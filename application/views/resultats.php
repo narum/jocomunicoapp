@@ -9,9 +9,9 @@
       opensource, free, text generation, natural language, llenguatge natural, projecte, master, arasaac" />
 
 <link href="<?= base_url();?>css/projecte.css" rel="stylesheet" type="text/css" />
-<script src="<?= base_url();?>js/prototype.js" type="text/javascript"></script>
-<script src="<?= base_url();?>js/scriptaculous.js" type="text/javascript"></script>
-<script src="<?= base_url();?>js/nlp/scripts.js" type="text/javascript"></script>
+<script src="<?= base_url();?>libraries/nlp/prototype.js" type="text/javascript"></script>
+<script src="<?= base_url();?>libraries/nlp/scriptaculous.js" type="text/javascript"></script>
+<script src="<?= base_url();?>libraries/nlp/scripts.js" type="text/javascript"></script>
 
 <title>Jo Comunico Beta - Resultats</title>
 

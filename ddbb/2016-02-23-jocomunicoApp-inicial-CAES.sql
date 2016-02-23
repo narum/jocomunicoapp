@@ -3,19 +3,13 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:8889
--- Temps de generació: 23-02-2016 a les 20:23:02
+-- Temps de generació: 23-02-2016 a les 21:29:42
 -- Versió del servidor: 5.5.42
 -- Versió de PHP: 5.6.10
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de dades: `jocomunicoapp`
@@ -5871,81 +5865,7 @@ CREATE TABLE `R_S_HistoricPictograms` (
   `isfem` enum('0','1') COLLATE utf8mb4_unicode_ci DEFAULT '0',
   `coordinated` enum('0','1') COLLATE utf8mb4_unicode_ci DEFAULT '0',
   `ID_RSHPUser` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Bolcant dades de la taula `R_S_HistoricPictograms`
---
-
-INSERT INTO `R_S_HistoricPictograms` (`ID_RSHPSentencePicto`, `ID_RSHPSentence`, `pictoid`, `isplural`, `isfem`, `coordinated`, `ID_RSHPUser`) VALUES
-(1, 1, 568, '0', '0', '0', NULL),
-(2, 1, 86, '0', '0', '0', NULL),
-(3, 1, 622, '0', '0', '0', NULL),
-(4, 2, 1, '0', '0', '0', NULL),
-(5, 2, 474, '0', '0', '0', NULL),
-(6, 3, 86, '0', '0', '0', NULL),
-(7, 3, 122, '0', '0', '0', NULL),
-(8, 4, 86, '0', '0', '0', NULL),
-(9, 4, 152, '0', '0', '0', NULL),
-(11, 5, 99, '0', '0', '0', NULL),
-(12, 5, 7, '0', '0', '0', NULL),
-(13, 5, 328, '0', '0', '0', NULL),
-(14, 5, 561, '0', '0', '0', NULL),
-(16, 6, 30, '0', '0', '0', NULL),
-(17, 6, 364, '0', '0', '0', NULL),
-(20, 7, 30, '0', '0', '0', NULL),
-(21, 7, 364, '0', '0', '0', NULL),
-(23, 8, 753, '0', '0', '0', NULL),
-(24, 8, 100, '0', '0', '0', NULL),
-(25, 8, 627, '0', '0', '0', NULL),
-(26, 9, 429, '0', '0', '0', NULL),
-(27, 9, 100, '0', '0', '0', NULL),
-(28, 9, 624, '0', '0', '0', NULL),
-(29, 10, 752, '0', '0', '0', NULL),
-(30, 10, 4, '0', '0', '0', NULL),
-(31, 11, 752, '0', '0', '0', NULL),
-(32, 11, 30, '0', '0', '0', NULL),
-(33, 11, 474, '0', '0', '0', NULL),
-(34, 11, 753, '0', '0', '0', NULL),
-(35, 12, 444, '0', '0', '0', NULL),
-(36, 12, 99, '0', '0', '0', NULL),
-(37, 12, 7, '0', '0', '0', NULL),
-(38, 12, 291, '0', '0', '0', NULL),
-(39, 12, 683, '0', '0', '0', NULL),
-(40, 13, 429, '0', '0', '0', NULL),
-(41, 13, 1, '0', '0', '0', NULL),
-(42, 13, 474, '0', '0', '0', NULL),
-(43, 14, 429, '0', '0', '0', NULL),
-(44, 14, 1, '0', '0', '0', NULL),
-(45, 14, 474, '0', '0', '0', NULL),
-(46, 15, 30, '0', '0', '0', NULL),
-(47, 15, 474, '0', '0', '0', NULL),
-(48, 16, 568, '0', '0', '0', NULL),
-(49, 16, 429, '0', '0', '0', NULL),
-(50, 16, 514, '0', '0', '0', NULL),
-(51, 16, 291, '0', '0', '0', NULL),
-(52, 16, 1, '0', '0', '0', NULL),
-(53, 16, 602, '0', '0', '0', NULL),
-(54, 17, 444, '0', '0', '0', NULL),
-(55, 17, 100, '0', '0', '0', NULL),
-(56, 17, 626, '0', '0', '0', NULL),
-(57, 17, 462, '0', '0', '0', NULL),
-(58, 18, 626, '0', '0', '0', NULL),
-(59, 18, 444, '0', '0', '0', NULL),
-(60, 18, 100, '0', '0', '0', NULL),
-(61, 18, 462, '0', '0', '0', NULL),
-(62, 19, 568, '0', '0', '0', NULL),
-(63, 19, 1, '0', '0', '0', NULL),
-(64, 19, 474, '0', '0', '0', NULL),
-(65, 20, 421, '0', '0', '0', NULL),
-(66, 21, 421, '0', '0', '0', NULL),
-(67, 22, 679, '0', '0', '0', NULL),
-(68, 23, 444, '0', '0', '0', NULL),
-(69, 23, 3, '0', '0', '0', NULL),
-(70, 23, 445, '0', '0', '0', NULL),
-(71, 23, 9, '0', '0', '0', NULL),
-(72, 24, 713, '0', '0', '0', NULL),
-(73, 24, 696, '0', '0', '0', NULL);
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -5977,7 +5897,7 @@ CREATE TABLE `R_S_TempPictograms` (
   `isfem` enum('0','1') COLLATE utf8mb4_unicode_ci DEFAULT '0',
   `coordinated` enum('0','1') COLLATE utf8mb4_unicode_ci DEFAULT '0',
   `ID_RSTPUser` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -6055,7 +5975,7 @@ CREATE TABLE `S_Historic` (
   `generatorScore` int(11) DEFAULT NULL,
   `generatorString` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `comments` text COLLATE utf8mb4_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -9973,7 +9893,7 @@ ALTER TABLE `QuestionPartES`
 -- AUTO_INCREMENT per la taula `R_S_HistoricPictograms`
 --
 ALTER TABLE `R_S_HistoricPictograms`
-  MODIFY `ID_RSHPSentencePicto` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=74;
+  MODIFY `ID_RSHPSentencePicto` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT per la taula `R_S_SentencePictograms`
 --
@@ -9983,7 +9903,7 @@ ALTER TABLE `R_S_SentencePictograms`
 -- AUTO_INCREMENT per la taula `R_S_TempPictograms`
 --
 ALTER TABLE `R_S_TempPictograms`
-  MODIFY `ID_RSTPSentencePicto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_RSTPSentencePicto` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT per la taula `SuperUser`
 --
@@ -9998,7 +9918,7 @@ ALTER TABLE `S_Folder`
 -- AUTO_INCREMENT per la taula `S_Historic`
 --
 ALTER TABLE `S_Historic`
-  MODIFY `ID_SHistoric` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_SHistoric` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT per la taula `S_PreRec`
 --
@@ -10352,7 +10272,3 @@ ALTER TABLE `VerbPatternES`
   ADD CONSTRAINT `verbpatternes_ibfk_1` FOREIGN KEY (`verbid`) REFERENCES `VerbES` (`verbid`) ON DELETE CASCADE,
   ADD CONSTRAINT `verbpatternes_ibfk_2` FOREIGN KEY (`patternid`) REFERENCES `PatternES` (`patternid`) ON DELETE CASCADE;
 SET FOREIGN_KEY_CHECKS=1;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
