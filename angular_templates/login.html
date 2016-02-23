@@ -1,0 +1,15 @@
+<link rel="stylesheet" type="text/css" href="css/login.css">
+<br>
+<div class="loginmodal-container">
+	<h1>Login:</h1>
+	<p>Introdueix les teves dades d'accés:</p><br>
+	<form name="loginForm" ng-submit="login(loginForm)">
+		<input type="text" name="user" placeholder="Usuari" ng-model="username" required>
+		<input type="password" name="pass" placeholder="Contrasenya" ng-model="password" required>
+		<button type="submit" name="login" class="login loginmodal-submit">Accés</button>
+	</form>
+	
+	<div class="login-help">
+		<a href="/#/register">Registra't</a> &nbsp; - &nbsp; <a href="#">Recupera la contrasenya</a>
+	</div>
+</div>
