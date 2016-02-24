@@ -1,0 +1,31 @@
+<div class="fullheight bg-success">
+    
+    <div class='row fullheight'>
+        <div bind-html-compile="dataword" class='col-xs-4' ng-style="{'height':'25% '}">
+            <img class="fullheight" width="100%" height="100%" src="http://localhost/jocomunico/img/pictos/nada.png" ng-drop="true"  ng-drop-success="onDropRemove($data,$event)"/>
+        </div>
+        <input type="text" class='col-xs-8 text-center' name="NameBoard" ng-value="nameboard" readonly="readonly" ng-style="{'height':'25% '}"/>
+        <div class='col-xs-6 text-center'>
+            Altura
+            <select>
+                <option ng-repeat="n in range(20)" value="{{n}}" ng-selected="n==rowsnum"> {{n}} </option>
+            </select>
+        </div>
+        <div class='col-xs-6 text-center'>
+            Amplada
+            <select>
+                <option ng-repeat="n in range(20)" value="{{n}}" ng-selected="n==columnsnum"> {{n}} </option>
+            </select>
+        </div>
+        <div class='col-xs-12 text-center'>
+            Panell Principal
+            <select>
+                <option ng-repeat="n in range(20)" value="{{n}}"> {{n}} </option>
+            </select>
+        </div>
+        <div class='col-xs-12 text-center'>
+            ((!))Retorn automatic<input type="checkbox" value="Auto-retorn"/>
+        </div>
+    </div>
+
+</div>

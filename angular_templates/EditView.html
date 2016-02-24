@@ -1,0 +1,38 @@
+
+<div class="fullheight">
+    <input type="text" ng-model="$parent.Name" ng-keyup="$parent.search($parent.SearchType);" placeholder="Escriba para filtar"/><br>
+    <form name="SearchForm">
+        <label>
+            <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Tots"/>
+            Tots
+        </label>
+        <label>
+            <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Noms"/>
+            Noms
+        </label>
+        <label>
+            <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Verb"/>
+            Verb
+        </label>
+        <label>
+            <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Adj" />
+            Adjectiu
+        </label>
+        <label>
+            <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Exp"/>
+            Expresions
+        </label>
+        <label>
+            <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Altres"/>
+            Altres
+        </label>
+        
+    </form>
+    <p>http status code: {{$parent.statusWord}}</p>
+    <div id="boardCellSearch" class='row'>
+        <div bind-html-compile="dataword" class='col-xs-4' ng-repeat="picto in dataWord| limitTo: 6" ng-style="{'height':'50% '}">
+            <img class="cellSearch" width="100%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}" ng-if="true" ng-drag="true" ng-drag-data="{idpicto:'{{picto.id}}'}" data-allow-transform="true"/>
+        </div>
+    </div>
+
+</div>

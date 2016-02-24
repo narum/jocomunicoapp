@@ -1,0 +1,99 @@
+@charset "UTF-8";
+/* CSS Document */
+
+.row{ 
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.container-fluid
+{
+    padding-right: 0px;
+    padding-left: 0px;
+}
+[class*="col-"]{
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.fullheight{
+    height:100%;
+}
+
+#mainboard{
+    height:100vh;
+}
+
+#header{
+    height:10%;
+}
+
+#footer{
+    height:30%;
+}
+
+#userview{
+    height:60%;
+}
+
+#searchView{
+    height:65%;
+}
+
+#trashView{
+    height:35%;
+}
+
+#boardCellSearch{
+    height: 65%;
+}
+
+.cellSearch{
+    position: absolute;
+    height: 100%;
+}
+
+.emptyImg{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+}
+
+.prediction{
+    height: 100%;
+    text-align: center;
+    align-self: center;
+    background-color: white;
+}
+
+.speakButton{
+    height: 100%;
+    text-align: center;
+    align-self: center;
+    background-color: purple;
+}
+
+.deleteLastButton{
+    height: 100%;
+    text-align: center;
+    align-self: center;
+    background-color: blue;
+}
+
+.deleteAllButton{
+    height: 100%;
+    text-align: center;
+    align-self: center;
+    background-color: orangered;
+}
+.content-prediction{
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 5%;
+    padding-right: 5%;
+    align-items: center;
+}
+
+.menu{
+    position:relative;
+}
