@@ -28,8 +28,30 @@ angular.module('controllers', [])
 		});
 	};
 })
-.controller('RegisterCtrl', function($scope){
-	
+
+.controller('RegisterCtrl', function($scope, Resources, $location){
+
+	// Pedimos los textos para cargar la pagina, por defecto en catalan
+		Resources.register.get({'section':"userRegister"}).$promise
+		.then(function(results){
+			$allContent = results;
+			$scope.content = $allContent.catalan;
+			$scope.language = true;
+			$scope.imgFlag = $scope.baseurl + 'img/Spanish.png';
+		});
+
+		$scope.changeLanguage=function(){
+
+			if($scope.language){
+				$scope.content = $allContent.catalan;
+				$scope.imgFlag = $scope.baseurl + 'img/Spanish.png'; //POSAR A LA BASE DE DADES!!
+			} else {
+				$scope.content = $allContent.spanish;
+				$scope.imgFlag = $scope.baseurl + 'img/Catalan.png';//POSAR A LA BASE DE DADES!!
+			}
+
+		};
+
 	$scope.formData = {};
 
 	$scope.submitForm = function (formData) {

@@ -9,6 +9,7 @@ angular.module('services', [])
 		"nom": $resource(baseUri + "names"),
 		"histo": $resource(baseUri + "histo"),
 		"login": $resource(baseUri + "login"),
+		"register": $resource(baseUri + "register"),
 		"main": $resource(baseUri + "main")
 	};
 })
@@ -41,6 +42,7 @@ angular.module('services', [])
 			window.localStorage.removeItem('languageid');
 			window.localStorage.removeItem('languageabbr');
 			delete $http.defaults.headers.common['Authorization'];
+			delete $http.defaults.headers.common['X-Authorization'];
 			$rootScope.isLogged = false;
 		}
 	}

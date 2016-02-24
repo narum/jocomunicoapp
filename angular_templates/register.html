@@ -1,41 +1,115 @@
 <link rel="stylesheet" type="text/css" href="css/register.css">
-
+<br>
 <div class="container">
-  <h2>Registre d'usuari / Registro de usuario</h2>
-
  
-    <form name="register" class="form form-horizontal" ng-controller="RegisterCtrl" novalidate>
+  <form name="register" class="form form-horizontal col-xs-6 col-xs-offset-3" ng-controller="RegisterCtrl">
+    
+    <legend class="row">
+      <h2 class="col-xs-10">{{ content.title }}</h2>
+      <div class="col-xs-2">
+        <img class="img-responsive img-rounded" alt="Responsive image" ng-src="{{imgFlag}}" ng-click="language = !language; changeLanguage()">
+      </div>
+    </legend>
 
-      <div class="control-group" ng-class="{error:!register.username.$valid}">
-        <label for="inputUsername" class="control-label">Username:</label>
-        <div class="controls">
-            <input type="text" id="inputUsername" name="username" ng-model="formData.username" valid-username />
-            <div class="help-inline">
-                <span ng-show="!!register.username.$error.isBlank">Username Required.</span>
-                <span ng-show="!!register.username.$error.invalidChars">Username must contain letters &amp; spaces only.</span>
-                <span ng-show="!!register.username.$error.invalidLen">Username must be 5-20 characters.</span>
-            </div>
+    <div class="col-xs-6">
+      <div class="col-xs-11">
+        <div class="form-group row">
+          <label for="user">{{ content.user }}</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="{{ content.user }}" 
+            name="user" 
+            ng-model="formData.user" 
+            required ng-class="{ error: !register.user.$pristine && register.user.$error.required }">
+          <span 
+            style="color:red" 
+            ng-show="register.user.$invalid && register.user.$dirty">Name is required.</span>
+        </div>
+      
+        <div class="form-group row">
+          <label for="pass1">{{ content.pass }}</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="{{ content.pass }}" 
+            name="pass1" 
+            ng-model="formData.pass1" 
+            required ng-class="{ error: !register.pass1.$pristine && register.pass1.$error.required }">
+          <span 
+            style="color:red" 
+            ng-show="register.pass1.$invalid && register.pass1.$dirty">Name is required.</span>
+        </div>
+
+        <div class="form-group row">
+          <label for="pass2">{{ content.pass }}</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="{{ content.pass }}" 
+            name="pass2" 
+            ng-model="formData.pass2" 
+            required ng-class="{ error: !register.pass2.$pristine && register.pass2.$error.required }">
+          <span 
+            style="color:red" 
+            ng-show="register.pass2.$invalid && register.pass2.$dirty">Name is required.</span>
         </div>
       </div>
+    </div>
 
+    <div class="col-xs-6">
+      <div class="col-xs-11 col-xs-offset-1">
+        <div class="form-group row">
+          <label for="name">{{ content.name }}</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="{{ content.name }}" 
+            name="name" 
+            ng-model="formData.name" 
+            required ng-class="{ error: !register.name.$pristine && register.name.$error.required }">
+          <span 
+            style="color:red" 
+            ng-show="register.name.$invalid && register.name.$dirty">Name is required.</span>
+        </div>
 
-      <div ng-class="{ error: register.lastname.$invalid && register.lastname.$dirty}" class="form-group">
-        <label for="lastname">Last Name</label>
-        <input type="text" class="form-control" placeholder="last name" name="lastname" ng-model="formData.lastname" required ng-class="{ error: !register.$pristine && register.lastname.$error.required }">
-        <span style="color:red" ng-show="register.lastname.$invalid && register.lastname.$dirty">Name is required.</span>
+        <div class="form-group row">
+          <label for="lastname">{{ content.lastname }}</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="{{ content.lastname }}" 
+            name="lastname" 
+            ng-model="formData.lastname" required 
+            ng-class="{ error: !register.lastname.$pristine && register.lastname.$error.required }">
+          <span 
+            style="color:red" 
+            ng-show="register.lastname.$invalid && register.lastname.$dirty">Name is required.</span>
+        </div>
+
+        <div class="form-group row">
+          <label for="email">{{ content.mail }}</label>
+          <input 
+            type="email" 
+            class="form-control" 
+            placeholder="example@email.com" 
+            name="email" 
+            ng-model="formData.email" required 
+            ng-class="{ error: !register.email.$pristine && register.email.$error.required, warning: register.email.$error.email }">
+          <span 
+            style="color:red" 
+            ng-show="!register.email.$pristine && register.email.$error.required">Email is required</span>
+          <span 
+            style="color:orange" 
+            ng-show="!register.email.$pristine && register.email.$error.email">Please enter a valid email</span>
+        </div>
       </div>
+    </div>
 
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" class="form-control" placeholder="example@email.com" name="email" ng-model="formData.email" required 
-        ng-class="{ error: register.email.$error.required && !register.$pristine, warning: register.email.$error.email }">
-        <span style="color:red" ng-show="!register.$pristine && register.email.$error.required">Email is required</span>
-        <span style="color:orange" ng-show="!register.$pristine && register.email.$error.email">Please enter a valid email</span>
-
-
-      </div>
-      <a class="btn btn-info pull-left" href="#/login" role="button">Tornar</a>
-      <button type="reset" class="btn btn-danger pull-left">Esborrar</button> <!--NO BORRA EL FORMULARI -->
-      <button type="submit" class="btn btn-success pull-right" ng-click="submitForm(formData)" ng-disabled="userForm.$invalid">Enviar</button>
-    </form>
+    <div class="row">
+      <a class="btn btn-info" href="#/login" role="button">{{ content.exitbutton }}</a>
+      <button type="reset" class="btn btn-danger">{{ content.resetbutton }}</button> <!--NO BORRA EL FORMULARI -->
+      <button type="submit" class="btn btn-success pull-right" ng-click="submitForm(formData)">{{ content.sendbutton }}</button>
+    </div>
+  </form>
 </div>
