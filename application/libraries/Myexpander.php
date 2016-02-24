@@ -12,6 +12,12 @@ class Myexpander {
     
     var $errormessagetemp = null; 
     var $errormessage = array(); 
+    var $errorcode = array();
+    var $errorcodetemp = null;
+    var $errortemp = null;
+    var $error = array(); // true i false
+    
+    var $readwithoutexpansion = false; // per llegir les frases tal qual si el sistema d'expansió no les pot fer
     var $preguntaposada = array();
     var $paraulescopia = array();
     var $info = array();
@@ -26,13 +32,19 @@ class Myexpander {
         $this->info['errormessage'] = null; // Missatges d'error o warnings
         $this->info['error'] = false; // Si el missatge és d'error
         $this->info['printparsepattern'] = "No pattern found.";
+        $this->info['errorcode'] = false;
+        $frasefinalnotexpanded = "";
 
         // GET SENTENCE
         $idusu = $CI->session->userdata('idusu');
         $this->paraulescopia = $CI->Lexicon->getLastSentence($idusu); // array amb les paraules
         $propietatsfrase = $CI->Lexicon->getLastSentenceProperties($idusu);
 
-        if ($this->paraulescopia == null) $this->info['errormessage'] = "Error. No hi ha cap frase per aquest usuari.";
+        if ($this->paraulescopia == null) {
+            $this->info['errormessage'] = "Error. No hi ha cap frase per aquest usuari.";
+            $this->info['error'] = true;
+            $this->info['errorcode'] = 1;
+        }
 
         // FIND VERBS
         $arrayVerbs = array();
@@ -40,6 +52,10 @@ class Myexpander {
         for ($i=0; $i<count($this->paraulescopia); $i++) {
             $word = &$this->paraulescopia[$i];
             if ($word->tipus == "verb") $arrayVerbs[] = &$word;
+            
+            // aprofitem el bucle que passa per totes les paraules per preparar la frase final per
+            // si hi ha un error que digui la frase inicial sense expandir-la
+            $frasefinalnotexpanded .= $word->text." ";
         }
 
         // GET PATTERNS
@@ -51,7 +67,10 @@ class Myexpander {
         if ($this->errormessagetemp != null) {
             $this->info['errormessage'] = $this->errormessagetemp;
             $this->info['error'] = true;
-
+            $this->info['errorcode'] = $this->errorcodetemp;
+            $this->info['readwithoutexpansion'] = $this->readwithoutexpansion;
+            
+            $this->info['frasefinal'] = $frasefinalnotexpanded;
             return;
         }
 
@@ -94,18 +113,29 @@ class Myexpander {
                // Si hi ha una partícula de pregunta
                $numpreguntes = count($partPregunta);
                if ($numpreguntes > 1) {
+                   
                    $this->errormessagetemp = "Error. La frase no pot contenir més d'una pregunta.";
-
+                   $this->errorcodetemp = 2;
+                   $this->readwithoutexpansion = true;
+                   
                    $this->info['errormessage'] = $this->errormessagetemp;
                    $this->info['error'] = true;
+                   $this->info['errorcode'] = $this->errorcodetemp;
+                   $this->info['readwithoutexpansion'] = $this->readwithoutexpansion;
+
+                   $this->info['frasefinal'] = $frasefinalnotexpanded;
 
                    return;
                }
                else if ($numpreguntes == 1) {
                    $partpreguntaposada = $auxpattern->fillPartPregunta($partPregunta[0]);
 
-                   if (!$partpreguntaposada) $this->errormessagetemp = "Warning. No s'ha trobat lloc per la partícula
-                                                                    de la pregunta.";
+                   if (!$partpreguntaposada) {
+                       $this->errormessagetemp = "Warning. No s'ha trobat lloc per la partícula de la pregunta.";
+                       $this->errorcodetemp = 4;
+                       $this->errortemp = true;
+                       $this->readwithoutexpansion = true;
+                   }
                } // Fi tractament de pregunta
 
 
@@ -145,6 +175,8 @@ class Myexpander {
                $this->puntsallpatterns[] = $puntspattern;
 
                $this->errormessage[] = $this->errormessagetemp;
+               $this->errorcode[] = $this->errorcodetemp;
+               $this->error[] = $this->errortemp;
                $this->preguntaposada[] = $partpreguntaposada;
                // DEBUG
                // echo $auxpattern->printPattern();
@@ -186,7 +218,9 @@ class Myexpander {
                 $frasefinal = $this->generateSentenceES($bestpattern, $propietatsfrase, $this->preguntaposada[$bestpatternindex]);
             }
 
-            $this->info['frasefinal'] = $frasefinal;
+            // si hi ha hagut algun error o s'ha desactivat el sistema d'expansió, aleshores es llegeix sense expandir la frase
+            if ($this->readwithoutexpansion) $this->info['frasefinal'] = $frasefinalnotexpanded;
+            else $this->info['frasefinal'] = $frasefinal;
 
             // Guardar parse tree i frase final a la base de dades
             $CI->Lexicon->guardarParseIFraseResultat($propietatsfrase['identry'], $printparsepattern, $frasefinal);
@@ -194,6 +228,9 @@ class Myexpander {
             $this->info['identry'] = $propietatsfrase['identry'];
             $this->info['inputwords'] = $propietatsfrase['inputwords'];
             $this->info['errormessage'] = $this->errormessage[$bestpatternindex];
+            $this->info['error'] = $this->error[$bestpatternindex];
+            $this->info['errorcode'] = $this->errorcode[$bestpatternindex];
+            $this->info['readwithoutexpansion'] = $this->readwithoutexpansion;
 
             // MOSTREM LA INTERFÍCIE
             return;                
@@ -217,6 +254,8 @@ class Myexpander {
             $this->allpatterns = null;
             $this->errormessagetemp = "Error. Hi ha més de dos verbs a la frase. <br />
                                 El sistema actual no pot generar frases d'aquesta mena.";
+            $this->readwithoutexpansion = true;
+            $this->errorcodetemp = 3;
             return; // En aquest cas ja hauríem acabat
         }
 
@@ -346,8 +385,10 @@ class Myexpander {
                     }
                 }
             }
-            if (!$subverbfound) $this->errormessagetemp = "Error. No s'ha trobat cap patró
-                                                        possible amb aquests verbs.";
+            if (!$subverbfound) {
+                $this->errormessagetemp = "Error. No s'ha trobat cap patró possible amb aquests verbs.";
+                $this->errorcodetemp = 5;
+            }
         } // Fi if ($numverbs == 2)
     }
 

@@ -1448,10 +1448,10 @@ class Mypattern {
             }
             else {
                 // restem els punts dels slots no plens
-                // els optatius de time, manera i locat que la majoria poden tenir no els restem
+                // els optatius de time, manera, locat, locfrom que la majoria poden tenir no els restem
                 // perquè si no els patterns amb pocs slots, que no els tenen tindrien avantatge
                 if ($slot->grade == '1' || ($slot->category != "Manner" && $slot->category != "Time" 
-                        && $slot->category != "LocAt" && $slot->category != "Company" && $slot->category != "Tool")) {
+                        && $slot->category != "LocAt" && $slot->category != "LocFrom" && $slot->category != "Company" && $slot->category != "Tool")) {
                     $this->puntuaciofinal -= $slot->puntsfinal;
                     // echo $slot->category.": -".$slot->puntsfinal.'<br />';
                 }
