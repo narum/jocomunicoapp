@@ -3,6 +3,7 @@ angular.module('app', [
 	'ngRoute',
 	'ngResource',
 	'ngCookies',
+        'ngDraggable',
 	'ui.bootstrap',
 
 	//Modules
@@ -19,19 +20,23 @@ angular.module('app', [
 	$routeProvider
 		.when('/login', {
 			controller:'LoginCtrl',
-			templateUrl:'../../angular_templates/login.html'
+			templateUrl:'../../jocomunicoapp/angular_templates/login.html'
 		})
 		.when('/', {
 			controller:'MainCtrl',
-			templateUrl:'../../angular_templates/main.html'
+			templateUrl:'../../jocomunicoapp/angular_templates/main.html'
 		})
 		.when('/adeu', {
 			controller:'AdeuCtrl',
-			templateUrl:'../../angular_templates/adeu.html'
+			templateUrl:'../../jocomunicoapp/angular_templates/adeu.html'
 		})
 		.when('/register', {
 			controller:'RegisterCtrl',
-			templateUrl:'../../angular_templates/register.html'
+			templateUrl:'../../jocomunicoapp/angular_templates/register.html'
+		})
+                .when('/board', {
+			controller:'myCtrl',
+			templateUrl:'../../jocomunicoapp/angular_templates/MainBoard.html'
 		})
 		.otherwise({ redirectTo:'/' });
 })
