@@ -150,6 +150,13 @@ angular.module('controllers', [])
         }
         return n;
     }
+            $scope.openDefault = function () {
+                ngDialog.open({
+                    template: 'firstDialogId',
+                    controller: 'InsideCtrl',
+                    className: 'ngdialog-theme-default'
+                });
+            };
     $scope.showall = function ()
     {
         $scope.grid1hide = false;
@@ -448,7 +455,7 @@ angular.module('controllers', [])
     };
 })
 //Add a directive in order to recognize the right click
-directive('ngRightClick', function ($parse) {
+.directive('ngRightClick', function ($parse) {
     return function (scope, element, attrs) {
         var fn = $parse(attrs.ngRightClick);
         element.bind('contextmenu', function (event) {
