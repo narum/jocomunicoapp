@@ -112,44 +112,44 @@ angular.module('controllers', [])
             }
         })
 
-.controller('myCtrl', function ($scope, $http, ngDialog) {
-    $scope.config = function (boardconf)
-    {
-        $scope.SearchType = "Tots";
-        $scope.inEdit = false;
-        if (boardconf === 1)
-        {
-            $scope.showall();
-        }
-        if (boardconf === 2)
-        {
-            $scope.showright();
-        }
-        if (boardconf === 3)
-        {
-            $scope.showleft();
-        }
-        if (boardconf === 4)
-        {
-            $scope.showmid();
-        }
-        $scope.showup();
-        /*$scope.grid1hide = false;
-         $scope.grid2hide = false;
-         $scope.grid3hide = false;
-         $scope.grid1 = 2;
-         $scope.grid2 = 8;
-         $scope.grid3 = 2;*/
-    }; 
-    $scope.range = function($repeatnum)
-    {
-        var n = [];
-        for(i=1;i<$repeatnum+1;i++)
-        {
-            n.push(i);
-        }
-        return n;
-    };
+        .controller('myCtrl', function ($scope, $http, ngDialog) {
+            $scope.config = function (boardconf)
+            {
+                $scope.SearchType = "Tots";
+                $scope.inEdit = false;
+                if (boardconf === 1)
+                {
+                    $scope.showall();
+                }
+                if (boardconf === 2)
+                {
+                    $scope.showright();
+                }
+                if (boardconf === 3)
+                {
+                    $scope.showleft();
+                }
+                if (boardconf === 4)
+                {
+                    $scope.showmid();
+                }
+                $scope.showup();
+                /*$scope.grid1hide = false;
+                 $scope.grid2hide = false;
+                 $scope.grid3hide = false;
+                 $scope.grid1 = 2;
+                 $scope.grid2 = 8;
+                 $scope.grid3 = 2;*/
+            };
+            $scope.range = function ($repeatnum)
+            {
+                var n = [];
+                for (i = 1; i < $repeatnum + 1; i++)
+                {
+                    n.push(i);
+                }
+                return n;
+            };
             $scope.openConfirmSize = function () {
                 alert('it works!');
                 ngDialog.open({
@@ -232,9 +232,8 @@ angular.module('controllers', [])
             $scope.showBoard = function ()
             {
                 var url = $scope.baseurl + "Board/showCellboard";
-                var postdata = {r: '0', c: '0'};
 
-                $http.post(url, postdata).success(function (response)
+                $http.post(url).success(function (response)
                 {
                     $scope.columns = response.col;
                     $scope.rows = response.row;
@@ -261,40 +260,37 @@ angular.module('controllers', [])
                     $scope.nameboard = response.name;
                     $scope.altura = $scope.range(20)[response.row].valueOf();
                     $scope.amplada = $scope.range(20)[response.col].valueOf();
+                    $scope.oldH = $scope.altura;
+                    $scope.oldW = $scope.amplada;
                 });
             };
 
-            $scope.changeWidth = function ($newSize)
+
+            $scope.changeSize = function ($newH, $newW)
             {
                 var url = $scope.baseurl + "Board/modifyCellBoard";
-                var postdata = {r: $scope.altura, c: $newSize};
-                alert($scope.amplada + "   " + $newSize);
-                if ($newSize < $scope.amplada) {
-                    alert("QUE COJONES HACES");
-                } else {
-
-                    $http.post(url, postdata).success(function (response)
+                var postdata = {r: $newH, c: $newW};
+                if ($newH < $scope.oldH || $newW < $scope.oldW) {
+                    alert("QUE COJONES HACES "+ 
+                            $newH +"<" + $scope.oldH + " o bien " +
+                            $newW +"<" + $scope.oldW);
+                    $http.post(url, postdata).then(function (response)
                     {
                         $scope.nameboard = response.name;
                         $scope.altura = $scope.range(20)[response.row].valueOf();
                         $scope.amplada = $scope.range(20)[response.col].valueOf();
+                        $scope.oldH = $scope.range(20)[response.row].valueOf();
+                        $scope.oldW = $scope.range(20)[response.col].valueOf();
                     });
-                }
-            };
-            $scope.changeHeight = function ($newSize)
-            {
-                var url = $scope.baseurl + "Board/modifyCellBoard";
-                var postdata = {r: $newSize , c:$scope.amplada};
-                alert($scope.altura + "   " + $newSize);
-                if ($newSize < $scope.altura) {
-                    alert("QUE COJONES HACES");
                 } else {
 
-                    $http.post(url, postdata).success(function (response)
+                    $http.post(url, postdata).then(function (response)
                     {
                         $scope.nameboard = response.name;
                         $scope.altura = $scope.range(20)[response.row].valueOf();
                         $scope.amplada = $scope.range(20)[response.col].valueOf();
+                        $scope.oldH = $scope.range(20)[response.row].valueOf();
+                        $scope.oldW = $scope.range(20)[response.col].valueOf();
                     });
                 }
             };
