@@ -116,6 +116,7 @@ class Mypattern {
             $theme->type = $patternbbdd->themetipus;
             if ($theme->grade == '1') $theme->defvalue = $patternbbdd->themedef;
             if ($patternbbdd->themeprep != "") $theme->prep = $patternbbdd->themeprep;
+            if ($patternbbdd->themeart != "NULL") $theme->art = $patternbbdd->themeart;
             
             if ($theme->type == "verb") $this->subverb = "Theme";
             $this->hasslot["Theme"] = true;
