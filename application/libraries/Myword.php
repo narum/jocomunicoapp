@@ -441,11 +441,11 @@ class Myword {
         mb_internal_encoding( 'utf-8' );
         
         // letters that we want to replace
-        $patterns[0] = '/[à]/u'; 
-        $patterns[1] = '/[è|é]/u';
-        $patterns[2] = '/[í|ï]/u';
-        $patterns[3] = '/[ò|ó]/u';
-        $patterns[4] = '/[ú|ü]/u';
+        $patterns[0] = '/[à|À]/u'; 
+        $patterns[1] = '/[è|é|É|È]/u';
+        $patterns[2] = '/[í|ï|Í|Ï]/u';
+        $patterns[3] = '/[ò|ó|Ò|Ó]/u';
+        $patterns[4] = '/[ú|ü|Ú|Ü]/u';
         
         $replacements[0] = 'a';
         $replacements[1] = 'e';
@@ -480,7 +480,6 @@ class Myword {
                     }
                     // e -> We use regular expressions to verify the condition
                     else if (preg_match('/^([aeo]|[h][aeo])/', $wordlowerednoaccents) == '1') {
-
                         //f
                         if (isset($matching->listB[$wordlowered]) || isset($matching->listD[$wordlowered]) || isset($matching->listF[$wordlowered])) {
                             return $matching->answers["P"];
