@@ -94,21 +94,20 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $c = $request->c;
         $r = $request->r;
-        $array = array();
 
         // "1" es el numero de id de la "board"
 
-        $output = $this->BoardInterface->getBoardStruct(1);
-        $columns = $output[0]->width + $c;
-        $rows = $output[0]->height + $r;
-        $this->BoardInterface->updateNumCR($columns, $rows, 1);
+//        $output = $this->BoardInterface->getBoardStruct(1);
+//        $columns = $output[0]->width + $c;
+//        $rows = $output[0]->height + $r;
+//        $this->BoardInterface->updateNumCR($columns, $rows, 1);
         //MODIF: cuando pasemos el total se cambia lo de arriba por:
-        /*
-         * $this->BoardInterface->updateNumCR($c, $r, 1);
-         * $output = $this->BoardInterface->getBoardStruct(1);
-         * $c = $c - $output[0]->width;
-         * $r = $r - $output[0]->height;
-         */
+        
+        $output = $this->BoardInterface->getBoardStruct(1);
+        $this->BoardInterface->updateNumCR($c, $r, 1);
+        $c = $c - $output[0]->width;
+        $r = $r - $output[0]->height;
+         
         
         
 
@@ -293,9 +292,14 @@ class Board extends REST_Controller {
         $this->BoardInterface->addStatsX2($paraules, 1);
         $this->BoardInterface->addStatsX3($paraules, 1);
 
-        $this->Lexicon->insertarFrase(1);
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $tense = $request->tense;
+        $tipusfrase = $request->tipusfrase;
+        $negativa = $request->negativa;
+        $this->Lexicon->insertarFrase(1, $tipusfrase, $tense, $negativa);
 
-
+       
         $this->BoardInterface->commitTrans();
 
         if ($this->BoardInterface->statusTrans() === FALSE) {

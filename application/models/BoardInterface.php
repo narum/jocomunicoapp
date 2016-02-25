@@ -207,10 +207,9 @@ class BoardInterface extends CI_Model {
      */
 
     function addStatsX2($paraulesFrase, $iduser) {
-        for ($i = 0; $i < count($paraulesFrase); $i++) {
-            if ($paraulesFrase[$i] != null && $paraulesFrase[$i + 1] != null) {
-                $word1 = $paraulesFrase[$i];
-                $word2 = $paraulesFrase[$i + 1];
+        for ($i = 1; $i < count($paraulesFrase); $i++) {
+                $word1 = $paraulesFrase[$i - 1];
+                $word2 = $paraulesFrase[$i];
                 $inputid1 = $word1->id;
                 $inputid2 = $word2->id;
                 $this->db->where('picto1id', $inputid1);
@@ -237,7 +236,6 @@ class BoardInterface extends CI_Model {
                     );
                     $query = $this->db->insert('P_StatsUserPictox2', $data);
                 }
-            }
         }
     }
 
@@ -247,11 +245,10 @@ class BoardInterface extends CI_Model {
      */
 
     function addStatsX3($paraulesFrase, $iduser) {
-        for ($i = 0; $i < count($paraulesFrase); $i++) {
-            if ($paraulesFrase[$i] != null && $paraulesFrase[$i + 1] != null && $paraulesFrase[$i + 2] != null) {
-                $word1 = $paraulesFrase[$i];
-                $word2 = $paraulesFrase[$i + 1];
-                $word3 = $paraulesFrase[$i + 2];
+        for ($i = 2; $i < count($paraulesFrase); $i++) {
+                $word1 = $paraulesFrase[$i - 2];
+                $word2 = $paraulesFrase[$i - 1];
+                $word3 = $paraulesFrase[$i];
                 $inputid1 = $word1->id;
                 $inputid2 = $word2->id;
                 $inputid3 = $word3->id;
@@ -267,7 +264,7 @@ class BoardInterface extends CI_Model {
                     $this->db->where('picto3id', $inputid3);
                     $this->db->where('picto2id', $inputid2);
                     $this->db->where('picto1id', $inputid1);
-                    $this->db->where('ID_PSUP2User', $iduser);
+                    $this->db->where('ID_PSUP3User', $iduser);
                     $data = array(
                         'countx3' => $num
                     );
@@ -286,4 +283,3 @@ class BoardInterface extends CI_Model {
         }
     }
   
-}
