@@ -1306,6 +1306,7 @@ class Mypattern {
             $penalty = 1000;
             
             if (!$slot->full && count($slot->paraulestemp) > 0) {
+                
                 // per cada paraula que podia anar a l'slot busquem la que fa millor fit
                 for ($i=0; $i<count($slot->paraulestemp); $i++) {
                     // si la paraula no ha estat ja utilitzada
@@ -1338,6 +1339,8 @@ class Mypattern {
                         }
                     }
                 }
+                
+                if ($indexselect == -1 ) $indexselect = 0;
                 
                 // Ja tenim la paraula seleccionada
                 $wordaux = $slot->paraulestemp[$indexselect][0];
