@@ -334,7 +334,7 @@ class Myslot {
         $matchscore = 1000;
         $matchindexclass = -1;
         $output = 0;
-        
+                
         // com que els quant poden omplir slots on tb hi pot haver ja un adv, només volem que l'ompli
         // si no hi ha cap adv, es a dir, si està buit
         if (!$this->full) {
@@ -389,8 +389,17 @@ class Myslot {
 
             // com més lluny pitjor
             $newslot->puntsfinal = 7 - abs($distance);
-
-            if ($distance == 1) $newslot->puntsfinal += 1; // Si el modficador va just abans de la paraula és la millor opció
+            
+            // fem que els quantificadors amb els adjectius tinguin més punts que els slots opcionals
+            // de manera que puguin tenir un quantificador com a fit (els opcionals valen 7 punts)
+            if ($tipusparaulafinal == "adj" && $word->isClass("quant")) {
+                if (abs($distance) == 1) {
+                    $newslot->puntsfinal += 1;
+                }
+            }
+            else if ($distance == 1) {
+                $newslot->puntsfinal += 1; // Si el modficador va just abans de la paraula és la millor opció
+            }
             
             $aux[1] = $newslot->puntsfinal; // els punts d'aquest slot: és per desambiguar si un modif pot complementar a dues paraules, per escollir la millor
             

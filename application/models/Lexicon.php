@@ -214,10 +214,13 @@ class Lexicon extends CI_Model {
          * Un cop introduïdes totes les paraules fem un insertarFrase amb els canvis
          * que calgui fer al codi
          */
+        
         $idusu = $this->session->userdata('idusu');
         $userlanguage = $this->session->userdata('ulanguage'); // en número i no en abbr 'CA'...
         
         $frase = strtolower($frase);
+        // eliminem tots els espais
+        $frase = preg_replace('/\s+/', '', $frase);
         $paraules = explode("/", $frase);
         
         // Després de l'última barra / no hi ha cap paraula
@@ -244,7 +247,7 @@ class Lexicon extends CI_Model {
 				$paraula = substr($paraula, 0, -1); // treiem l'últim caràcter que és }
 				
                 $pictoid = (int)$paraula; // l'id és la paraula introduïda
-                
+                                
                 $this->db->where('pictoid', $pictoid);
                 $query = $this->db->get('Pictograms');
                 
@@ -812,7 +815,7 @@ class Lexicon extends CI_Model {
 
 
                 $inputwords .= $word->text;
-                $inputids .= $word->id;
+                $inputids .= "{".$word->id."}";
                 
                 /*switch($word->pictoType)
                 {

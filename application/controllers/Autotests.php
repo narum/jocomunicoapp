@@ -36,6 +36,7 @@ class Autotests extends CI_Controller {
                     $contentview = "";
                     
                     for ($i=0; $i<count($frases); $i++) {
+                        
                         // GUARDAR LA FRASE DES DE L'ARXIU A LA BBDD
                         $this->Lexicon->insertarFraseDesDArxiu($frases[$i]);
 
