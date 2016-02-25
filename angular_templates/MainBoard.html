@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+    <div id="mainboard" style="max-height: 100vh;">
+        <div id="header" class="container-fluid text-center row">
+            <div style="background-color: Green;height:100%;">
+
+            </div>
+        </div>
+        <div id="userview" class="container-fluid" ng-init="config(2)">
+            <div class="row fullheight">
+                <div ng-hide="grid1hide" class="col-xs-{{grid1}} fullheight" style="background-color: Blue;">
+                    <div id="board" class="fullheight">
+                        <div id="trashView" class="row">
+                            <div class="row fullheight">
+                                <div class="col-sm-12 fullheight" ng-include="baseurl + '/angular_templates/EditViewTrash.html'">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="searchView" class="container-fluid">
+                            <div class="row fullheight">
+                                <div class="col-sm-12 fullheight" ng-include="baseurl + '/angular_templates/EditView.html'">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-{{grid2}} fullheight" ng-init="data = []" style="background-color: Red;">
+                    <div id="board" class="fullheight">
+                        <div class="container-fluid" ng-hide="subgrid1hide" style="height:{{subgrid1}}%">
+                            <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     
+                            </div>
+                        </div>
+                        <div class="container-fluid" ng-init="showBoard()" style="height:{{subgrid2}}%">
+                            <div class="row fullheight" >
+
+                                <div class="col-xs-12" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}">
+
+                                    <img ng-if="picto.imgPicto" width="100%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}"  ng-click="addToSentence(picto.pictoid);" ng-right-click="openMenu(picto.pictoid);" ng-drop="true" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="true" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"/>
+
+
+
+                                    <div ng-drop="true" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-if="!picto.imgPicto" class="emptyImg" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <br/><br/><br/><br/>
+                    </div>
+                    <div class="row" ng-hide="subgrid3hide" style="height:{{subgrid3}}%">
+                        <h4>SENTENCEBOARD1.PHP</h4>
+                    </div>
+                </div>
+
+                <div ng-hide="grid3hide" class="col-xs-{{grid3}} fullheight" style="background-color: Blue;">
+                    <div>
+                        <h4>UNKNOWN.PHP</h4>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div id="footer" class="container-fluid text-center row">
+            <div style="background-color: orange">
+                <br />
+                <button class="btn-success" ng-click="showall()">2:8:2</button>
+                <button class="btn-success" ng-click="showright()">10:2</button>
+                <button class="btn-success" ng-click="showleft()">2:10</button>
+                <button class="btn-success" ng-click="showmid()">12</button>
+                <button class="btn-success" ng-click="showupdown()">2:8:2</button>
+                <button class="btn-success" ng-click="showup()">2:10</button>
+                <button class="btn-success" ng-click="showdown()">10:2</button>
+                <button class="btn-success" ng-click="showmiddle()">12</button>
+                <br />
+            </div>
+            <div style="background-color: yellow">
+                <br />
+                <button class="btn-success" ng-click="edit()">edit</button>
+                <br />
+            </div>
+            <div style="background-color: grey">
+                <br />
+                <button class="btn-success" ng-click="addColumn()">addColumn</button>
+                <button class="btn-success" ng-click="addRow()">addRow</button>
+                <br />
+                <br />
+                <button class="btn-success" ng-click="removeColumn()">removeColumn</button>
+                <button class="btn-success" ng-click="removeRow()">removeRow</button>
+                <br />
+            </div>
+
+        </div>
+    </div>
+
+
+

@@ -3,6 +3,7 @@ angular.module('app', [
 	'ngRoute',
 	'ngResource',
 	'ngCookies',
+        'ngDraggable',
 	'ui.bootstrap',
 
 	//Modules
@@ -32,6 +33,10 @@ angular.module('app', [
 		.when('/register', {
 			controller:'RegisterCtrl',
 			templateUrl:'../../jocomunicoapp/angular_templates/register.html'
+		})
+                .when('/board', {
+			controller:'myCtrl',
+			templateUrl:'../../jocomunicoapp/angular_templates/MainBoard.html'
 		})
 		.otherwise({ redirectTo:'/' });
 })
