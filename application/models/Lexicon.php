@@ -787,13 +787,12 @@ class Lexicon extends CI_Model {
     /*
      * SEND WORDS ENTERED BY THE USER TO THE DATABASE
      */
-    function insertarFrase($idusu)
+    function insertarFrase($idusu, $tipusfrase, $tense, $negativa)
     {
         $datestring = "%Y/%m/%d";
         $time = time();
         $avui = mdate($datestring, $time);
 
-        $negativa = $this->input->post('negativa', true);
         if ($negativa) $negativa = '1';
         else $negativa = '0';
         
@@ -862,17 +861,17 @@ class Lexicon extends CI_Model {
             }
         }
 
-        $inputids .= " / #".$this->input->post('tipusfrase', true);
-        $inputids .= " / @".$this->input->post('tense', true);
+        $inputids .= " / #".$tipusfrase;
+        $inputids .= " / @".$tense;
         if ($negativa) $inputids .= " / %no";
         
         $inputwords .="<br /><br />".$inputids;
 
         $data = array(
             'ID_SHUser' => $idusu,
-            'sentenceType' => $this->input->post('tipusfrase', true),
+            'sentenceType' => $tipusfrase,
             'isNegative' => $negativa,
-            'sentenceTense' => $this->input->post('tense', true),
+            'sentenceTense' => $tense,
             'sentenceDate' => $avui,
             'intendedSentence' => $this->input->post('fraseobj', true),
             'sentenceFinished' => '1',
