@@ -2485,11 +2485,21 @@ class Mypattern {
                 }
             }
             else {
-                $this->subjsiguals = true;
-                // i el subjecte és en 3a persona, ja que és una proposició
-                $this->perssubj1 = 3; 
+                    $this->subjsiguals = true;
+                    // i el subjecte és en 3a persona, ja que és una proposició
+                    $this->perssubj1 = 3; 
             }
         }
+        
+        // si era pseudimpersonal amb subverb, si el receiver1 està definit i el subj2 no ho està, 
+        // que subj2 = receiver1
+        if ($this->pseudoimpersonal && isset($this->slotarray["Receiver 1"]) && $keysubj2 != null
+            && !isset($this->slotarray[$keysubj2]) ) {
+                    
+            $this->subjsiguals = true;
+        }
+        
+        
         // Si és verbless que posi per defecte la 1a persona, per si hi ha "Desig" activat
         // Ex: "Desig" Poma = Vull una poma
         if ($this->defaulttense == "verbless") $this->perssubj1 = 1;
@@ -2728,6 +2738,15 @@ class Mypattern {
                 $this->perssubj1 = 3; 
             }
         }
+        
+        // si era pseudimpersonal amb subverb, si el receiver1 està definit i el subj2 no ho està, 
+        // que subj2 = receiver1
+        if ($this->pseudoimpersonal && isset($this->slotarray["Receiver 1"]) && $keysubj2 != null
+            && !isset($this->slotarray[$keysubj2]) ) {
+                    
+            $this->subjsiguals = true;
+        }
+        
         // Si és verbless que posi per defecte la 1a persona, per si hi ha "Desig" activat
         // Ex: "Desig" Poma = Vull una poma
         if ($this->defaulttense == "verbless") $this->perssubj1 = 1;
