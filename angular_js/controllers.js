@@ -112,49 +112,48 @@ angular.module('controllers', [])
             }
         })
 
-        .controller('myCtrl', function ($scope, $http) {
-            $scope.config = function (boardconf)
-            {
-                $scope.SearchType = "Tots";
-                $scope.inEdit = false;
-                if (boardconf === 1)
-                {
-                    $scope.showall();
-                }
-                if (boardconf === 2)
-                {
-                    $scope.showright();
-                }
-                if (boardconf === 3)
-                {
-                    $scope.showleft();
-                }
-                if (boardconf === 4)
-                {
-                    $scope.showmid();
-                }
-                $scope.showup();
-                /*$scope.grid1hide = false;
-                 $scope.grid2hide = false;
-                 $scope.grid3hide = false;
-                 $scope.grid1 = 2;
-                 $scope.grid2 = 8;
-                 $scope.grid3 = 2;*/
-            };
-            $scope.range = function ($repeatnum)
-            {
-                var n = [];
-                for (i = 1; i < $repeatnum + 1; i++)
-                {
-                    n.push(i);
-                }
-                return n;
-            }
-            $scope.openDefault = function () {
+.controller('myCtrl', function ($scope, $http, ngDialog) {
+    $scope.config = function (boardconf)
+    {
+        $scope.SearchType = "Tots";
+        $scope.inEdit = false;
+        if (boardconf === 1)
+        {
+            $scope.showall();
+        }
+        if (boardconf === 2)
+        {
+            $scope.showright();
+        }
+        if (boardconf === 3)
+        {
+            $scope.showleft();
+        }
+        if (boardconf === 4)
+        {
+            $scope.showmid();
+        }
+        $scope.showup();
+        /*$scope.grid1hide = false;
+         $scope.grid2hide = false;
+         $scope.grid3hide = false;
+         $scope.grid1 = 2;
+         $scope.grid2 = 8;
+         $scope.grid3 = 2;*/
+    }; 
+    $scope.range = function($repeatnum)
+    {
+        var n = [];
+        for(i=1;i<$repeatnum+1;i++)
+        {
+            n.push(i);
+        }
+        return n;
+    };
+            $scope.openConfirmSize = function () {
+                alert('it works!');
                 ngDialog.open({
-                    template: 'firstDialogId',
-                    controller: 'InsideCtrl',
-                    className: 'ngdialog-theme-default'
+                    template: $scope.baseurl + '/angular_templates/SentenceView.html'
                 });
             };
             $scope.showall = function ()
