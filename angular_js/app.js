@@ -5,6 +5,7 @@ angular.module('app', [
 	'ngCookies',
         'ngDraggable',
 	'ui.bootstrap',
+        'ngDialog',
 
 	//Modules
 	'controllers',

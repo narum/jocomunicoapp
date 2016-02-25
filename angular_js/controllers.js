@@ -112,7 +112,7 @@ angular.module('controllers', [])
 	}
 })
 
-.controller('myCtrl', function ($scope, $http) {
+.controller('myCtrl', function ($scope, $http, ngDialog) {
     $scope.config = function (boardconf)
     {
         $scope.SearchType = "Tots";
@@ -149,12 +149,11 @@ angular.module('controllers', [])
             n.push(i);
         }
         return n;
-    }
-            $scope.openDefault = function () {
+    };
+            $scope.openConfirmSize = function () {
+                alert('it works!');
                 ngDialog.open({
-                    template: 'firstDialogId',
-                    controller: 'InsideCtrl',
-                    className: 'ngdialog-theme-default'
+                    template: $scope.baseurl + '/angular_templates/SentenceView.html'
                 });
             };
     $scope.showall = function ()
