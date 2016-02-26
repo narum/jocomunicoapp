@@ -66,6 +66,9 @@ class Mypattern {
                         
         $this->id = $patternbbdd->patternid;
         $this->idverb = $patternbbdd->verbid;
+        // els verbless patterns quan competeixen amb patrons no verbless, que comencin amb menys punts
+        // que només els agafi si no en troba de millors
+        if ($this->idverb == '0') $this->puntuaciofinal = 90;
         
         if ($patternbbdd->pronominal == '1') $this->pronominal = true;
         if ($patternbbdd->pseudoimpersonal == '1') $this->pseudoimpersonal = true;

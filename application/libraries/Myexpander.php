@@ -48,10 +48,16 @@ class Myexpander {
 
         // FIND VERBS
         $arrayVerbs = array();
-
+        // si a la frase no hi ha verb i només hi ha adjectius (amb o sense modificadors) voldrem que 
+        // agafi els patrons de ser i estar, si no només posarà els patrons verbless
+        $thereisadj = false;
+        $othertypes = false;
+                
         for ($i=0; $i<count($this->paraulescopia); $i++) {
             $word = &$this->paraulescopia[$i];
             if ($word->tipus == "verb") $arrayVerbs[] = &$word;
+            else if ($word->tipus == "adj") $thereisadj = true;
+            else if ($word->tipus != "modifier") $othertypes = true;
             
             // aprofitem el bucle que passa per totes les paraules per preparar la frase final per
             // si hi ha un error que digui la frase inicial sense expandir-la
@@ -60,7 +66,7 @@ class Myexpander {
 
         // GET PATTERNS
 
-        $this->initialiseVerbPatterns($arrayVerbs, $propietatsfrase);
+        $this->initialiseVerbPatterns($arrayVerbs, $propietatsfrase, $thereisadj, $othertypes);
         // $verbPatterns = new Mypatterngroup();            
         // $verbPatterns.initialise($arrayVerbs);
 
@@ -190,7 +196,7 @@ class Myexpander {
             for ($i=0; $i<count($this->puntsallpatterns); $i++) {
                 
                 // PER VEURE LES PUNTUACIONS DE TOTS ELS PATRONS QUE HA PROVAT 
-                // echo "Patró ".$i.": ".$this->puntsallpatterns[$i]." </br ><br />";
+                echo "Patró ".$this->allpatterns[$i]->id.": ".$this->puntsallpatterns[$i]." </br ><br />";
                 
                 if ($this->puntsallpatterns[$i] > $bestpatternpunts) {
                     $bestpatternpunts = $this->puntsallpatterns[$i];
@@ -240,7 +246,7 @@ class Myexpander {
 
 
     // INICIALITZA TOTS ELS PATTERNS POSSIBLES I ELS POSA A L'ARRAY ALLPATTERNS
-    function initialiseVerbPatterns($arrayVerbs, $propietatsfrase)
+    function initialiseVerbPatterns($arrayVerbs, $propietatsfrase, $thereisadj, $othertypes)
     {   
         $CI = &get_instance();
         $CI->load->model('Lexicon');
@@ -264,7 +270,7 @@ class Myexpander {
             $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(0); // Verbless
 
             // si no és una resposta afegir també els patterns de ser i estar
-            if ($propietatsfrase['tipusfrase'] != "resposta") {
+            if ($propietatsfrase['tipusfrase'] != "resposta" && $thereisadj && !$othertypes) {
                 $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(100); // Estar
                 $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(86); // Ser
             }
