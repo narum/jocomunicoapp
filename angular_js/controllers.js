@@ -232,12 +232,15 @@ angular.module('controllers', [])
             $scope.showBoard = function ()
             {
                 var url = $scope.baseurl + "Board/showCellboard";
+                alert("posicion 6");
 
                 $http.post(url).success(function (response)
                 {
                     $scope.columns = response.col;
                     $scope.rows = response.row;
                     $scope.data = response.data;
+                    $scope.oldW = response.col;
+                    $scope.oldH = response.row;
                 });
             };
 
@@ -271,33 +274,38 @@ angular.module('controllers', [])
                 var url = $scope.baseurl + "Board/modifyCellBoard";
                 var postdata = {r: $newH, c: $newW};
                 if ($newH < $scope.oldH || $newW < $scope.oldW) {
-                    alert("QUE COJONES HACES "+ 
-                            $newH +"<" + $scope.oldH + " o bien " +
-                            $newW +"<" + $scope.oldW);
+                    alert("QUE COJONES HACES " +
+                            $newH + "<" + $scope.oldH + " o bien " +
+                            $newW + "<" + $scope.oldW);
                     $http.post(url, postdata).then(function (response)
                     {
-                        $scope.nameboard = response.name;
-                        $scope.altura = $scope.range(20)[response.row].valueOf();
-                        $scope.amplada = $scope.range(20)[response.col].valueOf();
-                        $scope.oldH = $scope.range(20)[response.row].valueOf();
-                        $scope.oldW = $scope.range(20)[response.col].valueOf();
+                        $scope.showBoard();
+                    }).error(function (response)
+                    {
+ 
                     });
                 } else {
 
                     $http.post(url, postdata).then(function (response)
                     {
-                        $scope.nameboard = response.name;
-                        $scope.altura = $scope.range(20)[response.row].valueOf();
-                        $scope.amplada = $scope.range(20)[response.col].valueOf();
-                        $scope.oldH = $scope.range(20)[response.row].valueOf();
-                        $scope.oldW = $scope.range(20)[response.col].valueOf();
+                        $scope.showBoard();
+                    }).error(function (response)
+                    {
+
                     });
                 }
+                
             };
 
-            $scope.openMenu = function ($id) {
-
-                open($scope.baseurl + 'editMenu.html', '', 'top=300,left=300,width=300,height=300');
+            $scope.openEditCellMenu = function ($id) {
+                var iscope = $scope.$new(true);
+                iscope.id = $id;
+                //get basic info
+                ngDialog.open({
+                    template: $scope.baseurl + '/angular_templates/EditCellView.html',
+                    scope: iscope
+                    
+                });
             };
 
             // Desde aqui son del div de sentencias

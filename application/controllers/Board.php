@@ -123,23 +123,25 @@ class Board extends REST_Controller {
             $this->removeRows($output[0]->width, $output[0]->height, 1, -$rowsDiff);
         }
 
-        $array = $this->BoardInterface->getCellsBoard(1);
+        //$array = $this->BoardInterface->getCellsBoard(1);
 
 
-        $response = [
-            'col' => $c,
-            'row' => $r,
-            'data' => $array
-        ];
+        
         $this->BoardInterface->commitTrans();
-        if ($this->BoardInterface->statusTrans() === FALSE) {
-            $response = [
-                'error' => "errorText"
-            ];
-            $this->response($response, 500);
-        } else {
+        
+        $output = $this->BoardInterface->getBoardStruct(1);
+        $response = [
+            'col' => '1',
+            'row' => '1'
+        ];
+//        if ($this->BoardInterface->statusTrans() === FALSE) {
+//            $response = [
+//                'error' => "errorText"
+//            ];
+//            $this->response($response, 500);
+//        } else {
             $this->response($response, REST_Controller::HTTP_OK);
-        }
+//        }
     }
 
     /*

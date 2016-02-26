@@ -10,7 +10,7 @@
             <select
                 ng-model="altura"
                 ng-options="n for n in range(20)"
-                ng-change="changeSize(altura.valueOf(), amplada.valueOf()); showBoard();">
+                ng-change="changeSize(altura.valueOf(), amplada.valueOf());">
             </select>
         </div>
         <div class='col-xs-6 text-center'>
@@ -18,7 +18,7 @@
             <select
                 ng-model="amplada"
                 ng-options="n for n in range(20)"
-                ng-change="changeSize(altura.valueOf(),amplada.valueOf()); showBoard();">
+                ng-change="changeSize(altura.valueOf(),amplada.valueOf());">
             </select>
         </div>
         <div class='col-xs-12 text-center'>
