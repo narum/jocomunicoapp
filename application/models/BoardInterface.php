@@ -54,6 +54,24 @@ class BoardInterface extends CI_Model {
         return $output;
     }
 
+    function getCell($pos, $idboard) {
+        $output = array();
+
+        $this->db->where('R_BoardCell.ID_RBoard', $idboard);
+        $this->db->where('R_BoardCell.posInBoard', $pos);
+        $this->db->join('Cell', 'R_BoardCell.ID_RCell = Cell.ID_Cell');
+        //Este tiene que ser left, si pictograms.picto id = null significa que esta vacia
+        $this->db->join('Pictograms', 'Cell.ID_CPicto = Pictograms.pictoid', 'left');
+
+        $query = $this->db->get('R_BoardCell');
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
     function loadCFG($user) {
 
         $newdata = array(

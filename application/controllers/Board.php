@@ -34,11 +34,33 @@ class Board extends REST_Controller {
     }
 
     /*
-     * Get de cells of the boards that will be displayed and the 
+     * Get the cell's info
+     */
+
+    public function getCell_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+        $idboard = $request->idboard;
+        
+        // "1" es el numero de id de la "board"
+        $info = $this->BoardInterface->getCell($id, 1);
+
+
+        $response = [
+            'info' => $info[0]
+        ];
+
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    
+    
+    /*
+     * Get the cells of the boards that will be displayed and the 
      * number of rows and columns in order to set the proportion
      */
 
-        public function getCellboard_post() {
+    public function getCellboard_post() {
 
         // "1" es el numero de id de la "board"
         $output = $this->BoardInterface->getBoardStruct(1);
@@ -51,12 +73,11 @@ class Board extends REST_Controller {
             'col' => $columns,
             'row' => $rows,
             'name' => $name
-            
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     public function showCellboard_post() {
 
         $array = array();

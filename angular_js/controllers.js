@@ -269,20 +269,20 @@ angular.module('controllers', [])
             };
 
 
-            $scope.changeSize = function ($newH, $newW)
+            $scope.changeSize = function (newH, newW)
             {
                 var url = $scope.baseurl + "Board/modifyCellBoard";
-                var postdata = {r: $newH, c: $newW};
-                if ($newH < $scope.oldH || $newW < $scope.oldW) {
+                var postdata = {r: newH, c: newW};
+                if (newH < $scope.oldH || newW < $scope.oldW) {
                     alert("QUE COJONES HACES " +
-                            $newH + "<" + $scope.oldH + " o bien " +
-                            $newW + "<" + $scope.oldW);
+                            newH + "<" + $scope.oldH + " o bien " +
+                            newW + "<" + $scope.oldW);
                     $http.post(url, postdata).then(function (response)
                     {
                         $scope.showBoard();
                     }).error(function (response)
                     {
- 
+
                     });
                 } else {
 
@@ -294,18 +294,32 @@ angular.module('controllers', [])
 
                     });
                 }
-                
+
             };
 
-            $scope.openEditCellMenu = function ($id) {
+            $scope.openEditCellMenu = function (id) {
                 var iscope = $scope.$new(true);
-                iscope.id = $id;
                 //get basic info
-                ngDialog.open({
-                    template: $scope.baseurl + '/angular_templates/EditCellView.html',
-                    scope: iscope
+                var url = $scope.baseurl + "Board/getCell";
+                var postdata = {id: id, idboard: 1};
+
+                $http.post(url, postdata).success(function (response)
+                {
                     
+                    alert(response.info.cellType);
+                    iscope.info = response.info;
+                    iscope.baseurl = $scope.baseurl;
+                    iscope.getFunctions = function (id) {
+                        
+                    };
+                    ngDialog.open({
+                        template: $scope.baseurl + '/angular_templates/EditCellView.html',
+                        scope: iscope
+                    });
+                    $scope.cellType = "picto";
                 });
+
+
             };
 
             // Desde aqui son del div de sentencias

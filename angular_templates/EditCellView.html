@@ -1,5 +1,36 @@
 
-<div class="fullheight">
-    <p>{{id}}</p>
-
+<div class="row fullheight">
+    <p>{{info.pictoid}}</p>
+    <div class="col-xs-6">
+        <div class="row">
+            tipo
+        </div>
+        <div class="row">
+            <form name="cellType">
+                <label>
+                    <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="picto"/>
+                    pictograma
+                </label>
+                <label>
+                    <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="Function"/>
+                    funció
+                </label>
+                <label>
+                    <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="Folder"/>
+                    carpeta
+                </label>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                Funcio
+            </div>
+            <div class="col-xs-6">
+                {{funciones}}
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <img width="100%" height="100%" src="{{baseurl}}img/pictos/{{info.imgPicto}}"/>
+    </div>
 </div>
