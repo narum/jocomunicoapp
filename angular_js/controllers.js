@@ -144,17 +144,11 @@ angular.module('controllers', [])
             $scope.range = function ($repeatnum)
             {
                 var n = [];
-                for (i = 1; i < $repeatnum + 1; i++)
+                for (i = 0; i < $repeatnum; i++)
                 {
                     n.push(i);
                 }
                 return n;
-            };
-            $scope.openConfirmSize = function () {
-                alert('it works!');
-                ngDialog.open({
-                    template: $scope.baseurl + '/angular_templates/SentenceView.html'
-                });
             };
             $scope.showall = function ()
             {
@@ -232,7 +226,6 @@ angular.module('controllers', [])
             $scope.showBoard = function ()
             {
                 var url = $scope.baseurl + "Board/showCellboard";
-                alert("posicion 6");
 
                 $http.post(url).success(function (response)
                 {
@@ -274,17 +267,13 @@ angular.module('controllers', [])
                 var url = $scope.baseurl + "Board/modifyCellBoard";
                 var postdata = {r: $newH, c: $newW};
                 if ($newH < $scope.oldH || $newW < $scope.oldW) {
-                    alert("QUE COJONES HACES " +
+                    alert("QUE HACES " +
                             $newH + "<" + $scope.oldH + " o bien " +
                             $newW + "<" + $scope.oldW);
-                    $http.post(url, postdata).then(function (response)
-                    {
-                        $scope.showBoard();
-                    }).error(function (response)
-                    {
- 
-                    });
-                } else {
+                    //Confirm function
+                    $scope.openConfirmSize($newH,$scope.oldH,$newW,$scope.oldW,url,postdata);
+                } 
+                else {
 
                     $http.post(url, postdata).then(function (response)
                     {
@@ -296,7 +285,42 @@ angular.module('controllers', [])
                 }
                 
             };
-
+            $scope.openConfirmSize = function ($newH,$oldH,$newW,$oldW,$url,$postdata) {
+                
+                //Object of all new/old sizes
+                $scope.FormData = {
+                    newH: $newH,
+                    oldH: $oldH,
+                    newW: $newW,
+                    oldW: $oldW,
+                    HWType: 2,
+                    Dnum: 0
+                };
+                if($newH !== $oldH)
+                {
+                    alert("BOOM");
+                    $scope.FormData.HWType = 0;
+                    $scope.FormData.Dnum = ($oldH - $newH);
+                }
+                else if($newW !== $oldW)
+                {
+                    $scope.FormData.HWType = 1;
+                    $scope.FormData.Dnum = ($oldW - $newW);
+                }
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmResize.html',
+                    scope:$scope
+                }).then(function (value) {
+                    //if confirm
+                    alert('true');
+                    confrim = true;
+                    $http.post($url, $postdata).then(function (response){$scope.showBoard();}).error(function (response){});
+                }, function (value) {
+                    //if close
+                    alert('false');
+                });
+            };
+            
             $scope.openEditCellMenu = function ($id) {
                 var iscope = $scope.$new(true);
                 iscope.id = $id;
@@ -394,13 +418,6 @@ angular.module('controllers', [])
                             $scope.statusWord = response.status;
                             $scope.dataWord = response.data;
                         });
-            };
-            $scope.range = function ($max) {
-                var range = [];
-                for (i = 0; i < $max; i++) {
-                    range.push(i);
-                }
-                return range;
             };
             //Dragndrop events
             $scope.centerAnchor = true;
