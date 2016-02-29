@@ -53,8 +53,19 @@ class Myexpander {
         $thereisadj = false;
         $othertypes = false;
                 
+        // fem una cerca de tots els pictogames i agafem configuracions necessàries pel sistema
         for ($i=0; $i<count($this->paraulescopia); $i++) {
             $word = &$this->paraulescopia[$i];
+            
+            // si troba un pictograma que no es pot expandir, com ara el de "Falta pictograma"
+            // que surti l'error i un cop acabi el bucle que surti del sistema d'expansió
+            if ($word->supportsExpansion == '0') {
+                $this->info['errormessage'] = "Error. S’ha trobat un pictograma que no es pot expandir.";
+                $this->info['error'] = true;
+                $this->info['errorcode'] = 6;
+                $this->readwithoutexpansion = true;
+            }
+            
             if ($word->tipus == "verb") $arrayVerbs[] = &$word;
             else if ($word->tipus == "adj") $thereisadj = true;
             else if ($word->tipus != "modifier") $othertypes = true;
@@ -62,6 +73,12 @@ class Myexpander {
             // aprofitem el bucle que passa per totes les paraules per preparar la frase final per
             // si hi ha un error que digui la frase inicial sense expandir-la
             $frasefinalnotexpanded .= $word->text." ";
+        }
+        
+        // si ha trobat un pictograma que no es pot expandir que surti del sistema d'expansió
+        if ($this->readwithoutexpansion) {
+            $this->info['frasefinal'] = $frasefinalnotexpanded;
+            return;
         }
 
         // GET PATTERNS
@@ -196,7 +213,7 @@ class Myexpander {
             for ($i=0; $i<count($this->puntsallpatterns); $i++) {
                 
                 // PER VEURE LES PUNTUACIONS DE TOTS ELS PATRONS QUE HA PROVAT 
-                echo "Patró ".$this->allpatterns[$i]->id.": ".$this->puntsallpatterns[$i]." </br ><br />";
+                // echo "Patró ".$this->allpatterns[$i]->id.": ".$this->puntsallpatterns[$i]." </br ><br />";
                 
                 if ($this->puntsallpatterns[$i] > $bestpatternpunts) {
                     $bestpatternpunts = $this->puntsallpatterns[$i];

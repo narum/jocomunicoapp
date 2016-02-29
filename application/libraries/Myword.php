@@ -14,6 +14,7 @@ class Myword {
                             // Ex: Per noms (lloc, event)...
     var $text; // Paraula en text
     var $img; // Enllaç al pictograma
+    var $supportsExpansion; // Si la paraula pot ser utilitzada dins el sistema d'expansió
     
     var $propietats = array(); // Varia segons el tipus de paraula. És la fila de la BBDD
     var $patterns = array(); // Només pels verbs
@@ -50,6 +51,7 @@ class Myword {
         else $this->identry = $paraula->ID_RSHPSentence;
         $this->tipus = $paraula->pictoType;
         $this->img = $paraula->imgPicto;
+        $this->supportsExpansion = $paraula->supportsExpansion;
         
         if ($paraula->isplural == '1') $this->plural = true;
         else $this->plural = false;
