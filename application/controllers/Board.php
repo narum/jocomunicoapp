@@ -14,8 +14,8 @@ class Board extends REST_Controller {
         $this->load->model('BoardInterface');
         $this->load->model('Lexicon');
         $this->load->library('Myword');
-            $this->load->library('Myslot');
-            $this->load->library('Mypattern');
+        $this->load->library('Myslot');
+        $this->load->library('Mypattern');
         $this->load->library('Myexpander');
     }
 
@@ -42,7 +42,7 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $id = $request->id;
         $idboard = $request->idboard;
-        
+
         // "1" es el numero de id de la "board"
         $info = $this->BoardInterface->getCell($id, 1);
 
@@ -53,8 +53,7 @@ class Board extends REST_Controller {
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
-    
+
     /*
      * Get the cells of the boards that will be displayed and the 
      * number of rows and columns in order to set the proportion
@@ -117,20 +116,19 @@ class Board extends REST_Controller {
         $r = $request->r;
 
         // "1" es el numero de id de la "board"
-
 //        $output = $this->BoardInterface->getBoardStruct(1);
 //        $columns = $output[0]->width + $c;
 //        $rows = $output[0]->height + $r;
 //        $this->BoardInterface->updateNumCR($columns, $rows, 1);
         //MODIF: cuando pasemos el total se cambia lo de arriba por:
-        
+
         $output = $this->BoardInterface->getBoardStruct(1);
         $this->BoardInterface->updateNumCR($c, $r, 1);
         $columnsDiff = $c - $output[0]->width;
         $rowsDiff = $r - $output[0]->height;
-         
-        
-        
+
+
+
 
         if ($columnsDiff > 0) {
             $this->addColumns($output[0]->width, $output[0]->height, 1, $columnsDiff);
@@ -147,9 +145,9 @@ class Board extends REST_Controller {
         //$array = $this->BoardInterface->getCellsBoard(1);
 
 
-        
+
         $this->BoardInterface->commitTrans();
-        
+
         $output = $this->BoardInterface->getBoardStruct(1);
         $response = [
             'col' => '1',
@@ -161,7 +159,7 @@ class Board extends REST_Controller {
 //            ];
 //            $this->response($response, 500);
 //        } else {
-            $this->response($response, REST_Controller::HTTP_OK);
+        $this->response($response, REST_Controller::HTTP_OK);
 //        }
     }
 
@@ -322,7 +320,7 @@ class Board extends REST_Controller {
         $negativa = $request->negativa;
         $this->Lexicon->insertarFrase(1, $tipusfrase, $tense, $negativa);
 
-       
+
         $this->BoardInterface->commitTrans();
 
         if ($this->BoardInterface->statusTrans() === FALSE) {
@@ -346,17 +344,46 @@ class Board extends REST_Controller {
         }
     }
 
-     public function addPicto_post() {
+    /*
+     * Get the function
+     */
+
+    public function getFunction_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+
+        $function = $this->BoardInterface->getFunction($id);
+        $functionString = $function[0]->functShortName;
+        //MODIF: No puedo poner directamente ->$functionString....
+        switch ($functionString) {
+            case 'afegirModifNom("pl")':
+                $data = $this->BoardInterface->afegirModifNom("pl");
+                break;
+            case 'afegirModifNom("fem")':
+                $data = $this->BoardInterface->afegirModifNom("fem");
+                break;
+            case 'afegirModifNom("i")':
+                $data = $this->BoardInterface->afegirModifNom("i");
+                break;
+        }
+        //$data = $this->BoardInterface->$function[0]->functShortName;
+        $response = [
+            'data' => $data
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+
+    public function addPicto_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
         $pos = $request->pos;
         //$boardid = $request->boardid;
-
         //1 es la board
-        $cell = $this->BoardInterface->getIDCell($pos,1);
-        $this->BoardInterface->updateDataCell($id,$cell[0]->ID_RCell);
-        
+        $cell = $this->BoardInterface->getIDCell($pos, 1);
+        $this->BoardInterface->updateDataCell($id, $cell[0]->ID_RCell);
+
         $data = $this->BoardInterface->getCellsBoard(1);
 
         $response = [
@@ -364,19 +391,18 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     public function swapPicto_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $pos1 = $request->pos1;
         $pos2 = $request->pos2;
         //$boardid = $request->boardid;
-
         //1 es la board
-        $this->BoardInterface->updatePosCell($pos1,-1,1);  
-        $this->BoardInterface->updatePosCell($pos2, $pos1,1);
-        $this->BoardInterface->updatePosCell(-1, $pos2,1);
-        
+        $this->BoardInterface->updatePosCell($pos1, -1, 1);
+        $this->BoardInterface->updatePosCell($pos2, $pos1, 1);
+        $this->BoardInterface->updatePosCell(-1, $pos2, 1);
+
         $data = $this->BoardInterface->getCellsBoard(1);
 
         $response = [
@@ -384,17 +410,16 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     public function removePicto_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $pos = $request->pos;
         //$boardid = $request->boardid;
-
         //1 es la board
-        $cell = $this->BoardInterface->getIDCell($pos,1);  
-        $this->BoardInterface->updateDataCell(NULL,$cell[0]->ID_RCell);       
-      
+        $cell = $this->BoardInterface->getIDCell($pos, 1);
+        $this->BoardInterface->updateDataCell(NULL, $cell[0]->ID_RCell);
+
         $data = $this->BoardInterface->getCellsBoard(1);
 
         $response = [
@@ -402,5 +427,5 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
 }

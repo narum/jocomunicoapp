@@ -71,7 +71,7 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     function loadCFG($user) {
 
         $newdata = array(
@@ -95,7 +95,7 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     function updateDataCell($idpicto, $cell) {
         $output = array();
 
@@ -226,34 +226,34 @@ class BoardInterface extends CI_Model {
 
     function addStatsX2($paraulesFrase, $iduser) {
         for ($i = 1; $i < count($paraulesFrase); $i++) {
-                $word1 = $paraulesFrase[$i - 1];
-                $word2 = $paraulesFrase[$i];
-                $inputid1 = $word1->id;
-                $inputid2 = $word2->id;
-                $this->db->where('picto1id', $inputid1);
-                $this->db->where('picto2id', $inputid2);
-                $this->db->where('ID_PSUP2User', $iduser);
-                $query = $this->db->get('P_StatsUserPictox2');
-                if ($query->num_rows() > 0) {
-                    $stat = $query->result();
-                    $num = $stat[0]->countx2 + 1;
+            $word1 = $paraulesFrase[$i - 1];
+            $word2 = $paraulesFrase[$i];
+            $inputid1 = $word1->id;
+            $inputid2 = $word2->id;
+            $this->db->where('picto1id', $inputid1);
+            $this->db->where('picto2id', $inputid2);
+            $this->db->where('ID_PSUP2User', $iduser);
+            $query = $this->db->get('P_StatsUserPictox2');
+            if ($query->num_rows() > 0) {
+                $stat = $query->result();
+                $num = $stat[0]->countx2 + 1;
 
-                    $this->db->where('picto2id', $inputid2);
-                    $this->db->where('picto1id', $inputid1);
-                    $this->db->where('ID_PSUP2User', $iduser);
-                    $data = array(
-                        'countx2' => $num
-                    );
-                    $query = $this->db->update('P_StatsUserPictox2', $data);
-                } else {
-                    $data = array(
-                        'countx2' => '1',
-                        'picto2id' => $inputid2,
-                        'picto1id' => $inputid1,
-                        'ID_PSUP2User' => $iduser
-                    );
-                    $query = $this->db->insert('P_StatsUserPictox2', $data);
-                }
+                $this->db->where('picto2id', $inputid2);
+                $this->db->where('picto1id', $inputid1);
+                $this->db->where('ID_PSUP2User', $iduser);
+                $data = array(
+                    'countx2' => $num
+                );
+                $query = $this->db->update('P_StatsUserPictox2', $data);
+            } else {
+                $data = array(
+                    'countx2' => '1',
+                    'picto2id' => $inputid2,
+                    'picto1id' => $inputid1,
+                    'ID_PSUP2User' => $iduser
+                );
+                $query = $this->db->insert('P_StatsUserPictox2', $data);
+            }
         }
     }
 
@@ -264,40 +264,86 @@ class BoardInterface extends CI_Model {
 
     function addStatsX3($paraulesFrase, $iduser) {
         for ($i = 2; $i < count($paraulesFrase); $i++) {
-                $word1 = $paraulesFrase[$i - 2];
-                $word2 = $paraulesFrase[$i - 1];
-                $word3 = $paraulesFrase[$i];
-                $inputid1 = $word1->id;
-                $inputid2 = $word2->id;
-                $inputid3 = $word3->id;
-                $this->db->where('picto1id', $inputid1);
-                $this->db->where('picto2id', $inputid2);
-                $this->db->where('picto3id', $inputid3);
-                $this->db->where('ID_PSUP3User', $iduser);
-                $query = $this->db->get('P_StatsUserPictox3');
-                if ($query->num_rows() > 0) {
-                    $stat = $query->result();
-                    $num = $stat[0]->countx3 + 1;
+            $word1 = $paraulesFrase[$i - 2];
+            $word2 = $paraulesFrase[$i - 1];
+            $word3 = $paraulesFrase[$i];
+            $inputid1 = $word1->id;
+            $inputid2 = $word2->id;
+            $inputid3 = $word3->id;
+            $this->db->where('picto1id', $inputid1);
+            $this->db->where('picto2id', $inputid2);
+            $this->db->where('picto3id', $inputid3);
+            $this->db->where('ID_PSUP3User', $iduser);
+            $query = $this->db->get('P_StatsUserPictox3');
+            if ($query->num_rows() > 0) {
+                $stat = $query->result();
+                $num = $stat[0]->countx3 + 1;
 
-                    $this->db->where('picto3id', $inputid3);
-                    $this->db->where('picto2id', $inputid2);
-                    $this->db->where('picto1id', $inputid1);
-                    $this->db->where('ID_PSUP3User', $iduser);
-                    $data = array(
-                        'countx3' => $num
-                    );
-                    $query = $this->db->update('P_StatsUserPictox3', $data);
-                } else {
-                    $data = array(
-                        'countx3' => '1',
-                        'picto3id' => $inputid3,
-                        'picto2id' => $inputid2,
-                        'picto1id' => $inputid1,
-                        'ID_PSUP3User' => $iduser
-                    );
-                    $query = $this->db->insert('P_StatsUserPictox3', $data);
-                }
+                $this->db->where('picto3id', $inputid3);
+                $this->db->where('picto2id', $inputid2);
+                $this->db->where('picto1id', $inputid1);
+                $this->db->where('ID_PSUP3User', $iduser);
+                $data = array(
+                    'countx3' => $num
+                );
+                $query = $this->db->update('P_StatsUserPictox3', $data);
+            } else {
+                $data = array(
+                    'countx3' => '1',
+                    'picto3id' => $inputid3,
+                    'picto2id' => $inputid2,
+                    'picto1id' => $inputid1,
+                    'ID_PSUP3User' => $iduser
+                );
+                $query = $this->db->insert('P_StatsUserPictox3', $data);
             }
         }
     }
-  
+
+    function getFunction($id) {
+        
+        $this->db->where('ID_Function', $id);
+        $query = $this->db->get('Function');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+
+    function afegirModifNom($modif) {
+        
+        $idusu = $this->session->userdata('idusu');
+        
+        $this->db->where('ID_RSTPUser', $idusu);
+        $query = $this->db->get('R_S_TempPictograms');
+
+        if ($query->num_rows() > 0) {
+            $aux = $query->result();
+            $nrows = $query->num_rows();
+            $identry = $aux[$nrows - 1]->ID_RSTPSentencePicto;
+
+            if ($modif == 'pl') {
+                $data = array(
+                    'isplural' => '1',
+                );
+            }
+            if ($modif == 'fem') {
+                $data = array(
+                    'isfem' => '1',
+                );
+            }
+            if ($modif == 'i') {
+                $data = array(
+                    'coordinated' => '1',
+                );
+            }
+
+            $this->db->where('ID_RSTPSentencePicto', $identry);
+            $this->db->update('R_S_TempPictograms', $data);
+        }
+    }
+
+}

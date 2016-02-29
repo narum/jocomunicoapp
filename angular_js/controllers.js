@@ -271,9 +271,8 @@ angular.module('controllers', [])
                             $newH + "<" + $scope.oldH + " o bien " +
                             $newW + "<" + $scope.oldW);
                     //Confirm function
-                    $scope.openConfirmSize($newH,$scope.oldH,$newW,$scope.oldW,url,postdata);
-                } 
-                else {
+                    $scope.openConfirmSize($newH, $scope.oldH, $newW, $scope.oldW, url, postdata);
+                } else {
 
                     $http.post(url, postdata).then(function (response)
                     {
@@ -285,8 +284,8 @@ angular.module('controllers', [])
                 }
 
             };
-            $scope.openConfirmSize = function ($newH,$oldH,$newW,$oldW,$url,$postdata) {
-                
+            $scope.openConfirmSize = function ($newH, $oldH, $newW, $oldW, $url, $postdata) {
+
                 //Object of all new/old sizes
                 $scope.FormData = {
                     newH: $newH,
@@ -296,31 +295,32 @@ angular.module('controllers', [])
                     HWType: 2,
                     Dnum: 0
                 };
-                if($newH !== $oldH)
+                if ($newH !== $oldH)
                 {
                     alert("BOOM");
                     $scope.FormData.HWType = 0;
                     $scope.FormData.Dnum = ($oldH - $newH);
-                }
-                else if($newW !== $oldW)
+                } else if ($newW !== $oldW)
                 {
                     $scope.FormData.HWType = 1;
                     $scope.FormData.Dnum = ($oldW - $newW);
                 }
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmResize.html',
-                    scope:$scope
+                    scope: $scope
                 }).then(function (value) {
                     //if confirm
                     alert('true');
                     confrim = true;
-                    $http.post($url, $postdata).then(function (response){$scope.showBoard();}).error(function (response){});
+                    $http.post($url, $postdata).then(function (response) {
+                        $scope.showBoard();
+                    }).error(function (response) {});
                 }, function (value) {
                     //if close
                     alert('false');
                 });
             };
-            
+
             $scope.openEditCellMenu = function ($id) {
                 var iscope = $scope.$new(true);
                 //get basic info
@@ -329,12 +329,12 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata).success(function (response)
                 {
-                    
+
                     alert(response.info.cellType);
                     iscope.info = response.info;
                     iscope.baseurl = $scope.baseurl;
                     iscope.getFunctions = function () {
-                        
+
                     };
                     ngDialog.open({
                         template: $scope.baseurl + '/angular_templates/EditCellView.html',
@@ -355,6 +355,18 @@ angular.module('controllers', [])
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.dataTemp = response.data;
+                });
+            };
+            
+            $scope.clickOnFunction = function (id) {
+
+                var url = $scope.baseurl + "Board/getFunction";
+                var postdata = {id: id};
+
+                $http.post(url, postdata).success(function (response)
+                {
+                    //MODIF: Falta añadir picto especial
+                    //$scope.dataTemp = response.data;
                 });
             };
             $scope.deleteLast = function () {
@@ -385,7 +397,7 @@ angular.module('controllers', [])
                 $http.post(url, postdata).success(function (response)
                 {
                     console.log(response);
-                    $scope.dataTemp = response.data;
+                    //$scope.dataTemp = response.data;
                     $scope.info = response.info;
                 });
                 $scope.tense = "defecte";

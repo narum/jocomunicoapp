@@ -37,14 +37,15 @@
                             <div class="row fullheight" >
 
                                 <div class="col-xs-12" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}">
+                                    <img ng-if="picto.imgCell" width="100%" height="100%" src="{{picto.imgCell}}"  ng-click="clickOnFunction(picto.ID_CFunction)" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"/>
                                     <!-- If there is an image this line mades it draggable and dropable.
                                          Only if we are in edit mode-->
-                                    <img ng-if="picto.imgPicto" width="100%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}"  ng-click="addToSentence(picto.pictoid);" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"/>
+                                    <img ng-if="picto.imgPicto && !picto.imgCell" width="100%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}"  ng-click="addToSentence(picto.pictoid);" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"/>
 
 
                                     <!-- If not, puts a "empty image" and mades it dropable
                                          Only if we are in edit mode-->
-                                    <div ng-if="!picto.imgPicto" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)"  class="emptyImg" />
+                                    <div ng-if="!picto.imgPicto && !picto.imgCell" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)"  class="emptyImg" />
                                 </div>
                             </div>
 
