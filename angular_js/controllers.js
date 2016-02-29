@@ -281,6 +281,7 @@ angular.module('controllers', [])
                     {
 
                     });
+                    $scope.edit();
                 }
 
             };
@@ -311,11 +312,8 @@ angular.module('controllers', [])
                 }).then(function (value) {
                     //if confirm
                     alert('true');
-                    confrim = true;
-                    $http.post($url, $postdata).then(function (response) {
-                        $scope.showBoard();
-                    }).error(function (response) {});
-                }, function (value) {
+                    $http.post($url, $postdata).then(function (response){$scope.showBoard();}).error(function (response){});
+            }, function (value) {
                     //if close
                     alert('false');
                 });
