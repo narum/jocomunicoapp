@@ -4,13 +4,13 @@
         <div class='col-xs-4' ng-style="{'height':'25% '}">
             <img class="fullheight" width="100%" height="100%" src="http://localhost/jocomunico/img/pictos/nada.png" ng-drop="true"  ng-drop-success="onDropRemove($data,$event)"/>
         </div>
-        <input type="text" class='col-xs-8 text-center' name="NameBoard" ng-value="nameboard" readonly="readonly" ng-style="{'height':'25% '}"/>
+        <input type="text" class='col-xs-8 text-center' name="NameBoard" ng-value="nameboard" ng-blind-html="amplada" readonly="readonly" ng-style="{'height':'25% '}"/>
         <div class='col-xs-6 text-center'>
             Altura
             <select
                 ng-model="altura"
                 ng-options="n for n in range(20)"
-                ng-change="changeSize(altura.valueOf(), amplada.valueOf());">
+                ng-change='changeSize(altura.valueOf(), amplada.valueOf(), "0");'>
             </select>
         </div>
         <div class='col-xs-6 text-center'>
@@ -18,7 +18,7 @@
             <select
                 ng-model="amplada"
                 ng-options="n for n in range(20)"
-                ng-change="changeSize(altura.valueOf(),amplada.valueOf());">
+                ng-change='changeSize(altura.valueOf(),amplada.valueOf(), "1");'>
             </select>
         </div>
         <div class='col-xs-12 text-center'>

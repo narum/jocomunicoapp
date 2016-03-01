@@ -148,9 +148,7 @@ class Board extends REST_Controller {
             $this->addColumns($output[0]->width, $output[0]->height, 1, $columnsDiff);
         } elseif ($columnsDiff < 0) {
             $this->removeColumns($output[0]->width, $output[0]->height, 1, -$columnsDiff);
-        }
-
-        if ($rowsDiff > 0) {
+        }elseif ($rowsDiff > 0) {
             $this->addRows($output[0]->width, $output[0]->height, 1, $rowsDiff);
         } elseif ($rowsDiff < 0) {
             $this->removeRows($output[0]->width, $output[0]->height, 1, -$rowsDiff);
