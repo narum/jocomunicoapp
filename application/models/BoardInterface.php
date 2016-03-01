@@ -8,11 +8,26 @@ class BoardInterface extends CI_Model {
 
         $this->load->library('Myword');
     }
+    
+    /*
+     * Load the user config
+     */
+    function loadCFG($user) {
+
+        $newdata = array(
+            'cfguser' => 1,
+            'cfgExpansionOnOff' => 1,
+            'cfgPredOnOff' => 1,
+            'cfgPredBarVertHor' => 0,
+            'cfgSentenceBarUpDown' => 1
+        );
+
+        $this->session->set_userdata($newdata);
+    }
 
     /*
-     * GETS THE NOUNS OF THE TYPE $type FROM THE DATABASE
+     * Get the board struct (columns, rows, name...) 
      */
-
     function getBoardStruct($id) {
         $output = array();
 
@@ -27,6 +42,9 @@ class BoardInterface extends CI_Model {
         return $output;
     }
 
+    /*
+     * Change the board struct (columns and rows) 
+     */
     function updateNumCR($c, $r, $id) {
         $output = array();
 
@@ -35,7 +53,10 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-
+    
+    /*
+     * Return all pictograms from board 
+     */
     function getCellsBoard($id) {
         $output = array();
 
@@ -54,6 +75,9 @@ class BoardInterface extends CI_Model {
         return $output;
     }
 
+    /*
+     * Return one pictogram from the board with the given position in this board 
+     */
     function getCell($pos, $idboard) {
         $output = array();
 
@@ -71,20 +95,10 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-
-    function loadCFG($user) {
-
-        $newdata = array(
-            'cfguser' => 1,
-            'cfgExpansionOnOff' => 1,
-            'cfgPredOnOff' => 1,
-            'cfgPredBarVertHor' => 0,
-            'cfgSentenceBarUpDown' => 1
-        );
-
-        $this->session->set_userdata($newdata);
-    }
-
+    
+    /*
+     * Change one pictogram from the board to another position 
+     */
     function updatePosCell($oldPos, $newPos, $idBoard) {
         $output = array();
 
@@ -96,6 +110,9 @@ class BoardInterface extends CI_Model {
         return $output;
     }
 
+    /*
+     * Change the data of one pictogram ($cell) from the board ($idpicto)
+     */
     function updateDataCell($idpicto, $cell) {
         $output = array();
 
@@ -106,6 +123,10 @@ class BoardInterface extends CI_Model {
         return $output;
     }
 
+    /*
+     * Create a NULL cell (blank cell) in the position ($Pos) 
+     * and add the cell to the board ($idBoard)
+     */
     function newCell($Pos, $idBoard) {
         $output = array();
 
@@ -126,6 +147,9 @@ class BoardInterface extends CI_Model {
         $this->db->insert('R_BoardCell', $data);
     }
 
+    /*
+     * Return the cell ID in position ($Pos) from the board ($idBoard)
+     */
     function getIDCell($Pos, $idBoard) {
         $output = array();
 
@@ -141,6 +165,9 @@ class BoardInterface extends CI_Model {
         return $output;
     }
 
+    /*
+     * Remove the cell ($id) from the board ($idBoard). Remove the link too
+     */
     function removeCell($id, $idBoard) {
 
         $this->db->where('ID_RBoard', $idBoard);
@@ -151,19 +178,31 @@ class BoardInterface extends CI_Model {
         $this->db->delete('Cell');
     }
 
-    //Hasta aqui
+    /*
+     * Init a DB transaction 
+     */
     function initTrans() {
         $this->db->trans_start();
     }
-
+    
+    /*
+     * Ends a DB transaction. Commit change if nothing gone worng. Otherwise
+     * makes a rollback 
+     */
     function commitTrans() {
         $this->db->trans_complete();
     }
 
+    /*
+     * Return true if the last end transaction was a commit, else return false
+     */
     function statusTrans() {
         return $this->db->trans_status();
     }
 
+    /*
+     * Return the last word added to the sentence
+     */
     function getLastWord($idusu) {
         $output = array();
 
@@ -179,6 +218,9 @@ class BoardInterface extends CI_Model {
         return $output[0];
     }
 
+    /*
+     * Remove the sentence from the tabla temp
+     */
     function removeSentence($idusu) {
         $this->db->where('ID_RSTPUser', $idusu);
         $this->db->delete('R_S_TempPictograms');
@@ -300,6 +342,9 @@ class BoardInterface extends CI_Model {
         }
     }
 
+    /*
+     * Return the function information
+     */
     function getFunction($id) {
         
         $this->db->where('ID_Function', $id);
@@ -313,6 +358,9 @@ class BoardInterface extends CI_Model {
         return $output;
     }
 
+    /*
+     * ADD MODIFIER TO A NOUN THAT WAS JUST ENTERED
+     */
     function afegirModifNom($modif) {
         
         $idusu = $this->session->userdata('idusu');

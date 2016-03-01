@@ -141,6 +141,9 @@ angular.module('controllers', [])
                  $scope.grid2 = 8;
                  $scope.grid3 = 2;*/
             };
+            /*
+             * Return: array fron 0 to repeatnum
+             */
             $scope.range = function ($repeatnum)
             {
                 var n = [];
@@ -150,6 +153,9 @@ angular.module('controllers', [])
                 }
                 return n;
             };
+            /*
+             * Change mainboard views (history, prediction...)
+             */
             $scope.showall = function ()
             {
                 $scope.grid1hide = false;
@@ -223,6 +229,9 @@ angular.module('controllers', [])
                 $scope.subgrid2 = 100;
                 $scope.subgrid3 = 0;
             };
+            /*
+             * Shor board and the pictograms
+             */
             $scope.showBoard = function ()
             {
                 var url = $scope.baseurl + "Board/showCellboard";
@@ -237,7 +246,9 @@ angular.module('controllers', [])
                 });
             };
 
-            //Controladores de editar
+            /*
+             * Show edit view board
+             */
             $scope.edit = function ()
             {
 
@@ -261,7 +272,9 @@ angular.module('controllers', [])
                 });
             };
 
-
+            /*
+             * Resize cellboard (height and width)
+             */
             $scope.changeSize = function ($newH, $newW)
             {
                 var url = $scope.baseurl + "Board/modifyCellBoard";
@@ -285,6 +298,9 @@ angular.module('controllers', [])
                 }
 
             };
+            /*
+             * Open a dialog to confirm the new resize (when you resize to a lower size)
+             */
             $scope.openConfirmSize = function ($newH, $oldH, $newW, $oldW, $url, $postdata) {
 
                 //Object of all new/old sizes
@@ -318,7 +334,10 @@ angular.module('controllers', [])
                     alert('false');
                 });
             };
-
+            
+            /*
+             * Open edit cell dialog
+             */
             $scope.openEditCellMenu = function ($id) {
                 var iscope = $scope.$new(true);
                 //get basic info
@@ -344,7 +363,9 @@ angular.module('controllers', [])
 
             };
 
-            // Desde aqui son del div de sentencias
+            /*
+             * Add the selected pictogram to the sentence
+             */
             $scope.addToSentence = function (id) {
 
                 var url = $scope.baseurl + "Board/addWord";
@@ -355,7 +376,10 @@ angular.module('controllers', [])
                     $scope.dataTemp = response.data;
                 });
             };
-            
+            /*
+             * If you click in a function (not a pictogram) this controller carry you
+             * to the specific function
+             */
             $scope.clickOnFunction = function (id) {
 
                 var url = $scope.baseurl + "Board/getFunction";
@@ -367,6 +391,9 @@ angular.module('controllers', [])
                     //$scope.dataTemp = response.data;
                 });
             };
+            /*
+             * Remove last word added to the sentence
+             */
             $scope.deleteLast = function () {
 
                 var url = $scope.baseurl + "Board/deleteLastWord";
@@ -376,6 +403,9 @@ angular.module('controllers', [])
                     $scope.dataTemp = response.data;
                 });
             };
+            /*
+             * Remove the whole sentence
+             */
             $scope.deleteAll = function () {
 
                 var url = $scope.baseurl + "Board/deleteAllWords";
@@ -385,6 +415,10 @@ angular.module('controllers', [])
                     $scope.dataTemp = response.data;
                 });
             };
+            /*
+             * Generate the current senence under contruction.
+             * Add the pictograms (and the sentence itself) in the history
+             */
             $scope.generate = function () {
 
                 var url = $scope.baseurl + "Board/generate";
@@ -403,7 +437,10 @@ angular.module('controllers', [])
                 $scope.negativa = false;
             };
 
-            //Search controllers
+            /*
+             * Return pictograms from database. The result depends on 
+             * Searchtype (noms, verbs...) and Name (letters with the word start with)
+             */
             $scope.search = function ($Searchtype)
             {
                 var postdata = {id: $scope.Name};
@@ -448,14 +485,14 @@ angular.module('controllers', [])
             $scope.toggleCenterAnchor = function () {
                 $scope.centerAnchor = !$scope.centerAnchor;
             };
-            var onDraggableEvent = function (evt, data) {
-                console.log("128", "onDraggableEvent", evt, data);
-                if (evt.name === "draggable:start") {
-                    $scope.hide = false;
-                } else if (evt.name === "draggable:end") {
-                    $scope.hide = true;
-                }
-            };
+//            var onDraggableEvent = function (evt, data) {
+//                console.log("128", "onDraggableEvent", evt, data);
+//                if (evt.name === "draggable:start") {
+//                    $scope.hide = false;
+//                } else if (evt.name === "draggable:end") {
+//                    $scope.hide = true;
+//                }
+//            };
             $scope.$on('draggable:start', onDraggableEvent);
             // $scope.$on('draggable:move', onDraggableEvent);
             $scope.$on('draggable:end', onDraggableEvent);

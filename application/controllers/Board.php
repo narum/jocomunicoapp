@@ -355,32 +355,28 @@ class Board extends REST_Controller {
 
         $function = $this->BoardInterface->getFunction($id);
         $functionString = $function[0]->functShortName;
-        //MODIF: No puedo poner directamente ->$functionString....
-        switch ($functionString) {
-            case 'afegirModifNom("pl")':
-                $data = $this->BoardInterface->afegirModifNom("pl");
-                break;
-            case 'afegirModifNom("fem")':
-                $data = $this->BoardInterface->afegirModifNom("fem");
-                break;
-            case 'afegirModifNom("i")':
-                $data = $this->BoardInterface->afegirModifNom("i");
+        
+        switch ($function[0]->ID_Function) {
+            case  1 || 2 || 3:
+                $data = $this->BoardInterface->afegirModifNom($functionString);
                 break;
         }
-        //$data = $this->BoardInterface->$function[0]->functShortName;
         $response = [
             'data' => $data
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
 
+    /*
+     * Add the selected pictogram to the board 
+     */
     public function addPicto_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
         $pos = $request->pos;
         //$boardid = $request->boardid;
-        //1 es la board
+        //MODIF: 1 es la board
         $cell = $this->BoardInterface->getIDCell($pos, 1);
         $this->BoardInterface->updateDataCell($id, $cell[0]->ID_RCell);
 
@@ -392,6 +388,9 @@ class Board extends REST_Controller {
         $this->response($response, REST_Controller::HTTP_OK);
     }
 
+    /*
+     * Swap the two selected pictograms in the board
+     */
     public function swapPicto_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -411,6 +410,9 @@ class Board extends REST_Controller {
         $this->response($response, REST_Controller::HTTP_OK);
     }
 
+    /*
+     * Remove the selected pictogram to the board
+     */
     public function removePicto_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
