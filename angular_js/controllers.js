@@ -115,14 +115,19 @@ angular.module('controllers', [])
         .controller('myCtrl', function ($scope, $http, ngDialog) {
             $scope.config = function (boardconf)
             {
-
+                //-----------Iniciacion-----------
                 var url = $scope.baseurl + "Board/loadCFG";
                 var postdata = {idusu: window.localStorage.getItem('languageid'), lusu: window.localStorage.getItem('languageabbr')};
 
                 $http.post(url, postdata);
 
+                $scope.tense = "defecte";
+                $scope.tipusfrase = "defecte";
+                $scope.negativa = false;
                 $scope.SearchType = "Tots";
                 $scope.inEdit = false;
+                //-----------Iniciacion-----------
+                
                 if (boardconf === 1)
                 {
                     $scope.showall();
@@ -398,14 +403,15 @@ angular.module('controllers', [])
              * to the specific function
              */
             $scope.clickOnFunction = function (id) {
-
                 var url = $scope.baseurl + "Board/getFunction";
-                var postdata = {id: id};
+                var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
                 $http.post(url, postdata).success(function (response)
                 {
                     //MODIF: Falta añadir picto especial
-                    //$scope.dataTemp = response.data;
+                    $scope.tense = response.tense;
+                    $scope.tipusfrase = response.tipusfrase;
+                    $scope.negativa = response.negativa;
                 });
             };
             /*
@@ -439,9 +445,6 @@ angular.module('controllers', [])
             $scope.generate = function () {
 
                 var url = $scope.baseurl + "Board/generate";
-                $scope.tense = "defecte";
-                $scope.tipusfrase = "defecte";
-                $scope.negativa = false;
                 var postdata = {tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
                 $http.post(url, postdata).success(function (response)
                 {
