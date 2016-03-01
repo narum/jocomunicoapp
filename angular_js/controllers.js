@@ -115,6 +115,12 @@ angular.module('controllers', [])
         .controller('myCtrl', function ($scope, $http, ngDialog) {
             $scope.config = function (boardconf)
             {
+                
+                var url = $scope.baseurl + "Board/loadCFG";
+                var postdata = {idusu : window.localStorage.getItem('languageid'),lusu: window.localStorage.getItem('languageabbr')};
+                alert(window.localStorage.getItem('languageabbr'));
+                $http.post(url, postdata);
+
                 $scope.SearchType = "Tots";
                 $scope.inEdit = false;
                 if (boardconf === 1)
@@ -328,13 +334,15 @@ angular.module('controllers', [])
                 }).then(function (value) {
                     //if confirm
                     alert('true');
-                    $http.post($url, $postdata).then(function (response){$scope.showBoard();}).error(function (response){});
-            }, function (value) {
+                    $http.post($url, $postdata).then(function (response) {
+                        $scope.showBoard();
+                    }).error(function (response) {});
+                }, function (value) {
                     //if close
                     alert('false');
                 });
             };
-            
+
             /*
              * Open edit cell dialog
              */
@@ -485,14 +493,14 @@ angular.module('controllers', [])
             $scope.toggleCenterAnchor = function () {
                 $scope.centerAnchor = !$scope.centerAnchor;
             };
-//            var onDraggableEvent = function (evt, data) {
-//                console.log("128", "onDraggableEvent", evt, data);
-//                if (evt.name === "draggable:start") {
-//                    $scope.hide = false;
-//                } else if (evt.name === "draggable:end") {
-//                    $scope.hide = true;
-//                }
-//            };
+            var onDraggableEvent = function (evt, data) {
+                //console.log("128", "onDraggableEvent", evt, data);
+                if (evt.name === "draggable:start") {
+                    $scope.hide = false;
+                } else if (evt.name === "draggable:end") {
+                    $scope.hide = true;
+                }
+            };
             $scope.$on('draggable:start', onDraggableEvent);
             // $scope.$on('draggable:move', onDraggableEvent);
             $scope.$on('draggable:end', onDraggableEvent);
@@ -526,7 +534,8 @@ angular.module('controllers', [])
                             $scope.statusWord = response.status;
                             $scope.data = response.data;
                         });
-            };
+            }
+            ;
         })
 //Add a directive in order to recognize the right click
         .directive('ngRightClick', function ($parse) {

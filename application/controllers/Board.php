@@ -17,6 +17,7 @@ class Board extends REST_Controller {
         $this->load->library('Myslot');
         $this->load->library('Mypattern');
         $this->load->library('Myexpander');
+        $this->load->library('session');
     }
 
     public function index_get() {
@@ -33,6 +34,19 @@ class Board extends REST_Controller {
         }
     }
 
+    public function loadCFG_post(){
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $iu = $request->idusu;
+        $lu = $request->lusu;
+        
+        $data = array( 
+                    'idusu'  => $iu,
+                    'ulangabbr' => $lu);
+        
+        $this->session->set_userdata($data);
+        
+    }
     /*
      * Get the cell's info
      */

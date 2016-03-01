@@ -21,11 +21,7 @@ class SearchWord extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $startswith = $request->id;
-        //$languageNum get cookie lenguage user
-        $languageNum = 2;
-
-        // MODIF: canviar por cookie
-        $language = $this->switch_language($languageNum);
+        $language = $this->session->userdata('ulangabbr');
 
         
         // Controller search all names from all picto table
@@ -165,16 +161,6 @@ class SearchWord extends REST_Controller {
             return $row;
         }
         return array_map("concat_path", $DataArray);
-    }
-    // MODIF: funcio temporal per escollir el idoma.
-    function switch_language($languageNum)
-    {
-        if ($languageNum == 1){
-            $language = "CA";
-        } else if($languageNum == 2) {
-            $language = "ES";
-        }
-        return $language;
     }
 }
 
