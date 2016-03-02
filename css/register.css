@@ -1,12 +1,80 @@
-
+	
 body{
 	background: #f2f2f2;
 }
 
-.error {
-  	border-color: red;
+.box{
+	background: #ffcc99;
 }
- 
-.warning {
-  	border-color: orange;
+
+/*Comentario de error en una capa superior para no desplazar el contenido*/
+.errorcoment{
+	color:red;
+  	font-size: 80%;
+  	position: fixed;
+  	z-index:1;
 }
+/*color del icono de estado, texto y el borde del checkbox en error*/
+.error,
+.has-error .form-control,
+.has-error .form-control-feedback {
+	color:red;
+  	border-color:red;
+}
+/*color del borde cuando esta seleccionado el checkbox en error*/
+.has-error .form-control:focus{
+	 border-color:#dc143c;
+}
+/*color del borde del icono del checkbox en error*/
+.has-error .input-group-addon {
+  	border-color:red;
+} 
+/*Comentario de warning en una capa superior para no desplazar el contenido*/
+.warningcoment{
+	color:orange;
+  	font-size: 80%;
+  	position: fixed;
+  	z-index:2;
+}
+/*color del icono de estado, texto y el borde del checkbox en warning*/
+.warning,
+.has-warning .form-control,
+.has-warning .form-control-feedback {
+    color:orange;
+    border-color:orange;
+}
+/*color del borde cuando esta seleccionado el checkbox en warning*/
+.has-warning .form-control:focus{
+	 border-color:#ff8c00;
+}
+/*color del borde del icono del checkbox en warning*/
+.has-warning .input-group-addon {
+  border-color:orange;
+}
+/*color del icono de estado, texto y el borde del checkbox en warning*/
+.success,
+.has-success .form-control-feedback {
+    color:green;
+    border-color:green;
+}
+/*Para centrar verticalmente en una row*/
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+
+/*Listado de idiomas fondo blanco y sin margenes*/
+.form-control.xavi[disabled] {
+  background-color:white;
+  opacity: 1;
+  color:green;
+}
+.form-group.xavi.row{
+  margin-top: 0px;
+  margin-bottom: 0px
+}
+
+

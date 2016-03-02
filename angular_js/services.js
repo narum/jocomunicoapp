@@ -9,7 +9,7 @@ angular.module('services', [])
 		"nom": $resource(baseUri + "names"),
 		"histo": $resource(baseUri + "histo"),
 		"login": $resource(baseUri + "login"),
-		"register": $resource(baseUri + "register"),
+		"register": $resource(baseUri + "register/:funct",{funct:"@funct"}), //Acceder a funciones dentro de Register.php
 		"main": $resource(baseUri + "main")
 	};
 })
