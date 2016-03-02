@@ -115,14 +115,19 @@ angular.module('controllers', [])
         .controller('myCtrl', function ($scope, $http, ngDialog) {
             $scope.config = function (boardconf)
             {
-                
+                //-----------Iniciacion-----------
                 var url = $scope.baseurl + "Board/loadCFG";
-                var postdata = {idusu : window.localStorage.getItem('languageid'),lusu: window.localStorage.getItem('languageabbr')};
-                alert(window.localStorage.getItem('languageabbr'));
+                var postdata = {idusu: window.localStorage.getItem('languageid'), lusu: window.localStorage.getItem('languageabbr')};
+
                 $http.post(url, postdata);
 
+                $scope.tense = "defecte";
+                $scope.tipusfrase = "defecte";
+                $scope.negativa = false;
                 $scope.SearchType = "Tots";
                 $scope.inEdit = false;
+                //-----------Iniciacion-----------
+                
                 if (boardconf === 1)
                 {
                     $scope.showall();
@@ -247,8 +252,8 @@ angular.module('controllers', [])
                     $scope.columns = response.col;
                     $scope.rows = response.row;
                     $scope.data = response.data;
-                    $scope.oldW = response.col;
-                    $scope.oldH = response.row;
+//                    $scope.oldW = response.col;
+//                    $scope.oldH = response.row;
                 });
             };
 
@@ -273,42 +278,54 @@ angular.module('controllers', [])
                     $scope.nameboard = response.name;
                     $scope.altura = $scope.range(20)[response.row].valueOf();
                     $scope.amplada = $scope.range(20)[response.col].valueOf();
-                    $scope.oldH = $scope.altura;
-                    $scope.oldW = $scope.amplada;
+//                    $scope.oldH = $scope.altura;
+//                    $scope.oldW = $scope.amplada;
                 });
             };
 
             /*
              * Resize cellboard (height and width)
              */
-            $scope.changeSize = function ($newH, $newW)
+            $scope.changeSize = function ($newH, $newW, $HW)
             {
-                var url = $scope.baseurl + "Board/modifyCellBoard";
-                var postdata = {r: $newH, c: $newW};
-                if ($newH < $scope.oldH || $newW < $scope.oldW) {
-                    alert("QUE HACES " +
-                            $newH + "<" + $scope.oldH + " o bien " +
-                            $newW + "<" + $scope.oldW);
-                    //Confirm function
-                    $scope.openConfirmSize($newH, $scope.oldH, $newW, $scope.oldW, url, postdata);
-                } else {
+               
+                var url = $scope.baseurl + "Board/getCellboard";
 
-                    $http.post(url, postdata).then(function (response)
-                    {
-                        $scope.showBoard();
-                    }).error(function (response)
-                    {
+                $http.post(url).success(function (response)
+                {
 
-                    });
-                    $scope.edit();
-                }
+                    $scope.oldH = response.row;
+                    $scope.oldW = response.col;
 
+                    var postdata = {r: $newH, c: $newW};
+                    if ($HW == "1"){
+                        $newH = $scope.oldH;
+                    }else{
+                        $newW = $scope.oldW;
+                    }
+                    if ($newH < $scope.oldH || $newW < $scope.oldW) {
+                        $scope.openConfirmSize($newH, $scope.oldH, $newW, $scope.oldW);
+                    } else {
+                        var url = $scope.baseurl + "Board/modifyCellBoard";
+                        $http.post(url, postdata).then(function (response)
+                        {
+                            $scope.showBoard();
+                        }).error(function (response)
+                        {
+
+                        });
+                        $scope.edit();
+
+                    }
+                });
             };
             /*
              * Open a dialog to confirm the new resize (when you resize to a lower size)
              */
-            $scope.openConfirmSize = function ($newH, $oldH, $newW, $oldW, $url, $postdata) {
+            $scope.openConfirmSize = function ($newH, $oldH, $newW, $oldW) {
 
+                 var url = $scope.baseurl + "Board/modifyCellBoard";
+                 var postdata = {r: $newH, c: $newW};
                 //Object of all new/old sizes
                 $scope.FormData = {
                     newH: $newH,
@@ -318,12 +335,11 @@ angular.module('controllers', [])
                     HWType: 2,
                     Dnum: 0
                 };
-                if ($newH !== $oldH)
+                if ($newH != $oldH)
                 {
-                    alert("BOOM");
                     $scope.FormData.HWType = 0;
                     $scope.FormData.Dnum = ($oldH - $newH);
-                } else if ($newW !== $oldW)
+                } else if ($newW != $oldW)
                 {
                     $scope.FormData.HWType = 1;
                     $scope.FormData.Dnum = ($oldW - $newW);
@@ -333,13 +349,12 @@ angular.module('controllers', [])
                     scope: $scope
                 }).then(function (value) {
                     //if confirm
-                    alert('true');
-                    $http.post($url, $postdata).then(function (response) {
+                    $http.post(url, postdata).then(function (response) {
                         $scope.showBoard();
                     }).error(function (response) {});
                 }, function (value) {
                     //if close
-                    alert('false');
+                    $scope.showBoard();
                 });
             };
 
@@ -355,7 +370,6 @@ angular.module('controllers', [])
                 $http.post(url, postdata).success(function (response)
                 {
 
-                    alert(response.info.cellType);
                     iscope.info = response.info;
                     iscope.baseurl = $scope.baseurl;
                     iscope.getFunctions = function () {
@@ -389,14 +403,15 @@ angular.module('controllers', [])
              * to the specific function
              */
             $scope.clickOnFunction = function (id) {
-
                 var url = $scope.baseurl + "Board/getFunction";
-                var postdata = {id: id};
+                var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
                 $http.post(url, postdata).success(function (response)
                 {
                     //MODIF: Falta añadir picto especial
-                    //$scope.dataTemp = response.data;
+                    $scope.tense = response.tense;
+                    $scope.tipusfrase = response.tipusfrase;
+                    $scope.negativa = response.negativa;
                 });
             };
             /*
@@ -430,9 +445,6 @@ angular.module('controllers', [])
             $scope.generate = function () {
 
                 var url = $scope.baseurl + "Board/generate";
-                $scope.tense = "defecte";
-                $scope.tipusfrase = "defecte";
-                $scope.negativa = false;
                 var postdata = {tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
                 $http.post(url, postdata).success(function (response)
                 {

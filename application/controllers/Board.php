@@ -148,9 +148,7 @@ class Board extends REST_Controller {
             $this->addColumns($output[0]->width, $output[0]->height, 1, $columnsDiff);
         } elseif ($columnsDiff < 0) {
             $this->removeColumns($output[0]->width, $output[0]->height, 1, -$columnsDiff);
-        }
-
-        if ($rowsDiff > 0) {
+        }elseif ($rowsDiff > 0) {
             $this->addRows($output[0]->width, $output[0]->height, 1, $rowsDiff);
         } elseif ($rowsDiff < 0) {
             $this->removeRows($output[0]->width, $output[0]->height, 1, -$rowsDiff);
@@ -366,17 +364,32 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
+        $tense = $request->tense;
+        $tipusfrase = $request->tipusfrase;
+        $negativa = $request->negativa;
 
         $function = $this->BoardInterface->getFunction($id);
-        $functionString = $function[0]->functShortName;
+        $value = $function[0]->value;
+        $type = $function[0]->type;
         
-        switch ($function[0]->ID_Function) {
-            case  1 || 2 || 3:
-                $data = $this->BoardInterface->afegirModifNom($functionString);
+        switch ($type) {
+            case "modif":
+                $data = $this->BoardInterface->afegirModifNom($value);
+                break;
+            case "tense":
+                $tense =  $value;
+                break;
+            case "tipusfrase":
+                $tipusfrase =  $value;
+                break;
+            case "negativa":
+                $negativa =  $value;
                 break;
         }
         $response = [
-            'data' => $data
+            'tense' => $tense,
+            'tipusfrase' => $tipusfrase,
+            'negativa' => $negativa
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
