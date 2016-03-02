@@ -120,7 +120,8 @@ angular.module('controllers', [])
                 var postdata = {idusu: window.localStorage.getItem('languageid'), lusu: window.localStorage.getItem('languageabbr')};
 
                 $http.post(url, postdata);
-
+                //MODIF: mirar la board predeterminada 
+                $scope.idboard = "1";
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
@@ -241,13 +242,21 @@ angular.module('controllers', [])
                 $scope.subgrid3 = 0;
             };
             /*
-             * Shor board and the pictograms
+             * Show board and the pictograms
              */
-            $scope.showBoard = function ()
+            $scope.showBoard = function (id)
             {
+                //If the id is 0, show the actual board. Else the current board is changed (and showed)
+                if (id === '0'){
+                    id = $scope.idboard;
+                }else{
+                    $scope.idboard = id;
+                }
+                alert (id);
                 var url = $scope.baseurl + "Board/showCellboard";
-
-                $http.post(url).success(function (response)
+                var postdata = {idboard: id};
+                
+                $http.post(url, postdata).success(function (response)
                 {
                     $scope.columns = response.col;
                     $scope.rows = response.row;
@@ -310,7 +319,7 @@ angular.module('controllers', [])
                         var url = $scope.baseurl + "Board/modifyCellBoard";
                         $http.post(url, postdata).then(function ()
                         {
-                            $scope.showBoard();
+                            $scope.showBoard('0');
                         }).error(function ()
                         {
 
@@ -351,11 +360,11 @@ angular.module('controllers', [])
                 }).then(function (value) {
                     //if confirm
                     $http.post(url, postdata).then(function (response) {
-                        $scope.showBoard();
+                        $scope.showBoard('0');
                     }).error(function (response) {});
                 }, function (value) {
                     //if close
-                    $scope.showBoard();
+                    $scope.showBoard('0');
                 });
             };
 

@@ -92,15 +92,18 @@ class Board extends REST_Controller {
     }
 
     public function showCellboard_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idboard = $request->idboard;
 
         $array = array();
 
         // "1" es el numero de id de la "board"
-        $output = $this->BoardInterface->getBoardStruct(1);
+        $output = $this->BoardInterface->getBoardStruct($idboard);
         $columns = $output[0]->width;
         $rows = $output[0]->height;
 
-        $array = $this->BoardInterface->getCellsBoard(1);
+        $array = $this->BoardInterface->getCellsBoard($idboard);
 
 
         $response = [
@@ -389,7 +392,7 @@ class Board extends REST_Controller {
 
         switch ($type) {
             case "modif":
-                $data = $this->BoardInterface->afegirModifNom($value);
+                $this->BoardInterface->afegirModifNom($value);
                 break;
             case "tense":
                 $tense = $value;
