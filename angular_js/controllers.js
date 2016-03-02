@@ -282,7 +282,19 @@ angular.module('controllers', [])
 //                    $scope.oldW = $scope.amplada;
                 });
             };
-
+            
+            $scope.changeNameBoard = function ()
+            {
+                var postdata = {Name: $scope.BoardName};
+                var URL = $scope.baseurl + "Board/modifyNameboard";
+                
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.statusWord = response.status;
+                            $scope.dataWord = response.data;
+                        });
+            };
             /*
              * Resize cellboard (height and width)
              */
