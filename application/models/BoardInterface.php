@@ -53,7 +53,14 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+    function updateName($Name, $id) {
+        $output = array();
+
+        $this->db->where('ID_Board', $id);
+        $query = $this->db->update('Boards', array('Bname' => $Name));
+
+        return $output;
+    }
     /*
      * Return all pictograms from board 
      */

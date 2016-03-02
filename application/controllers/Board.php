@@ -117,7 +117,18 @@ class Board extends REST_Controller {
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    
+    
+    public function modifyNameboard_post() {
+        $this->BoardInterface->initTrans();
 
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $Name = $request->Name;
+        
+        $this->BoardInterface->updateName($Name, 1);
+        $this->BoardInterface->commitTrans();
+    }
     /*
      * Estos van en otro controlador que seria el de edicion, pero aun no estan hechos
      */
