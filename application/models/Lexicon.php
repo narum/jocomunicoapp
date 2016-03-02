@@ -799,6 +799,12 @@ class Lexicon extends CI_Model {
         // calculem l'string d'inputwords: és el llistat de paraules com apareixien
         // a Elements Seleccionats, just abans de prémer Generar
         $paraulesFrase = $this->recuperarFrase($idusu);
+        
+        // guardem les estadístiques de la frase
+        $this->addStatsX1($paraulesFrase, $idusu);
+        $this->addStatsX2($paraulesFrase, $idusu);
+        $this->addStatsX3($paraulesFrase, $idusu);
+        
         $inputwords = "";
         
         // Hi afegirem també els ids, modifs, tipus de frases i tenses a l'string
@@ -812,7 +818,7 @@ class Lexicon extends CI_Model {
 
 
                 $inputwords .= $word->text;
-                $inputids .= $word->id;
+                $inputids .= "{".$word->id."}";
                 
                 /*switch($word->pictoType)
                 {

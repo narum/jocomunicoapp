@@ -338,10 +338,10 @@ class Board extends REST_Controller {
     public function generate_post() {
         //1 user
         $this->BoardInterface->initTrans();
-        $paraules = $this->Lexicon->recuperarFrase(1);
-        $this->BoardInterface->addStatsX1($paraules, 1);
-        $this->BoardInterface->addStatsX2($paraules, 1);
-        $this->BoardInterface->addStatsX3($paraules, 1);
+//        $paraules = $this->Lexicon->recuperarFrase(1);
+//        $this->BoardInterface->addStatsX1($paraules, 1);
+//        $this->BoardInterface->addStatsX2($paraules, 1);
+//        $this->BoardInterface->addStatsX3($paraules, 1);
 
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
