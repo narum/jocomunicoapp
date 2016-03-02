@@ -118,7 +118,8 @@ CREATE TABLE Pictograms (
 # (functNameCa... el nom que apareixerà al llistat per triar les funcions)
 CREATE TABLE Function (
 	ID_Function INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	functShortName VARCHAR(50),
+	functType VARCHAR(50),
+	functValue VARCHAR(50),
 	functNameCA VARCHAR(100),
 	functNameES VARCHAR(100),
 	functDescrCA TEXT NULL,

@@ -39,6 +39,10 @@ class Myexpander {
         $idusu = $CI->session->userdata('idusu');
         $this->paraulescopia = $CI->Lexicon->getLastSentence($idusu); // array amb les paraules
         $propietatsfrase = $CI->Lexicon->getLastSentenceProperties($idusu);
+        
+        // variables per mostrar els resultats per pantalla
+        $this->info['identry'] = $propietatsfrase['identry'];
+        $this->info['inputwords'] = $propietatsfrase['inputwords'];
 
         if ($this->paraulescopia == null) {
             $this->info['errormessage'] = "Error. No hi ha cap frase per aquest usuari.";
@@ -248,8 +252,6 @@ class Myexpander {
             // Guardar parse tree i frase final a la base de dades
             $CI->Lexicon->guardarParseIFraseResultat($propietatsfrase['identry'], $printparsepattern, $frasefinal);
 
-            $this->info['identry'] = $propietatsfrase['identry'];
-            $this->info['inputwords'] = $propietatsfrase['inputwords'];
             $this->info['errormessage'] = $this->errormessage[$bestpatternindex];
             $this->info['error'] = $this->error[$bestpatternindex];
             $this->info['errorcode'] = $this->errorcode[$bestpatternindex];
