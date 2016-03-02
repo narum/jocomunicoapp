@@ -118,7 +118,8 @@ CREATE TABLE Pictograms (
 # (functNameCa... el nom que apareixerà al llistat per triar les funcions)
 CREATE TABLE Function (
 	ID_Function INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	functShortName VARCHAR(50),
+	functType VARCHAR(50),
+	functValue VARCHAR(50),
 	functNameCA VARCHAR(100),
 	functNameES VARCHAR(100),
 	functDescrCA TEXT NULL,
@@ -221,6 +222,7 @@ CREATE TABLE S_Sentence (
 	ID_SSentence INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	ID_SSUser INT,
 	ID_SFolder INT,
+	posInFolder INT NULL,
 	sentenceType VARCHAR(20) DEFAULT 'enunciativa',
 	isNegative ENUM('0', '1') DEFAULT '0',
 	sentenceTense VARCHAR(20) DEFAULT 'default',
@@ -262,6 +264,7 @@ CREATE TABLE S_PreRec (
 	ID_SPreRec INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	ID_SPRUser INT,
 	ID_SPRFolder INT,
+	posInFolder INT NULL,
 	sPreRecText TEXT,
 	sPreRecDate DATE,
 	sPreRecImg1 VARCHAR(300),

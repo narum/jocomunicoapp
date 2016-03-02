@@ -1,0 +1,9 @@
+Llistat d’errors sistema d’expansió:
+
+1. "Error. No hi ha cap frase per aquest usuari."
+2. "Error. La frase no pot contenir més d'una pregunta."
+3. "Error. Hi ha més de dos verbs a la frase. <br />
+    El sistema actual no pot generar frases d'aquesta mena."
+4. "Warning. No s'ha trobat lloc per la partícula de la pregunta."
+5. "Error. No s'ha trobat cap patró possible amb aquests verbs.";
+6. “Error. S’ha trobat un pictograma que no es pot expandir.”;

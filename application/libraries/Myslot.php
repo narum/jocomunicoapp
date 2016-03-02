@@ -9,6 +9,7 @@ class Myslot {
     var $type = null; // Si vol qualsevol nom, joguines, adverbis, verbs... (si és obligatori o optatiu)
     var $defvalue = null; // Valor per defecte si és de grade obligatori
     var $prep = null; // Preposició que precedeix a l'slot
+    var $art = null;
     var $defvalueused = false; // indica si l'slot s'ha omplert amb el def value
     
     var $full = false; // Si l'slot ja està ple/bloquejat
@@ -334,7 +335,7 @@ class Myslot {
         $matchscore = 1000;
         $matchindexclass = -1;
         $output = 0;
-        
+                
         // com que els quant poden omplir slots on tb hi pot haver ja un adv, només volem que l'ompli
         // si no hi ha cap adv, es a dir, si està buit
         if (!$this->full) {
@@ -389,8 +390,17 @@ class Myslot {
 
             // com més lluny pitjor
             $newslot->puntsfinal = 7 - abs($distance);
-
-            if ($distance == 1) $newslot->puntsfinal += 1; // Si el modficador va just abans de la paraula és la millor opció
+            
+            // fem que els quantificadors amb els adjectius tinguin més punts que els slots opcionals
+            // de manera que puguin tenir un quantificador com a fit (els opcionals valen 7 punts)
+            if ($tipusparaulafinal == "adj" && $word->isClass("quant")) {
+                if (abs($distance) == 1) {
+                    $newslot->puntsfinal += 1;
+                }
+            }
+            else if ($distance == 1) {
+                $newslot->puntsfinal += 1; // Si el modficador va just abans de la paraula és la millor opció
+            }
             
             $aux[1] = $newslot->puntsfinal; // els punts d'aquest slot: és per desambiguar si un modif pot complementar a dues paraules, per escollir la millor
             
@@ -2374,11 +2384,16 @@ class Myslot {
                 // si no té quantificador davant, procedim amb l'algoritme normal
                 else {
                     // si són complements (al nostre sistema no poden tenir possessius)
-                    // si no porten article, sense article, i si són objecte amb determinat
+                    // si no porten article, sense article, i si són del grup dels animats amb determinat
                     // i si no sense, JA QUE ÉS EL CAS MÉS COMÚ
                     if ($auxstring[6]) {
                         if ($wordaux->propietats->determinat == 'sense') $noarticle = true;
-                        else if ($wordaux->isClass("objecte")) $definite = true;
+                        else if ($wordaux->isClass("animate") ||
+                                $wordaux->isClass("animal") ||
+                                $wordaux->isClass("vehicle") ||
+                                $wordaux->isClass("human") ||
+                                $wordaux->isClass("event") ||
+                                $wordaux->isClass("planta")) $definite = true;
                         else $noarticle = true;
                     }
                     // si no són complements, dependrà de quina categoria sigui l'slot
@@ -2417,6 +2432,12 @@ class Myslot {
                                 // si és una resposta, si el nom és humà, article determinat
                                 else if ($tipusfrase == "resposta" && $wordaux->isClass("human")) {
                                     $definite = true;
+                                }
+                                // si hi ha definit un article determinat pel theme l'agafem
+                                else if ($this->art != null) {
+                                    if ($this->art == '1') $definite = true;
+                                    else if ($this->art == '0') $indefinite = true;
+                                    else $noarticle = true;
                                 }
                                 // si no, mirem les propietats
                                 else {
@@ -2509,11 +2530,16 @@ class Myslot {
                 // si no té quantificador davant, procedim amb l'algoritme normal
                 else {
                     // si són complements (al nostre sistema no poden tenir possessius)
-                    // si no porten article, sense article, i si són objecte amb determinat
+                    // si no porten article, sense article, i si són del grup dels animats amb determinat
                     // i si no sense, JA QUE ÉS EL CAS MÉS COMÚ
                     if ($auxstring[6]) {
                         if ($wordaux->propietats->determinat == 'sense') $noarticle = true;
-                        else if ($wordaux->isClass("objecte")) $definite = true;
+                        else if ($wordaux->isClass("animate") ||
+                                $wordaux->isClass("animal") ||
+                                $wordaux->isClass("vehicle") ||
+                                $wordaux->isClass("human") ||
+                                $wordaux->isClass("event") ||
+                                $wordaux->isClass("planta")) $definite = true;
                         else $noarticle = true;
                     }
                     // si no són complements, dependrà de quina categoria sigui l'slot
@@ -2552,6 +2578,12 @@ class Myslot {
                                 // si és una resposta, si el nom és humà, article determinat
                                 else if ($tipusfrase == "resposta" && $wordaux->isClass("human")) {
                                     $definite = true;
+                                }
+                                // si hi ha definit un article determinat pel theme l'agafem
+                                else if ($this->art != null) {
+                                    if ($this->art == '1') $definite = true;
+                                    else if ($this->art == '0') $indefinite = true;
+                                    else $noarticle = true;
                                 }
                                 // si no, mirem les propietats
                                 else {

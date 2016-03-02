@@ -73,7 +73,10 @@ class Frase extends CI_Controller {
                 }
                 else {
                     // GUARDAR LA FRASE SENCERA A LA BBDD
-                    $this->Lexicon->insertarFrase($this->session->userdata('idusu'));
+                    $tipusfrase = $this->input->post('tipusfrase', true);
+                    $tense = $this->input->post('tense', true);
+                    $negativa = $this->input->post('negativa', true);
+                    $this->Lexicon->insertarFrase($this->session->userdata('idusu'), $tipusfrase, $tense, $negativa);
                     redirect(base_url().'resultats', 'location');
                 }
             }

@@ -235,21 +235,21 @@ class Mymatching {
     var $nounsFit = array(
         //           0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2
         0 => array  (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1), // perquè un match noun a qualsevol no és tan bon match
-        1 => array  (5,0,0,0,0,0,0,5,5,5,5,5,5,5,1,5,5,5,5,5,5,5,5),
+        1 => array  (5,0,0,0,0,0,1,5,5,5,5,5,5,5,1,5,5,5,5,5,5,5,5),
         2 => array  (5,1,0,0,1,2,5,2,5,5,5,5,5,5,2,5,5,5,5,5,5,5,5),
         3 => array  (5,2,1,0,2,2,2,2,5,5,5,5,5,5,2,5,5,5,5,5,5,5,5),
         4 => array  (5,1,1,1,0,1,1,1,5,5,5,5,5,5,1,5,5,5,5,5,5,5,5),
         5 => array  (5,1,1,1,1,0,1,1,5,5,5,5,5,5,1,5,5,5,5,5,5,5,5),
         6 => array  (5,1,1,1,1,1,0,1,5,5,5,5,5,5,1,5,5,5,5,5,5,5,5),
         7 => array  (5,1,1,1,1,1,1,0,5,5,5,5,5,5,1,5,5,5,5,5,5,5,5),
-        8 => array  (5,5,5,5,5,5,5,5,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0),
+        8 => array  (5,5,5,5,5,5,2,5,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0),
         9 => array  (5,5,5,5,5,5,5,5,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1),
         10 => array (5,5,5,5,5,5,5,5,2,1,0,1,1,1,2,2,2,2,2,2,2,2,2),
         11 => array (5,5,5,5,5,5,5,5,2,1,1,0,1,1,2,2,2,2,2,2,2,2,2),
         12 => array (5,5,5,5,5,5,5,5,2,1,1,1,0,1,2,2,2,2,2,2,2,2,2),
         13 => array (5,5,5,5,5,5,5,5,2,1,1,1,1,0,2,2,2,2,2,2,2,2,2),
         14 => array (5,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1),
-        15 => array (5,5,3,1000,5,5,1,0,1,1,1,1,1,1,5,0,1,1,5,5,5,5,1),
+        15 => array (5,5,3,5,5,5,0,0,2,2,2,1,1,1,5,0,1,1,5,5,5,5,1),
         16 => array (5,5,1,5,1,1,5,5,2,1,2,2,1,1,2,2,0,1,2,2,2,2,2),
         17 => array (5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,1,0,2,2,2,2,2),
         18 => array (5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,0,0,0,0,5),
@@ -382,6 +382,7 @@ class Mymatching {
         "nosaltres" => "ens",
         "vosaltres" => "us",
         "ells" => "els",
+        "elles" => "els",
     );
     
     var $pronomsPersonalsAfterReceiver = array(
@@ -393,6 +394,31 @@ class Mymatching {
         "nosaltres" => "nos",
         "vosaltres" => "vos",
         "ells" => "los",
+        "elles" => "los",
+    );
+    
+    var $pronomsPersonalsFrontTheme = array(
+        "jo" => "em",
+        "mi" => "em",
+        "tu" => "et",
+        "ell" => "@PRFEBLEel", // per diferenciar-lo de l'article "el"
+        "ella" => "@PRFEBLEla", // per diferenciar-lo de l'article "la"
+        "nosaltres" => "ens",
+        "vosaltres" => "us",
+        "ells" => "els",
+        "elles" => "les",
+    );
+    
+    var $pronomsPersonalsAfterTheme = array(
+        "jo" => "me",
+        "mi" => "me",
+        "tu" => "te",
+        "ell" => "lo",
+        "ella" => "la",
+        "nosaltres" => "nos",
+        "vosaltres" => "vos",
+        "ells" => "los",
+        "elles" => "les",
     );
     
     var $tempsPrep = array(
@@ -452,6 +478,19 @@ class Mymatching {
         "nosotros" => "nos",
         "vosotros" => "os",
         "ellos" => "les",
+        "ellas" => "les",
+    );
+    
+    var $pronomsPersonalsThemeES = array(
+        "yo" => "me",
+        "mí" => "me",
+        "tú" => "te",
+        "él" => "lo",
+        "ella" => "la",
+        "nosotros" => "nos",
+        "vosotros" => "os",
+        "ellos" => "los",
+        "ellas" => "las",
     );
     
     var $tempsPrepES = array(
