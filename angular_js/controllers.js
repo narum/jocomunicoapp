@@ -127,7 +127,7 @@ angular.module('controllers', [])
                 $scope.SearchType = "Tots";
                 $scope.inEdit = false;
                 //-----------Iniciacion-----------
-                
+
                 if (boardconf === 1)
                 {
                     $scope.showall();
@@ -288,7 +288,7 @@ angular.module('controllers', [])
              */
             $scope.changeSize = function ($newH, $newW, $HW)
             {
-               
+
                 var url = $scope.baseurl + "Board/getCellboard";
 
                 $http.post(url).success(function (response)
@@ -297,20 +297,21 @@ angular.module('controllers', [])
                     $scope.oldH = response.row;
                     $scope.oldW = response.col;
 
-                    var postdata = {r: $newH, c: $newW};
-                    if ($HW == "1"){
+
+                    if ($HW == "1") {
                         $newH = $scope.oldH;
-                    }else{
+                    } else {
                         $newW = $scope.oldW;
                     }
+                    var postdata = {r: $newH, c: $newW};
                     if ($newH < $scope.oldH || $newW < $scope.oldW) {
                         $scope.openConfirmSize($newH, $scope.oldH, $newW, $scope.oldW);
                     } else {
                         var url = $scope.baseurl + "Board/modifyCellBoard";
-                        $http.post(url, postdata).then(function (response)
+                        $http.post(url, postdata).then(function ()
                         {
                             $scope.showBoard();
-                        }).error(function (response)
+                        }).error(function ()
                         {
 
                         });
@@ -324,8 +325,8 @@ angular.module('controllers', [])
              */
             $scope.openConfirmSize = function ($newH, $oldH, $newW, $oldW) {
 
-                 var url = $scope.baseurl + "Board/modifyCellBoard";
-                 var postdata = {r: $newH, c: $newW};
+                var url = $scope.baseurl + "Board/modifyCellBoard";
+                var postdata = {r: $newH, c: $newW};
                 //Object of all new/old sizes
                 $scope.FormData = {
                     newH: $newH,
@@ -372,19 +373,28 @@ angular.module('controllers', [])
 
                     iscope.info = response.info;
                     iscope.baseurl = $scope.baseurl;
+                    iscope.isSelected = function (thisType) {
+                        if (iscope.info.type === thisType) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    };
                     iscope.getFunctions = function () {
-
+                        var url = $scope.baseurl + "Board/getFunctions";
+                        $http.post(url, postdata).success(function (response)
+                        {
+                            iscope.functions = response.functions;
+                        });
                     };
                     ngDialog.open({
                         template: $scope.baseurl + '/angular_templates/EditCellView.html',
                         scope: iscope
                     });
-                    $scope.cellType = "picto";
-                });
 
-
+                }
+                );
             };
-
             /*
              * Add the selected pictogram to the sentence
              */
@@ -412,6 +422,16 @@ angular.module('controllers', [])
                     $scope.tense = response.tense;
                     $scope.tipusfrase = response.tipusfrase;
                     $scope.negativa = response.negativa;
+                    if (response.control !== "") {
+                        var url = $scope.baseurl + "Board/" + response.control;
+                        var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
+
+                        $http.post(url, postdata).success(function (response)
+                        {
+                            $scope.dataTemp = response.data;
+                            $scope.info = response.info;
+                        });
+                    }
                 });
             };
             /*
@@ -548,7 +568,8 @@ angular.module('controllers', [])
                         });
             }
             ;
-        })
+        }
+        )
 //Add a directive in order to recognize the right click
         .directive('ngRightClick', function ($parse) {
             return function (scope, element, attrs) {

@@ -359,6 +359,21 @@ class BoardInterface extends CI_Model {
     }
 
     /*
+     * Return all functions
+     */
+    function getFunctions() {
+        
+ 
+        $query = $this->db->get('Function');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    /*
      * ADD MODIFIER TO A NOUN THAT WAS JUST ENTERED
      */
     function afegirModifNom($modif) {

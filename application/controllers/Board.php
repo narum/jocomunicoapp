@@ -34,19 +34,19 @@ class Board extends REST_Controller {
         }
     }
 
-    public function loadCFG_post(){
+    public function loadCFG_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $iu = $request->idusu;
         $lu = $request->lusu;
-        
-        $data = array( 
-                    'idusu'  => $iu,
-                    'ulangabbr' => $lu);
-        
+
+        $data = array(
+            'idusu' => $iu,
+            'ulangabbr' => $lu);
+
         $this->session->set_userdata($data);
-        
     }
+
     /*
      * Get the cell's info
      */
@@ -148,7 +148,7 @@ class Board extends REST_Controller {
             $this->addColumns($output[0]->width, $output[0]->height, 1, $columnsDiff);
         } elseif ($columnsDiff < 0) {
             $this->removeColumns($output[0]->width, $output[0]->height, 1, -$columnsDiff);
-        }elseif ($rowsDiff > 0) {
+        } elseif ($rowsDiff > 0) {
             $this->addRows($output[0]->width, $output[0]->height, 1, $rowsDiff);
         } elseif ($rowsDiff < 0) {
             $this->removeRows($output[0]->width, $output[0]->height, 1, -$rowsDiff);
@@ -357,6 +357,20 @@ class Board extends REST_Controller {
     }
 
     /*
+     * Get the functions in a list to create the dropdown menu
+     */
+
+    public function getFunctions_post() {
+
+        $functions = $this->BoardInterface->getFunctions();
+
+        $response = [
+            'functions' => $functions
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+
+    /*
      * Get the function
      */
 
@@ -368,28 +382,33 @@ class Board extends REST_Controller {
         $tipusfrase = $request->tipusfrase;
         $negativa = $request->negativa;
 
+        $control = "";
         $function = $this->BoardInterface->getFunction($id);
         $value = $function[0]->value;
         $type = $function[0]->type;
-        
+
         switch ($type) {
             case "modif":
                 $data = $this->BoardInterface->afegirModifNom($value);
                 break;
             case "tense":
-                $tense =  $value;
+                $tense = $value;
                 break;
             case "tipusfrase":
-                $tipusfrase =  $value;
+                $tipusfrase = $value;
                 break;
             case "negativa":
-                $negativa =  $value;
+                $negativa = $value;
+                break;
+            case "control":
+                $control = $value;
                 break;
         }
         $response = [
             'tense' => $tense,
             'tipusfrase' => $tipusfrase,
-            'negativa' => $negativa
+            'negativa' => $negativa,
+            'control' => $control
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
@@ -397,6 +416,7 @@ class Board extends REST_Controller {
     /*
      * Add the selected pictogram to the board 
      */
+
     public function addPicto_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -418,6 +438,7 @@ class Board extends REST_Controller {
     /*
      * Swap the two selected pictograms in the board
      */
+
     public function swapPicto_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -440,6 +461,7 @@ class Board extends REST_Controller {
     /*
      * Remove the selected pictogram to the board
      */
+
     public function removePicto_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);

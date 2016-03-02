@@ -12,12 +12,12 @@
                     pictograma
                 </label>
                 <label>
-                    <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="Function"/>
-                    funció
+                    <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="frase" ng-checked="isSelected('function')"/>
+                    frase
                 </label>
                 <label>
-                    <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="Folder"/>
-                    carpeta
+                    <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="history"/>
+                    carpeta d'historial
                 </label>
             </form>
         </div>
@@ -25,8 +25,12 @@
             <div class="col-xs-6">
                 Funcio
             </div>
-            <div class="col-xs-6">
-                {{funciones}}
+            <div class="col-xs-6" ng-init="getFunctions()">
+                <select
+                ng-model="funcType"
+                ng-options="n.functNameCA for n in functions"
+                ng-value="{{n.ID_Function}}">
+                </select>
             </div>
         </div>
     </div>
