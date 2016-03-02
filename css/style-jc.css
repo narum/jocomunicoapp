@@ -97,3 +97,8 @@
 .menu{
     position:relative;
 }
+
+.ngdialog.dialogEdit .ngdialog-content{
+    width : 75vw;
+    height: 60vh;
+}

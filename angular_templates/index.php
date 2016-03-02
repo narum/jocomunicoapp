@@ -24,14 +24,14 @@
         <script type="text/javascript" src="<?= base_url(); ?>angular_js/services.js"></script>
 
 
-        
+        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/css/ngDialog.min.css"/>
+        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/css/ngDialog-theme-default.min.css"/>
         <link rel="stylesheet" href="<?= base_url(); ?>/css/style-jc.css"/>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular-bind-html-compile.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular-sanitize.min.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/ngDraggable.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/ngDialog.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/css/ngDialog.min.css"/>
-        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/css/ngDialog-theme-default.min.css"/>
+        
         
         <div ng-view class="root" ng-init="baseurl = '<?= base_url(); ?>'"></div>
     </body>

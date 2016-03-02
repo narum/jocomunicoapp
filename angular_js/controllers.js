@@ -395,23 +395,28 @@ angular.module('controllers', [])
 
                     iscope.info = response.info;
                     iscope.baseurl = $scope.baseurl;
-                    iscope.isSelected = function (thisType) {
-                        if (iscope.info.type === thisType) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    };
+                    //Se ejecutan automaticamente
                     iscope.getFunctions = function () {
                         var url = $scope.baseurl + "Board/getFunctions";
-                        $http.post(url, postdata).success(function (response)
+                        $http.post(url).success(function (response)
                         {
                             iscope.functions = response.functions;
                         });
                     };
+                    iscope.getBoards = function () {
+                        var url = $scope.baseurl + "Board/getBoards";
+                        var postdata = {idboard: $scope.idboard};
+                        
+                        $http.post(url, postdata).success(function (response)
+                        {
+                            iscope.boards = response.boards;
+                        });
+                    };
                     ngDialog.open({
                         template: $scope.baseurl + '/angular_templates/EditCellView.html',
-                        scope: iscope
+                        className: 'ngdialog-theme-default dialogEdit',
+                        scope: iscope,
+                        
                     });
 
                 }

@@ -28,13 +28,28 @@
             <div class="col-xs-6" ng-init="getFunctions()">
                 <select
                 ng-model="funcType"
-                ng-options="n.functNameCA for n in functions"
-                ng-value="{{n.ID_Function}}">
+                ng-options="f.functNameCA for f in functions"
+                ng-value="{{f.ID_Function}}">
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                Funcio
+            </div>
+            <div class="col-xs-6" ng-init="getBoards()">
+                <select
+                ng-model="boardsGroup"
+                ng-options="n.Bname for n in boards"
+                ng-value="{{n.ID_Board}}">
                 </select>
             </div>
         </div>
     </div>
-    <div class="col-xs-6">
+    <div class="col-xs-6" style="height: 50%">
         <img width="100%" height="100%" src="{{baseurl}}img/pictos/{{info.imgPicto}}"/>
+    </div>
+    <div class="col-xs-6">
+        <button class="btn-success" ng-click="addColumn()">addColumn</button>
     </div>
 </div>

@@ -240,7 +240,7 @@ class BoardInterface extends CI_Model {
 
     function addStatsX1($paraulesFrase, $iduser) {
         for ($i = 0; $i < count($paraulesFrase); $i++) {
-            if ($paraulesFrase[$i] != null) {
+            if ($paraulesFrase[$i] != null) {//esto se podria quitar...
                 $word = $paraulesFrase[$i];
                 $inputid = $word->id;
                 $this->db->where('pictoid', $inputid);
@@ -370,8 +370,39 @@ class BoardInterface extends CI_Model {
      */
     function getFunctions() {
         
- 
+        
         $query = $this->db->get('Function');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    /*
+     * Return all user boards in the same group
+     */
+    function getIDGroupBoards($idboard) {
+        
+        $this->db->where('ID_Board', $idboard);
+        $query = $this->db->get('Boards');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = "null";
+
+        return $output;
+    }
+    /*
+     * Return all user boards in the same group
+     */
+    function getBoards($idgroup) {
+        
+        $this->db->where('ID_GBBoard', $idgroup);
+        $query = $this->db->get('Boards');
 
         if ($query->num_rows() > 0) {
             $output = $query->result();

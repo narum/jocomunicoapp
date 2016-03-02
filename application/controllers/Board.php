@@ -387,6 +387,24 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    
+    /*
+     * Get the user boards in a list to create the dropdown menu
+     */
+
+    public function getBoards_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idboard = $request->idboard;
+        
+        $board = $this->BoardInterface->getIDGroupBoards($idboard);
+        $boards = $this->BoardInterface->getBoards($board[0]->ID_GBBoard);
+
+        $response = [
+            'boards' => $boards
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 
     /*
      * Get the function
