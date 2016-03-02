@@ -382,6 +382,7 @@ class Mymatching {
         "nosaltres" => "ens",
         "vosaltres" => "us",
         "ells" => "els",
+        "elles" => "els",
     );
     
     var $pronomsPersonalsAfterReceiver = array(
@@ -393,6 +394,31 @@ class Mymatching {
         "nosaltres" => "nos",
         "vosaltres" => "vos",
         "ells" => "los",
+        "elles" => "los",
+    );
+    
+    var $pronomsPersonalsFrontTheme = array(
+        "jo" => "em",
+        "mi" => "em",
+        "tu" => "et",
+        "ell" => "@PRFEBLEel", // per diferenciar-lo de l'article "el"
+        "ella" => "@PRFEBLEla", // per diferenciar-lo de l'article "la"
+        "nosaltres" => "ens",
+        "vosaltres" => "us",
+        "ells" => "els",
+        "elles" => "les",
+    );
+    
+    var $pronomsPersonalsAfterTheme = array(
+        "jo" => "me",
+        "mi" => "me",
+        "tu" => "te",
+        "ell" => "lo",
+        "ella" => "la",
+        "nosaltres" => "nos",
+        "vosaltres" => "vos",
+        "ells" => "los",
+        "elles" => "les",
     );
     
     var $tempsPrep = array(
@@ -452,6 +478,19 @@ class Mymatching {
         "nosotros" => "nos",
         "vosotros" => "os",
         "ellos" => "les",
+        "ellas" => "les",
+    );
+    
+    var $pronomsPersonalsThemeES = array(
+        "yo" => "me",
+        "mí" => "me",
+        "tú" => "te",
+        "él" => "lo",
+        "ella" => "la",
+        "nosotros" => "nos",
+        "vosotros" => "os",
+        "ellos" => "los",
+        "ellas" => "las",
     );
     
     var $tempsPrepES = array(
