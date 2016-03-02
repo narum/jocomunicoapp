@@ -252,7 +252,6 @@ angular.module('controllers', [])
                 }else{
                     $scope.idboard = id;
                 }
-                alert (id);
                 var url = $scope.baseurl + "Board/showCellboard";
                 var postdata = {idboard: id};
                 
@@ -281,8 +280,9 @@ angular.module('controllers', [])
                 $scope.grid3 = 0;
 
                 var url = $scope.baseurl + "Board/getCellboard";
+                var postdata = {idboard: $scope.idboard};
 
-                $http.post(url).success(function (response)
+                $http.post(url, postdata).success(function (response)
                 {
                     $scope.nameboard = response.name;
                     $scope.altura = $scope.range(20)[response.row].valueOf();
@@ -299,8 +299,9 @@ angular.module('controllers', [])
             {
 
                 var url = $scope.baseurl + "Board/getCellboard";
+                var postdata = {idboard: $scope.idboard};
 
-                $http.post(url).success(function (response)
+                $http.post(url, postdata).success(function (response)
                 {
 
                     $scope.oldH = response.row;
@@ -312,7 +313,7 @@ angular.module('controllers', [])
                     } else {
                         $newW = $scope.oldW;
                     }
-                    var postdata = {r: $newH, c: $newW};
+                    var postdata = {r: $newH, c: $newW, idboard: $scope.idboard};
                     if ($newH < $scope.oldH || $newW < $scope.oldW) {
                         $scope.openConfirmSize($newH, $scope.oldH, $newW, $scope.oldW);
                     } else {
@@ -335,7 +336,7 @@ angular.module('controllers', [])
             $scope.openConfirmSize = function ($newH, $oldH, $newW, $oldW) {
 
                 var url = $scope.baseurl + "Board/modifyCellBoard";
-                var postdata = {r: $newH, c: $newW};
+                var postdata = {r: $newH, c: $newW, idboard: $scope.idboard};
                 //Object of all new/old sizes
                 $scope.FormData = {
                     newH: $newH,
@@ -375,7 +376,7 @@ angular.module('controllers', [])
                 var iscope = $scope.$new(true);
                 //get basic info
                 var url = $scope.baseurl + "Board/getCell";
-                var postdata = {id: $id, idboard: 1};
+                var postdata = {id: $id, idboard: $scope.idboard};
 
                 $http.post(url, postdata).success(function (response)
                 {
@@ -404,11 +405,29 @@ angular.module('controllers', [])
                 }
                 );
             };
+            
+            /*
+             * Add the selected pictogram to the sentence
+             */
+            $scope.clickOnCell = function (cell) {
+
+
+                if(cell.ID_CPicto !== null){
+                    alert(cell.ID_CPicto);
+                    $scope.addToSentence(cell.ID_CPicto);
+                }
+                if(cell.ID_CFunction !== null){
+                    alert(cell.ID_CFunction);
+                    $scope.clickOnFunction(cell.ID_CFunction);
+                }
+                if(cell.boardLink !== null){
+                    $scope.showBoard(cell.boardLink);
+                }
+            };
             /*
              * Add the selected pictogram to the sentence
              */
             $scope.addToSentence = function (id) {
-
                 var url = $scope.baseurl + "Board/addWord";
                 var postdata = {id: id};
 
@@ -422,6 +441,7 @@ angular.module('controllers', [])
              * to the specific function
              */
             $scope.clickOnFunction = function (id) {
+                alert("hola" + id);
                 var url = $scope.baseurl + "Board/getFunction";
                 var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
@@ -432,6 +452,7 @@ angular.module('controllers', [])
                     $scope.tipusfrase = response.tipusfrase;
                     $scope.negativa = response.negativa;
                     if (response.control !== "") {
+                        alert(response.control);
                         var url = $scope.baseurl + "Board/" + response.control;
                         var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
@@ -550,9 +571,9 @@ angular.module('controllers', [])
                 //Significa que no hay que hacer swap, solo medio swap...
                 if (data.idpicto) {
                     URL = $scope.baseurl + "Board/addPicto";
-                    var postdata = {id: data.idpicto, pos: posInBoard};
+                    var postdata = {id: data.idpicto, pos: posInBoard,idboard: $scope.idboard};
                 } else {
-                    var postdata = {pos1: data.posInBoardPicto, pos2: posInBoard};
+                    var postdata = {pos1: data.posInBoardPicto, pos2: posInBoard, idboard: $scope.idboard};
                     URL = $scope.baseurl + "Board/swapPicto";
                 }
 
@@ -565,7 +586,7 @@ angular.module('controllers', [])
             };
             $scope.onDropRemove = function (data, evt) {
 
-                var postdata = {pos: data.posInBoardPicto};
+                var postdata = {pos: data.posInBoardPicto, idboard: $scope.idboard};
                 var URL = $scope.baseurl + "Board/removePicto";
 
 

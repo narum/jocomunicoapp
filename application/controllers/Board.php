@@ -58,7 +58,7 @@ class Board extends REST_Controller {
         $idboard = $request->idboard;
 
         // "1" es el numero de id de la "board"
-        $info = $this->BoardInterface->getCell($id, 1);
+        $info = $this->BoardInterface->getCell($id, $idboard);
 
 
         $response = [
@@ -74,9 +74,12 @@ class Board extends REST_Controller {
      */
 
     public function getCellboard_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idboard = $request->idboard;
 
         // "1" es el numero de id de la "board"
-        $output = $this->BoardInterface->getBoardStruct(1);
+        $output = $this->BoardInterface->getBoardStruct($idboard);
         $columns = $output[0]->width;
         $rows = $output[0]->height;
         $name = $output[0]->Bname;
@@ -131,6 +134,7 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $c = $request->c;
         $r = $request->r;
+        $idboard = $request->idboard;
 
         // "1" es el numero de id de la "board"
 //        $output = $this->BoardInterface->getBoardStruct(1);
@@ -139,8 +143,8 @@ class Board extends REST_Controller {
 //        $this->BoardInterface->updateNumCR($columns, $rows, 1);
         //MODIF: cuando pasemos el total se cambia lo de arriba por:
 
-        $output = $this->BoardInterface->getBoardStruct(1);
-        $this->BoardInterface->updateNumCR($c, $r, 1);
+        $output = $this->BoardInterface->getBoardStruct($idboard);
+        $this->BoardInterface->updateNumCR($c, $r, $idboard);
         $columnsDiff = $c - $output[0]->width;
         $rowsDiff = $r - $output[0]->height;
 
@@ -148,13 +152,13 @@ class Board extends REST_Controller {
 
 
         if ($columnsDiff > 0) {
-            $this->addColumns($output[0]->width, $output[0]->height, 1, $columnsDiff);
+            $this->addColumns($output[0]->width, $output[0]->height, $idboard, $columnsDiff);
         } elseif ($columnsDiff < 0) {
-            $this->removeColumns($output[0]->width, $output[0]->height, 1, -$columnsDiff);
+            $this->removeColumns($output[0]->width, $output[0]->height, $idboard, -$columnsDiff);
         } elseif ($rowsDiff > 0) {
-            $this->addRows($output[0]->width, $output[0]->height, 1, $rowsDiff);
+            $this->addRows($output[0]->width, $output[0]->height, $idboard, $rowsDiff);
         } elseif ($rowsDiff < 0) {
-            $this->removeRows($output[0]->width, $output[0]->height, 1, -$rowsDiff);
+            $this->removeRows($output[0]->width, $output[0]->height, $idboard, -$rowsDiff);
         }
 
         //$array = $this->BoardInterface->getCellsBoard(1);
@@ -163,7 +167,7 @@ class Board extends REST_Controller {
 
         $this->BoardInterface->commitTrans();
 
-        $output = $this->BoardInterface->getBoardStruct(1);
+        $output = $this->BoardInterface->getBoardStruct($idboard);
         $response = [
             'col' => '1',
             'row' => '1'
@@ -387,8 +391,8 @@ class Board extends REST_Controller {
 
         $control = "";
         $function = $this->BoardInterface->getFunction($id);
-        $value = $function[0]->value;
-        $type = $function[0]->type;
+        $value = $function[0]->functValue;
+        $type = $function[0]->functType;
 
         switch ($type) {
             case "modif":
@@ -425,12 +429,13 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $id = $request->id;
         $pos = $request->pos;
+        $idboard = $request->idboard;
         //$boardid = $request->boardid;
         //MODIF: 1 es la board
-        $cell = $this->BoardInterface->getIDCell($pos, 1);
+        $cell = $this->BoardInterface->getIDCell($pos, $idboard);
         $this->BoardInterface->updateDataCell($id, $cell[0]->ID_RCell);
 
-        $data = $this->BoardInterface->getCellsBoard(1);
+        $data = $this->BoardInterface->getCellsBoard($idboard);
 
         $response = [
             'data' => $data
@@ -447,13 +452,14 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $pos1 = $request->pos1;
         $pos2 = $request->pos2;
+        $idboard = $request->idboard;
         //$boardid = $request->boardid;
         //1 es la board
-        $this->BoardInterface->updatePosCell($pos1, -1, 1);
-        $this->BoardInterface->updatePosCell($pos2, $pos1, 1);
-        $this->BoardInterface->updatePosCell(-1, $pos2, 1);
+        $this->BoardInterface->updatePosCell($pos1, -1, $idboard);
+        $this->BoardInterface->updatePosCell($pos2, $pos1, $idboard);
+        $this->BoardInterface->updatePosCell(-1, $pos2, $idboard);
 
-        $data = $this->BoardInterface->getCellsBoard(1);
+        $data = $this->BoardInterface->getCellsBoard($idboard);
 
         $response = [
             'data' => $data
@@ -469,12 +475,13 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $pos = $request->pos;
+        $idboard = $request->idboard;
         //$boardid = $request->boardid;
         //1 es la board
-        $cell = $this->BoardInterface->getIDCell($pos, 1);
+        $cell = $this->BoardInterface->getIDCell($pos, $idboard);
         $this->BoardInterface->updateDataCell(NULL, $cell[0]->ID_RCell);
 
-        $data = $this->BoardInterface->getCellsBoard(1);
+        $data = $this->BoardInterface->getCellsBoard($idboard);
 
         $response = [
             'data' => $data
