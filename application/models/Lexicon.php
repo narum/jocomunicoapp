@@ -802,6 +802,12 @@ class Lexicon extends CI_Model {
         // calculem l'string d'inputwords: és el llistat de paraules com apareixien
         // a Elements Seleccionats, just abans de prémer Generar
         $paraulesFrase = $this->recuperarFrase($idusu);
+        
+        // guardem les estadístiques de la frase
+        $this->addStatsX1($paraulesFrase, $idusu);
+        $this->addStatsX2($paraulesFrase, $idusu);
+        $this->addStatsX3($paraulesFrase, $idusu);
+        
         $inputwords = "";
         
         // Hi afegirem també els ids, modifs, tipus de frases i tenses a l'string
@@ -1402,6 +1408,124 @@ class Lexicon extends CI_Model {
         $this->db->where('ID_SHistoric', $identry);
         $this->db->update('S_Historic', $data);  
     }
+    
+    
+    /*
+     * Inserts individually each pictogram in P_StatsUserPicto.
+     * If this picto already exists increment count
+     */
+
+    function addStatsX1($paraulesFrase, $iduser) {
+        for ($i = 0; $i < count($paraulesFrase); $i++) {
+            if ($paraulesFrase[$i] != null) {//esto se podria quitar...
+                $word = $paraulesFrase[$i];
+                $inputid = $word->id;
+                $this->db->where('pictoid', $inputid);
+                $this->db->where('ID_PSUPUser', $iduser);
+                $query = $this->db->get('P_StatsUserPicto');
+                if ($query->num_rows() > 0) {
+                    $stat = $query->result();
+                    $num = $stat[0]->countx1 + 1;
+
+                    $this->db->where('pictoid', $inputid);
+                    $this->db->where('ID_PSUPUser', $iduser);
+                    $data = array(
+                        'countx1' => $num
+                    );
+                    $query = $this->db->update('P_StatsUserPicto', $data);
+                } else {
+                    $data = array(
+                        'countx1' => '1',
+                        'pictoid' => $inputid,
+                        'ID_PSUPUser' => $iduser
+                    );
+                    $query = $this->db->insert('P_StatsUserPicto', $data);
+                }
+            }
+        }
+    }
+
+    /*
+     * Inserts, in pairs, each pictogram in P_StatsUserPicto.
+     * If this combination of pictograms already exist increment count
+     */
+
+    function addStatsX2($paraulesFrase, $iduser) {
+        for ($i = 1; $i < count($paraulesFrase); $i++) {
+            $word1 = $paraulesFrase[$i - 1];
+            $word2 = $paraulesFrase[$i];
+            $inputid1 = $word1->id;
+            $inputid2 = $word2->id;
+            $this->db->where('picto1id', $inputid1);
+            $this->db->where('picto2id', $inputid2);
+            $this->db->where('ID_PSUP2User', $iduser);
+            $query = $this->db->get('P_StatsUserPictox2');
+            if ($query->num_rows() > 0) {
+                $stat = $query->result();
+                $num = $stat[0]->countx2 + 1;
+
+                $this->db->where('picto2id', $inputid2);
+                $this->db->where('picto1id', $inputid1);
+                $this->db->where('ID_PSUP2User', $iduser);
+                $data = array(
+                    'countx2' => $num
+                );
+                $query = $this->db->update('P_StatsUserPictox2', $data);
+            } else {
+                $data = array(
+                    'countx2' => '1',
+                    'picto2id' => $inputid2,
+                    'picto1id' => $inputid1,
+                    'ID_PSUP2User' => $iduser
+                );
+                $query = $this->db->insert('P_StatsUserPictox2', $data);
+            }
+        }
+    }
+
+    /*
+     * Inserts, in t, each pictogram in P_StatsUserPicto.
+     * If this combination of pictograms already exist increment count
+     */
+
+    function addStatsX3($paraulesFrase, $iduser) {
+        for ($i = 2; $i < count($paraulesFrase); $i++) {
+            $word1 = $paraulesFrase[$i - 2];
+            $word2 = $paraulesFrase[$i - 1];
+            $word3 = $paraulesFrase[$i];
+            $inputid1 = $word1->id;
+            $inputid2 = $word2->id;
+            $inputid3 = $word3->id;
+            $this->db->where('picto1id', $inputid1);
+            $this->db->where('picto2id', $inputid2);
+            $this->db->where('picto3id', $inputid3);
+            $this->db->where('ID_PSUP3User', $iduser);
+            $query = $this->db->get('P_StatsUserPictox3');
+            if ($query->num_rows() > 0) {
+                $stat = $query->result();
+                $num = $stat[0]->countx3 + 1;
+
+                $this->db->where('picto3id', $inputid3);
+                $this->db->where('picto2id', $inputid2);
+                $this->db->where('picto1id', $inputid1);
+                $this->db->where('ID_PSUP3User', $iduser);
+                $data = array(
+                    'countx3' => $num
+                );
+                $query = $this->db->update('P_StatsUserPictox3', $data);
+            } else {
+                $data = array(
+                    'countx3' => '1',
+                    'picto3id' => $inputid3,
+                    'picto2id' => $inputid2,
+                    'picto1id' => $inputid1,
+                    'ID_PSUP3User' => $iduser
+                );
+                $query = $this->db->insert('P_StatsUserPictox3', $data);
+            }
+        }
+    }
+    
 }
 
 ?>
