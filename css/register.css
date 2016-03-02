@@ -1,12 +1,45 @@
-	
-body{
-	background: #f2f2f2;
+
+html, body, .container-table {
+    height: 100%;
+    background: #f2f2f2;
+}
+/*Per centrar el div del boxRegistreUsuari*/
+.container-table {
+    display: table;
+    background: #f2f2f2;
+}
+.vertical-center-row {
+    display: table-cell;
+    vertical-align: middle;
 }
 
-.box{
-	background: #ffcc99;
+/*propietats del box central*/
+.boxRegistreUsuari{
+    background: #ffcc99;
+    border-radius: 10px;
 }
-
+.barraSuperiorRegistre{
+    background: #333333;
+    color:white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.nomBarraSuperiorRegistre{
+    margin-bottom: 2px;
+    margin-top: 5px;
+}
+.btn-idioma {
+  color: white;
+  background-color: #333333;
+  border-color: #cccccc;
+  border-radius: 6px;
+}
+.butonsBarraSuperiorRegistre{
+    margin-top: 5px;
+}
+.butoSortirBarraSuperiorRegistre{
+    color: red;
+}
 /*Comentario de error en una capa superior para no desplazar el contenido*/
 .errorcoment{
 	color:red;
@@ -28,7 +61,7 @@ body{
 /*color del borde del icono del checkbox en error*/
 .has-error .input-group-addon {
   	border-color:red;
-} 
+}
 /*Comentario de warning en una capa superior para no desplazar el contenido*/
 .warningcoment{
 	color:orange;
@@ -56,14 +89,6 @@ body{
 .has-success .form-control-feedback {
     color:green;
     border-color:green;
-}
-/*Para centrar verticalmente en una row*/
-.vertical-center {
-  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
-  min-height: 100vh; /* These two lines are counted as one :-)       */
-
-  display: flex;
-  align-items: center;
 }
 
 /*Listado de idiomas fondo blanco y sin margenes*/
