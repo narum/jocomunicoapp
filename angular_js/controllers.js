@@ -247,14 +247,14 @@ angular.module('controllers', [])
             $scope.showBoard = function (id)
             {
                 //If the id is 0, show the actual board. Else the current board is changed (and showed)
-                if (id === '0'){
+                if (id === '0') {
                     id = $scope.idboard;
-                }else{
+                } else {
                     $scope.idboard = id;
                 }
                 var url = $scope.baseurl + "Board/showCellboard";
                 var postdata = {idboard: id};
-                
+
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.columns = response.col;
@@ -291,12 +291,12 @@ angular.module('controllers', [])
 //                    $scope.oldW = $scope.amplada;
                 });
             };
-            
+
             $scope.changeNameBoard = function ()
             {
                 var postdata = {Name: $scope.BoardName};
                 var URL = $scope.baseurl + "Board/modifyNameboard";
-                
+
                 $http.post(URL, postdata).
                         success(function (response)
                         {
@@ -358,11 +358,11 @@ angular.module('controllers', [])
                     HWType: 2,
                     Dnum: 0
                 };
-                if ($newH != $oldH)
+                if ($newH !== $oldH)
                 {
                     $scope.FormData.HWType = 0;
                     $scope.FormData.Dnum = ($oldH - $newH);
-                } else if ($newW != $oldW)
+                } else if ($newW !== $oldW)
                 {
                     $scope.FormData.HWType = 1;
                     $scope.FormData.Dnum = ($oldW - $newW);
@@ -382,62 +382,20 @@ angular.module('controllers', [])
             };
 
             /*
-             * Open edit cell dialog
-             */
-            $scope.openEditCellMenu = function ($id) {
-                var iscope = $scope.$new(true);
-                //get basic info
-                var url = $scope.baseurl + "Board/getCell";
-                var postdata = {id: $id, idboard: $scope.idboard};
-
-                $http.post(url, postdata).success(function (response)
-                {
-
-                    iscope.info = response.info;
-                    iscope.baseurl = $scope.baseurl;
-                    //Se ejecutan automaticamente
-                    iscope.getFunctions = function () {
-                        var url = $scope.baseurl + "Board/getFunctions";
-                        $http.post(url).success(function (response)
-                        {
-                            iscope.functions = response.functions;
-                        });
-                    };
-                    iscope.getBoards = function () {
-                        var url = $scope.baseurl + "Board/getBoards";
-                        var postdata = {idboard: $scope.idboard};
-                        
-                        $http.post(url, postdata).success(function (response)
-                        {
-                            iscope.boards = response.boards;
-                        });
-                    };
-                    ngDialog.open({
-                        template: $scope.baseurl + '/angular_templates/EditCellView.html',
-                        className: 'ngdialog-theme-default dialogEdit',
-                        scope: iscope,
-                        
-                    });
-
-                }
-                );
-            };
-            
-            /*
              * Add the selected pictogram to the sentence
              */
             $scope.clickOnCell = function (cell) {
 
 
-                if(cell.ID_CPicto !== null){
+                if (cell.ID_CPicto !== null) {
                     alert(cell.ID_CPicto);
                     $scope.addToSentence(cell.ID_CPicto);
                 }
-                if(cell.ID_CFunction !== null){
+                if (cell.ID_CFunction !== null) {
                     alert(cell.ID_CFunction);
                     $scope.clickOnFunction(cell.ID_CFunction);
                 }
-                if(cell.boardLink !== null){
+                if (cell.boardLink !== null) {
                     $scope.showBoard(cell.boardLink);
                 }
             };
@@ -458,7 +416,6 @@ angular.module('controllers', [])
              * to the specific function
              */
             $scope.clickOnFunction = function (id) {
-                alert("hola" + id);
                 var url = $scope.baseurl + "Board/getFunction";
                 var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
@@ -588,7 +545,7 @@ angular.module('controllers', [])
                 //Significa que no hay que hacer swap, solo medio swap...
                 if (data.idpicto) {
                     URL = $scope.baseurl + "Board/addPicto";
-                    var postdata = {id: data.idpicto, pos: posInBoard,idboard: $scope.idboard};
+                    var postdata = {id: data.idpicto, pos: posInBoard, idboard: $scope.idboard};
                 } else {
                     var postdata = {pos1: data.posInBoardPicto, pos2: posInBoard, idboard: $scope.idboard};
                     URL = $scope.baseurl + "Board/swapPicto";
@@ -613,10 +570,68 @@ angular.module('controllers', [])
                             $scope.statusWord = response.status;
                             $scope.data = response.data;
                         });
+            };
+            
+            /*
+             * Open edit cell dialog
+             */
+            $scope.openEditCellMenu = function (id) {
+                $scope.idEditCell = id;
+                ngDialog.open({
+                    template: $scope.baseurl + '/angular_templates/EditCellView.html',
+                    className: 'ngdialog-theme-default dialogEdit',
+                    scope: $scope,
+                    controller: 'Edit'
+                });
+
+            };
+        })
+
+
+        .controller('Edit', function ($scope, $http) {
+            var url = $scope.baseurl + "Board/getCell";
+            var postdata = {id: $scope.idEditCell, idboard: $scope.idboard};
+
+            $http.post(url, postdata).success(function (response)
+            {
+                $scope.Editinfo = response.info;
+                
+                //Se ejecutan automaticamente
+                $scope.getFunctions = function () {
+                    var url = $scope.baseurl + "Board/getFunctions";
+                    $http.post(url).success(function (response)
+                    {
+                        $scope.functions = response.functions;
+                    });
+                };
+                $scope.getBoards = function () {
+                    var url = $scope.baseurl + "Board/getBoards";
+                    var postdata = {idboard: $scope.idboard};
+
+                    $http.post(url, postdata).success(function (response)
+                    {
+                        $scope.boards = response.boards;
+                        alert($scope.Editinfo.boardLink);
+                        $scope.boardsGroup = {ID_Board: $scope.Editinfo.boardLink};
+                    });
+                };
+                //Initialize the dropdwon menus.
+                $scope.getFunctions();
+                $scope.getBoards();
+                $scope.aceptar = function (boardsGroup, funcType) {
+                    alert(boardsGroup.ID_Board + "a" + funcType);
+                };
+                
             }
-            ;
-        }
-        )
+            );
+        })
+
+
+
+
+
+
+
 //Add a directive in order to recognize the right click
         .directive('ngRightClick', function ($parse) {
             return function (scope, element, attrs) {

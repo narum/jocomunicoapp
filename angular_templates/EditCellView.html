@@ -1,6 +1,6 @@
 
 <div class="row fullheight">
-    <p>{{info.pictoid}}</p>
+    <p>{{Editinfo.pictoid}}</p>
     <div class="col-xs-6">
         <div class="row">
             tipo
@@ -25,11 +25,11 @@
             <div class="col-xs-6">
                 Funcio
             </div>
-            <div class="col-xs-6" ng-init="getFunctions()">
+            <div class="col-xs-6">
                 <select
                 ng-model="funcType"
-                ng-options="f.functNameCA for f in functions"
-                ng-value="{{f.ID_Function}}">
+                ng-options="f.functNameCA for f in functions track by f.ID_Function"
+                ng-value="f.ID_Function">
                 </select>
             </div>
         </div>
@@ -37,19 +37,19 @@
             <div class="col-xs-6">
                 Funcio
             </div>
-            <div class="col-xs-6" ng-init="getBoards()">
-                <select
+            <div class="col-xs-6">
+                <select 
                 ng-model="boardsGroup"
-                ng-options="n.Bname for n in boards"
-                ng-value="{{n.ID_Board}}">
+                ng-options="b.Bname for b in boards track by b.ID_Board"
+                ng-value="b.ID_Boardb">
                 </select>
             </div>
         </div>
     </div>
     <div class="col-xs-6" style="height: 50%">
-        <img width="100%" height="100%" src="{{baseurl}}img/pictos/{{info.imgPicto}}"/>
+        <img width="100%" height="100%" src="{{baseurl}}img/pictos/{{Editinfo.imgPicto}}"/>
     </div>
     <div class="col-xs-6">
-        <button class="btn-success" ng-click="addColumn()">addColumn</button>
+        <button class="btn-success" ng-click="aceptar(boardsGroup.valueOf(), funcType.valueOf())">aceptar</button>
     </div>
 </div>
