@@ -1,6 +1,5 @@
 
 <div class="row fullheight">
-    <p>{{Editinfo.pictoid}}</p>
     <div class="col-xs-6">
         <div class="row">
             tipo
@@ -43,10 +42,12 @@
             <div class="col-xs-6">
                 boardlink
             </div>
-            <input type="checkbox"
-                   ng-model="checkboxBoardsGroup"
-                   />
             <div class="col-xs-6">
+                <input type="checkbox"
+                       ng-model="checkboxBoardsGroup"
+                       />
+            </div>
+            <div class="col-xs-12">
                 <select 
                     ng-disabled="!checkboxBoardsGroup"
                     ng-model="boardsGroup"
@@ -88,9 +89,56 @@
                        />
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-6">
+                Fixed
+            </div>
+            <div class="col-xs-6">
+                <input type="checkbox"
+                       ng-model="checkboxIsFixed"
+                       />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                Escaneo
+            </div>
+            <div class="col-xs-3">
+                1<input type="checkbox"
+                        ng-model="checkboxScanBlockText1"
+                        />
+            </div>
+            <div class="col-xs-3">
+                <select
+                    ng-disabled="!checkboxScanBlockText1"
+                    ng-model="numScanBlockText1"
+                    ng-options="n for n in range(5)"
+                    >
+                </select>
+            </div>
+            <div class="col-xs-6">
+                <input type="text" ng-model="textInScanBlockText1" ng-disabled="!checkboxScanBlockText1"/>
+            </div>
+            <div class="col-xs-3">
+                2<input type="checkbox"
+                        ng-model="checkboxScanBlockText2"
+                        />
+            </div>
+            <div class="col-xs-3">
+                <select
+                    ng-disabled="!checkboxScanBlockText2"
+                    ng-model="numScanBlockText2"
+                    ng-options="n for n in range(5)"
+                    >
+                </select>
+            </div>
+            <div class="col-xs-6">
+                <input type="text" ng-model="textInScanBlockText2" ng-disabled="!checkboxScanBlockText2"/>
+            </div>
+        </div>
         <img width="100%" height="100%" src="{{baseurl}}img/pictos/{{Editinfo.imgPicto}}"/>
-    </div>
-    <div class="col-xs-6">
-        <button class="btn-success" ng-click="aceptar()">aceptar</button>
+        <div class="col-xs-12">
+            <button class="btn-success" ng-click="aceptar()">aceptar</button>
+        </div>
     </div>
 </div>

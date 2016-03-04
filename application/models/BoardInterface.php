@@ -159,6 +159,19 @@ class BoardInterface extends CI_Model {
     /*
      * 
      */
+    function updateFixedCell($id, $isFixed) {
+        $output = array();
+
+        $this->db->where('ID_Cell', $id);
+        $this->db->update('Cell', array('isFixedInGroupBoards' => $isFixed));
+
+
+        return $output;
+    }
+    
+    /*
+     * 
+     */
     function updateTextCell($id, $textInCell) {
         $output = array();
 

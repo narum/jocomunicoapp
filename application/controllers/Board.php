@@ -526,12 +526,14 @@ class Board extends REST_Controller {
         $boardLink = $request->boardLink;
         $idFunct = $request->idFunct;
         $textInCell = $request->textInCell;
-        $visible = $request->visible;
+        $visible = $request->visible; 
+        $isFixed = $request->isFixed;
         //1 es la board
         $this->BoardInterface->updateLinkCell($id, $boardLink);
         $this->BoardInterface->updateFuncCell($id, $idFunct);
         $this->BoardInterface->updateTextCell($id, $textInCell);
         $this->BoardInterface->updateVisibleCell($id, $visible);
+        $this->BoardInterface->updateFixedCell($id, $isFixed);
         
         $response = [
             

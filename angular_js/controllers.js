@@ -626,6 +626,10 @@ angular.module('controllers', [])
                 //Initialize the dropdwon menus.
                 $scope.getFunctions();
                 $scope.getBoards();
+                $scope.numScanBlockText1 = $scope.range(20)[$scope.Editinfo.customScanBlock1];
+                $scope.textInScanBlockText1 = $scope.Editinfo.customScanBlockText1;
+                $scope.numScanBlockText2 = $scope.range(20)[$scope.Editinfo.customScanBlock2];
+                $scope.textInScanBlockText2 = $scope.Editinfo.customScanBlockText2;
                 //MODIF:hay dos campos
                 if ($scope.Editinfo.textInCell !== null) {
                     $scope.checkboxTextInCell = true;
@@ -634,10 +638,13 @@ angular.module('controllers', [])
                 if ($scope.Editinfo.activeCell === "1") {
                     $scope.checkboxVisible = true;
                 }
+                if ($scope.Editinfo.isFixedInGroupBoards === "1") {
+                    $scope.checkboxIsFixed = true;
+                }
                 
                 $scope.aceptar = function () {
                     var url = $scope.baseurl + "Board/editCell";
-                    var postdata = {id: idCell, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1"};
+                    var postdata = {id: idCell, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1",isFixed: "1"};
                     if (!$scope.checkboxFuncType) {
                         postdata.idFunct = null;
                     }
@@ -648,6 +655,9 @@ angular.module('controllers', [])
                         postdata.textInCell = null;
                     }
                     if (!$scope.checkboxVisible) {
+                        postdata.visible = "0";
+                    }
+                    if (!$scope.checkboxIsFixed) {
                         postdata.visible = "0";
                     }
                     alert(postdata.boardLink);
