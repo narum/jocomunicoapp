@@ -26,30 +26,71 @@
                 Funcio
             </div>
             <div class="col-xs-6">
+                <input type="checkbox"
+                       ng-model="checkboxFuncType"
+                       />
+            </div>
+            <div class="col-xs-12">
                 <select
-                ng-model="funcType"
-                ng-options="f.functNameCA for f in functions track by f.ID_Function"
-                ng-value="f.ID_Function">
+                    ng-disabled="!checkboxFuncType"
+                    ng-model="funcType"
+                    ng-options="f.functNameCA for f in functions track by f.ID_Function"
+                    ng-value="f.ID_Function">
                 </select>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-6">
-                Funcio
+                boardlink
             </div>
+            <input type="checkbox"
+                   ng-model="checkboxBoardsGroup"
+                   />
             <div class="col-xs-6">
                 <select 
-                ng-model="boardsGroup"
-                ng-options="b.Bname for b in boards track by b.ID_Board"
-                ng-value="b.ID_Boardb">
+                    ng-disabled="!checkboxBoardsGroup"
+                    ng-model="boardsGroup"
+                    ng-options="b.Bname for b in boards track by b.ID_Board"
+                    ng-value="b.ID_Boardb">
                 </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                text
+            </div>
+            <div class="col-xs-6">
+                <input type="checkbox"
+                       ng-model="checkboxTextInCell"
+                       />
+            </div>
+            <div class="col-xs-12">
+                <input type="text" ng-model="textInCell" ng-disabled="!checkboxTextInCell"/>
             </div>
         </div>
     </div>
     <div class="col-xs-6" style="height: 50%">
+        <div class="row">
+            <div class="col-xs-6">
+                color
+            </div>
+            <div class="col-xs-6">
+                lo que sea
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                visible
+            </div>
+            <div class="col-xs-6">
+                <input type="checkbox"
+                       ng-model="checkboxVisible"
+                       />
+            </div>
+        </div>
         <img width="100%" height="100%" src="{{baseurl}}img/pictos/{{Editinfo.imgPicto}}"/>
     </div>
     <div class="col-xs-6">
-        <button class="btn-success" ng-click="aceptar(boardsGroup.valueOf(), funcType.valueOf())">aceptar</button>
+        <button class="btn-success" ng-click="aceptar()">aceptar</button>
     </div>
 </div>

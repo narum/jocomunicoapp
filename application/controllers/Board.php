@@ -517,5 +517,26 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    
+    
+    public function editCell_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+        $boardLink = $request->boardLink;
+        $idFunct = $request->idFunct;
+        $textInCell = $request->textInCell;
+        $visible = $request->visible;
+        //1 es la board
+        $this->BoardInterface->updateLinkCell($id, $boardLink);
+        $this->BoardInterface->updateFuncCell($id, $idFunct);
+        $this->BoardInterface->updateTextCell($id, $textInCell);
+        $this->BoardInterface->updateVisibleCell($id, $visible);
+        
+        $response = [
+            
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 
 }

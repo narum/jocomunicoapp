@@ -129,6 +129,58 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+    
+    /*
+     * 
+     */
+    function updateLinkCell($id, $idboard) {
+        $output = array();
+
+        $this->db->where('ID_Cell', $id);
+        $this->db->update('Cell', array('boardLink' => $idboard));
+
+
+        return $output;
+    }
+    
+    /*
+     * 
+     */
+    function updateFuncCell($id, $idFunc) {
+        $output = array();
+
+        $this->db->where('ID_Cell', $id);
+        $this->db->update('Cell', array('ID_CFunction' => $idFunc));
+
+
+        return $output;
+    }
+    
+    /*
+     * 
+     */
+    function updateTextCell($id, $textInCell) {
+        $output = array();
+
+        $this->db->where('ID_Cell', $id);
+        $this->db->update('Cell', array('textInCell' => $textInCell));
+
+
+        return $output;
+    }
+    
+    /*
+     * 
+     */
+    function updateVisibleCell($id, $visible) {
+        $output = array();
+
+        $this->db->where('ID_Cell', $id);
+        $this->db->update('Cell', array('activeCell' => $visible));
+
+
+        return $output;
+    }
 
     /*
      * Create a NULL cell (blank cell) in the position ($Pos) 

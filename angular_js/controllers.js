@@ -571,7 +571,7 @@ angular.module('controllers', [])
                             $scope.data = response.data;
                         });
             };
-            
+
             /*
              * Open edit cell dialog
              */
@@ -595,13 +595,19 @@ angular.module('controllers', [])
             $http.post(url, postdata).success(function (response)
             {
                 $scope.Editinfo = response.info;
-                
+                var idCell = response.info.ID_RCell;
+                $scope.cellType = response.info.cellType;
+
                 //Se ejecutan automaticamente
                 $scope.getFunctions = function () {
                     var url = $scope.baseurl + "Board/getFunctions";
                     $http.post(url).success(function (response)
                     {
                         $scope.functions = response.functions;
+                        $scope.funcType = {ID_Function: $scope.Editinfo.ID_CFunction};
+                        if ($scope.Editinfo.ID_CFunction !== null) {
+                            $scope.checkboxFuncType = true;
+                        }
                     });
                 };
                 $scope.getBoards = function () {
@@ -611,17 +617,47 @@ angular.module('controllers', [])
                     $http.post(url, postdata).success(function (response)
                     {
                         $scope.boards = response.boards;
-                        alert($scope.Editinfo.boardLink);
                         $scope.boardsGroup = {ID_Board: $scope.Editinfo.boardLink};
+                        if ($scope.Editinfo.boardLink !== null) {
+                            $scope.checkboxBoardsGroup = true;
+                        }
                     });
                 };
                 //Initialize the dropdwon menus.
                 $scope.getFunctions();
                 $scope.getBoards();
-                $scope.aceptar = function (boardsGroup, funcType) {
-                    alert(boardsGroup.ID_Board + "a" + funcType);
-                };
+                //MODIF:hay dos campos
+                if ($scope.Editinfo.textInCell !== null) {
+                    $scope.checkboxTextInCell = true;
+                    $scope.textInCell = $scope.Editinfo.textInCell;
+                }
+                if ($scope.Editinfo.activeCell === "1") {
+                    $scope.checkboxVisible = true;
+                }
                 
+                $scope.aceptar = function () {
+                    var url = $scope.baseurl + "Board/editCell";
+                    var postdata = {id: idCell, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1"};
+                    if (!$scope.checkboxFuncType) {
+                        postdata.idFunct = null;
+                    }
+                    if (!$scope.checkboxBoardsGroup) {
+                        postdata.boardLink = null;
+                    }
+                    if (!$scope.checkboxTextInCell) {
+                        postdata.textInCell = null;
+                    }
+                    if (!$scope.checkboxVisible) {
+                        postdata.visible = "0";
+                    }
+                    alert(postdata.boardLink);
+                    $http.post(url, postdata).success(function ()
+                    {
+                        alert("Okey");
+                    });
+                    //         alert(boardsGroup.ID_Board + "a" + funcType);
+                };
+
             }
             );
         })
