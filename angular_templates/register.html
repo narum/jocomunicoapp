@@ -15,171 +15,193 @@
                          <a class="icon-remove-sign pull-right butoSortirBarraSuperiorRegistre" ng-href="#/login" ng-click="resetForm()"></a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="col-xs-11">
-                            <div class="form-group {{state.user}} has-feedback row">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="icon-user"></i></span>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        placeholder="{{ content.user }}"
-                                        name="user"
-                                        required="string"
-                                        ng-model="formData.user"
-                                        ng-change="checkUser(formData)"
-                                        ng-class="{
-                                            error: state.user =='has-error',
+                <div class="row boxFormulariRegistreUsuari">
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group {{state.user}} has-feedback">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="icon-user"></i></span>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="{{ content.user }}"
+                                            name="user"
+                                            required="string"
+                                            ng-model="formData.user"
+                                            ng-change="checkUser(formData)"
+                                            ng-class="{
+                                                    error: state.user =='has-error',
                                                     warning: state.user =='has-warning',
                                                     success: state.user =='has-success'}">
+                                    </div>
+                                    <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.user =='has-error'"></span>
+                                    <span class="glyphicon glyphicon-alert form-control-feedback" ng-show=" state.user =='has-warning'"></span>
+                                    <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.user =='has-success'"></span>
+                                    <span class="errorcoment" ng-show="state.user=='has-error'">Name already exists.</span>
+                                    <span class="warningcoment" ng-show="state.user=='has-warning'">Must be 4 characters.</span>
+                                    <span class="errorcoment"
+                                          ng-show="registerForm.user.$touched && registerForm.user.$pristine">Name is required.</span>
                                 </div>
-                                <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.user =='has-error'"></span>
-                                <span class="glyphicon glyphicon-alert form-control-feedback" ng-show=" state.user =='has-warning'"></span>
-                                <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.user =='has-success'"></span>
-                                <span class="errorcoment" ng-show="state.user=='has-error'">Name already exists.</span>
-                                <span class="warningcoment" ng-show="state.user=='has-warning'">Must be 4 characters.</span>
-                                <span class="errorcoment"
-                                      ng-show="registerForm.user.$touched && registerForm.user.$pristine">Name is required.</span>
-                            </div>
-                            <div class="form-group {{state.password}} has-feedback row">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="icon-unlock-alt"></i></span>
-                                    <input
-                                        type="password"
-                                        class="form-control"
-                                        placeholder="{{ content.pass }}"
-                                        name="password"
-                                        required="string"
-                                        ng-model="formData.password"
-                                        ng-change="checkPassword(formData)"
-                                        ng-class="{
-                                        error: state.password =='has-error',
-                                                warning: state.password =='has-warning',
-                                                success: state.password =='has-success'}">
-                                </div>
-                                <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.password =='has-error'"></span>
-                                <span class="glyphicon glyphicon-alert form-control-feedback" ng-show=" state.password =='has-warning'"></span>
-                                <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.password =='has-success'"></span>
-                                <span class="warningcoment" ng-show="state.password=='has-warning'">Must be 4 characters.</span>
-                                <span class="errorcoment"
-                                      ng-show="registerForm.password.$touched && registerForm.password.$pristine">Name is required.</span>
-                            </div>
-                            <div class="form-group {{state.confirmPassword}} has-feedback row">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="icon-lock"></i></span>
-                                    <input
-                                        type="password"
-                                        class="form-control"
-                                        placeholder="{{ content.pass }}"
-                                        name="confirmPassword"
-                                        required="string"
-                                        ng-model="formData.confirmPassword"
-                                        ng-change="checkPassword(formData)"
-                                        ng-disabled="state.password != 'has-success'"
-                                        ng-class="{
-                                    error: state.confirmPassword =='has-error',
-                                            warning: state.confirmPassword =='has-warning',
-                                            success: state.confirmPassword =='has-success'}">
-                                </div>
-                                <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.confirmPassword =='has-error'"></span>
-                                <span class="glyphicon glyphicon-alert form-control-feedback" ng-show=" state.confirmPassword =='has-warning'"></span>
-                                <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.confirmPassword =='has-success'"></span>
-                                <span class="warningcoment" ng-show="state.confirmPassword=='has-warning'">Passwords do not match.</span>
-                                <span class="errorcoment"
-                                      ng-show="registerForm.confirmPassword.$touched && registerForm.confirmPassword.$pristine">Name is required.</span>
-                            </div>
-                            <div class="form-group {{state.languageSelected}} has-feedback row">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="icon-comments"></i></span>
-                                    <select
-                                        class="form-control"
-                                        name="languageSelected"
-                                        ng-model="formData.languageSelected"
-                                        ng-options="item as item.language for item in languages"
-                                        ng-change="addLanguage(formData.languageSelected)"
-                                        >
-                                        <option value='' disabled selected>-Choose language-</option>
-                                    </select>
-                                </div>
-                                <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.languageSelected =='has-error'"></span>
-                                <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.languageSelected =='has-success'"></span>
-                                <span class="errorcoment"
-                                      ng-show="state.languageSelected =='has-error' || registerForm.languageSelected.$touched && registerForm.languageSelected.$pristine">Name is required.</span>  
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="col-xs-11 col-xs-offset-1">
-                            <div class="form-group {{state.name}} has-feedback row">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="icon-list-alt"></i></span>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        placeholder="{{ content.name }}"
-                                        name="name"
-                                        required="string"
-                                        ng-model="formData.name"
-                                        ng-change="checkName()"
-                                        ng-class="{
-                                error: state.name =='has-error',
-                                        success: state.name =='has-success'}">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group {{state.password}} has-feedback">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="icon-unlock-alt"></i></span>
+                                        <input
+                                            type="password"
+                                            class="form-control"
+                                            placeholder="{{ content.pass }}"
+                                            name="password"
+                                            required="string"
+                                            ng-model="formData.password"
+                                            ng-change="checkPassword(formData)"
+                                            ng-class="{
+                                                    error: state.password =='has-error',
+                                                    warning: state.password =='has-warning',
+                                                    success: state.password =='has-success'}">
+                                    </div>
+                                    <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.password =='has-error'"></span>
+                                    <span class="glyphicon glyphicon-alert form-control-feedback" ng-show=" state.password =='has-warning'"></span>
+                                    <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.password =='has-success'"></span>
+                                    <span class="warningcoment" ng-show="state.password=='has-warning'">Must be 4 characters.</span>
+                                    <span class="errorcoment"
+                                          ng-show="registerForm.password.$touched && registerForm.password.$pristine">Name is required.</span>
                                 </div>
-                                <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.name =='has-error'"></span>
-                                <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.name =='has-success'"></span>
-                                <span class="errorcoment"
-                                      ng-show="registerForm.name.$touched && (registerForm.name.$error.required || registerForm.name.$pristine)">Name is required.</span>
                             </div>
-                            <div class="form-group {{state.lastname}} has-feedback row">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="icon-edit"></i></span>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        placeholder="{{ content.lastname }}"
-                                        name="lastname"
-                                        required="string"
-                                        ng-model="formData.lastname"
-                                        ng-change="checkLastname()"
-                                        ng-class="{
-                            error: state.lastname =='has-error',
-                                    success: state.lastname =='has-success'}">
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group {{state.confirmPassword}} has-feedback">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="icon-lock"></i></span>
+                                        <input
+                                            type="password"
+                                            class="form-control"
+                                            placeholder="{{ content.pass }}"
+                                            name="confirmPassword"
+                                            required="string"
+                                            ng-model="formData.confirmPassword"
+                                            ng-change="checkPassword(formData)"
+                                            ng-disabled="state.password != 'has-success'"
+                                            ng-class="{
+                                                    error: state.confirmPassword =='has-error',
+                                                    warning: state.confirmPassword =='has-warning',
+                                                    success: state.confirmPassword =='has-success'}">
+                                    </div>
+                                    <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.confirmPassword =='has-error'"></span>
+                                    <span class="glyphicon glyphicon-alert form-control-feedback" ng-show=" state.confirmPassword =='has-warning'"></span>
+                                    <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.confirmPassword =='has-success'"></span>
+                                    <span class="warningcoment" ng-show="state.confirmPassword=='has-warning'">Passwords do not match.</span>
+                                    <span class="errorcoment"
+                                          ng-show="registerForm.confirmPassword.$touched && registerForm.confirmPassword.$pristine">Name is required.</span>
                                 </div>
-                                <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.lastname =='has-error'"></span>
-                                <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.lastname =='has-success'"></span>
-                                <span class="errorcoment"
-                                      ng-show="registerForm.lastname.$touched && (registerForm.lastname.$error.required || registerForm.lastname.$pristine)">Name is required.</span>
                             </div>
-                            <div class="form-group {{state.email}} has-feedback row">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="icon-envelope"></i></span>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        placeholder="{{ content.email }}"
-                                        name="email"
-                                        required="text"
-                                        ng-model="formData.email"
-                                        ng-change="checkEmail(formData)"
-                                        ng-class="{
-                        error: state.email =='has-error',
-                                warning: state.email =='has-warning',
-                                success: state.email =='has-success'}">
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="form-group {{state.name}} has-feedback">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="icon-list-alt"></i></span>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="{{ content.name }}"
+                                            name="name"
+                                            required="string"
+                                            ng-model="formData.name"
+                                            ng-change="checkName()"
+                                            ng-class="{
+                                                error: state.name =='has-error',
+                                                success: state.name =='has-success'}">
+                                    </div>
+                                    <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.name =='has-error'"></span>
+                                    <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.name =='has-success'"></span>
+                                    <span class="errorcoment"
+                                          ng-show="registerForm.name.$touched && (registerForm.name.$error.required || registerForm.name.$pristine)">Name is required.</span>
                                 </div>
-                                <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.email =='has-error'"></span>
-                                <span class="glyphicon glyphicon-alert form-control-feedback" ng-show=" state.email =='has-warning'"></span>
-                                <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.email =='has-success'"></span>
-                                <span class="errorcoment" ng-show="state.email=='has-error'">Email already exists.</span>
-                                <span class="warningcoment" ng-show="state.email=='has-warning'">Incorrect format email.</span>
-                                <span class="errorcoment"
-                                      ng-show="registerForm.email.$touched && registerForm.email.$pristine">Name is required.</span>
                             </div>
-                            <div class="form-group xavi has-success has-feedback row" ng-repeat="item in languageList">
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="icon-comments-alt"></i></div>
-                                    <input type="text" class="form-control xavi input-sm" placeholder="{{ item.language }}" ng-disabled="true">
-                                    <div class="input-group-addon"><a ng-click="removeLanguage(item.language)" class="glyphicon glyphicon-trash" style="color:red"/></div>
+                            <div class="col-xs-6">
+                                <div class="form-group {{state.lastname}} has-feedback">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="icon-edit"></i></span>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="{{ content.lastname }}"
+                                            name="lastname"
+                                            required="string"
+                                            ng-model="formData.lastname"
+                                            ng-change="checkLastname()"
+                                            ng-class="{
+                                                error: state.lastname =='has-error',
+                                                success: state.lastname =='has-success'}">
+                                    </div>
+                                    <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.lastname =='has-error'"></span>
+                                    <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.lastname =='has-success'"></span>
+                                    <span class="errorcoment"
+                                          ng-show="registerForm.lastname.$touched && (registerForm.lastname.$error.required || registerForm.lastname.$pristine)">Name is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group {{state.email}} has-feedback">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="icon-envelope"></i></span>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="{{ content.email }}"
+                                            name="email"
+                                            required="text"
+                                            ng-model="formData.email"
+                                            ng-change="checkEmail(formData)"
+                                            ng-class="{
+                                                error: state.email =='has-error',
+                                                warning: state.email =='has-warning',
+                                                success: state.email =='has-success'}">
+                                    </div>
+                                    <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.email =='has-error'"></span>
+                                    <span class="glyphicon glyphicon-alert form-control-feedback" ng-show=" state.email =='has-warning'"></span>
+                                    <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.email =='has-success'"></span>
+                                    <span class="errorcoment" ng-show="state.email=='has-error'">Email already exists.</span>
+                                    <span class="warningcoment" ng-show="state.email=='has-warning'">Incorrect format email.</span>
+                                    <span class="errorcoment"
+                                          ng-show="registerForm.email.$touched && registerForm.email.$pristine">Name is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="form-group {{state.languageSelected}} has-feedback">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="icon-comments"></i></span>
+                                        <select
+                                            class="form-control"
+                                            name="languageSelected"
+                                            ng-model="formData.languageSelected"
+                                            ng-options="item as item.language for item in languages"
+                                            ng-change="addLanguage(formData.languageSelected)"
+                                            >
+                                            <option value='' disabled selected>-Choose language-</option>
+                                        </select>
+                                    </div>
+                                    <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.languageSelected =='has-error'"></span>
+                                    <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.languageSelected =='has-success'"></span>
+                                    <span class="errorcoment"
+                                          ng-show="state.languageSelected =='has-error' || registerForm.languageSelected.$touched && registerForm.languageSelected.$pristine">Name is required.</span>  
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group llistaIdiomesFormulariRegistre has-success has-feedback" ng-repeat="item in languageList">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="icon-comments-alt"></i></div>
+                                        <input type="text" class="form-control llistaIdiomesFormulariRegistre input-sm" placeholder="{{ item.language }}" ng-disabled="true">
+                                        <div class="input-group-addon"><a ng-click="removeLanguage(item.language)" class="glyphicon glyphicon-trash" style="color:red"/></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -187,9 +209,9 @@
                 </div>
             </div>
             <div class="col-xs-3">
-                <div class="row"><br><br><br><br><br><br><br><br></div>
-                <button type="submit" class="btn btn-success" ng-click="submitForm(formData)" ng-disabled="registerForm.$invalid">{{ content.sendbutton }}</button>
-                <a class="btn btn-info pull-right" href="#/login" role="button" ng-click="resetForm()">{{ content.exitbutton }}</a>
+                <div class="row"><br><br><br><br><br><br></div>
+                <img class="img img-rounded" alt="Responsive image" ng-src="{{imgButton}}" ng-click="submitForm(formData)">
+                <!--<button type="submit" class="btn btn-success" ng-click="submitForm(formData)" ng-disabled="registerForm.$invalid">{{ content.sendbutton }}</button>-->
             </div>
         </form>
     </div>

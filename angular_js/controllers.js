@@ -2,8 +2,8 @@ angular.module('controllers', [])
 
 
 // Controlador del Login
-        .controller('LoginCtrl', function($scope, Resources, $location, AuthService){
-            var loginResource = Resources.login;
+.controller('LoginCtrl', function($scope, Resources, $location, AuthService){
+    var loginResource = Resources.login;
     
     // Función que coje el user y pass y comprueba que sean correctos
     $scope.login = function(form) {
@@ -14,16 +14,16 @@ angular.module('controllers', [])
         
         // Petición del login
         loginResource.save(body).$promise  // POST (en angular 'save') del user y pass
-		.then(function(result){				// respuesta ok!
-            var token = result.data.token;
-            var languageid = result.data.languageid;
-            var languageabbr = result.data.languageabbr;
-            AuthService.login(token, languageid, languageabbr);
-            $location.path('/home');
+            .then(function(result){				// respuesta ok!
+                var token = result.data.token;
+                var languageid = result.data.languageid;
+                var languageabbr = result.data.languageabbr;
+                AuthService.login(token, languageid, languageabbr);
+                $location.path('/home');
         })
-		.catch(function(error){	// no respuesta
-            alert('Nombre de usuario o contraseña erroneo');
-            console.log(error);
+            .catch(function(error){	// no respuesta
+                alert('Nombre de usuario o contraseña erroneo');
+                console.log(error);
         });
     };
 })
@@ -31,14 +31,14 @@ angular.module('controllers', [])
 
 
 //Controlador del registro de usuario
-        .controller('RegisterCtrl', function($scope, Resources, $location){
+.controller('RegisterCtrl', function($scope, Resources, $location){
             
-            // Pedimos los textos para cargar la pagina, por defecto en catalan, y los idiomas disponibles
+    // Pedimos los textos para cargar la pagina, por defecto en catalan, y los idiomas disponibles
     Resources.register.get({'section':"userRegister"},{'funct':"content"}).$promise
-            .then(function(results){
-                $allContent = results;
-        $scope.contentLanguage = true; //true = CATALAN, false = Castellano
-        $scope.changeContentLanguage();
+        .then(function(results){
+            $allContent = results;
+            $scope.contentLanguage = true; //true = CATALAN, false = Castellano
+            $scope.changeContentLanguage();
     });
     
     //Cambiar de idioma el contenido
@@ -57,6 +57,7 @@ angular.module('controllers', [])
     //Inicializamos el formulario
     $scope.formData = {};		//Datos del formulario
     $scope.languageList = []; 	//lista de idiomas seleccionados
+    $scope.imgButton = $scope.baseurl + 'img/BotoCrearUsuari.png';
     $scope.state ={user:"", password:""};
     
     //Borrar el formulario
