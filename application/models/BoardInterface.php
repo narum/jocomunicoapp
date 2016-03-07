@@ -194,6 +194,19 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+    
+    /*
+     * 
+     */
+    function updatePictoCell($id, $idPicto) {
+        $output = array();
+
+        $this->db->where('ID_Cell', $id);
+        $this->db->update('Cell', array('ID_CPicto' => $idPicto));
+
+
+        return $output;
+    }
 
     /*
      * Create a NULL cell (blank cell) in the position ($Pos) 
@@ -351,6 +364,23 @@ class BoardInterface extends CI_Model {
     function getBoards($idgroup) {
         
         $this->db->where('ID_GBBoard', $idgroup);
+        $query = $this->db->get('Boards');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    /*
+     * Return all user boards in the same group
+     */
+    function getAllBoards() {
+        
+        $idusu = $this->session->userdata('idusu');
+        $this->db->where('ID_GBUser', $idusu);
+        $this->db->join('GroupBoards', 'ID_GB = ID_GBBoard');
         $query = $this->db->get('Boards');
 
         if ($query->num_rows() > 0) {

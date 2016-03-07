@@ -270,7 +270,7 @@ angular.module('controllers', [])
              */
             $scope.edit = function ()
             {
-
+                $scope.getAllBoards();
                 $scope.inEdit = true;
                 $scope.grid1hide = false;
                 $scope.grid2hide = false;
@@ -287,11 +287,23 @@ angular.module('controllers', [])
                     $scope.nameboard = response.name;
                     $scope.altura = $scope.range(20)[response.row].valueOf();
                     $scope.amplada = $scope.range(20)[response.col].valueOf();
-//                    $scope.oldH = $scope.altura;
-//                    $scope.oldW = $scope.amplada;
                 });
             };
 
+            $scope.getAllBoards = function () {
+                var url = $scope.baseurl + "Board/getAllBoards";
+
+                $http.post(url).success(function (response)
+                {
+                    $scope.allBoards = response.boards;
+                    $scope.primaryBoard = response.boards.primaryBoard;
+                });
+            };
+
+            $scope.changePrimaryBoard = function ()
+            {
+                alert("ieee");
+            };
             $scope.changeNameBoard = function ()
             {
                 var postdata = {Name: $scope.BoardName};
@@ -576,19 +588,22 @@ angular.module('controllers', [])
              * Open edit cell dialog
              */
             $scope.openEditCellMenu = function (id) {
-                $scope.idEditCell = id;
-                ngDialog.open({
-                    template: $scope.baseurl + '/angular_templates/EditCellView.html',
-                    className: 'ngdialog-theme-default dialogEdit',
-                    scope: $scope,
-                    controller: 'Edit'
-                });
+                if ($scope.inEdit) {
+                    $scope.idEditCell = id;
+                    ngDialog.open({
+                        template: $scope.baseurl + '/angular_templates/EditCellView.html',
+                        className: 'ngdialog-theme-default dialogEdit',
+                        scope: $scope,
+                        controller: 'Edit'
+                    });
 
-            };
+                }
+                ;
+            }
         })
 
 
-        .controller('Edit', function ($scope, $http) {
+        .controller('Edit', function ($scope, $http, ngDialog) {
             var url = $scope.baseurl + "Board/getCell";
             var postdata = {id: $scope.idEditCell, idboard: $scope.idboard};
 
@@ -630,6 +645,8 @@ angular.module('controllers', [])
                 $scope.textInScanBlockText1 = $scope.Editinfo.customScanBlockText1;
                 $scope.numScanBlockText2 = $scope.range(20)[$scope.Editinfo.customScanBlock2];
                 $scope.textInScanBlockText2 = $scope.Editinfo.customScanBlockText2;
+                $scope.idPictoEdit = response.info.ID_CPicto;
+                $scope.imgPictoEdit = $scope.Editinfo.imgPicto;
                 //MODIF:hay dos campos
                 if ($scope.Editinfo.textInCell !== null) {
                     $scope.checkboxTextInCell = true;
@@ -641,10 +658,10 @@ angular.module('controllers', [])
                 if ($scope.Editinfo.isFixedInGroupBoards === "1") {
                     $scope.checkboxIsFixed = true;
                 }
-                
+
                 $scope.aceptar = function () {
                     var url = $scope.baseurl + "Board/editCell";
-                    var postdata = {id: idCell, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1",isFixed: "1"};
+                    var postdata = {id: idCell, idPicto: $scope.idPictoEdit, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1"};
                     if (!$scope.checkboxFuncType) {
                         postdata.idFunct = null;
                     }
@@ -658,15 +675,21 @@ angular.module('controllers', [])
                         postdata.visible = "0";
                     }
                     if (!$scope.checkboxIsFixed) {
-                        postdata.visible = "0";
+                        postdata.isFixed = "0";
                     }
                     alert(postdata.boardLink);
                     $http.post(url, postdata).success(function ()
                     {
-                        alert("Okey");
+                        $scope.showBoard("0");
+                        ngDialog.close();
                     });
                     //         alert(boardsGroup.ID_Board + "a" + funcType);
                 };
+                $scope.selectPicto = function (id, img) {
+                    $scope.idPictoEdit = id;
+                    $scope.imgPictoEdit = img;
+                };
+
 
             }
             );

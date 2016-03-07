@@ -1,35 +1,73 @@
 
 <div class="row fullheight">
-    <div class="col-xs-6">
-        <div class="row">
-            tipo
+    <div class="col-xs-7 fullheight">
+        <div class="row" style="height:40%">
+            <div class="col-xs-12" style="height:20%"> 
+                tipo
+            </div>
+            <div class="col-xs-12" style="height:20%">  
+                <form name="cellType">
+                    <label>
+                        <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="picto"/>
+                        pictograma
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="frase" ng-checked="isSelected('function')"/>
+                        frase
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="history"/>
+                        carpeta d'historial
+                    </label>
+                </form>
+            </div>
+            <div class="col-xs-6" style="height:60%">
+                <input type="text" ng-model="$parent.Name" ng-keyup="$parent.search($parent.SearchType);" placeholder="Escriba para filtar" style="width: 100%"/><br>
+                <form name="SearchForm">
+                    <label>
+                        <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Tots"/>
+                        Tots
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Noms"/>
+                        Noms
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Verb"/>
+                        Verb
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Adj" />
+                        Adjectiu
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Exp"/>
+                        Expresions
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Altres"/>
+                        Altres
+                    </label>
+
+                </form>
+            </div>
+            <div id="boardCellSearch" class="col-xs-6" style="height:60%">
+                <div bind-html-compile="dataword" class="col-xs-6 fullheight" ng-repeat="picto in dataWord| limitTo: 2">
+                    <img class="cellSearch" width="100%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}" ng-click="selectPicto(picto.id, picto.imgPicto)"/>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <form name="cellType">
-                <label>
-                    <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="picto"/>
-                    pictograma
-                </label>
-                <label>
-                    <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="frase" ng-checked="isSelected('function')"/>
-                    frase
-                </label>
-                <label>
-                    <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="history"/>
-                    carpeta d'historial
-                </label>
-            </form>
-        </div>
-        <div class="row">
-            <div class="col-xs-6">
+
+        <div class="row" style="height:20%">
+            <div class="col-xs-6" style="height:50%">
                 Funcio
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-6" style="height:50%">
                 <input type="checkbox"
                        ng-model="checkboxFuncType"
                        />
             </div>
-            <div class="col-xs-12">
+            <div class="col-xs-12" style="height:50%">
                 <select
                     ng-disabled="!checkboxFuncType"
                     ng-model="funcType"
@@ -38,16 +76,16 @@
                 </select>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-6">
+        <div class="row" style="height:20%">
+            <div class="col-xs-6" style="height:50%">
                 boardlink
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-6" style="height:50%">
                 <input type="checkbox"
                        ng-model="checkboxBoardsGroup"
                        />
             </div>
-            <div class="col-xs-12">
+            <div class="col-xs-12" style="height:50%">
                 <select 
                     ng-disabled="!checkboxBoardsGroup"
                     ng-model="boardsGroup"
@@ -56,22 +94,22 @@
                 </select>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-6">
+        <div class="row" style="height:20%">
+            <div class="col-xs-6" style="height:50%">
                 text
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-6" style="height:50%">
                 <input type="checkbox"
                        ng-model="checkboxTextInCell"
                        />
             </div>
-            <div class="col-xs-12">
+            <div class="col-xs-12" style="height:50%">
                 <input type="text" ng-model="textInCell" ng-disabled="!checkboxTextInCell"/>
             </div>
         </div>
     </div>
-    <div class="col-xs-6" style="height: 50%">
-        <div class="row">
+    <div class="col-xs-5 fullheight">
+        <div class="row" style="height:10%">
             <div class="col-xs-6">
                 color
             </div>
@@ -79,7 +117,7 @@
                 lo que sea
             </div>
         </div>
-        <div class="row">
+        <div class="row" style="height:10%">
             <div class="col-xs-6">
                 visible
             </div>
@@ -89,7 +127,7 @@
                        />
             </div>
         </div>
-        <div class="row">
+        <div class="row" style="height:10%">
             <div class="col-xs-6">
                 Fixed
             </div>
@@ -99,7 +137,7 @@
                        />
             </div>
         </div>
-        <div class="row">
+        <div class="row" style="height:35%">
             <div class="col-xs-12">
                 Escaneo
             </div>
@@ -136,7 +174,9 @@
                 <input type="text" ng-model="textInScanBlockText2" ng-disabled="!checkboxScanBlockText2"/>
             </div>
         </div>
-        <img width="100%" height="100%" src="{{baseurl}}img/pictos/{{Editinfo.imgPicto}}"/>
+        <div class="row" style="height:35%">
+            <img width="100%" height="100%" src="{{baseurl}}img/pictos/{{imgPictoEdit}}"/>
+        </div>
         <div class="col-xs-12">
             <button class="btn-success" ng-click="aceptar()">aceptar</button>
         </div>
