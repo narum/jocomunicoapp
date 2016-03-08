@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="<?= base_url(); ?>libraries/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>css/typeahead.css">
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>css/app.css">
+        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>css/editCell.css">
     </head>
     <body oncontextmenu="return false">
         

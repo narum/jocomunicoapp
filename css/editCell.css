@@ -1,0 +1,79 @@
+@charset "UTF-8";
+/* CSS Document */
+
+.title1{ 
+    background-color: #fff;
+    height: 8%;
+    margin-top: 2%;
+    padding-right: 2%;
+}
+.title2{ 
+    background-color: #fff;
+    height: 16%;
+    margin-top: 1%;
+}
+.content1{ 
+    background-color: #fddfad;
+    height: 8%;
+    padding-left: 25% !important;
+    padding-right: 25% !important;
+}
+.content1-5{ 
+    background-color: #fddfad;
+    height: 12%;
+    padding-top: 5%;
+}
+.content2{ 
+    background-color: #fddfad;
+    height: 16%;
+}
+.content3{ 
+    background-color: #fddfad;
+    height: 24%;
+}
+.content4{ 
+    height: 30%;
+    margin-top: 4%;
+}
+.saveEdit{
+    margin-left: 8%;
+    border-radius: 150px;
+}
+.marginEditcell{
+  margin-left: 2.5%; 
+  width: 39%;
+}
+
+.titleText{
+    font-weight: bold;
+    padding-left: 5% !important;
+    /*This percentage goes with the width... I assume that the proportions will be keept*/
+    margin-top: 1%;
+}
+.buttonTitle{
+    padding-right: 5% !important;
+    /*This percentage goes with the width... I assume that the proportions will be keept*/
+    margin-top: 2%;
+}
+.typeCellText{
+    text-align: center;
+}
+.boxEdit{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 27px;
+    margin-top: 2%;
+}
+.checkboxEdit{
+    float: right;
+    
+}
+.cellEditSearch{
+    width: 75%;
+    height: 75%;
+    margin: 5% 10% 5% 10%;
+}
+.pictoEditSearch{
+    margin-left: 5%
+}
