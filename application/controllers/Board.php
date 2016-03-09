@@ -543,6 +543,10 @@ class Board extends REST_Controller {
         $visible = $request->visible; 
         $isFixed = $request->isFixed;
         $idPicto = $request->idPicto;
+        $numScanBlockText1 = $request->numScanBlockText1;
+        $textInScanBlockText1 = $request->textInScanBlockText1;
+        $numScanBlockText2 = $request->numScanBlockText2;
+        $textInScanBlockText2 = $request->textInScanBlockText2;
         //1 es la board
         $this->BoardInterface->updateLinkCell($id, $boardLink);
         $this->BoardInterface->updateFuncCell($id, $idFunct);
@@ -550,6 +554,7 @@ class Board extends REST_Controller {
         $this->BoardInterface->updateVisibleCell($id, $visible);
         $this->BoardInterface->updateFixedCell($id, $isFixed);
         $this->BoardInterface->updatePictoCell($id, $idPicto);
+        $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
         
         $response = [
             

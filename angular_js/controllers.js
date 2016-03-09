@@ -316,8 +316,8 @@ angular.module('controllers', [])
                             $scope.dataWord = response.data;
                         });
             };
-            
-            $scope.changeColor = function (color){
+
+            $scope.changeColor = function (color) {
                 $scope.colorSelected = color;
                 alert(color);
             };
@@ -663,10 +663,16 @@ angular.module('controllers', [])
                 if ($scope.Editinfo.isFixedInGroupBoards === "1") {
                     $scope.checkboxIsFixed = true;
                 }
+                if ($scope.Editinfo.customScanBlockText1 !== ""){
+                    $scope.checkboxScanBlockText1 = true;
+                }
+                if ($scope.Editinfo.customScanBlockText2 !== null){
+                    $scope.checkboxScanBlockText2 = true;
+                }
 
                 $scope.aceptar = function () {
                     var url = $scope.baseurl + "Board/editCell";
-                    var postdata = {id: idCell, idPicto: $scope.idPictoEdit, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1"};
+                    var postdata = {id: idCell, idPicto: $scope.idPictoEdit, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1",numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1,numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2 };
                     if (!$scope.checkboxFuncType) {
                         postdata.idFunct = null;
                     }
@@ -682,7 +688,16 @@ angular.module('controllers', [])
                     if (!$scope.checkboxIsFixed) {
                         postdata.isFixed = "0";
                     }
-                    alert(postdata.boardLink);
+                    if (!$scope.checkboxScanBlockText1) {
+                        postdata.numScanBlockText1 = "1";
+                        postdata.textInScanBlockText1 = null;
+                    }
+                    if (!$scope.checkboxScanBlockText2) {
+                        postdata.numScanBlockText2 = null;
+                        postdata.textInScanBlockText2 = null;
+                    }
+                   
+
                     $http.post(url, postdata).success(function ()
                     {
                         $scope.showBoard("0");
@@ -718,32 +733,32 @@ angular.module('controllers', [])
                 });
             };
         })
-        
-        
-            .directive('bootstrapSwitch', [
-        function() {
-            return {
-                restrict: 'A',
-                require: '?ngModel',
-                link: function(scope, element, attrs, ngModel) {
-                    element.bootstrapSwitch();
 
-                    element.on('switchChange.bootstrapSwitch', function(event, state) {
-                        if (ngModel) {
-                            scope.$apply(function() {
-                                ngModel.$setViewValue(state);
-                            });
-                        }
-                    });
+//Add a directive to link bootstrap switch with angular
+        .directive('bootstrapSwitch', [
+            function () {
+                return {
+                    restrict: 'A',
+                    require: '?ngModel',
+                    link: function (scope, element, attrs, ngModel) {
+                        element.bootstrapSwitch();
 
-                    scope.$watch(attrs.ngModel, function(newValue, oldValue) {
-                        if (newValue) {
-                            element.bootstrapSwitch('state', true, true);
-                        } else {
-                            element.bootstrapSwitch('state', false, true);
-                        }
-                    });
-                }
-            };
-        }
-    ]);
+                        element.on('switchChange.bootstrapSwitch', function (event, state) {
+                            if (ngModel) {
+                                scope.$apply(function () {
+                                    ngModel.$setViewValue(state);
+                                });
+                            }
+                        });
+
+                        scope.$watch(attrs.ngModel, function (newValue, oldValue) {
+                            if (newValue) {
+                                element.bootstrapSwitch('state', true, true);
+                            } else {
+                                element.bootstrapSwitch('state', false, true);
+                            }
+                        });
+                    }
+                };
+            }
+        ]);

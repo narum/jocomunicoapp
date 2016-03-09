@@ -8,10 +8,11 @@ class BoardInterface extends CI_Model {
 
         $this->load->library('Myword');
     }
-    
+
     /*
      * Load the user config
      */
+
     function loadCFG($user) {
 
         $newdata = array(
@@ -28,6 +29,7 @@ class BoardInterface extends CI_Model {
     /*
      * Get the board struct (columns, rows, name...) 
      */
+
     function getBoardStruct($id) {
         $output = array();
 
@@ -45,6 +47,7 @@ class BoardInterface extends CI_Model {
     /*
      * Change the board struct (columns and rows) 
      */
+
     function updateNumCR($c, $r, $id) {
         $output = array();
 
@@ -53,6 +56,7 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+
     function updateName($Name, $id) {
         $output = array();
 
@@ -61,9 +65,11 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+
     /*
      * Return all pictograms from board 
      */
+
     function getCellsBoard($id) {
         $output = array();
 
@@ -85,6 +91,7 @@ class BoardInterface extends CI_Model {
     /*
      * Return one pictogram from the board with the given position in this board 
      */
+
     function getCell($pos, $idboard) {
         $output = array();
 
@@ -102,10 +109,11 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * Change one pictogram from the board to another position 
      */
+
     function updatePosCell($oldPos, $newPos, $idBoard) {
         $output = array();
 
@@ -120,6 +128,7 @@ class BoardInterface extends CI_Model {
     /*
      * Change the data of one pictogram ($cell) from the board ($idpicto)
      */
+
     function updateDataCell($idpicto, $cell) {
         $output = array();
 
@@ -129,10 +138,11 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * 
      */
+
     function updateLinkCell($id, $idboard) {
         $output = array();
 
@@ -142,10 +152,11 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * 
      */
+
     function updateFuncCell($id, $idFunc) {
         $output = array();
 
@@ -155,10 +166,11 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * 
      */
+
     function updateFixedCell($id, $isFixed) {
         $output = array();
 
@@ -168,10 +180,11 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * 
      */
+
     function updateTextCell($id, $textInCell) {
         $output = array();
 
@@ -181,10 +194,11 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * 
      */
+
     function updateVisibleCell($id, $visible) {
         $output = array();
 
@@ -194,10 +208,29 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * 
      */
+
+    function updateScanCell($id, $num1, $text1, $num2, $text2) {
+        $output = array();
+
+        $data = array('customScanBlock1' => $num1,
+                'customScanBlockText1' => $text1,
+                'customScanBlock2' => $num2,
+                'customScanBlockText2' => $text2);
+        $this->db->where('ID_RCell', $id);
+        $this->db->update('R_BoardCell', $data);
+
+
+        return $output;
+    }
+
+    /*
+     * 
+     */
+
     function updatePictoCell($id, $idPicto) {
         $output = array();
 
@@ -212,6 +245,7 @@ class BoardInterface extends CI_Model {
      * Create a NULL cell (blank cell) in the position ($Pos) 
      * and add the cell to the board ($idBoard)
      */
+
     function newCell($Pos, $idBoard) {
         $output = array();
 
@@ -235,6 +269,7 @@ class BoardInterface extends CI_Model {
     /*
      * Return the cell ID in position ($Pos) from the board ($idBoard)
      */
+
     function getIDCell($Pos, $idBoard) {
         $output = array();
 
@@ -253,6 +288,7 @@ class BoardInterface extends CI_Model {
     /*
      * Remove the cell ($id) from the board ($idBoard). Remove the link too
      */
+
     function removeCell($id, $idBoard) {
 
         $this->db->where('ID_RBoard', $idBoard);
@@ -266,14 +302,16 @@ class BoardInterface extends CI_Model {
     /*
      * Init a DB transaction 
      */
+
     function initTrans() {
         $this->db->trans_start();
     }
-    
+
     /*
      * Ends a DB transaction. Commit change if nothing gone worng. Otherwise
      * makes a rollback 
      */
+
     function commitTrans() {
         $this->db->trans_complete();
     }
@@ -281,6 +319,7 @@ class BoardInterface extends CI_Model {
     /*
      * Return true if the last end transaction was a commit, else return false
      */
+
     function statusTrans() {
         return $this->db->trans_status();
     }
@@ -288,6 +327,7 @@ class BoardInterface extends CI_Model {
     /*
      * Return the last word added to the sentence
      */
+
     function getLastWord($idusu) {
         $output = array();
 
@@ -306,6 +346,7 @@ class BoardInterface extends CI_Model {
     /*
      * Remove the sentence from the tabla temp
      */
+
     function removeSentence($idusu) {
         $this->db->where('ID_RSTPUser', $idusu);
         $this->db->delete('R_S_TempPictograms');
@@ -314,8 +355,9 @@ class BoardInterface extends CI_Model {
     /*
      * Return the function information
      */
+
     function getFunction($id) {
-        
+
         $this->db->where('ID_Function', $id);
         $query = $this->db->get('Function');
 
@@ -330,9 +372,10 @@ class BoardInterface extends CI_Model {
     /*
      * Return all functions
      */
+
     function getFunctions() {
-        
-        
+
+
         $query = $this->db->get('Function');
 
         if ($query->num_rows() > 0) {
@@ -342,12 +385,13 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * Return all user boards in the same group
      */
+
     function getIDGroupBoards($idboard) {
-        
+
         $this->db->where('ID_Board', $idboard);
         $query = $this->db->get('Boards');
 
@@ -358,11 +402,13 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+
     /*
      * Return all user boards in the same group
      */
+
     function getBoards($idgroup) {
-        
+
         $this->db->where('ID_GBBoard', $idgroup);
         $query = $this->db->get('Boards');
 
@@ -373,11 +419,13 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+
     /*
      * Return all user boards in the same group
      */
+
     function getAllBoards() {
-        
+
         $idusu = $this->session->userdata('idusu');
         $this->db->where('ID_GBUser', $idusu);
         $this->db->join('GroupBoards', 'ID_GB = ID_GBBoard');
@@ -390,13 +438,15 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+
     /*
      * ADD MODIFIER TO A NOUN THAT WAS JUST ENTERED
      */
+
     function afegirModifNom($modif) {
-        
+
         $idusu = $this->session->userdata('idusu');
-        
+
         $this->db->where('ID_RSTPUser', $idusu);
         $query = $this->db->get('R_S_TempPictograms');
 

@@ -44,16 +44,23 @@
   width: 39%;
 }
 
+.titleTextTypus{
+    font-weight: bold;
+    padding-left: 5% !important;
+    /*vertical align*/
+    margin-top: 2%;
+}
 .titleText{
     font-weight: bold;
     padding-left: 5% !important;
-    /*This percentage goes with the width... I assume that the proportions will be keept*/
-    margin-top: 1%;
+    /*vertical align*/
+    top: 50%;
+    transform:translate(0%,-50%);
 }
 .buttonTitle{
     padding-right: 5% !important;
-    /*This percentage goes with the width... I assume that the proportions will be keept*/
-    margin-top: 2%;
+    top: 50%;
+    transform:translate(0%,-50%);
 }
 .typeCellText{
     text-align: center;
@@ -63,7 +70,7 @@
     margin-left: 5%;
     margin-right: 5%;
     height: 27px;
-    margin-top: 1%;
+    margin-top: 2%;
 }
 .checkboxEdit{
     float: right;
