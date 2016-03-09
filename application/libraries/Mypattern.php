@@ -1787,9 +1787,7 @@ class Mypattern {
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
                         
             if ($slotaux->category == "Theme" && $slotaux->prep == null) {
-                
-                echo "Preposicio: ".$slotaux->prep."<br />";
-                
+                                
                 $wordslotauxfinal = $slotaux->paraulafinal;
                 // si està en forma de pronom (només de tu, jo)
                 if ($slotaux->defvalueused || $wordslotauxfinal->isClass("pronoun")) {
