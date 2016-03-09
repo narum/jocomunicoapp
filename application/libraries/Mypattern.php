@@ -6,6 +6,7 @@ class Mypattern {
     var $idverb;
     var $pronominal = false;
     var $pseudoimpersonal = false;
+    var $copulatiu = false;
     
     var $tipusfrase;
     var $defaulttense = null;
@@ -74,6 +75,7 @@ class Mypattern {
         
         if ($patternbbdd->pronominal == '1') $this->pronominal = true;
         if ($patternbbdd->pseudoimpersonal == '1') $this->pseudoimpersonal = true;
+        if ($patternbbdd->copulatiu == '1') $this->copulatiu = true;
         
         $this->tipusfrase = $patternbbdd->tipusfrase;
         $this->defaulttense = $patternbbdd->defaulttense;
@@ -2375,10 +2377,15 @@ class Mypattern {
             $keysubj2 = "Subject 2";
         }
         
+        // si no hi ha subjecte i el verb és copulatiu
+        if(!isset($this->slotarray[$keysubj1]) && $this->copulatiu) {
+            $keysubj1 = "Theme";
+        }
+        
         // agafem les dades del primer subjecte
         if (isset($this->slotarray[$keysubj1])) {
             $slotsubj1 = $this->slotarray[$keysubj1];
-            
+                        
             // si hi ha el subjecte per defecte
             if ($slotsubj1->defvalueused) {
                 $subj1 = $slotsubj1->defvalue;
@@ -2443,7 +2450,7 @@ class Mypattern {
                     }
                 }
                 // si no, agafem les propietats de la paraula
-                else {
+                else {                    
                     if ($subj1->propietats->mf == "fem") $this->genmascsubj1 = false;
                     else $this->genmascsubj1 = true;
                     if ($subj1->propietats->singpl == "pl") $this->plsubj1 = true;
@@ -2621,6 +2628,11 @@ class Mypattern {
         if (isset($this->slotarray["Secondary Verb 2"])) {
             $keysubj1 .= " 1";
             $keysubj2 = "Subject 2";
+        }
+        
+        // si no hi ha subjecte i el verb és copulatiu
+        if(!isset($this->slotarray[$keysubj1]) && $this->copulatiu) {
+            $keysubj1 = "Theme";
         }
         
         // agafem les dades del primer subjecte
@@ -2874,7 +2886,10 @@ class Mypattern {
             
             // si acabem de tractar un subjecte, refresquem els valors de gènere i número per si no eren
             // pronoms, i pels possibles adjectius que hagin de concordar amb ells, que apareixeran després
-            if ($slotaux->category == "Subject") $this->getPersGenNumSubjs();
+            // pels verbs copulatius sense subjecte també ho fem
+            if ($slotaux->category == "Subject" || ($this->copulatiu && $slotaux->category == "Theme")) {
+                $this->getPersGenNumSubjs();
+            }
         }
         
         if ($this->questiontypequant) {
@@ -2941,7 +2956,10 @@ class Mypattern {
             
             // si acabem de tractar un subjecte, refresquem els valors de gènere i número per si no eren
             // pronoms, i pels possibles adjectius que hagin de concordar amb ells, que apareixeran després
-            if ($slotaux->category == "Subject") $this->getPersGenNumSubjsES();
+            // pels verbs copulatius sense subjecte també ho fem
+            if ($slotaux->category == "Subject" || ($this->copulatiu && $slotaux->category == "Theme")) {
+                $this->getPersGenNumSubjsES();
+            }
         }
         
         if ($this->questiontypequant) {
