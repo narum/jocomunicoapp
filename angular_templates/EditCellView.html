@@ -7,39 +7,41 @@
                 </div>
                 <div class="col-xs-12 typeCellText">  
                     <form name="cellType">
-                        <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="picto"/>
+                        <input type="radio" ng-model="cellType" value="picto"/>
                         pictograma
-                        <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="frase" ng-checked="isSelected('function')"/>
+                        <input type="radio" ng-model="cellType" value="frase"/>
                         frase
-                        <input type="radio" ng-model="cellType" ng-click="getFunctions(cellType);" value="history"/>
+                        <input type="radio" ng-model="cellType" value="history"/>
                         carpeta d'historial
                     </form>
                 </div>
             </div>
-            <div class="col-xs-6 content3">
-                <input class="boxEdit" type="text" ng-model="$parent.Name" ng-keyup="$parent.search($parent.SearchType);" placeholder="Escriba para filtar" /><br>
-                <form name="SearchForm">
-                    <div class="col-xs-12 typeCellText">
-                        <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Noms"/>
-                        Noms
-                        <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Verb"/>
-                        Verb
+            <div ng-if="cellType === 'picto'" class="col-xs-12 content3">
+                <div class="col-xs-6">
+                    <input class="boxEdit" type="text" ng-model="$parent.Name" ng-keyup="$parent.search($parent.SearchType);" placeholder="Escriba para filtar" /><br>
+                    <form name="SearchForm">
+                        <div class="col-xs-12 typeCellText">
+                            <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Noms"/>
+                            Noms
+                            <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Verb"/>
+                            Verb
 
-                        <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Adj" />
-                        Adjectiu
-                    </div>
-                    <div class="col-xs-12 typeCellText">
-                        <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Exp"/>
-                        Expresions
-                        <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Altres"/>
-                        Altres
-                    </div>
+                            <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Adj" />
+                            Adjectiu
+                        </div>
+                        <div class="col-xs-12 typeCellText">
+                            <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Exp"/>
+                            Expresions
+                            <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Altres"/>
+                            Altres
+                        </div>
 
-                </form>
-            </div>
-            <div id="boardCellSearch" class="col-xs-6 content3">
-                <div bind-html-compile="dataword" class="cellEditSearch">
-                    <img class="pictoEditSearch" ng-repeat="picto in dataWord| limitTo: 2" width="45%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}" ng-click="selectPicto(picto.id, picto.imgPicto)"/>
+                    </form>
+                </div>
+                <div id="boardCellSearch" class="col-xs-6">
+                    <div bind-html-compile="dataword" class="cellEditSearch">
+                        <img class="pictoEditSearch" ng-repeat="picto in dataWord| limitTo: 2" width="45%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}" ng-click="selectPicto(picto.id, picto.imgPicto)"/>
+                    </div>
                 </div>
             </div>
 
@@ -101,11 +103,10 @@
                 Color del borde
             </div>
             <div class="col-xs-3 col-xs-offset-3 buttonTitle">
-                <select class="boxEdit" style="background-color: #{{colorSelected}};">
+                <select class="boxEdit" style="background-color: #{{colorSelected}};" ng-model="colorSelected">
                     <option ng-repeat="color in ['000', 'fff', 'ff00ff', '00ff00', 'ff0000']"
                             style="background-color: #{{color}};"
-                            value="{{color}}"
-                            ng-click="changeColor(color);">        </option>
+                            ng-value="color">        </option>
                 </select>
             </div>
         </div>

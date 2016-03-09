@@ -547,13 +547,8 @@ class Board extends REST_Controller {
         $textInScanBlockText1 = $request->textInScanBlockText1;
         $numScanBlockText2 = $request->numScanBlockText2;
         $textInScanBlockText2 = $request->textInScanBlockText2;
-        //1 es la board
-        $this->BoardInterface->updateLinkCell($id, $boardLink);
-        $this->BoardInterface->updateFuncCell($id, $idFunct);
-        $this->BoardInterface->updateTextCell($id, $textInCell);
-        $this->BoardInterface->updateVisibleCell($id, $visible);
-        $this->BoardInterface->updateFixedCell($id, $isFixed);
-        $this->BoardInterface->updatePictoCell($id, $idPicto);
+
+        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto);
         $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
         
         $response = [

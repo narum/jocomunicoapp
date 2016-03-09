@@ -126,89 +126,26 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * Change the data of one pictogram ($cell) from the board ($idpicto)
-     */
-
-    function updateDataCell($idpicto, $cell) {
-        $output = array();
-
-        $this->db->where('ID_Cell', $cell);
-        $this->db->update('Cell', array('ID_CPicto' => $idpicto));
-
-
-        return $output;
-    }
-
-    /*
      * 
      */
 
-    function updateLinkCell($id, $idboard) {
+    function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto) {
         $output = array();
 
+        $data = array(
+            'activeCell' => $visible,
+            'textInCell' => $textInCell,
+            'isFixedInGroupBoards' => $isFixed,
+            'ID_CFunction' => $idFunc,
+            'boardLink' => $idboard,
+            'ID_CPicto' => $idpicto
+        );
         $this->db->where('ID_Cell', $id);
-        $this->db->update('Cell', array('boardLink' => $idboard));
+        $this->db->update('Cell', $data);
 
 
         return $output;
     }
-
-    /*
-     * 
-     */
-
-    function updateFuncCell($id, $idFunc) {
-        $output = array();
-
-        $this->db->where('ID_Cell', $id);
-        $this->db->update('Cell', array('ID_CFunction' => $idFunc));
-
-
-        return $output;
-    }
-
-    /*
-     * 
-     */
-
-    function updateFixedCell($id, $isFixed) {
-        $output = array();
-
-        $this->db->where('ID_Cell', $id);
-        $this->db->update('Cell', array('isFixedInGroupBoards' => $isFixed));
-
-
-        return $output;
-    }
-
-    /*
-     * 
-     */
-
-    function updateTextCell($id, $textInCell) {
-        $output = array();
-
-        $this->db->where('ID_Cell', $id);
-        $this->db->update('Cell', array('textInCell' => $textInCell));
-
-
-        return $output;
-    }
-
-    /*
-     * 
-     */
-
-    function updateVisibleCell($id, $visible) {
-        $output = array();
-
-        $this->db->where('ID_Cell', $id);
-        $this->db->update('Cell', array('activeCell' => $visible));
-
-
-        return $output;
-    }
-
     /*
      * 
      */
