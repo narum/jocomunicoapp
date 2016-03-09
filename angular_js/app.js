@@ -33,6 +33,10 @@ angular.module('app', [
 			controller:'RegisterCtrl',
 			templateUrl:'../../angular_templates/register.html'
 		})
+                .when('/userConfig', {
+			controller:'UserConfCtrl',
+			templateUrl:'../../angular_templates/userConfig.html'
+		})
 		.otherwise({ redirectTo:'/' });
 })
 .run(function(AuthService){

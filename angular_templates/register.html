@@ -1,16 +1,15 @@
 <link rel="stylesheet" type="text/css" href="css/register.css">
 <div class="container container-table">
     <div class="row vertical-center-row">
-        <form class="form form-horizontal" ng-controller="RegisterCtrl">
+        <form class="form form-horizontal" name="registerForm" ng-controller="RegisterCtrl">
             <div class="col-xs-6 col-xs-offset-3 boxRegistreUsuari">
                 <div class="row barraSuperiorRegistre">
                     <div class="col-xs-4"><p class="nomBarraSuperiorRegistre">{{ content.title }}</p></div>
                     <div class="col-xs-5 col-xs-offset-3 butonsBarraSuperiorRegistre">
                         <button
                             type="button"
-                            class="icon-flag btn-idioma"
-                            ng-disabled="contentLanguageDisable"
-                            ng-click="contentLanguage = !contentLanguage; changeContentLanguage()"> &nbsp;{{languageForm}}
+                            class="icon-globe btn-idioma"
+                            ng-click="changeContentLanguage()"> &nbsp;{{languageNameNext}}
                         </button>
                          <a class="icon-remove-sign pull-right butoSortirBarraSuperiorRegistre" ng-href="#/login" ng-click="resetForm()"></a>
                     </div>
@@ -28,7 +27,7 @@
                                             placeholder="{{ content.user }}"
                                             name="user"
                                             required="string"
-                                            ng-model="formData.user"
+                                            ng-model="formData.SUname"
                                             ng-change="checkUser(formData)"
                                             ng-class="{
                                                     error: state.user =='has-error',
@@ -41,7 +40,7 @@
                                     <span class="errorcoment" ng-show="state.user=='has-error'">Name already exists.</span>
                                     <span class="warningcoment" ng-show="state.user=='has-warning'">Must be 4 characters.</span>
                                     <span class="errorcoment"
-                                          ng-show="registerForm.user.$touched && registerForm.user.$pristine">Name is required.</span>
+                                          ng-show="registerForm.user.$touched && registerForm.user.$pristine && (state.user == '')">Name is required.</span>
                                 </div>
                             </div>
                         </div>
@@ -56,7 +55,7 @@
                                             placeholder="{{ content.pass }}"
                                             name="password"
                                             required="string"
-                                            ng-model="formData.password"
+                                            ng-model="formData.pswd"
                                             ng-change="checkPassword(formData)"
                                             ng-class="{
                                                     error: state.password =='has-error',
@@ -68,7 +67,7 @@
                                     <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.password =='has-success'"></span>
                                     <span class="warningcoment" ng-show="state.password=='has-warning'">Must be 4 characters.</span>
                                     <span class="errorcoment"
-                                          ng-show="registerForm.password.$touched && registerForm.password.$pristine">Name is required.</span>
+                                          ng-show="registerForm.password.$touched && registerForm.password.$pristine && (state.password == '')">Name is required.</span>
                                 </div>
                             </div>
                         </div>
@@ -96,23 +95,23 @@
                                     <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.confirmPassword =='has-success'"></span>
                                     <span class="warningcoment" ng-show="state.confirmPassword=='has-warning'">Passwords do not match.</span>
                                     <span class="errorcoment"
-                                          ng-show="registerForm.confirmPassword.$touched && registerForm.confirmPassword.$pristine">Name is required.</span>
+                                          ng-show="registerForm.confirmPassword.$touched && registerForm.confirmPassword.$pristine && (state.confirmPassword == '')">Name is required.</span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-6">
                                 <div class="form-group {{state.name}} has-feedback">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="icon-list-alt"></i></span>
+                                    <div class="input-group inputMarginRigth">
+                                        <span class="input-group-addon"><i class="icon-edit"></i></span>
                                         <input
                                             type="text"
                                             class="form-control"
                                             placeholder="{{ content.name }}"
                                             name="name"
                                             required="string"
-                                            ng-model="formData.name"
-                                            ng-change="checkName()"
+                                            ng-model="formData.realname"
+                                            ng-change="checkName(formData)"
                                             ng-class="{
                                                 error: state.name =='has-error',
                                                 success: state.name =='has-success'}">
@@ -120,12 +119,12 @@
                                     <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.name =='has-error'"></span>
                                     <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.name =='has-success'"></span>
                                     <span class="errorcoment"
-                                          ng-show="registerForm.name.$touched && (registerForm.name.$error.required || registerForm.name.$pristine)">Name is required.</span>
+                                          ng-show="registerForm.name.$touched && registerForm.name.$pristine || (state.name=='has-error')">Name is required.</span>
                                 </div>
                             </div>
                             <div class="col-xs-6">
                                 <div class="form-group {{state.lastname}} has-feedback">
-                                    <div class="input-group">
+                                    <div class="input-group inputMarginLeft">
                                         <span class="input-group-addon"><i class="icon-edit"></i></span>
                                         <input
                                             type="text"
@@ -133,8 +132,8 @@
                                             placeholder="{{ content.lastname }}"
                                             name="lastname"
                                             required="string"
-                                            ng-model="formData.lastname"
-                                            ng-change="checkLastname()"
+                                            ng-model="formData.surnames"
+                                            ng-change="checkLastname(formData)"
                                             ng-class="{
                                                 error: state.lastname =='has-error',
                                                 success: state.lastname =='has-success'}">
@@ -142,7 +141,7 @@
                                     <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.lastname =='has-error'"></span>
                                     <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.lastname =='has-success'"></span>
                                     <span class="errorcoment"
-                                          ng-show="registerForm.lastname.$touched && (registerForm.lastname.$error.required || registerForm.lastname.$pristine)">Name is required.</span>
+                                          ng-show="registerForm.lastname.$touched && registerForm.lastname.$pristine || (state.lastname=='has-error')">Name is required.</span>
                                 </div>
                             </div>
                         </div>
@@ -156,7 +155,7 @@
                                             class="form-control"
                                             placeholder="{{ content.email }}"
                                             name="email"
-                                            required="text"
+                                            required="string"
                                             ng-model="formData.email"
                                             ng-change="checkEmail(formData)"
                                             ng-class="{
@@ -167,41 +166,43 @@
                                     <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.email =='has-error'"></span>
                                     <span class="glyphicon glyphicon-alert form-control-feedback" ng-show=" state.email =='has-warning'"></span>
                                     <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.email =='has-success'"></span>
-                                    <span class="errorcoment" ng-show="state.email=='has-error'">Email already exists.</span>
-                                    <span class="warningcoment" ng-show="state.email=='has-warning'">Incorrect format email.</span>
+                                    <span class="errorcoment" ng-show="state.email =='has-error'">Email already exists.</span>
+                                    <span class="warningcoment" ng-show="state.email =='has-warning'">Incorrect format email.</span>
                                     <span class="errorcoment"
-                                          ng-show="registerForm.email.$touched && registerForm.email.$pristine">Name is required.</span>
+                                          ng-show="registerForm.email.$touched && registerForm.email.$pristine && (state.email == undefined)">Name is required.</span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-6">
                                 <div class="form-group {{state.languageSelected}} has-feedback">
-                                    <div class="input-group">
+                                    <div class="input-group inputMarginRigth">
                                         <span class="input-group-addon"><i class="icon-comments"></i></span>
                                         <select
                                             class="form-control"
                                             name="languageSelected"
                                             ng-model="formData.languageSelected"
-                                            ng-options="item as item.language for item in languages"
                                             ng-change="addLanguage(formData.languageSelected)"
                                             >
                                             <option value='' disabled selected>-Choose language-</option>
+                                            <option ng-repeat="option in availableLanguageOptions" value="{{option.ID_Language}}">{{option.languageName}}</option>
                                         </select>
                                     </div>
                                     <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.languageSelected =='has-error'"></span>
                                     <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.languageSelected =='has-success'"></span>
+                                    <span class="errorcoment" ng-show="state.languageSelected =='has-error'">Name is required.</span>
                                     <span class="errorcoment"
-                                          ng-show="state.languageSelected =='has-error' || registerForm.languageSelected.$touched && registerForm.languageSelected.$pristine">Name is required.</span>  
+                                          ng-show="registerForm.languageSelected.$touched && registerForm.languageSelected.$pristine && state.languageSelected ==''">Name is required.</span>  
                                 </div>
                             </div>
-                            <div class="col-xs-6">
-                                <div class="form-group llistaIdiomesFormulariRegistre has-success has-feedback" ng-repeat="item in languageList">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="icon-comments-alt"></i></div>
-                                        <input type="text" class="form-control llistaIdiomesFormulariRegistre input-sm" placeholder="{{ item.language }}" ng-disabled="true">
-                                        <div class="input-group-addon"><a ng-click="removeLanguage(item.language)" class="glyphicon glyphicon-trash" style="color:red"/></div>
-                                    </div>
+                            <div class="col-xs-6 llistaIdiomesFormulariRegistre2">
+                                <div class="inputMarginLeft">
+                                    <table class="table table-condensed taula">
+                                            <tr ng-repeat="item in languageList">
+                                                <td class="llenguatge" >{{ item.languageName }}</td>
+                                                <td class="buto"><a class="icon-minus btn-borrar" ng-click="removeLanguage($index)"></a></td>
+                                            </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -211,7 +212,6 @@
             <div class="col-xs-3">
                 <div class="row"><br><br><br><br><br><br></div>
                 <img class="img img-rounded" alt="Responsive image" ng-src="{{imgButton}}" ng-click="submitForm(formData)">
-                <!--<button type="submit" class="btn btn-success" ng-click="submitForm(formData)" ng-disabled="registerForm.$invalid">{{ content.sendbutton }}</button>-->
             </div>
         </form>
     </div>

@@ -32,7 +32,7 @@ html, body, .container-table {
     border-top-right-radius: 10px;
 }
 .nomBarraSuperiorRegistre{
-    margin-bottom: 2px;
+    margin-bottom: 3px;
     margin-top: 5px;
 }
 .btn-idioma {
@@ -40,7 +40,7 @@ html, body, .container-table {
     /*background-color: #333333;*/
     background-image: url("http://localhost:83/img/BarraMenuRegistre.png");
     border-color: #cccccc;
-    border-radius: 6px;
+    border-radius: 5px;
 }
 .butonsBarraSuperiorRegistre{
     margin-top: 5px;
@@ -52,10 +52,17 @@ html, body, .container-table {
     margin-top: 30px;
     margin-bottom: 20px;
 }
+.inputMarginLeft{
+    margin-left: 5px;
+}
+.inputMarginRigth{
+    margin-right: 5px;
+}
 
 /*Comentario de error en una capa superior para no desplazar el contenido*/
 .errorcoment{
-    color:red;
+    color:#cc0000; /*dark red*/
+    font-weight: bold;
     font-size: 80%;
     position: fixed;
     z-index:1;
@@ -67,7 +74,7 @@ html, body, .container-table {
 }
 .has-error .form-control{
     color:red;
-    border: 2px solid red;
+    border: 3px solid red;
     border-left: none;
 }
 /*color del borde cuando esta seleccionado el input box en error*/
@@ -77,14 +84,15 @@ html, body, .container-table {
 /*color del borde, fondo e icono del input box en error*/
 .has-error .input-group-addon{
     background-color: #99ccdd; /*azul turquesa*/
-    border: 2px solid red;
+    border: 3px solid red;
     border-right: none;
     color:#8b0000; /*dark red*/
 }
 
 /*Comentario de warning en una capa superior para no desplazar el contenido*/
 .warningcoment{
-    color:orange;
+    color:#cc0000; /*dark red*/
+    font-weight: bold;
     font-size: 80%;
     position: fixed;
     z-index:2;
@@ -96,17 +104,17 @@ html, body, .container-table {
 }
 .has-warning .form-control{
     color:orange;
-    border: 2px solid orange;
+    border: 3px solid red;
     border-left: none;
 }
 /*color del borde cuando esta seleccionado el input box en warning*/
 .has-warning .form-control:focus{
-    border-color:#ff8c00;
+    border-color:#dc143c;
 }
 /*color del borde, fondo e icono del input box en warning*/
 .has-warning .input-group-addon {
     background-color: #99ccdd;/*azul turquesa*/
-    border: 2px solid orange;
+    border: 3px solid red;
     border-right: none;
     color:#EE7600; /*dark orange*/
 }
@@ -117,13 +125,13 @@ html, body, .container-table {
 }
 .has-success .form-control{
     color:green;
-    border: 2px solid green;
+    border: 3px solid green;
     border-left: none;
 }
 /*color del borde, fondo e icono del input box en success*/
 .has-success .input-group-addon{
     background-color: #99ccdd;/*azul turquesa*/
-    border: 2px solid green;
+    border: 3px solid green;
     border-right: none;
     color:#006400; /*dark green*/
 }
@@ -142,11 +150,41 @@ html, body, .container-table {
     margin-top: 0px;
     margin-bottom: 0px
 }
+.llistaIdiomesFormulariRegistre2{
+    padding: 0px;
+}
+.llistaIdiomesFormulariRegistre2 .icona{
+    vertical-align: middle;
+}
+.llistaIdiomesFormulariRegistre2 .llenguatge{
+    text-align: center;
+    padding: 0px;
+}
+.llistaIdiomesFormulariRegistre2 .taula{
+    font-size: small;
+    margin: 0px;
+    background-color: white;
+}
+.table th, .table td { 
+     border-top: none !important; 
+ }
+.llistaIdiomesFormulariRegistre2 .buto{
+    background-color: #444444;
+    padding: 0px;
+    display:inline-block;
+    vertical-align: middle;
+    text-align: center;
+}
+.btn-borrar{
+    color: white;
+    padding-rigth: 15px;
+}
+
 .img-rounded{
     height: 100px;
     width: 66px;
     border-radius: 10px;
     border:none;
-    margin-left: 20px; 
+    margin-left: 20px;
 }
 
