@@ -34,9 +34,11 @@ class Lexicon extends CI_Model {
             $output = $query->result();
             $idusu = $output[0]->ID_SU;
             $ulanguage = $output[0]->cfgDefLanguage;
+            $isfem = $output[0]->cfgIsFem;
             $this->session->set_userdata('idusu', $idusu);
             $this->session->set_userdata('uname', $usuari);
             $this->session->set_userdata('ulanguage', $ulanguage);
+            $this->session->set_userdata('isfem', $isfem);
             
             $output2 = array();
             $this->db->where('ID_Language', $ulanguage);  

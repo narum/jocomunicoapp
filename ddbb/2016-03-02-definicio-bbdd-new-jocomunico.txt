@@ -21,6 +21,7 @@ CREATE TABLE SuperUser (
 	surnames VARCHAR(300),
 	email VARCHAR(300),
 	cfgDefLanguage INT DEFAULT '1',
+	cfgIsFem ENUM('0', '1') DEFAULT '0',
 	cfgAppConfUsageMouseOneCTwoC ENUM('0', '1', '2') DEFAULT '0',
 	cfgTimeClick INT DEFAULT '1000',
 	cfgExpansionOnOff ENUM('0', '1') DEFAULT '1',

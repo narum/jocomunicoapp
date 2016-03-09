@@ -47,6 +47,8 @@ class Mypattern {
     var $questiontypequant = false; // ens indica si hi ha partícules de pregunta que es comporten com "quant"
     var $frasenegativa = false; // serveix per conjugar l'imperatiu quan és negatiu com a present de subjuntiu 
     
+    var $isfem = false; // ens diu si l'usuari és una dona
+    
     var $perssubj1 = 1;
     var $genmascsubj1 = true;
     var $plsubj1 = false;
@@ -63,7 +65,7 @@ class Mypattern {
     {
         $CI = &get_instance();
         $CI->load->library('Myslot');
-                        
+        
         $this->id = $patternbbdd->patternid;
         $this->idverb = $patternbbdd->verbid;
         // els verbless patterns quan competeixen amb patrons no verbless, que comencin amb menys punts
@@ -1590,6 +1592,9 @@ class Mypattern {
         $CI->load->library('Myword');
         $matching = new Mymatching();
         
+        //agafem si l'usuari parla en masculí o en femení pel generador
+        if ($CI->session->userdata('isfem') == '1') $this->isfem = true;
+        
         // agafem si la frase és negativa
         $this->frasenegativa = $propietatsfrase['negativa'];
                 
@@ -1978,6 +1983,9 @@ class Mypattern {
         
         // agafem si la frase és negativa
         $this->frasenegativa = $propietatsfrase['negativa'];
+        
+        //agafem si l'usuari parla en masculí o en femení pel generador
+        if ($CI->session->userdata('isfem') == '1') $this->isfem = true;
                 
         // ADVS TEMPS
 
@@ -2386,7 +2394,7 @@ class Mypattern {
                 // si és un pronom personal
                 if ($subj1->isClass("pronoun")) {
                     if ($subj1->text == "jo") {
-                        if ($subj1->fem) $this->genmascsubj1 = false;
+                        if ($subj1->fem || $this->isfem) $this->genmascsubj1 = false;
                         else $this->genmascsubj1 = true;
                         $this->plsubj1 = false;
                         $this->perssubj1 = 1;
@@ -2482,7 +2490,7 @@ class Mypattern {
                 
                 // si és un pronom personal
                 if ($subj2->isClass("pronoun")) {
-                    if ($subj2->text == "jo") {
+                    if ($subj2->text == "jo" || $this->isfem) {
                         if ($subj2->fem) $this->genmascsubj2 = false;
                         else $this->genmascsubj2 = true;
                         $this->plsubj2 = false;
@@ -2634,7 +2642,7 @@ class Mypattern {
                 // si és un pronom personal
                 if ($subj1->isClass("pronoun")) {
                     if ($subj1->text == "yo") {
-                        if ($subj1->fem) $this->genmascsubj1 = false;
+                        if ($subj1->fem || $this->isfem) $this->genmascsubj1 = false;
                         else $this->genmascsubj1 = true;
                         $this->plsubj1 = false;
                         $this->perssubj1 = 1;
@@ -2730,7 +2738,7 @@ class Mypattern {
                 
                 // si és un pronom personal
                 if ($subj2->isClass("pronoun")) {
-                    if ($subj2->text == "yo") {
+                    if ($subj2->text == "yo" || $this->isfem) {
                         if ($subj2->fem) $this->genmascsubj2 = false;
                         else $this->genmascsubj2 = true;
                         $this->plsubj2 = false;
