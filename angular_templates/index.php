@@ -9,7 +9,7 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>css/editCell.css">
     </head>
     <body oncontextmenu="return false">
-        
+
 
         <script type="text/javascript" src="<?= base_url(); ?>libraries/jquery.min.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular.min.js"></script>
@@ -32,8 +32,12 @@
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular-sanitize.min.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/ngDraggable.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/ngDialog.min.js"></script>
-        
-        
+
+        <link href="<?= base_url(); ?>css/bootstrap-switch.css" rel="stylesheet">
+        <script src="<?= base_url(); ?>css/bootstrap-switch.js"></script>
+
+ 
+ 
         <div ng-view class="root" ng-init="baseurl = '<?= base_url(); ?>'"></div>
     </body>
 </html>
