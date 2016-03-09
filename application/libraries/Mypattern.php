@@ -1794,8 +1794,8 @@ class Mypattern {
             if ($slotaux->category == "Theme" && $slotaux->prep == null) {
                                 
                 $wordslotauxfinal = $slotaux->paraulafinal;
-                // si està en forma de pronom (només de tu, jo)
-                if ($slotaux->defvalueused || $wordslotauxfinal->isClass("pronoun")) {
+                // si està en forma de pronom
+                if (!$slotaux->defvalueused && $wordslotauxfinal->isClass("pronoun")) {
                     if ($slotaux->level == 1) $indextheme1 = $i;
                     if ($slotaux->level == 2) $indextheme2 = $i;
                 }
@@ -2185,8 +2185,8 @@ class Mypattern {
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
             if ($slotaux->category == "Theme" && $slotaux->prep == null) {
                 $wordslotauxfinal = $slotaux->paraulafinal;
-                // si està en forma de pronom (només de tu, jo)
-                if ($slotaux->defvalueused || $wordslotauxfinal->isClass("pronoun")) {
+                // si està en forma de pronom
+                if (!$slotaux->defvalueused && $wordslotauxfinal->isClass("pronoun")) {
                     if ($slotaux->level == 1) $indextheme1 = $i;
                     if ($slotaux->level == 2) $indextheme2 = $i;
                 }
@@ -4046,7 +4046,7 @@ class Mypattern {
         $patterns[13] = '/(?<=[aeiou]@VERBUM)[[:space:]]vos[[:space:]]/u';
         $patterns[14] = '/(?<=[aeiou]@VERBUM)[[:space:]]los[[:space:]]/u';
         $patterns[38] = '/(?<=[aeiou]@VERBUM)[[:space:]]lo[[:space:]]/u';
-        $patterns[39] = '/(?<=[aeiou]@VERBUM)[[:space:]]la[[:space:]]/u';
+        $patterns[39] = '/(?<=[aeiou]@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
         $patterns[42] = '/(?<=[aeiou]@VERBUM)[[:space:]]les[[:space:]]/u';
         
         // verb acabat en vocal+r + pronoms de receiver a darrere
@@ -4057,7 +4057,7 @@ class Mypattern {
         $patterns[19] = '/(?<=[aeiou]r@VERBUM)[[:space:]]vos[[:space:]]/u';
         $patterns[20] = '/(?<=[aeiou]r@VERBUM)[[:space:]]los[[:space:]]/u';
         $patterns[40] = '/(?<=[aeiou]r@VERBUM)[[:space:]]lo[[:space:]]/u';
-        $patterns[41] = '/(?<=[aeiou]r@VERBUM)[[:space:]]la[[:space:]]/u';
+        $patterns[41] = '/(?<=[aeiou]r@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
         $patterns[43] = '/(?<=[aeiou]r@VERBUM)[[:space:]]les[[:space:]]/u';
         
         // verb+pronom feble de receiver ja enganxat, seguit de "ho"
@@ -4668,7 +4668,7 @@ class Mypattern {
 
         // verb + pronoms de theme a darrere
         $patterns[2] = '/(?<=@VERBUM)[[:space:]]lo[[:space:]]/u';
-        $patterns[14] = '/(?<=@VERBUM)[[:space:]]la[[:space:]]/u';
+        $patterns[14] = '/(?<=@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
         $patterns[15] = '/(?<=@VERBUM)[[:space:]]los[[:space:]]/u';
         $patterns[16] = '/(?<=@VERBUM)[[:space:]]las[[:space:]]/u';
         
@@ -4686,8 +4686,9 @@ class Mypattern {
         $patterns[11] = "/(?<=@VERBUM)nos[[:space:]]lo[[:space:]]/u";
         $patterns[12] = "/(?<=@VERBUM)os[[:space:]]lo[[:space:]]/u";
         
-        // netejar @VERBUM
+        // netejar @VERBUM i @PRFEBLE
         $patterns[13] = "/@VERBUM/u";
+        $patterns[27] = "/@PRFEBLE/u";
         
         // preps + pronoms personals
         $patterns[17] = '/[[:space:]][c][o][n][[:space:]][y][o][[:space:]]/u';
@@ -4723,6 +4724,7 @@ class Mypattern {
         $replacements[12] = "roslo ";
         
         $replacements[13] = "";
+        $replacements[27] = "";
         
         $replacements[17] = ' conmigo ';
         $replacements[18] = ' conmigo ';
