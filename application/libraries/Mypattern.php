@@ -1776,16 +1776,20 @@ class Mypattern {
             array_splice($this->ordrefrase, $indexsecondaryverb, 0, $temp);
         }
         
-        // THEME PRONOMINAL -> JO / TU / ELL...
+        // THEME PRONOMINAL -> JO / TU / ELL... si no té una preposició davant
                 
         $indextheme1 = null;
         $indextheme2 = null;
                 
-        // busquem si té un slot de receiver que sigui pronominal i el posem abans del verb principal
+        // busquem si té un slot de theme que sigui pronominal i el posem abans del verb principal
         for($i=0; $i<count($this->ordrefrase); $i++) {
             
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
-            if ($slotaux->category == "Theme") {
+                        
+            if ($slotaux->category == "Theme" && $slotaux->prep == null) {
+                
+                echo "Preposicio: ".$slotaux->prep."<br />";
+                
                 $wordslotauxfinal = $slotaux->paraulafinal;
                 // si està en forma de pronom (només de tu, jo)
                 if ($slotaux->defvalueused || $wordslotauxfinal->isClass("pronoun")) {
@@ -2164,7 +2168,7 @@ class Mypattern {
         }
         
         
-        // THEME PRONOMINAL / Yo, tu, él, etc.
+        // THEME PRONOMINAL / Yo, tu, él, etc. si no té preposició davant
         
         $indextheme1 = null;
         $indextheme2 = null;
@@ -2173,7 +2177,7 @@ class Mypattern {
         for($i=0; $i<count($this->ordrefrase); $i++) {
             
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
-            if ($slotaux->category == "Theme") {
+            if ($slotaux->category == "Theme" && $slotaux->prep == null) {
                 $wordslotauxfinal = $slotaux->paraulafinal;
                 // si està en forma de pronom (només de tu, jo)
                 if ($slotaux->defvalueused || $wordslotauxfinal->isClass("pronoun")) {
@@ -3789,12 +3793,13 @@ class Mypattern {
                 else {
                     
                     $parauladerivada = $slotaux->slotstring[0];
-                    $parauladerivada = $parauladerivada[0];
+                    $parauladerivada = $parauladerivada[0]; 
+                    // si hi ha una preposicio davant del pronom, no hauria de fer el canvi
                     
                     if (($slotaux->level == 1 && $mainverbinf) 
                             || ($slotaux->level == 1 && $ordre && !$this->frasenegativa)) {
-                        // si són pronoms personals, posem la forma correcta pels receivers de darrere el verb
-                        if ($matching->isPronomPers($slotaux->paraulafinal->text)) {
+                        // si són pronoms personals, posem la forma correcta pels themes de darrere el verb
+                        if ($matching->isPronomPers($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsAfterTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -3804,8 +3809,8 @@ class Mypattern {
                         }                        
                     }
                     else if ($slotaux->level == 1) {
-                        // si són pronoms personals, posem la forma correcta pels receivers d'abans del verb
-                        if ($matching->isPronomPers($slotaux->paraulafinal->text)) {
+                        // si són pronoms personals, posem la forma correcta pels themes d'abans del verb
+                        if ($matching->isPronomPers($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsFrontTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -3815,8 +3820,8 @@ class Mypattern {
                         }
                     }
                     else if ($slotaux->level == 2 && $secondaryverbinf) {
-                        // si són pronoms personals, posem la forma correcta pels receivers de darrere el verb
-                        if ($matching->isPronomPers($slotaux->paraulafinal->text)) {
+                        // si són pronoms personals, posem la forma correcta pels themes de darrere el verb
+                        if ($matching->isPronomPers($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsAfterTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -3826,8 +3831,8 @@ class Mypattern {
                         }                        
                     }
                     else if ($slotaux->level == 2) {
-                        // si són pronoms personals, posem la forma correcta pels receivers d'abans del verb
-                        if ($matching->isPronomPers($slotaux->paraulafinal->text)) {
+                        // si són pronoms personals, posem la forma correcta pels themes d'abans del verb
+                        if ($matching->isPronomPers($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsFrontTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4422,7 +4427,7 @@ class Mypattern {
                     if (($slotaux->level == 1 && $mainverbinf) 
                             || ($slotaux->level == 1 && $ordre && !$this->frasenegativa)) {
                         // si són pronoms personals, posem la forma correcta pels receivers de darrere el verb
-                        if ($matching->isPronomPersES($slotaux->paraulafinal->text)) {
+                        if ($matching->isPronomPersES($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4433,7 +4438,7 @@ class Mypattern {
                     }
                     else if ($slotaux->level == 1) {
                         // si són pronoms personals, posem la forma correcta pels receivers d'abans del verb
-                        if ($matching->isPronomPersES($slotaux->paraulafinal->text)) {
+                        if ($matching->isPronomPersES($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4444,7 +4449,7 @@ class Mypattern {
                     }
                     else if ($slotaux->level == 2 && $secondaryverbinf) {
                         // si són pronoms personals, posem la forma correcta pels receivers de darrere el verb
-                        if ($matching->isPronomPersES($slotaux->paraulafinal->text)) {
+                        if ($matching->isPronomPersES($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4455,7 +4460,7 @@ class Mypattern {
                     }
                     else if ($slotaux->level == 2) {
                         // si són pronoms personals, posem la forma correcta pels receivers d'abans del verb
-                        if ($matching->isPronomPersES($slotaux->paraulafinal->text)) {
+                        if ($matching->isPronomPersES($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
