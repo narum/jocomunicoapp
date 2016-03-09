@@ -4077,8 +4077,14 @@ class Mypattern {
         $patterns[35] = "/(?<=@PRFEBLE)el[[:space:]](?=[(aeiouAEIOUhH)])/u";
         $patterns[36] = "/(?<=@PRFEBLE)la[[:space:]](?=[(aeiouAEIOUhH)])/u";
         
-        // netejar @VERBUM
+        // netejar @PRFEBLE
         $patterns[37] = "/@PRFEBLE/u";
+        
+        //preps + pronoms personals
+        $patterns[44] = '/[[:space:]][p][e][r][[:space:]][j][o][[:space:]]/u';
+        $patterns[45] = '/[[:space:]][a][m][b][[:space:]][j][o][[:space:]]/u';
+        $patterns[46] = '/[[:space:]][a][[:space:]][j][o][[:space:]]/u';
+        $patterns[47] = '/[[:space:]][d][e][[:space:]][j][o][[:space:]]/u';
         
         
         $replacements[0] = ' del ';
@@ -4134,6 +4140,11 @@ class Mypattern {
         $replacements[35] = "l'";
         $replacements[36] = "l'";
         $replacements[37] = "";
+        
+        $replacements[44] = ' per mi ';
+        $replacements[45] = ' amb mi ';
+        $replacements[46] = ' a mi ';
+        $replacements[47] = ' de mi ';
         
         $frasebruta = preg_replace($patterns, $replacements, $frasebruta);
         
@@ -4670,6 +4681,18 @@ class Mypattern {
         // netejar @VERBUM
         $patterns[13] = "/@VERBUM/u";
         
+        // preps + pronoms personals
+        $patterns[17] = '/[[:space:]][c][o][n][[:space:]][y][o][[:space:]]/u';
+        $patterns[18] = '/[[:space:]][c][o][n][[:space:]][m][í][[:space:]]/u';
+        $patterns[19] = '/[[:space:]][c][o][n][[:space:]][t][ú][[:space:]]/u';
+        $patterns[20] = '/[[:space:]][c][o][n][[:space:]][t][i][[:space:]]/u';
+        $patterns[21] = '/[[:space:]][p][a][r][a][[:space:]][y][o][[:space:]]/u';
+        $patterns[22] = '/[[:space:]][p][a][r][a][[:space:]][t][ú][[:space:]]/u';
+        $patterns[23] = '/[[:space:]][a][[:space:]][y][o][[:space:]]/u';
+        $patterns[24] = '/[[:space:]][a][[:space:]][t][ú][[:space:]]/u';
+        $patterns[25] = '/[[:space:]][d][e][[:space:]][y][o][[:space:]]/u';
+        $patterns[26] = '/[[:space:]][d][e][[:space:]][t][ú][[:space:]]/u';
+        
         
         $replacements[0] = ' del ';
         $replacements[1] = ' al ';
@@ -4692,6 +4715,17 @@ class Mypattern {
         $replacements[12] = "roslo ";
         
         $replacements[13] = "";
+        
+        $replacements[17] = ' conmigo ';
+        $replacements[18] = ' conmigo ';
+        $replacements[19] = ' contigo ';
+        $replacements[20] = ' contigo ';
+        $replacements[21] = ' para mí ';
+        $replacements[22] = ' para ti ';
+        $replacements[23] = ' a mí ';
+        $replacements[24] = ' a ti ';
+        $replacements[25] = ' de mí ';
+        $replacements[26] = ' de ti ';
         
         $frasebruta = preg_replace($patterns, $replacements, $frasebruta);
         
