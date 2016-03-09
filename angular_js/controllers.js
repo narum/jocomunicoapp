@@ -48,7 +48,6 @@ angular.module('controllers', [])
     //Pedimos los idiomas disponibles
     Resources.register.get({'section':'userRegister'},{'funct':"allContent"}).$promise
         .then(function(results){
-            console.log(results);
             $scope.availableLanguageOptions=results.languages;// Idiomas disponibles para el desplegable del formulario
             content=results.content;// Contenido en cada idioma
             $scope.content=content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
@@ -234,7 +233,7 @@ angular.module('controllers', [])
                     console.log('response:', results);
                     alert('Form submitted with' + JSON.stringify(formData));
 
-                angular.forEach($scope.languageList, function(value, key) {
+                angular.forEach($scope.languageList, function(value) {
 
                     Resources.register.save({'SUname':formData.SUname,'ID_ULanguage':value.ID_Language},{'funct':"saveUserData"}).$promise
                     .then(function(results){

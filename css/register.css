@@ -7,6 +7,8 @@ html, body, .container-table {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    
+    overflow-y:hidden;
 }
 /*Per centrar el div del boxRegistreUsuari*/
 .container-table {
@@ -23,29 +25,44 @@ html, body, .container-table {
     /*background: #ffcc99;*/
     background-image: url("http://localhost:83/img/FonsTaronja.png");
     border-radius: 10px;
+    
 }
 .barraSuperiorRegistre{
     /*background: #333333;*/
-    background-image: url("http://localhost:83/img/BarraMenuRegistre.png");
+    background-image: url("http://localhost:83/img/BarraMenuSuperior.png");
     color:white;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    height: 45px;
 }
 .nomBarraSuperiorRegistre{
+    font-size: x-large;
     margin-bottom: 3px;
     margin-top: 5px;
 }
 .btn-idioma {
     color: white;
-    /*background-color: #333333;*/
-    background-image: url("http://localhost:83/img/BarraMenuRegistre.png");
-    border-color: #cccccc;
+    background-color: #333333;
+    border-color: #333333;
+    font-size: large;
+    
+    height: 40px;
+    width: 120px;
+    margin-top: 2px;
     border-radius: 5px;
 }
+.btn-idioma:hover{
+    background-color: black;
+    border-color: black;
+    margin-left: 1px;
+    margin-top: 3px;
+}
+
 .butonsBarraSuperiorRegistre{
-    margin-top: 5px;
 }
 .butoSortirBarraSuperiorRegistre{
+    font-size: large;
+    margin-top: 10px;
     color: white;
 }
 .boxFormulariRegistreUsuari{
@@ -59,11 +76,15 @@ html, body, .container-table {
     margin-right: 5px;
 }
 
+.form-group {
+  margin-bottom: 30px;
+}
+
 /*Comentario de error en una capa superior para no desplazar el contenido*/
 .errorcoment{
     color:#cc0000; /*dark red*/
     font-weight: bold;
-    font-size: 80%;
+    font-size: 130%;
     position: fixed;
     z-index:1;
 }
@@ -93,7 +114,7 @@ html, body, .container-table {
 .warningcoment{
     color:#cc0000; /*dark red*/
     font-weight: bold;
-    font-size: 80%;
+    font-size: 130%;
     position: fixed;
     z-index:2;
 }
@@ -146,29 +167,26 @@ html, body, .container-table {
     opacity: 1;
     color:green;
 }
+
 .llistaIdiomesFormulariRegistre{
-    margin-top: 0px;
-    margin-bottom: 0px
-}
-.llistaIdiomesFormulariRegistre2{
     padding: 0px;
 }
-.llistaIdiomesFormulariRegistre2 .icona{
+.llistaIdiomesFormulariRegistre .icona{
     vertical-align: middle;
 }
-.llistaIdiomesFormulariRegistre2 .llenguatge{
+.llistaIdiomesFormulariRegistre .llenguatge{
     text-align: center;
     padding: 0px;
 }
-.llistaIdiomesFormulariRegistre2 .taula{
-    font-size: small;
+.llistaIdiomesFormulariRegistre .taula{
+    /*font-size: small;*/
     margin: 0px;
     background-color: white;
 }
 .table th, .table td { 
      border-top: none !important; 
  }
-.llistaIdiomesFormulariRegistre2 .buto{
+.llistaIdiomesFormulariRegistre .buto{
     background-color: #444444;
     padding: 0px;
     display:inline-block;
@@ -181,10 +199,10 @@ html, body, .container-table {
 }
 
 .img-rounded{
-    height: 100px;
-    width: 66px;
+    height: 20vh;
+    width: auto;
     border-radius: 10px;
     border:none;
-    margin-left: 20px;
+    margin-left: 10vh;
 }
 
