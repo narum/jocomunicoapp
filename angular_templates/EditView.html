@@ -1,25 +1,25 @@
 
 <div class="row fullheight">
     <div class="col-xs-12" style="height: 15%">
-        <input type="text" ng-model="$parent.Name" ng-keyup="$parent.search($parent.SearchType);" placeholder="Escriba para filtar"/><br>
+        <input type="text" ng-model="pictoEditSearch" ng-keyup="search(pictoEditSearch, SearchType);" placeholder="Escriba para filtar"/><br>
     </div>
     <div class="col-xs-12" style="height: 20%">
         <form name="SearchForm">
             <div class="col-xs-12" style="height: 50%">
-                <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Tots"/>
+                <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Tots"/>
                 Tots
-                <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Noms"/>
+                <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Noms"/>
                 Noms
 
-                <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Verb"/>
+                <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Verb"/>
                 Verb
             </div>
             <div class="col-xs-12" style="height: 50%">
-                <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Adj" />
+                <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Adj" />
                 Adjectiu
-                <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Exp"/>
+                <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Exp"/>
                 Expresions
-                <input type="radio" ng-model="$parent.SearchType" ng-click="$parent.search($parent.SearchType);" value="Altres"/>
+                <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Altres"/>
                 Altres
             </div>
         </form>

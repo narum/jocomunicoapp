@@ -129,7 +129,7 @@ class BoardInterface extends CI_Model {
      * 
      */
 
-    function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto) {
+    function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto, $idSentence, $cellType) {
         $output = array();
 
         $data = array(
@@ -138,7 +138,9 @@ class BoardInterface extends CI_Model {
             'isFixedInGroupBoards' => $isFixed,
             'ID_CFunction' => $idFunc,
             'boardLink' => $idboard,
-            'ID_CPicto' => $idpicto
+            'ID_CPicto' => $idpicto,
+            'ID_CSentence' => $idSentence,
+            'cellType' => $cellType
         );
         $this->db->where('ID_Cell', $id);
         $this->db->update('Cell', $data);
@@ -374,6 +376,43 @@ class BoardInterface extends CI_Model {
             $output = null;
 
         return $output;
+    }
+    
+    /*
+     * 
+     */
+
+
+    function getSentences($idusu, $idsearch) {
+
+        $this->db->like('generatorString', $idsearch);
+        $this->db->where('ID_SSUser', $idusu);
+        $query = $this->db->get('S_Sentence');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    /*
+     * 
+     */
+
+
+    function getSentence($id) {
+
+        $this->db->where('ID_SSentence', $id);
+        $query = $this->db->get('S_Sentence');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output[0];
     }
 
     /*

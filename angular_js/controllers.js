@@ -319,8 +319,8 @@ angular.module('controllers', [])
 
             $scope.changeColor = function (color) {
                 $scope.colorSelected = color;
-                alert(color);
             };
+
             /*
              * Resize cellboard (height and width)
              */
@@ -502,32 +502,33 @@ angular.module('controllers', [])
              * Return pictograms from database. The result depends on 
              * Searchtype (noms, verbs...) and Name (letters with the word start with)
              */
-            $scope.search = function ($Searchtype)
+            $scope.search = function (name, Searchtype)
             {
-                var postdata = {id: $scope.Name};
+                var URL = "";
+                var postdata = {id: name};
                 //Radio button function parameter, to set search type
-                switch ($Searchtype)
+                switch (Searchtype)
                 {
                     case "Tots":
-                        var URL = $scope.baseurl + "SearchWord/getDBAll";
+                        URL = $scope.baseurl + "SearchWord/getDBAll";
                         break;
                     case "Noms":
-                        var URL = $scope.baseurl + "SearchWord/getDBNames";
+                        URL = $scope.baseurl + "SearchWord/getDBNames";
                         break;
                     case "Verb":
-                        var URL = $scope.baseurl + "SearchWord/getDBVerbs";
+                        URL = $scope.baseurl + "SearchWord/getDBVerbs";
                         break;
                     case "Adj":
-                        var URL = $scope.baseurl + "SearchWord/getDBAdj";
+                        URL = $scope.baseurl + "SearchWord/getDBAdj";
                         break;
                     case "Exp":
-                        var URL = $scope.baseurl + "SearchWord/getDBExprs";
+                        URL = $scope.baseurl + "SearchWord/getDBExprs";
                         break;
                     case "Altres":
-                        var URL = $scope.baseurl + "SearchWord/getDBOthers";
+                        URL = $scope.baseurl + "SearchWord/getDBOthers";
                         break;
                     default:
-                        var URL = $scope.baseurl + "SearchWord/getDBAll";
+                        URL = $scope.baseurl + "SearchWord/getDBAll";
                 }
 
 
@@ -537,7 +538,6 @@ angular.module('controllers', [])
                 $http.post(URL, postdata).
                         success(function (response)
                         {
-                            $scope.statusWord = response.status;
                             $scope.dataWord = response.data;
                         });
             };
@@ -616,7 +616,7 @@ angular.module('controllers', [])
             {
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
-                $scope.cellType = response.info.cellType;
+                
 
                 //Se ejecutan automaticamente
                 $scope.getFunctions = function () {
@@ -643,9 +643,34 @@ angular.module('controllers', [])
                         }
                     });
                 };
+                $scope.getSentence = function (id) {
+                    var url = $scope.baseurl + "Board/getSentence";
+                    var postdata = {id: id};
+
+                    $http.post(url, postdata).success(function (response)
+                    {
+                        $scope.sentenceSelectedId = response.sentence.ID_SSentence;
+                        $scope.sentenceSelectedText = response.sentence.generatorString;
+                    });
+                };
+                $scope.searchSentece = function (sentence) {
+                    var postdata = {search: sentence};
+                    var URL = $scope.baseurl + "Board/searchSentence";
+
+                    $http.post(URL, postdata).
+                            success(function (response)
+                            {
+                                $scope.sentenceResult = response.sentence;
+                            });
+                };
+                $scope.selectSentence = function (id, text){
+                    $scope.sentenceSelectedId = id;
+                    $scope.sentenceSelectedText = text;
+                };
                 //Initialize the dropdwon menus.
                 $scope.getFunctions();
                 $scope.getBoards();
+                $scope.cellType = response.info.cellType;
                 $scope.numScanBlockText1 = $scope.range(20)[$scope.Editinfo.customScanBlock1];
                 $scope.textInScanBlockText1 = $scope.Editinfo.customScanBlockText1;
                 $scope.numScanBlockText2 = $scope.range(20)[$scope.Editinfo.customScanBlock2];
@@ -663,16 +688,20 @@ angular.module('controllers', [])
                 if ($scope.Editinfo.isFixedInGroupBoards === "1") {
                     $scope.checkboxIsFixed = true;
                 }
-                if ($scope.Editinfo.customScanBlockText1 !== ""){
+                if ($scope.Editinfo.customScanBlockText1 !== "") {
                     $scope.checkboxScanBlockText1 = true;
                 }
-                if ($scope.Editinfo.customScanBlockText2 !== null){
+                if ($scope.Editinfo.customScanBlockText2 !== null) {
                     $scope.checkboxScanBlockText2 = true;
+                }
+                if (response.info.cellType === 'sentence') {
+                    $scope.getSentence(response.info.ID_CSentence);
                 }
 
                 $scope.aceptar = function () {
+                    alert($scope.cellType);
                     var url = $scope.baseurl + "Board/editCell";
-                    var postdata = {id: idCell, idPicto: $scope.idPictoEdit, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1",numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1,numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2 };
+                    var postdata = {id: idCell, idPicto: $scope.idPictoEdit, idSentence: $scope.sentenceSelectedId, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1", numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1, numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2, cellType: $scope.cellType};
                     if (!$scope.checkboxFuncType) {
                         postdata.idFunct = null;
                     }
@@ -696,7 +725,16 @@ angular.module('controllers', [])
                         postdata.numScanBlockText2 = null;
                         postdata.textInScanBlockText2 = null;
                     }
-                   
+                    if ($scope.cellType !== 'picto'){
+                        postdata.idPicto = null;
+                    }
+                    if ($scope.cellType !== 'sentence'){
+                        postdata.idSentence = null;
+                    }
+//                    if ($scope.cellType !== 'history'){
+//                        postdata.idPicto = null;
+//                    }
+
 
                     $http.post(url, postdata).success(function ()
                     {

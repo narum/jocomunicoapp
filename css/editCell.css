@@ -87,4 +87,47 @@
 .imgRounded{
     border-radius: 6px;
 }
+#sentenceSearchContent{
+    position:relative;
+    top:0px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+}
+.boxSearch{
+    border-bottom: 2px solid;
+}
+#scrollbox1 {
+    overflow: auto;
+    padding: 0 5px;
+    border: 1px solid #b7b7b7;
+}
+.track1 {
+    width: 10px;
+    background: rgba(0, 0, 0, 0);
+    margin-right: 2px;
+    border-radius: 10px;
+    -webkit-transition: background 250ms linear;
+    transition: background 250ms linear;
+}
 
+.track1:hover,
+.track1.dragging {
+    background: #d9d9d9; 
+    background: rgba(0, 0, 0, 0.30);
+}
+
+.handle1 {
+    width: 7px;
+    right: 0;
+    background: #999;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 7px;
+    -webkit-transition: width 250ms;
+    transition: width 250ms;
+}
+
+.track1:hover .handle1,
+.track1.dragging .handle1 {
+    width: 10px;
+}

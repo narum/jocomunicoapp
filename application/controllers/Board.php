@@ -532,6 +532,36 @@ class Board extends REST_Controller {
         $this->response($response, REST_Controller::HTTP_OK);
     }
     
+    /*
+     * 
+     */
+
+    public function searchSentence_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $search = $request->search;
+
+        $idusu = $this->session->userdata('idusu');
+        $sentence = $this->BoardInterface->getSentences($idusu, $search);
+
+        $response = [
+            'sentence' => $sentence
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    
+    public function getSentence_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+
+        $sentence = $this->BoardInterface->getSentence($id);
+
+        $response = [
+            'sentence' => $sentence
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
     
     public function editCell_post() {
         $postdata = file_get_contents("php://input");
@@ -543,12 +573,14 @@ class Board extends REST_Controller {
         $visible = $request->visible; 
         $isFixed = $request->isFixed;
         $idPicto = $request->idPicto;
+        $idSentence = $request->idSentence;
         $numScanBlockText1 = $request->numScanBlockText1;
         $textInScanBlockText1 = $request->textInScanBlockText1;
         $numScanBlockText2 = $request->numScanBlockText2;
         $textInScanBlockText2 = $request->textInScanBlockText2;
+        $cellType = $request->cellType;
 
-        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto);
+        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $cellType);
         $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
         
         $response = [
