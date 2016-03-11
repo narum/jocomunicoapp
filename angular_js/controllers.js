@@ -112,7 +112,12 @@ angular.module('controllers', [])
             }
         })
 
-        .controller('myCtrl', function ($scope, $http, ngDialog) {
+        .controller('myCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope) {
+            // Pedimos los textos para cargar la pagina
+            txtContent("mainboard").then(function (results) {
+                $rootScope.content = results.data;
+            });
+            
             $scope.config = function (boardconf)
             {
                 //-----------Iniciacion-----------
@@ -121,6 +126,7 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
+                
                 $scope.idboard = "1";
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
@@ -153,6 +159,7 @@ angular.module('controllers', [])
                  $scope.grid2 = 8;
                  $scope.grid3 = 2;*/
             };
+            
             /*
              * Return: array fron 0 to repeatnum
              */
@@ -608,7 +615,8 @@ angular.module('controllers', [])
         })
 
 
-        .controller('Edit', function ($scope, $http, ngDialog) {
+        .controller('Edit', function ($scope, $http, ngDialog, txtContent, $rootScope) {
+
             var url = $scope.baseurl + "Board/getCell";
             var postdata = {id: $scope.idEditCell, idboard: $scope.idboard};
 

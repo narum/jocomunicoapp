@@ -101,7 +101,7 @@ class Board extends REST_Controller {
 
         $array = array();
 
-        // "1" es el numero de id de la "board"
+        //MODIF: hacer seguridad por si intenta coger la board de otro usuario
         $output = $this->BoardInterface->getBoardStruct($idboard);
         $columns = $output[0]->width;
         $rows = $output[0]->height;

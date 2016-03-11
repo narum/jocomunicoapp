@@ -1,26 +1,26 @@
 
 <div class="row fullheight">
     <div class="col-xs-12" style="height: 15%">
-        <input type="text" ng-model="pictoEditSearch" ng-keyup="search(pictoEditSearch, SearchType);" placeholder="Escriba para filtar"/><br>
+        <input type="text" ng-model="pictoEditSearch" ng-keyup="search(pictoEditSearch, SearchType);" placeholder="{{content.placeholderSearch}}"/><br>
     </div>
     <div class="col-xs-12" style="height: 20%">
         <form name="SearchForm">
             <div class="col-xs-12" style="height: 50%">
                 <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Tots"/>
-                Tots
+                {{content.all}}
                 <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Noms"/>
-                Noms
+                {{content.names}}
 
                 <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Verb"/>
-                Verb
+                {{content.verbs}}
             </div>
             <div class="col-xs-12" style="height: 50%">
                 <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Adj" />
-                Adjectiu
+                {{content.adj}}
                 <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Exp"/>
-                Expresions
+                {{content.expressions}}
                 <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Altres"/>
-                Altres
+                {{content.others}}
             </div>
         </form>
     </div>

@@ -8,7 +8,7 @@
             <input type="text" class="fullheight text-center" width="100%" height="100%" name="NameBoard" ng-model="$parent.BoardName" ng-value="nameboard" ng-change="changeNameBoard($parent.BoardName)" ng-blind-html="amplada" />
         </div>
         <div class='col-xs-6 text-center' style="height: 23%">
-            Altura
+            {{content.rows}}
             <select
                 ng-model="altura"
                 ng-options="h for h in range(20)"
@@ -16,7 +16,7 @@
             </select>
         </div>
         <div class='col-xs-6 text-center' style="height: 23%">
-            Amplada
+            {{content.columns}}
             <select
                 ng-model="amplada"
                 ng-options="w for w in range(20)"
@@ -24,7 +24,7 @@
             </select>
         </div>
         <div class='col-xs-12 text-center' style="height: 23%">
-            Panell Principal
+            {{content.mainpanel}}
             <select
                 ng-model="primaryBoard"
                 ng-options="b.Bname for b in allBoards track by b.ID_Board"
@@ -33,7 +33,7 @@
             </select>
         </div>
         <div class='col-xs-12 text-center' style="height: 23%">
-            ((!))Retorn automatic<input type="checkbox" value="Auto-retorn"/>
+            ((!)){{content.automaticreturn}}<input type="checkbox" value="Auto-retorn"/>
         </div>
     </div>
 
