@@ -129,7 +129,7 @@ class BoardInterface extends CI_Model {
      * 
      */
 
-    function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto, $idSentence, $cellType) {
+    function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto, $idSentence, $idSFolder, $cellType) {
         $output = array();
 
         $data = array(
@@ -140,6 +140,7 @@ class BoardInterface extends CI_Model {
             'boardLink' => $idboard,
             'ID_CPicto' => $idpicto,
             'ID_CSentence' => $idSentence,
+            'sentenceFolder' => $idSFolder,
             'cellType' => $cellType
         );
         $this->db->where('ID_Cell', $id);
@@ -406,6 +407,43 @@ class BoardInterface extends CI_Model {
 
         $this->db->where('ID_SSentence', $id);
         $query = $this->db->get('S_Sentence');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output[0];
+    }
+    
+    /*
+     * 
+     */
+
+
+    function getSFolders($idusu, $idsearch) {
+
+        $this->db->like('folderName', $idsearch);
+        $this->db->where('ID_SFUser', $idusu);
+        $query = $this->db->get('S_Folder');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    /*
+     * 
+     */
+
+
+    function getSFolder($id) {
+
+        $this->db->where('ID_Folder', $id);
+        $query = $this->db->get('S_Folder');
 
         if ($query->num_rows() > 0) {
             $output = $query->result();

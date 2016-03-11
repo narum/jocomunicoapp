@@ -563,6 +563,37 @@ class Board extends REST_Controller {
         $this->response($response, REST_Controller::HTTP_OK);
     }
     
+    /*
+     * 
+     */
+
+    public function searchSFolder_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $search = $request->search;
+
+        $idusu = $this->session->userdata('idusu');
+        $sFolder = $this->BoardInterface->getSFolders($idusu, $search);
+
+        $response = [
+            'sfolder' => $sFolder
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    
+    public function getSFolder_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+
+        $sFolder = $this->BoardInterface->getSFolder($id);
+
+        $response = [
+            'sFolder' => $sFolder
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    
     public function editCell_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -574,13 +605,14 @@ class Board extends REST_Controller {
         $isFixed = $request->isFixed;
         $idPicto = $request->idPicto;
         $idSentence = $request->idSentence;
+        $idSFolder = $request->idSFolder;
         $numScanBlockText1 = $request->numScanBlockText1;
         $textInScanBlockText1 = $request->textInScanBlockText1;
         $numScanBlockText2 = $request->numScanBlockText2;
         $textInScanBlockText2 = $request->textInScanBlockText2;
         $cellType = $request->cellType;
 
-        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $cellType);
+        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType);
         $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
         
         $response = [

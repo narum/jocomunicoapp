@@ -667,6 +667,33 @@ angular.module('controllers', [])
                     $scope.sentenceSelectedId = id;
                     $scope.sentenceSelectedText = text;
                 };
+                
+                $scope.getSFolder = function (id) {
+                    var url = $scope.baseurl + "Board/getSFolder";
+                    var postdata = {id: id};
+
+                    $http.post(url, postdata).success(function (response)
+                    {
+                        $scope.sFolderSelectedId = response.sFolder.ID_Folder;
+                        $scope.sFolderSelectedImg = response.sFolder.imgSFolder;
+                        $scope.sFolderSelectedText = response.sFolder.folderName;
+                    });
+                };
+                $scope.searchSFolder = function (sFolder) {
+                    var postdata = {search: sFolder};
+                    var URL = $scope.baseurl + "Board/searchSFolder";
+
+                    $http.post(URL, postdata).
+                            success(function (response)
+                            {
+                                $scope.sFolderResult = response.sfolder;
+                            });
+                };
+                $scope.selectSFolder = function (id, img ,text){
+                    $scope.sFolderSelectedId = id;
+                    $scope.sFolderSelectedImg = img;
+                    $scope.sFolderSelectedText = text;
+                };
                 //Initialize the dropdwon menus.
                 $scope.getFunctions();
                 $scope.getBoards();
@@ -697,11 +724,14 @@ angular.module('controllers', [])
                 if (response.info.cellType === 'sentence') {
                     $scope.getSentence(response.info.ID_CSentence);
                 }
-
+                if (response.info.cellType === 'sfolder') {
+                    $scope.getSFolder(response.info.sentenceFolder);
+                }
+                
                 $scope.aceptar = function () {
                     alert($scope.cellType);
                     var url = $scope.baseurl + "Board/editCell";
-                    var postdata = {id: idCell, idPicto: $scope.idPictoEdit, idSentence: $scope.sentenceSelectedId, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1", numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1, numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2, cellType: $scope.cellType};
+                    var postdata = {id: idCell, idPicto: $scope.idPictoEdit, idSentence: $scope.sentenceSelectedId, idSFolder: $scope.sFolderSelectedId, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1", numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1, numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2, cellType: $scope.cellType};
                     if (!$scope.checkboxFuncType) {
                         postdata.idFunct = null;
                     }
@@ -731,9 +761,9 @@ angular.module('controllers', [])
                     if ($scope.cellType !== 'sentence'){
                         postdata.idSentence = null;
                     }
-//                    if ($scope.cellType !== 'history'){
-//                        postdata.idPicto = null;
-//                    }
+                    if ($scope.cellType !== 'sfolder'){
+                        postdata.idSFolder = null;
+                    }
 
 
                     $http.post(url, postdata).success(function ()
