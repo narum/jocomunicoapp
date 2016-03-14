@@ -3159,7 +3159,9 @@ class Mypattern {
                         $auxtupla[0] = $secondaryverbslot->prep;
                         $auxtupla[1] = null;
 
-                        $secondaryverbslot->slotstring[] = $auxtupla;
+                        // la preposició del verb secundari va darrere del verb principal
+                        
+                        $mainverbslot->slotstring[] = $auxtupla;
                     }
                     
                     $auxtupla[0] = $verbconjugat."@VERBUM";
@@ -3200,11 +3202,27 @@ class Mypattern {
                         $verbconjugat = $CI->Lexicon->conjugar($secondaryverbslot->paraulafinal->id, 'infinitiu', $persona2, $numero2, $this->pronominal2);
                         
                         $secondaryverbslot->isInfinitive = true;
+                        
+                        // posem la preposició que va davant del verb secundari, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $secondaryverbslot->slotstring[] = $auxtupla;
+                        }
                     }
                     // si no, aleshores va en subjuntiu (si fos en passat hauria d'anar en passat
                     // de subjuntiu, però el sistema encara no ho té
                     else {
                         $verbconjugat = $CI->Lexicon->conjugar($secondaryverbslot->paraulafinal->id, 'prsubj', $persona2, $numero2, $this->pronominal2);
+                        
+                        // posem la preposició que va darrer del verb principal, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $mainverbslot->slotstring[] = $auxtupla;
+                        }
                         
                         // afegim la partícula QUE després del main verb
                         $auxtupla[0] = "que";
@@ -3212,14 +3230,6 @@ class Mypattern {
                         $mainverbslot->slotstring[] = $auxtupla;
                     }
                     
-                    // posem la preposició que va davant del verb secundari, si n'hi havia
-                    if ($secondaryverbslot->prep != null) {
-                        $auxtupla[0] = $secondaryverbslot->prep;
-                        $auxtupla[1] = null;
-
-                        $secondaryverbslot->slotstring[] = $auxtupla;
-                    }
-
                     $auxtupla[0] = $verbconjugat."@VERBUM";
                     $auxtupla[1] = $secondaryverbslot->paraulafinal;
 
@@ -3246,26 +3256,34 @@ class Mypattern {
                         $verbconjugat = $CI->Lexicon->conjugar($secondaryverbslot->paraulafinal->id, 'infinitiu', $persona2, $numero2, $this->pronominal2);
                         
                         $secondaryverbslot->isInfinitive = true;
+                        
+                        // posem la preposició que va davant del verb secundari, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $secondaryverbslot->slotstring[] = $auxtupla;
+                        }
                     }
                     // si no, aleshores va en subjuntiu (si fos en passat hauria d'anar en passat
                     // de subjuntiu, però el sistema encara no ho té
                     else {
                         $verbconjugat = $CI->Lexicon->conjugar($secondaryverbslot->paraulafinal->id, 'prsubj', $persona2, $numero2, $this->pronominal2);
                         
+                        // posem la preposició que va darrer del verb principal, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $mainverbslot->slotstring[] = $auxtupla;
+                        }
+                        
                         // afegim la partícula QUE després del main verb
                         $auxtupla[0] = "que";
                         $auxtupla[1] = null;
                         $mainverbslot->slotstring[] = $auxtupla;
                     }
-                    
-                    // posem la preposició que va davant del verb secundari, si n'hi havia
-                    if ($secondaryverbslot->prep != null) {
-                        $auxtupla[0] = $secondaryverbslot->prep;
-                        $auxtupla[1] = null;
-
-                        $secondaryverbslot->slotstring[] = $auxtupla;
-                    }
-                    
+                                        
                     $auxtupla[0] = $verbconjugat."@VERBUM";
                     $auxtupla[1] = $secondaryverbslot->paraulafinal;
 
@@ -3406,7 +3424,9 @@ class Mypattern {
                         $auxtupla[0] = $secondaryverbslot->prep;
                         $auxtupla[1] = null;
 
-                        $secondaryverbslot->slotstring[] = $auxtupla;
+                        // la preposició del verb secundari va darrere del verb principal
+                        
+                        $mainverbslot->slotstring[] = $auxtupla;
                     }
                     
                     $auxtupla[0] = $verbconjugat."@VERBUM";
@@ -3447,11 +3467,27 @@ class Mypattern {
                         $verbconjugat = $CI->Lexicon->conjugarES($secondaryverbslot->paraulafinal->id, 'infinitiu', $persona2, $numero2, $this->pronominal2);
                         
                         $secondaryverbslot->isInfinitive = true;
+                        
+                        // posem la preposició que va davant del verb secundari, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $secondaryverbslot->slotstring[] = $auxtupla;
+                        }
                     }
                     // si no, aleshores va en subjuntiu (si fos en passat hauria d'anar en passat
                     // de subjuntiu, però el sistema encara no ho té
                     else {
                         $verbconjugat = $CI->Lexicon->conjugarES($secondaryverbslot->paraulafinal->id, 'prsubj', $persona2, $numero2, $this->pronominal2);
+                        
+                        // posem la preposició que darrere del verb principal, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $mainverbslot->slotstring[] = $auxtupla;
+                        }
                         
                         // afegim la partícula QUE després del main verb
                         $auxtupla[0] = "que";
@@ -3459,14 +3495,6 @@ class Mypattern {
                         $mainverbslot->slotstring[] = $auxtupla;
                     }
                     
-                    // posem la preposició que va davant del verb secundari, si n'hi havia
-                    if ($secondaryverbslot->prep != null) {
-                        $auxtupla[0] = $secondaryverbslot->prep;
-                        $auxtupla[1] = null;
-
-                        $secondaryverbslot->slotstring[] = $auxtupla;
-                    }
-
                     $auxtupla[0] = $verbconjugat."@VERBUM";
                     $auxtupla[1] = $secondaryverbslot->paraulafinal;
 
@@ -3493,26 +3521,34 @@ class Mypattern {
                         $verbconjugat = $CI->Lexicon->conjugarES($secondaryverbslot->paraulafinal->id, 'infinitiu', $persona2, $numero2, $this->pronominal2);
                         
                         $secondaryverbslot->isInfinitive = true;
+                        
+                        // posem la preposició que va davant del verb secundari, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $secondaryverbslot->slotstring[] = $auxtupla;
+                        }
                     }
                     // si no, aleshores va en subjuntiu (si fos en passat hauria d'anar en passat
                     // de subjuntiu, però el sistema encara no ho té
                     else {
                         $verbconjugat = $CI->Lexicon->conjugarES($secondaryverbslot->paraulafinal->id, 'prsubj', $persona2, $numero2, $this->pronominal2);
                         
+                        // posem la preposició que darrere del verb principal, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $mainverbslot->slotstring[] = $auxtupla;
+                        }
+                        
                         // afegim la partícula QUE després del main verb
                         $auxtupla[0] = "que";
                         $auxtupla[1] = null;
                         $mainverbslot->slotstring[] = $auxtupla;
                     }
-                    
-                    // posem la preposició que va davant del verb secundari, si n'hi havia
-                    if ($secondaryverbslot->prep != null) {
-                        $auxtupla[0] = $secondaryverbslot->prep;
-                        $auxtupla[1] = null;
-
-                        $secondaryverbslot->slotstring[] = $auxtupla;
-                    }
-                    
+                                        
                     $auxtupla[0] = $verbconjugat."@VERBUM";
                     $auxtupla[1] = $secondaryverbslot->paraulafinal;
 
