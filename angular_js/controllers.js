@@ -307,10 +307,29 @@ angular.module('controllers', [])
                 });
             };
 
-            $scope.changePrimaryBoard = function ()
+            $scope.changePrimaryBoard = function (value)
             {
-                alert("ieee");
+                var postdata = {id: value.ID_Board, idBoard: value.ID_GBBoard};
+                var url = $scope.baseurl + "Board/changePrimaryBoard";
+
+                $http.post(url, postdata).success(function (response)
+                {
+
+                });
             };
+            
+             $scope.changeAutoReturn = function (autoreturn)
+            {
+                var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
+                var URL = $scope.baseurl + "Board/changeAutoReturn";
+
+                $http.post(URL, postdata).
+                        success(function ()
+                        {
+                            
+                        });
+            };
+            
             $scope.changeNameBoard = function ()
             {
                 var postdata = {Name: $scope.BoardName};
@@ -611,7 +630,7 @@ angular.module('controllers', [])
 
                 }
                 ;
-            }
+            };
         })
 
 

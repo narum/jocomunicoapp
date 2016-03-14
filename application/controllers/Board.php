@@ -620,5 +620,25 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    
+    public function changePrimaryBoard_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+        $idBoard = $request->idBoard;
 
+        $this->BoardInterface->changePrimaryBoard($id, $idBoard);
+    }
+    
+    public function changeAutoReturn_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $value = ($request->value == true ? '1' : '0');
+        $id = $request->id;
+
+        
+        $this->BoardInterface->changeAutoReturn($id, $value);
+    }
+    
+    
 }
