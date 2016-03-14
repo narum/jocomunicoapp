@@ -19,7 +19,8 @@ angular.module('controllers', [])
                             var token = result.data.token;
                             var languageid = result.data.languageid;
                             var languageabbr = result.data.languageabbr;
-                            AuthService.login(token, languageid, languageabbr);
+                            var userid = result.data.userID;
+                            AuthService.login(token, languageid, languageabbr, userid);
                             $location.path('/home');
                         })
                         .catch(function (error) {	// no respuesta
@@ -117,16 +118,16 @@ angular.module('controllers', [])
             txtContent("mainboard").then(function (results) {
                 $rootScope.content = results.data;
             });
-            
+
             $scope.config = function (boardconf)
             {
                 //-----------Iniciacion-----------
                 var url = $scope.baseurl + "Board/loadCFG";
-                var postdata = {idusu: window.localStorage.getItem('languageid'), lusu: window.localStorage.getItem('languageabbr')};
+                var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr')};
 
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
-                
+
                 $scope.idboard = "1";
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
@@ -159,7 +160,7 @@ angular.module('controllers', [])
                  $scope.grid2 = 8;
                  $scope.grid3 = 2;*/
             };
-            
+
             /*
              * Return: array fron 0 to repeatnum
              */
@@ -277,7 +278,7 @@ angular.module('controllers', [])
              */
             $scope.edit = function ()
             {
-                $scope.getAllBoards();
+                $scope.getPrimaryBoard();
                 $scope.inEdit = true;
                 $scope.grid1hide = false;
                 $scope.grid2hide = false;
@@ -297,15 +298,17 @@ angular.module('controllers', [])
                 });
             };
 
-            $scope.getAllBoards = function () {
-                var url = $scope.baseurl + "Board/getAllBoards";
+            $scope.getPrimaryBoard = function () {
+                var url = $scope.baseurl + "Board/getBoards";
+                var postdata = {idboard: $scope.idboard};
 
-                $http.post(url).success(function (response)
+                $http.post(url, postdata).success(function (response)
                 {
                     $scope.allBoards = response.boards;
-                    $scope.primaryBoard = response.boards.primaryBoard;
+                    $scope.primaryBoard = {ID_Board: response.primaryBoard.ID_Board};
                 });
             };
+
 
             $scope.changePrimaryBoard = function (value)
             {
@@ -317,8 +320,8 @@ angular.module('controllers', [])
 
                 });
             };
-            
-             $scope.changeAutoReturn = function (autoreturn)
+
+            $scope.changeAutoReturn = function (autoreturn)
             {
                 var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
                 var URL = $scope.baseurl + "Board/changeAutoReturn";
@@ -326,10 +329,10 @@ angular.module('controllers', [])
                 $http.post(URL, postdata).
                         success(function ()
                         {
-                            
+
                         });
             };
-            
+
             $scope.changeNameBoard = function ()
             {
                 var postdata = {Name: $scope.BoardName};
@@ -643,14 +646,15 @@ angular.module('controllers', [])
             {
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
-                
 
-                //Se ejecutan automaticamente
+
+
                 $scope.getFunctions = function () {
                     var url = $scope.baseurl + "Board/getFunctions";
                     $http.post(url).success(function (response)
                     {
                         $scope.functions = response.functions;
+                        //Inicializa el dropdown menu
                         $scope.funcType = {ID_Function: $scope.Editinfo.ID_CFunction};
                         if ($scope.Editinfo.ID_CFunction !== null) {
                             $scope.checkboxFuncType = true;
@@ -690,11 +694,11 @@ angular.module('controllers', [])
                                 $scope.sentenceResult = response.sentence;
                             });
                 };
-                $scope.selectSentence = function (id, text){
+                $scope.selectSentence = function (id, text) {
                     $scope.sentenceSelectedId = id;
                     $scope.sentenceSelectedText = text;
                 };
-                
+
                 $scope.getSFolder = function (id) {
                     var url = $scope.baseurl + "Board/getSFolder";
                     var postdata = {id: id};
@@ -716,7 +720,7 @@ angular.module('controllers', [])
                                 $scope.sFolderResult = response.sfolder;
                             });
                 };
-                $scope.selectSFolder = function (id, img ,text){
+                $scope.selectSFolder = function (id, img, text) {
                     $scope.sFolderSelectedId = id;
                     $scope.sFolderSelectedImg = img;
                     $scope.sFolderSelectedText = text;
@@ -754,7 +758,7 @@ angular.module('controllers', [])
                 if (response.info.cellType === 'sfolder') {
                     $scope.getSFolder(response.info.sentenceFolder);
                 }
-                
+
                 $scope.aceptar = function () {
                     alert($scope.cellType);
                     var url = $scope.baseurl + "Board/editCell";
@@ -782,13 +786,13 @@ angular.module('controllers', [])
                         postdata.numScanBlockText2 = null;
                         postdata.textInScanBlockText2 = null;
                     }
-                    if ($scope.cellType !== 'picto'){
+                    if ($scope.cellType !== 'picto') {
                         postdata.idPicto = null;
                     }
-                    if ($scope.cellType !== 'sentence'){
+                    if ($scope.cellType !== 'sentence') {
                         postdata.idSentence = null;
                     }
-                    if ($scope.cellType !== 'sfolder'){
+                    if ($scope.cellType !== 'sfolder') {
                         postdata.idSFolder = null;
                     }
 

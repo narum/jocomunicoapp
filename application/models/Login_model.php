@@ -65,7 +65,8 @@ class Login_model extends CI_Model {
         $unencodedArray = [
             'token' => $jwt,
             'languageid' => $languageid,
-            'languageabbr' => $languageabbr
+            'languageabbr' => $languageabbr,
+            'userID' => $output[0]->ID_User
         ];
 
         return $unencodedArray;

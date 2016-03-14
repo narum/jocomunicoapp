@@ -83,12 +83,16 @@ class Board extends REST_Controller {
         $columns = $output[0]->width;
         $rows = $output[0]->height;
         $name = $output[0]->Bname;
+        $primaryBoard = $output[0]->primaryBoard;
+        $autoReturn = $output[0]->autoReturn;
 
 
         $response = [
             'col' => $columns,
             'row' => $rows,
-            'name' => $name
+            'name' => $name,
+            'primaryBoard' => $primaryBoard,
+            'autoReturn' => $autoReturn,
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
@@ -399,23 +403,11 @@ class Board extends REST_Controller {
         
         $board = $this->BoardInterface->getIDGroupBoards($idboard);
         $boards = $this->BoardInterface->getBoards($board[0]->ID_GBBoard);
+        $primaryBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
 
         $response = [
-            'boards' => $boards
-        ];
-        $this->response($response, REST_Controller::HTTP_OK);
-    }
-    
-    /*
-     * Get the user boards in a list to create the dropdown menu
-     */
-
-    public function getAllBoards_post() {
-        
-        $boards = $this->BoardInterface->getAllBoards();
-
-        $response = [
-            'boards' => $boards
+            'boards' => $boards,
+            'primaryBoard' => $primaryBoard[0]
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
@@ -615,10 +607,7 @@ class Board extends REST_Controller {
         $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType);
         $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
         
-        $response = [
-            
-        ];
-        $this->response($response, REST_Controller::HTTP_OK);
+        
     }
     
     public function changePrimaryBoard_post() {
@@ -639,6 +628,5 @@ class Board extends REST_Controller {
         
         $this->BoardInterface->changeAutoReturn($id, $value);
     }
-    
     
 }
