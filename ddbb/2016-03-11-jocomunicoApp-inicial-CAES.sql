@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:8889
--- Temps de generació: 09-03-2016 a les 20:16:53
+-- Temps de generació: 11-03-2016 a les 22:27:10
 -- Versió del servidor: 5.5.42
 -- Versió de PHP: 5.6.10
 
@@ -6537,7 +6537,7 @@ CREATE TABLE `R_S_TempPictograms` (
   `isfem` enum('0','1') COLLATE utf8mb4_unicode_ci DEFAULT '0',
   `coordinated` enum('0','1') COLLATE utf8mb4_unicode_ci DEFAULT '0',
   `ID_RSTPUser` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -6789,25 +6789,6 @@ INSERT INTO `S_Historic` (`ID_SHistoric`, `ID_SHUser`, `sentenceType`, `isNegati
 -- --------------------------------------------------------
 
 --
--- Estructura de la taula `S_PreRec`
---
-
-CREATE TABLE `S_PreRec` (
-  `ID_SPreRec` int(11) NOT NULL,
-  `ID_SPRUser` int(11) DEFAULT NULL,
-  `ID_SPRFolder` int(11) DEFAULT NULL,
-  `posInFolder` int(11) DEFAULT NULL,
-  `sPreRecText` text COLLATE utf8mb4_unicode_ci,
-  `sPreRecDate` date DEFAULT NULL,
-  `sPreRecImg1` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sPreRecImg2` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sPreRecImg3` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sPreRecPath` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de la taula `S_Sentence`
 --
 
@@ -6827,7 +6808,14 @@ CREATE TABLE `S_Sentence` (
   `parseString` text COLLATE utf8mb4_unicode_ci,
   `generatorScore` int(11) DEFAULT NULL,
   `generatorString` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `comments` text COLLATE utf8mb4_unicode_ci
+  `comments` text COLLATE utf8mb4_unicode_ci,
+  `isPreRec` enum('0','1') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `sPreRecText` text COLLATE utf8mb4_unicode_ci,
+  `sPreRecDate` date DEFAULT NULL,
+  `sPreRecImg1` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sPreRecImg2` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sPreRecImg3` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sPreRecPath` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -10503,14 +10491,6 @@ ALTER TABLE `S_Historic`
   ADD KEY `SHUser` (`ID_SHUser`);
 
 --
--- Index de la taula `S_PreRec`
---
-ALTER TABLE `S_PreRec`
-  ADD PRIMARY KEY (`ID_SPreRec`),
-  ADD KEY `SPRUser` (`ID_SPRUser`),
-  ADD KEY `SPRFolder` (`ID_SPRFolder`);
-
---
 -- Index de la taula `S_Sentence`
 --
 ALTER TABLE `S_Sentence`
@@ -10714,7 +10694,7 @@ ALTER TABLE `R_S_SentencePictograms`
 -- AUTO_INCREMENT per la taula `R_S_TempPictograms`
 --
 ALTER TABLE `R_S_TempPictograms`
-  MODIFY `ID_RSTPSentencePicto` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=89;
+  MODIFY `ID_RSTPSentencePicto` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT per la taula `SuperUser`
 --
@@ -10730,11 +10710,6 @@ ALTER TABLE `S_Folder`
 --
 ALTER TABLE `S_Historic`
   MODIFY `ID_SHistoric` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=161;
---
--- AUTO_INCREMENT per la taula `S_PreRec`
---
-ALTER TABLE `S_PreRec`
-  MODIFY `ID_SPreRec` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT per la taula `S_Sentence`
 --
@@ -11015,13 +10990,6 @@ ALTER TABLE `S_Folder`
 --
 ALTER TABLE `S_Historic`
   ADD CONSTRAINT `s_historic_ibfk_1` FOREIGN KEY (`ID_SHUser`) REFERENCES `User` (`ID_User`) ON DELETE CASCADE;
-
---
--- Restriccions per la taula `S_PreRec`
---
-ALTER TABLE `S_PreRec`
-  ADD CONSTRAINT `s_prerec_ibfk_1` FOREIGN KEY (`ID_SPRUser`) REFERENCES `User` (`ID_User`) ON DELETE SET NULL,
-  ADD CONSTRAINT `s_prerec_ibfk_2` FOREIGN KEY (`ID_SPRFolder`) REFERENCES `S_Folder` (`ID_Folder`) ON DELETE SET NULL;
 
 --
 -- Restriccions per la taula `S_Sentence`

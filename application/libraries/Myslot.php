@@ -2433,8 +2433,9 @@ class Myslot {
                                 else if ($tipusfrase == "resposta" && $wordaux->isClass("human")) {
                                     $definite = true;
                                 }
-                                // si hi ha definit un article determinat pel theme l'agafem
-                                else if ($this->art != null) {
+                                // si hi ha definit un article determinat pel theme i la paraula no
+                                // preferia no portar article, l'agafem
+                                else if ($this->art != null && $wordaux->propietats->determinat != 'sense') {
                                     if ($this->art == '1') $definite = true;
                                     else if ($this->art == '0') $indefinite = true;
                                     else $noarticle = true;

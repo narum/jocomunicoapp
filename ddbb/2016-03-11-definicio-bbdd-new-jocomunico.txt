@@ -219,7 +219,7 @@ CREATE TABLE S_Folder (
 	FOREIGN KEY (ID_SFUser) REFERENCES User (ID_User) ON DELETE SET NULL
 ) ENGINE=INNODB;	
 
-
+# (per les PreRec: fem que sempre tingui els mp3 guardats al servidor o que faci servir la cache generar amb els mp3 temporals?)
 CREATE TABLE S_Sentence (
 	ID_SSentence INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	ID_SSUser INT,
@@ -237,6 +237,13 @@ CREATE TABLE S_Sentence (
 	generatorScore INT NULL,
 	generatorString VARCHAR(500) NULL,
 	comments TEXT NULL,
+	isPreRec ENUM('0', '1') DEFAULT '0',
+	sPreRecText TEXT,
+	sPreRecDate DATE,
+	sPreRecImg1 VARCHAR(300),
+	sPreRecImg2 VARCHAR(300),
+	sPreRecImg3 VARCHAR(300),
+	sPreRecPath VARCHAR(300),
 	INDEX SSUser (ID_SSUser),
 	FOREIGN KEY (ID_SSUser) REFERENCES User (ID_User) ON DELETE SET NULL,
 	INDEX SFolder (ID_SFolder),
@@ -258,25 +265,6 @@ CREATE TABLE R_S_SentencePictograms (
 	FOREIGN KEY (pictoid) REFERENCES Pictograms (pictoid) ON DELETE SET NULL,
 	INDEX RSSPUser (ID_RSSPUser),
 	FOREIGN KEY (ID_RSSPUser) REFERENCES User (ID_User) ON DELETE SET NULL
-) ENGINE=INNODB;
-
-
-# (fem que sempre tingui els mp3 guardats al servidor o que faci servir la cache generar amb els mp3 temporals?)
-CREATE TABLE S_PreRec (
-	ID_SPreRec INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	ID_SPRUser INT,
-	ID_SPRFolder INT,
-	posInFolder INT NULL,
-	sPreRecText TEXT,
-	sPreRecDate DATE,
-	sPreRecImg1 VARCHAR(300),
-	sPreRecImg2 VARCHAR(300),
-	sPreRecImg3 VARCHAR(300),
-	sPreRecPath VARCHAR(300),
-	INDEX SPRUser (ID_SPRUser),
-	FOREIGN KEY (ID_SPRUser) REFERENCES User (ID_User) ON DELETE SET NULL,
-	INDEX SPRFolder (ID_SPRFolder),
-	FOREIGN KEY (ID_SPRFolder) REFERENCES S_Folder (ID_Folder) ON DELETE SET NULL
 ) ENGINE=INNODB;
 	
 
