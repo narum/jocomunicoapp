@@ -28,7 +28,6 @@
             <select
                 ng-model="primaryBoard"
                 ng-options="b.Bname for b in allBoards track by b.ID_Board"
-                ng-value="b.ID_Board"
                 ng-change="changePrimaryBoard(primaryBoard.valueOf())">
             </select>
         </div>

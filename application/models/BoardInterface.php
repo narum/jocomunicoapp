@@ -33,7 +33,10 @@ class BoardInterface extends CI_Model {
     function getBoardStruct($id) {
         $output = array();
 
+        $idusu = $this->session->userdata('idusu');
+        $this->db->where('ID_GBUser', $idusu);
         $this->db->where('ID_Board', $id);
+        $this->db->join('GroupBoards', 'GroupBoards.ID_GB = Boards.ID_GBBoard');
         $query = $this->db->get('Boards');
 
         if ($query->num_rows() > 0) {
@@ -149,6 +152,7 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+
     /*
      * 
      */
@@ -157,9 +161,9 @@ class BoardInterface extends CI_Model {
         $output = array();
 
         $data = array('customScanBlock1' => $num1,
-                'customScanBlockText1' => $text1,
-                'customScanBlock2' => $num2,
-                'customScanBlockText2' => $text2);
+            'customScanBlockText1' => $text1,
+            'customScanBlock2' => $num2,
+            'customScanBlockText2' => $text2);
         $this->db->where('ID_RCell', $id);
         $this->db->update('R_BoardCell', $data);
 
@@ -378,11 +382,10 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * 
      */
-
 
     function getSentences($idusu, $idsearch) {
 
@@ -397,11 +400,10 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * 
      */
-
 
     function getSentence($id) {
 
@@ -415,11 +417,10 @@ class BoardInterface extends CI_Model {
 
         return $output[0];
     }
-    
+
     /*
      * 
      */
-
 
     function getSFolders($idusu, $idsearch) {
 
@@ -434,11 +435,10 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * 
      */
-
 
     function getSFolder($id) {
 
@@ -488,6 +488,22 @@ class BoardInterface extends CI_Model {
             $this->db->where('ID_RSTPSentencePicto', $identry);
             $this->db->update('R_S_TempPictograms', $data);
         }
+    }
+
+    /*
+     * ADD MODIFIER TO A NOUN THAT WAS JUST ENTERED
+     */
+
+    function changePrimaryBoard($id, $idboard) {
+        $this->db->where('ID_GBBoard', $idboard);
+        $this->db->update('Boards', array(
+            'primaryBoard' => '0',
+        ));
+        
+        $this->db->where('ID_Board', $id);
+        $this->db->update('Boards', array(
+            'primaryBoard' => '1',
+        ));
     }
 
 }
