@@ -279,12 +279,12 @@ angular.module('controllers', [])
             {
                 $scope.getAllBoards();
                 $scope.inEdit = true;
-                $scope.grid1hide = false;
+                $scope.grid1hide = true;
                 $scope.grid2hide = false;
-                $scope.grid3hide = true;
-                $scope.grid1 = 3;
+                $scope.grid3hide = false;
+                $scope.grid1 = 0;
                 $scope.grid2 = 9;
-                $scope.grid3 = 0;
+                $scope.grid3 = 3;
 
                 var url = $scope.baseurl + "Board/getCellboard";
                 var postdata = {idboard: $scope.idboard};
