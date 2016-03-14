@@ -2447,6 +2447,10 @@ class Myslot {
                                     else $noarticle = true;
                                 }
                             }
+                            // si és un receiver
+                            else if ($this->category == "Receiver") {
+                                $definite = true;
+                            }
                             // en tots els altres slots i casos, mirem les propietats del nom
                             else {
                                 if ($wordaux->propietats->determinat == '1') $definite = true;
@@ -2592,6 +2596,10 @@ class Myslot {
                                     else if ($wordaux->propietats->determinat == '0') $indefinite = true;
                                     else $noarticle = true;
                                 }
+                            }
+                            // si és un receiver
+                            else if ($this->category == "Receiver") {
+                                $definite = true;
                             }
                             // en tots els altres slots i casos, mirem les propietats del nom
                             else {
