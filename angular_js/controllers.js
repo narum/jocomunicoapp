@@ -325,7 +325,6 @@ angular.module('controllers', [])
             {
                 var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
                 var URL = $scope.baseurl + "Board/changeAutoReturn";
-
                 $http.post(URL, postdata).
                         success(function ()
                         {
@@ -434,11 +433,9 @@ angular.module('controllers', [])
 
 
                 if (cell.ID_CPicto !== null) {
-                    alert(cell.ID_CPicto);
                     $scope.addToSentence(cell.ID_CPicto);
                 }
                 if (cell.ID_CFunction !== null) {
-                    alert(cell.ID_CFunction);
                     $scope.clickOnFunction(cell.ID_CFunction);
                 }
                 if (cell.boardLink !== null) {
@@ -456,6 +453,18 @@ angular.module('controllers', [])
                 {
                     $scope.dataTemp = response.data;
                 });
+                
+                var url = $scope.baseurl + "Board/autoReturn";
+                var postdata = {id: $scope.idboard};
+
+                $http.post(url, postdata).success(function (response)
+                {
+                    
+                    if (response.idPrimaryBoard !== null){
+                        alert("he entrado" + response.idPrimaryBoard);
+                        $scope.showBoard(response.idPrimaryBoard);
+                    }
+                });
             };
             /*
              * If you click in a function (not a pictogram) this controller carry you
@@ -472,7 +481,6 @@ angular.module('controllers', [])
                     $scope.tipusfrase = response.tipusfrase;
                     $scope.negativa = response.negativa;
                     if (response.control !== "") {
-                        alert(response.control);
                         var url = $scope.baseurl + "Board/" + response.control;
                         var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
@@ -760,7 +768,6 @@ angular.module('controllers', [])
                 }
 
                 $scope.aceptar = function () {
-                    alert($scope.cellType);
                     var url = $scope.baseurl + "Board/editCell";
                     var postdata = {id: idCell, idPicto: $scope.idPictoEdit, idSentence: $scope.sentenceSelectedId, idSFolder: $scope.sFolderSelectedId, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1", numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1, numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2, cellType: $scope.cellType};
                     if (!$scope.checkboxFuncType) {
@@ -802,7 +809,6 @@ angular.module('controllers', [])
                         $scope.showBoard("0");
                         ngDialog.close();
                     });
-                    //         alert(boardsGroup.ID_Board + "a" + funcType);
                 };
                 $scope.selectPicto = function (id, img) {
                     $scope.idPictoEdit = id;

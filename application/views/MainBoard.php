@@ -60,7 +60,7 @@
                                 <div class="row fullheight" ng-include="'http://localhost/jocomunico/SentenceView.html'">                     
                                 </div>
                             </div>
-                            <div class="container-fluid" ng-init="showBoard()" style="height:{{subgrid2}}%">
+                            <div class="container-fluid" style="height:{{subgrid2}}%">
                                 <div class="row fullheight" >
 
                                     <div class="col-xs-12" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}">

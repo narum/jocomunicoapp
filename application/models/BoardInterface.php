@@ -544,6 +544,18 @@ class BoardInterface extends CI_Model {
             'autoReturn' => $value,
         ));
     }
+    
+    function getAutoReturn($id) {
+        $this->db->where('ID_Board', $id);
+        $this->db->get('Boards');
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output[0];
+    }
    
     
 }
