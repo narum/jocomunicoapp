@@ -1,11 +1,13 @@
 <link rel="stylesheet" type="text/css" href="css/register.css">
+<link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
+<div class="row barraSuperior"></div>
 <div class="container container-table">
     <div class="row vertical-center-row">
         <form class="form form-horizontal" name="registerForm" ng-controller="RegisterCtrl">
             <div class="col-xs-8 col-xs-offset-2 boxRegistreUsuari">
                 <div class="row barraSuperiorRegistre">
-                    <div class="col-xs-4"><p class="nomBarraSuperiorRegistre">{{ content.title }}</p></div>
-                    <div class="col-xs-5 col-xs-offset-3 butonsBarraSuperiorRegistre">
+                    <div class="col-xs-6"><p class="nomBarraSuperiorRegistre">{{ content.title }}</p></div>
+                    <div class="col-xs-6">
                         <button
                             type="button"
                             class="icon-globe btn-idioma"
@@ -19,7 +21,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="form-group {{state.user}} has-feedback">
-                                    <div class="input-group input-group-lg">
+                                    <div class="input-group input-group-auto">
                                         <span class="input-group-addon"><i class="icon-user"></i></span>
                                         <input
                                             type="text"
@@ -47,7 +49,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="form-group {{state.password}} has-feedback">
-                                    <div class="input-group input-group-lg">
+                                    <div class="input-group input-group-auto">
                                         <span class="input-group-addon"><i class="icon-unlock-alt"></i></span>
                                         <input
                                             type="password"
@@ -74,7 +76,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="form-group {{state.confirmPassword}} has-feedback">
-                                    <div class="input-group input-group-lg">
+                                    <div class="input-group input-group-auto">
                                         <span class="input-group-addon"><i class="icon-lock"></i></span>
                                         <input
                                             type="password"
@@ -102,7 +104,7 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <div class="form-group {{state.name}} has-feedback">
-                                    <div class="input-group input-group-lg inputMarginRigth">
+                                    <div class="input-group input-group-auto inputMarginRigth">
                                         <span class="input-group-addon"><i class="icon-tags"></i></span>
                                         <input
                                             type="text"
@@ -124,7 +126,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <div class="form-group {{state.lastname}} has-feedback">
-                                    <div class="input-group input-group-lg inputMarginLeft">
+                                    <div class="input-group input-group-auto inputMarginLeft">
                                         <span class="input-group-addon"><i class="icon-tags"></i></span>
                                         <input
                                             type="text"
@@ -148,12 +150,12 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="form-group {{state.email}} has-feedback">
-                                    <div class="input-group input-group-lg">
+                                    <div class="input-group input-group-auto">
                                         <span class="input-group-addon"><i class="icon-envelope"></i></span>
                                         <input
                                             type="text"
                                             class="form-control"
-                                            placeholder="{{ content.email }}"
+                                            placeholder="{{ content.mail }}"
                                             name="email"
                                             required="string"
                                             ng-model="formData.email"
@@ -176,7 +178,7 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <div class="form-group {{state.languageSelected}} has-feedback">
-                                    <div class="input-group input-group-lg inputMarginRigth">
+                                    <div class="input-group input-group-auto inputMarginRigth">
                                         <span class="input-group-addon"><i class="icon-comments"></i></span>
                                         <select
                                             class="form-control"
@@ -209,13 +211,23 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-2">
-                <div class="row"><br><br><br><br><br><br><br><br><br>
-                    <div id="divID" ng-init="imgsrc='/img/BotoCrearUsuari.png'" ng-mouseover="imgsrc='/img/BotoCrearUsuari2.png'" ng-mouseout="imgsrc='/img/BotoCrearUsuari.png'">
-                    <input type="image" class="img img-rounded" alt="Responsive image" ng-src="{{imgsrc}}" ng-click="submitForm(formData)">
+            <div class="col-xs-2 boxButo">
+                <div class="buto">
+                    <div class="col-xs-2 triangle">
+                        <image class="imgTriangle" alt="Responsive image" src="/img/fletxaLogin2.png" />
+                    </div>
+                    <div class="col-xs-10">
+                        <div id="divID" ng-init="imgsrc='/img/BotoCrea.png'" ng-mouseover="imgsrc='/img/BotoCrea2.png'" ng-mouseout="imgsrc='/img/BotoCrea.png'">
+                            <input type="image" class="img img-rounded" alt="Responsive image" ng-src="{{imgsrc}}" ng-click="submitForm(formData)">
+                        </div>
                     </div>
                 </div>
             </div>
+<!--                <div class="row"><br><br><br><br><br><br><br><br><br>
+                    <div id="divID" ng-init="imgsrc='/img/BotoCrea.png'" ng-mouseover="imgsrc='/img/BotoCrea2.png'" ng-mouseout="imgsrc='/img/BotoCrea.png'">
+                    <input type="image" class="img img-rounded" alt="Responsive image" ng-src="{{imgsrc}}" ng-click="submitForm(formData)">
+                    </div>
+                </div>-->
         </form>
     </div>
 </div>

@@ -11,21 +11,24 @@ angular.module('controllers', [])
             user: $scope.username,
             pass: $scope.password
         };
-        
-        // Petición del login
-        loginResource.save(body).$promise  // POST (en angular 'save') del user y pass
-            .then(function(result){				// respuesta ok!
-                var token = result.data.token;
-                var languageid = result.data.languageid;
-                var languageabbr = result.data.languageabbr;
-                var userid = result.data.userID;
-                AuthService.login(token, languageid, languageabbr, userid);
-                $location.path('/userConfig');
+    // Petición del login
+    loginResource.save(body).$promise  // POST (en angular 'save') del user y pass
+        .then(function(result){				// respuesta ok!
+            var token = result.data.token;
+            var languageid = result.data.languageid;
+            var languageabbr = result.data.languageabbr;
+            var userid = result.data.userID;
+            AuthService.login(token, languageid, languageabbr, userid);
+            $location.path('/userConfig');
         })
-            .catch(function(error){	// no respuesta
-                alert('Nombre de usuario o contraseña erroneo');
-                console.log(error);
+        .catch(function(error){	// no respuesta
+            $scope.state = 'has-error';
+            console.log(error);
         });
+    };
+    // Cambiar estados del formulario
+    $scope.changeFormSate=function(){
+            $scope.state = '';
     };
 })
 

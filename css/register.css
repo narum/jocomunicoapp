@@ -1,13 +1,11 @@
-
 html, body, .container-table {
     height: 100%;
-    /*background: #f2f2f2;*/
+    height: 100vh;
     background: url("/img/FonsRegistre.png") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    
 }
 /*Per centrar el div del boxRegistreUsuari*/
 .container-table {
@@ -19,166 +17,81 @@ html, body, .container-table {
     vertical-align: middle;
 }
 
-/*propietats del box central*/
-.boxRegistreUsuari{
-    /*background: #ffcc99;*/
-    background-image: url("/img/FonsTaronja.png");
-    border-radius: 10px;
+.barraSuperior{
+    background-image: url("/img/fonsBarraSuperior.png");
     
+    height: 6vh;
+    width: 110vw;
+    
+    position: fixed;
+    z-index:1;
+}
+
+/*Form properties*/
+.boxRegistreUsuari{
+    background-image: url("/img/Patterns1-08.png");
+    border-radius: 15px;
 }
 .barraSuperiorRegistre{
     /*background: #333333;*/
-    background-image: url("/img/BarraMenuSuperior.png");
-    color:white;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    height: 45px;
+    background-image: url("/img/fonsBarraSuperior.png");
+    height: 6vh;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 .nomBarraSuperiorRegistre{
-    font-size: x-large;
-    margin-bottom: 3px;
-    margin-top: 5px;
+    color:white;
+    margin-top: 1vh;
+    margin-left: 1vw;
 }
 .btn-idioma {
     color: white;
     background-color: #333333;
     border-color: #333333;
-    font-size: large;
     
-    height: 40px;
-    width: 120px;
-    margin-top: 2px;
+    height: 5vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    margin-top: 0.5vh;
     border-radius: 5px;
 }
 .btn-idioma:hover{
     background-color: black;
     border-color: black;
     margin-left: 1px;
-    margin-top: 3px;
+    margin-top: 0.6vh;
 }
 
-.butonsBarraSuperiorRegistre{
-}
 .butoSortirBarraSuperiorRegistre{
-    font-size: large;
-    margin-top: 10px;
+    margin-top: 1.3vh;
     color: white;
 }
+.butoSortirBarraSuperiorRegistre:hover{
+    text-decoration: none;
+    color:black;
+}
 .boxFormulariRegistreUsuari{
-    margin-top: 30px;
-    margin-bottom: 20px;
+    margin-bottom: 4vh;
 }
 .inputMarginLeft{
-    margin-left: 5px;
+    margin-left: 0.5vw;
 }
 .inputMarginRigth{
-    margin-right: 5px;
+    margin-right: 0.5vw;
 }
 
-.form-group {
-  margin-bottom: 30px;
-}
 
-/*Comentario de error en una capa superior para no desplazar el contenido*/
-.errorcoment{
-    color:#cc0000; /*dark red*/
-    font-weight: bold;
-    font-size: 130%;
-    position: fixed;
-    z-index:1;
-}
-/*color del icono de estado, texto y el borde del input box en error*/
-.error,
-.has-error .form-control-feedback {
-    color:red;
-}
-.has-error .form-control{
-    color:red;
-    border: 3px solid red;
-    border-left: none;
-}
-/*color del borde cuando esta seleccionado el input box en error*/
-.has-error .form-control:focus{
-    border-color:#dc143c;
-}
-/*color del borde, fondo e icono del input box en error*/
-.has-error .input-group-addon{
-    background-color: #99ccdd; /*azul turquesa*/
-    border: 3px solid red;
-    border-right: none;
-    color:#8b0000; /*dark red*/
-}
-
-/*Comentario de warning en una capa superior para no desplazar el contenido*/
-.warningcoment{
-    color:#cc0000; /*dark red*/
-    font-weight: bold;
-    font-size: 130%;
-    position: fixed;
-    z-index:2;
-}
-/*color del icono de estado, texto y el borde del input box en warning*/
-.warning,
-.has-warning .form-control-feedback {
-    color:orange;
-}
-.has-warning .form-control{
-    color:orange;
-    border: 3px solid red;
-    border-left: none;
-}
-/*color del borde cuando esta seleccionado el input box en warning*/
-.has-warning .form-control:focus{
-    border-color:#dc143c;
-}
-/*color del borde, fondo e icono del input box en warning*/
-.has-warning .input-group-addon {
-    background-color: #99ccdd;/*azul turquesa*/
-    border: 3px solid red;
-    border-right: none;
-    color:#EE7600; /*dark orange*/
-}
-/*color del icono de estado, texto y el borde del input box en warning*/
-.success,
-.has-success .form-control-feedback {
-    color:green;
-}
-.has-success .form-control{
-    color:green;
-    border: 3px solid green;
-    border-left: none;
-}
-/*color del borde, fondo e icono del input box en success*/
-.has-success .input-group-addon{
-    background-color: #99ccdd;/*azul turquesa*/
-    border: 3px solid green;
-    border-right: none;
-    color:#006400; /*dark green*/
-}
-/*color de fondo de los iconos de los input box en reposo*/
-.input-group-addon{
-    background-color: #99ccdd;/*azul turquesa*/
-}
-
-/*Listado de idiomas fondo blanco y sin margenes*/
-.form-control.llistaIdiomesFormulariRegistre[disabled] {
-    background-color:white;
-    opacity: 1;
-    color:green;
-}
-
+/*Languages list*/
 .llistaIdiomesFormulariRegistre{
     padding: 0px;
-}
-.llistaIdiomesFormulariRegistre .icona{
-    vertical-align: middle;
+    margin-top: 3vh;
 }
 .llistaIdiomesFormulariRegistre .llenguatge{
     text-align: center;
     padding: 0px;
 }
 .llistaIdiomesFormulariRegistre .taula{
-    /*font-size: small;*/
+    font-size: 2vh;
     margin: 0px;
     background-color: white;
 }
@@ -194,15 +107,36 @@ html, body, .container-table {
 }
 .btn-borrar{
     color: white;
-    padding-rigth: 15px;
+    cursor: pointer;
+}
+.btn-borrar:hover{
+    color: black;
+    text-decoration: none;
 }
 
+/*Triangle div and submit button*/
+.boxButo{
+    padding: 0px;
+    height: 60vh;
+    background-color: none;
+}
+.buto{
+    margin-top: 19.5vh;
+}
+.triangle{
+    padding: 0px;
+}
+.imgTriangle{
+    height: 18.9vh;
+    width: auto;
+}
+
+/*Submit button*/
 .img-rounded{
-    height: 20vh;
+    height: 21vh;
     width: auto;
     border-radius: 10px;
     border:none;
-    margin-left: 10vh;
+    margin-left: 1vh;
     cursor: pointer;
 }
-

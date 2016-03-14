@@ -1,4 +1,5 @@
 <link rel="stylesheet" type="text/css" href="css/login.css">
+<link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
 <div class="row barraSuperior"></div>
 <div class="container container-table">
     <div class="row vertical-center-row">
@@ -12,25 +13,23 @@
                 <div class="row">
                     <div class="col-xs-8 col-xs-offset-2">
                         <div class="row margeSuperiorUser">
-                            <div class="form-group {{state.user}} has-feedback">
+                            <div class="form-group {{state}} has-feedback">
                                 <div class="input-group input-group-auto">
                                     <span class="input-group-addon"><i class="icon-user"></i></span>
-                                    <input class="form-control" type="text" name="user" placeholder="Usuari" ng-model="username" required>
+                                    <input class="form-control" type="text" name="user" placeholder="Usuari" ng-change="changeFormSate('user')" ng-model="username" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group {{state.user}} has-feedback">
+                            <div class="form-group {{state}} has-feedback">
                                 <div class="input-group input-group-auto">
                                     <span class="input-group-addon"><i class="icon-unlock-alt"></i></span>
-                                    <input class="form-control" type="password" name="pass" placeholder="Contrasenya" ng-model="password" required>
+                                    <input class="form-control" type="password" name="pass" placeholder="Contrasenya" ng-change="changeFormSate('pass')" ng-model="password" required/>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xs-2">
-                        <div class="triangle">
-                            <image class="imgTriangle" alt="Responsive image" src="/img/fletxaLogin.png" >
+                        <div class="row comentariError">
+                            <span class="errorcoment" ng-show="state=='has-error'">Usuari o contrasenya incorrecte!</span>
                         </div>
                     </div>
                     <div class="row">
@@ -44,12 +43,15 @@
                 </div>
             </div>
             <div class="col-xs-2 boxButo">
-                <!--<img class="img img-fletxa" alt="Responsive image" ng-src="/img/fletxaLogin.png">-->
                 <div class="buto">
-                    <div id="divID" ng-init="imgsrc='/img/BotoCrearUsuari.png'" ng-mouseover="imgsrc='/img/BotoCrearUsuari2.png'" ng-mouseout="imgsrc='/img/BotoCrearUsuari.png'">
-                    <input type="image" class="img img-rounded" alt="Responsive image" ng-src="{{imgsrc}}" ng-click="login()">
+                    <div class="col-xs-2 triangle">
+                        <image class="imgTriangle" alt="Responsive image" src="/img/fletxaLogin2.png" />
                     </div>
-                    <!--<button type="submit" name="login" class="login loginmodal-submit">Accés</button>-->
+                    <div class="col-xs-10">
+                        <div id="divID" ng-init="imgsrc='/img/BotoEntra.png'" ng-mouseover="imgsrc='/img/BotoEntra2.png'" ng-mouseout="imgsrc='/img/BotoEntra.png'">
+                            <input type="image" class="img img-rounded" alt="Responsive image" ng-src="{{imgsrc}}" ng-click="login()">
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
