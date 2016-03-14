@@ -1,96 +1,263 @@
-@import url(http://fonts.googleapis.com/css?family=Roboto);
-
-/****** LOGIN MODAL ******/
-.loginmodal-container {
-  padding: 30px;
-  max-width: 350px;
-  width: 100% !important;
-  background-color: #F7F7F7;
-  margin: 0 auto;
-  border-radius: 2px;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  font-family: roboto;
+html, body, .container-table {
+    height: 100%;
+    height: 100vh;
+    background: url("/img/FonsRegistre.png") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    position: relative;
+    z-index:1;
+}
+/*Per centrar el div central*/
+.container-table {
+    display: table;
+    background: none;
+}
+.vertical-center-row {
+    display: table-cell;
+    vertical-align: middle;
 }
 
-.loginmodal-container h1 {
-  text-align: center;
-  font-size: 1.8em;
-  font-family: roboto;
+.barraSuperior{
+    background-image: url("/img/fonsBarraSuperior.png");
+    
+    height: 6vh;
+    width: 110vw;
+    
+    position: fixed;
+    z-index:1;
 }
 
-.loginmodal-container button {
-  width: 100%;
-  display: block;
-  margin-bottom: 10px;
-  position: relative;
+.boxLogin{
+    background-image: url("/img/FonsTaronja.png");
+    height: 35vh;
+    border-radius: 15px;
+}
+.barraBoxLogin{
+    background-image: url("/img/fonsBarraSuperior.png");
+    height: 6vh;
+    
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.textResponsiveBarra{
+    font-size: 3vh;
+    color: white;
+    margin-top: 1vh;
+    margin-left: 1vw;
+}
+.imatgeClau{
+    height: 5vh;
+    width: auto;
+}
+.margeSuperiorUser{
+    padding-top: 3vh;
 }
 
-.loginmodal-container input[type=text], input[type=password]{
-  height: 44px;
-  font-size: 16px;
-  width: 100%;
-  margin-bottom: 10px;
-  -webkit-appearance: none;
-  background: #fff;
-  border: 1px solid #d9d9d9;
-  border-top: 1px solid #c0c0c0;
-  /* border-radius: 2px; */
-  padding: 0 8px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
+.recuperacioContrasenya{
+    font-size: 3vh;
+    font-weight: bold;
+    padding-top: 2vh;
+}
+.recuperacioContrasenya a {
+    color: #3d98b8; /* turquesa oscuro*/
+    text-decoration: none;
+}
+.recuperacioContrasenya a:hover,
+.recuperacioContrasenya a:focus {
+  color: #333333; /* gris*/
 }
 
-.loginmodal-container input[type=text]:hover, input[type=password]:hover {
-  border: 1px solid #b9b9b9;
-  border-top: 1px solid #a0a0a0;
-  -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-  -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+
+.butoRegistret{
+    background: none;
+    font-size: 3vh;
+    
+    padding: 0px;
+    padding-top: 2vh;
+    padding-bottom:1vh;
+    border:0px;
+    margin:0px;
+}
+.butoRegistret a {
+    padding-top:1vh;
+    padding-bottom: 1vh;
+    padding-left: 2vw;
+    padding-right: 3vw;
+    margin:0px;
+    
+    color: #333333; /* gris*/
+    background-color: #99ccdd;  /*azul turquesa*/
+    border-left:2px solid #3d98b8;/*azul turquesa Oscuro*/
+    border-bottom:2px solid #3d98b8;/*azul turquesa Oscuro*/
+    
+    height: 40px;
+    width: 120px;
+    margin-top: 2px;
+}
+.butoRegistret a:hover,
+.butoRegistret a:focus {
+    background-color: #99ccdd;
+    border:none;
+    margin-left: 1px;
+    margin-top: 3px;
+    text-decoration:none;
+    
 }
 
-.loginmodal {
-  text-align: center;
-  font-size: 14px;
-  font-family: 'Arial', sans-serif;
-  font-weight: 700;
-  height: 36px;
-  padding: 0 8px;
-/* border-radius: 3px; */
-/* -webkit-user-select: none;
-  user-select: none; */
+.boxButo{
+    height: 35vh;
+    background-color: none;
+}
+.buto{
+    margin-top: 8vh;
+}
+.img-rounded{
+    height: 21vh;
+    width: auto;
+    border-radius: 10px;
+    border:none;
+    margin-left: 5vh;
+    cursor: pointer;
 }
 
-.loginmodal-submit {
-  /* border: 1px solid #3079ed; */
-  border: 0px;
-  color: #fff;
-  text-shadow: 0 1px rgba(0,0,0,0.1); 
-  background-color: #4d90fe;
-  padding: 17px 0px;
-  font-family: roboto;
-  font-size: 14px;
-  /* background-image: -webkit-gradient(linear, 0 0, 0 100%,   from(#4d90fe), to(#4787ed)); */
+
+.triangle {
+    position: relative;
+    z-index: -1;
+}
+.imgTriangle{
+    height: 18.5vh;
+    width: auto;
+    position: relative;
+    z-index: -1;
 }
 
-.loginmodal-submit:hover {
-  /* border: 1px solid #2f5bb7; */
-  border: 0px;
-  text-shadow: 0 1px rgba(0,0,0,0.3);
-  background-color: #357ae8;
-  /* background-image: -webkit-gradient(linear, 0 0, 0 100%,   from(#4d90fe), to(#357ae8)); */
+
+
+
+
+
+
+/*Input box borders and text colors from box state*/
+.errorcoment{/*Comentario de error en una capa superior para no desplazar el contenido*/
+    color:#cc0000; /*dark red*/
+    font-weight: bold;
+    font-size: 130%;
+    position: fixed;
+    z-index:1;
+}
+.error,/*color del icono de estado, texto y el borde del input box en error*/
+.has-error .form-control-feedback {
+    color:red;
+}
+.has-error .form-control{
+    color:red;
+    border: 3px solid red;
+    border-left: none;
+}
+.has-error .form-control:focus{/*color del borde cuando esta seleccionado el input box en error*/
+    border-color:#dc143c;
+}
+.has-error .input-group-addon{/*color del borde, fondo e icono del input box en error*/
+    background-color: #99ccdd; /*azul turquesa*/
+    border: 3px solid red;
+    border-right: none;
+    color:#8b0000; /*dark red*/
+}
+.warningcoment{/*Comentario de warning en una capa superior para no desplazar el contenido*/
+    color:#cc0000; /*dark red*/
+    font-weight: bold;
+    font-size: 130%;
+    position: fixed;
+    z-index:2;
+}
+.warning,
+.has-warning .form-control-feedback {/*color del icono de estado, texto y el borde del input box en warning*/
+    color:orange;
+}
+.has-warning .form-control{
+    color:orange;
+    border: 3px solid red;
+    border-left: none;
+}
+.has-warning .form-control:focus{/*color del borde cuando esta seleccionado el input box en warning*/
+    border-color:#dc143c;
+}
+.has-warning .input-group-addon {/*color del borde, fondo e icono del input box en warning*/
+    background-color: #99ccdd;/*azul turquesa*/
+    border: 3px solid red;
+    border-right: none;
+    color:#EE7600; /*dark orange*/
+}
+.success,
+.has-success .form-control-feedback {/*color del icono de estado, texto y el borde del input box en warning*/
+    color:green;
+}
+.has-success .form-control{
+    color:green;
+    border: 3px solid green;
+    border-left: none;
+}
+.has-success .input-group-addon{/*color del borde, fondo e icono del input box en success*/
+    background-color: #99ccdd;/*azul turquesa*/
+    border: 3px solid green;
+    border-right: none;
+    color:#006400; /*dark green*/
+}
+.input-group-addon{/*color de fondo de los iconos de los input box en reposo*/
+    background-color: #99ccdd;/*azul turquesa*/
 }
 
-.loginmodal-container a {
-  text-decoration: none;
-  color: #666;
-  font-weight: 400;
-  text-align: center;
-  display: inline-block;
-  opacity: 0.6;
-  transition: opacity ease 0.5s;
-} 
 
-.login-help{
-  font-size: 12px;
+
+
+
+
+
+/* Automatic resize Input Type from viewheight */
+input[type="date"].input-auto,
+input[type="time"].input-auto,
+input[type="datetime-local"].input-auto,
+input[type="month"].input-auto,
+.input-group-auto input[type="date"],
+.input-group-auto input[type="time"],
+.input-group-auto input[type="datetime-local"],
+.input-group-auto input[type="month"] {
+    line-height: 5vh;
+}
+.input-auto + .form-control-feedback,
+.input-group-auto + .form-control-feedback,
+.form-group-auto .form-control + .form-control-feedback {
+    width: 5vh;
+    height: 5vh;
+    line-height: 5vh;
+}
+.input-group-auto > .form-control,
+.input-group-auto > .input-group-addon,
+.input-group-auto > .input-group-btn > .btn {
+    height: 5vh;
+    padding: 0vh 1vw;
+    font-size: 3vh;
+    line-height: 1.3333333;
+    /*border-radius: 6px;*/
+}
+select.input-group-auto > .form-control,
+select.input-group-auto > .input-group-addon,
+select.input-group-auto > .input-group-btn > .btn {
+    height: 5vh;
+    line-height: 5vh;
+}
+textarea.input-group-auto > .form-control,
+textarea.input-group-auto > .input-group-addon,
+textarea.input-group-auto > .input-group-btn > .btn,
+select[multiple].input-group-auto > .form-control,
+select[multiple].input-group-auto > .input-group-addon,
+select[multiple].input-group-auto > .input-group-btn > .btn {
+    height: auto;
+}
+.form-group {
+    margin-bottom: 1.5vh;
+    margin-top: 1.5vh;
 }

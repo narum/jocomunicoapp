@@ -18,7 +18,8 @@ angular.module('controllers', [])
                 var token = result.data.token;
                 var languageid = result.data.languageid;
                 var languageabbr = result.data.languageabbr;
-                AuthService.login(token, languageid, languageabbr);
+                var userid = result.data.userID;
+                AuthService.login(token, languageid, languageabbr, userid);
                 $location.path('/userConfig');
         })
             .catch(function(error){	// no respuesta

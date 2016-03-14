@@ -2,13 +2,12 @@
 html, body, .container-table {
     height: 100%;
     /*background: #f2f2f2;*/
-    background: url("http://localhost:83/img/FonsRegistre.png") no-repeat center center fixed;
+    background: url("/img/FonsRegistre.png") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
     
-    overflow-y:hidden;
 }
 /*Per centrar el div del boxRegistreUsuari*/
 .container-table {
@@ -23,13 +22,13 @@ html, body, .container-table {
 /*propietats del box central*/
 .boxRegistreUsuari{
     /*background: #ffcc99;*/
-    background-image: url("http://localhost:83/img/FonsTaronja.png");
+    background-image: url("/img/FonsTaronja.png");
     border-radius: 10px;
     
 }
 .barraSuperiorRegistre{
     /*background: #333333;*/
-    background-image: url("http://localhost:83/img/BarraMenuSuperior.png");
+    background-image: url("/img/BarraMenuSuperior.png");
     color:white;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -204,5 +203,6 @@ html, body, .container-table {
     border-radius: 10px;
     border:none;
     margin-left: 10vh;
+    cursor: pointer;
 }
 

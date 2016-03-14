@@ -61,11 +61,15 @@ class Login_model extends CI_Model {
         $languageid = array_column($query2, 'cfgDefLanguage');
         $languageabbr = array_column($query2, 'languageabbr');
 
+        //Cojemos el id de usuario y superusuario
+
+
         // Guardamos los datos como objeto
         $unencodedArray = [
             'token' => $jwt,
             'languageid' => $languageid,
-            'languageabbr' => $languageabbr
+            'languageabbr' => $languageabbr,
+            'userID' => $output[0]->ID_User
         ];
 
         return $unencodedArray;
