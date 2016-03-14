@@ -2395,7 +2395,8 @@ class Mypattern {
                 else $this->perssubj1 = 3;
             }
             // si el subjecte és una paraula
-            else {
+            // si hi ha una partícula de pregunta al subjecte, no ha d'agafar-ne les propietats
+            else if($slotsubj1->paraulafinal->tipus != "questpart") {
                 $subj1 = $slotsubj1->paraulafinal;
                 
                 // si és un pronom personal
@@ -2648,7 +2649,8 @@ class Mypattern {
                 else $this->perssubj1 = 3;
             }
             // si el subjecte és una paraula
-            else {
+            // si hi ha una partícula de pregunta al subjecte, no ha d'agafar-ne les propietats
+            else if($slotsubj1->paraulafinal->tipus != "questpart") {
                 $subj1 = $slotsubj1->paraulafinal;
                 
                 // si és un pronom personal
