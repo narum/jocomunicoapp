@@ -1,16 +1,16 @@
 @charset "UTF-8";
 /* CSS Document */
-
+.marginTop{
+    height:1%;
+}
 .title1{ 
     background-color: #fff;
     height: 8%;
-    margin-top: 2%;
     padding-right: 2%;
 }
 .title2{ 
     background-color: #fff;
     height: 16%;
-    margin-top: 1%;
 }
 .content1{ 
     background-color: #fddfad;
@@ -21,7 +21,6 @@
 .content1-5{ 
     background-color: #fddfad;
     height: 12%;
-    padding-top: 5%;
 }
 .content2{ 
     background-color: #fddfad;
@@ -33,15 +32,15 @@
 }
 .content4{ 
     height: 30%;
-    margin-top: 4%;
+
 }
 .saveEdit{
     margin-left: 8%;
     border-radius: 150px;
 }
 .marginEditcell{
-  margin-left: 2.5%; 
-  width: 39%;
+    margin-left: 2.5%; 
+    width: 39%;
 }
 
 .titleTextTypus{
@@ -74,7 +73,7 @@
 }
 .checkboxEdit{
     float: right;
-    
+
 }
 .cellEditSearch{
     width: 75%;
@@ -87,6 +86,36 @@
 .imgRounded{
     border-radius: 6px;
 }
+.cruz{
+    background-color: #151515;
+    height: 100%;
+    float: right;
+    width: 5%;
+    border-top-right-radius: 10px;
+}
+.editTitle{
+    position: relative;
+    color: #fff;
+    height: 75%;
+    float: left;
+    top: 50%;
+    transform:translate(0%,-50%);
+    margin-left: 2em;
+    font-weight: bold;
+}
+.topBar{
+    background-color: #3d3d3d;
+    height: 7%;
+    width: 105%;
+    margin: -1em 1em 1em -1em;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.ngdialog-close{
+    top: -5px !important;
+}
+
 #sentenceSearchContent{
     position:relative;
     top:0px;

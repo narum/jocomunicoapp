@@ -743,7 +743,7 @@ angular.module('controllers', [])
                 $scope.textInScanBlockText2 = $scope.Editinfo.customScanBlockText2;
                 $scope.idPictoEdit = response.info.ID_CPicto;
                 $scope.imgPictoEdit = $scope.Editinfo.imgPicto;
-                //MODIF:hay dos campos
+
                 if ($scope.Editinfo.textInCell !== null) {
                     $scope.checkboxTextInCell = true;
                     $scope.textInCell = $scope.Editinfo.textInCell;

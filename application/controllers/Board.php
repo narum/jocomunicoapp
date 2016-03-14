@@ -105,34 +105,35 @@ class Board extends REST_Controller {
 
         $array = array();
 
-        //MODIF: hacer seguridad por si intenta coger la board de otro usuario
         $output = $this->BoardInterface->getBoardStruct($idboard);
-        $columns = $output[0]->width;
-        $rows = $output[0]->height;
+        if ($output != null) {
+            $columns = $output[0]->width;
+            $rows = $output[0]->height;
 
-        $array = $this->BoardInterface->getCellsBoard($idboard);
+            $array = $this->BoardInterface->getCellsBoard($idboard);
 
 
-        $response = [
-            'col' => $columns,
-            'row' => $rows,
-            'data' => $array
-        ];
+            $response = [
+                'col' => $columns,
+                'row' => $rows,
+                'data' => $array
+            ];
 
-        $this->response($response, REST_Controller::HTTP_OK);
+            $this->response($response, REST_Controller::HTTP_OK);
+        }
     }
-    
-    
+
     public function modifyNameboard_post() {
         $this->BoardInterface->initTrans();
 
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $Name = $request->Name;
-        
+
         $this->BoardInterface->updateName($Name, 1);
         $this->BoardInterface->commitTrans();
     }
+
     /*
      * Estos van en otro controlador que seria el de edicion, pero aun no estan hechos
      */
@@ -156,7 +157,6 @@ class Board extends REST_Controller {
 //        $columns = $output[0]->width + $c;
 //        $rows = $output[0]->height + $r;
 //        $this->BoardInterface->updateNumCR($columns, $rows, 1);
-        //MODIF: cuando pasemos el total se cambia lo de arriba por:
 
         $output = $this->BoardInterface->getBoardStruct($idboard);
         $this->BoardInterface->updateNumCR($c, $r, $idboard);
@@ -391,7 +391,7 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     /*
      * Get the user boards in a list to create the dropdown menu
      */
@@ -400,7 +400,7 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $idboard = $request->idboard;
-        
+
         $board = $this->BoardInterface->getIDGroupBoards($idboard);
         $boards = $this->BoardInterface->getBoards($board[0]->ID_GBBoard);
         $primaryBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
@@ -465,8 +465,7 @@ class Board extends REST_Controller {
         $id = $request->id;
         $pos = $request->pos;
         $idboard = $request->idboard;
-        //$boardid = $request->boardid;
-        //MODIF: 1 es la board
+        
         $cell = $this->BoardInterface->getIDCell($pos, $idboard);
         $this->BoardInterface->updateDataCell($id, $cell[0]->ID_RCell);
 
@@ -523,7 +522,7 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     /*
      * 
      */
@@ -541,7 +540,7 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     public function getSentence_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -554,7 +553,7 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     /*
      * 
      */
@@ -572,7 +571,7 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     public function getSFolder_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -585,7 +584,7 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     public function editCell_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -593,7 +592,7 @@ class Board extends REST_Controller {
         $boardLink = $request->boardLink;
         $idFunct = $request->idFunct;
         $textInCell = $request->textInCell;
-        $visible = $request->visible; 
+        $visible = $request->visible;
         $isFixed = $request->isFixed;
         $idPicto = $request->idPicto;
         $idSentence = $request->idSentence;
@@ -606,10 +605,8 @@ class Board extends REST_Controller {
 
         $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType);
         $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
-        
-        
     }
-    
+
     public function changePrimaryBoard_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -618,37 +615,36 @@ class Board extends REST_Controller {
 
         $this->BoardInterface->changePrimaryBoard($id, $idBoard);
     }
-    
+
     public function changeAutoReturn_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $value = ($request->value == true ? '1' : '0');
         $id = $request->id;
 
-        
+
         $this->BoardInterface->changeAutoReturn($id, $value);
     }
-    
+
     public function autoReturn_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
 
-        
+
         $board = $this->BoardInterface->getBoardStruct($id);
-        
+
         $idPrimaryBoard = null;
-        
-        if($board[0]->autoReturn === "1"){
-             $primaryBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
-             $idPrimaryBoard = $primaryBoard[0]->ID_Board;
+
+        if ($board[0]->autoReturn === "1") {
+            $primaryBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
+            $idPrimaryBoard = $primaryBoard[0]->ID_Board;
         }
-        
+
         $response = [
             'idPrimaryBoard' => $idPrimaryBoard
         ];
         $this->response($response, REST_Controller::HTTP_OK);
-        
     }
-    
+
 }

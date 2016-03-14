@@ -67,8 +67,8 @@
 }
 .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-primary,
 .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-primary {
-  color: #fff;
-  background: #337ab7;
+  color: #3d3d3d;
+  background: #f7a35d;
 }
 .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-info,
 .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-info {
@@ -93,7 +93,7 @@
 .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-default,
 .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-default {
   color: #000;
-  background: #eeeeee;
+  background: #cbcbcb;
 }
 .bootstrap-switch .bootstrap-switch-label {
   text-align: center;
@@ -101,7 +101,7 @@
   margin-bottom: -1px;
   z-index: 100;
   color: #333333;
-  background: #ffffff;
+  background: #3d3d3d;
 }
 .bootstrap-switch .bootstrap-switch-handle-on {
   border-bottom-left-radius: 3px;
