@@ -520,4 +520,12 @@ class BoardInterface extends CI_Model {
         ));
     }
 
+    function changeAutoReturn($id, $value) {
+        $this->db->where('ID_Board', $id);
+        $this->db->update('Boards', array(
+            'autoReturn' => $value,
+        ));
+    }
+   
+    
 }

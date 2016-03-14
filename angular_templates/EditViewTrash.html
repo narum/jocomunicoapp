@@ -32,7 +32,7 @@
             </select>
         </div>
         <div class='col-xs-12 text-center' style="height: 23%">
-            ((!)){{content.automaticreturn}}<input type="checkbox" value="Auto-retorn"/>
+            ((!)){{content.automaticreturn}}<input ng-model="autoreturn" type="checkbox" ng-click="changeAutoReturn(autoreturn)"/>
         </div>
     </div>
 

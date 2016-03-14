@@ -317,6 +317,19 @@ angular.module('controllers', [])
 
                 });
             };
+            
+             $scope.changeAutoReturn = function (autoreturn)
+            {
+                var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
+                var URL = $scope.baseurl + "Board/changeAutoReturn";
+
+                $http.post(URL, postdata).
+                        success(function ()
+                        {
+                            
+                        });
+            };
+            
             $scope.changeNameBoard = function ()
             {
                 var postdata = {Name: $scope.BoardName};
