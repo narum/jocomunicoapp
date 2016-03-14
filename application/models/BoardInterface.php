@@ -230,6 +230,20 @@ class BoardInterface extends CI_Model {
     }
 
     /*
+     * Change the data of one pictogram ($cell) from the board ($idpicto)    
+     */
+
+    function updateDataCell($idpicto, $cell) {
+        $output = array();
+
+        $this->db->where('ID_Cell', $cell);
+        $this->db->update('Cell', array('ID_CPicto' => $idpicto));
+
+
+        return $output;
+    }
+
+    /*
      * Remove the cell ($id) from the board ($idBoard). Remove the link too
      */
 
@@ -499,7 +513,7 @@ class BoardInterface extends CI_Model {
         $this->db->update('Boards', array(
             'primaryBoard' => '0',
         ));
-        
+
         $this->db->where('ID_Board', $id);
         $this->db->update('Boards', array(
             'primaryBoard' => '1',
