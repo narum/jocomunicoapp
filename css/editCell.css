@@ -18,6 +18,11 @@
     padding-left: 25% !important;
     padding-right: 25% !important;
 }
+.content1nocolor{ 
+    height: 8%;
+    padding-left: 3% !important;
+    padding-right: 3% !important;
+}
 .content1-5{ 
     background-color: #fddfad;
     height: 12%;
@@ -160,7 +165,18 @@
 .track1.dragging .handle1 {
     width: 10px;
 }
-#Defpadding
+.Defpadding
 {
-    padding: 5%
+    padding: 1%;
+}
+.PaddingSent
+{
+    padding-top: 0.5% !important;
+    padding-bottom: 0.5% !important;
+    padding-left: 2.5% !important;
+    padding-right: 1.5% !important;
+}
+.Defmargin
+{
+    margin: 1%;
 }

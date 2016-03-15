@@ -12,14 +12,14 @@
                 <div ng-hide="grid1hide" class="col-xs-{{grid1}} fullheight">
                    
                 </div>
-                <div class="col-xs-{{grid2}} fullheight" ng-init="data = []" style="background-color: Red;">
+                <div class="col-xs-{{grid2}} fullheight" ng-init="data = []">
                     <div id="board" class="fullheight">
-                        <div class="container-fluid" ng-hide="subgrid1hide" style="height:{{subgrid1}}%">
+                        <div class="container-fluid Defmargin" ng-hide="subgrid1hide" style="height:{{subgrid1}}%">
                             <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     
                             </div>
                         </div>
-                        <div class="container-fluid" ng-init="showBoard('0')" style="height:{{subgrid2}}%">
-                            <div class="row fullheight" >
+                        <div class="container-fluid Defmargin" ng-init="showBoard('0')" style="height:{{subgrid2}}%">
+                            <div class="row fullheight img-rounded Defpadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
 
                                 <div class="col-xs-12" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}">
                                     <img ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" width="100%" height="100%" src="{{picto.imgCell}}"  ng-click="clickOnCell(picto)" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"/>
@@ -42,10 +42,10 @@
                     </div>
                 </div>
 
-                <div ng-hide="grid3hide" class="col-xs-{{grid3}} fullheight">
-                     <div id="board" class="fullheight">
+                <div ng-hide="grid3hide" class="col-xs-{{grid3}} fullheight ">
+                     <div id="board" class="fullheight Defmargin">
                         <div id="trashView" class="row">
-                            <div class="row fullheight">
+                            <div class="row fullheight ">
                                 <div class="col-sm-12 fullheight" ng-include="baseurl + '/angular_templates/EditViewTrash.html'">
 
                                 </div>

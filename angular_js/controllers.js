@@ -236,8 +236,8 @@ angular.module('controllers', [])
                 $scope.subgrid1hide = false;
                 $scope.subgrid2hide = false;
                 $scope.subgrid3hide = true;
-                $scope.subgrid1 = 20;
-                $scope.subgrid2 = 80;
+                $scope.subgrid1 = 16;
+                $scope.subgrid2 = 78;
                 $scope.subgrid3 = 0;
             };
             $scope.showmiddle = function ()
