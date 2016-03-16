@@ -4139,6 +4139,7 @@ class Mypattern {
         $patterns[38] = '/(?<=[aeiou]@VERBUM)[[:space:]]lo[[:space:]]/u';
         $patterns[39] = '/(?<=[aeiou]@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
         $patterns[42] = '/(?<=[aeiou]@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
+        $patterns[47] = '/(?<=[aeiou]@VERBUM)[[:space:]]ho[[:space:]]/u';
         
         // verb acabat en vocal+r + pronoms de receiver a darrere
         $patterns[15] = '/(?<=[aeiou]r@VERBUM)[[:space:]]me[[:space:]]/u';
@@ -4150,6 +4151,7 @@ class Mypattern {
         $patterns[40] = '/(?<=[aeiou]r@VERBUM)[[:space:]]lo[[:space:]]/u';
         $patterns[41] = '/(?<=[aeiou]r@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
         $patterns[43] = '/(?<=[aeiou]r@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
+        $patterns[48] = '/(?<=[aeiou]r@VERBUM)[[:space:]]ho[[:space:]]/u';
         
         // verb+pronom feble de receiver ja enganxat, seguit de "ho"
         $patterns[21] = "/(?<=@VERBUM)'m[[:space:]]ho[[:space:]]/u";
@@ -4177,7 +4179,7 @@ class Mypattern {
         $patterns[36] = "/(?<=@PRFEBLE)la[[:space:]](?=[(aeiouAEIOUhH)])/u";
         
         // netejar @PRFEBLE
-        $patterns[48] = "/@PRFEBLE/u";
+        $patterns[49] = "/@PRFEBLE/u";
         
         //preps + pronoms personals
         $patterns[44] = '/[[:space:]][p][e][r][[:space:]][j][o][[:space:]]/u';
@@ -4207,6 +4209,7 @@ class Mypattern {
         $replacements[38] = "'l ";
         $replacements[39] = "-la ";
         $replacements[42] = "-les ";
+        $replacements[47] = "-ho ";
         
         $replacements[15] = "-me ";
         $replacements[16] = "-te ";
@@ -4217,6 +4220,7 @@ class Mypattern {
         $replacements[40] = "-lo ";
         $replacements[41] = "-la ";
         $replacements[43] = "-les ";
+        $replacements[48] = "-ho ";
         
         $replacements[21] = "-m'ho ";
         $replacements[22] = "-t'ho ";
@@ -4238,7 +4242,7 @@ class Mypattern {
         
         $replacements[35] = "l'";
         $replacements[36] = "l'";
-        $replacements[48] = "";
+        $replacements[49] = "";
         
         $replacements[44] = ' per mi ';
         $replacements[45] = ' amb mi ';
