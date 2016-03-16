@@ -2399,7 +2399,7 @@ class Mypattern {
         // agafem les dades del primer subjecte
         if (isset($this->slotarray[$keysubj1])) {
             $slotsubj1 = $this->slotarray[$keysubj1];
-                        
+                                    
             // si hi ha el subjecte per defecte
             if ($slotsubj1->defvalueused) {
                 $subj1 = $slotsubj1->defvalue;
@@ -2414,9 +2414,9 @@ class Mypattern {
             // si el subjecte és una paraula
             // si hi ha una partícula de pregunta al subjecte o no hi havia slot subjecte
             // perquè era impersonal, no ha d'agafar-ne les propietats
-            else if($slotsubj1->paraulafinal->tipus != "questpart" && !$this->impersonal) {
+            else if($slotsubj1->paraulafinal->tipus != "questpart") {
                 $subj1 = $slotsubj1->paraulafinal;
-                
+                                
                 // si és un pronom personal
                 if ($subj1->isClass("pronoun")) {
                     if ($subj1->text == "jo") {
@@ -2469,32 +2469,35 @@ class Mypattern {
                     }
                 }
                 // si no, agafem les propietats de la paraula
-                else {                    
-                    if ($subj1->propietats->mf == "fem") $this->genmascsubj1 = false;
-                    else $this->genmascsubj1 = true;
-                    if ($subj1->propietats->singpl == "pl") $this->plsubj1 = true;
-                    else $this->plsubj1 = false;
-                    
-                    // hem de mirar si el subjecte té un quantificador o modificador que el fa ser plural
-                    // la info estarà codificada a slotstring, al primer element que és nom
-                    $i=0;
-                    $found = false;
-                    while ($i<count($slotsubj1->slotstring) && !$found) {
-                        $aux = $slotsubj1->slotstring[$i];
-                        
-                        // si trobem el nucli i efectivament és un nom
-                        if (isset($aux[2]) && $aux[2]) {
-                            $this->genmascsubj1 = $aux[3];
-                            $this->plsubj1 = $aux[4];
-                            
-                            $found = true;
+                else {     
+                                        
+                    if ($subj1->tipus == "name") {
+                        if ($subj1->propietats->mf == "fem") $this->genmascsubj1 = false;
+                        else $this->genmascsubj1 = true;
+                        if ($subj1->propietats->singpl == "pl") $this->plsubj1 = true;
+                        else $this->plsubj1 = false;
+
+                        // hem de mirar si el subjecte té un quantificador o modificador que el fa ser plural
+                        // la info estarà codificada a slotstring, al primer element que és nom
+                        $i=0;
+                        $found = false;
+                        while ($i<count($slotsubj1->slotstring) && !$found) {
+                            $aux = $slotsubj1->slotstring[$i];
+
+                            // si trobem el nucli i efectivament és un nom
+                            if (isset($aux[2]) && $aux[2]) {
+                                $this->genmascsubj1 = $aux[3];
+                                $this->plsubj1 = $aux[4];
+
+                                $found = true;
+                            }
+                            $i++;
                         }
-                        $i++;
                     }
                     $this->perssubj1 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj1->paraulacoord != null) $this->plsubj1 = true;
+                if ($subj1->tipus == "name" && $subj1->paraulacoord != null) $this->plsubj1 = true;
             }
         }
         
@@ -2659,6 +2662,7 @@ class Mypattern {
         
         // agafem les dades del primer subjecte
         if (isset($this->slotarray[$keysubj1])) {
+            
             $slotsubj1 = $this->slotarray[$keysubj1];
             
             // si hi ha el subjecte per defecte
@@ -2675,7 +2679,7 @@ class Mypattern {
             // si el subjecte és una paraula
             // si hi ha una partícula de pregunta al subjecte o no hi havia slot subjecte
             // perquè era impersonal, no ha d'agafar-ne les propietats
-            else if($slotsubj1->paraulafinal->tipus != "questpart" && !$this->impersonal) {
+            else if($slotsubj1->paraulafinal->tipus != "questpart") {
                 $subj1 = $slotsubj1->paraulafinal;
                 
                 // si és un pronom personal
@@ -2730,32 +2734,34 @@ class Mypattern {
                     }
                 }
                 // si no, agafem les propietats de la paraula
-                else {
-                    if ($subj1->propietats->mf == "fem") $this->genmascsubj1 = false;
-                    else $this->genmascsubj1 = true;
-                    if ($subj1->propietats->singpl == "pl") $this->plsubj1 = true;
-                    else $this->plsubj1 = false;
-                    
-                    // hem de mirar si el subjecte té un quantificador o modificador que el fa ser plural
-                    // la info estarà codificada a slotstring, al primer element que és nom
-                    $i=0;
-                    $found = false;
-                    while ($i<count($slotsubj1->slotstring) && !$found) {
-                        $aux = $slotsubj1->slotstring[$i];
-                        
-                        // si trobem el nucli i efectivament és un nom
-                        if (isset($aux[2]) && $aux[2]) {
-                            $this->genmascsubj1 = $aux[3];
-                            $this->plsubj1 = $aux[4];
-                            
-                            $found = true;
+                else {     
+                    if ($subj1->tipus == "name") {
+                        if ($subj1->propietats->mf == "fem") $this->genmascsubj1 = false;
+                        else $this->genmascsubj1 = true;
+                        if ($subj1->propietats->singpl == "pl") $this->plsubj1 = true;
+                        else $this->plsubj1 = false;
+
+                        // hem de mirar si el subjecte té un quantificador o modificador que el fa ser plural
+                        // la info estarà codificada a slotstring, al primer element que és nom
+                        $i=0;
+                        $found = false;
+                        while ($i<count($slotsubj1->slotstring) && !$found) {
+                            $aux = $slotsubj1->slotstring[$i];
+
+                            // si trobem el nucli i efectivament és un nom
+                            if (isset($aux[2]) && $aux[2]) {
+                                $this->genmascsubj1 = $aux[3];
+                                $this->plsubj1 = $aux[4];
+
+                                $found = true;
+                            }
+                            $i++;
                         }
-                        $i++;
                     }
                     $this->perssubj1 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj1->paraulacoord != null) $this->plsubj1 = true;
+                if ($subj1->tipus == "name" && $subj1->paraulacoord != null) $this->plsubj1 = true;
             }
         }
         
