@@ -55,9 +55,14 @@ class Myexpander {
         // si a la frase no hi ha verb i només hi ha adjectius (amb o sense modificadors) voldrem que 
         // agafi els patrons de ser i estar, si no només posarà els patrons verbless
         $thereisadj = false;
+        $adjdefverb = 0;
+        $adjdefsubj = false;
+        $countnouns = 0;
+        $noundefverb = 0;
         $othertypes = false;
                 
         // fem una cerca de tots els pictogames i agafem configuracions necessàries pel sistema
+        // com ara verbs per defecte
         for ($i=0; $i<count($this->paraulescopia); $i++) {
             $word = &$this->paraulescopia[$i];
             
@@ -71,7 +76,19 @@ class Myexpander {
             }
             
             if ($word->tipus == "verb") $arrayVerbs[] = &$word;
-            else if ($word->tipus == "adj") $thereisadj = true;
+            else if ($word->tipus == "adj") { 
+                if (!$thereisadj) {
+                    $adjdefverb = $word->defaultverb;
+                    $adjdefsubj = $word->subjdef;
+                }
+                $thereisadj = true;
+            }
+            else if ($word->tipus == "name") { 
+                if ($countnouns < 1) $noundefverb = $word->defaultverb;
+                if (!$word->isClass("pronoun")) {
+                    $countnouns++;
+                }
+            }
             else if ($word->tipus != "modifier") $othertypes = true;
             
             // aprofitem el bucle que passa per totes les paraules per preparar la frase final per
@@ -87,7 +104,7 @@ class Myexpander {
 
         // GET PATTERNS
 
-        $this->initialiseVerbPatterns($arrayVerbs, $propietatsfrase, $thereisadj, $othertypes);
+        $this->initialiseVerbPatterns($arrayVerbs, $propietatsfrase, $thereisadj, $adjdefverb, $adjdefsubj, $countnouns, $noundefverb, $othertypes);
         // $verbPatterns = new Mypatterngroup();            
         // $verbPatterns.initialise($arrayVerbs);
 
@@ -265,7 +282,7 @@ class Myexpander {
 
 
     // INICIALITZA TOTS ELS PATTERNS POSSIBLES I ELS POSA A L'ARRAY ALLPATTERNS
-    function initialiseVerbPatterns($arrayVerbs, $propietatsfrase, $thereisadj, $othertypes)
+    function initialiseVerbPatterns($arrayVerbs, $propietatsfrase, $thereisadj, $adjdefverb, $adjdefsubj, $countnouns, $noundefverb, $othertypes)
     {   
         $CI = &get_instance();
         $CI->load->model('Lexicon');
@@ -285,13 +302,30 @@ class Myexpander {
         }
 
         else if ($numverbs == 0) {
-            // Agafem els verbless patterns
-            $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(0); // Verbless
 
-            // si no és una resposta afegir també els patterns de ser i estar
-            if ($propietatsfrase['tipusfrase'] != "resposta" && $thereisadj && !$othertypes) {
-                $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(100); // Estar
-                $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(86); // Ser
+            // si no és una resposta afegir també els patterns per defecte dels noms
+            // o dels adjectius (principalment ser o estar)
+            if ($propietatsfrase['tipusfrase'] != "resposta") {
+                
+                // si hi ha un adjectiu i no hi ha noms, ni altres paraules excepte modificadors
+                // agafem el verb per defecte del primer adjectiu introduït
+                if ($thereisadj && $countnouns == 0 && !$othertypes) {
+                    $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, true); 
+                }
+                // si hi ha algun nom i no hi ha altres paraules excepte modificadors i/o adjectius
+                // agafem el verb per defecte del primer nom introduït
+                else if ($countnouns > 0 && !$othertypes) {
+                    $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($noundefverb, false);
+                }
+                else {
+                    // Agafem els verbless patterns
+                    $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(0, false); // Verbless
+                }
+                
+            }
+            else {
+                // Agafem els verbless patterns
+                $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(0, false); // Verbless
             }
 
             // Per cada paraula
@@ -303,7 +337,9 @@ class Myexpander {
                 foreach ($auxword->patterns as $pattern) {
 
                     $auxpattern = new Mypattern();
-                    $auxpattern->initialise($pattern); // inicialitzem el pattern
+                    // inicialitzem el pattern, li diem que és verbless i li passem el subjecte per defecte
+                    // de l'adjectiu (si era un nom el valor serà false)
+                    $auxpattern->initialise($pattern, true, $adjdefsubj); 
 
                     // Omplim el main verb
                     $auxpattern->forceFillSlot("Main Verb", $auxword, 0, 0);
@@ -323,7 +359,7 @@ class Myexpander {
                 // menys els que eren de subverb
                 if ($pattern->subverb == '0') {
                     $auxpattern = new Mypattern();
-                    $auxpattern->initialise($pattern);
+                    $auxpattern->initialise($pattern, false, false);
 
                     $auxpattern->forceFillSlot("Main Verb", $auxword, 0, 0);
 
@@ -347,7 +383,7 @@ class Myexpander {
                 if ($pattern->subverb == '1') { // Si el pattern accepta subverb
 
                     $auxpattern = new Mypattern();
-                    $auxpattern->initialise($pattern);
+                    $auxpattern->initialise($pattern, false, false);
 
                     // Posar a dins els patterns del segon verb que no accepten subverb
                     foreach ($auxword2->patterns as $pattern2) {
@@ -357,7 +393,7 @@ class Myexpander {
                             $subverbfound = true;
 
                             $auxpattern2 = new Mypattern();
-                            $auxpattern2->initialise($pattern2);
+                            $auxpattern2->initialise($pattern2, false, false);
 
                             $auxpatternfusion = new Mypattern();
                             $auxpatternfusion = unserialize(serialize($auxpattern));
@@ -383,7 +419,7 @@ class Myexpander {
                     if ($pattern2->subverb == '1') { // Si el pattern accepta subverb
 
                         $auxpattern2 = new Mypattern();
-                        $auxpattern2->initialise($pattern2);
+                        $auxpattern2->initialise($pattern2, false, false);
 
                         // Posar a dins els patterns del segon verb que no accepten subverb
                         foreach ($auxword->patterns as $pattern) {
@@ -393,7 +429,7 @@ class Myexpander {
                                 $subverbfound = true;
 
                                 $auxpattern = new Mypattern();
-                                $auxpattern->initialise($pattern);
+                                $auxpattern->initialise($pattern, false, false);
 
                                 $auxpatternfusion = new Mypattern();
                                 $auxpatternfusion = unserialize(serialize($auxpattern2));

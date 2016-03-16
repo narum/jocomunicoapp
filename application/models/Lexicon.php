@@ -1206,10 +1206,13 @@ class Lexicon extends CI_Model {
     }
     
     // Retorna l'estructura de la paraula Verbless o de qualsevol Verb amb els seus patterns
-    function getPatternsVerb($verbid)
+    function getPatternsVerb($verbid, $withsubject)
     {
         $output = array();
         $userlanguage = $this->session->userdata('ulangabbr');
+        
+        // només retorna patrons amb subjecte, és a dir, no impersonals
+        if ($withsubject) $this->db->where('Pattern'.$userlanguage.'.subj !=', '0');
         
         $this->db->where('Verb'.$userlanguage.'.verbid', $verbid);
         $this->db->join('Pictograms', 'Pictograms.pictoid = Verb'.$userlanguage.'.verbid', 'left');

@@ -520,11 +520,14 @@ CREATE TABLE NameCA (
 	contabincontab ENUM('contable', 'incontable'),
 	determinat ENUM('0', '1', 'sense'),
 	ispropernoun ENUM('0', '1') DEFAULT '0',
+	defaultverb INT DEFAULT '0',
 	plural VARCHAR(50) NULL,
 	femeni VARCHAR(50) NULL,
 	fempl VARCHAR(50) NULL,
 	INDEX NameId (nameid),
-	FOREIGN KEY (nameid) REFERENCES Pictograms (pictoid) ON DELETE CASCADE
+	FOREIGN KEY (nameid) REFERENCES Pictograms (pictoid) ON DELETE CASCADE,
+	INDEX DefaultVerb (defaultverb),
+	FOREIGN KEY (defaultverb) REFERENCES VerbCA (verbid) ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 CREATE TABLE NameClassCA (
@@ -541,10 +544,12 @@ CREATE TABLE AdjectiveCA (
 	fem VARCHAR(50),
 	mascpl VARCHAR(50),
 	fempl VARCHAR(50),
-	serestar ENUM('0', '1') DEFAULT '1',
+	defaultverb INT DEFAULT '86',
 	subjdef VARCHAR(30) DEFAULT '1',
 	INDEX AjdId (adjid),
-	FOREIGN KEY (adjid) REFERENCES Pictograms (pictoid) ON DELETE CASCADE
+	FOREIGN KEY (adjid) REFERENCES Pictograms (pictoid) ON DELETE CASCADE,
+	INDEX DefaultVerb (defaultverb),
+	FOREIGN KEY (defaultverb) REFERENCES VerbCA (verbid) ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 CREATE TABLE AdjClassCA (
@@ -716,11 +721,14 @@ CREATE TABLE NameES (
 	contabincontab ENUM('contable', 'incontable'),
 	determinat ENUM('0', '1', 'sense'),
 	ispropernoun ENUM('0', '1') DEFAULT '0',
+	defaultverb INT DEFAULT '0',
 	plural VARCHAR(50) NULL,
 	femeni VARCHAR(50) NULL,
 	fempl VARCHAR(50) NULL,
 	INDEX NameId (nameid),
-	FOREIGN KEY (nameid) REFERENCES Pictograms (pictoid) ON DELETE CASCADE
+	FOREIGN KEY (nameid) REFERENCES Pictograms (pictoid) ON DELETE CASCADE,
+	INDEX DefaultVerb (defaultverb),
+	FOREIGN KEY (defaultverb) REFERENCES VerbES (verbid) ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 CREATE TABLE NameClassES (
@@ -737,10 +745,12 @@ CREATE TABLE AdjectiveES (
 	fem VARCHAR(50),
 	mascpl VARCHAR(50),
 	fempl VARCHAR(50),
-	serestar ENUM('0', '1') DEFAULT '1',
+	defaultverb INT DEFAULT '86',
 	subjdef VARCHAR(30),
 	INDEX AjdId (adjid),
-	FOREIGN KEY (adjid) REFERENCES Pictograms (pictoid) ON DELETE CASCADE
+	FOREIGN KEY (adjid) REFERENCES Pictograms (pictoid) ON DELETE CASCADE,
+	INDEX DefaultVerb (defaultverb),
+	FOREIGN KEY (defaultverb) REFERENCES VerbES (verbid) ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 CREATE TABLE AdjClassES (

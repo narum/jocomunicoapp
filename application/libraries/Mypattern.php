@@ -7,6 +7,9 @@ class Mypattern {
     var $pronominal = false;
     var $pseudoimpersonal = false;
     var $copulatiu = false;
+    var $verbless = false; // per quan no han introduït verb i s'afegeix després amb les columnes
+                           // defaultverb o els verbless patterns
+    var $impersonal = false;
     
     var $tipusfrase;
     var $defaulttense = null;
@@ -62,13 +65,14 @@ class Mypattern {
     
     function __construct() {}
     
-    public function initialise($patternbbdd) 
+    public function initialise($patternbbdd, $verbless, $subjdef) 
     {
         $CI = &get_instance();
         $CI->load->library('Myslot');
         
         $this->id = $patternbbdd->patternid;
         $this->idverb = $patternbbdd->verbid;
+        $this->verbless = $verbless;
         // els verbless patterns quan competeixen amb patrons no verbless, que comencin amb menys punts
         // que només els agafi si no en troba de millors
         if ($this->idverb == '0') $this->puntuaciofinal = 90;
@@ -93,11 +97,21 @@ class Mypattern {
             $subjecte->type = $patternbbdd->subj;
             $subjecte->defvalue = $patternbbdd->subjdef;
             $subjecte->slotPuntsInicials();
+            $subjecte->verbless = $verbless;
+            
+            // sobreescrivim el subjecte per defecte, si s'envia des de la columna subdef dels adjectius
+            if ($subjdef) {
+                $subjecte->defvalue = $subjdef;
+            }
 
             if ($subjecte->type == "verb") $this->subverb = "Subject";
             $this->hasslot["Subject"] = true;
 
             $this->slotarray["Subject"] = $subjecte;
+        }
+        // si no té subjecte
+        else {
+            $this->impersonal = true;
         }
         
         // Slot ROOT
@@ -2389,8 +2403,11 @@ class Mypattern {
             // si hi ha el subjecte per defecte
             if ($slotsubj1->defvalueused) {
                 $subj1 = $slotsubj1->defvalue;
-                
-                if ($subj1 == '1')  $this->perssubj1 = 1;
+                                
+                if ($subj1 == '1') {
+                    $this->perssubj1 = 1;
+                    if ($this->isfem) $this->genmascsubj1 = false;
+                }
                 else if ($subj1 == '2') $this->perssubj1 = 2;
                 else $this->perssubj1 = 3;
             }
@@ -2488,7 +2505,10 @@ class Mypattern {
             if ($slotsubj2->defvalueused) {
                 $subj2 = $slotsubj2->defvalue;
                 
-                if ($subj2 == '1')  $this->perssubj2 = 1;
+                if ($subj2 == '1')  {
+                    $this->perssubj2 = 1;
+                    if ($this->isfem) $this->genmascsubj2 = false;
+                }
                 else if ($subj2 == '2') $this->perssubj2 = 2;
                 else $this->perssubj2 = 3;
             }
@@ -2644,7 +2664,10 @@ class Mypattern {
             if ($slotsubj1->defvalueused) {
                 $subj1 = $slotsubj1->defvalue;
                 
-                if ($subj1 == '1')  $this->perssubj1 = 1;
+                if ($subj1 == '1') {
+                    $this->perssubj1 = 1;
+                    if ($this->isfem) $this->genmascsubj1 = false;
+                }
                 else if ($subj1 == '2') $this->perssubj1 = 2;
                 else $this->perssubj1 = 3;
             }
@@ -2742,7 +2765,10 @@ class Mypattern {
             if ($slotsubj2->defvalueused) {
                 $subj2 = $slotsubj2->defvalue;
                 
-                if ($subj2 == '1')  $this->perssubj2 = 1;
+                if ($subj2 == '1')  {
+                    $this->perssubj2 = 1;
+                    if ($this->isfem) $this->genmascsubj2 = false;
+                }
                 else if ($subj2 == '2') $this->perssubj2 = 2;
                 else $this->perssubj2 = 3;
             }
@@ -3614,8 +3640,9 @@ class Mypattern {
             else if ($slotaux->category == "Permission") $indexpermission = $i;
             else if ($slotaux->category == "Subject") {
                 if ($slotaux->defvalueused) {
-                    // esborrem el tu o jo
-                    if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2') $slotaux->slotstring = array();
+                    // esborrem el tu o jo o 3a persona impersonal o vostè quan hi són per defecte
+                    if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2' 
+                            || $slotaux->defvalue == '3' || $slotaux->defvalue == '7') $slotaux->slotstring = array();
                 }
                 // si no s'ha fet servir el subjecte per defecte
                 else {
@@ -4318,8 +4345,9 @@ class Mypattern {
             else if ($slotaux->category == "Permission") $indexpermission = $i;
             else if ($slotaux->category == "Subject") {
                 if ($slotaux->defvalueused) {
-                    // esborrem el tú o yo
-                    if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2') $slotaux->slotstring = array();
+                    // esborrem el tú o yo, 3a persona impersonal o usted quan hi són per defecte
+                    if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2' 
+                            || $slotaux->defvalue == '3' || $slotaux->defvalue == '7') $slotaux->slotstring = array();
                 }
                 // si no s'ha fet servir el subjecte per defecte
                 else {

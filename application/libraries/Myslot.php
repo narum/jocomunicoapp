@@ -11,6 +11,8 @@ class Myslot {
     var $prep = null; // Preposició que precedeix a l'slot
     var $art = null;
     var $defvalueused = false; // indica si l'slot s'ha omplert amb el def value
+    var $verbless = false; // per quan no han introduït verb i s'afegeix després amb les columnes
+                           // defaultverb o els verbless patterns
     
     var $full = false; // Si l'slot ja està ple/bloquejat
     var $paraulafinal = null; // Paraula que acaba omplint l'slot (classe Myword)
@@ -452,12 +454,12 @@ class Myslot {
         $punts;
         if ($this->category == "Subject") {
             $punts = $penalty;
-            // si la paraula va abans del verb i el fit no és horrible, li donem un bonus per 
+            // si la paraula va abans del verb, el patró no era verbless i el fit no és horrible, li donem un bonus per 
             // igualar als altres camps obligatoris en l'ordre de prioritat
             // pel subjecte principal
-            if ($this->level == 1 && $word->beforeverb && $penalty < 5) $punts -= 18;
+            if ($this->level == 1 && $word->beforeverb && $penalty < 5 && !$this->verbless) $punts -= 18;
             // pel secundari si n'hi ha
-            if ($this->level == 2 && $word->beforeverb2 && $penalty < 5) $punts -= 18;
+            if ($this->level == 2 && $word->beforeverb2 && $penalty < 5 && !$this->verbless) $punts -= 18;
         }
         else if ($this->category == "Main Verb") $punts = 0;
         else if ($this->grade == '1') {
