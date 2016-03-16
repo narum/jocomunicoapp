@@ -2391,8 +2391,8 @@ class Mypattern {
             $keysubj2 = "Subject 2";
         }
         
-        // si no hi ha subjecte i el verb és copulatiu
-        if(!isset($this->slotarray[$keysubj1]) && $this->copulatiu) {
+        // si no hi ha subjecte i el verb és impersonal
+        if(!isset($this->slotarray[$keysubj1]) && $this->impersonal) {
             $keysubj1 = "Theme";
         }
         
@@ -2655,8 +2655,8 @@ class Mypattern {
             $keysubj2 = "Subject 2";
         }
         
-        // si no hi ha subjecte i el verb és copulatiu
-        if(!isset($this->slotarray[$keysubj1]) && $this->copulatiu) {
+        // si no hi ha subjecte i el verb és impersonal
+        if(!isset($this->slotarray[$keysubj1]) && $this->impersonal) {
             $keysubj1 = "Theme";
         }
         
@@ -2922,8 +2922,8 @@ class Mypattern {
             
             // si acabem de tractar un subjecte, refresquem els valors de gènere i número per si no eren
             // pronoms, i pels possibles adjectius que hagin de concordar amb ells, que apareixeran després
-            // pels verbs copulatius sense subjecte també ho fem
-            if ($slotaux->category == "Subject" || ($this->copulatiu && $slotaux->category == "Theme")) {
+            // pels verbs impersonals sense subjecte també ho fem
+            if ($slotaux->category == "Subject" || ($this->impersonal && $slotaux->category == "Theme")) {
                 $this->getPersGenNumSubjs();
             }
         }
@@ -2992,8 +2992,8 @@ class Mypattern {
             
             // si acabem de tractar un subjecte, refresquem els valors de gènere i número per si no eren
             // pronoms, i pels possibles adjectius que hagin de concordar amb ells, que apareixeran després
-            // pels verbs copulatius sense subjecte també ho fem
-            if ($slotaux->category == "Subject" || ($this->copulatiu && $slotaux->category == "Theme")) {
+            // pels verbs impersonals sense subjecte també ho fem
+            if ($slotaux->category == "Subject" || ($this->impersonal && $slotaux->category == "Theme")) {
                 $this->getPersGenNumSubjsES();
             }
         }
