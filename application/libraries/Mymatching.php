@@ -489,8 +489,8 @@ class Mymatching {
         "ella" => "@PRFEBLEla",
         "nosotros" => "nos",
         "vosotros" => "os",
-        "ellos" => "los",
-        "ellas" => "las",
+        "ellos" => "@PRFEBLElos",
+        "ellas" => "@PRFEBLElas",
     );
     
     var $tempsPrepES = array(
