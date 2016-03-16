@@ -539,7 +539,7 @@ class Myslot {
      */
     
     // ordena els slots internament i fa concordar els elements
-    public function ordenarSlot($subjmasc, $subjpl)
+    public function ordenarSlot($subjmasc, $subjpl, $copulatiu)
     {
         $nucli = $this->paraulafinal;
         $elementaux = array();
@@ -561,14 +561,30 @@ class Myslot {
                     $masc = true;
                     $plural = false;
                     
-                    // si el nom és femení
-                    if ($nucli->propietats->mf == "fem") $masc = false;
-                    // si el nom és plural
-                    if ($nucli->propietats->singpl == "pl") $plural = true;
-                    // si té modificadors de femení i l'accepta
-                    if ($nucli->propietats->femeni != "NULL" && $nucli->fem) $masc = false;
-                    // si té modificador de plural
-                    if ($nucli->plural) $plural = true;
+                    // si el verb és copulatiu el nom del theme concorda amb el subjecte
+                    if ($this->category == "Theme" && $copulatiu) {
+                        
+                        if (!$subjmasc && $subjpl) {
+                            if ($nucli->propietats->femeni != "") {
+                                $masc = false;
+                            }
+                            $plural = true;
+                        }
+                        else if (!$subjmasc && !$subjpl && $nucli->propietats->femeni != "") {
+                            $masc = false;
+                        }
+                        else if ($subjmasc && $subjpl) $plural = true;
+                    }
+                    else {
+                        // si el nom és femení
+                        if ($nucli->propietats->mf == "fem") $masc = false;
+                        // si el nom és plural
+                        if ($nucli->propietats->singpl == "pl") $plural = true;
+                        // si té modificadors de femení i l'accepta
+                        if ($nucli->propietats->femeni != "" && $nucli->fem) $masc = false;
+                        // si té modificador de plural
+                        if ($nucli->plural) $plural = true;
+                    }
                     
                     // PREPOSICIÓ
                     // posem la preposició, si n'hi ha
@@ -810,7 +826,7 @@ class Myslot {
                         // si el nom és plural
                         if ($nouncmp->propietats->singpl == "pl") $pluralcmp = true;
                         // si té modificadors de femení i l'accepta
-                        if ($nouncmp->propietats->femeni != "NULL" && $nouncmp->fem) $masccmp = false;
+                        if ($nouncmp->propietats->femeni != "" && $nouncmp->fem) $masccmp = false;
                         // si té modificador de plural
                         if ($nouncmp->plural) $pluralcmp = true;
                         
@@ -848,7 +864,7 @@ class Myslot {
                             // si el nom és plural
                             if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
                             // si té modificadors de femení i l'accepta
-                            if ($paraulacoord->propietats->femeni != "NULL" && $paraulacoord->fem) $masccmp = false;
+                            if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
                             // si té modificador de plural
                             if ($paraulacoord->plural) $pluralcmp = true;
                         
@@ -968,7 +984,7 @@ class Myslot {
                             // si el nom és plural
                             if ($nouncmp->propietats->singpl == "pl") $pluralcmp = true;
                             // si té modificadors de femení i l'accepta
-                            if ($nouncmp->propietats->femeni != "NULL" && $nucli->fem) $masccmp = false;
+                            if ($nouncmp->propietats->femeni != "" && $nucli->fem) $masccmp = false;
                             // si té modificador de plural
                             if ($nouncmp->plural) $pluralcmp = true;
 
@@ -1006,7 +1022,7 @@ class Myslot {
                                 // si el nom és plural
                                 if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
                                 // si té modificadors de femení i l'accepta
-                                if ($paraulacoord->propietats->femeni != "NULL" && $paraulacoord->fem) $masccmp = false;
+                                if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
                                 // si té modificador de plural
                                 if ($paraulacoord->plural) $pluralcmp = true;
 
@@ -1048,7 +1064,7 @@ class Myslot {
                             // si el nom és plural
                             if ($nouncmp->propietats->singpl == "pl") $pluralcmp = true;
                             // si té modificadors de femení i l'accepta
-                            if ($nouncmp->propietats->femeni != "NULL" && $nucli->fem) $masccmp = false;
+                            if ($nouncmp->propietats->femeni != "" && $nucli->fem) $masccmp = false;
                             // si té modificador de plural
                             if ($nouncmp->plural) $pluralcmp = true;
 
@@ -1086,7 +1102,7 @@ class Myslot {
                                 // si el nom és plural
                                 if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
                                 // si té modificadors de femení i l'accepta
-                                if ($paraulacoord->propietats->femeni != "NULL" && $paraulacoord->fem) $masccmp = false;
+                                if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
                                 // si té modificador de plural
                                 if ($paraulacoord->plural) $pluralcmp = true;
 
@@ -1432,7 +1448,7 @@ class Myslot {
     }
     
     // ordena els slots internament i fa concordar els elements
-    public function ordenarSlotES($subjmasc, $subjpl)
+    public function ordenarSlotES($subjmasc, $subjpl, $copulatiu)
     {
         $nucli = $this->paraulafinal;
         $elementaux = array();
@@ -1454,14 +1470,30 @@ class Myslot {
                     $masc = true;
                     $plural = false;
                     
-                    // si el nom és femení
-                    if ($nucli->propietats->mf == "fem") $masc = false;
-                    // si el nom és plural
-                    if ($nucli->propietats->singpl == "pl") $plural = true;
-                    // si té modificadors de femení i l'accepta
-                    if ($nucli->propietats->femeni != "NULL" && $nucli->fem) $masc = false;
-                    // si té modificador de plural
-                    if ($nucli->plural) $plural = true;
+                    // si el verb és copulatiu el nom del theme concorda amb el subjecte
+                    if ($this->category == "Theme" && $copulatiu) {
+                        
+                        if (!$subjmasc && $subjpl) {
+                            if ($nucli->propietats->femeni != "") {
+                                $masc = false;
+                            }
+                            $plural = true;
+                        }
+                        else if (!$subjmasc && !$subjpl && $nucli->propietats->femeni != "") {
+                            $masc = false;
+                        }
+                        else if ($subjmasc && $subjpl) $plural = true;
+                    }
+                    else {
+                        // si el nom és femení
+                        if ($nucli->propietats->mf == "fem") $masc = false;
+                        // si el nom és plural
+                        if ($nucli->propietats->singpl == "pl") $plural = true;
+                        // si té modificadors de femení i l'accepta
+                        if ($nucli->propietats->femeni != "" && $nucli->fem) $masc = false;
+                        // si té modificador de plural
+                        if ($nucli->plural) $plural = true;
+                    }
                     
                     // PREPOSICIÓ
                     // posem la preposició, si n'hi ha, excepte si el nom és el nucli d'un slot de LocAt i 
@@ -1717,7 +1749,7 @@ class Myslot {
                         // si el nom és plural
                         if ($nouncmp->propietats->singpl == "pl") $pluralcmp = true;
                         // si té modificadors de femení i l'accepta
-                        if ($nouncmp->propietats->femeni != "NULL" && $nouncmp->fem) $masccmp = false;
+                        if ($nouncmp->propietats->femeni != "" && $nouncmp->fem) $masccmp = false;
                         // si té modificador de plural
                         if ($nouncmp->plural) $pluralcmp = true;
                         
@@ -1755,7 +1787,7 @@ class Myslot {
                             // si el nom és plural
                             if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
                             // si té modificadors de femení i l'accepta
-                            if ($paraulacoord->propietats->femeni != "NULL" && $paraulacoord->fem) $masccmp = false;
+                            if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
                             // si té modificador de plural
                             if ($paraulacoord->plural) $pluralcmp = true;
                         
@@ -1881,7 +1913,7 @@ class Myslot {
                             // si el nom és plural
                             if ($nouncmp->propietats->singpl == "pl") $pluralcmp = true;
                             // si té modificadors de femení i l'accepta
-                            if ($nouncmp->propietats->femeni != "NULL" && $nucli->fem) $masccmp = false;
+                            if ($nouncmp->propietats->femeni != "" && $nucli->fem) $masccmp = false;
                             // si té modificador de plural
                             if ($nouncmp->plural) $pluralcmp = true;
 
@@ -1919,7 +1951,7 @@ class Myslot {
                                 // si el nom és plural
                                 if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
                                 // si té modificadors de femení i l'accepta
-                                if ($paraulacoord->propietats->femeni != "NULL" && $paraulacoord->fem) $masccmp = false;
+                                if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
                                 // si té modificador de plural
                                 if ($paraulacoord->plural) $pluralcmp = true;
 
@@ -1961,7 +1993,7 @@ class Myslot {
                             // si el nom és plural
                             if ($nouncmp->propietats->singpl == "pl") $pluralcmp = true;
                             // si té modificadors de femení i l'accepta
-                            if ($nouncmp->propietats->femeni != "NULL" && $nucli->fem) $masccmp = false;
+                            if ($nouncmp->propietats->femeni != "" && $nucli->fem) $masccmp = false;
                             // si té modificador de plural
                             if ($nouncmp->plural) $pluralcmp = true;
 
@@ -1999,7 +2031,7 @@ class Myslot {
                                 // si el nom és plural
                                 if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
                                 // si té modificadors de femení i l'accepta
-                                if ($paraulacoord->propietats->femeni != "NULL" && $paraulacoord->fem) $masccmp = false;
+                                if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
                                 // si té modificador de plural
                                 if ($paraulacoord->plural) $pluralcmp = true;
 
