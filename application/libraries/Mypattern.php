@@ -4138,7 +4138,7 @@ class Mypattern {
         $patterns[14] = '/(?<=[aeiou]@VERBUM)[[:space:]]los[[:space:]]/u';
         $patterns[38] = '/(?<=[aeiou]@VERBUM)[[:space:]]lo[[:space:]]/u';
         $patterns[39] = '/(?<=[aeiou]@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
-        $patterns[42] = '/(?<=[aeiou]@VERBUM)[[:space:]]les[[:space:]]/u';
+        $patterns[42] = '/(?<=[aeiou]@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
         
         // verb acabat en vocal+r + pronoms de receiver a darrere
         $patterns[15] = '/(?<=[aeiou]r@VERBUM)[[:space:]]me[[:space:]]/u';
@@ -4149,7 +4149,7 @@ class Mypattern {
         $patterns[20] = '/(?<=[aeiou]r@VERBUM)[[:space:]]los[[:space:]]/u';
         $patterns[40] = '/(?<=[aeiou]r@VERBUM)[[:space:]]lo[[:space:]]/u';
         $patterns[41] = '/(?<=[aeiou]r@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
-        $patterns[43] = '/(?<=[aeiou]r@VERBUM)[[:space:]]les[[:space:]]/u';
+        $patterns[43] = '/(?<=[aeiou]r@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
         
         // verb+pronom feble de receiver ja enganxat, seguit de "ho"
         $patterns[21] = "/(?<=@VERBUM)'m[[:space:]]ho[[:space:]]/u";
@@ -4177,7 +4177,7 @@ class Mypattern {
         $patterns[36] = "/(?<=@PRFEBLE)la[[:space:]](?=[(aeiouAEIOUhH)])/u";
         
         // netejar @PRFEBLE
-        $patterns[37] = "/@PRFEBLE/u";
+        $patterns[48] = "/@PRFEBLE/u";
         
         //preps + pronoms personals
         $patterns[44] = '/[[:space:]][p][e][r][[:space:]][j][o][[:space:]]/u';
@@ -4238,7 +4238,7 @@ class Mypattern {
         
         $replacements[35] = "l'";
         $replacements[36] = "l'";
-        $replacements[37] = "";
+        $replacements[48] = "";
         
         $replacements[44] = ' per mi ';
         $replacements[45] = ' amb mi ';
@@ -4761,8 +4761,8 @@ class Mypattern {
         // verb + pronoms de theme a darrere
         $patterns[2] = '/(?<=@VERBUM)[[:space:]]lo[[:space:]]/u';
         $patterns[14] = '/(?<=@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
-        $patterns[15] = '/(?<=@VERBUM)[[:space:]]los[[:space:]]/u';
-        $patterns[16] = '/(?<=@VERBUM)[[:space:]]las[[:space:]]/u';
+        $patterns[15] = '/(?<=@VERBUM)[[:space:]]@PRFEBLElos[[:space:]]/u';
+        $patterns[16] = '/(?<=@VERBUM)[[:space:]]@PRFEBLElas[[:space:]]/u';
         
         // verb + pronoms de receiver a darrere
         $patterns[3] = '/(?<=@VERBUM)[[:space:]]me[[:space:]]/u';
