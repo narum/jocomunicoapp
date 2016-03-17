@@ -90,7 +90,7 @@
     margin-left: 5%
 }
 .imgRounded{
-    border-radius: 6px;
+    border-radius: 7px;
 }
 .cruz{
     background-color: #151515;
@@ -113,8 +113,8 @@
 
     height: 7%;
     width: 100%;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
     /*gradient in all browsers*/
     background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
