@@ -23,23 +23,27 @@ angular.module('services', [])
 			var token = window.localStorage.getItem('token'); //mirem si hi ha un token al LocalStorage de html5
 			var languageid = window.localStorage.getItem('languageid'); 
 			var languageabbr = window.localStorage.getItem('languageabbr');
+                        var userid = window.localStorage.getItem('userid');
 			if(token)
-				this.login(token, languageid, languageabbr);
+				this.login(token, languageid, languageabbr, userid);
 		},
-		"login": function(token, languageid, languageabbr) {
+		"login": function(token, languageid, languageabbr, userid) {
 			window.localStorage.setItem('token', token); // guardem el token al localStorage
 			window.localStorage.setItem('languageid', languageid); // guardem el idlanguage al localStorage
 			window.localStorage.setItem('languageabbr', languageabbr); // guardem el nomlanguage al localStorage
+                        window.localStorage.setItem('userid', userid); // guardem el id de usuari al localStorage
 			$http.defaults.headers.common['Authorization'] = 'Bearer '+token; // posem el token al header per a totes les peticions
 			$http.defaults.headers.common['X-Authorization'] = 'Bearer '+token; // posem el token al header per a totes les peticions
 			$rootScope.isLogged = true;
 			$rootScope.languageid = languageid;
 			$rootScope.languageabbr = languageabbr;
+                        $rootScope.userid = userid;
 		},
 		"logout": function() {
 			window.localStorage.removeItem('token');
 			window.localStorage.removeItem('languageid');
 			window.localStorage.removeItem('languageabbr');
+                        window.localStorage.removeItem('userid');
 			delete $http.defaults.headers.common['Authorization'];
 			$rootScope.isLogged = false;
 		}

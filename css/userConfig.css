@@ -1,0 +1,37 @@
+html, body, .container-table {
+    height: 100%;
+    /*background: #f2f2f2;*/
+    background: url("http://localhost:83/img/FonsRegistre.png") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+/*Per centrar el div del boxRegistreUsuari*/
+.container-table {
+    display: table;
+    background: none;
+}
+.vertical-center-row {
+    display: table-cell;
+    vertical-align: middle;
+}
+.barraSuperior{
+    /*background: #333333;*/
+    background-image: url("http://localhost:83/img/BarraMenuSuperior.png");
+    color:white;
+}
+.contingutBarraSuperior{
+    margin-bottom: 7px;
+    margin-top: 10px;
+}
+.btn-idioma {
+    color: white;
+    background-color: #333333;
+    border-color: #333333;
+    border-radius: 5px;
+}
+.butonsBarraSuperiorRegistre{
+    margin-top: 10px;
+}
+
