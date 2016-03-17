@@ -109,12 +109,17 @@
     padding: 0em;
 }
 
+.panellPrincipalText{
+    height:50%;
+    transform: translate(0%, 25%);
+}
+
 @media (max-width:1000px){
     .col-xs-12{
         font-size: 12.5px;
     }
     .col-xs-6{
-        font-size: 12.5px;
+        font-size: 12px;
     }
     input[type="radio"]{
             margin: 0px;

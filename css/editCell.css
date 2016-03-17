@@ -198,6 +198,10 @@
     background: url("http://localhost/jocomunicoapp/img/srcWeb/boto_desplegable.jpg") no-repeat right #fff;
     background-size: 20px 100%;
     border: 0px;
+    min-width:40px;
+}
+.dropdown-arrow.panellPrincipal{
+    width: 50%;
 }
 .dropdown-arrow.color{
     border: 1px solid;

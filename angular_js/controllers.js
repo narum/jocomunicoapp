@@ -113,7 +113,11 @@ angular.module('controllers', [])
             }
         })
 
-        .controller('myCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope) {
+        .controller('myCtrl', function ($location, $scope, $http, ngDialog, txtContent, $rootScope) {
+             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+            if (!$rootScope.isLogged) {
+                $location.path('/login');
+            }
             // Pedimos los textos para cargar la pagina
             txtContent("mainboard").then(function (results) {
                 $rootScope.content = results.data;
