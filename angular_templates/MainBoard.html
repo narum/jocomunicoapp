@@ -1,78 +1,73 @@
 <!-- This view is the main board where the picto will be shown. In addition it 
      includes others view like sentece, edit (board/cell) panel, etc etc
 -->
-<div ng-controller="myCtrl">
-        <div id="header" class="container-fluid text-center row">
-            <div style="background-color: Green;height:100%;">
+<div class="fullheight">
+    <div id="userview" class="container-fluid" ng-init="config(4)">
+        <div class="row fullheight">
+            <div ng-hide="grid1hide" class="col-xs-{{grid1}} fullheight">
 
             </div>
-        </div>
-        <div id="userview" class="container-fluid" ng-init="config(4)">
-            <div class="row fullheight">
-                <div ng-hide="grid1hide" class="col-xs-{{grid1}} fullheight">
-                   
-                </div>
-                <div class="col-xs-{{grid2}} fullheight" ng-init="data = []">
-                    <div id="board" class="fullheight">
-                        <div class="container-fluid Defmargin" ng-hide="subgrid1hide" style="height:{{subgrid1}}%">
-                            <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     
-                            </div>
+            <div class="col-xs-{{grid2}} fullheight">
+                <div id="board" class="fullheight">
+                    <div class="container-fluid Defmargin" ng-hide="subgrid1hide" style="height:{{subgrid1}}%">
+                        <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     
                         </div>
-                        <div class="container-fluid Defmargin" ng-init="showBoard('0')" style="height:{{subgrid2}}%">
-                            <div class="row fullheight imgRounded Defpadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
-
-                                <div class="col-xs-12" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}">
-                                    <img ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" width="100%" height="100%" src="{{picto.imgCell}}"  ng-click="clickOnCell(picto)" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"/>
-                                    <!-- If there is an image this line mades it draggable and dropable.
-                                         Only if we are in edit mode-->
-                                    <img ng-if="picto.imgPicto && !picto.imgCell && (picto.activeCell == 1|| (picto.activeCell == 0 && inEdit))" width="100%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}"  ng-click="clickOnCell(picto);" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"/>
-
-
-                                    <!-- If not, puts a "empty image" and mades it dropable
-                                         Only if we are in edit mode-->
-                                    <div ng-if="!picto.imgPicto && !picto.imgCell || (picto.activeCell == 0 && !inEdit)" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)"  class="emptyImg" ng-right-click="openEditCellMenu({{picto.posInBoard}});"/>
-                                </div>
-                            </div>
-
-                        </div>
-                        
                     </div>
-                    <div class="row" ng-hide="subgrid3hide" style="height:{{subgrid3}}%">
-                        <h4>SENTENCEBOARD1.PHP</h4>
-                    </div>
-                </div>
+                    <div class="container-fluid Defmargin" ng-init="showBoard('0')" style="height:{{subgrid2}}%">
+                        <div class="row fullheight imgRounded Defpadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
 
-                <div ng-hide="grid3hide" class="col-xs-{{grid3}} fullheight ">
-                     <div id="board" class="fullheight Defmargin">
-                            <div class="row fullheight ">
-                                <div class="col-sm-12 fullheight" ng-include="baseurl + '/angular_templates/EditViewTrash.html'">
+                            <div class="col-xs-12" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}">
+                                <img ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" width="100%" height="100%" src="{{picto.imgCell}}"  ng-click="clickOnCell(picto)" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"/>
+                                <!-- If there is an image this line mades it draggable and dropable.
+                                     Only if we are in edit mode-->
+                                <img ng-if="picto.imgPicto && !picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" width="100%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}"  ng-click="clickOnCell(picto);" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"/>
 
-                                </div>
+
+                                <!-- If not, puts a "empty image" and mades it dropable
+                                     Only if we are in edit mode-->
+                                <div ng-if="!picto.imgPicto && !picto.imgCell || (picto.activeCell == 0 && !inEdit)" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)"  class="emptyImg" ng-right-click="openEditCellMenu({{picto.posInBoard}});"/>
                             </div>
                         </div>
-                        <div id="searchView" class="container-fluid">
-                            <div class="row fullheight">
-                                <div class="col-sm-12 fullheight" ng-include="baseurl + '/angular_templates/EditView.html'">
 
-                                </div>
-                            </div>
+                    </div>
+
+                </div>
+                <div class="row" ng-hide="subgrid3hide" style="height:{{subgrid3}}%">
+                    <h4>SENTENCEBOARD1.PHP</h4>
+                </div>
+            </div>
+
+            <div ng-hide="grid3hide" class="col-xs-{{grid3}} fullheight ">
+                <div id="trashview" class="fullheight">
+                    <div class="row fullheight">
+                        <div class="col-sm-12" ng-include="baseurl + '/angular_templates/EditViewTrash.html'">
+
                         </div>
                     </div>
                 </div>
+                <div id="searchView" class="container-fluid">
+                    <div class="row fullheight">
+                        <div class="col-sm-12" ng-include="baseurl + '/angular_templates/EditView.html'">
 
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
-        <div id="footer" class="container-fluid text-center row">
-           
-            <div style="background-color: yellow">
-                <br />
-                <button class="btn-success" ng-click="edit()">edit</button>
-                <br />
-            </div>
 
-        </div>
     </div>
+
+</div>
+<div id="footer" class="container-fluid text-center row">
+
+    <div style="background-color: yellow">
+        <br />
+        <button class="btn-success" ng-click="edit()">edit</button>
+        <br />
+    </div>
+
+</div>
+</div>
 
 
 

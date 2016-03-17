@@ -24,15 +24,15 @@
 }
 
 #header{
-    height:10%;
+    height:00%;
 }
 
 #footer{
-    height:10%;
+    height:00%;
 }
 
 #userview{
-    height:78%;
+    height:88%;
 }
 
 #searchView{
@@ -44,7 +44,7 @@
 #trashView{
     height:37%;
     margin-bottom: 4%;
-    margin-top: 4%;
+    margin-top: 2%;
     margin-right: 3%;
 }
 
