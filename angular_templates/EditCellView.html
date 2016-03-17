@@ -52,7 +52,7 @@
                 </div>
                 <div id="boardCellSearch" class="col-xs-6">
                     <div bind-html-compile="dataword" class="cellEditSearch">
-                        <img class="pictoEditSearch img-rounded" ng-repeat="picto in dataWord| limitTo: 2" width="45%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}" ng-click="selectPicto(picto.id, picto.imgPicto)"/>
+                        <img class="pictoEditSearch imgRounded" ng-repeat="picto in dataWord| limitTo: 2" width="45%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}" ng-click="selectPicto(picto.id, picto.imgPicto)"/>
                     </div>
                 </div>
             </div>
