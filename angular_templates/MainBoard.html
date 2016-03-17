@@ -1,7 +1,7 @@
 <!-- This view is the main board where the picto will be shown. In addition it 
      includes others view like sentece, edit (board/cell) panel, etc etc
 -->
-    <div id="mainboard" style="max-height: 100vh;">
+    <div>
         <div id="header" class="container-fluid text-center row">
             <div style="background-color: Green;height:100%;">
 
@@ -44,7 +44,6 @@
 
                 <div ng-hide="grid3hide" class="col-xs-{{grid3}} fullheight ">
                      <div id="board" class="fullheight Defmargin">
-                        <div id="trashView" class="row">
                             <div class="row fullheight ">
                                 <div class="col-sm-12 fullheight" ng-include="baseurl + '/angular_templates/EditViewTrash.html'">
 

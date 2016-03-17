@@ -1,0 +1,40 @@
+<!-- This view is the main board where the picto will be shown. In addition it 
+     includes others view like sentece, edit (board/cell) panel, etc etc
+-->
+    <div id="mainboard">
+        <div id="header" class="container-fluid text-center row">
+            <div style="background-color: Green;height:100%;">
+
+            </div>
+        </div>
+        <div id="userview" class="container-fluid" ng-init="config(4)">
+            <div class="row fullheight">
+                <div class="col-xs-2 fullheight">
+                   
+                </div>
+                <div class="col-xs-8" ng-include="baseurl + '/angular_templates/MainBoard.html'">
+
+                
+                </div>
+
+                <div ng-hide="grid3hide" class="col-xs-2 fullheight ">
+                
+                </div>
+
+            </div>
+
+        </div>
+        <div id="footer" class="container-fluid text-center row">
+           
+            <div style="background-color: yellow">
+                <br />
+                <button class="btn-success" ng-click="edit()">edit</button>
+                <br />
+            </div>
+
+        </div>
+    </div>
+
+
+
+

@@ -25,7 +25,7 @@ angular.module('app', [
 		})
 		.when('/', {
 			controller:'MainCtrl',
-			templateUrl:'../../jocomunicoapp/angular_templates/main.html'
+			templateUrl:'../../jocomunicoapp/angular_templates/MenuView.html'
 		})
 		.when('/adeu', {
 			controller:'AdeuCtrl',
