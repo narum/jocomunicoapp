@@ -2520,10 +2520,10 @@ class Mypattern {
             else {
                 $subj2 = $slotsubj2->paraulafinal;
                 
-                // si és un pronom personal
+                // si és un pronom personalq
                 if ($subj2->isClass("pronoun")) {
-                    if ($subj2->text == "jo" || $this->isfem) {
-                        if ($subj2->fem) $this->genmascsubj2 = false;
+                    if ($subj2->text == "jo") {
+                        if ($subj2->fem || $this->isfem) $this->genmascsubj2 = false;
                         else $this->genmascsubj2 = true;
                         $this->plsubj2 = false;
                         $this->perssubj2 = 1;
@@ -2786,8 +2786,8 @@ class Mypattern {
                 
                 // si és un pronom personal
                 if ($subj2->isClass("pronoun")) {
-                    if ($subj2->text == "yo" || $this->isfem) {
-                        if ($subj2->fem) $this->genmascsubj2 = false;
+                    if ($subj2->text == "yo") {
+                        if ($subj2->fem || $this->isfem) $this->genmascsubj2 = false;
                         else $this->genmascsubj2 = true;
                         $this->plsubj2 = false;
                         $this->perssubj2 = 1;
