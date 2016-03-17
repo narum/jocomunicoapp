@@ -242,7 +242,7 @@ class Mymatching {
         5 => array  (5,1,1,1,1,0,1,1,5,5,5,5,5,5,1,5,5,5,5,5,5,5,5),
         6 => array  (5,1,1,1,1,1,0,1,5,5,5,5,5,5,1,5,5,5,5,5,5,5,5),
         7 => array  (5,1,1,1,1,1,1,0,5,5,5,5,5,5,1,5,5,5,5,5,5,5,5),
-        8 => array  (5,5,5,5,5,5,2,5,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0),
+        8 => array  (5,5,5,5,5,5,2,5,0,0,0,0,0,0,0,1,0,0,1,1,1,1,0),
         9 => array  (5,5,5,5,5,5,5,5,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1),
         10 => array (5,5,5,5,5,5,5,5,2,1,0,1,1,1,2,2,2,2,2,2,2,2,2),
         11 => array (5,5,5,5,5,5,5,5,2,1,1,0,1,1,2,2,2,2,2,2,2,2,2),
@@ -414,11 +414,11 @@ class Mymatching {
         "mi" => "me",
         "tu" => "te",
         "ell" => "lo",
-        "ella" => "la",
+        "ella" => "@PRFEBLEla",
         "nosaltres" => "nos",
         "vosaltres" => "vos",
         "ells" => "los",
-        "elles" => "les",
+        "elles" => "@PRFEBLEles",
     );
     
     var $tempsPrep = array(
@@ -486,11 +486,11 @@ class Mymatching {
         "mí" => "me",
         "tú" => "te",
         "él" => "lo",
-        "ella" => "la",
+        "ella" => "@PRFEBLEla",
         "nosotros" => "nos",
         "vosotros" => "os",
-        "ellos" => "los",
-        "ellas" => "las",
+        "ellos" => "@PRFEBLElos",
+        "ellas" => "@PRFEBLElas",
     );
     
     var $tempsPrepES = array(

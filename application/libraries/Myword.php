@@ -15,6 +15,8 @@ class Myword {
     var $text; // Paraula en text
     var $img; // Enllaç al pictograma
     var $supportsExpansion; // Si la paraula pot ser utilitzada dins el sistema d'expansió
+    var $defaultverb = 0; // Pels noms i pels adjectius, el verb per defecte si no hi ha més paraules a la frase
+    var $subjdef = false; // Pels adjectius, el subjecte per defecte si no hi ha més paraules a la frase
     
     var $propietats = array(); // Varia segons el tipus de paraula. És la fila de la BBDD
     var $patterns = array(); // Només pels verbs
@@ -66,6 +68,7 @@ class Myword {
         {
             case 'name':
                 $this->text = $infobbdd[0]->nomtext;
+                $this->defaultverb = $infobbdd[0]->defaultverb;
                 $this->propietats = $infobbdd[0];
                 foreach ($infobbdd as $row) {
                     array_push($this->classes, $row->class);
@@ -81,6 +84,8 @@ class Myword {
             
             case 'adj':
                 $this->text = $infobbdd[0]->masc;
+                $this->defaultverb = $infobbdd[0]->defaultverb;
+                $this->subjdef = $infobbdd[0]->subjdef;
                 $this->propietats = $infobbdd[0];
                 foreach ($infobbdd as $row) {
                     array_push($this->classes, $row->class);

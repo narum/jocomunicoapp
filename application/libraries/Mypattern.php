@@ -6,6 +6,10 @@ class Mypattern {
     var $idverb;
     var $pronominal = false;
     var $pseudoimpersonal = false;
+    var $copulatiu = false;
+    var $verbless = false; // per quan no han introduït verb i s'afegeix després amb les columnes
+                           // defaultverb o els verbless patterns
+    var $impersonal = false;
     
     var $tipusfrase;
     var $defaulttense = null;
@@ -47,6 +51,8 @@ class Mypattern {
     var $questiontypequant = false; // ens indica si hi ha partícules de pregunta que es comporten com "quant"
     var $frasenegativa = false; // serveix per conjugar l'imperatiu quan és negatiu com a present de subjuntiu 
     
+    var $isfem = false; // ens diu si l'usuari és una dona
+    
     var $perssubj1 = 1;
     var $genmascsubj1 = true;
     var $plsubj1 = false;
@@ -59,19 +65,21 @@ class Mypattern {
     
     function __construct() {}
     
-    public function initialise($patternbbdd) 
+    public function initialise($patternbbdd, $verbless, $subjdef) 
     {
         $CI = &get_instance();
         $CI->load->library('Myslot');
-                        
+        
         $this->id = $patternbbdd->patternid;
         $this->idverb = $patternbbdd->verbid;
+        $this->verbless = $verbless;
         // els verbless patterns quan competeixen amb patrons no verbless, que comencin amb menys punts
         // que només els agafi si no en troba de millors
         if ($this->idverb == '0') $this->puntuaciofinal = 90;
         
         if ($patternbbdd->pronominal == '1') $this->pronominal = true;
         if ($patternbbdd->pseudoimpersonal == '1') $this->pseudoimpersonal = true;
+        if ($patternbbdd->copulatiu == '1') $this->copulatiu = true;
         
         $this->tipusfrase = $patternbbdd->tipusfrase;
         $this->defaulttense = $patternbbdd->defaulttense;
@@ -89,11 +97,21 @@ class Mypattern {
             $subjecte->type = $patternbbdd->subj;
             $subjecte->defvalue = $patternbbdd->subjdef;
             $subjecte->slotPuntsInicials();
+            $subjecte->verbless = $verbless;
+            
+            // sobreescrivim el subjecte per defecte, si s'envia des de la columna subdef dels adjectius
+            if ($subjdef) {
+                $subjecte->defvalue = $subjdef;
+            }
 
             if ($subjecte->type == "verb") $this->subverb = "Subject";
             $this->hasslot["Subject"] = true;
 
             $this->slotarray["Subject"] = $subjecte;
+        }
+        // si no té subjecte
+        else {
+            $this->impersonal = true;
         }
         
         // Slot ROOT
@@ -1590,6 +1608,9 @@ class Mypattern {
         $CI->load->library('Myword');
         $matching = new Mymatching();
         
+        //agafem si l'usuari parla en masculí o en femení pel generador
+        if ($CI->session->userdata('isfem') == '1') $this->isfem = true;
+        
         // agafem si la frase és negativa
         $this->frasenegativa = $propietatsfrase['negativa'];
                 
@@ -1776,19 +1797,21 @@ class Mypattern {
             array_splice($this->ordrefrase, $indexsecondaryverb, 0, $temp);
         }
         
-        // THEME PRONOMINAL -> JO / TU / ELL...
+        // THEME PRONOMINAL -> JO / TU / ELL... si no té una preposició davant
                 
         $indextheme1 = null;
         $indextheme2 = null;
                 
-        // busquem si té un slot de receiver que sigui pronominal i el posem abans del verb principal
+        // busquem si té un slot de theme que sigui pronominal i el posem abans del verb principal
         for($i=0; $i<count($this->ordrefrase); $i++) {
             
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
-            if ($slotaux->category == "Theme") {
+                        
+            if ($slotaux->category == "Theme" && $slotaux->prep == null) {
+                                
                 $wordslotauxfinal = $slotaux->paraulafinal;
-                // si està en forma de pronom (només de tu, jo)
-                if ($slotaux->defvalueused || $wordslotauxfinal->isClass("pronoun")) {
+                // si està en forma de pronom
+                if (!$slotaux->defvalueused && $wordslotauxfinal->isClass("pronoun")) {
                     if ($slotaux->level == 1) $indextheme1 = $i;
                     if ($slotaux->level == 2) $indextheme2 = $i;
                 }
@@ -1976,6 +1999,9 @@ class Mypattern {
         
         // agafem si la frase és negativa
         $this->frasenegativa = $propietatsfrase['negativa'];
+        
+        //agafem si l'usuari parla en masculí o en femení pel generador
+        if ($CI->session->userdata('isfem') == '1') $this->isfem = true;
                 
         // ADVS TEMPS
 
@@ -2164,7 +2190,7 @@ class Mypattern {
         }
         
         
-        // THEME PRONOMINAL / Yo, tu, él, etc.
+        // THEME PRONOMINAL / Yo, tu, él, etc. si no té preposició davant
         
         $indextheme1 = null;
         $indextheme2 = null;
@@ -2173,10 +2199,10 @@ class Mypattern {
         for($i=0; $i<count($this->ordrefrase); $i++) {
             
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
-            if ($slotaux->category == "Theme") {
+            if ($slotaux->category == "Theme" && $slotaux->prep == null) {
                 $wordslotauxfinal = $slotaux->paraulafinal;
-                // si està en forma de pronom (només de tu, jo)
-                if ($slotaux->defvalueused || $wordslotauxfinal->isClass("pronoun")) {
+                // si està en forma de pronom
+                if (!$slotaux->defvalueused && $wordslotauxfinal->isClass("pronoun")) {
                     if ($slotaux->level == 1) $indextheme1 = $i;
                     if ($slotaux->level == 2) $indextheme2 = $i;
                 }
@@ -2365,26 +2391,36 @@ class Mypattern {
             $keysubj2 = "Subject 2";
         }
         
+        // si no hi ha subjecte i el verb és impersonal
+        if(!isset($this->slotarray[$keysubj1]) && $this->impersonal) {
+            $keysubj1 = "Theme";
+        }
+        
         // agafem les dades del primer subjecte
         if (isset($this->slotarray[$keysubj1])) {
             $slotsubj1 = $this->slotarray[$keysubj1];
-            
+                                    
             // si hi ha el subjecte per defecte
             if ($slotsubj1->defvalueused) {
                 $subj1 = $slotsubj1->defvalue;
-                
-                if ($subj1 == '1')  $this->perssubj1 = 1;
+                                
+                if ($subj1 == '1') {
+                    $this->perssubj1 = 1;
+                    if ($this->isfem) $this->genmascsubj1 = false;
+                }
                 else if ($subj1 == '2') $this->perssubj1 = 2;
                 else $this->perssubj1 = 3;
             }
             // si el subjecte és una paraula
-            else {
+            // si hi ha una partícula de pregunta al subjecte o no hi havia slot subjecte
+            // perquè era impersonal, no ha d'agafar-ne les propietats
+            else if($slotsubj1->paraulafinal->tipus != "questpart") {
                 $subj1 = $slotsubj1->paraulafinal;
-                
+                                
                 // si és un pronom personal
                 if ($subj1->isClass("pronoun")) {
                     if ($subj1->text == "jo") {
-                        if ($subj1->fem) $this->genmascsubj1 = false;
+                        if ($subj1->fem || $this->isfem) $this->genmascsubj1 = false;
                         else $this->genmascsubj1 = true;
                         $this->plsubj1 = false;
                         $this->perssubj1 = 1;
@@ -2433,32 +2469,35 @@ class Mypattern {
                     }
                 }
                 // si no, agafem les propietats de la paraula
-                else {
-                    if ($subj1->propietats->mf == "fem") $this->genmascsubj1 = false;
-                    else $this->genmascsubj1 = true;
-                    if ($subj1->propietats->singpl == "pl") $this->plsubj1 = true;
-                    else $this->plsubj1 = false;
-                    
-                    // hem de mirar si el subjecte té un quantificador o modificador que el fa ser plural
-                    // la info estarà codificada a slotstring, al primer element que és nom
-                    $i=0;
-                    $found = false;
-                    while ($i<count($slotsubj1->slotstring) && !$found) {
-                        $aux = $slotsubj1->slotstring[$i];
-                        
-                        // si trobem el nucli i efectivament és un nom
-                        if (isset($aux[2]) && $aux[2]) {
-                            $this->genmascsubj1 = $aux[3];
-                            $this->plsubj1 = $aux[4];
-                            
-                            $found = true;
+                else {     
+                                        
+                    if ($subj1->tipus == "name") {
+                        if ($subj1->propietats->mf == "fem") $this->genmascsubj1 = false;
+                        else $this->genmascsubj1 = true;
+                        if ($subj1->propietats->singpl == "pl") $this->plsubj1 = true;
+                        else $this->plsubj1 = false;
+
+                        // hem de mirar si el subjecte té un quantificador o modificador que el fa ser plural
+                        // la info estarà codificada a slotstring, al primer element que és nom
+                        $i=0;
+                        $found = false;
+                        while ($i<count($slotsubj1->slotstring) && !$found) {
+                            $aux = $slotsubj1->slotstring[$i];
+
+                            // si trobem el nucli i efectivament és un nom
+                            if (isset($aux[2]) && $aux[2]) {
+                                $this->genmascsubj1 = $aux[3];
+                                $this->plsubj1 = $aux[4];
+
+                                $found = true;
+                            }
+                            $i++;
                         }
-                        $i++;
                     }
                     $this->perssubj1 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj1->paraulacoord != null) $this->plsubj1 = true;
+                if ($subj1->tipus == "name" && $subj1->paraulacoord != null) $this->plsubj1 = true;
             }
         }
         
@@ -2470,7 +2509,10 @@ class Mypattern {
             if ($slotsubj2->defvalueused) {
                 $subj2 = $slotsubj2->defvalue;
                 
-                if ($subj2 == '1')  $this->perssubj2 = 1;
+                if ($subj2 == '1')  {
+                    $this->perssubj2 = 1;
+                    if ($this->isfem) $this->genmascsubj2 = false;
+                }
                 else if ($subj2 == '2') $this->perssubj2 = 2;
                 else $this->perssubj2 = 3;
             }
@@ -2478,10 +2520,10 @@ class Mypattern {
             else {
                 $subj2 = $slotsubj2->paraulafinal;
                 
-                // si és un pronom personal
+                // si és un pronom personalq
                 if ($subj2->isClass("pronoun")) {
                     if ($subj2->text == "jo") {
-                        if ($subj2->fem) $this->genmascsubj2 = false;
+                        if ($subj2->fem || $this->isfem) $this->genmascsubj2 = false;
                         else $this->genmascsubj2 = true;
                         $this->plsubj2 = false;
                         $this->perssubj2 = 1;
@@ -2613,26 +2655,37 @@ class Mypattern {
             $keysubj2 = "Subject 2";
         }
         
+        // si no hi ha subjecte i el verb és impersonal
+        if(!isset($this->slotarray[$keysubj1]) && $this->impersonal) {
+            $keysubj1 = "Theme";
+        }
+        
         // agafem les dades del primer subjecte
         if (isset($this->slotarray[$keysubj1])) {
+            
             $slotsubj1 = $this->slotarray[$keysubj1];
             
             // si hi ha el subjecte per defecte
             if ($slotsubj1->defvalueused) {
                 $subj1 = $slotsubj1->defvalue;
                 
-                if ($subj1 == '1')  $this->perssubj1 = 1;
+                if ($subj1 == '1') {
+                    $this->perssubj1 = 1;
+                    if ($this->isfem) $this->genmascsubj1 = false;
+                }
                 else if ($subj1 == '2') $this->perssubj1 = 2;
                 else $this->perssubj1 = 3;
             }
             // si el subjecte és una paraula
-            else {
+            // si hi ha una partícula de pregunta al subjecte o no hi havia slot subjecte
+            // perquè era impersonal, no ha d'agafar-ne les propietats
+            else if($slotsubj1->paraulafinal->tipus != "questpart") {
                 $subj1 = $slotsubj1->paraulafinal;
                 
                 // si és un pronom personal
                 if ($subj1->isClass("pronoun")) {
                     if ($subj1->text == "yo") {
-                        if ($subj1->fem) $this->genmascsubj1 = false;
+                        if ($subj1->fem || $this->isfem) $this->genmascsubj1 = false;
                         else $this->genmascsubj1 = true;
                         $this->plsubj1 = false;
                         $this->perssubj1 = 1;
@@ -2681,32 +2734,34 @@ class Mypattern {
                     }
                 }
                 // si no, agafem les propietats de la paraula
-                else {
-                    if ($subj1->propietats->mf == "fem") $this->genmascsubj1 = false;
-                    else $this->genmascsubj1 = true;
-                    if ($subj1->propietats->singpl == "pl") $this->plsubj1 = true;
-                    else $this->plsubj1 = false;
-                    
-                    // hem de mirar si el subjecte té un quantificador o modificador que el fa ser plural
-                    // la info estarà codificada a slotstring, al primer element que és nom
-                    $i=0;
-                    $found = false;
-                    while ($i<count($slotsubj1->slotstring) && !$found) {
-                        $aux = $slotsubj1->slotstring[$i];
-                        
-                        // si trobem el nucli i efectivament és un nom
-                        if (isset($aux[2]) && $aux[2]) {
-                            $this->genmascsubj1 = $aux[3];
-                            $this->plsubj1 = $aux[4];
-                            
-                            $found = true;
+                else {     
+                    if ($subj1->tipus == "name") {
+                        if ($subj1->propietats->mf == "fem") $this->genmascsubj1 = false;
+                        else $this->genmascsubj1 = true;
+                        if ($subj1->propietats->singpl == "pl") $this->plsubj1 = true;
+                        else $this->plsubj1 = false;
+
+                        // hem de mirar si el subjecte té un quantificador o modificador que el fa ser plural
+                        // la info estarà codificada a slotstring, al primer element que és nom
+                        $i=0;
+                        $found = false;
+                        while ($i<count($slotsubj1->slotstring) && !$found) {
+                            $aux = $slotsubj1->slotstring[$i];
+
+                            // si trobem el nucli i efectivament és un nom
+                            if (isset($aux[2]) && $aux[2]) {
+                                $this->genmascsubj1 = $aux[3];
+                                $this->plsubj1 = $aux[4];
+
+                                $found = true;
+                            }
+                            $i++;
                         }
-                        $i++;
                     }
                     $this->perssubj1 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj1->paraulacoord != null) $this->plsubj1 = true;
+                if ($subj1->tipus == "name" && $subj1->paraulacoord != null) $this->plsubj1 = true;
             }
         }
         
@@ -2718,7 +2773,10 @@ class Mypattern {
             if ($slotsubj2->defvalueused) {
                 $subj2 = $slotsubj2->defvalue;
                 
-                if ($subj2 == '1')  $this->perssubj2 = 1;
+                if ($subj2 == '1')  {
+                    $this->perssubj2 = 1;
+                    if ($this->isfem) $this->genmascsubj2 = false;
+                }
                 else if ($subj2 == '2') $this->perssubj2 = 2;
                 else $this->perssubj2 = 3;
             }
@@ -2729,7 +2787,7 @@ class Mypattern {
                 // si és un pronom personal
                 if ($subj2->isClass("pronoun")) {
                     if ($subj2->text == "yo") {
-                        if ($subj2->fem) $this->genmascsubj2 = false;
+                        if ($subj2->fem || $this->isfem) $this->genmascsubj2 = false;
                         else $this->genmascsubj2 = true;
                         $this->plsubj2 = false;
                         $this->perssubj2 = 1;
@@ -2859,12 +2917,15 @@ class Mypattern {
             
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
             // si és un slot del subverb li passem les dades del subj2
-            if ($slotaux->level == 2) $slotaux->ordenarSlot($this->genmascsubj2, $this->plsubj2);
-            else $slotaux->ordenarSlot($this->genmascsubj1, $this->plsubj1);
+            if ($slotaux->level == 2) $slotaux->ordenarSlot($this->genmascsubj2, $this->plsubj2, $this->copulatiu, $this->impersonal);
+            else $slotaux->ordenarSlot($this->genmascsubj1, $this->plsubj1, $this->copulatiu, $this->impersonal);
             
             // si acabem de tractar un subjecte, refresquem els valors de gènere i número per si no eren
             // pronoms, i pels possibles adjectius que hagin de concordar amb ells, que apareixeran després
-            if ($slotaux->category == "Subject") $this->getPersGenNumSubjs();
+            // pels verbs impersonals sense subjecte també ho fem
+            if ($slotaux->category == "Subject" || ($this->impersonal && $slotaux->category == "Theme")) {
+                $this->getPersGenNumSubjs();
+            }
         }
         
         if ($this->questiontypequant) {
@@ -2926,12 +2987,15 @@ class Mypattern {
             
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
             // si és un slot del subverb li passem les dades del subj2
-            if ($slotaux->level == 2) $slotaux->ordenarSlotES($this->genmascsubj2, $this->plsubj2);
-            else $slotaux->ordenarSlotES($this->genmascsubj1, $this->plsubj1);
+            if ($slotaux->level == 2) $slotaux->ordenarSlotES($this->genmascsubj2, $this->plsubj2, $this->copulatiu, $this->impersonal);
+            else $slotaux->ordenarSlotES($this->genmascsubj1, $this->plsubj1, $this->copulatiu, $this->impersonal);
             
             // si acabem de tractar un subjecte, refresquem els valors de gènere i número per si no eren
             // pronoms, i pels possibles adjectius que hagin de concordar amb ells, que apareixeran després
-            if ($slotaux->category == "Subject") $this->getPersGenNumSubjsES();
+            // pels verbs impersonals sense subjecte també ho fem
+            if ($slotaux->category == "Subject" || ($this->impersonal && $slotaux->category == "Theme")) {
+                $this->getPersGenNumSubjsES();
+            }
         }
         
         if ($this->questiontypequant) {
@@ -3131,7 +3195,9 @@ class Mypattern {
                         $auxtupla[0] = $secondaryverbslot->prep;
                         $auxtupla[1] = null;
 
-                        $secondaryverbslot->slotstring[] = $auxtupla;
+                        // la preposició del verb secundari va darrere del verb principal
+                        
+                        $mainverbslot->slotstring[] = $auxtupla;
                     }
                     
                     $auxtupla[0] = $verbconjugat."@VERBUM";
@@ -3172,11 +3238,27 @@ class Mypattern {
                         $verbconjugat = $CI->Lexicon->conjugar($secondaryverbslot->paraulafinal->id, 'infinitiu', $persona2, $numero2, $this->pronominal2);
                         
                         $secondaryverbslot->isInfinitive = true;
+                        
+                        // posem la preposició que va davant del verb secundari, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $secondaryverbslot->slotstring[] = $auxtupla;
+                        }
                     }
                     // si no, aleshores va en subjuntiu (si fos en passat hauria d'anar en passat
                     // de subjuntiu, però el sistema encara no ho té
                     else {
                         $verbconjugat = $CI->Lexicon->conjugar($secondaryverbslot->paraulafinal->id, 'prsubj', $persona2, $numero2, $this->pronominal2);
+                        
+                        // posem la preposició que va darrer del verb principal, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $mainverbslot->slotstring[] = $auxtupla;
+                        }
                         
                         // afegim la partícula QUE després del main verb
                         $auxtupla[0] = "que";
@@ -3184,14 +3266,6 @@ class Mypattern {
                         $mainverbslot->slotstring[] = $auxtupla;
                     }
                     
-                    // posem la preposició que va davant del verb secundari, si n'hi havia
-                    if ($secondaryverbslot->prep != null) {
-                        $auxtupla[0] = $secondaryverbslot->prep;
-                        $auxtupla[1] = null;
-
-                        $secondaryverbslot->slotstring[] = $auxtupla;
-                    }
-
                     $auxtupla[0] = $verbconjugat."@VERBUM";
                     $auxtupla[1] = $secondaryverbslot->paraulafinal;
 
@@ -3218,26 +3292,34 @@ class Mypattern {
                         $verbconjugat = $CI->Lexicon->conjugar($secondaryverbslot->paraulafinal->id, 'infinitiu', $persona2, $numero2, $this->pronominal2);
                         
                         $secondaryverbslot->isInfinitive = true;
+                        
+                        // posem la preposició que va davant del verb secundari, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $secondaryverbslot->slotstring[] = $auxtupla;
+                        }
                     }
                     // si no, aleshores va en subjuntiu (si fos en passat hauria d'anar en passat
                     // de subjuntiu, però el sistema encara no ho té
                     else {
                         $verbconjugat = $CI->Lexicon->conjugar($secondaryverbslot->paraulafinal->id, 'prsubj', $persona2, $numero2, $this->pronominal2);
                         
+                        // posem la preposició que va darrer del verb principal, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $mainverbslot->slotstring[] = $auxtupla;
+                        }
+                        
                         // afegim la partícula QUE després del main verb
                         $auxtupla[0] = "que";
                         $auxtupla[1] = null;
                         $mainverbslot->slotstring[] = $auxtupla;
                     }
-                    
-                    // posem la preposició que va davant del verb secundari, si n'hi havia
-                    if ($secondaryverbslot->prep != null) {
-                        $auxtupla[0] = $secondaryverbslot->prep;
-                        $auxtupla[1] = null;
-
-                        $secondaryverbslot->slotstring[] = $auxtupla;
-                    }
-                    
+                                        
                     $auxtupla[0] = $verbconjugat."@VERBUM";
                     $auxtupla[1] = $secondaryverbslot->paraulafinal;
 
@@ -3378,7 +3460,9 @@ class Mypattern {
                         $auxtupla[0] = $secondaryverbslot->prep;
                         $auxtupla[1] = null;
 
-                        $secondaryverbslot->slotstring[] = $auxtupla;
+                        // la preposició del verb secundari va darrere del verb principal
+                        
+                        $mainverbslot->slotstring[] = $auxtupla;
                     }
                     
                     $auxtupla[0] = $verbconjugat."@VERBUM";
@@ -3419,11 +3503,27 @@ class Mypattern {
                         $verbconjugat = $CI->Lexicon->conjugarES($secondaryverbslot->paraulafinal->id, 'infinitiu', $persona2, $numero2, $this->pronominal2);
                         
                         $secondaryverbslot->isInfinitive = true;
+                        
+                        // posem la preposició que va davant del verb secundari, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $secondaryverbslot->slotstring[] = $auxtupla;
+                        }
                     }
                     // si no, aleshores va en subjuntiu (si fos en passat hauria d'anar en passat
                     // de subjuntiu, però el sistema encara no ho té
                     else {
                         $verbconjugat = $CI->Lexicon->conjugarES($secondaryverbslot->paraulafinal->id, 'prsubj', $persona2, $numero2, $this->pronominal2);
+                        
+                        // posem la preposició que darrere del verb principal, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $mainverbslot->slotstring[] = $auxtupla;
+                        }
                         
                         // afegim la partícula QUE després del main verb
                         $auxtupla[0] = "que";
@@ -3431,14 +3531,6 @@ class Mypattern {
                         $mainverbslot->slotstring[] = $auxtupla;
                     }
                     
-                    // posem la preposició que va davant del verb secundari, si n'hi havia
-                    if ($secondaryverbslot->prep != null) {
-                        $auxtupla[0] = $secondaryverbslot->prep;
-                        $auxtupla[1] = null;
-
-                        $secondaryverbslot->slotstring[] = $auxtupla;
-                    }
-
                     $auxtupla[0] = $verbconjugat."@VERBUM";
                     $auxtupla[1] = $secondaryverbslot->paraulafinal;
 
@@ -3465,26 +3557,34 @@ class Mypattern {
                         $verbconjugat = $CI->Lexicon->conjugarES($secondaryverbslot->paraulafinal->id, 'infinitiu', $persona2, $numero2, $this->pronominal2);
                         
                         $secondaryverbslot->isInfinitive = true;
+                        
+                        // posem la preposició que va davant del verb secundari, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $secondaryverbslot->slotstring[] = $auxtupla;
+                        }
                     }
                     // si no, aleshores va en subjuntiu (si fos en passat hauria d'anar en passat
                     // de subjuntiu, però el sistema encara no ho té
                     else {
                         $verbconjugat = $CI->Lexicon->conjugarES($secondaryverbslot->paraulafinal->id, 'prsubj', $persona2, $numero2, $this->pronominal2);
                         
+                        // posem la preposició que darrere del verb principal, si n'hi havia
+                        if ($secondaryverbslot->prep != null) {
+                            $auxtupla[0] = $secondaryverbslot->prep;
+                            $auxtupla[1] = null;
+
+                            $mainverbslot->slotstring[] = $auxtupla;
+                        }
+                        
                         // afegim la partícula QUE després del main verb
                         $auxtupla[0] = "que";
                         $auxtupla[1] = null;
                         $mainverbslot->slotstring[] = $auxtupla;
                     }
-                    
-                    // posem la preposició que va davant del verb secundari, si n'hi havia
-                    if ($secondaryverbslot->prep != null) {
-                        $auxtupla[0] = $secondaryverbslot->prep;
-                        $auxtupla[1] = null;
-
-                        $secondaryverbslot->slotstring[] = $auxtupla;
-                    }
-                    
+                                        
                     $auxtupla[0] = $verbconjugat."@VERBUM";
                     $auxtupla[1] = $secondaryverbslot->paraulafinal;
 
@@ -3548,8 +3648,9 @@ class Mypattern {
             else if ($slotaux->category == "Permission") $indexpermission = $i;
             else if ($slotaux->category == "Subject") {
                 if ($slotaux->defvalueused) {
-                    // esborrem el tu o jo
-                    if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2') $slotaux->slotstring = array();
+                    // esborrem el tu o jo o 3a persona impersonal o vostè quan hi són per defecte
+                    if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2' 
+                            || $slotaux->defvalue == '3' || $slotaux->defvalue == '7') $slotaux->slotstring = array();
                 }
                 // si no s'ha fet servir el subjecte per defecte
                 else {
@@ -3789,12 +3890,13 @@ class Mypattern {
                 else {
                     
                     $parauladerivada = $slotaux->slotstring[0];
-                    $parauladerivada = $parauladerivada[0];
+                    $parauladerivada = $parauladerivada[0]; 
+                    // si hi ha una preposicio davant del pronom, no hauria de fer el canvi
                     
                     if (($slotaux->level == 1 && $mainverbinf) 
                             || ($slotaux->level == 1 && $ordre && !$this->frasenegativa)) {
-                        // si són pronoms personals, posem la forma correcta pels receivers de darrere el verb
-                        if ($matching->isPronomPers($slotaux->paraulafinal->text)) {
+                        // si són pronoms personals, posem la forma correcta pels themes de darrere el verb
+                        if ($matching->isPronomPers($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsAfterTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -3804,8 +3906,8 @@ class Mypattern {
                         }                        
                     }
                     else if ($slotaux->level == 1) {
-                        // si són pronoms personals, posem la forma correcta pels receivers d'abans del verb
-                        if ($matching->isPronomPers($slotaux->paraulafinal->text)) {
+                        // si són pronoms personals, posem la forma correcta pels themes d'abans del verb
+                        if ($matching->isPronomPers($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsFrontTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -3815,8 +3917,8 @@ class Mypattern {
                         }
                     }
                     else if ($slotaux->level == 2 && $secondaryverbinf) {
-                        // si són pronoms personals, posem la forma correcta pels receivers de darrere el verb
-                        if ($matching->isPronomPers($slotaux->paraulafinal->text)) {
+                        // si són pronoms personals, posem la forma correcta pels themes de darrere el verb
+                        if ($matching->isPronomPers($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsAfterTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -3826,8 +3928,8 @@ class Mypattern {
                         }                        
                     }
                     else if ($slotaux->level == 2) {
-                        // si són pronoms personals, posem la forma correcta pels receivers d'abans del verb
-                        if ($matching->isPronomPers($slotaux->paraulafinal->text)) {
+                        // si són pronoms personals, posem la forma correcta pels themes d'abans del verb
+                        if ($matching->isPronomPers($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsFrontTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4035,8 +4137,9 @@ class Mypattern {
         $patterns[13] = '/(?<=[aeiou]@VERBUM)[[:space:]]vos[[:space:]]/u';
         $patterns[14] = '/(?<=[aeiou]@VERBUM)[[:space:]]los[[:space:]]/u';
         $patterns[38] = '/(?<=[aeiou]@VERBUM)[[:space:]]lo[[:space:]]/u';
-        $patterns[39] = '/(?<=[aeiou]@VERBUM)[[:space:]]la[[:space:]]/u';
-        $patterns[42] = '/(?<=[aeiou]@VERBUM)[[:space:]]les[[:space:]]/u';
+        $patterns[39] = '/(?<=[aeiou]@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
+        $patterns[42] = '/(?<=[aeiou]@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
+        $patterns[48] = '/(?<=[aeiou]@VERBUM)[[:space:]]ho[[:space:]]/u';
         
         // verb acabat en vocal+r + pronoms de receiver a darrere
         $patterns[15] = '/(?<=[aeiou]r@VERBUM)[[:space:]]me[[:space:]]/u';
@@ -4046,8 +4149,9 @@ class Mypattern {
         $patterns[19] = '/(?<=[aeiou]r@VERBUM)[[:space:]]vos[[:space:]]/u';
         $patterns[20] = '/(?<=[aeiou]r@VERBUM)[[:space:]]los[[:space:]]/u';
         $patterns[40] = '/(?<=[aeiou]r@VERBUM)[[:space:]]lo[[:space:]]/u';
-        $patterns[41] = '/(?<=[aeiou]r@VERBUM)[[:space:]]la[[:space:]]/u';
-        $patterns[43] = '/(?<=[aeiou]r@VERBUM)[[:space:]]les[[:space:]]/u';
+        $patterns[41] = '/(?<=[aeiou]r@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
+        $patterns[43] = '/(?<=[aeiou]r@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
+        $patterns[49] = '/(?<=[aeiou]r@VERBUM)[[:space:]]ho[[:space:]]/u';
         
         // verb+pronom feble de receiver ja enganxat, seguit de "ho"
         $patterns[21] = "/(?<=@VERBUM)'m[[:space:]]ho[[:space:]]/u";
@@ -4068,14 +4172,21 @@ class Mypattern {
         $patterns[33] = "/'[[:space:]]/u";
         
         // netejar @VERBUM
-        $patterns[34] = "/@VERBUM/u";
+        $patterns[50] = "/@VERBUM/u";
         
         // canviar els pronoms febles el i la, per l', si cal
         $patterns[35] = "/(?<=@PRFEBLE)el[[:space:]](?=[(aeiouAEIOUhH)])/u";
         $patterns[36] = "/(?<=@PRFEBLE)la[[:space:]](?=[(aeiouAEIOUhH)])/u";
         
-        // netejar @VERBUM
-        $patterns[37] = "/@PRFEBLE/u";
+        // netejar @PRFEBLE
+        $patterns[51] = "/@PRFEBLE/u";
+        
+        //preps + pronoms personals
+        $patterns[44] = '/[[:space:]][p][e][r][[:space:]][j][o][[:space:]]/u';
+        $patterns[45] = '/[[:space:]][a][m][b][[:space:]][j][o][[:space:]]/u';
+        $patterns[46] = '/[[:space:]][a][[:space:]][j][o][[:space:]]/u';
+        $patterns[47] = '/[[:space:]][d][e][[:space:]][j][o][[:space:]]/u';
+        $patterns[34] = '/[[:space:]][e][n][[:space:]][j][o][[:space:]]/u';
         
         
         $replacements[0] = ' del ';
@@ -4099,6 +4210,7 @@ class Mypattern {
         $replacements[38] = "'l ";
         $replacements[39] = "-la ";
         $replacements[42] = "-les ";
+        $replacements[48] = "-ho ";
         
         $replacements[15] = "-me ";
         $replacements[16] = "-te ";
@@ -4109,6 +4221,7 @@ class Mypattern {
         $replacements[40] = "-lo ";
         $replacements[41] = "-la ";
         $replacements[43] = "-les ";
+        $replacements[49] = "-ho ";
         
         $replacements[21] = "-m'ho ";
         $replacements[22] = "-t'ho ";
@@ -4126,11 +4239,17 @@ class Mypattern {
         $replacements[32] = "'";
         $replacements[33] = "'";
         
-        $replacements[34] = "";
+        $replacements[50] = "";
         
         $replacements[35] = "l'";
         $replacements[36] = "l'";
-        $replacements[37] = "";
+        $replacements[51] = "";
+        
+        $replacements[44] = ' per mi ';
+        $replacements[45] = ' amb mi ';
+        $replacements[46] = ' a mi ';
+        $replacements[47] = ' de mi ';
+        $replacements[34] = ' en mi ';
         
         $frasebruta = preg_replace($patterns, $replacements, $frasebruta);
         
@@ -4240,8 +4359,9 @@ class Mypattern {
             else if ($slotaux->category == "Permission") $indexpermission = $i;
             else if ($slotaux->category == "Subject") {
                 if ($slotaux->defvalueused) {
-                    // esborrem el tú o yo
-                    if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2') $slotaux->slotstring = array();
+                    // esborrem el tú o yo, 3a persona impersonal o usted quan hi són per defecte
+                    if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2' 
+                            || $slotaux->defvalue == '3' || $slotaux->defvalue == '7') $slotaux->slotstring = array();
                 }
                 // si no s'ha fet servir el subjecte per defecte
                 else {
@@ -4422,7 +4542,7 @@ class Mypattern {
                     if (($slotaux->level == 1 && $mainverbinf) 
                             || ($slotaux->level == 1 && $ordre && !$this->frasenegativa)) {
                         // si són pronoms personals, posem la forma correcta pels receivers de darrere el verb
-                        if ($matching->isPronomPersES($slotaux->paraulafinal->text)) {
+                        if ($matching->isPronomPersES($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4433,7 +4553,7 @@ class Mypattern {
                     }
                     else if ($slotaux->level == 1) {
                         // si són pronoms personals, posem la forma correcta pels receivers d'abans del verb
-                        if ($matching->isPronomPersES($slotaux->paraulafinal->text)) {
+                        if ($matching->isPronomPersES($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4444,7 +4564,7 @@ class Mypattern {
                     }
                     else if ($slotaux->level == 2 && $secondaryverbinf) {
                         // si són pronoms personals, posem la forma correcta pels receivers de darrere el verb
-                        if ($matching->isPronomPersES($slotaux->paraulafinal->text)) {
+                        if ($matching->isPronomPersES($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4455,7 +4575,7 @@ class Mypattern {
                     }
                     else if ($slotaux->level == 2) {
                         // si són pronoms personals, posem la forma correcta pels receivers d'abans del verb
-                        if ($matching->isPronomPersES($slotaux->paraulafinal->text)) {
+                        if ($matching->isPronomPersES($parauladerivada)) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4646,9 +4766,9 @@ class Mypattern {
 
         // verb + pronoms de theme a darrere
         $patterns[2] = '/(?<=@VERBUM)[[:space:]]lo[[:space:]]/u';
-        $patterns[14] = '/(?<=@VERBUM)[[:space:]]la[[:space:]]/u';
-        $patterns[15] = '/(?<=@VERBUM)[[:space:]]los[[:space:]]/u';
-        $patterns[16] = '/(?<=@VERBUM)[[:space:]]las[[:space:]]/u';
+        $patterns[14] = '/(?<=@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
+        $patterns[15] = '/(?<=@VERBUM)[[:space:]]@PRFEBLElos[[:space:]]/u';
+        $patterns[16] = '/(?<=@VERBUM)[[:space:]]@PRFEBLElas[[:space:]]/u';
         
         // verb + pronoms de receiver a darrere
         $patterns[3] = '/(?<=@VERBUM)[[:space:]]me[[:space:]]/u';
@@ -4664,8 +4784,23 @@ class Mypattern {
         $patterns[11] = "/(?<=@VERBUM)nos[[:space:]]lo[[:space:]]/u";
         $patterns[12] = "/(?<=@VERBUM)os[[:space:]]lo[[:space:]]/u";
         
-        // netejar @VERBUM
-        $patterns[13] = "/@VERBUM/u";
+        // netejar @VERBUM i @PRFEBLE
+        $patterns[28] = "/@VERBUM/u";
+        $patterns[29] = "/@PRFEBLE/u";
+        
+        // preps + pronoms personals
+        $patterns[17] = '/[[:space:]][c][o][n][[:space:]][y][o][[:space:]]/u';
+        $patterns[18] = '/[[:space:]][c][o][n][[:space:]][m][í][[:space:]]/u';
+        $patterns[19] = '/[[:space:]][c][o][n][[:space:]][t][ú][[:space:]]/u';
+        $patterns[20] = '/[[:space:]][c][o][n][[:space:]][t][i][[:space:]]/u';
+        $patterns[21] = '/[[:space:]][p][a][r][a][[:space:]][y][o][[:space:]]/u';
+        $patterns[22] = '/[[:space:]][p][a][r][a][[:space:]][t][ú][[:space:]]/u';
+        $patterns[23] = '/[[:space:]][a][[:space:]][y][o][[:space:]]/u';
+        $patterns[24] = '/[[:space:]][a][[:space:]][t][ú][[:space:]]/u';
+        $patterns[25] = '/[[:space:]][d][e][[:space:]][y][o][[:space:]]/u';
+        $patterns[26] = '/[[:space:]][d][e][[:space:]][t][ú][[:space:]]/u';
+        $patterns[13] = '/[[:space:]][e][n][[:space:]][y][o][[:space:]]/u';
+        $patterns[27] = '/[[:space:]][e][n][[:space:]][t][ú][[:space:]]/u';
         
         
         $replacements[0] = ' del ';
@@ -4688,7 +4823,21 @@ class Mypattern {
         $replacements[11] = "noslo ";
         $replacements[12] = "roslo ";
         
-        $replacements[13] = "";
+        $replacements[28] = "";
+        $replacements[29] = "";
+        
+        $replacements[17] = ' conmigo ';
+        $replacements[18] = ' conmigo ';
+        $replacements[19] = ' contigo ';
+        $replacements[20] = ' contigo ';
+        $replacements[21] = ' para mí ';
+        $replacements[22] = ' para ti ';
+        $replacements[23] = ' a mí ';
+        $replacements[24] = ' a ti ';
+        $replacements[25] = ' de mí ';
+        $replacements[26] = ' de ti ';
+        $replacements[13] = ' en mí ';
+        $replacements[27] = ' en ti ';
         
         $frasebruta = preg_replace($patterns, $replacements, $frasebruta);
         

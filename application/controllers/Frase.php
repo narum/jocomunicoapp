@@ -30,7 +30,7 @@ class Frase extends CI_Controller {
                     $info['nomsHora'] = $this->Lexicon->getNoms(array('hora'));
 
                     $info['nomsAnimal'] = $this->Lexicon->getNoms(array('animal'));
-                    $info['nomsAnimat'] = $this->Lexicon->getNoms(array('animate'));
+                    $info['nomsAnimat'] = $this->Lexicon->getNoms(array('animate', 'vehicle'));
                     $info['nomsPlanta'] = $this->Lexicon->getNoms(array('planta'));
 
                     $info['nomsPronoun'] = $this->Lexicon->getNoms(array('pronoun'));
