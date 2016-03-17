@@ -2917,8 +2917,8 @@ class Mypattern {
             
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
             // si és un slot del subverb li passem les dades del subj2
-            if ($slotaux->level == 2) $slotaux->ordenarSlot($this->genmascsubj2, $this->plsubj2, $this->copulatiu);
-            else $slotaux->ordenarSlot($this->genmascsubj1, $this->plsubj1, $this->copulatiu);
+            if ($slotaux->level == 2) $slotaux->ordenarSlot($this->genmascsubj2, $this->plsubj2, $this->copulatiu, $this->impersonal);
+            else $slotaux->ordenarSlot($this->genmascsubj1, $this->plsubj1, $this->copulatiu, $this->impersonal);
             
             // si acabem de tractar un subjecte, refresquem els valors de gènere i número per si no eren
             // pronoms, i pels possibles adjectius que hagin de concordar amb ells, que apareixeran després
@@ -2987,8 +2987,8 @@ class Mypattern {
             
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
             // si és un slot del subverb li passem les dades del subj2
-            if ($slotaux->level == 2) $slotaux->ordenarSlotES($this->genmascsubj2, $this->plsubj2, $this->copulatiu);
-            else $slotaux->ordenarSlotES($this->genmascsubj1, $this->plsubj1, $this->copulatiu);
+            if ($slotaux->level == 2) $slotaux->ordenarSlotES($this->genmascsubj2, $this->plsubj2, $this->copulatiu, $this->impersonal);
+            else $slotaux->ordenarSlotES($this->genmascsubj1, $this->plsubj1, $this->copulatiu, $this->impersonal);
             
             // si acabem de tractar un subjecte, refresquem els valors de gènere i número per si no eren
             // pronoms, i pels possibles adjectius que hagin de concordar amb ells, que apareixeran després

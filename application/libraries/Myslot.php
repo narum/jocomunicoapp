@@ -539,7 +539,7 @@ class Myslot {
      */
     
     // ordena els slots internament i fa concordar els elements
-    public function ordenarSlot($subjmasc, $subjpl, $copulatiu)
+    public function ordenarSlot($subjmasc, $subjpl, $copulatiu, $impersonal)
     {
         $nucli = $this->paraulafinal;
         $elementaux = array();
@@ -561,8 +561,8 @@ class Myslot {
                     $masc = true;
                     $plural = false;
                     
-                    // si el verb és copulatiu el nom del theme concorda amb el subjecte
-                    if ($this->category == "Theme" && $copulatiu) {
+                    // si el verb és copulatiu (amb un patró no impersonal) el nom del theme concorda amb el subjecte
+                    if ($this->category == "Theme" && $copulatiu && !$impersonal) {
                         
                         if (!$subjmasc && $subjpl) {
                             if ($nucli->propietats->femeni != "") {
@@ -1448,7 +1448,7 @@ class Myslot {
     }
     
     // ordena els slots internament i fa concordar els elements
-    public function ordenarSlotES($subjmasc, $subjpl, $copulatiu)
+    public function ordenarSlotES($subjmasc, $subjpl, $copulatiu, $impersonal)
     {
         $nucli = $this->paraulafinal;
         $elementaux = array();
@@ -1471,7 +1471,7 @@ class Myslot {
                     $plural = false;
                     
                     // si el verb és copulatiu el nom del theme concorda amb el subjecte
-                    if ($this->category == "Theme" && $copulatiu) {
+                    if ($this->category == "Theme" && $copulatiu && !$impersonal) {
                         
                         if (!$subjmasc && $subjpl) {
                             if ($nucli->propietats->femeni != "") {
