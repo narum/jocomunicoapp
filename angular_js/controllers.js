@@ -288,8 +288,8 @@ angular.module('controllers', [])
                 $scope.grid2hide = false;
                 $scope.grid3hide = false;
                 $scope.grid1 = 0;
-                $scope.grid2 = 9;
-                $scope.grid3 = 3;
+                $scope.grid2 = 8;
+                $scope.grid3 = 4;
 
                 var url = $scope.baseurl + "Board/getCellboard";
                 var postdata = {idboard: $scope.idboard};

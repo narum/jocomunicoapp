@@ -9,15 +9,15 @@
         </div>
         <div id="userview" class="container-fluid" ng-init="config(4)">
             <div class="row fullheight">
-                <div class="col-xs-2 fullheight">
+                <div class="col-xs-1 fullheight">
                    
                 </div>
-                <div class="col-xs-8" ng-include="baseurl + '/angular_templates/MainBoard.html'">
+                <div class="col-xs-10 fullheight" ng-controller="myCtrl" ng-include="baseurl + '/angular_templates/MainBoard.html'">
 
                 
                 </div>
 
-                <div ng-hide="grid3hide" class="col-xs-2 fullheight ">
+                <div ng-hide="grid3hide" class="col-xs-1 fullheight ">
                 
                 </div>
 
