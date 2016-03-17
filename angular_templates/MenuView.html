@@ -1,7 +1,7 @@
 <!-- This view is the main board where the picto will be shown. In addition it 
      includes others view like sentece, edit (board/cell) panel, etc etc
 -->
-    <div id="mainboard">
+    <div id="mainboard" ng-controller="myCtrl">
         <div id="header" class="container-fluid text-center row">
             <div style="background-color: Green;height:100%;">
 
@@ -26,10 +26,7 @@
         </div>
         <div id="footer" class="container-fluid text-center row">
            
-            <div style="background-color: yellow">
-                <br />
-                <button class="btn-success" ng-click="edit()">edit</button>
-                <br />
+            <div class="fullheight" style="background-color: yellow">
             </div>
 
         </div>
