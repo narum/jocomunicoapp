@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                     </div>
-                    <div class="col-xs-{{grid2}} fullheight" ng-init="data = []" style="background-color: Red;">
+                    <div class="col-xs-{{grid2}} col-md-{{grid2}} fullheight" ng-init="data = []" style="background-color: Red;">
                         <div id="board" class="fullheight">
                             <div class="container-fluid" ng-hide="subgrid1hide" style="height:{{subgrid1}}%">
                                 <div class="row fullheight" ng-include="'http://localhost/jocomunico/SentenceView.html'">                     

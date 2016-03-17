@@ -114,13 +114,17 @@ angular.module('controllers', [])
         })
 
         .controller('myCtrl', function ($location, $scope, $http, ngDialog, txtContent, $rootScope) {
-             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
             }
             // Pedimos los textos para cargar la pagina
             txtContent("mainboard").then(function (results) {
                 $rootScope.content = results.data;
+            });
+
+            $rootScope.$on("EditCallFromMenu", function () {
+                $scope.edit();
             });
 
             $scope.config = function (boardconf)
@@ -288,8 +292,13 @@ angular.module('controllers', [])
                 $scope.grid2hide = false;
                 $scope.grid3hide = false;
                 $scope.grid1 = 0;
-                $scope.grid2 = 8;
-                $scope.grid3 = 4;
+                $scope.grid2 = 9;
+                $scope.grid3 = 3;
+                if (window.innerWidth < 1050) {
+                    $scope.grid2 = 8;
+                    $scope.grid3 = 4;
+                }
+
 
                 var url = $scope.baseurl + "Board/getCellboard";
                 var postdata = {idboard: $scope.idboard};
@@ -457,14 +466,14 @@ angular.module('controllers', [])
                 {
                     $scope.dataTemp = response.data;
                 });
-                
+
                 var url = $scope.baseurl + "Board/autoReturn";
                 var postdata = {id: $scope.idboard};
 
                 $http.post(url, postdata).success(function (response)
                 {
-                    
-                    if (response.idPrimaryBoard !== null){
+
+                    if (response.idPrimaryBoard !== null) {
                         alert("he entrado" + response.idPrimaryBoard);
                         $scope.showBoard(response.idPrimaryBoard);
                     }
@@ -824,7 +833,12 @@ angular.module('controllers', [])
             );
         })
 
-
+        .controller('menuCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope) {
+            $scope.editMenu = function () {
+                alert("hola");
+                $rootScope.$emit("EditCallFromMenu", {});
+            };
+        })
 
 
 

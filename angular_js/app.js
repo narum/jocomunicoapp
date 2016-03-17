@@ -24,7 +24,7 @@ angular.module('app', [
 			templateUrl:'../../jocomunicoapp/angular_templates/login.html'
 		})
 		.when('/', {
-			controller:'MainCtrl',
+			controller:'menuCtrl',
 			templateUrl:'../../jocomunicoapp/angular_templates/MenuView.html'
 		})
 		.when('/adeu', {
