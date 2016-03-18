@@ -476,7 +476,9 @@ class Myword {
             }
             else {
                 // m -> New rule: if it's a proper noun, the article is "en"
-                if ($this->propietats->ispropernoun == '1') return $matching->answers["T"];
+                if ($this->propietats->ispropernoun == '1' && $masc) {
+                    return $matching->answers["T"];
+                }
                 else { 
                     // c -> We use regular expressions to verify the condition        
                     if (preg_match('/^[bcdfgjklmnpqrstvwxyz]/', $wordlowerednoaccents) == '1') {

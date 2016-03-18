@@ -2415,6 +2415,8 @@ class Myslot {
                 // és un pronom personal
                 
                 if ($auxstring[5] || $wordaux->isClass("pronoun")) $noarticle = true;
+                // si és un nom propi va amb article determinat
+                else if ($wordaux->propietats->ispropernoun == '1') $definite = true;
                 // si no té quantificador davant, procedim amb l'algoritme normal
                 else {
                     // si són complements (al nostre sistema no poden tenir possessius)
