@@ -6,8 +6,15 @@
         <form name="loginForm" ng-submit="login(loginForm)">
             <div class="col-xs-8 col-xs-offset-2 boxLogin">
                 <div class="row barraBoxLogin">
-                    <div class="col-xs-12">
-                        <div class="textResponsiveBarra">Login &nbsp;<image class="imatgeClau" ng-src="/img/srcWeb/Login/clau.png"/></div>
+                    <div class="col-xs-6">
+                        <div class="textResponsiveBarra">{{content.login}} &nbsp;<image class="imatgeClau" ng-src="/img/srcWeb/Login/clau.png"/></div>
+                    </div>
+                    <div class="col-xs-6">
+                        <button
+                            type="button"
+                            class="icon-globe btn-idioma"
+                            ng-click="changeContentLanguage()"> &nbsp;{{languageNameNext}}
+                        </button>
                     </div>
                 </div>
                 <div class="row">
@@ -16,7 +23,7 @@
                             <div class="form-group {{state}} has-feedback">
                                 <div class="input-group input-group-auto">
                                     <span class="input-group-addon"><i class="icon-user"></i></span>
-                                    <input class="form-control" type="text" name="user" placeholder="Usuari" ng-change="changeFormSate('user')" ng-model="username" required>
+                                    <input class="form-control" type="text" name="user" placeholder={{content.user}} ng-change="changeFormSate('user')" ng-model="username" required>
                                 </div>
                             </div>
                         </div>
@@ -24,19 +31,19 @@
                             <div class="form-group {{state}} has-feedback">
                                 <div class="input-group input-group-auto">
                                     <span class="input-group-addon"><i class="icon-unlock-alt"></i></span>
-                                    <input class="form-control" type="password" name="pass" placeholder="Contrasenya" ng-change="changeFormSate('pass')" ng-model="password" required/>
+                                    <input class="form-control" type="password" name="pass" placeholder={{content.pass}} ng-change="changeFormSate('pass')" ng-model="password" required/>
                                 </div>
                             </div>
                         </div>
                         <div class="row comentariError">
-                            <span class="errorcoment" ng-show="state=='has-error'">Usuari o contrasenya incorrecte!</span>
+                            <span class="errorcoment" ng-show="state=='has-error'">{{content.incorrect}}</span>
                         </div>
                         <div class="row">
                             <div class="col-xs-3 butoRegistret">
-                                <a href="/#/register">Registra't</a>
+                                <a href="/#/register">{{content.register}}</a>
                             </div>
                             <div class="col-xs-9 recuperacioContrasenya">
-                                <a href="#">Has oblidat la contrassenya?</a>
+                                <a href="#">{{content.forgotPass}}</a>
                             </div>
                         </div>
                     </div>
