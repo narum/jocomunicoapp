@@ -23,7 +23,7 @@ class Main extends REST_Controller {
         else {
 
             //Petición al modelo
-            $saveResult = $this->main_model->getStrings($section, $idLanguage);
+            $saveResult = $this->main_model->getContent($section, $idLanguage);
 
             
             //Cojemos los datos de las dos columnas de la petición y lo convertimos en un objecto clave:valor
