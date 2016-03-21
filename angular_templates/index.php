@@ -9,8 +9,8 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/typeahead.css">
         <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/app.css">
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>css/editCell.css">
-        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/css/ngDialog.min.css"/>
-        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/css/ngDialog-theme-default.min.css"/>
+        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/libraries/ngDialog.min.css"/>
+        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/libraries/ngDialog-theme-default.min.css"/>
         <link rel="stylesheet" href="<?= base_url(); ?>/css/style-jc.css"/>
     </head>
     <body oncontextmenu="return false">
@@ -35,7 +35,7 @@
         <!--<script type="text/javascript" src="<?= base_url(); ?>libraries/angular-sanitize.min.js"></script>-->
         <script type="text/javascript" src="<?= base_url(); ?>libraries/ngDraggable.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/ngDialog.min.js"></script>
-        <link href="<?= base_url(); ?>css/bootstrap-switch.css" rel="stylesheet">
-        <script src="<?= base_url(); ?>css/bootstrap-switch.js"></script>
+        <link href="<?= base_url(); ?>libraries/bootstrap-switch.css" rel="stylesheet">
+        <script src="<?= base_url(); ?>libraries/bootstrap-switch.js"></script>
     </body>
 </html>
