@@ -1,0 +1,34 @@
+<link rel="stylesheet" type="text/css" href="css/register.css">
+<link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
+<div class="row barraSuperior"></div>
+<div class="container container-table">
+    <div class="row vertical-center-row">
+        <div class="form form-horizontal" name="registerForm" ng-controller="RegisterCtrl">
+            <div class="col-xs-8 col-xs-offset-2 boxRegistreUsuari">
+                <div class="row barraSuperiorRegistre">
+                    <div class="col-xs-6"><p class="nomBarraSuperiorRegistre">{{ content.title }}</p></div>
+                    <div class="col-xs-6">
+                        <button
+                            type="button"
+                            class="icon-globe btn-idioma"
+                            ng-click="changeContentLanguage()"> &nbsp;{{languageNameNext}}
+                        </button>
+                         <a class="icon-remove-sign pull-right butoSortirBarraSuperiorRegistre" ng-href="#/login"></a>
+                    </div>
+                </div>
+                <div class="row boxFormulariRegistreUsuari">
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <div class="row resposta">
+                            <div class="col-xs-2 check"><div class="icon-ok"></div></div>
+                            <div class="col-xs-10 textresposta">{{content.registrationOk1}}</div>
+                        </div>
+                        <div class="row resposta">
+                            <div class="col-xs-2 alert"><div class="icon-info-sign"></div></div>
+                            <div class="col-xs-10 textresposta">{{content.registrationOk2}}<br><br><div style='font-weight: bold;'>{{content.registrationOk3}}</div><br>{{content.registrationOk4}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

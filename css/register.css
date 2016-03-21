@@ -151,3 +151,23 @@ html, body, .container-table {
     height: 4vh;
     width: auto;
 }
+
+.resposta{
+    margin-top: 4vh;
+    border-radius: 10px;
+    
+    background: rgb(255, 255, 255); /* Fall-back for browsers that don't support rgba */
+    background: rgba(255, 255, 255, .5);
+}
+.check{
+    font-size: 8vh;
+    color: #0fb806;/*Green*/
+}
+.alert{
+    font-size: 8vh;
+    color: #3d05cb; /*Blue*/
+}
+.textresposta{
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}

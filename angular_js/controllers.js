@@ -16,7 +16,7 @@ angular.module('controllers', [])
             $scope.content=content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
             $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
             numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
-            
+
     });
     //Cambiar el idioma del contenido
     $scope.changeContentLanguage=function(){
@@ -35,9 +35,7 @@ angular.module('controllers', [])
             }
         }
     };
-    
-    
-    
+
     // Función que coje el user y pass y comprueba que sean correctos
     $scope.login = function(form) {
         var body = {
@@ -66,7 +64,7 @@ angular.module('controllers', [])
 })
 
 //Controlador del registro de usuario
-.controller('RegisterCtrl', function($scope, Resources, md5){
+.controller('RegisterCtrl', function($scope, Resources, md5, $location){
     
             //Inicializamos el formulario y las variables necesarias
     $scope.formData = {};  //Datos del formulario
@@ -275,11 +273,14 @@ angular.module('controllers', [])
         }
         // Comprobamos todos los campos del formulario accediendo a las funciones o mirando las variables de estado
         if (userOk&&$scope.checkPassword(formData)&&$scope.checkName(formData)&&$scope.checkLastname(formData)&&emailOk&&languageOk&&$scope.sex(formData)) {
+            //Vista confirmación
+            $location.path('/registerComplete');
+            
             //Borramos los campos inecesarios
             delete formData.confirmPassword;
             delete formData.languageSelected;
             //Ponemos como idioma por defecto el primero de la lista que ha seleccionado el usuario
-            formData.cfgDefLanguage = $scope.languageList[0].id;
+            formData.cfgDefLanguage = $scope.languageList[0].ID_Language;
             //Ciframos el password en md5
             $pass = formData.pswd;
             formData.pswd = md5.createHash($pass);
@@ -287,24 +288,36 @@ angular.module('controllers', [])
             var data = {'data':JSON.stringify(formData),'table':'SuperUser'};
             //enviamos los datos del formulario.
             Resources.register.save(data,{'funct':"saveData"}).$promise
-                    .then(function(results){
-                        console.log('response:', results);
-                alert('Form submitted with' + JSON.stringify(formData));
-
-                angular.forEach($scope.languageList, function(value) {
-
-                    Resources.register.save({'SUname':formData.SUname,'ID_ULanguage':value.ID_Language},{'funct':"saveUserData"}).$promise
+                .then(function(results){
+                    console.log('response:', results);
+            
+            //ENVIAR MAIL CONFIRMACIÓN
+            
+                    angular.forEach($scope.languageList, function(value) {
+                        Resources.register.save({'SUname':formData.SUname,'ID_ULanguage':value.ID_Language},{'funct':"saveUserData"}).$promise
                             .then(function(results){
                                 console.log('response:', results);
+                            });
                     });
-                });
             });
         }
     };
 })
 
+//User email validation
+.controller('emailValidationCtrl', function($scope, $routeParams, Resources) {
+  $scope.message = 'params = ' + $routeParams.emailKey + $routeParams.emailKey.id;
+  console.log($routeParams);
+  
+  //enviamos la clave y el id para comprobar el email del usuario
+   Resources.register.save({'emailKey':$routeParams.emailKey,'ID_SU':$routeParams.id},{'funct':"emailValidation"}).$promise
+        .then(function(results){
+            console.log('response:', results);
+        });
+})
+
 //Controlador de la configuración de usuario
-        .controller('UserConfCtrl', function($scope, Resources, AuthService, txtContent, $location){
+.controller('UserConfCtrl', function($scope, Resources, AuthService, txtContent, $location){
     
     
             // Función salir del login

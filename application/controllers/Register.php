@@ -136,4 +136,18 @@ class Register extends REST_Controller {
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
 
     }
+    public function emailValidation_post() 
+    {
+        $emailKey = $this->query("emailKey");
+        $ID_SU = $this->query("ID_SU");
+        
+//        $saved=$this->main_model->saveUser($SUname,$ID_ULanguage);
+        
+        $response = [
+                "emailKey" => $emailKey,
+                "ID" => $ID_SU
+            ];
+        
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
 }
