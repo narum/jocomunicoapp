@@ -3,7 +3,40 @@ angular.module('controllers', [])
 // Controlador del Login
 
 .controller('LoginCtrl', function($scope, Resources, $location, AuthService){
+    //Definición de variables
     var loginResource = Resources.login;
+    var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
+    var numberOfLanguages = 0;// numero de idiomas (inicialmente a 0 pero se actualiza automaticamente en la siguiente función al hacer la peticion a la base de datos)
+
+    //Pedimos el contenido en los idiomas disponibles.
+    Resources.register.get({'section':'login'},{'funct':"allContent"}).$promise
+        .then(function(results){
+            $scope.availableLanguageOptions=results.languages;// Idiomas disponibles para el desplegable del formulario
+            content=results.content;// Contenido en cada idioma
+            $scope.content=content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
+            $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
+            numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
+            
+    });
+    //Cambiar el idioma del contenido
+    $scope.changeContentLanguage=function(){
+        currentLanguage ++;
+        // El content esta dentro de un array que empieza por la posición 1 y el nombre de cada idioma en un array que empieza en la posicion 0.
+        if(currentLanguage > numberOfLanguages){
+            currentLanguage = 1;
+            $scope.content=content[1];
+            $scope.languageNameNext = $scope.availableLanguageOptions[1].languageName;
+        }else{
+            $scope.content=content[currentLanguage];
+            if((currentLanguage+1) > numberOfLanguages){
+                $scope.languageNameNext = $scope.availableLanguageOptions[0].languageName;
+            }else{
+                $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;
+            }
+        }
+    };
+    
+    
     
     // Función que coje el user y pass y comprueba que sean correctos
     $scope.login = function(form) {
