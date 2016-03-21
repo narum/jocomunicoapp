@@ -1,31 +1,35 @@
-<div id="paddingFolder" class="row fullheight imgRounded" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
-    <div  class="col-xs-2">
-        <div class="fullheight imgRounded FolderButton" ng-click="copyBoard">
-            {{$parent.content.cpboard}}
+
+<div  class="row fullheight imgRounded " style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
+    <div class="topBar"></div>
+    <div id="paddingFolder">
+        <div  class="col-xs-2">
+            <div class=" imgRounded FolderButton" ng-click="copyBoard()">
+                {{$parent.content.cpboard}}
+            </div>
         </div>
-    </div>
-    <div  class="col-xs-2">
-        <div class="fullheight imgRounded FolderButton" ng-click="">
-            {{$parent.content.mvboard}}
+        <div  class="col-xs-2">
+            <div class=" imgRounded FolderButton" ng-click="">
+                {{$parent.content.mvboard}}
+            </div>
         </div>
-    </div>
-    <div  class="col-xs-2">
-        <div class="fullheight imgRounded FolderButton" ng-click="">
-            {{$parent.content.nwboard}}
+        <div  class="col-xs-2">
+            <div class=" imgRounded FolderButton" ng-click="">
+                {{$parent.content.nwboard}}
+            </div>
         </div>
-    </div>
-    <div  class="col-xs-2">
-        <div class="fullheight imgRounded FolderButton" ng-click="">
-            {{$parent.content.rmboard}}
+        <div  class="col-xs-2">
+            <div class=" imgRounded FolderButton" ng-click="">
+                {{$parent.content.rmboard}}
+            </div>
         </div>
-    </div>
-    <div  class="col-xs-2">
-        <div class="fullheight imgRounded col-xs-4">
-            {{content.rows}}
-                <select class="dropdown-arrow"
-                        ng-model="altura"
-                        ng-options="h for h in range(20)">
-                </select>
+        <div  class="col-xs-2">
+        </div>
+        <div class=" imgRounded col-xs-4">
+            <select class="boxEdit dropdown-arrow"
+                    ng-model="selectBoard"
+                    ng-options="b.Bname for b in allBoards track by b.ID_Board"
+                    ng-change="changeBoard(selectBoard.valueOf())">
+            </select>
         </div>
     </div>
 </div>

@@ -580,21 +580,26 @@ angular.module('controllers', [])
 
                 });
             };
-
-            $scope.changeAutoReturn = function (autoreturn)
+                        $scope.changePrimaryBoard = function (value)
             {
-                var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
-                var URL = $scope.baseurl + "Board/changeAutoReturn";
-                $http.post(URL, postdata).
-                        success(function ()
-                        {
+                var postdata = {id: value.ID_Board, idBoard: value.ID_GBBoard};
+                var url = $scope.baseurl + "Board/changePrimaryBoard";
 
-                        });
+                $http.post(url, postdata).success(function (response)
+                {
+
+                });
             };
 
-            $scope.changeNameBoard = function ()
+            $scope.changeBoard = function (viewBoard)
             {
-                var postdata = {Name: $scope.BoardName};
+                $scope.showBoard(viewBoard.ID_Board);
+                $scope.edit();
+            };
+
+            $scope.changeNameBoard = function (nameboard, boardindex)
+            {
+                var postdata = {Name: nameboard, ID: boardindex};
                 var URL = $scope.baseurl + "Board/modifyNameboard";
 
                 $http.post(URL, postdata).
@@ -634,10 +639,11 @@ angular.module('controllers', [])
                     if ($newH < $scope.oldH || $newW < $scope.oldW) {
                         $scope.openConfirmSize($newH, $scope.oldH, $newW, $scope.oldW);
                     } else {
+                        
                         var url = $scope.baseurl + "Board/modifyCellBoard";
                         $http.post(url, postdata).then(function ()
                         {
-                            $scope.showBoard('0');
+                            $scope.showBoard($scope.idboard);
                         }).error(function ()
                         {
 
@@ -901,9 +907,9 @@ angular.module('controllers', [])
                         controller: 'Edit'
                     });
 
-        }
-        ;
-    };
+                }
+                ;
+            };
     
     /*
      *
@@ -911,7 +917,9 @@ angular.module('controllers', [])
      *  
      */
     
-    
+            $scope.copyBoard = function () {
+                alert("copy");
+            };    
     
     
     

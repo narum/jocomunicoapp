@@ -129,8 +129,9 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $Name = $request->Name;
+        $IDnumboard = $request -> ID;
 
-        $this->BoardInterface->updateName($Name, 1);
+        $this->BoardInterface->updateName($Name, $IDnumboard);
         $this->BoardInterface->commitTrans();
     }
 
