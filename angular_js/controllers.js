@@ -428,76 +428,52 @@ angular.module('controllers', [])
              */
             $scope.showall = function ()
             {
-                $scope.grid1hide = false;
-                $scope.grid2hide = false;
-                $scope.grid3hide = false;
-                $scope.grid1 = 2;
-                $scope.grid2 = 8;
-                $scope.grid3 = 2;
+
             };
             $scope.showright = function ()
             {
-                $scope.grid1hide = true;
-                $scope.grid2hide = false;
-                $scope.grid3hide = false;
-                $scope.grid1 = 0;
-                $scope.grid2 = 10;
-                $scope.grid3 = 2;
+
             };
             $scope.showleft = function ()
             {
-                $scope.grid1hide = false;
-                $scope.grid2hide = false;
-                $scope.grid3hide = true;
-                $scope.grid1 = 2;
-                $scope.grid2 = 10;
-                $scope.grid3 = 0;
+
             };
             $scope.showmid = function ()
             {
-                $scope.grid1hide = true;
-                $scope.grid2hide = false;
-                $scope.grid3hide = true;
-                $scope.grid1 = 0;
-                $scope.grid2 = 12;
-                $scope.grid3 = 0;
+
             };
 
             $scope.showupdown = function ()
             {
-                $scope.subgrid1hide = false;
-                $scope.subgrid2hide = false;
-                $scope.subgrid3hide = false;
-                $scope.subgrid1 = 20;
-                $scope.subgrid2 = 60;
-                $scope.subgrid3 = 20;
+                $scope.sentenceViewTop = true;
+                $scope.sentenceViewHeight = 20;
+                $scope.userViewWidth = 100;
+                $scope.searchFolderHeight = 0;
+                $scope.boardHeight = 60;
             };
             $scope.showdown = function ()
             {
-                $scope.subgrid1hide = true;
-                $scope.subgrid2hide = false;
-                $scope.subgrid3hide = false;
-                $scope.subgrid1 = 0;
-                $scope.subgrid2 = 80;
-                $scope.subgrid3 = 20;
+                $scope.sentenceViewTop = false;
+                $scope.sentenceViewHeight = 0;
+                $scope.userViewWidth = 100;
+                $scope.searchFolderHeight = 0;
+                $scope.boardHeight = 80;
             };
             $scope.showup = function ()
             {
-                $scope.subgrid1hide = false;
-                $scope.subgrid2hide = false;
-                $scope.subgrid3hide = true;
-                $scope.subgrid1 = 16;
-                $scope.subgrid2 = 78;
-                $scope.subgrid3 = 0;
+                $scope.sentenceViewTop = true;
+                $scope.sentenceViewHeight = 16;
+                $scope.userViewWidth = 100;
+                $scope.searchFolderHeight = 0;
+                $scope.boardHeight = 78;
             };
             $scope.showmiddle = function ()
             {
-                $scope.subgrid1hide = true;
-                $scope.subgrid2hide = false;
-                $scope.subgrid3hide = true;
-                $scope.subgrid1 = 0;
-                $scope.subgrid2 = 100;
-                $scope.subgrid3 = 0;
+                $scope.sentenceViewTop = false;
+                $scope.sentenceViewHeight = 0;
+                $scope.userViewWidth = 100;
+                $scope.searchFolderHeight = 0;
+                $scope.boardHeight = 100;
             };
             /*
              * Show board and the pictograms
@@ -530,15 +506,14 @@ angular.module('controllers', [])
             {
                 $scope.getPrimaryBoard();
                 $scope.inEdit = true;
-                $scope.grid1hide = true;
-                $scope.grid2hide = false;
-                $scope.grid3hide = false;
-                $scope.grid1 = 0;
-                $scope.grid2 = 9;
-                $scope.grid3 = 3;
+                $scope.boardHeight = 96;
+                $scope.userViewWidth = 9;
+                $scope.editViewWidth = 3;
+                $scope.userViewHeight = 80;
+                $scope.searchFolderHeight = 20;
                 if (window.innerWidth < 1050) {
-                    $scope.grid2 = 8;
-                    $scope.grid3 = 4;
+                    $scope.userViewWidth = 8;
+                    $scope.editViewWidth = 4;
                 }
 
 
@@ -685,16 +660,18 @@ angular.module('controllers', [])
              * Add the selected pictogram to the sentence
              */
             $scope.clickOnCell = function (cell) {
+                if (!$scope.inEdit){
 
 
-                if (cell.ID_CPicto !== null) {
-                    $scope.addToSentence(cell.ID_CPicto);
-                }
-                if (cell.ID_CFunction !== null) {
-                    $scope.clickOnFunction(cell.ID_CFunction);
-                }
-                if (cell.boardLink !== null) {
-                    $scope.showBoard(cell.boardLink);
+                    if (cell.ID_CPicto !== null) {
+                        $scope.addToSentence(cell.ID_CPicto);
+                    }
+                    if (cell.ID_CFunction !== null) {
+                        $scope.clickOnFunction(cell.ID_CFunction);
+                    }
+                    if (cell.boardLink !== null) {
+                        $scope.showBoard(cell.boardLink);
+                    }
                 }
             };
             /*
@@ -1080,20 +1057,20 @@ angular.module('controllers', [])
                 alert("hola");
                 $rootScope.$emit("EditCallFromMenu", {});
             };
-             // Función salir del login
+            // Función salir del login
             $scope.logout = function () {
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
                     scope: $scope
                 }).then(function () {
                     AuthService.logout();
-                $location.path('/login');
+                    $location.path('/login');
                 }, function (value) {
-                    
+
                 });
-               
+
             };
-            
+
         })
 
 
