@@ -716,7 +716,6 @@ angular.module('controllers', [])
         {
 
             if (response.idPrimaryBoard !== null) {
-                alert("he entrado" + response.idPrimaryBoard);
                 $scope.showBoard(response.idPrimaryBoard);
             }
         });
@@ -1077,7 +1076,7 @@ angular.module('controllers', [])
 
         .controller('menuCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope) {
             $scope.editMenu = function () {
-                alert("hola");
+                
         $rootScope.$emit("EditCallFromMenu", {});
     };
 })
