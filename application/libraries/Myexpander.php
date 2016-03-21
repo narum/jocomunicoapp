@@ -121,9 +121,10 @@ class Myexpander {
         else {
 
             $partpreguntaposada = false;
+            $preguntabona = false;
             // Per cada PATTERN
             for ($i=0; $i<count($this->allpatterns); $i++) {
-
+                
                 // fem una còpia de les paraules per treballar des de 0 a cada pattern
                 $paraules = unserialize(serialize($this->paraulescopia));
                 $partPregunta = array();
@@ -174,11 +175,19 @@ class Myexpander {
                else if ($numpreguntes == 1) {
                    $partpreguntaposada = $auxpattern->fillPartPregunta($partPregunta[0]);
 
-                   if (!$partpreguntaposada) {
+                   if (!$partpreguntaposada && !$preguntabona) {
                        $this->errormessagetemp = "Warning. No s'ha trobat lloc per la partícula de la pregunta.";
                        $this->errorcodetemp = 4;
                        $this->errortemp = true;
                        $this->readwithoutexpansion = true;
+                   }
+                   else {
+                       // només que hi hagi un patró on encaixi la partícula de pregunta, ja va bé
+                       $preguntabona = true;
+                       $this->errormessagetemp = null;
+                       $this->errorcodetemp = null;
+                       $this->errortemp = false;
+                       $this->readwithoutexpansion = false;
                    }
                } // Fi tractament de pregunta
 
