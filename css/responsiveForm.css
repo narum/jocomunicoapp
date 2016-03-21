@@ -1,3 +1,5 @@
+/*Force landscape orientation*/
+
 /*Responsive Text*/
 html, body{
     font-size: 3vh;
@@ -138,4 +140,7 @@ select[multiple].input-group-auto > .input-group-btn > .btn {
 }
 .input-group-addon{/*color de fondo de los iconos de los input box en reposo*/
     background-color: #99ccdd;/*azul turquesa*/
+    height: 5vh;
+/*    width: 9vh;
+    padding: auto;*/
 }

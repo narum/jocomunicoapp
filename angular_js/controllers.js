@@ -45,9 +45,8 @@ angular.module('controllers', [])
         var userOk = false; // variables de validación
         var emailOk = false; // variables de validación
         var languageOk = false; // variables de validación
-        
-        $scope.imgButton = $scope.baseurl + 'img/BotoCrearUsuari.png'; //Imagen del boton submit
         var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
+//        $scope.sound = ngAudio.load("mp3/sound.mp3");
         
     //Pedimos los idiomas disponibles
     Resources.register.get({'section':'userRegister'},{'funct':"allContent"}).$promise
@@ -207,6 +206,29 @@ angular.module('controllers', [])
         $scope.languageList.splice(index,1);//Borrar item de un array .splice(posicion, numero de items)
     };
     
+    //Genero de la aplicación (Masculino/femenino)
+    $scope.sex=function(sex){
+        if(sex=='female'){
+            $scope.state.female ='has-success';
+            $scope.state.male='';
+            $scope.formData.cfgIsFem = '1';
+            return true;
+        }else if(sex=='male'){
+            $scope.state.female ='';
+            $scope.state.male='has-success';
+            $scope.formData.cfgIsFem = '0';
+            return true;
+        }
+            console.log($scope.formData);
+        if(sex.cfgIsFem == null || sex.cfgIsFem ==''){
+            $scope.state.female ='has-error';
+            $scope.state.male ='has-error';
+            return false;
+        }else{
+            return true;
+        }
+    }
+    
     $scope.submitForm = function (formData) {
        // Llamamos las funciones para printar el error en el formulario si nunca se han llamado
         $scope.checkUser(formData);
@@ -214,13 +236,14 @@ angular.module('controllers', [])
         $scope.checkPassword(formData);
         $scope.checkName(formData);
         $scope.checkLastname(formData);
+        $scope.sex(formData);
         // Comprobamos si el usuario ha introducido algun idioma
         if ($scope.languageList.length==0){
             $scope.state.languageSelected = 'has-error';
             languageOk=false;
         }
         // Comprobamos todos los campos del formulario accediendo a las funciones o mirando las variables de estado
-        if (userOk&&$scope.checkPassword(formData)&&$scope.checkName(formData)&&$scope.checkLastname(formData)&&emailOk&&languageOk) {
+        if (userOk&&$scope.checkPassword(formData)&&$scope.checkName(formData)&&$scope.checkLastname(formData)&&emailOk&&languageOk&&$scope.sex(formData)) {
             //Borramos los campos inecesarios
             delete formData.confirmPassword;
             delete formData.languageSelected;

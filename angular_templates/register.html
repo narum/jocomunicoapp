@@ -143,7 +143,7 @@
                                     <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.lastname =='has-error'"></span>
                                     <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.lastname =='has-success'"></span>
                                     <span class="errorcoment"
-                                          ng-show="registerForm.lastname.$touched && registerForm.lastname.$pristine || (state.lastname=='has-error')">{{ content.required }}</span>
+                                          ng-show="registerForm.lastname.$touched && registerForm.lastname.$pristine || (state.lastname=='has-error')"> &nbsp;&nbsp;{{ content.required }}</span>
                                 </div>
                             </div>
                         </div>
@@ -177,6 +177,26 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-6">
+                                <div class="form-group {{state.female}} has-feedback">
+                                    <div class="input-group input-group-auto inputMarginRigth">
+                                        <span class="input-group-addon"><image class="img img-inputIcon" alt="Responsive image" src='/img/icons/yo_3.png'></span>
+                                        <input type="button" class="form-control" value="{{ content.sexFemale }}" ng-click="sex('female')">
+                                    </div>
+                                    <span class="errorcoment" ng-show="state.female =='has-error'">{{ content.required }}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group {{state.male}} has-feedback">
+                                    <div class="input-group input-group-auto inputMarginLeft">
+                                        <span class="input-group-addon"><image class="img img-inputIcon" alt="Responsive image" src='/img/icons/yo_1.png'></span>
+                                        <input type="button" class="form-control" value="{{ content.sexMale }}" ng-click="sex('male')">
+                                    </div>
+                                    <span class="errorcoment" ng-show="state.male =='has-error'"> &nbsp;&nbsp;{{ content.required }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
                                 <div class="form-group {{state.languageSelected}} has-feedback">
                                     <div class="input-group input-group-auto inputMarginRigth">
                                         <span class="input-group-addon"><i class="icon-comments"></i></span>
@@ -186,7 +206,7 @@
                                             ng-model="formData.languageSelected"
                                             ng-change="addLanguage(formData.languageSelected)"
                                             >
-                                            <option value='' disabled selected>{{ content.language }}</option>
+                                            <option selected="selected" disabled="disabled" value="">{{ content.language }}</option>
                                             <option ng-repeat="option in availableLanguageOptions" value="{{option.ID_Language}}">{{option.languageName}}</option>
                                         </select>
                                     </div>
@@ -223,11 +243,6 @@
                     </div>
                 </div>
             </div>
-<!--                <div class="row"><br><br><br><br><br><br><br><br><br>
-                    <div id="divID" ng-init="imgsrc='/img/BotoCrea.png'" ng-mouseover="imgsrc='/img/BotoCrea2.png'" ng-mouseout="imgsrc='/img/BotoCrea.png'">
-                    <input type="image" class="img img-rounded" alt="Responsive image" ng-src="{{imgsrc}}" ng-click="submitForm(formData)">
-                    </div>
-                </div>-->
         </form>
     </div>
 </div>

@@ -140,3 +140,8 @@ html, body, .container-table {
     margin-left: 1vh;
     cursor: pointer;
 }
+
+.img-inputIcon{
+    height: 4vh;
+    width: auto;
+}
