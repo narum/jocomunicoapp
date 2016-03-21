@@ -137,7 +137,7 @@
     width : 80vw;
     height: 80vh;
     margin-top: -15vh;
-    background-image: url(http://localhost/jocomunicoapp/img/srcWeb/Patterns1-08.png);
+    background-image: url(/img/srcWeb/Patterns1-08.png);
     border-radius: 10px;
     padding: 0em;
 }
