@@ -1,0 +1,32 @@
+<!-- This view is the main board where the picto will be shown. In addition it 
+     includes others view like sentece, edit (board/cell) panel, etc etc
+-->
+<div id="mainboard" style="background-image: url('http://localhost/jocomunicoapp/img/FonsRegistre.png');background-size:100% 100%">
+    <div id="header" class="container-fluid text-center row">
+        <div id="menuText" class="col-xs-offset-2 col-xs-10">
+            <div class="col-xs-2" ng-click="editMenu();">
+                Edita panell
+            </div>
+            <div class="col-xs-1">
+                Grups
+            </div>
+            <div class="col-xs-3">
+                Configuracio d'usuari
+            </div>
+            <div class="col-xs-offset-1 col-xs-1">
+                Inici
+            </div>
+            <div class="col-xs-1">
+                Log out
+            </div>
+        </div>
+    </div>
+    
+    <div id="body" class="col-xs-12 fullheight" ng-controller="myCtrl" ng-include="baseurl + '/angular_templates/MainBoard.html'">
+    </div>
+
+</div>
+
+
+
+

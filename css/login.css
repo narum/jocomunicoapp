@@ -1,60 +1,29 @@
-html, body, .container-table {
-    height: 100%;
-    height: 100vh;
-    background: url("/img/FonsRegistre.png") no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-}
-/*Per centrar el div central*/
-.container-table {
-    display: table;
-    background: none;
-}
-.vertical-center-row {
-    display: table-cell;
-    vertical-align: middle;
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+
+/****** LOGIN MODAL ******/
+.loginmodal-container {
+  padding: 30px;
+  max-width: 350px;
+  width: 100% !important;
+  background-color: #F7F7F7;
+  margin: 0 auto;
+  border-radius: 2px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  font-family: roboto;
 }
 
-.barraSuperior{
-    background-image: url("/img/fonsBarraSuperior.png");
-    
-    height: 6vh;
-    width: 110vw;
-    
-    position: fixed;
-    z-index:1;
+.loginmodal-container h1 {
+  text-align: center;
+  font-size: 1.8em;
+  font-family: roboto;
 }
 
-.boxLogin{
-    background-image: url("/img/Patterns1-08.png");
-    height: 35vh;
-    border-radius: 15px;
-}
-.barraBoxLogin{
-    background-image: url("/img/fonsBarraSuperior.png");
-    height: 6vh;
-    
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-}
-.textResponsiveBarra{
-    color: white;
-    margin-top: 1vh;
-    margin-left: 1vw;
-}
-.imatgeClau{
-    height: 5vh;
-    width: auto;
-}
-.margeSuperiorUser{
-    padding-top: 1.5vh;
-}
-.comentariError{
-    margin: 0px;
-    padding: 0px;
-    border: 0px;
+.loginmodal-container button {
+  width: 100%;
+  display: block;
+  margin-bottom: 10px;
+  position: relative;
 }
 
 .recuperacioContrasenya{
@@ -126,27 +95,48 @@ html, body, .container-table {
   color: #333333; /* gris*/
 }
 
-.boxButo{
-    padding: 0px;
-    height: 35vh;
-    background-color: none;
-}
-.buto{
-    margin-top: 8vh;
-}
-.triangle{
-    padding: 0px;
-}
-.imgTriangle{
-    height: 18.9vh;
-    width: auto;
+.loginmodal {
+  text-align: center;
+  font-size: 14px;
+  font-family: 'Arial', sans-serif;
+  font-weight: 700;
+  height: 36px;
+  padding: 0 8px;
+/* border-radius: 3px; */
+/* -webkit-user-select: none;
+  user-select: none; */
 }
 
-.img-rounded{
-    height: 21vh;
-    width: auto;
-    border-radius: 10px;
-    border:none;
-    margin-left: 1vh;
-    cursor: pointer;
+.loginmodal-submit {
+  /* border: 1px solid #3079ed; */
+  border: 0px;
+  color: #fff;
+  text-shadow: 0 1px rgba(0,0,0,0.1); 
+  background-color: #4d90fe;
+  padding: 17px 0px;
+  font-family: roboto;
+  font-size: 14px;
+  /* background-image: -webkit-gradient(linear, 0 0, 0 100%,   from(#4d90fe), to(#4787ed)); */
+}
+
+.loginmodal-submit:hover {
+  /* border: 1px solid #2f5bb7; */
+  border: 0px;
+  text-shadow: 0 1px rgba(0,0,0,0.3);
+  background-color: #357ae8;
+  /* background-image: -webkit-gradient(linear, 0 0, 0 100%,   from(#4d90fe), to(#357ae8)); */
+}
+
+.loginmodal-container a {
+  text-decoration: none;
+  color: #666;
+  font-weight: 400;
+  text-align: center;
+  display: inline-block;
+  opacity: 0.6;
+  transition: opacity ease 0.5s;
+} 
+
+.login-help{
+  font-size: 12px;
 }
