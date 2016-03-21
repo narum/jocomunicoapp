@@ -92,6 +92,17 @@
 .imgRounded{
     border-radius: 7px;
 }
+.imgResponsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    width: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    position: relative;
+}
 .cruz{
     background-color: #151515;
     height: 100%;
