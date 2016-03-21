@@ -929,6 +929,20 @@ angular.module('controllers', [])
         }
         ;
     };
+    
+    /*
+     *
+     *  editFolders functions
+     *  
+     */
+    
+    
+    
+    
+    
+    
+    
+    
 })
 
 

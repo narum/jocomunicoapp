@@ -160,3 +160,7 @@
     height: 100%;
     width: 100%;
 }
+.FolderButton{
+    margin: 10%;
+    background-color: white;
+}

@@ -188,6 +188,11 @@
 {
     padding: 1%;
 }
+#paddingFolder
+{
+    padding-top: 2.5vw;
+    padding-bottom: 3.5vw;
+}
 .PaddingSent
 {
     padding-top: 0.5% !important;
