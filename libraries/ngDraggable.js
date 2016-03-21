@@ -240,7 +240,7 @@ angular.module("ngDraggable", [])
 
                 var reset = function() {
                     if(allowTransform)
-                        element.css({transform:'', 'z-index':'', '-webkit-transform':'', '-ms-transform':''});
+                        element.css({transform:'', 'z-index':'', '-webkit-transform':'', '-ms-transform':'',top:'',left:''});
                     else
                         element.css({'position':'',top:'',left:''});
                 };
@@ -251,7 +251,9 @@ angular.module("ngDraggable", [])
                             transform: 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + x + ', ' + y + ', 0, 1)',
                             'z-index': 2147483647,
                             '-webkit-transform': 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + x + ', ' + y + ', 0, 1)',
-                            '-ms-transform': 'matrix(1, 0, 0, 1, ' + x + ', ' + y + ')'
+                            '-ms-transform': 'matrix(1, 0, 0, 1, ' + x + ', ' + y + ')',
+                            'left':'0%',
+                            'top':'0%'
                         });
                     }else{
                         element.css({'left':x+'px','top':y+'px', 'position':'fixed'});

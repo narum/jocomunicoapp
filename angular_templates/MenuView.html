@@ -1,7 +1,7 @@
 <!-- This view is the main board where the picto will be shown. In addition it 
      includes others view like sentece, edit (board/cell) panel, etc etc
 -->
-<div id="mainboard" style="background-image: url('/img/FonsRegistre.png');background-size:100% 100%">
+<div id="main" style="background-image: url('/img/FonsRegistre.png');background-size:100% 100%">
     <div id="header" class="container-fluid text-center row">
         <div id="menuText" class="col-xs-offset-2 col-xs-10">
             <div class="col-xs-2" ng-click="editMenu();">
@@ -16,7 +16,7 @@
             <div class="col-xs-offset-1 col-xs-1">
                 Inici
             </div>
-            <div class="col-xs-1">
+            <div class="col-xs-1"  ng-click="logout();">
                 Log out
             </div>
         </div>
