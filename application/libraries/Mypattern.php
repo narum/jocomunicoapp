@@ -2502,6 +2502,9 @@ class Mypattern {
                 // si la paraula en té una altra de coordinada, passarà a plural
                 if ($subj1->tipus == "name" && $subj1->paraulacoord != null) $this->plsubj1 = true;
             }
+            else if($slotsubj1->paraulafinal->tipus == "questpart") {
+                $this->perssubj1 = 3;
+            }
         }
         
         // si hi és també agafem les dades del segon subjecte
@@ -2765,6 +2768,9 @@ class Mypattern {
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
                 if ($subj1->tipus == "name" && $subj1->paraulacoord != null) $this->plsubj1 = true;
+            }
+            else if($slotsubj1->paraulafinal->tipus == "questpart") {
+                $this->perssubj1 = 3;
             }
         }
         
