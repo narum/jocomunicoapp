@@ -438,6 +438,7 @@ angular.module('controllers', [])
                     $scope.showmid();
                 }
                 $scope.showup();
+                $scope.showBoard('0')
                 /*$scope.grid1hide = false;
                  $scope.grid2hide = false;
                  $scope.grid3hide = false;
