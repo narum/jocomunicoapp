@@ -59,6 +59,9 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+    /*
+     * Change the name of one board from ID of the board
+     */
 
     function updateName($Name, $id) {
         $output = array();
@@ -129,7 +132,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Change the values of a cell from cell database table
      */
 
     function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto, $idSentence, $idSFolder, $cellType, $color) {
@@ -155,7 +158,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Change scan values by the output scan values 
      */
 
     function updateScanCell($id, $num1, $text1, $num2, $text2) {
@@ -173,7 +176,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Change the cell pictogram by another pictogram
      */
 
     function updatePictoCell($id, $idPicto) {
@@ -417,7 +420,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Return all sentences from user
      */
 
     function getSentences($idusu, $idsearch) {
@@ -435,7 +438,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Return the sentence of the input id sentence
      */
 
     function getSentence($id) {
@@ -452,7 +455,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Return all folders from user
      */
 
     function getSFolders($idusu, $idsearch) {
@@ -470,7 +473,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Return a folder of input id folder
      */
 
     function getSFolder($id) {
@@ -539,12 +542,20 @@ class BoardInterface extends CI_Model {
         ));
     }
 
+    /*
+     * Change the value of autoreturn from board
+     */
+    
     function changeAutoReturn($id, $value) {
         $this->db->where('ID_Board', $id);
         $this->db->update('Boards', array(
             'autoReturn' => $value,
         ));
     }
+    
+    /*
+     * Get autoreturn value
+     */
     
     function getAutoReturn($id) {
         $this->db->where('ID_Board', $id);
