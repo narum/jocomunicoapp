@@ -1016,6 +1016,7 @@ angular.module('controllers', [])
                 //Initialize the dropdwon menus.
                 $scope.getFunctions();
                 $scope.getBoards();
+                $scope.colorSelected = response.info.color;
                 $scope.cellType = response.info.cellType;
                 $scope.numScanBlockText1 = $scope.range(20)[$scope.Editinfo.customScanBlock1];
                 $scope.textInScanBlockText1 = $scope.Editinfo.customScanBlockText1;
@@ -1050,10 +1051,10 @@ angular.module('controllers', [])
                 $scope.aceptar = function () {
                     var url = $scope.baseurl + "Board/editCell";
                     var postdata = {id: idCell, idPicto: $scope.idPictoEdit, idSentence: $scope.sentenceSelectedId, idSFolder: $scope.sFolderSelectedId, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1", numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1, numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2, cellType: $scope.cellType, color: $scope.colorSelected};
-                    if (!$scope.checkboxFuncType) {
+                    if (!$scope.checkboxFuncType || ($scope.cellType === 'link')) {
                         postdata.idFunct = null;
                     }
-                    if (!$scope.checkboxBoardsGroup) {
+                    if (!$scope.checkboxBoardsGroup || ($scope.cellType === 'funct')) {
                         postdata.boardLink = null;
                     }
                     if (!$scope.checkboxTextInCell) {
