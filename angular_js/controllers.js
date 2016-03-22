@@ -798,6 +798,10 @@ angular.module('controllers', [])
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
+                
+                //MODIF: dir frase
+                $scope.sound = ngAudio.load($scope.baseurl+"mp3/sound.mp3");
+                $scope.sound.play();
             };
 
             /*
@@ -915,11 +919,7 @@ angular.module('controllers', [])
      */
     
             $scope.copyBoard = function () {
-                alert($scope.baseurl+"mp3/test.mp3");
 
-                $scope.sound = ngAudio.load($scope.baseurl+"mp3/test.mp3");
-                $scope.sound.play();
-                alert("3");
             };    
     
     
