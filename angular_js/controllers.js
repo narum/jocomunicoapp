@@ -385,7 +385,7 @@ angular.module('controllers', [])
         $scope.goodbye = "Adeu!!";
     }
 })
-        .controller('myCtrl', function ($location, $scope, $http, ngDialog, txtContent, $rootScope) {
+        .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -545,6 +545,7 @@ angular.module('controllers', [])
                     $scope.userViewWidth = 8;
                     $scope.editViewWidth = 4;
                 }
+                
 
 
                 var url = $scope.baseurl + "Board/getCellboard";
@@ -914,7 +915,11 @@ angular.module('controllers', [])
      */
     
             $scope.copyBoard = function () {
-                alert("copy");
+                alert($scope.baseurl+"mp3/test.mp3");
+
+                $scope.sound = ngAudio.load($scope.baseurl+"mp3/test.mp3");
+                $scope.sound.play();
+                alert("3");
             };    
     
     
@@ -1103,7 +1108,6 @@ angular.module('controllers', [])
 
         .controller('menuCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope, AuthService, $location) {
             $scope.editMenu = function () {
-                alert("hola");
                 $rootScope.$emit("EditCallFromMenu", {});
             };
             // Función salir del login

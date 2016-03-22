@@ -6,7 +6,8 @@ angular.module('app', [
         'ngDraggable',
 	'ui.bootstrap',
         'ngDialog',
-
+        'ngAudio',
+        
 	//Modules
 	'controllers',
 	'services'
