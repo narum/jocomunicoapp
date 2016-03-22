@@ -740,7 +740,7 @@ class Myslot {
                         // afegim la paraula coordinada, el plural es passa, però el femení
                         // s'ha de mirar si la paraula ho era o no el tenia el modificador
                         $masccoord = true;
-                        $pluralcoord = $plural;
+                        $pluralcoord = false;
                         if ($paraulacoord->propietats->mf == "fem" || $paraulacoord->fem) $masccoord = false;
                         // el plural només pot canviar si plural era false i la paraulacoord sempre és plural
                         // que aleshores ha de passar a true o si volíem que la paraulacoord fos plural
@@ -1665,7 +1665,7 @@ class Myslot {
                         // afegim la paraula coordinada, el plural es passa, però el femení
                         // s'ha de mirar si la paraula ho era o no el tenia el modificador
                         $masccoord = true;
-                        $pluralcoord = $plural;
+                        $pluralcoord = false;
                         if ($paraulacoord->propietats->mf == "fem" || $paraulacoord->fem) $masccoord = false;
                         // el plural només pot canviar si plural era false i la paraulacoord sempre és plural
                         // que aleshores ha de passar a true o si volíem que la paraulacoord fos plural
