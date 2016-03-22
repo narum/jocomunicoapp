@@ -601,7 +601,7 @@ angular.module('controllers', [])
             {
                 var postdata = {Name: nameboard, ID: boardindex};
                 var URL = $scope.baseurl + "Board/modifyNameboard";
-
+                alert(postdata.Name);
                 $http.post(URL, postdata).
                         success(function (response)
                         {
