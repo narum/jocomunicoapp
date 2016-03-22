@@ -1710,18 +1710,19 @@ class Mypattern {
             else if ($slotmodifaux->paraulafinal->text == "no") $this->frasenegativa = true;
         }
         
-        // THEME PRONOMINAL HO
+        // THEME PRONOMINAL HO, JO, TU
         
         $indextheme1 = null;
         $indextheme2 = null;
                 
-        // busquem si té un slot de theme que sigui pronominal "ho"
+        // busquem si té un slot de theme que sigui pronominal "ho", "jo", "tu"
         for($i=0; $i<count($this->ordrefrase); $i++) {
             
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
             if ($slotaux->category == "Theme") {
                 // si està en forma de pronom
-                if ($slotaux->defvalueused && $slotaux->defvalue == "ho") {
+                if ($slotaux->defvalueused && ($slotaux->defvalue == "ho" || $slotaux->defvalue == "jo"
+                        || $slotaux->defvalue == "tu")) {
                     if ($slotaux->level == 1) $indextheme1 = $i;
                     if ($slotaux->level == 2) $indextheme2 = $i;
                 }
@@ -2102,18 +2103,19 @@ class Mypattern {
             else if ($slotmodifaux->paraulafinal->text == "no") $this->frasenegativa = true;
         }
         
-        // THEME PRONOMINAL LO
+        // THEME PRONOMINAL LO, TÚ, YO
         
         $indextheme1 = null;
         $indextheme2 = null;
                 
-        // busquem si té un slot de theme que sigui pronominal "lo"
+        // busquem si té un slot de theme que sigui pronominal "lo", "tú", "yo"
         for($i=0; $i<count($this->ordrefrase); $i++) {
             
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
             if ($slotaux->category == "Theme") {
                 // si està en forma de pronom
-                if ($slotaux->defvalueused && $slotaux->defvalue == "lo") {
+                if ($slotaux->defvalueused && ($slotaux->defvalue == "lo" || $slotaux->defvalue == "tú"
+                        || $slotaux->defvalue == "yo")) {
                     if ($slotaux->level == 1) $indextheme1 = $i;
                     if ($slotaux->level == 2) $indextheme2 = $i;
                 }
@@ -2190,7 +2192,8 @@ class Mypattern {
         }
         
         
-        // THEME PRONOMINAL / Yo, tu, él, etc. si no té preposició davant
+        // THEME PRONOMINAL / Yo, tu, él, etc. si no té preposició, excepte "a"
+        // si té la preposició "a" davant, farà el canvi, però no posarà la preposició
         
         $indextheme1 = null;
         $indextheme2 = null;
@@ -2199,7 +2202,7 @@ class Mypattern {
         for($i=0; $i<count($this->ordrefrase); $i++) {
             
             $slotaux = $this->slotarray[$this->ordrefrase[$i]];
-            if ($slotaux->category == "Theme" && $slotaux->prep == null) {
+            if ($slotaux->category == "Theme" && ($slotaux->prep == null || $slotaux->prep == "a")) {
                 $wordslotauxfinal = $slotaux->paraulafinal;
                 // si està en forma de pronom
                 if (!$slotaux->defvalueused && $wordslotauxfinal->isClass("pronoun")) {
@@ -2211,7 +2214,7 @@ class Mypattern {
         
         if ($indextheme1 != null) {
             $temp = $this->ordrefrase[$indextheme1];
-            // esborrem el receiver 1 per moure'l de lloc
+            // esborrem el theme 1 per moure'l de lloc
             array_splice($this->ordrefrase, $indextheme1, 1);
             
             // si la frase és un ordre
@@ -2224,7 +2227,7 @@ class Mypattern {
                 array_splice($this->ordrefrase, $indexmainverb, 0, $temp);
             }
         }
-        // fem el mateix amb el receiver 2, si hi és
+        // fem el mateix amb el theme 2, si hi és
         if ($indextheme2 != null) {
             $temp = $this->ordrefrase[$indextheme2];
             // esborrem el receiver 1 per moure'l de lloc

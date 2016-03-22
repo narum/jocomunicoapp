@@ -80,6 +80,7 @@ CREATE TABLE GroupBoards (
 	ID_GB INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	ID_GBUser INT,
 	GBname VARCHAR(100),
+	primaryGroup ENUM('0', '1') DEFAULT '0',
 	defWidth INT DEFAULT '8',
 	defHeight INT DEFAULT '5',
 	imgGB VARCHAR(300),

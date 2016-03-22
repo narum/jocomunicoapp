@@ -1495,15 +1495,23 @@ class Myslot {
                         if ($nucli->plural) $plural = true;
                     }
                     
+                    echo $this->category." ".$this->prep." ";
+                    if ($this->paraulafinal->isClass("pronoun")) echo "PRONOM ";
+                    echo "<br />";
+                    
                     // PREPOSICIÓ
-                    // posem la preposició, si n'hi ha, excepte si el nom és el nucli d'un slot de LocAt i 
-                    // el complementa un adverbi de lloc. Per evitar ex: "Está en debajo la mesa."
+                    // posem la preposició, si n'hi ha, excepte: Si el nom és el nucli d'un slot de LocAt i 
+                    // el complementa un adverbi de lloc. Per evitar ex: "Está en debajo la mesa." SI és un
+                    // Theme amb un pronom i la preposició "a" davant, que no la posarem -> Per evitar: A te quiero.
                     if ($this->prep != null) {
-                        if (!($this->category == "LocAt" && $this->CAdvassigned && 
-                                $this->cmpAdvs[$this->CAdvassignedkey]->paraulafinal->isClass("lloc"))) {
+                        if (!(($this->category == "LocAt" && $this->CAdvassigned && 
+                                $this->cmpAdvs[$this->CAdvassignedkey]->paraulafinal->isClass("lloc"))
+                                || ($this->category == "Theme" && $this->paraulafinal->isClass("pronoun") &&
+                                    $this->prep == "a"))) {
                             $elementaux[0] = $this->prep;
                             $elementaux[1] = null;
                             $this->slotstring[] = $elementaux; 
+                            echo "NOOOO";
                         }
                     }
                     
