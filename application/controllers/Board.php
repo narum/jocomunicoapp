@@ -603,8 +603,9 @@ class Board extends REST_Controller {
         $numScanBlockText2 = $request->numScanBlockText2;
         $textInScanBlockText2 = $request->textInScanBlockText2;
         $cellType = $request->cellType;
+        $color = $request->color;
 
-        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType);
+        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType, $color);
         $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
     }
 

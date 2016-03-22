@@ -132,7 +132,7 @@ class BoardInterface extends CI_Model {
      * 
      */
 
-    function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto, $idSentence, $idSFolder, $cellType) {
+    function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto, $idSentence, $idSFolder, $cellType, $color) {
         $output = array();
 
         $data = array(
@@ -144,7 +144,8 @@ class BoardInterface extends CI_Model {
             'ID_CPicto' => $idpicto,
             'ID_CSentence' => $idSentence,
             'sentenceFolder' => $idSFolder,
-            'cellType' => $cellType
+            'cellType' => $cellType,
+            'color' => $color
         );
         $this->db->where('ID_Cell', $id);
         $this->db->update('Cell', $data);
