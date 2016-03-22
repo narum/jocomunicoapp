@@ -398,6 +398,11 @@ angular.module('controllers', [])
             $rootScope.$on("EditCallFromMenu", function () {
                 $scope.edit();
             });
+            
+            $rootScope.$on("IniciCallFromMenu", function () {
+                //MODIF: Se tiene que hacer con configuracion de usuario
+                $scope.config(4);
+            });
 
             $scope.config = function (boardconf)
             {
@@ -1103,11 +1108,10 @@ angular.module('controllers', [])
 
         .controller('menuCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope, AuthService, $location) {
             $scope.editMenu = function () {
-                alert("hola");
                 $rootScope.$emit("EditCallFromMenu", {});
             };
             // Función salir del login
-            $scope.logout = function () {
+            $scope.logOut = function () {
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
                     scope: $scope
@@ -1118,6 +1122,10 @@ angular.module('controllers', [])
 
                 });
 
+            };
+            
+            $scope.home = function () {
+                $rootScope.$emit("IniciCallFromMenu", {});
             };
 
         })
