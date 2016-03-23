@@ -1,8 +1,6 @@
-<div class="topBarDialog"><div class="editTitle">Log out</div><div class="cruz"></div></div>
+<div class="topBarDialog"><div class="editTitle">Crea Panells</div><div class="cruz"></div></div>
 <div class="dialogContent row" style="margin-top: 2%">
-    <p class="text-center col-xs-12 dialogText">
-        Estas seguro de que quieres salir?
-    </p>
+        <input type="text" class="form-control col-xs-offset-2 col-xs-8 dialogText"  name="NameBoard" ng-model="CreateBoardName" ng-value="content." ng-change="changeNameBoard($parent.BoardName,$parent.idboard)"/>
 </div>
 <div class="row" style="margin-top: 2%">
     <input class="dialogButton col-xs-offset-3 col-xs-2 dialogTitle" type="button" value="confirm" ng-click="confirm();"/>

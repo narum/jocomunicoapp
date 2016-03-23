@@ -144,7 +144,13 @@
     border-radius: 10px;
     padding: 0em;
 }
-
+.ngdialog.dialogLogOut .ngdialog-content{
+    width : 45vw;
+    height: 25vh;
+    background-image: url(/img/srcWeb/Patterns1-08.png);
+    border-radius: 10px;
+    padding: 0em;
+}
 .panellPrincipalText{
     height:50%;
     transform: translate(0%, 25%);
