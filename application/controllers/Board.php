@@ -485,7 +485,7 @@ class Board extends REST_Controller {
         $idboard = $request->idboard;
         //$boardid = $request->boardid;
         $cell = $this->BoardInterface->getIDCell($pos, $idboard);
-        $this->BoardInterface->updateDataCell(NULL, $cell[0]->ID_RCell);
+        $this->BoardInterface->removeDataCell($cell[0]->ID_RCell);
 
         $data = $this->BoardInterface->getCellsBoard($idboard);
 
