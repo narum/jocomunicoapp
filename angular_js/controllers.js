@@ -915,23 +915,38 @@ angular.module('controllers', [])
              *  
              */
             $scope.CreateBoard = function () {
-                $scope.CreateBoardData={CreateBoardName:'', height: 0, width: 0};
+                $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
                     scope: $scope,
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
-                    alert($scope.CreateBoardData.CreateBoardName);
+                    var postdata = {id: $scope.idboard};
+                    var URL = $scope.baseurl + "Board/getIDGroupBoards"
+
+                    $http.post(URL, postdata).success(function (response)
+                    {
+                        $scope.CreateBoardData.idGroupBoard = response.idGroupBoard;
+
+                        URL = $scope.baseurl + "Board/newBoard"
+
+
+                        $http.post(URL, $scope.CreateBoardData).success(function (response)
+                        {
+                            
+                        });
+                    });
+
                 }, function (value) {
                 });
 
             };
-            
-            
+
+
             $scope.copyBoard = function () {
 
             };
-            
+
 
 
 
