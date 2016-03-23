@@ -56,7 +56,6 @@ class Board extends REST_Controller {
         $id = $request->id;
         $idboard = $request->idboard;
 
-        // "1" es el numero de id de la "board"
         $info = $this->BoardInterface->getCell($id, $idboard);
 
 
@@ -77,7 +76,6 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $idboard = $request->idboard;
 
-        // "1" es el numero de id de la "board"
         $output = $this->BoardInterface->getBoardStruct($idboard);
         $columns = $output[0]->width;
         $rows = $output[0]->height;
@@ -152,12 +150,6 @@ class Board extends REST_Controller {
         $r = $request->r;
         $idboard = $request->idboard;
 
-        // "1" es el numero de id de la "board"
-//        $output = $this->BoardInterface->getBoardStruct(1);
-//        $columns = $output[0]->width + $c;
-//        $rows = $output[0]->height + $r;
-//        $this->BoardInterface->updateNumCR($columns, $rows, 1);
-
         $output = $this->BoardInterface->getBoardStruct($idboard);
         $this->BoardInterface->updateNumCR($c, $r, $idboard);
         $columnsDiff = $c - $output[0]->width;
@@ -176,25 +168,8 @@ class Board extends REST_Controller {
             $this->removeRows($output[0]->width, $output[0]->height, $idboard, -$rowsDiff);
         }
 
-        //$array = $this->BoardInterface->getCellsBoard(1);
-
-
-
         $this->BoardInterface->commitTrans();
 
-        $output = $this->BoardInterface->getBoardStruct($idboard);
-        $response = [
-            'col' => '1',
-            'row' => '1'
-        ];
-//        if ($this->BoardInterface->statusTrans() === FALSE) {
-//            $response = [
-//                'error' => "errorText"
-//            ];
-//            $this->response($response, 500);
-//        } else {
-        $this->response($response, REST_Controller::HTTP_OK);
-//        }
     }
 
     /*
@@ -288,9 +263,10 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $id = $request->id;
 
-        $this->Lexicon->afegirParaula(1, $id, null);
+        $idusu = $this->session->userdata('idusu');
+        $this->Lexicon->afegirParaula($idusu, $id, null);
 
-        $data = $this->Lexicon->recuperarFrase(1);
+        $data = $this->Lexicon->recuperarFrase($idusu);
 
         $response = [
             'data' => $data
@@ -305,11 +281,12 @@ class Board extends REST_Controller {
 
     public function deleteLastWord_post() {
 
-        $id = $this->BoardInterface->getLastWord(1);
+        $idusu = $this->session->userdata('idusu');
+        $id = $this->BoardInterface->getLastWord($idusu);
 
         $this->Lexicon->eliminarParaula($id->ID_RSTPSentencePicto);
 
-        $data = $this->Lexicon->recuperarFrase(1);
+        $data = $this->Lexicon->recuperarFrase($idusu);
 
         $response = [
             'data' => $data
@@ -323,10 +300,10 @@ class Board extends REST_Controller {
 
     public function deleteAllWords_post() {
 
-        //1 es usuario
-        $this->BoardInterface->removeSentence(1);
+        $idusu = $this->session->userdata('idusu');
+        $this->BoardInterface->removeSentence($idusu);
 
-        $data = $this->Lexicon->recuperarFrase(1);
+        $data = $this->Lexicon->recuperarFrase($idusu);
 
         $response = [
             'data' => $data
@@ -340,19 +317,16 @@ class Board extends REST_Controller {
      */
 
     public function generate_post() {
-        //1 user
+        
         $this->BoardInterface->initTrans();
-//        $paraules = $this->Lexicon->recuperarFrase(1);
-//        $this->BoardInterface->addStatsX1($paraules, 1);
-//        $this->BoardInterface->addStatsX2($paraules, 1);
-//        $this->BoardInterface->addStatsX3($paraules, 1);
 
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $tense = $request->tense;
         $tipusfrase = $request->tipusfrase;
         $negativa = $request->negativa;
-        $this->Lexicon->insertarFrase(1, $tipusfrase, $tense, $negativa);
+        $idusu = $this->session->userdata('idusu');
+        $this->Lexicon->insertarFrase($idusu, $tipusfrase, $tense, $negativa);
 
 
         $this->BoardInterface->commitTrans();
@@ -487,8 +461,7 @@ class Board extends REST_Controller {
         $pos1 = $request->pos1;
         $pos2 = $request->pos2;
         $idboard = $request->idboard;
-        //$boardid = $request->boardid;
-        //1 es la board
+
         $this->BoardInterface->updatePosCell($pos1, -1, $idboard);
         $this->BoardInterface->updatePosCell($pos2, $pos1, $idboard);
         $this->BoardInterface->updatePosCell(-1, $pos2, $idboard);
@@ -511,7 +484,6 @@ class Board extends REST_Controller {
         $pos = $request->pos;
         $idboard = $request->idboard;
         //$boardid = $request->boardid;
-        //1 es la board
         $cell = $this->BoardInterface->getIDCell($pos, $idboard);
         $this->BoardInterface->updateDataCell(NULL, $cell[0]->ID_RCell);
 
