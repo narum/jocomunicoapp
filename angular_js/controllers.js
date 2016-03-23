@@ -922,7 +922,6 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
                     alert($scope.CreateBoardData.CreateBoardName);
-                    
                 }, function (value) {
                 });
 
