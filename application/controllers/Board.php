@@ -661,6 +661,26 @@ class Board extends REST_Controller {
         $this->addColumns(0, 0, $idBoard, $width);
         $this->addRows($width, 0, $idBoard, $height);
         $this->BoardInterface->commitTrans();
+        $response = [
+            'idBoard' => $idBoard
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    public function removeBoard_post(){
+        $this->BoardInterface->initTrans();
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+        
+
+        $cell = $this->BoardInterface->getCellsBoard($id);
+        for ($i = 0; $i < count($cell); $i++){
+            $this->BoardInterface->removeCell($cell[$i]->ID_RCell,$id);
+        }
+        $this->BoardInterface->removeBoardLinks($id);
+        
+        $this->BoardInterface->removeBoard($id);
+        $this->BoardInterface->commitTrans();
     }
 
     public function getIDGroupBoards_post(){

@@ -933,7 +933,8 @@ angular.module('controllers', [])
 
                         $http.post(URL, $scope.CreateBoardData).success(function (response)
                         {
-                            
+                            $scope.showBoard(response.idBoard)
+                            $scope.edit();
                         });
                     });
 
@@ -947,7 +948,13 @@ angular.module('controllers', [])
                     scope: $scope,
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
-                
+                    var postdata = {id: $scope.idboard};
+                    var URL = $scope.baseurl + "Board/removeBoard"
+
+                    $http.post(URL, postdata).success(function (response)
+                    {
+                        
+                    });
                 }, function (value) {
                 });
 

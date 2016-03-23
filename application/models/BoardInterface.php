@@ -644,4 +644,31 @@ class BoardInterface extends CI_Model {
         return $id;
     }
     
+    function removeBoard($IDboard){
+        $this->db->where('ID_Board', $IDboard);
+        $this->db->delete('Boards');
+  
+    }
+    
+    function removeBoardLinks($IDboard){
+        $output = array();
+        $data = array(
+            'imgCell' => NULL,
+            'activeCell' => 1,
+            'textInCellTextOnOff' => 1,
+            'textInCell' => NULL,
+            'isFixedInGroupBoards' => NULL,
+            'ID_CFunction' => NULL,
+            'boardLink' => NULL,
+            'ID_CPicto' => NULL,
+            'ID_CSentence' => NULL,
+            'sentenceFolder' => NULL,
+            'cellType' => NULL,
+            'color' => 'fff'
+        );
+
+        $this->db->where('boardLink', $IDboard);
+        $this->db->update('Cell', $data);
+    }
+    
 }
