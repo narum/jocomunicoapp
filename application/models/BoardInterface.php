@@ -590,4 +590,19 @@ class BoardInterface extends CI_Model {
         return $output[0];
     }
     
+    function createBoard($IDGboard, $name, $width, $height){
+        $data = array(
+            'ID_GBBoard' => $IDGboard,
+            'Bname' => $name,
+            'width' => $width,
+            'height' => $height
+        );
+
+        $this->db->insert('Boards', $data);
+
+        $id = $this->db->insert_id();
+        
+        return $id;
+    }
+    
 }
