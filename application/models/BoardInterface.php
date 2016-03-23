@@ -241,7 +241,46 @@ class BoardInterface extends CI_Model {
         $output = array();
 
         $this->db->where('ID_Cell', $cell);
-        $this->db->update('Cell', array('ID_CPicto' => $idpicto));
+        $this->db->update('Cell', array('ID_CPicto' => $idpicto,'cellType' => 'picto'));
+
+
+        return $output;
+    }
+    
+    /*
+     * Remove the data of one pictogram ($cell) from the board ($idpicto)    
+     */
+
+    function removeDataCell($cell) {
+        $output = array();
+        $data = array(
+            'imgCell' => NULL,
+            'activeCell' => 1,
+            'textInCellTextOnOff' => 1,
+            'textInCell' => NULL,
+            'isFixedInGroupBoards' => NULL,
+            'ID_CFunction' => NULL,
+            'boardLink' => NULL,
+            'ID_CPicto' => NULL,
+            'ID_CSentence' => NULL,
+            'sentenceFolder' => NULL,
+            'cellType' => NULL,
+            'color' => 'fff'
+        );
+
+        $this->db->where('ID_Cell', $cell);
+        $this->db->update('Cell', $data);
+        
+        $data = array(
+            'isMenu' => 0,
+            'customScanBlock1' => 1,
+            'customScanBlockText1' => NULL,
+            'customScanBlock2' => NULL,
+            'customScanBlockText2' => NULL
+        );
+
+        $this->db->where('ID_RCell', $cell);
+        $this->db->update('R_BoardCell', $data);
 
 
         return $output;
