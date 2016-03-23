@@ -945,7 +945,7 @@ angular.module('controllers', [])
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmRemoveBoard.html',
                     scope: $scope,
-                    className: 'ngdialog-theme-default dialogCreateBoard'
+                    className: 'ngdialog-theme-default dialogRemoveBoard'
                 }).then(function () {
                 
                 }, function (value) {
@@ -955,7 +955,28 @@ angular.module('controllers', [])
 
 
             $scope.copyBoard = function () {
-
+                //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia
+                $scope.CopyBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmCopyBoard.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogCopyBoard'
+                }).then(function () {
+                
+                }, function (value) {
+                });
+            };
+            $scope.moveBoard = function () {
+                //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia
+                $scope.MoveBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmMoveBoard.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogMoveBoard'
+                }).then(function () {
+                
+                }, function (value) {
+                });
             };
 
 
