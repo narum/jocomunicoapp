@@ -591,7 +591,28 @@ angular.module('controllers', [])
 
                 });
             };
+            
+        $scope.changeAutoReturn = function (autoreturn)
+        {
+            var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
+            var URL = $scope.baseurl + "Board/changeAutoReturn";
+            $http.post(URL, postdata).
+                    success(function ()
+            {
 
+            });
+        };
+        $scope.changeAutoReadSentence = function (AutoReadSentence)
+        {
+            var postdata = {id: $scope.idboard, value: AutoReadSentence.valueOf()};
+            var URL = $scope.baseurl + "Board/changeAutoReadSentence";
+            $http.post(URL, postdata).
+                    success(function ()
+            {
+
+            });
+        };
+            
             $scope.changeBoard = function (viewBoard)
             {
                 $scope.showBoard(viewBoard.ID_Board);

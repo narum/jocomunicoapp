@@ -568,6 +568,26 @@ class BoardInterface extends CI_Model {
 
         return $output[0];
     }
-   
+    
+    
+    function changeAutoReadSentence($id, $value) {
+        $this->db->where('ID_Board', $id);
+        $this->db->update('Boards', array(
+            'autoReadSentence' => $value,
+        ));
+    }
+    
+    
+    function getAutoReadSentence($id) {
+        $this->db->where('ID_Board', $id);
+        $this->db->get('Boards');
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output[0];
+    }
     
 }
