@@ -153,7 +153,7 @@ class Mypattern {
             $receiver->grade = $patternbbdd->receiver;
             $receiver->slotPuntsInicials();
 
-            $receiver->type = "animate";
+            $receiver->type = "human";
             if ($receiver->grade == '1') $receiver->defvalue = $patternbbdd->receiverdef;
             if ($patternbbdd->receiverprep != "") $receiver->prep = $patternbbdd->receiverprep;
             
@@ -1098,6 +1098,7 @@ class Mypattern {
         }
                 
         $this->mySort($this->virtualslotsort);
+        
     }
     
     function mySort($virtualslotorder)
@@ -1129,8 +1130,9 @@ class Mypattern {
                         $found = true;
                     }
                     else if ($infoaux[1] == $infoactual[1]) {
-                        // en cas d'empat el receiver té prioritat sobre el subj, si no és pseudoimpersonal
-                        if (strpos($infoaux[0], "Receiver") === 0 && !$this->pseudoimpersonal) {
+                        
+                        // en cas d'empat el receiver té prioritat sobre el qualsevol slot, excepte el Theme, si no és pseudoimpersonal
+                        if (strpos($infoaux[0], "Receiver") === 0 && !(strpos($infoactual[0], "Theme") === 0) && !$this->pseudoimpersonal) {
                             $indexinsert = $j;
                             $found = true;
                         }
@@ -2230,7 +2232,7 @@ class Mypattern {
         // fem el mateix amb el theme 2, si hi és
         if ($indextheme2 != null) {
             $temp = $this->ordrefrase[$indextheme2];
-            // esborrem el receiver 1 per moure'l de lloc
+            // esborrem el theme 1 per moure'l de lloc
             array_splice($this->ordrefrase, $indextheme2, 1);
             // l'insertem just abans del verb secundari
             array_splice($this->ordrefrase, $indexsecondaryverb, 0, $temp);
