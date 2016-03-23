@@ -24,7 +24,7 @@
 
                     <!-- If not, puts a "empty image" and mades it dropable
                          Only if we are in edit mode-->
-                    <div ng-if="!picto.imgPicto && !picto.imgCell || (picto.activeCell == 0 && !inEdit)" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)"  ng-right-click="openEditCellMenu({{picto.posInBoard}});">
+                    <div ng-if="!picto.imgPicto && !picto.imgCell || (picto.activeCell == 0 && !inEdit)" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)"  ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-click="clickOnCell(picto)">
                         <div class="emptyImg imgResponsive" ></div>
                     </div>
                 </div>
