@@ -70,8 +70,7 @@
 }
 
 #searchView{
-    height:56%;
-    margin-top: 4%;
+    height:50%;
     margin-right: 2%;
 }
 #searchFolder{
@@ -79,9 +78,9 @@
 }
 
 #trashView{
-    height:37%;
-    margin-bottom: 4%;
-    margin-top: 2%;
+    height:42%;
+    margin-bottom: 2vh;
+    margin-top: 0.5vh;
     margin-right: 3%;
 }
 
