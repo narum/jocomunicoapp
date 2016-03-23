@@ -2449,6 +2449,7 @@ class Myslot {
                     // i si no sense, JA QUE ÉS EL CAS MÉS COMÚ
                     if ($auxstring[6]) {
                         if ($wordaux->propietats->determinat == 'sense') $noarticle = true;
+                        else if ($wordaux->isClass("material")) $noarticle = true;
                         else if ($wordaux->isClass("animate") ||
                                 $wordaux->isClass("animal") ||
                                 $wordaux->isClass("vehicle") ||
@@ -2601,6 +2602,7 @@ class Myslot {
                     // i si no sense, JA QUE ÉS EL CAS MÉS COMÚ
                     if ($auxstring[6]) {
                         if ($wordaux->propietats->determinat == 'sense') $noarticle = true;
+                        else if ($wordaux->isClass("material")) $noarticle = true;
                         else if ($wordaux->isClass("animate") ||
                                 $wordaux->isClass("animal") ||
                                 $wordaux->isClass("vehicle") ||
