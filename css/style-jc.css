@@ -151,6 +151,13 @@
     border-radius: 10px;
     padding: 0em;
 }
+.ngdialog.dialogCreateBoard .ngdialog-content{
+    width : 50vw;
+    height: 35vh;
+    background-image: url(/img/srcWeb/Patterns1-08.png);
+    border-radius: 10px;
+    padding: 0em;
+}
 .panellPrincipalText{
     height:50%;
     transform: translate(0%, 25%);
