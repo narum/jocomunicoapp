@@ -941,6 +941,17 @@ angular.module('controllers', [])
                 });
 
             };
+            $scope.RemoveBoard = function () {
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmRemoveBoard.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogCreateBoard'
+                }).then(function () {
+                
+                }, function (value) {
+                });
+
+            };
 
 
             $scope.copyBoard = function () {
