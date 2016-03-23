@@ -564,6 +564,17 @@ class Myslot {
                     // si el verb és copulatiu (amb un patró no impersonal) el nom del theme concorda amb el subjecte
                     if ($this->category == "Theme" && $copulatiu && !$impersonal) {
                         
+                        // si el nom és femení
+                        if ($nucli->propietats->mf == "fem") $masc = false;
+                        // si el nom és plural
+                        if ($nucli->propietats->singpl == "pl") $plural = true;
+                        // si té modificadors de femení i l'accepta
+                        if ($nucli->propietats->femeni != "" && $nucli->fem) $masc = false;
+                        // si té modificador de plural
+                        if ($nucli->plural) $plural = true;
+                        
+                        
+                        // sobreescrivim els valors si cal
                         if (!$subjmasc && $subjpl) {
                             if ($nucli->propietats->femeni != "") {
                                 $masc = false;
@@ -1474,6 +1485,16 @@ class Myslot {
                     // si el verb és copulatiu el nom del theme concorda amb el subjecte
                     if ($this->category == "Theme" && $copulatiu && !$impersonal) {
                         
+                        // si el nom és femení
+                        if ($nucli->propietats->mf == "fem") $masc = false;
+                        // si el nom és plural
+                        if ($nucli->propietats->singpl == "pl") $plural = true;
+                        // si té modificadors de femení i l'accepta
+                        if ($nucli->propietats->femeni != "" && $nucli->fem) $masc = false;
+                        // si té modificador de plural
+                        if ($nucli->plural) $plural = true;
+                        
+                        // sobreescrivim els valors si cal
                         if (!$subjmasc && $subjpl) {
                             if ($nucli->propietats->femeni != "") {
                                 $masc = false;
@@ -1496,10 +1517,6 @@ class Myslot {
                         if ($nucli->plural) $plural = true;
                     }
                     
-                    echo $this->category." ".$this->prep." ";
-                    if ($this->paraulafinal->isClass("pronoun")) echo "PRONOM ";
-                    echo "<br />";
-                    
                     // PREPOSICIÓ
                     // posem la preposició, si n'hi ha, excepte: Si el nom és el nucli d'un slot de LocAt i 
                     // el complementa un adverbi de lloc. Per evitar ex: "Está en debajo la mesa." SI és un
@@ -1512,7 +1529,6 @@ class Myslot {
                             $elementaux[0] = $this->prep;
                             $elementaux[1] = null;
                             $this->slotstring[] = $elementaux; 
-                            echo "NOOOO";
                         }
                     }
                     
