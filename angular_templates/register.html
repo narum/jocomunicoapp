@@ -3,8 +3,9 @@
 <div class="row barraSuperior"></div>
 <div class="container container-table">
     <div class="row vertical-center-row">
-        <form class="form form-horizontal" name="registerForm" ng-controller="RegisterCtrl">
-            <div class="col-xs-8 col-xs-offset-2 boxRegistreUsuari">
+        <form class="form form-horizontal" name="registerForm">
+            <div class="col-xs-2 col-xs-offset-5" ng-show="!viewActived"><img class="img-responsive" src="/img/srcWeb/Login/loading.gif"/></div>
+            <div class="col-xs-8 col-xs-offset-2 boxRegistreUsuari" ng-show="viewActived">
                 <div class="row barraSuperiorRegistre">
                     <div class="col-xs-6"><p class="nomBarraSuperiorRegistre">{{ content.title }}</p></div>
                     <div class="col-xs-6">
@@ -231,7 +232,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-2 boxButo">
+            <div class="col-xs-2 boxButo" ng-show="viewActived">
                 <div class="buto">
                     <div class="col-xs-2 triangle">
                         <image class="imgTriangle" alt="Responsive image" src="/img/srcWeb/Login/fletxaLogin2.png" />

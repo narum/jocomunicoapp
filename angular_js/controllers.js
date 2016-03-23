@@ -4,6 +4,8 @@ angular.module('controllers', [])
 
 .controller('LoginCtrl', function($scope, Resources, $location, AuthService){
     //Definición de variables
+    $scope.viewActived = false; // para activar el gif de loading...
+    $scope.view2=false;// vista de recuperación de contraseña
     var loginResource = Resources.login;
     var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
     var numberOfLanguages = 0;// numero de idiomas (inicialmente a 0 pero se actualiza automaticamente en la siguiente función al hacer la peticion a la base de datos)
@@ -16,7 +18,7 @@ angular.module('controllers', [])
             $scope.content=content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
             $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
             numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
-
+            $scope.viewActived = true; // para activar la vista
     });
     //Cambiar el idioma del contenido
     $scope.changeContentLanguage=function(){
@@ -37,7 +39,7 @@ angular.module('controllers', [])
     };
 
     // Función que coje el user y pass y comprueba que sean correctos
-    $scope.login = function(form) {
+    $scope.login = function() {
         var body = {
             user: $scope.username,
             pass: $scope.password
@@ -58,15 +60,33 @@ angular.module('controllers', [])
         });
     };
     // Cambiar estados del formulario
-    $scope.changeFormSate=function(){
+    $scope.changeFormState=function(){
             $scope.state = '';
+            $scope.state2 = '';
     };
+    
+    // Comprobar usuario o email para renovar la contrasseña
+    $scope.forgotPass=function(){
+        var emailFormat = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
+        if (String($scope.user).search(emailFormat) == -1) {
+            Resources.register.save({'user':$scope.user},{'funct':"passRecovery"}).$promise
+            .then(function(results){
+                console.log(results);
+            });
+        } else {
+            Resources.register.save({'email':$scope.user},{'funct':"passRecovery"}).$promise
+            .then(function(results){
+                console.log(results);
+            });
+        }
+    };
+    
 })
 
 //Controlador del registro de usuario
-.controller('RegisterCtrl', function($scope, Resources, md5, $location){
+.controller('RegisterCtrl', function($scope, $rootScope, Resources, md5, $q, $location){
     
-            //Inicializamos el formulario y las variables necesarias
+    //Inicializamos el formulario y las variables necesarias
     $scope.formData = {};  //Datos del formulario
     $scope.languageList = []; //lista de idiomas seleccionados por el usuario
     $scope.state ={user:"", password:""};// estado de cada campo del formulario
@@ -75,7 +95,7 @@ angular.module('controllers', [])
     var emailOk = false; // variables de validación
     var languageOk = false; // variables de validación
     var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
-    //        $scope.sound = ngAudio.load("mp3/sound.mp3");
+    $scope.viewActived = false; // para activar el gif de loading...
         
     //Pedimos los idiomas disponibles
     Resources.register.get({'section':'userRegister'},{'funct':"allContent"}).$promise
@@ -85,6 +105,7 @@ angular.module('controllers', [])
                 $scope.content=content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
                 $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
                 numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
+                $scope.viewActived = true; // para activar la vista del formulario
             
     });
     
@@ -273,9 +294,8 @@ angular.module('controllers', [])
         }
         // Comprobamos todos los campos del formulario accediendo a las funciones o mirando las variables de estado
         if (userOk&&$scope.checkPassword(formData)&&$scope.checkName(formData)&&$scope.checkLastname(formData)&&emailOk&&languageOk&&$scope.sex(formData)) {
-            //Vista confirmación
             $location.path('/registerComplete');
-            
+
             //Borramos los campos inecesarios
             delete formData.confirmPassword;
             delete formData.languageSelected;
@@ -290,14 +310,30 @@ angular.module('controllers', [])
             Resources.register.save(data,{'funct':"saveData"}).$promise
                 .then(function(results){
                     console.log('response:', results);
-            
-            //ENVIAR MAIL CONFIRMACIÓN
-            
+
+                    var promises = []; //PROMESAS
                     angular.forEach($scope.languageList, function(value) {
+                        var deferred = $q.defer();//PROMESAS
+                        //enviamos los usuarios con cada idioma.
                         Resources.register.save({'SUname':formData.SUname,'ID_ULanguage':value.ID_Language},{'funct':"saveUserData"}).$promise
                             .then(function(results){
+                                deferred.resolve(results);//PROMESAS
+                                $id_su=results.ID_SU;
                                 console.log('response:', results);
                             });
+                        promises.push(deferred.promise);//PROMESAS
+                    });
+
+                    //Funcion que se llama al finalizar todas las promesas
+                    $q.all(promises).then(function(){
+                        //Vista confirmación
+                        $scope.viewActived = true; // para activar la vista
+                        // Creamos el hash para la url de validación del usuario enviado por mail
+                        $hash=md5.createHash(formData.pswd + $id_su);
+                        $url = $rootScope.baseurl + '#/emailValidation/' + $hash + '/' + $id_su;
+                        console.log($url);
+
+                        //ENVIAR MAIL CONFIRMACIÓN
                     });
             });
         }
@@ -306,13 +342,44 @@ angular.module('controllers', [])
 
 //User email validation
 .controller('emailValidationCtrl', function($scope, $routeParams, Resources) {
-  $scope.message = 'params = ' + $routeParams.emailKey + $routeParams.emailKey.id;
-  console.log($routeParams);
+    $scope.activedValidation=false;// para activar el gif de loading
+    $scope.viewActived = false; // para activar el gif de loading...
+    //Pedimos los idiomas disponibles
+    var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
+    Resources.register.get({'section':'emailValidation'},{'funct':"allContent"}).$promise
+            .then(function(results){
+                $scope.availableLanguageOptions=results.languages;// Idiomas disponibles para el desplegable del formulario
+                content=results.content;// Contenido en cada idioma
+                $scope.content=content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
+                $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
+                numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
+                $scope.viewActived = true; // para activar la vista
+            
+    });
+    //Cambiar el idioma del contenido
+    $scope.changeContentLanguage=function(){
+        currentLanguage ++;
+        // El content esta dentro de un array que empieza por la posición 1 y el nombre de cada idioma en un array que empieza en la posicion 0.
+        if(currentLanguage > numberOfLanguages){
+            currentLanguage = 1;
+            $scope.content=content[1];
+            $scope.languageNameNext = $scope.availableLanguageOptions[1].languageName;
+        }else{
+            $scope.content=content[currentLanguage];
+            if((currentLanguage+1) > numberOfLanguages){
+                $scope.languageNameNext = $scope.availableLanguageOptions[0].languageName;
+            }else{
+                $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;
+            }
+        }
+    };
   
-  //enviamos la clave y el id para comprobar el email del usuario
-   Resources.register.save({'emailKey':$routeParams.emailKey,'ID_SU':$routeParams.id},{'funct':"emailValidation"}).$promise
+    //Enviamos la clave y el id para comprobar el email del usuario
+    Resources.register.save({'emailKey':$routeParams.emailKey,'ID_SU':$routeParams.id},{'funct':"emailValidation"}).$promise
         .then(function(results){
-            console.log('response:', results);
+            $scope.validated=results.validated;
+            $scope.activedValidation=true;// para activar la vista
+            console.log('saved:', results.validated);
         });
 })
 
