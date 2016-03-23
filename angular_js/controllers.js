@@ -915,13 +915,15 @@ angular.module('controllers', [])
              *  
              */
             $scope.CreateBoard = function () {
+                $scope.CreateBoardData={CreateBoardName:''};
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
                     scope: $scope,
                     className: 'ngdialog-theme-default dialogLogOut'
                 }).then(function () {
+                    alert($scope.CreateBoardData.CreateBoardName);
+                    
                 }, function (value) {
-
                 });
 
             };
