@@ -914,10 +914,25 @@ angular.module('controllers', [])
              *  editFolders functions
              *  
              */
+            $scope.CreateBoard = function () {
+                $scope.CreateBoardData={CreateBoardName:'', height: 0, width: 0};
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogCreateBoard'
+                }).then(function () {
+                    alert($scope.CreateBoardData.CreateBoardName);
+                    
+                }, function (value) {
+                });
 
+            };
+            
+            
             $scope.copyBoard = function () {
 
             };
+            
 
 
 
@@ -1117,7 +1132,8 @@ angular.module('controllers', [])
             $scope.logOut = function () {
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
-                    scope: $scope
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogLogOut'
                 }).then(function () {
                     AuthService.logout();
                     $location.path('/login');
@@ -1126,6 +1142,7 @@ angular.module('controllers', [])
                 });
 
             };
+
 
             $scope.home = function () {
                 $rootScope.$emit("IniciCallFromMenu", {});
