@@ -121,9 +121,9 @@ El pastel de manzana no me gusta.
 Nosotros iremos a cantar el miércoles.
 Nosotros iremos a cantar el miércoles.
 Nosotros iremos a cantar el miércoles.
-Nosotros hemos bebido vaso de leche caliente.
-Nosotros hemos bebido vaso de leche caliente.
-Nosotros hemos bebido vaso de leche caliente.
+Nosotros hemos bebido un vaso de leche caliente.
+Nosotros hemos bebido un vaso de leche caliente.
+Nosotros hemos bebido un vaso de leche caliente.
 ¿Qué hace mi madre?
 ¿Qué hace mi madre?
 ¿Qué hace mi madre?
@@ -213,7 +213,7 @@ Eres mucho más alto.
 ¿A quién lo cuento?
 Nosotros estaremos  en Europa el jueves.
 Nosotros estaremos  en Europa el jueves.
-El jueves estará  con nosotros en Europa.
+Nosotros estaremos  en Europa el jueves.
 ¿Cómo lo sabremos nosotros?
 ¿Cómo lo sabremos nosotros?
 ¿Cómo lo sabremos nosotros?

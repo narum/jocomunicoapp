@@ -4299,7 +4299,8 @@ class Mypattern {
         }
         
         // POSAR ELS PUNTS O EXCLAMACIONS O INTERROGANTS
-        // esborrar l'últim espai i una coma al final si hi és. També l'espai del principi
+        // esborrar si hi ha dos espais junts, l'últim espai i una coma al final si hi és. També l'espai del principi
+        $frasebruta = preg_replace("/[[:space:]][[:space:]]/u", " ", $frasebruta);
         $frasebruta = preg_replace("/[[:space:]]$/u", "", $frasebruta);
         $frasebruta = preg_replace("/,$/u", "", $frasebruta);
         $frasebruta = substr($frasebruta, 1);
@@ -4887,7 +4888,8 @@ class Mypattern {
         }
         
         // POSAR ELS PUNTS O EXCLAMACIONS O INTERROGANTS
-        // esborrar l'últim espai i una coma al final si hi és. També l'espai del principi
+        // esborrar si hi ha dos espais junts, l'últim espai i una coma al final si hi és. També l'espai del principi
+        $frasebruta = preg_replace("/[[:space:]][[:space:]]/u", " ", $frasebruta);
         $frasebruta = preg_replace("/[[:space:]]$/u", "", $frasebruta);
         $frasebruta = preg_replace("/,$/u", "", $frasebruta);
         $frasebruta = substr($frasebruta, 1);
