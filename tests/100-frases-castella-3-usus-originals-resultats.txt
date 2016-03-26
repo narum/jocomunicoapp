@@ -19,30 +19,30 @@ La nieve me gusta.
 Quiero dormir.
 Quiero dormir.
 Quiero dormir.
-Está mucho bueno macarrones.
-Está mucho bueno macarrones.
-Está mucho bueno macarrones.
+Los macarrones están muy buenos.
+Los macarrones están muy buenos.
+Los macarrones están muy buenos.
 Necesitaré el medicamento por la tarde.
 Necesitaré el medicamento por la tarde.
 Necesitaré el medicamento por la tarde.
 Dame un tenedor, por favor.
 Dame un tenedor, por favor.
 Dame un tenedor, por favor.
-El monitor no está  a la escuela.
-El monitor no está  a la escuela.
-El monitor no está  a la escuela.
+El monitor no está  en la escuela.
+El monitor no está  en la escuela.
+El monitor no está  en la escuela.
 Quiero una manzana.
 Quiero una manzana.
 Quiero una manzana.
 Quiero ir al lavabo.
 Quiero ir al lavabo.
 Quiero ir al lavabo.
-La piscina es mucho guai.
-La piscina es mucho guai.
-La piscina es mucho guai.
-Todo es mucho divertido.
-Todo es mucho divertido.
-Todo es mucho divertido.
+La piscina es muy guai.
+La piscina es muy guai.
+La piscina es muy guai.
+Todo es muy divertido.
+Todo es muy divertido.
+Todo es muy divertido.
 Vendré tarde.
 Vendré tarde.
 Vendré tarde.
@@ -127,9 +127,9 @@ Nosotros hemos bebido vaso de leche caliente.
 ¿Qué hace mi madre?
 ¿Qué hace mi madre?
 ¿Qué hace mi madre?
-La enfermera es mucho alegre.
-La enfermera es mucho alegre.
-La enfermera es mucho alegre.
+La enfermera es muy alegre.
+La enfermera es muy alegre.
+La enfermera es muy alegre.
 Quiero clasificarme en las olimpíadas.
 Quiero clasificarme en las olimpíadas.
 Quiero clasificarme en las olimpíadas.
@@ -172,18 +172,18 @@ Estoy  bien.
 Ayudame a bajar de las escaleras.
 Ayudame a bajar de las escaleras, por favor.
 Ayudame a bajar de las escaleras.
-Nosotros estuvimos mucho contentos.
-Nosotros estuvimos mucho contentos.
-Nosotros estuvimos mucho contentos.
+Nosotros estuvimos muy contentos.
+Nosotros estuvimos muy contentos.
+Nosotros estuvimos muy contentos.
 Espera un minuto.
 Espera un minuto.
 Espera un minuto.
 No quiero que te pelees.
 No quiero que te pelees.
 No quiero que te pelees.
-El tren iba mucho lento.
-El tren iba mucho lento.
-El tren iba mucho lento.
+El tren iba muy lento.
+El tren iba muy lento.
+El tren iba muy lento.
 Esto será una sorpresa.
 Esto será una sorpresa.
 Esto será una sorpresa.
@@ -211,9 +211,9 @@ Eres mucho más alto.
 ¿A quién lo cuento?
 ¿A quién lo cuento?
 ¿A quién lo cuento?
-Nosotros estaremos  a Europa el jueves.
-Nosotros estaremos  a Europa el jueves.
-Nosotros estaremos  a Europa el jueves.
+Nosotros estaremos  en Europa el jueves.
+Nosotros estaremos  en Europa el jueves.
+El jueves estará  con nosotros en Europa.
 ¿Cómo lo sabremos nosotros?
 ¿Cómo lo sabremos nosotros?
 ¿Cómo lo sabremos nosotros?
@@ -232,9 +232,9 @@ Cambia una silla de color marrón.
 Ya está.
 Ya está.
 Ya está.
-Mi perro es mucho gracioso.
-Mi perro es mucho gracioso.
-Mi perro es mucho gracioso.
+Mi perro es muy gracioso.
+Mi perro es muy gracioso.
+Mi perro es muy gracioso.
 Mala suerte.
 Mala suerte.
 Mala suerte.
