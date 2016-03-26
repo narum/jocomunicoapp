@@ -2150,7 +2150,7 @@ class Myslot {
                             // excepte "mucho" que pasa a ser "muy"
                             if ($quantifierslot->paraulafinal->propietats->masc == "mucho") {
                                 // si té més d'un quantificador ja no. Ex: mucho más alto
-                                if ($this->CModassignedkey == 1) $elementaux[0] = "muy";
+                                if (count($this->CModassignedkey) == 1) $elementaux[0] = "muy";
                                 else $elementaux[0] = "mucho";
                             }
                             else {
@@ -2328,7 +2328,7 @@ class Myslot {
                             // Excepció: Ex: "Muy arriba".
                             if ($quantifier->text == "mucho") {
                                 // si té més d'un quantificador ja no. Ex: mucho más arriba
-                                if ($this->CModassignedkey == 1) $elementaux[0] = "muy";
+                                if (count($this->CModassignedkey) == 1) $elementaux[0] = "muy";
                                 else $elementaux[0] = "mucho";
                             }
                             else $elementaux[0] = $quantifier->text;

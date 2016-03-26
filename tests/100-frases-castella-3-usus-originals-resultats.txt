@@ -7,9 +7,9 @@ He comido mucho.
 Adiós.
 Adiós.
 Adiós.
-dónde ser mi muñeca 
-dónde ser mi muñeca 
-dónde ser mi muñeca 
+¿Dónde está  mi muñeca?
+¿Dónde está  mi muñeca?
+¿Dónde está  mi muñeca?
 No tengo la silla de ruedas.
 No tengo la silla de ruedas.
 No tengo la silla de ruedas.
@@ -19,39 +19,39 @@ La nieve me gusta.
 Quiero dormir.
 Quiero dormir.
 Quiero dormir.
-Los macarrones son muy buenos.
-Los macarrones son muy buenos.
-Los macarrones son muy buenos.
+Está mucho bueno macarrones.
+Está mucho bueno macarrones.
+Está mucho bueno macarrones.
 Necesitaré el medicamento por la tarde.
 Necesitaré el medicamento por la tarde.
 Necesitaré el medicamento por la tarde.
 Dame un tenedor, por favor.
 Dame un tenedor, por favor.
 Dame un tenedor, por favor.
-No es la escuela el monitor.
-No es la escuela el monitor.
-No es la escuela el monitor.
+El monitor no está  a la escuela.
+El monitor no está  a la escuela.
+El monitor no está  a la escuela.
 Quiero una manzana.
 Quiero una manzana.
 Quiero una manzana.
 Quiero ir al lavabo.
 Quiero ir al lavabo.
 Quiero ir al lavabo.
-La piscina es muy guai.
-La piscina es muy guai.
-La piscina es muy guai.
-Todo es muy divertido.
-Todo es muy divertido.
-Todo es muy divertido.
+La piscina es mucho guai.
+La piscina es mucho guai.
+La piscina es mucho guai.
+Todo es mucho divertido.
+Todo es mucho divertido.
+Todo es mucho divertido.
 Vendré tarde.
 Vendré tarde.
 Vendré tarde.
 No quiero más verdura.
 No quiero más verdura.
 No quiero más verdura.
-cuánto croquetas tú querer 
-cuánto croquetas querer 
-cuánto croquetas tú querer 
+¿Cuántas croquetas quieres?
+¿Cuántas croquetas quieres?
+¿Cuántas croquetas quieres?
 Tengo frío.
 Tengo frío.
 Tengo frío.
@@ -73,9 +73,9 @@ Voy a la biblioteca.
 Ayer compré unos zapatos azules.
 Ayer compré unos zapatos azules.
 Ayer compré unos zapatos azules.
-El bicho muy raro se ha escondido detrás la puerta.
-El bicho muy raro se ha escondido detrás la puerta.
-El bicho muy raro se ha escondido detrás la puerta.
+El bicho muy raro se ha escondido detrás de la puerta.
+El bicho muy raro se ha escondido detrás de la puerta.
+El bicho muy raro se ha escondido detrás de la puerta.
 Es un palo.
 Es un palo.
 Es un palo.
@@ -106,12 +106,12 @@ Nosotros iremos al restaurante.
 Hoy no cojas el abrigo.
 Hoy no cojas el abrigo.
 Hoy no cojas el abrigo.
-Nosotros nos bañaremos en la playa en el verano.
-Nosotros nos bañaremos en la playa en el verano.
-Nosotros nos bañaremos en la playa en el verano.
-Ayer el médico fue.
-Ayer el médico fue.
-Ayer fui con el médico.
+Nosotros nos bañaremos en la playa en verano.
+Nosotros nos bañaremos en la playa en verano.
+Nosotros nos bañaremos en la playa en verano.
+Ayer fui al médico.
+Ayer fui al médico.
+Ayer fui al médico.
 El hombre del jersey negro es malo.
 El hombre del jersey negro es malo.
 El hombre del jersey negro es malo.
@@ -121,15 +121,15 @@ El pastel de manzana no me gusta.
 Nosotros iremos a cantar el miércoles.
 Nosotros iremos a cantar el miércoles.
 Nosotros iremos a cantar el miércoles.
-Nosotros hemos bebido un vaso de leche caliente.
-Nosotros hemos bebido un vaso de leche caliente.
-Nosotros hemos bebido un vaso de leche caliente.
-¿Qué hace la madre?
-¿Qué hace la madre?
-¿Qué hace la madre?
-La enfermera es muy alegre.
-La enfermera es muy alegre.
-La enfermera es muy alegre.
+Nosotros hemos bebido vaso de leche caliente.
+Nosotros hemos bebido vaso de leche caliente.
+Nosotros hemos bebido vaso de leche caliente.
+¿Qué hace mi madre?
+¿Qué hace mi madre?
+¿Qué hace mi madre?
+La enfermera es mucho alegre.
+La enfermera es mucho alegre.
+La enfermera es mucho alegre.
 Quiero clasificarme en las olimpíadas.
 Quiero clasificarme en las olimpíadas.
 Quiero clasificarme en las olimpíadas.
@@ -172,18 +172,18 @@ Estoy  bien.
 Ayudame a bajar de las escaleras.
 Ayudame a bajar de las escaleras, por favor.
 Ayudame a bajar de las escaleras.
-Nosotros estuvimos muy contentos.
-Nosotros estuvimos muy contentos.
-Nosotros estuvimos muy contentos.
+Nosotros estuvimos mucho contentos.
+Nosotros estuvimos mucho contentos.
+Nosotros estuvimos mucho contentos.
 Espera un minuto.
 Espera un minuto.
 Espera un minuto.
 No quiero que te pelees.
 No quiero que te pelees.
 No quiero que te pelees.
-El tren iba muy lento.
-El tren iba muy lento.
-El tren iba muy lento.
+El tren iba mucho lento.
+El tren iba mucho lento.
+El tren iba mucho lento.
 Esto será una sorpresa.
 Esto será una sorpresa.
 Esto será una sorpresa.
@@ -195,31 +195,31 @@ Las cinco.
 Son las cinco.
 Te quiero.
 Te quiero.
-Te amo.
+Te quiero.
 El cocinero y la cocinera hacen unos pasteles.
 El cocinero y la cocinera hacen unos pasteles.
 El cocinero y la cocinera hacen unos pasteles.
 Me he caído.
 Me he caído.
 Me he caído.
-Eres muy más alto.
-Eres muy más alto.
-Eres muy más alto.
+Eres mucho más alto.
+Eres mucho más alto.
+Eres mucho más alto.
 ¿Por qué?
 ¿Por qué?
 ¿Por qué?
 ¿A quién lo cuento?
 ¿A quién lo cuento?
 ¿A quién lo cuento?
-Nosotros seremos unas Europa el jueves.
-Nosotros seremos unas Europa el jueves.
-El jueves nos será Europa.
+Nosotros estaremos  a Europa el jueves.
+Nosotros estaremos  a Europa el jueves.
+Nosotros estaremos  a Europa el jueves.
 ¿Cómo lo sabremos nosotros?
 ¿Cómo lo sabremos nosotros?
 ¿Cómo lo sabremos nosotros?
-La madre está  con el padre.
-La madre está  con el padre.
-La madre está  con el padre.
+Mi madre está  con mi padre.
+Mi madre está  con mi padre.
+Mi madre está  con mi padre.
 No.
 No.
 No.
@@ -232,9 +232,9 @@ Cambia una silla de color marrón.
 Ya está.
 Ya está.
 Ya está.
-Mi perro es muy gracioso.
-Mi perro es muy gracioso.
-Mi perro es muy gracioso.
+Mi perro es mucho gracioso.
+Mi perro es mucho gracioso.
+Mi perro es mucho gracioso.
 Mala suerte.
 Mala suerte.
 Mala suerte.
@@ -250,12 +250,12 @@ Ellos celebran su cumpleaños en el parque.
 Compra esto en la farmacia.
 Compra esto en la farmacia.
 Compra esto en la farmacia.
-Nosotros bebimos un café en la boda.
-Nosotros bebimos un café en la boda.
-Nosotros bebimos un café en la boda.
-Cinco personas estaban incómodas dentro el taxi.
-Cinco personas estaban incómodas dentro el taxi.
-Cinco personas estaban incómodas dentro el taxi.
+Nosotros bebimos café en la boda.
+Nosotros bebimos café en la boda.
+Nosotros bebimos café en la boda.
+Cinco personas estaban incómodas dentro del taxi.
+Cinco personas estaban incómodas dentro del taxi.
+Cinco personas estaban incómodas dentro del taxi.
 Mi perra necesita una ducha.
 Mi perra necesita una ducha.
 Mi perra necesita una ducha.
@@ -283,9 +283,9 @@ Mi hermana descansa sobre la cama.
 Cuentame un cuento.
 Cuentame un cuento.
 Cuentame un cuento.
-Después nosotros me miraremos una película en el cine.
-Después nosotros me miraremos una película en el cine.
-Después nosotros me miraremos una película en el cine.
+Después nosotros miraremos una película en el cine.
+Después nosotros miraremos una película en el cine.
+Después nosotros miraremos una película en el cine.
 Vosotros jugaréis más tarde.
 Vosotros jugaréis más tarde.
 Vosotros jugaréis más tarde.
