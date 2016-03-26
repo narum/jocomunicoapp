@@ -205,7 +205,7 @@ class Lexicon extends CI_Model {
         $nounentered = false;
         $queuedmodif = false;
         $queuedmodifs = array();
-        
+                
         for ($i=0; $i<$numparaules; $i++) {
             
             $paraula = $paraules[$i];
@@ -795,6 +795,7 @@ class Lexicon extends CI_Model {
         $inputids .= " / #".$tipusfrase;
         $inputids .= " / @".$tense;
         if ($negativa) $inputids .= " / %no";
+        $inputids .= " /";
         
         $inputwords .="<br /><br />".$inputids;
         $data = array(
@@ -856,7 +857,7 @@ class Lexicon extends CI_Model {
                     if ($word->coord) $inputwords .= 'i';
                     $inputwords .= ')';
                 } 
-                if ($i < (count($paraulesFrase) - 1)) $inputwords .= " / ";
+                if ($i < (count($paraulesFrase))) $inputwords .= " / ";
             }
         }
         $data = array(
