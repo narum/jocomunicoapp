@@ -2149,7 +2149,9 @@ class Myslot {
                             // el quantificador és invariable
                             // excepte "mucho" que pasa a ser "muy"
                             if ($quantifierslot->paraulafinal->propietats->masc == "mucho") {
-                                $elementaux[0] = "muy";
+                                // si té més d'un quantificador ja no. Ex: mucho más alto
+                                if ($this->CModassignedkey == 1) $elementaux[0] = "muy";
+                                else $elementaux[0] = "mucho";
                             }
                             else {
                                 $elementaux[0] = $quantifierslot->paraulafinal->propietats->masc;
@@ -2324,7 +2326,11 @@ class Myslot {
                             
                             $quantifier = $this->cmpMod[$this->CModassignedkey[$i]]->paraulafinal;
                             // Excepció: Ex: "Muy arriba".
-                            if ($quantifier->text == "mucho") $elementaux[0] = "muy";
+                            if ($quantifier->text == "mucho") {
+                                // si té més d'un quantificador ja no. Ex: mucho más arriba
+                                if ($this->CModassignedkey == 1) $elementaux[0] = "muy";
+                                else $elementaux[0] = "mucho";
+                            }
                             else $elementaux[0] = $quantifier->text;
                             $elementaux[1] = $quantifier;
 

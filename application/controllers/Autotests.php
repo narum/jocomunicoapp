@@ -21,7 +21,7 @@ class Autotests extends CI_Controller {
             }
             else {
                 
-                $filename = "tests/100-frases-catala-3-usus-originals.txt";
+                $filename = "tests/100-frases-castella-3-usus-originals.txt";
                 $fitxertxt = fopen($filename,"r+b");
                 $length = filesize($filename);
                 
@@ -48,7 +48,7 @@ class Autotests extends CI_Controller {
                         $contentview .= $info["frasefinal"]."<br />";
                     }
 
-                    $filenamewrite = "tests/100-frases-catala-3-usus-originals-resultats.txt";
+                    $filenamewrite = "tests/100-frases-castella-3-usus-originals-resultats.txt";
                     $fitxertxtwrite = fopen($filenamewrite,"w+b");
                     
                     if (flock($fitxertxtwrite, LOCK_EX)) {
