@@ -44,6 +44,14 @@ angular.module('app', [
 			controller:'UserConfCtrl',
 			templateUrl:'../../angular_templates/userConfig.html'
 		})
+                .when('/registerComplete', {
+			controller:'RegisterCtrl',
+			templateUrl:'../../angular_templates/registerComplete.html'
+		})
+                .when('/emailValidation/:emailKey/:id', {
+			controller:'emailValidationCtrl',
+			templateUrl:'../../angular_templates/emailValidation.html'
+		})
 		.otherwise({ redirectTo:'/' });
 })
 .run(function(AuthService){

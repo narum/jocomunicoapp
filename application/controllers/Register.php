@@ -126,14 +126,50 @@ class Register extends REST_Controller {
     {
         $SUname = $this->query("SUname");
         $ID_ULanguage = $this->query("ID_ULanguage");
-        
-        $saved=$this->main_model->saveUser($SUname,$ID_ULanguage);
-        
-        $response = [
-                "saved" => $saved
-            ];
-        
+
+        $response=$this->main_model->saveUser($SUname,$ID_ULanguage);
+
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
 
+    }
+    public function emailValidation_post()
+    {
+        $emailKey = $this->query("emailKey");
+        $ID_SU = $this->query("ID_SU");
+
+        $validated=$this->main_model->userValidation($emailKey, $ID_SU);
+        
+        $response = [
+                "validated" => $validated
+            ];
+
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
+    public function passRecovery_post()
+    {
+        $email = $this->query("email");
+        $SUname = $this->query("user");
+
+        if(($email == NULL || $email == "")&&($SUname!=NULL||$SUname!="")) {
+            
+            $response = [
+                "validated" => "NOM"
+            ];
+
+            $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+        }else if (($email!=NULL||$email!="")&&($SUname==NULL||$SUname=="")){
+            $response = [
+                "validated" => "email"
+            ];
+
+            $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+        }else{
+            $response = [
+                "validated" => "nothing"
+            ];
+
+            $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+
+        }
     }
 }
