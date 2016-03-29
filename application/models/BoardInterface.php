@@ -671,4 +671,50 @@ class BoardInterface extends CI_Model {
         $this->db->update('Cell', $data);
     }
     
+    function getMaxScanBlock1($IDboard){
+        $output = array();
+        
+        $this->db->order_by('customScanBlock1', 'desc');
+        $this->db->where('ID_RBoard', $IDboard);
+        $query = $this->db->get('R_BoardCell');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    function getMaxScanBlock2($IDboard){
+        $output = array();
+        
+        $this->db->order_by('customScanBlock2', 'desc');
+        $this->db->where('ID_RBoard', $IDboard);
+        $query = $this->db->get('R_BoardCell');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    function getScannedCells($IDboard, $csb1, $csb2){
+        $output = array();
+        
+        $this->db->order_by('posInBoard', 'asc');
+        $this->db->where('customScanBlock2', $csb2);
+        $this->db->where('customScanBlock1', $csb1);
+        $this->db->where('ID_RBoard', $IDboard);
+        $query = $this->db->get('R_BoardCell');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
 }

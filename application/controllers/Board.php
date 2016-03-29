@@ -695,4 +695,45 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    
+    public function getMaxScanBlock1_post(){
+        $this->BoardInterface->initTrans();
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->idboard;
+        
+        $max = $this->BoardInterface->getMaxScanBlock1($id);
+        $response = [
+            'max' => $max[0]->customScanBlock1
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    
+    public function getMaxScanBlock2_post(){
+        $this->BoardInterface->initTrans();
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->idboard;
+        
+        $max = $this->BoardInterface->getMaxScanBlock2($id);
+        $response = [
+            'max' => $max[0]->customScanBlock2
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    
+    public function getScannedCells_post(){
+        $this->BoardInterface->initTrans();
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->idboard;
+        $csb1 = $request->numCustomScanBlock1;
+        $csb2 = $request->numCustomScanBlock2;
+        
+        $array = $this->BoardInterface->getScannedCells($id, $csb1, $csb2);
+        $response = [
+            'array' => $array
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 }

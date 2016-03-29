@@ -401,37 +401,76 @@ angular.module('controllers', [])
             // Get event Init call in the mune bar
             $rootScope.$on("IniciCallFromMenu", function () {
                 //MODIF: Se tiene que hacer con configuracion de usuario
-                
+
                 $scope.config(4);
             });
             //MODIF: Solo para hacer pruebas
             $rootScope.$on("ScanCallFromMenu", function () {
                 $scope.InitScan();
             });
-            
+
             $scope.InitScan = function ()
             {
                 $scope.currentScanBlock = 1;
                 $scope.currentScanBlock1 = 1;
                 $scope.currentScanBlock2 = 1;
-                $scope.maxScanBlock1 = 5;
-                $scope.maxScanBlock2 = 5;
+                $scope.getMaxScanBlock1();
+                $scope.getMaxScanBlock2();
             };
-            
+
+            $scope.getMaxScanBlock1 = function ()
+            {
+                var url = $scope.baseurl + "Board/getMaxScanBlock1";
+                var postdata = {idboard: $scope.idboard};
+
+                $http.post(url, postdata).success(function (response)
+                {
+                    $scope.maxScanBlock1 = response.max;
+                });
+            };
+
+            $scope.getMaxScanBlock2 = function ()
+            {
+                var url = $scope.baseurl + "Board/getMaxScanBlock2";
+                var postdata = {idboard: $scope.idboard};
+
+                $http.post(url, postdata).success(function (response)
+                {
+                    $scope.maxScanBlock2 = response.max;
+                });
+            };
+
             $scope.changeBlockScan = function () {
-                if ($scope.currentScanBlock === 1){
-                    $scope.currentScanBlock1 = $scope.currentScanBlock1 + 1;
-                }else if ($scope.currentScanBlock === 2){
-                    $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                }else if ($scope.currentScanBlock === 3){
-                    //Hacerlo con un array
+                if ($scope.currentScanBlock === 1) {
+                    $scope.currentScanBlock1 = $scope.currentScanBlock1 % $scope.maxScanBlock1 + 1;
+                } else if ($scope.currentScanBlock === 2) {
+                    if ($scope.currentScanBlock2 === null) {
+                        $scope.currentScanBlock2 = 1;
+                    } else {
+                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
+                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
+                            $scope.currentScanBlock2 = null;
+                        }
+                    }
+                } else if ($scope.currentScanBlock === 3) {
+                    $scope.indexScannedCells = ($scope.indexScannedCells +1) % ($scope.arrayScannedCells.length);
                 }
             };
-            
+
             $scope.selectBlockScan = function () {
                 $scope.currentScanBlock = $scope.currentScanBlock + 1;
+                if ($scope.currentScanBlock === 3) {
+                    var url = $scope.baseurl + "Board/getScannedCells";
+                    var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
+
+                    $http.post(url, postdata).success(function (response)
+                    {
+                        $scope.arrayScannedCells = response.array;
+                        $scope.indexScannedCells = 0;
+                    });
+                }
             };
-            
+
             // Get the user config and show the board
             $scope.config = function (boardconf)
             {
@@ -450,7 +489,7 @@ angular.module('controllers', [])
                 $scope.negativa = false;
                 $scope.SearchType = "Tots";
                 $scope.inEdit = false;
-                
+
                 //-----------Iniciacion-----------
 
                 if (boardconf === 1)
@@ -607,16 +646,16 @@ angular.module('controllers', [])
                     $scope.primaryBoard = {ID_Board: response.primaryBoard.ID_Board};
                 });
             };
-            
+
             $scope.changeAutoReturn = function (autoreturn)
             {
                 var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
                 var URL = $scope.baseurl + "Board/changeAutoReturn";
                 $http.post(URL, postdata).
                         success(function ()
-                {
+                        {
 
-                });
+                        });
             };
 
             // Change the primary board of the group
@@ -995,7 +1034,7 @@ angular.module('controllers', [])
 
                     $http.post(URL, postdata).success(function (response)
                     {
-                        
+
                     });
                 }, function (value) {
                 });
@@ -1011,7 +1050,7 @@ angular.module('controllers', [])
                     scope: $scope,
                     className: 'ngdialog-theme-default dialogCopyBoard'
                 }).then(function () {
-                
+
                 }, function (value) {
                 });
             };
@@ -1023,12 +1062,12 @@ angular.module('controllers', [])
                     scope: $scope,
                     className: 'ngdialog-theme-default dialogMoveBoard'
                 }).then(function () {
-                
+
                 }, function (value) {
                 });
             };
 
-            
+
 
 
 
@@ -1241,9 +1280,9 @@ angular.module('controllers', [])
 
             $scope.home = function () {
                 $rootScope.$emit("IniciCallFromMenu", {});
-                
+
             };
-            
+
             $scope.IniciScan = function () {
                 $rootScope.$emit("ScanCallFromMenu", {});
             };

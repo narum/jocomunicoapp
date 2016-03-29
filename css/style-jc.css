@@ -203,6 +203,6 @@
     background-color: white;
 }
 .scaneo{
-    background: linear-gradient(white, white), linear-gradient(red, red);
+    background: linear-gradient(white, white), linear-gradient(black, black);
     background-clip: content-box, padding-box;
 }
