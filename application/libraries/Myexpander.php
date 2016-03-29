@@ -243,7 +243,7 @@ class Myexpander {
             for ($i=0; $i<count($this->puntsallpatterns); $i++) {
                 
                 // PER VEURE LES PUNTUACIONS DE TOTS ELS PATRONS QUE HA PROVAT 
-                // echo "Patró ".$this->allpatterns[$i]->id.": ".$this->puntsallpatterns[$i]." </br ><br />";
+                echo "Patró ".$this->allpatterns[$i]->id.": ".$this->puntsallpatterns[$i]." </br ><br />";
                 
                 if ($this->puntsallpatterns[$i] > $bestpatternpunts) {
                     $bestpatternpunts = $this->puntsallpatterns[$i];
@@ -323,8 +323,11 @@ class Myexpander {
                 }
                 // si hi ha algun nom i no hi ha altres paraules excepte modificadors i/o adjectius
                 // agafem el verb per defecte del primer nom introduït
+                // si el nom no tenia verb per defecte i hi havia un adjectiu, agafem el verb per
+                // defecte de l'adjectiu
                 else if ($countnouns > 0 && !$othertypes) {
-                    $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($noundefverb, false);
+                    if ($noundefverb != 0) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($noundefverb, false);
+                    else if ($thereisadj) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, true);
                 }
                 else {
                     // Agafem els verbless patterns
