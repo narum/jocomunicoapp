@@ -401,12 +401,15 @@ angular.module('controllers', [])
             // Get event Init call in the mune bar
             $rootScope.$on("IniciCallFromMenu", function () {
                 //MODIF: Se tiene que hacer con configuracion de usuario
+                
                 $scope.config(4);
             });
             // Get the user config and show the board
             $scope.config = function (boardconf)
             {
                 //-----------Iniciacion-----------
+                $scope.userViewHeight = 100;
+                $scope.searchFolderHeight = 0;
                 var url = $scope.baseurl + "Board/loadCFG";
                 var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr')};
 
@@ -575,6 +578,17 @@ angular.module('controllers', [])
                     $scope.primaryBoard = {ID_Board: response.primaryBoard.ID_Board};
                 });
             };
+            
+            $scope.changeAutoReturn = function (autoreturn)
+            {
+                var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
+                var URL = $scope.baseurl + "Board/changeAutoReturn";
+                $http.post(URL, postdata).
+                        success(function ()
+                {
+
+                });
+            };
 
             // Change the primary board of the group
             $scope.changePrimaryBoard = function (value)
@@ -723,7 +737,6 @@ angular.module('controllers', [])
                 {
 
                     if (response.idPrimaryBoard !== null) {
-                        alert("he entrado" + response.idPrimaryBoard);
                         $scope.showBoard(response.idPrimaryBoard);
                     }
                 });
@@ -1199,6 +1212,7 @@ angular.module('controllers', [])
 
             $scope.home = function () {
                 $rootScope.$emit("IniciCallFromMenu", {});
+                
             };
 
         })
