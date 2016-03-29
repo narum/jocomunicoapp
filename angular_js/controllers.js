@@ -403,6 +403,34 @@ angular.module('controllers', [])
                 //MODIF: Se tiene que hacer con configuracion de usuario
                 $scope.config(4);
             });
+            //MODIF: Solo para hacer pruebas
+            $rootScope.$on("ScanCallFromMenu", function () {
+                $scope.InitScan();
+            });
+            
+            $scope.InitScan = function ()
+            {
+                $scope.currentScanBlock = 1;
+                $scope.currentScanBlock1 = 1;
+                $scope.currentScanBlock2 = 1;
+                $scope.maxScanBlock1 = 5;
+                $scope.maxScanBlock2 = 5;
+            };
+            
+            $scope.changeBlockScan = function () {
+                if ($scope.currentScanBlock === 1){
+                    $scope.currentScanBlock1 = $scope.currentScanBlock1 + 1;
+                }else if ($scope.currentScanBlock === 2){
+                    $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
+                }else if ($scope.currentScanBlock === 3){
+                    //Hacerlo con un array
+                }
+            };
+            
+            $scope.selectBlockScan = function () {
+                $scope.currentScanBlock = $scope.currentScanBlock + 1;
+            };
+            
             // Get the user config and show the board
             $scope.config = function (boardconf)
             {
@@ -419,6 +447,7 @@ angular.module('controllers', [])
                 $scope.negativa = false;
                 $scope.SearchType = "Tots";
                 $scope.inEdit = false;
+                
                 //-----------Iniciacion-----------
 
                 if (boardconf === 1)
@@ -965,7 +994,7 @@ angular.module('controllers', [])
 
             };
 
-
+            
 
 
 
@@ -1179,7 +1208,10 @@ angular.module('controllers', [])
             $scope.home = function () {
                 $rootScope.$emit("IniciCallFromMenu", {});
             };
-
+            
+            $scope.IniciScan = function () {
+                $rootScope.$emit("ScanCallFromMenu", {});
+            };
         })
 
 

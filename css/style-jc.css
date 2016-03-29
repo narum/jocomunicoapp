@@ -179,3 +179,7 @@
     margin: 10%;
     background-color: white;
 }
+.scaneo{
+    background: linear-gradient(white, white), linear-gradient(red, red);
+    background-clip: content-box, padding-box;
+}
