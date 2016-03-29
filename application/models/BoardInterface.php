@@ -686,10 +686,11 @@ class BoardInterface extends CI_Model {
         return $output;
     }
     
-    function getMaxScanBlock2($IDboard){
+    function getMaxScanBlock2($IDboard, $scanGroup){
         $output = array();
         
         $this->db->order_by('customScanBlock2', 'desc');
+        $this->db->where('customScanBlock1', $scanGroup);
         $this->db->where('ID_RBoard', $IDboard);
         $query = $this->db->get('R_BoardCell');
 

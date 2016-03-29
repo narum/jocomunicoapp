@@ -411,13 +411,14 @@ angular.module('controllers', [])
 
             $scope.InitScan = function ()
             {
+                $scope.arrayScannedCells = null;
+                $scope.indexScannedCells = 0;
                 $scope.currentScanBlock = 1;
                 $scope.currentScanBlock1 = 1;
                 $scope.currentScanBlock2 = 1;
                 $scope.getMaxScanBlock1();
-                $scope.getMaxScanBlock2();
             };
-
+            // Get the number of scan blocks
             $scope.getMaxScanBlock1 = function ()
             {
                 var url = $scope.baseurl + "Board/getMaxScanBlock1";
@@ -428,38 +429,60 @@ angular.module('controllers', [])
                     $scope.maxScanBlock1 = response.max;
                 });
             };
-
+            // Get the number of level 2 scan blocks
             $scope.getMaxScanBlock2 = function ()
             {
                 var url = $scope.baseurl + "Board/getMaxScanBlock2";
-                var postdata = {idboard: $scope.idboard};
+                var postdata = {idboard: $scope.idboard, scanGroup: $scope.currentScanBlock1};
 
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.maxScanBlock2 = response.max;
+                    // If there is no subgroup passes to the next scan level (3)
+                    if ($scope.maxScanBlock2 === null) {
+                        $scope.currentScanBlock2 = null;
+                        $scope.selectBlockScan();
+                    }
+                    // There is no group selected
+                    if ($scope.maxScanBlock2 === "No group found"){
+                        $scope.InitScan();
+                    }
                 });
             };
-
+            // Change teh current scan block
             $scope.changeBlockScan = function () {
+                // If we are in the first scan level passes to the next (cyclic)
                 if ($scope.currentScanBlock === 1) {
                     $scope.currentScanBlock1 = $scope.currentScanBlock1 % $scope.maxScanBlock1 + 1;
+                    // If we are in the second scan level passes to the next (cyclic) but...
                 } else if ($scope.currentScanBlock === 2) {
-                    if ($scope.currentScanBlock2 === null) {
-                        $scope.currentScanBlock2 = 1;
-                    } else {
+                    // CurrentScanBlock will be null when we are over all the cell that have no scan block
+                    if ($scope.currentScanBlock2 !== null) {
+                        // If we are not over the mentioned scanblock pass to the next (cyclic... almost)
                         $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
+                        // If we pass the last scan scan block instead of go to the first one, go to the null block (those cells which are no assigned to a scan block)
                         if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
                             $scope.currentScanBlock2 = null;
                         }
+                    // If we are over this strange block, go to the first one.
+                    } else {
+                        $scope.currentScanBlock2 = 1;
                     }
+                // If we are in the third scan pass one by one over the array (cyclic)  
                 } else if ($scope.currentScanBlock === 3) {
-                    $scope.indexScannedCells = ($scope.indexScannedCells +1) % ($scope.arrayScannedCells.length);
+                    $scope.indexScannedCells = ($scope.indexScannedCells + 1) % ($scope.arrayScannedCells.length);
                 }
             };
-
+            //Pass to the next scan level (subgroup)
             $scope.selectBlockScan = function () {
                 $scope.currentScanBlock = $scope.currentScanBlock + 1;
-                if ($scope.currentScanBlock === 3) {
+                //If we are in the second level
+                if ($scope.currentScanBlock === 2) {
+                    // Get the number of level 2 subgroup
+                    $scope.getMaxScanBlock2();
+                //If we are in the third level, get all the cells (arraScannedCells)
+                } else if ($scope.currentScanBlock === 3) {
+
                     var url = $scope.baseurl + "Board/getScannedCells";
                     var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
 
@@ -467,9 +490,30 @@ angular.module('controllers', [])
                     {
                         $scope.arrayScannedCells = response.array;
                         $scope.indexScannedCells = 0;
+                        //There is one cell in that group
+
+                        if ($scope.arrayScannedCells.length === 1) {
+                            $scope.selectScannedCell();
+                        }
                     });
+                // This is, we selected a cell.
+                } else if ($scope.currentScanBlock === 4) {
+                    $scope.selectScannedCell();
                 }
             };
+            
+            // Select the current cell (the index point to the array with all the cells)
+            $scope.selectScannedCell = function ()
+            {
+                var url = $scope.baseurl + "Board/getCell";
+                var postdata = {idboard: $scope.arrayScannedCells[$scope.indexScannedCells].ID_RBoard, pos: $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard};
+                $http.post(url, postdata).success(function (response)
+                {
+                    $scope.clickOnCell(response.info);
+                    $scope.InitScan();
+                });
+            };
+
 
             // Get the user config and show the board
             $scope.config = function (boardconf)
@@ -1076,10 +1120,10 @@ angular.module('controllers', [])
         })
 
         // Edit controller 
-        .controller('Edit', function ($scope, $http, ngDialog, txtContent, $rootScope) {
+        .controller('Edit', function ($scope, $http, ngDialog) {
             // Get the cell clicked (the cell in the cicked position in the current board
             var url = $scope.baseurl + "Board/getCell";
-            var postdata = {id: $scope.idEditCell, idboard: $scope.idboard};
+            var postdata = {pos: $scope.idEditCell, idboard: $scope.idboard};
 
             $http.post(url, postdata).success(function (response)
             {
