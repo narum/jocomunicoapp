@@ -594,6 +594,7 @@ angular.module('controllers', [])
                     $scope.nameboard = response.name;
                     $scope.altura = $scope.range(20)[response.row].valueOf();
                     $scope.amplada = $scope.range(20)[response.col].valueOf();
+                    $scope.autoreturn = (response.autoReturn === '1' ? true : false);
                 });
             };
             // Gets all the boards in the group and select the primary
@@ -950,12 +951,15 @@ angular.module('controllers', [])
                 }
                 ;
             };
-
-            /*
+            var testtimer = setInterval(myTimer, 2000);
+            function myTimer() {
+                
+            }
+            /***************************************************
              *
              *  editFolders functions
              *  
-             */
+             ***************************************************/
             $scope.CreateBoard = function () {
                 $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
                 ngDialog.openConfirm({
