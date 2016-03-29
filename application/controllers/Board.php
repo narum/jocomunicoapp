@@ -1,4 +1,3 @@
-
 <?php
 
 if (!defined('BASEPATH'))
@@ -57,7 +56,6 @@ class Board extends REST_Controller {
         $id = $request->id;
         $idboard = $request->idboard;
 
-        // "1" es el numero de id de la "board"
         $info = $this->BoardInterface->getCell($id, $idboard);
 
 
@@ -78,7 +76,6 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $idboard = $request->idboard;
 
-        // "1" es el numero de id de la "board"
         $output = $this->BoardInterface->getBoardStruct($idboard);
         $columns = $output[0]->width;
         $rows = $output[0]->height;
@@ -129,8 +126,9 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $Name = $request->Name;
+        $IDnumboard = $request -> ID;
 
-        $this->BoardInterface->updateName($Name, 1);
+        $this->BoardInterface->updateName($Name, $IDnumboard);
         $this->BoardInterface->commitTrans();
     }
 
@@ -152,12 +150,6 @@ class Board extends REST_Controller {
         $r = $request->r;
         $idboard = $request->idboard;
 
-        // "1" es el numero de id de la "board"
-//        $output = $this->BoardInterface->getBoardStruct(1);
-//        $columns = $output[0]->width + $c;
-//        $rows = $output[0]->height + $r;
-//        $this->BoardInterface->updateNumCR($columns, $rows, 1);
-
         $output = $this->BoardInterface->getBoardStruct($idboard);
         $this->BoardInterface->updateNumCR($c, $r, $idboard);
         $columnsDiff = $c - $output[0]->width;
@@ -176,25 +168,8 @@ class Board extends REST_Controller {
             $this->removeRows($output[0]->width, $output[0]->height, $idboard, -$rowsDiff);
         }
 
-        //$array = $this->BoardInterface->getCellsBoard(1);
-
-
-
         $this->BoardInterface->commitTrans();
 
-        $output = $this->BoardInterface->getBoardStruct($idboard);
-        $response = [
-            'col' => '1',
-            'row' => '1'
-        ];
-//        if ($this->BoardInterface->statusTrans() === FALSE) {
-//            $response = [
-//                'error' => "errorText"
-//            ];
-//            $this->response($response, 500);
-//        } else {
-        $this->response($response, REST_Controller::HTTP_OK);
-//        }
     }
 
     /*
@@ -288,9 +263,10 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $id = $request->id;
 
-        $this->Lexicon->afegirParaula(1, $id, null);
+        $idusu = $this->session->userdata('idusu');
+        $this->Lexicon->afegirParaula($idusu, $id, null);
 
-        $data = $this->Lexicon->recuperarFrase(1);
+        $data = $this->Lexicon->recuperarFrase($idusu);
 
         $response = [
             'data' => $data
@@ -305,11 +281,12 @@ class Board extends REST_Controller {
 
     public function deleteLastWord_post() {
 
-        $id = $this->BoardInterface->getLastWord(1);
+        $idusu = $this->session->userdata('idusu');
+        $id = $this->BoardInterface->getLastWord($idusu);
 
         $this->Lexicon->eliminarParaula($id->ID_RSTPSentencePicto);
 
-        $data = $this->Lexicon->recuperarFrase(1);
+        $data = $this->Lexicon->recuperarFrase($idusu);
 
         $response = [
             'data' => $data
@@ -323,10 +300,10 @@ class Board extends REST_Controller {
 
     public function deleteAllWords_post() {
 
-        //1 es usuario
-        $this->BoardInterface->removeSentence(1);
+        $idusu = $this->session->userdata('idusu');
+        $this->BoardInterface->removeSentence($idusu);
 
-        $data = $this->Lexicon->recuperarFrase(1);
+        $data = $this->Lexicon->recuperarFrase($idusu);
 
         $response = [
             'data' => $data
@@ -340,19 +317,16 @@ class Board extends REST_Controller {
      */
 
     public function generate_post() {
-        //1 user
+        
         $this->BoardInterface->initTrans();
-//        $paraules = $this->Lexicon->recuperarFrase(1);
-//        $this->BoardInterface->addStatsX1($paraules, 1);
-//        $this->BoardInterface->addStatsX2($paraules, 1);
-//        $this->BoardInterface->addStatsX3($paraules, 1);
 
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $tense = $request->tense;
         $tipusfrase = $request->tipusfrase;
         $negativa = $request->negativa;
-        $this->Lexicon->insertarFrase(1, $tipusfrase, $tense, $negativa);
+        $idusu = $this->session->userdata('idusu');
+        $this->Lexicon->insertarFrase($idusu, $tipusfrase, $tense, $negativa);
 
 
         $this->BoardInterface->commitTrans();
@@ -487,8 +461,7 @@ class Board extends REST_Controller {
         $pos1 = $request->pos1;
         $pos2 = $request->pos2;
         $idboard = $request->idboard;
-        //$boardid = $request->boardid;
-        //1 es la board
+
         $this->BoardInterface->updatePosCell($pos1, -1, $idboard);
         $this->BoardInterface->updatePosCell($pos2, $pos1, $idboard);
         $this->BoardInterface->updatePosCell(-1, $pos2, $idboard);
@@ -511,9 +484,8 @@ class Board extends REST_Controller {
         $pos = $request->pos;
         $idboard = $request->idboard;
         //$boardid = $request->boardid;
-        //1 es la board
         $cell = $this->BoardInterface->getIDCell($pos, $idboard);
-        $this->BoardInterface->updateDataCell(NULL, $cell[0]->ID_RCell);
+        $this->BoardInterface->removeDataCell($cell[0]->ID_RCell);
 
         $data = $this->BoardInterface->getCellsBoard($idboard);
 
@@ -602,8 +574,9 @@ class Board extends REST_Controller {
         $numScanBlockText2 = $request->numScanBlockText2;
         $textInScanBlockText2 = $request->textInScanBlockText2;
         $cellType = $request->cellType;
+        $color = $request->color;
 
-        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType);
+        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType, $color);
         $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
     }
 
@@ -625,6 +598,15 @@ class Board extends REST_Controller {
 
         $this->BoardInterface->changeAutoReturn($id, $value);
     }
+    public function changeAutoReadSentence_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $value = ($request->value == true ? '1' : '0');
+        $id = $request->id;
+
+
+        $this->BoardInterface->changeAutoReadSentence($id, $value);
+    }
 
     public function autoReturn_post() {
         $postdata = file_get_contents("php://input");
@@ -644,7 +626,73 @@ class Board extends REST_Controller {
         $response = [
             'idPrimaryBoard' => $idPrimaryBoard
         ];
+    $this->response($response, REST_Controller::HTTP_OK);
+    }
+    public function autoReadSentence_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+
+
+        $board = $this->BoardInterface->getBoardStruct($id);
+
+        $idPrimaryBoard = null;
+
+        if ($board[0]->autoReadSentence === "1") {
+            $primaryBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
+            $idPrimaryBoard = $primaryBoard[0]->ID_Board;
+        }
+
+        $response = [
+            'idPrimaryBoard' => $idPrimaryBoard
+        ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    public function newBoard_post(){
+        $this->BoardInterface->initTrans();
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $IDGboard = $request->idGroupBoard;
+        $name = $request->CreateBoardName;
+        $width = $request->width;
+        $height = $request->height;
+        
+        $idBoard = $this->BoardInterface->createBoard($IDGboard, $name, $width, $height);
+        $this->addColumns(0, 0, $idBoard, $width);
+        $this->addRows($width, 0, $idBoard, $height);
+        $this->BoardInterface->commitTrans();
+        $response = [
+            'idBoard' => $idBoard
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    public function removeBoard_post(){
+        $this->BoardInterface->initTrans();
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+        
 
+        $cell = $this->BoardInterface->getCellsBoard($id);
+        for ($i = 0; $i < count($cell); $i++){
+            $this->BoardInterface->removeCell($cell[$i]->ID_RCell,$id);
+        }
+        $this->BoardInterface->removeBoardLinks($id);
+        
+        $this->BoardInterface->removeBoard($id);
+        $this->BoardInterface->commitTrans();
+    }
+
+    public function getIDGroupBoards_post(){
+        $this->BoardInterface->initTrans();
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+        
+        $idBoard = $this->BoardInterface->getIDGroupBoards($id);
+        $response = [
+            'idGroupBoard' => $idBoard[0]->ID_GBBoard
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 }

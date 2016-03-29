@@ -19,7 +19,7 @@
     height:100%;
 }
 
-#mainboard{
+#main{
     height:100vh;
 }
 
@@ -66,12 +66,11 @@
 
 #userview{
     height:100%;
-    padding: 5%;
+    
 }
 
 #searchView{
-    height:56%;
-    margin-top: 4%;
+    height:50%;
     margin-right: 2%;
 }
 #searchFolder{
@@ -79,9 +78,9 @@
 }
 
 #trashView{
-    height:37%;
-    margin-bottom: 4%;
-    margin-top: 2%;
+    height:42%;
+    margin-bottom: 2vh;
+    margin-top: 0.5vh;
     margin-right: 3%;
 }
 
@@ -140,11 +139,24 @@
     width : 80vw;
     height: 80vh;
     margin-top: -15vh;
-    background-image: url(http://localhost/jocomunicoapp/img/srcWeb/Patterns1-08.png);
+    background-image: url(/img/srcWeb/Patterns1-08.png);
     border-radius: 10px;
     padding: 0em;
 }
-
+.ngdialog.dialogLogOut .ngdialog-content{
+    width : 45vw;
+    height: 25vh;
+    background-image: url(/img/srcWeb/Patterns1-08.png);
+    border-radius: 10px;
+    padding: 0em;
+}
+.ngdialog.dialogCreateBoard .ngdialog-content{
+    width : 50vw;
+    height: 35vh;
+    background-image: url(/img/srcWeb/Patterns1-08.png);
+    border-radius: 10px;
+    padding: 0em;
+}
 .panellPrincipalText{
     height:50%;
     transform: translate(0%, 25%);
@@ -159,4 +171,11 @@
     border-radius: 10px;
     height: 100%;
     width: 100%;
+}
+.ngdialog-overlay{
+    background: rgba(255,255,255,0.8);
+}
+.FolderButton{
+    margin: 10%;
+    background-color: white;
 }

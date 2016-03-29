@@ -59,6 +59,9 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+    /*
+     * Change the name of one board from ID of the board
+     */
 
     function updateName($Name, $id) {
         $output = array();
@@ -129,10 +132,10 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Change the values of a cell from cell database table
      */
 
-    function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto, $idSentence, $idSFolder, $cellType) {
+    function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto, $idSentence, $idSFolder, $cellType, $color) {
         $output = array();
 
         $data = array(
@@ -144,7 +147,8 @@ class BoardInterface extends CI_Model {
             'ID_CPicto' => $idpicto,
             'ID_CSentence' => $idSentence,
             'sentenceFolder' => $idSFolder,
-            'cellType' => $cellType
+            'cellType' => $cellType,
+            'color' => $color
         );
         $this->db->where('ID_Cell', $id);
         $this->db->update('Cell', $data);
@@ -154,7 +158,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Change scan values by the output scan values 
      */
 
     function updateScanCell($id, $num1, $text1, $num2, $text2) {
@@ -172,7 +176,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Change the cell pictogram by another pictogram
      */
 
     function updatePictoCell($id, $idPicto) {
@@ -237,7 +241,46 @@ class BoardInterface extends CI_Model {
         $output = array();
 
         $this->db->where('ID_Cell', $cell);
-        $this->db->update('Cell', array('ID_CPicto' => $idpicto));
+        $this->db->update('Cell', array('ID_CPicto' => $idpicto,'cellType' => 'picto'));
+
+
+        return $output;
+    }
+    
+    /*
+     * Remove the data of one pictogram ($cell) from the board ($idpicto)    
+     */
+
+    function removeDataCell($cell) {
+        $output = array();
+        $data = array(
+            'imgCell' => NULL,
+            'activeCell' => 1,
+            'textInCellTextOnOff' => 1,
+            'textInCell' => NULL,
+            'isFixedInGroupBoards' => NULL,
+            'ID_CFunction' => NULL,
+            'boardLink' => NULL,
+            'ID_CPicto' => NULL,
+            'ID_CSentence' => NULL,
+            'sentenceFolder' => NULL,
+            'cellType' => NULL,
+            'color' => 'fff'
+        );
+
+        $this->db->where('ID_Cell', $cell);
+        $this->db->update('Cell', $data);
+        
+        $data = array(
+            'isMenu' => 0,
+            'customScanBlock1' => 1,
+            'customScanBlockText1' => NULL,
+            'customScanBlock2' => NULL,
+            'customScanBlockText2' => NULL
+        );
+
+        $this->db->where('ID_RCell', $cell);
+        $this->db->update('R_BoardCell', $data);
 
 
         return $output;
@@ -416,7 +459,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Return all sentences from user
      */
 
     function getSentences($idusu, $idsearch) {
@@ -434,7 +477,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Return the sentence of the input id sentence
      */
 
     function getSentence($id) {
@@ -451,7 +494,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Return all folders from user
      */
 
     function getSFolders($idusu, $idsearch) {
@@ -469,7 +512,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * 
+     * Return a folder of input id folder
      */
 
     function getSFolder($id) {
@@ -538,12 +581,20 @@ class BoardInterface extends CI_Model {
         ));
     }
 
+    /*
+     * Change the value of autoreturn from board
+     */
+    
     function changeAutoReturn($id, $value) {
         $this->db->where('ID_Board', $id);
         $this->db->update('Boards', array(
             'autoReturn' => $value,
         ));
     }
+    
+    /*
+     * Get autoreturn value
+     */
     
     function getAutoReturn($id) {
         $this->db->where('ID_Board', $id);
@@ -556,6 +607,68 @@ class BoardInterface extends CI_Model {
 
         return $output[0];
     }
-   
+    
+    
+    function changeAutoReadSentence($id, $value) {
+        $this->db->where('ID_Board', $id);
+        $this->db->update('Boards', array(
+            'autoReadSentence' => $value,
+        ));
+    }
+    
+    
+    function getAutoReadSentence($id) {
+        $this->db->where('ID_Board', $id);
+        $this->db->get('Boards');
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output[0];
+    }
+    
+    function createBoard($IDGboard, $name, $width, $height){
+        $data = array(
+            'ID_GBBoard' => $IDGboard,
+            'Bname' => $name,
+            'width' => $width,
+            'height' => $height
+        );
+
+        $this->db->insert('Boards', $data);
+
+        $id = $this->db->insert_id();
+        
+        return $id;
+    }
+    
+    function removeBoard($IDboard){
+        $this->db->where('ID_Board', $IDboard);
+        $this->db->delete('Boards');
+  
+    }
+    
+    function removeBoardLinks($IDboard){
+        $output = array();
+        $data = array(
+            'imgCell' => NULL,
+            'activeCell' => 1,
+            'textInCellTextOnOff' => 1,
+            'textInCell' => NULL,
+            'isFixedInGroupBoards' => NULL,
+            'ID_CFunction' => NULL,
+            'boardLink' => NULL,
+            'ID_CPicto' => NULL,
+            'ID_CSentence' => NULL,
+            'sentenceFolder' => NULL,
+            'cellType' => NULL,
+            'color' => 'fff'
+        );
+
+        $this->db->where('boardLink', $IDboard);
+        $this->db->update('Cell', $data);
+    }
     
 }

@@ -1,7 +1,7 @@
 html, body, .container-table {
     height: 100%;
     /*background: #f2f2f2;*/
-    background: url("http://localhost:83/img/FonsRegistre.png") no-repeat center center fixed;
+    background: url("/img/FonsRegistre.png") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -18,7 +18,7 @@ html, body, .container-table {
 }
 .barraSuperior{
     /*background: #333333;*/
-    background-image: url("http://localhost:83/img/BarraMenuSuperior.png");
+    background-image: url("/img/BarraMenuSuperior.png");
     color:white;
 }
 .contingutBarraSuperior{
