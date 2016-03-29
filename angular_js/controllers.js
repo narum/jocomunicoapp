@@ -401,6 +401,7 @@ angular.module('controllers', [])
             // Get event Init call in the mune bar
             $rootScope.$on("IniciCallFromMenu", function () {
                 //MODIF: Se tiene que hacer con configuracion de usuario
+                
                 $scope.config(4);
             });
             //MODIF: Solo para hacer pruebas
@@ -435,6 +436,8 @@ angular.module('controllers', [])
             $scope.config = function (boardconf)
             {
                 //-----------Iniciacion-----------
+                $scope.userViewHeight = 100;
+                $scope.searchFolderHeight = 0;
                 var url = $scope.baseurl + "Board/loadCFG";
                 var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr')};
 
@@ -604,6 +607,17 @@ angular.module('controllers', [])
                     $scope.primaryBoard = {ID_Board: response.primaryBoard.ID_Board};
                 });
             };
+            
+            $scope.changeAutoReturn = function (autoreturn)
+            {
+                var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
+                var URL = $scope.baseurl + "Board/changeAutoReturn";
+                $http.post(URL, postdata).
+                        success(function ()
+                {
+
+                });
+            };
 
             // Change the primary board of the group
             $scope.changePrimaryBoard = function (value)
@@ -752,7 +766,6 @@ angular.module('controllers', [])
                 {
 
                     if (response.idPrimaryBoard !== null) {
-                        alert("he entrado" + response.idPrimaryBoard);
                         $scope.showBoard(response.idPrimaryBoard);
                     }
                 });
@@ -975,7 +988,7 @@ angular.module('controllers', [])
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmRemoveBoard.html',
                     scope: $scope,
-                    className: 'ngdialog-theme-default dialogCreateBoard'
+                    className: 'ngdialog-theme-default dialogRemoveBoard'
                 }).then(function () {
                     var postdata = {id: $scope.idboard};
                     var URL = $scope.baseurl + "Board/removeBoard"
@@ -991,7 +1004,28 @@ angular.module('controllers', [])
 
 
             $scope.copyBoard = function () {
-
+                //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia
+                $scope.CopyBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmCopyBoard.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogCopyBoard'
+                }).then(function () {
+                
+                }, function (value) {
+                });
+            };
+            $scope.moveBoard = function () {
+                //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia
+                $scope.MoveBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmMoveBoard.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogMoveBoard'
+                }).then(function () {
+                
+                }, function (value) {
+                });
             };
 
             
@@ -1207,6 +1241,7 @@ angular.module('controllers', [])
 
             $scope.home = function () {
                 $rootScope.$emit("IniciCallFromMenu", {});
+                
             };
             
             $scope.IniciScan = function () {
