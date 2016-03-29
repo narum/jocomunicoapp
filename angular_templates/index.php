@@ -13,7 +13,7 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/libraries/ngDialog-theme-default.min.css"/>
         <link rel="stylesheet" href="<?= base_url(); ?>/css/style-jc.css"/>
     </head>
-    <body oncontextmenu="return false">
+    <body>
 
         <div ng-view class="root" ng-init="baseurl = '<?= base_url();?>'"></div>
 
