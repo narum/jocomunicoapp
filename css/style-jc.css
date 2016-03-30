@@ -213,8 +213,8 @@
     position: absolute;
 }
 .function{
-    right: 1px;
-    bottom: 1px;
+    right: 0px;
+    bottom: 0px;
     max-width: 100%;
     height: auto;
     max-height: 100%;

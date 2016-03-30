@@ -489,10 +489,12 @@ angular.module('controllers', [])
                 if (true) {
                     $interval.cancel($scope.intervalScan);
                     var Intervalscan = 450;
-                    $scope.intervalScan = $interval(myTimer, Intervalscan);
                     function myTimer() {
                         $scope.NextBlockScan();
-                    };
+                    }
+                    ;
+                    $scope.intervalScan = $interval(myTimer, Intervalscan);
+
                 }
                 $scope.arrayScannedCells = null;
                 $scope.indexScannedCells = 0;
@@ -501,6 +503,12 @@ angular.module('controllers', [])
                 $scope.currentScanBlock2 = 1;
                 $scope.getMaxScanBlock1();
             };
+            // When we get out from scanMode stops the interval
+            $scope.$watch('inScan', function () {
+                if($scope.inScan === false){
+                    $interval.cancel($scope.intervalScan);
+                }
+            });
             // Get the number of scan blocks
             $scope.getMaxScanBlock1 = function ()
             {
@@ -534,54 +542,58 @@ angular.module('controllers', [])
             };
             // Change teh current scan block
             $scope.NextBlockScan = function () {
-                // If we are in the first scan level passes to the next (cyclic)
-                if ($scope.currentScanBlock === 1) {
-                    $scope.currentScanBlock1 = $scope.currentScanBlock1 % $scope.maxScanBlock1 + 1;
-                    // If we are in the second scan level passes to the next (cyclic) but...
-                } else if ($scope.currentScanBlock === 2) {
-                    // CurrentScanBlock will be null when we are over all the cell that have no scan block
-                    if ($scope.currentScanBlock2 !== null) {
-                        // If we are not over the mentioned scanblock pass to the next (cyclic... almost)
-                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                        // If we pass the last scan scan block instead of go to the first one, go to the null block (those cells which are no assigned to a scan block)
-                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                            $scope.currentScanBlock2 = null;
+                if ($scope.inScan) {
+                    // If we are in the first scan level passes to the next (cyclic)
+                    if ($scope.currentScanBlock === 1) {
+                        $scope.currentScanBlock1 = $scope.currentScanBlock1 % $scope.maxScanBlock1 + 1;
+                        // If we are in the second scan level passes to the next (cyclic) but...
+                    } else if ($scope.currentScanBlock === 2) {
+                        // CurrentScanBlock will be null when we are over all the cell that have no scan block
+                        if ($scope.currentScanBlock2 !== null) {
+                            // If we are not over the mentioned scanblock pass to the next (cyclic... almost)
+                            $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
+                            // If we pass the last scan scan block instead of go to the first one, go to the null block (those cells which are no assigned to a scan block)
+                            if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
+                                $scope.currentScanBlock2 = null;
+                            }
+                            // If we are over this strange block, go to the first one.
+                        } else {
+                            $scope.currentScanBlock2 = 1;
                         }
-                        // If we are over this strange block, go to the first one.
-                    } else {
-                        $scope.currentScanBlock2 = 1;
+                        // If we are in the third scan pass one by one over the array (cyclic)  
+                    } else if ($scope.currentScanBlock === 3) {
+                        $scope.indexScannedCells = ($scope.indexScannedCells + 1) % ($scope.arrayScannedCells.length);
                     }
-                    // If we are in the third scan pass one by one over the array (cyclic)  
-                } else if ($scope.currentScanBlock === 3) {
-                    $scope.indexScannedCells = ($scope.indexScannedCells + 1) % ($scope.arrayScannedCells.length);
                 }
             };
             //Pass to the next scan level (subgroup)
             $scope.selectBlockScan = function () {
-                $scope.currentScanBlock = $scope.currentScanBlock + 1;
-                //If we are in the second level
-                if ($scope.currentScanBlock === 2) {
-                    // Get the number of level 2 subgroup
-                    $scope.getMaxScanBlock2();
-                    //If we are in the third level, get all the cells (arraScannedCells)
-                } else if ($scope.currentScanBlock === 3) {
+                if ($scope.inScan) {
+                    $scope.currentScanBlock = $scope.currentScanBlock + 1;
+                    //If we are in the second level
+                    if ($scope.currentScanBlock === 2) {
+                        // Get the number of level 2 subgroup
+                        $scope.getMaxScanBlock2();
+                        //If we are in the third level, get all the cells (arraScannedCells)
+                    } else if ($scope.currentScanBlock === 3) {
 
-                    var url = $scope.baseurl + "Board/getScannedCells";
-                    var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
+                        var url = $scope.baseurl + "Board/getScannedCells";
+                        var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
 
-                    $http.post(url, postdata).success(function (response)
-                    {
-                        $scope.arrayScannedCells = response.array;
-                        $scope.indexScannedCells = 0;
-                        //There is one cell in that group
+                        $http.post(url, postdata).success(function (response)
+                        {
+                            $scope.arrayScannedCells = response.array;
+                            $scope.indexScannedCells = 0;
+                            //There is one cell in that group
 
-                        if ($scope.arrayScannedCells.length === 1) {
-                            $scope.selectScannedCell();
-                        }
-                    });
-                    // This is, we selected a cell.
-                } else if ($scope.currentScanBlock === 4) {
-                    $scope.selectScannedCell();
+                            if ($scope.arrayScannedCells.length === 1) {
+                                $scope.selectScannedCell();
+                            }
+                        });
+                        // This is, we selected a cell.
+                    } else if ($scope.currentScanBlock === 4) {
+                        $scope.selectScannedCell();
+                    }
                 }
             };
 
