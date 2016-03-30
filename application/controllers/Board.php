@@ -53,10 +53,10 @@ class Board extends REST_Controller {
     public function getCell_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
-        $id = $request->id;
+        $pos = $request->pos;
         $idboard = $request->idboard;
 
-        $info = $this->BoardInterface->getCell($id, $idboard);
+        $info = $this->BoardInterface->getCell($pos, $idboard);
 
 
         $response = [
@@ -126,7 +126,7 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $Name = $request->Name;
-        $IDnumboard = $request -> ID;
+        $IDnumboard = $request->ID;
 
         $this->BoardInterface->updateName($Name, $IDnumboard);
         $this->BoardInterface->commitTrans();
@@ -169,7 +169,6 @@ class Board extends REST_Controller {
         }
 
         $this->BoardInterface->commitTrans();
-
     }
 
     /*
@@ -317,7 +316,7 @@ class Board extends REST_Controller {
      */
 
     public function generate_post() {
-        
+
         $this->BoardInterface->initTrans();
 
         $postdata = file_get_contents("php://input");
@@ -439,7 +438,7 @@ class Board extends REST_Controller {
         $id = $request->id;
         $pos = $request->pos;
         $idboard = $request->idboard;
-        
+
         $cell = $this->BoardInterface->getIDCell($pos, $idboard);
         $this->BoardInterface->updateDataCell($id, $cell[0]->ID_RCell);
 
@@ -598,6 +597,7 @@ class Board extends REST_Controller {
 
         $this->BoardInterface->changeAutoReturn($id, $value);
     }
+
     public function changeAutoReadSentence_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -626,8 +626,9 @@ class Board extends REST_Controller {
         $response = [
             'idPrimaryBoard' => $idPrimaryBoard
         ];
-    $this->response($response, REST_Controller::HTTP_OK);
+        $this->response($response, REST_Controller::HTTP_OK);
     }
+
     public function autoReadSentence_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -648,7 +649,8 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    public function newBoard_post(){
+
+    public function newBoard_post() {
         $this->BoardInterface->initTrans();
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -656,7 +658,7 @@ class Board extends REST_Controller {
         $name = $request->CreateBoardName;
         $width = $request->width;
         $height = $request->height;
-        
+
         $idBoard = $this->BoardInterface->createBoard($IDGboard, $name, $width, $height);
         $this->addColumns(0, 0, $idBoard, $width);
         $this->addRows($width, 0, $idBoard, $height);
@@ -666,33 +668,83 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    public function removeBoard_post(){
+
+    public function removeBoard_post() {
         $this->BoardInterface->initTrans();
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
-        
+
 
         $cell = $this->BoardInterface->getCellsBoard($id);
-        for ($i = 0; $i < count($cell); $i++){
-            $this->BoardInterface->removeCell($cell[$i]->ID_RCell,$id);
+        for ($i = 0; $i < count($cell); $i++) {
+            $this->BoardInterface->removeCell($cell[$i]->ID_RCell, $id);
         }
         $this->BoardInterface->removeBoardLinks($id);
-        
+
         $this->BoardInterface->removeBoard($id);
         $this->BoardInterface->commitTrans();
     }
 
-    public function getIDGroupBoards_post(){
+    public function getIDGroupBoards_post() {
         $this->BoardInterface->initTrans();
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
-        
+
         $idBoard = $this->BoardInterface->getIDGroupBoards($id);
         $response = [
             'idGroupBoard' => $idBoard[0]->ID_GBBoard
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+
+    public function getMaxScanBlock1_post() {
+        $this->BoardInterface->initTrans();
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->idboard;
+
+        $max = $this->BoardInterface->getMaxScanBlock1($id);
+        $response = [
+            'max' => $max[0]->customScanBlock1
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+
+    public function getMaxScanBlock2_post() {
+        $this->BoardInterface->initTrans();
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->idboard;
+        $scanGroup = $request->scanGroup;
+
+        $max = $this->BoardInterface->getMaxScanBlock2($id, $scanGroup);
+        if ($max != null) {
+            $response = [
+                'max' => $max[0]->customScanBlock2
+            ];
+        }else{
+            $response = [
+                'max' => "No group found"
+            ];
+        }
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+
+    public function getScannedCells_post() {
+        $this->BoardInterface->initTrans();
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->idboard;
+        $csb1 = $request->numCustomScanBlock1;
+        $csb2 = $request->numCustomScanBlock2;
+
+        $array = $this->BoardInterface->getScannedCells($id, $csb1, $csb2);
+        $response = [
+            'array' => $array
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+
 }

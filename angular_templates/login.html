@@ -4,7 +4,8 @@
 <div class="container container-table">
     <div class="row vertical-center-row">
         <form name="loginForm" ng-submit="login(loginForm)">
-            <div class="col-xs-8 col-xs-offset-2 boxLogin">
+            <div class="col-xs-2 col-xs-offset-5" ng-show="!viewActived"><img class="img-responsive" src="/img/srcWeb/Login/loading.gif"/></div>
+            <div class="col-xs-8 col-xs-offset-2 boxLogin" ng-show="viewActived">
                 <div class="row barraBoxLogin">
                     <div class="col-xs-6">
                         <div class="textResponsiveBarra">{{content.login}} &nbsp;<image class="imatgeClau" ng-src="/img/srcWeb/Login/clau.png"/></div>
@@ -15,15 +16,17 @@
                             class="icon-globe btn-idioma"
                             ng-click="changeContentLanguage()"> &nbsp;{{languageNameNext}}
                         </button>
+                         <a class="icon-remove-sign pull-right butoSortirBarraSuperiorRegistre" ng-show="view2" ng-click="view2=false" ></a>
                     </div>
                 </div>
-                <div class="row">
+            <!--Login view-->
+                <div class="row" ng-show="!view2">
                     <div class="col-xs-8 col-xs-offset-2">
                         <div class="row margeSuperiorUser">
                             <div class="form-group {{state}} has-feedback">
                                 <div class="input-group input-group-auto">
                                     <span class="input-group-addon"><i class="icon-user"></i></span>
-                                    <input class="form-control" type="text" name="user" placeholder={{content.user}} ng-change="changeFormSate('user')" ng-model="username" required>
+                                    <input class="form-control" type="text" name="user" placeholder={{content.user}} ng-change="changeFormState()" ng-model="username" required>
                                 </div>
                             </div>
                         </div>
@@ -31,7 +34,7 @@
                             <div class="form-group {{state}} has-feedback">
                                 <div class="input-group input-group-auto">
                                     <span class="input-group-addon"><i class="icon-unlock-alt"></i></span>
-                                    <input class="form-control" type="password" name="pass" placeholder={{content.pass}} ng-change="changeFormSate('pass')" ng-model="password" required/>
+                                    <input class="form-control" type="password" name="pass" placeholder={{content.pass}} ng-change="changeFormState()" ng-model="password" required/>
                                 </div>
                             </div>
                         </div>
@@ -43,13 +46,38 @@
                                 <a href="/#/register">{{content.register}}</a>
                             </div>
                             <div class="col-xs-9 recuperacioContrasenya">
-                                <a href="#">{{content.forgotPass}}</a>
+                                <a ng-click="view2=true" >{{content.forgotPass}}</a>
                             </div>
                         </div>
                     </div>
                 </div>
+            <!--Password recovery view-->
+                <div class="row" ng-show=view2>
+                    <div class="fonsBlanc">
+                        <p>Introdueix el nom d'usuari o l'adreça de correu electrònic:</p>
+                    </div>
+                    <div class="col-xs-8 col-xs-offset-2">
+                        <div class="row">
+                            <div class="form-group {{state2}} has-feedback">
+                                <div class="input-group input-group-auto">
+                                    <span class="input-group-addon"><i class="icon-user"></i></span>
+                                    <input class="form-control" type="text" name="user" placeholder="Usuari / Correu electrònic" ng-change="changeFormState()" ng-model="user">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row rowButons">
+<!--                            <div class="col-xs-2">
+                                <a class="btn-blue" ng-click="view2=false">Tornar</a>
+                            </div>-->
+                            <div class="col-xs-2 col-xs-offset-10">
+                                <a class="btn-blue" ng-click="forgotPass()">Enviar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!--Login view-->
             </div>
-            <div class="col-xs-2 boxButo">
+            <div class="col-xs-2 boxButo" ng-show="viewActived&&!view2">
                 <div class="buto">
                     <div class="col-xs-2 triangle">
                         <image class="imgTriangle" alt="Responsive image" src="/img/srcWeb/Login/fletxaLogin2.png" />

@@ -151,3 +151,58 @@ html, body, .container-table {
     height: 4vh;
     width: auto;
 }
+
+.resposta{
+    margin-top: 4vh;
+    border-radius: 10px;
+    
+    background: rgb(255, 255, 255); /* Fall-back for browsers that don't support rgba */
+    background: rgba(255, 255, 255, .5);
+}
+.check{
+    font-size: 8vh;
+    color: #0fb806;/*Green*/
+}
+.cross{
+    font-size: 8vh;
+    color: #ff0000;/*Red*/
+}
+.alert{
+    font-size: 8vh;
+    color: #3d05cb; /*Blue*/
+}
+.textresposta{
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    text-align: justify;
+}
+.textresposta2{
+    margin-top: 4vh;
+    margin-bottom: 4vh;
+    text-align: justify;
+}
+
+.butoLogin{
+    padding: 0px;
+    padding-top: 4vh;
+   
+}
+.btn-login {
+    color: black;
+    background-color: #99ccdd;  /*azul turquesa*/
+    border-color: #333333;
+    
+    padding: 1vh;
+    height: 5.2vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 5px;
+}
+.btn-login:hover{
+    color: black;
+    background-color: #5eacc0; /*azul turquesa Oscuro*/
+    border-color: black;
+    margin-left: 1px;
+    margin-top: 0.6vh;
+    text-decoration:none;
+}
