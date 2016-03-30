@@ -211,3 +211,17 @@
     z-index: 24;
     position: absolute;
 }
+.function{
+    right: 1px;
+    bottom: 1px;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    width: auto;
+    z-index: 24;
+    position: absolute;
+}
+
+.shadow{
+    box-shadow: 3px -2px #4a4a4a;
+}
