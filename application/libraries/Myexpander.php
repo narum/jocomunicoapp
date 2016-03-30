@@ -243,7 +243,7 @@ class Myexpander {
             for ($i=0; $i<count($this->puntsallpatterns); $i++) {
                 
                 // PER VEURE LES PUNTUACIONS DE TOTS ELS PATRONS QUE HA PROVAT 
-                echo "Patró ".$this->allpatterns[$i]->id.": ".$this->puntsallpatterns[$i]." </br ><br />";
+                // echo "Patró ".$this->allpatterns[$i]->id.": ".$this->puntsallpatterns[$i]." </br ><br />";
                 
                 if ($this->puntsallpatterns[$i] > $bestpatternpunts) {
                     $bestpatternpunts = $this->puntsallpatterns[$i];
@@ -328,6 +328,7 @@ class Myexpander {
                 else if ($countnouns > 0 && !$othertypes) {
                     if ($noundefverb != 0) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($noundefverb, false);
                     else if ($thereisadj) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, true);
+                    else $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(0, false); // Verbless
                 }
                 else {
                     // Agafem els verbless patterns
