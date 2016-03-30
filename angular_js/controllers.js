@@ -458,7 +458,7 @@ angular.module('controllers', [])
 
 })
 
-        .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope) {
+        .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -482,8 +482,17 @@ angular.module('controllers', [])
                 $scope.InitScan();
             });
 
+            //MODIF: Coger de BBDD escaneo por intervalo o no en el if
             $scope.InitScan = function ()
             {
+                if(true){
+                    $interval.cancel($scope.intervalScan);
+                    var Intervalscan = 450;
+                    $scope.intervalScan = $interval(myTimer, Intervalscan);
+                    function myTimer() {
+                        $scope.NextBlockScan();
+                    }
+                }
                 $scope.arrayScannedCells = null;
                 $scope.indexScannedCells = 0;
                 $scope.currentScanBlock = 1;
@@ -523,7 +532,7 @@ angular.module('controllers', [])
                 });
             };
             // Change teh current scan block
-            $scope.changeBlockScan = function () {
+            $scope.NextBlockScan = function () {
                 // If we are in the first scan level passes to the next (cyclic)
                 if ($scope.currentScanBlock === 1) {
                     $scope.currentScanBlock1 = $scope.currentScanBlock1 % $scope.maxScanBlock1 + 1;
@@ -1107,10 +1116,7 @@ angular.module('controllers', [])
                 }
                 ;
             };
-            var testtimer = setInterval(myTimer, 2000);
-            function myTimer() {
-                
-            }
+            
             /***************************************************
              *
              *  editFolders functions
