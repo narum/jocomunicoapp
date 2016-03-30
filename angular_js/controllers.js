@@ -484,6 +484,7 @@ angular.module('controllers', [])
 
             $scope.InitScan = function ()
             {
+                $scope.inScan = true;
                 $scope.arrayScannedCells = null;
                 $scope.indexScannedCells = 0;
                 $scope.currentScanBlock = 1;
@@ -600,12 +601,14 @@ angular.module('controllers', [])
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
 
+                
                 $scope.idboard = "1";
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
                 $scope.SearchType = "Tots";
                 $scope.inEdit = false;
+                $scope.inScan = false;
 
                 //-----------Iniciacion-----------
 
@@ -734,7 +737,7 @@ angular.module('controllers', [])
                 $scope.userViewWidth = 9;
                 $scope.editViewWidth = 3;
                 $scope.userViewHeight = 80;
-                $scope.searchFolderHeight = 20;
+                $scope.searchFolderHeight = 20;               
                 if (window.innerWidth < 1050) {
                     $scope.userViewWidth = 8;
                     $scope.editViewWidth = 4;
@@ -1317,7 +1320,7 @@ angular.module('controllers', [])
                 if ($scope.Editinfo.customScanBlockText1 !== "") {
                     $scope.checkboxScanBlockText1 = true;
                 }
-                if ($scope.Editinfo.customScanBlockText2 !== null) {
+                if ($scope.Editinfo.customScanBlock2 !== null) {
                     $scope.checkboxScanBlockText2 = true;
                 }
                 if (response.info.cellType === 'sentence') {
