@@ -2487,7 +2487,7 @@ class Myslot {
                             // si és un locatiu
                             else if ($this->category == "LocAt" || $this->category == "LocTo" 
                                     || $this->category == "LocFrom") {
-                                if ($wordaux->isClass("lloc")) {
+                                if ($wordaux->isClass("lloc") || $wordaux->isClass("joc")) {
                                     // si no porten article, sense article, i si no determinat
                                     if ($wordaux->propietats->determinat == 'sense') $noarticle = true;
                                     else $definite = true;
@@ -2640,7 +2640,7 @@ class Myslot {
                             // si és un locatiu
                             else if ($this->category == "LocAt" || $this->category == "LocTo" 
                                     || $this->category == "LocFrom") {
-                                if ($wordaux->isClass("lloc")) {
+                                if ($wordaux->isClass("lloc") || $wordaux->isClass("joc")) {
                                     // si no porten article, sense article, i si no determinat
                                     if ($wordaux->propietats->determinat == 'sense') $noarticle = true;
                                     else $definite = true;

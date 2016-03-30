@@ -32,6 +32,7 @@ CREATE TABLE SuperUser (
 	cfgScanningRowColCustom ENUM('0', '1', '2') DEFAULT '0',
 	cfgScanningAutoOnOff ENUM('0', '1') DEFAULT '0',
 	cfgTimeScanning INT DEFAULT '1000',
+	cfgNumLapScanRestart INT DEFAULT '2',
 	cfgMenuUpDown ENUM('0', '1') DEFAULT '1',
 	cfgMenuSize INT DEFAULT '10',
 	cfgSentenceBarUpDown ENUM('0', '1') DEFAULT '0',
