@@ -458,7 +458,7 @@ angular.module('controllers', [])
 
         })
 
-        .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval) {
+        .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval, $timeout) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -485,10 +485,12 @@ angular.module('controllers', [])
             //MODIF: Coger de BBDD escaneo por intervalo o no en el if
             $scope.InitScan = function ()
             {
+                $scope.inScan = true;
+                $scope.longclick = true;
                 function myTimer() {
                         $scope.NextBlockScan();
                 }
-                if(true){
+                if(false){
                     $interval.cancel($scope.intervalScan);
                     var Intervalscan = 450;
                     function myTimer() {
@@ -498,12 +500,14 @@ angular.module('controllers', [])
                     $scope.intervalScan = $interval(myTimer, Intervalscan);
 
                 }
+                
                 $scope.arrayScannedCells = null;
                 $scope.indexScannedCells = 0;
                 $scope.currentScanBlock = 1;
                 $scope.currentScanBlock1 = 1;
                 $scope.currentScanBlock2 = 1;
                 $scope.getMaxScanBlock1();
+                
             };
             // When we get out from scanMode stops the interval
             $scope.$watch('inScan', function () {
@@ -511,6 +515,56 @@ angular.module('controllers', [])
                     $interval.cancel($scope.intervalScan);
                 }
             });
+            
+            
+            $scope.scanLeftClick = function()
+            {
+                if($scope.inScan){
+                    if(!$scope.longclick)
+                    {
+                        $scope.selectBlockScan();
+                    }
+                }
+            };
+            $scope.playLongClick = function()
+            {
+                if($scope.inScan){
+                    if($scope.longclick)
+                    {
+                        $timeout.cancel($scope.scanLongClickTime);
+                        $scope.scanLongClickController = true;
+                        $scope.scanLongClickTime = $timeout($scope.nextBlockScan,1000);
+                    }
+                }
+            };
+            $scope.cancelLongClick = function()
+            {
+                if($scope.inScan){
+                    if($scope.longclick)
+                    {
+                      if($scope.scanLongClickController)
+                      {
+                        $timeout.cancel($scope.scanLongClickTime);
+                        $scope.selectBlockScan();
+                        
+                          
+                      }
+                      else
+                      {
+                          
+                      }
+                    }
+                }
+            };
+            
+            $scope.scanRightClick = function()
+            {
+                if($scope.inScan){
+                    
+                    $scope.nextBlockScan();
+                }
+            };
+            
             // Get the number of scan blocks
             $scope.getMaxScanBlock1 = function ()
             {
@@ -543,8 +597,12 @@ angular.module('controllers', [])
                 });
             };
             // Change teh current scan block
-            $scope.NextBlockScan = function () {
+            $scope.nextBlockScan = function () {
                 if ($scope.inScan) {
+                    if($scope.longclick)
+                    {
+                        $scope.scanLongClickController = false;
+                    }
                     // If we are in the first scan level passes to the next (cyclic)
                     if ($scope.currentScanBlock === 1) {
                         $scope.currentScanBlock1 = $scope.currentScanBlock1 % $scope.maxScanBlock1 + 1;
@@ -564,6 +622,7 @@ angular.module('controllers', [])
                         }
                         // If we are in the third scan pass one by one over the array (cyclic)  
                     } else if ($scope.currentScanBlock === 3) {
+                        
                         $scope.indexScannedCells = ($scope.indexScannedCells + 1) % ($scope.arrayScannedCells.length);
                     }
                 }
@@ -571,6 +630,7 @@ angular.module('controllers', [])
             //Pass to the next scan level (subgroup)
             $scope.selectBlockScan = function () {
                 if ($scope.inScan) {
+                    
                     $scope.currentScanBlock = $scope.currentScanBlock + 1;
                     //If we are in the second level
                     if ($scope.currentScanBlock === 2) {
@@ -603,6 +663,10 @@ angular.module('controllers', [])
             $scope.selectScannedCell = function ()
             {
                 var url = $scope.baseurl + "Board/getCell";
+                if ($scope.arrayScannedCells === null){
+                    $scope.InitScan();
+                    return false;
+                }
                 var postdata = {idboard: $scope.arrayScannedCells[$scope.indexScannedCells].ID_RBoard, pos: $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard};
                 $http.post(url, postdata).success(function (response)
                 {
@@ -756,6 +820,7 @@ angular.module('controllers', [])
             {
                 $scope.getPrimaryBoard();
                 $scope.inEdit = true;
+                $scope.inScan = false;
                 $scope.boardHeight = 96;
                 $scope.userViewWidth = 9;
                 $scope.editViewWidth = 3;
