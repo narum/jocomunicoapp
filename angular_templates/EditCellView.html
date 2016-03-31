@@ -94,7 +94,7 @@
                 <select class="boxEdit dropdown-arrow"
                         ng-disabled="!checkboxFuncType || (cellType === 'link')"
                         ng-model="funcType"
-                        ng-options="f.functNameCA for f in functions track by f.ID_Function"
+                        ng-options="f.name for f in functions track by f.ID_Function"
                         ng-value="f.ID_Function">
                 </select>
             </div>

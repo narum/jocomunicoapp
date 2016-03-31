@@ -87,7 +87,8 @@ class BoardInterface extends CI_Model {
         //Este tiene que ser left, si pictograms.picto id = null significa que esta vacia
         $this->db->join('Pictograms', 'Cell.ID_CPicto = Pictograms.pictoid', 'left');
         $this->db->join('PictogramsLanguage', 'Pictograms.pictoid = PictogramsLanguage.pictoid AND PictogramsLanguage.languageid = "'.$idlang.'"', 'left');
-
+        $this->db->join('Function', 'Cell.ID_CFunction = Function.ID_Function', 'left');
+        
         $query = $this->db->get('R_BoardCell');
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -379,7 +380,8 @@ class BoardInterface extends CI_Model {
 
     function getFunctions() {
 
-
+        $language = $this->session->userdata('ulangabbr');
+        $this->db->select('ID_Function, functName'.$language.' AS name');
         $query = $this->db->get('Function');
 
         if ($query->num_rows() > 0) {
