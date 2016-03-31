@@ -490,7 +490,7 @@ angular.module('controllers', [])
                     $interval.cancel($scope.intervalScan);
                     var Intervalscan = 450;
                     function myTimer() {
-                        $scope.NextBlockScan();
+                        $scope.nextBlockScan();
                     }
                     ;
                     $scope.intervalScan = $interval(myTimer, Intervalscan);
@@ -541,7 +541,7 @@ angular.module('controllers', [])
                 });
             };
             // Change teh current scan block
-            $scope.NextBlockScan = function () {
+            $scope.nextBlockScan = function () {
                 if ($scope.inScan) {
                     // If we are in the first scan level passes to the next (cyclic)
                     if ($scope.currentScanBlock === 1) {
@@ -621,9 +621,10 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
+                $scope.getPrimaryUserBoard();
 
 
-                $scope.idboard = "1";
+
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
@@ -650,7 +651,7 @@ angular.module('controllers', [])
                     $scope.showmid();
                 }
                 $scope.showup();
-                $scope.showBoard('0')
+                
                 /*$scope.grid1hide = false;
                  $scope.grid2hide = false;
                  $scope.grid3hide = false;
@@ -659,6 +660,15 @@ angular.module('controllers', [])
                  $scope.grid3 = 2;*/
             };
 
+            $scope.getPrimaryUserBoard = function (){
+                var url = $scope.baseurl + "Board/getPrimaryUserBoard";
+
+                $http.post(url).success(function (response)
+                {
+                    $scope.idboard = response.idboard;
+                    $scope.showBoard('0');
+                });
+            };
             /*
              * Return: array fron 0 to repeatnum
              */
@@ -754,6 +764,7 @@ angular.module('controllers', [])
             {
                 $scope.getPrimaryBoard();
                 $scope.inEdit = true;
+                $scope.inScan = false;
                 $scope.boardHeight = 96;
                 $scope.userViewWidth = 9;
                 $scope.editViewWidth = 3;

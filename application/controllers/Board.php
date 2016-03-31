@@ -366,6 +366,20 @@ class Board extends REST_Controller {
     }
 
     /*
+     * Get the primary user board (the primary board in her/his primary group board)
+     */
+    public function getPrimaryUserBoard_post() {
+
+        $board = $this->BoardInterface->getPrimaryGroupBoard();
+        $primaryBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
+
+        $response = [
+            'idboard' => $primaryBoard[0]->ID_Board
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    
+    /*
      * Get the user boards in a list to create the dropdown menu
      */
 
