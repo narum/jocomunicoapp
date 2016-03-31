@@ -533,7 +533,7 @@ angular.module('controllers', [])
                     {
                         $timeout.cancel($scope.scanLongClickTime);
                         $scope.scanLongClickController = true;
-                        $scope.scanLongClickTime = $timeout($scope.nextBlockScan,1000);
+                        $scope.scanLongClickTime = $timeout($scope.selectBlockScan,1000);
                     }
                 }
             };
@@ -545,7 +545,7 @@ angular.module('controllers', [])
                       if($scope.scanLongClickController)
                       {
                         $timeout.cancel($scope.scanLongClickTime);
-                        $scope.selectBlockScan();
+                        $scope.nextBlockScan();
                         
                           
                       }
@@ -601,10 +601,7 @@ angular.module('controllers', [])
             // Change teh current scan block
             $scope.nextBlockScan = function () {
                 if ($scope.inScan) {
-                    if($scope.longclick)
-                    {
-                        $scope.scanLongClickController = false;
-                    }
+                    
                     // If we are in the first scan level passes to the next (cyclic)
                     if ($scope.currentScanBlock === 1) {
                         $scope.currentScanBlock1 = $scope.currentScanBlock1 % $scope.maxScanBlock1 + 1;
@@ -632,7 +629,10 @@ angular.module('controllers', [])
             //Pass to the next scan level (subgroup)
             $scope.selectBlockScan = function () {
                 if ($scope.inScan) {
-                    
+                    if($scope.longclick)
+                    {
+                        $scope.scanLongClickController = false;
+                    }
                     $scope.currentScanBlock = $scope.currentScanBlock + 1;
                     //If we are in the second level
                     if ($scope.currentScanBlock === 2) {
