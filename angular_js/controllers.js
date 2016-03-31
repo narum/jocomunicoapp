@@ -485,6 +485,9 @@ angular.module('controllers', [])
             //MODIF: Coger de BBDD escaneo por intervalo o no en el if
             $scope.InitScan = function ()
             {
+                function myTimer() {
+                        $scope.NextBlockScan();
+                }
                 if(true){
                     $interval.cancel($scope.intervalScan);
                     var Intervalscan = 450;
