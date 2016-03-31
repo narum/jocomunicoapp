@@ -3,14 +3,15 @@
 <div class="row barraSuperior"></div>
 <div class="container container-table">
     <div class="row vertical-center-row">
-        <form name="loginForm" ng-submit="login(loginForm)">
+        <form name="loginForm">
             <div class="col-xs-2 col-xs-offset-5" ng-show="!viewActived"><img class="img-responsive" src="/img/srcWeb/Login/loading.gif"/></div>
             <div class="col-xs-8 col-xs-offset-2 boxLogin" ng-show="viewActived">
                 <div class="row barraBoxLogin">
-                    <div class="col-xs-6">
-                        <div class="textResponsiveBarra">{{content.login}} &nbsp;<image class="imatgeClau" ng-src="/img/srcWeb/Login/clau.png"/></div>
+                    <div class="col-xs-7">
+                        <div class="textResponsiveBarra" ng-show="!view2">{{content.login}} &nbsp;<image class="imatgeClau" ng-src="/img/srcWeb/Login/clau.png"/></div>
+                        <div class="textResponsiveBarra" ng-show="view2">{{content.title}}</div>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-5">
                         <button
                             type="button"
                             class="icon-globe btn-idioma"
@@ -40,6 +41,7 @@
                         </div>
                         <div class="row comentariError">
                             <span class="errorcoment" ng-show="state=='has-error'">{{content.incorrect}}</span>
+                            <span class="errorcoment" ng-show="state=='has-warning'">{{content.userNotValidated}}</span>
                         </div>
                         <div class="row">
                             <div class="col-xs-3 butoRegistret">
@@ -53,24 +55,28 @@
                 </div>
             <!--Password recovery view-->
                 <div class="row" ng-show=view2>
-                    <div class="fonsBlanc">
-                        <p>Introdueix el nom d'usuari o l'adreça de correu electrònic:</p>
+                    <div class="titol">
+                        {{content.recoveryText}}
                     </div>
                     <div class="col-xs-8 col-xs-offset-2">
                         <div class="row">
                             <div class="form-group {{state2}} has-feedback">
                                 <div class="input-group input-group-auto">
                                     <span class="input-group-addon"><i class="icon-user"></i></span>
-                                    <input class="form-control" type="text" name="user" placeholder="Usuari / Correu electrònic" ng-change="changeFormState()" ng-model="user">
+                                    <input class="form-control" type="text" name="user" placeholder="{{content.checkboxRecovery}}" ng-change="changeFormState()" ng-model="user" 
+                                           onkeydown = "if (event.keyCode == 13) document.getElementById('btnSearch').click()">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row comentariError">
+                            <span class="errorcoment" ng-show="state2=='has-error'">{{content.incorrectUser}}</span>
                         </div>
                         <div class="row rowButons">
 <!--                            <div class="col-xs-2">
                                 <a class="btn-blue" ng-click="view2=false">Tornar</a>
                             </div>-->
                             <div class="col-xs-2 col-xs-offset-10">
-                                <a class="btn-blue" ng-click="forgotPass()">Enviar</a>
+                                <a class="btn-blue" id = "btnSearch" ng-click="forgotPass()">Enviar</a>
                             </div>
                         </div>
                     </div>

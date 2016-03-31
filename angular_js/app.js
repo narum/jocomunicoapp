@@ -52,6 +52,14 @@ angular.module('app', [
 			controller:'emailValidationCtrl',
 			templateUrl:'../../angular_templates/emailValidation.html'
 		})
+                .when('/emailSended', {
+			controller:'LoginCtrl',
+			templateUrl:'../../angular_templates/emailSended.html'
+		})
+                .when('/passRecovery/:emailKey/:id', {
+			controller:'passRecoveryCtrl',
+			templateUrl:'../../angular_templates/passRecovery.html'
+		})
 		.otherwise({ redirectTo:'/' });
 })
 .run(function(AuthService){

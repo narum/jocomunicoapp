@@ -51,8 +51,13 @@ angular.module('controllers', [])
             var languageid = result.data.languageid;
             var languageabbr = result.data.languageabbr;
             var userid = result.data.userID;
-            AuthService.login(token, languageid, languageabbr, userid);
-            $location.path('/');
+            var userValidated = result.data.userValidated;
+            if(userValidated=='1'){
+                AuthService.login(token, languageid, languageabbr, userid);
+                $location.path('/');
+            }else{
+                $scope.state = 'has-warning';
+            }
         })
         .catch(function(error){	// no respuesta
             $scope.state = 'has-error';
@@ -64,23 +69,19 @@ angular.module('controllers', [])
             $scope.state = '';
             $scope.state2 = '';
     };
-    
-    // Comprobar usuario o email para renovar la contrasseña
+
+    // Renovar la contrasseña
     $scope.forgotPass=function(){
-        var emailFormat = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
-        if (String($scope.user).search(emailFormat) == -1) {
-            Resources.register.save({'user':$scope.user},{'funct':"passRecovery"}).$promise
-            .then(function(results){
-                console.log(results);
-            });
-        } else {
-            Resources.register.save({'email':$scope.user},{'funct':"passRecovery"}).$promise
-            .then(function(results){
-                console.log(results);
-            });
-        }
+        Resources.register.save({'user':$scope.user},{'funct':"passRecoveryMail"}).$promise
+        .then(function(results){
+            console.log(results.message);
+            if(results.exist){ // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                $location.path('/emailSended');
+            }else{
+                $scope.state2 = 'has-error';
+            }
+        });
     };
-    
 })
 
 //Controlador del registro de usuario
@@ -269,7 +270,6 @@ angular.module('controllers', [])
             $scope.formData.cfgIsFem = '0';
             return true;
         }
-        console.log($scope.formData);
         if(sex.cfgIsFem == null || sex.cfgIsFem ==''){
             $scope.state.female ='has-error';
             $scope.state.male ='has-error';
@@ -310,7 +310,6 @@ angular.module('controllers', [])
             Resources.register.save(data,{'funct':"saveData"}).$promise
                 .then(function(results){
                     console.log('response:', results);
-
                     var promises = []; //PROMESAS
                     angular.forEach($scope.languageList, function(value) {
                         var deferred = $q.defer();//PROMESAS
@@ -327,13 +326,13 @@ angular.module('controllers', [])
                     //Funcion que se llama al finalizar todas las promesas
                     $q.all(promises).then(function(){
                         //Vista confirmación
-                        $scope.viewActived = true; // para activar la vista
-                        // Creamos el hash para la url de validación del usuario enviado por mail
-                        $hash=md5.createHash(formData.pswd + $id_su);
-                        $url = $rootScope.baseurl + '#/emailValidation/' + $hash + '/' + $id_su;
-                        console.log($url);
-
-                        //ENVIAR MAIL CONFIRMACIÓN
+                        Resources.register.save({'user':$id_su},{'funct':"generateValidationMail"}).$promise
+                        .then(function(results){
+                            console.log(results.message);
+                            if(results.exist){ // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                $scope.viewActived = true; // para activar la vista
+                            }
+                        });
                     });
             });
         }
@@ -378,9 +377,111 @@ angular.module('controllers', [])
     Resources.register.save({'emailKey':$routeParams.emailKey,'ID_SU':$routeParams.id},{'funct':"emailValidation"}).$promise
         .then(function(results){
             $scope.validated=results.validated;
-            $scope.activedValidation=true;// para activar la vista
-            console.log('saved:', results.validated);
+            $scope.activedValidation=true;// para activar la vista;
         });
+})
+
+//Password recovery controller
+.controller('passRecoveryCtrl', function($scope, $routeParams, Resources, md5) {
+    
+    //HTML views
+    $scope.linkExpiredView=false;
+    $scope.enterPassView=false;
+    $scope.passChangedView=false;
+    
+    //initialize variables
+    $scope.formData = {};  //Datos del formulario
+    $scope.state ={password:"", confirmPassword:""};// estado de cada campo del formulario
+    var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
+    
+    //HTML text content
+    Resources.register.get({'section':'passRecovery'},{'funct':"allContent"}).$promise
+            .then(function(results){
+                $scope.availableLanguageOptions=results.languages;// Idiomas disponibles para el desplegable del formulario
+                content=results.content;// Contenido en cada idioma
+                $scope.content=content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
+                $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
+                numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
+                $scope.viewActived = true; // para activar la vista
+    });
+    
+    //Check if url user exists
+    Resources.register.save({'emailKey':$routeParams.emailKey,'ID_SU':$routeParams.id},{'funct':"emailValidation"}).$promise
+        .then(function(results){
+            if(results.userExist){
+                $scope.linkExpiredView=false;
+                $scope.enterPassView=true;
+                $scope.passChangedView=false;
+            }else{
+                $scope.linkExpiredView=true;
+                $scope.enterPassView=false;
+                $scope.passChangedView=false;
+            }
+        });
+        
+    //Change HTML text content language
+    $scope.changeContentLanguage=function(){
+        currentLanguage ++;
+        // El content esta dentro de un array que empieza por la posición 1 y el nombre de cada idioma en un array que empieza en la posicion 0.
+        if(currentLanguage > numberOfLanguages){
+            currentLanguage = 1;
+            $scope.content=content[1];
+            $scope.languageNameNext = $scope.availableLanguageOptions[1].languageName;
+        }else{
+            $scope.content=content[currentLanguage];
+            if((currentLanguage+1) > numberOfLanguages){
+                $scope.languageNameNext = $scope.availableLanguageOptions[0].languageName;
+            }else{
+                $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;
+            }
+        }
+    };
+    
+    //Check if passwords are equal.
+     $scope.checkPassword=function(formData){
+        if(formData.pswd == null || formData.pswd.length >= 32){ // minimo y maximo de caracteres requeridos
+            $scope.state.password = 'has-warning';
+            $scope.state.confirmPassword = 'has-warning';
+            return false;
+        }
+        if (formData.pswd.length < 4) {
+            $scope.state.password = 'has-warning';
+            return false;
+        } else {
+            $scope.state.password = 'has-success';
+            var passOk=true;
+        }
+        if (formData.pswd != formData.confirmPassword && passOk && $scope.PassForm.confirmPassword.$dirty) {
+            $scope.state.confirmPassword = 'has-warning';
+            return false;
+        }else
+            if (formData.pswd == formData.confirmPassword) {
+                $scope.state.confirmPassword = 'has-success';
+                return true;
+            }
+    };
+    //Send new password
+    $scope.sendPass=function(formData){
+
+        if ($scope.checkPassword(formData)) {
+            //HTML views
+            $scope.linkExpiredView=false;
+            $scope.enterPassView=false;
+            $scope.passChangedView=false;
+            //md5 password encode and Json formating
+            $password = md5.createHash(formData.pswd);
+            $pass ='{"pswd":"'+ $password +'"}';
+            //Send new password
+            Resources.register.save({'emailKey':$routeParams.emailKey,'ID_SU':$routeParams.id,'pass':$pass},{'funct':"changePass"}).$promise
+            .then(function(results){
+                if(results.passChanged){
+                $scope.linkExpiredView=false;
+                $scope.enterPassView=false;
+                $scope.passChangedView=true;
+                }
+            });
+        }
+    }
 })
 
 //Controlador de la configuración de usuario

@@ -51,7 +51,7 @@ class Login_model extends CI_Model {
         );
             
         //Miramos el default language del Super User
-        $this->db->select('cfgDefLanguage, languageabbr'); // Seleccionar les columnes
+        $this->db->select('cfgDefLanguage, languageabbr, UserValidated'); // Seleccionar les columnes
         $this->db->from('SuperUser');// Seleccionem la taula
         $this->db->join('Languages', 'SuperUser.cfgDefLanguage = Languages.ID_Language', 'left');
         $this->db->where('SUname', $user);// filtrem per columnes
@@ -60,6 +60,7 @@ class Login_model extends CI_Model {
         // Sacamos la variable language del array
         $languageid = array_column($query2, 'cfgDefLanguage');
         $languageabbr = array_column($query2, 'languageabbr');
+        $userValidated = array_column($query2, 'UserValidated');
 
         //Cojemos el id de usuario y superusuario
 
@@ -69,6 +70,7 @@ class Login_model extends CI_Model {
             'token' => $jwt,
             'languageid' => $languageid,
             'languageabbr' => $languageabbr,
+            'userValidated' => $userValidated,
             'userID' => $output[0]->ID_User
         ];
 

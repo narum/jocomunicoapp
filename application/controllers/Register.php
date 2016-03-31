@@ -132,44 +132,195 @@ class Register extends REST_Controller {
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
 
     }
+    public function changePass_post()
+    {
+        $emailKey = $this->query("emailKey");
+        $ID_SU = $this->query("ID_SU");
+        $pass = json_decode($this->query("pass"), true); // convertimos el string json del post en array.
+        $changed=false;
+
+        $response=$this->main_model->userValidation($emailKey, $ID_SU);
+        $userExist=$response["userExist"];
+
+        if($userExist){
+            $changed=$this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $pass);
+        }
+        $response = [
+                "passChanged" => $changed,
+                "userExist" => $userExist
+            ];
+        
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
     public function emailValidation_post()
     {
         $emailKey = $this->query("emailKey");
         $ID_SU = $this->query("ID_SU");
 
-        $validated=$this->main_model->userValidation($emailKey, $ID_SU);
-        
-        $response = [
-                "validated" => $validated
-            ];
+        $response=$this->main_model->userValidation($emailKey, $ID_SU);
+
 
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
-    public function passRecovery_post()
+    public function generateValidationMail_post()
     {
-        $email = $this->query("email");
-        $SUname = $this->query("user");
+        //Check data
+        $user = $this->query("user");
+        if($user == NULL || $user == "") {
+            $this->response("missing arguments", 400);
+            return;
+        }
+        $sended=false;
+        $exist=false;
+        $message="User Does not exist";
+        //Check if user exist
+        $userValidated=$this->main_model->checkData('SuperUser', 'ID_SU', $user);
+        //If user exists get data from user
+        if($userValidated === "true"){
+            $data=$this->main_model->getData('SuperUser', 'ID_SU', $user);
+            $exist=true;
+        }
+        if($exist){
 
-        if(($email == NULL || $email == "")&&($SUname!=NULL||$SUname!="")) {
-            
+                //send email
+                $email=$data["email"];
+                $userName=$data["realname"] ." " . $data["surnames"] ;
+                $ID_SU=$data["ID_SU"];
+                $pass=$data["pswd"];
+                $language=$data["cfgDefLanguage"];
+                $hash=md5($pass . $ID_SU);
+                $url= base_url() . '#/emailValidation/' . $hash . '/' . $ID_SU;
+    
+                if($language==1){
+                    //Catalan email
+                    $subject    = 'JoComunico/Recuperació de contrasenya';
+                    $message   = 'Accedeix el següent enllaç per validar la conta. \r\n ' . $url;
+                }else{
+                    //Spanish email
+                    $subject    = 'JoComunico/Recuperación de contraseña';
+                    $message   = 'Dirigete al siguiente enlace para validar la cuenta. \r\n ' . $url;
+                }
+    
+                $sended=$this->sendEmail($email, $userName, $subject, $message);
+            }
+
             $response = [
-                "validated" => "NOM"
+                "sendend" => $sended,
+                "exist" => $exist,
+                "message" => $message
             ];
 
             $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
-        }else if (($email!=NULL||$email!="")&&($SUname==NULL||$SUname=="")){
+    }
+    public function passRecoveryMail_post()
+    {
+        $sended=false;
+        $exist=false;
+        $message="User Does not exist";
+
+        $user = $this->query("user");
+
+        //Check data
+        if($user == NULL || $user == "") {
+            $response = ["sendend" => $sended,"exist" => $exist,"message" => $message];
+            $this->response($response, REST_Controller::HTTP_OK);
+        }
+        else{
+            //Check if data are email
+            if (filter_var($user, FILTER_VALIDATE_EMAIL)) {
+                //Check if email exist
+                $email=$user;
+                $emailValidated=$this->main_model->checkData("SuperUser", "email", $email);
+                //If email exists get data from user
+                if($emailValidated === "true"){
+                    $data=$this->main_model->getData('SuperUser', 'email', $email);
+                    $exist=true;
+                }
+            }
+            else{
+                //Check if user exist
+                $userValidated=$this->main_model->checkData('SuperUser', 'SUname', $user);
+                //If user exists get data from user
+                if($userValidated === "true"){
+                    $data=$this->main_model->getData('SuperUser', 'SUname', $user);
+                    $exist=true;
+                }
+            }
+
+            if($exist){
+
+                //send email
+                $email=$data["email"];
+                $userName=$data["realname"] ." " . $data["surnames"] ;
+                $ID_SU=$data["ID_SU"];
+                $pass=$data["pswd"];
+                $language=$data["cfgDefLanguage"];
+                $hash=md5($pass . $ID_SU);
+                $url= base_url() . '#/passRecovery/' . $hash . '/' . $ID_SU;
+    
+                if($language==1){
+                    //Catalan email
+                    $subject    = 'JoComunico/Recuperació de contrasenya';
+                    $message   = 'Accedeix el següent enllaç per introduir la nova contrasenya. \r\n ' . $url;
+                }else{
+                    //Spanish email
+                    $subject    = 'JoComunico/Recuperación de contraseña';
+                    $message   = 'Dirigete al siguiente enlace para introducir la nueva contraseña. \r\n ' . $url;
+                }
+    
+                $sended=$this->sendEmail($email, $userName, $subject, $message);
+            }
+
             $response = [
-                "validated" => "email"
+                "sendend" => $sended,
+                "exist" => $exist,
+                "message" => $message
             ];
 
             $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+        }
+
+    }
+    
+    public function sendEmail($mail, $userName, $subject, $message){
+        //Cargamos la libreria de codeigniter
+        $this->load->library('email');
+        //Indicamos el protocolo a utilizar
+        $config['protocol'] = 'smtp';
+        //El servidor de correo que utilizaremos
+        $config["smtp_host"] = 'smtp.gmail.com';
+        //Nuestro usuario
+        $config["smtp_user"] = '';
+        //Nuestra contraseña
+        $config["smtp_pass"] = '';
+        //El puerto que utilizará el servidor smtp
+        $config["smtp_port"] = '587';
+        //El juego de caracteres a utilizar
+        $config['charset'] = 'utf-8';
+        //Permitimos que se puedan cortar palabras
+        $config['wordwrap'] = TRUE;
+        //El email debe ser valido
+        $config['validate'] = true;
+
+        //Establecemos esta configuración
+        $this->email->initialize($config);
+        //Ponemos la dirección de correo que enviará el email y un nombre
+        $this->email->from('jocomunico@jocomunico.com', 'JoComunico');
+
+        //Destinatario
+        $this->email->to($mail, $userName);
+
+        //Definimos el asunto del mensaje
+        $this->email->subject($subject);
+
+        //Definimos el mensaje a enviar
+        $this->email->message($message);
+
+        //Enviamos el email y comprovamos el envio
+        if($this->email->send()){
+            return true;
         }else{
-            $response = [
-                "validated" => "nothing"
-            ];
-
-            $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
-
+            return false;
         }
     }
 }
