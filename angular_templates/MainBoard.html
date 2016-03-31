@@ -1,7 +1,7 @@
 <!-- This view is the main board where the picto will be shown. In addition it 
      includes others view like sentece, edit (board/cell) panel, etc etc
 -->
-<div class="fullheight row" ng-init="config(4)" style="padding: 5vh;" ng-click="selectBlockScan()" ng-right-click="changeBlockScan()">
+<div class="fullheight row" ng-init="config(4)" style="padding: 5vh;" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
 
     <div id="userview" class="col-xs-{{userViewWidth}}" style="height:{{userViewHeight}}%" >
         <div id="sentenceView" class="container-fluid Defmargin" ng-if="sentenceViewTop && !inEdit" style="height:{{sentenceViewHeight}}%">
@@ -11,21 +11,41 @@
 
         <div class="container-fluid Defmargin" style="height:{{boardHeight}}%">
             <div class="row fullheight imgRounded Defpadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
-                
+
                 <div class="col-xs-12 containerCell" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}">
-                    <div ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-click="clickOnCell(picto)" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"  ng-class="(picto.customScanBlock1 == currentScanBlock1 && currentScanBlock == 1) || (picto.customScanBlock1 == currentScanBlock1 && currentScanBlock == 2 && picto.customScanBlock2 == currentScanBlock2) ? 'scaneo' : ''">
-                        <img class="imgResponsive" src="{{picto.imgCell}}"/>
+                    <!-- put the scan color over the image.
+                         Only if we are in Scan mode
+                    MODIF: Añadir variable if inScan-->
+
+                    <div ng-if="inScan && ((picto.customScanBlock1 == currentScanBlock1 && currentScanBlock == 1) || (picto.customScanBlock1 == currentScanBlock1 && currentScanBlock == 2 && picto.customScanBlock2 == currentScanBlock2) || (picto.posInBoard == arrayScannedCells[indexScannedCells].posInBoard))" class="scaneo"></div>
+
+                    <!-- If there is an custom image this line mades it draggable and dropable.
+                         Only if we are in edit mode-->
+                    <div ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-click="clickOnCell(picto)" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
+                        <div ng-if="picto.textInCell === null" class="text-center text-capitalize">{{picto.pictotext}}</div>
+                        <div ng-if="picto.textInCell !== null" class="text-center text-capitalize">{{picto.textInCell}}</div>
+                        <div ng-style="picto.pictotext !== null || picto.textInCell !== null  ? {'height':'70%'}:{'height':'100%'}">
+                            <img class="imgResponsive" src="{{baseurl}}img{{picto.imgCell}}"/>
+                            <img ng-if="picto.ID_CFunction !== null" src="{{baseurl}}img/srcWeb/functions.png" class="function"/>
+                        </div>
                     </div>
                     <!-- If there is an image this line mades it draggable and dropable.
                          Only if we are in edit mode-->
-                    <div ng-if="picto.imgPicto && !picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-click="clickOnCell(picto);" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"  ng-class="(picto.customScanBlock1 == currentScanBlock1 && currentScanBlock == 1) || (picto.customScanBlock1 == currentScanBlock1 && currentScanBlock == 2 && picto.customScanBlock2 == currentScanBlock2) ? 'scaneo' : ''">
-                        <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
+                    <div ng-if="picto.imgPicto && !picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-click="clickOnCell(picto);" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
+                        <div class="text-center text-capitalize">{{picto.pictotext}}</div>
+                        <div ng-if="picto.textInCell !== null" class="text-center text-capitalize">{{picto.textInCell}}</div>
+                        <div ng-style="picto.pictotext !== null || picto.textInCell !== null ? {'height':'70%'}:{'height':'100%'}">
+                            <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
+                            <img ng-if="picto.ID_CFunction !== null" src="{{baseurl}}img/srcWeb/functions.png" class="function"/>
+                        </div>
                     </div>
 
-                    <!-- If not, puts a "empty image" and mades it dropable
+                    <!-- Else, puts a "empty image" and mades it dropable
                          Only if we are in edit mode-->
-                    <div ng-if="!picto.imgPicto && !picto.imgCell || (picto.activeCell == 0 && !inEdit)" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)"  ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-click="clickOnCell(picto)"  ng-class="(picto.customScanBlock1 == currentScanBlock1 && currentScanBlock == 1) || (picto.customScanBlock1 == currentScanBlock1 && currentScanBlock == 2 && picto.customScanBlock2 == currentScanBlock2) ? 'scaneo' : ''">
+                    <div ng-if="!picto.imgPicto && !picto.imgCell || (picto.activeCell == 0 && !inEdit)" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)"  ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-click="clickOnCell(picto)">
+                        <!--There is no text -->
                         <div class="emptyImg imgResponsive" ></div>
+                        <img ng-if="picto.ID_CFunction !== null" src="{{baseurl}}img/srcWeb/functions.png" class="function"/>
                     </div>
                 </div>
             </div>

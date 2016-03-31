@@ -79,12 +79,16 @@ class BoardInterface extends CI_Model {
     function getCellsBoard($id) {
         $output = array();
 
+        $idlang = $this->session->userdata('ulangid');
+
         $this->db->where('R_BoardCell.ID_RBoard', $id);
         $this->db->order_by('R_BoardCell.posInBoard', 'asc');
         $this->db->join('Cell', 'R_BoardCell.ID_RCell = Cell.ID_Cell');
         //Este tiene que ser left, si pictograms.picto id = null significa que esta vacia
         $this->db->join('Pictograms', 'Cell.ID_CPicto = Pictograms.pictoid', 'left');
-
+        $this->db->join('PictogramsLanguage', 'Pictograms.pictoid = PictogramsLanguage.pictoid AND PictogramsLanguage.languageid = "'.$idlang.'"', 'left');
+        $this->db->join('Function', 'Cell.ID_CFunction = Function.ID_Function', 'left');
+        
         $query = $this->db->get('R_BoardCell');
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -376,7 +380,8 @@ class BoardInterface extends CI_Model {
 
     function getFunctions() {
 
-
+        $language = $this->session->userdata('ulangabbr');
+        $this->db->select('ID_Function, functName'.$language.' AS name');
         $query = $this->db->get('Function');
 
         if ($query->num_rows() > 0) {
@@ -412,6 +417,25 @@ class BoardInterface extends CI_Model {
 
         $this->db->where('ID_GBBoard', $idgroup);
         $query = $this->db->get('Boards');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    /*
+     * Return primarygroupboard from a board group
+     */
+
+    function getPrimaryGroupBoard() {
+
+        $idusu = $this->session->userdata('idusu');
+        $this->db->where('primaryGroupBoard', '1');
+        $this->db->where('ID_GBUser', $idusu);
+        $query = $this->db->get('GroupBoards');
 
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -671,4 +695,51 @@ class BoardInterface extends CI_Model {
         $this->db->update('Cell', $data);
     }
     
+    function getMaxScanBlock1($IDboard){
+        $output = array();
+        
+        $this->db->order_by('customScanBlock1', 'desc');
+        $this->db->where('ID_RBoard', $IDboard);
+        $query = $this->db->get('R_BoardCell');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    function getMaxScanBlock2($IDboard, $scanGroup){
+        $output = array();
+        
+        $this->db->order_by('customScanBlock2', 'desc');
+        $this->db->where('customScanBlock1', $scanGroup);
+        $this->db->where('ID_RBoard', $IDboard);
+        $query = $this->db->get('R_BoardCell');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    function getScannedCells($IDboard, $csb1, $csb2){
+        $output = array();
+        
+        $this->db->order_by('posInBoard', 'asc');
+        $this->db->where('customScanBlock2', $csb2);
+        $this->db->where('customScanBlock1', $csb1);
+        $this->db->where('ID_RBoard', $IDboard);
+        $query = $this->db->get('R_BoardCell');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
 }
