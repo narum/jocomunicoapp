@@ -685,7 +685,7 @@ angular.module('controllers', [])
                 $scope.userViewHeight = 100;
                 $scope.searchFolderHeight = 0;
                 var url = $scope.baseurl + "Board/loadCFG";
-                var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr')};
+                var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr'),lusuid: window.localStorage.getItem('languageid')};
 
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 

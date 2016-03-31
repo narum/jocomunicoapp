@@ -38,10 +38,12 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $iu = $request->idusu;
         $lu = $request->lusu;
+        $luid = $request->lusuid;
 
         $data = array(
             'idusu' => $iu,
-            'ulangabbr' => $lu);
+            'ulangabbr' => $lu,
+            'ulangid' => $luid);
 
         $this->session->set_userdata($data);
     }
