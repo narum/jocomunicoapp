@@ -194,6 +194,7 @@
     border-radius: 10px;
     height: 100%;
     width: 100%;
+    position: relative;
 }
 .ngdialog-overlay{
     background: rgba(255,255,255,0.8);
@@ -212,8 +213,8 @@
     position: absolute;
 }
 .function{
-    right: 1px;
-    bottom: 1px;
+    right: 0px;
+    bottom: 0px;
     max-width: 100%;
     height: auto;
     max-height: 100%;
