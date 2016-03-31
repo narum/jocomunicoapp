@@ -422,6 +422,25 @@ class BoardInterface extends CI_Model {
     }
     
     /*
+     * Return primarygroupboard from a board group
+     */
+
+    function getPrimaryGroupBoard() {
+
+        $idusu = $this->session->userdata('idusu');
+        $this->db->where('primaryGroupBoard', '1');
+        $this->db->where('ID_GBUser', $idusu);
+        $query = $this->db->get('GroupBoards');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    /*
      * Return primaryboard from a board group
      */
 

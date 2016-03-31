@@ -494,7 +494,7 @@ angular.module('controllers', [])
                     $interval.cancel($scope.intervalScan);
                     var Intervalscan = 450;
                     function myTimer() {
-                        $scope.NextBlockScan();
+                        $scope.nextBlockScan();
                     }
                     ;
                     $scope.intervalScan = $interval(myTimer, Intervalscan);
@@ -560,8 +560,10 @@ angular.module('controllers', [])
             $scope.scanRightClick = function()
             {
                 if($scope.inScan){
-                    
-                    $scope.nextBlockScan();
+                    if(!$scope.longclick)
+                    {
+                        $scope.nextBlockScan();
+                    }
                 }
             };
             
@@ -687,9 +689,10 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
+                $scope.getPrimaryUserBoard();
 
 
-                $scope.idboard = "1";
+
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
@@ -716,7 +719,7 @@ angular.module('controllers', [])
                     $scope.showmid();
                 }
                 $scope.showup();
-                $scope.showBoard('0')
+                
                 /*$scope.grid1hide = false;
                  $scope.grid2hide = false;
                  $scope.grid3hide = false;
@@ -725,6 +728,15 @@ angular.module('controllers', [])
                  $scope.grid3 = 2;*/
             };
 
+            $scope.getPrimaryUserBoard = function (){
+                var url = $scope.baseurl + "Board/getPrimaryUserBoard";
+
+                $http.post(url).success(function (response)
+                {
+                    $scope.idboard = response.idboard;
+                    $scope.showBoard('0');
+                });
+            };
             /*
              * Return: array fron 0 to repeatnum
              */
