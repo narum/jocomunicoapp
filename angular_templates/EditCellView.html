@@ -141,7 +141,7 @@
             </div>
             <div class="col-xs-3 col-xs-offset-3 buttonTitle">
                 <select class="boxEdit dropdown-arrow color" style="background-color: #{{colorSelected}};" ng-model="colorSelected">
-                    <option ng-repeat="color in ['000', 'fff', 'ff00ff', '00ff00', 'ff0000']"
+                    <option ng-repeat="color in ['ffffff', 'ffd751', 'ff5927', '41c426', 'f73b5e', '67b5cb']"
                             style="background-color: #{{color}};"
                             ng-value="color">        </option>
                 </select>
@@ -185,7 +185,7 @@
                 <select class="boxEdit dropdown-arrow"
                         ng-disabled="!checkboxScanBlockText1"
                         ng-model="numScanBlockText1"
-                        ng-options="n for n in range(5)"
+                        ng-options="n for n in range(8)"
                         >
                 </select>
             </div>

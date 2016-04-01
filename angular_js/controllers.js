@@ -488,9 +488,9 @@ angular.module('controllers', [])
                 $scope.inScan = true;
                 $scope.longclick = true;
                 function myTimer() {
-                        $scope.NextBlockScan();
+                    $scope.NextBlockScan();
                 }
-                if(false){
+                if (false) {
                     $interval.cancel($scope.intervalScan);
                     var Intervalscan = 450;
                     function myTimer() {
@@ -500,73 +500,72 @@ angular.module('controllers', [])
                     $scope.intervalScan = $interval(myTimer, Intervalscan);
 
                 }
-                
+
                 $scope.arrayScannedCells = null;
                 $scope.indexScannedCells = 0;
                 $scope.currentScanBlock = 1;
                 $scope.currentScanBlock1 = 1;
                 $scope.currentScanBlock2 = 1;
                 $scope.getMaxScanBlock1();
-                
+
             };
             // When we get out from scanMode stops the interval
             $scope.$watch('inScan', function () {
-                if($scope.inScan === false){
+                if ($scope.inScan === false) {
                     $interval.cancel($scope.intervalScan);
                 }
             });
-            
-            
-            $scope.scanLeftClick = function()
+
+
+            $scope.scanLeftClick = function ()
             {
-                if($scope.inScan){
-                    if(!$scope.longclick)
+                if ($scope.inScan) {
+                    if (!$scope.longclick)
                     {
                         $scope.selectBlockScan();
                     }
                 }
             };
-            $scope.playLongClick = function()
+            $scope.playLongClick = function ()
             {
-                if($scope.inScan){
-                    if($scope.longclick)
+                if ($scope.inScan) {
+                    if ($scope.longclick)
                     {
                         $timeout.cancel($scope.scanLongClickTime);
                         $scope.scanLongClickController = true;
-                        $scope.scanLongClickTime = $timeout($scope.selectBlockScan,1000);
+                        $scope.scanLongClickTime = $timeout($scope.selectBlockScan, 1000);
                     }
                 }
             };
-            $scope.cancelLongClick = function()
+            $scope.cancelLongClick = function ()
             {
-                if($scope.inScan){
-                    if($scope.longclick)
+                if ($scope.inScan) {
+                    if ($scope.longclick)
                     {
-                      if($scope.scanLongClickController)
-                      {
-                        $timeout.cancel($scope.scanLongClickTime);
-                        $scope.nextBlockScan();
-                        
-                          
-                      }
-                      else
-                      {
-                          
-                      }
+                        if ($scope.scanLongClickController)
+                        {
+                            $timeout.cancel($scope.scanLongClickTime);
+                            $scope.nextBlockScan();
+
+
+                        } else
+                        {
+
+                        }
                     }
                 }
             };
-            
-            $scope.scanRightClick = function()
+
+            $scope.scanRightClick = function ()
             {
-                if($scope.inScan){
-                    if(!$scope.longclick)
+                if ($scope.inScan) {
+                    if (!$scope.longclick)
                     {
                         $scope.nextBlockScan();
                     }
                 }
             };
-            
+
             // Get the number of scan blocks
             $scope.getMaxScanBlock1 = function ()
             {
@@ -601,7 +600,7 @@ angular.module('controllers', [])
             // Change teh current scan block
             $scope.nextBlockScan = function () {
                 if ($scope.inScan) {
-                    
+
                     // If we are in the first scan level passes to the next (cyclic)
                     if ($scope.currentScanBlock === 1) {
                         $scope.currentScanBlock1 = $scope.currentScanBlock1 % $scope.maxScanBlock1 + 1;
@@ -621,7 +620,7 @@ angular.module('controllers', [])
                         }
                         // If we are in the third scan pass one by one over the array (cyclic)  
                     } else if ($scope.currentScanBlock === 3) {
-                        
+
                         $scope.indexScannedCells = ($scope.indexScannedCells + 1) % ($scope.arrayScannedCells.length);
                     }
                 }
@@ -629,7 +628,7 @@ angular.module('controllers', [])
             //Pass to the next scan level (subgroup)
             $scope.selectBlockScan = function () {
                 if ($scope.inScan) {
-                    if($scope.longclick)
+                    if ($scope.longclick)
                     {
                         $scope.scanLongClickController = false;
                     }
@@ -665,7 +664,7 @@ angular.module('controllers', [])
             $scope.selectScannedCell = function ()
             {
                 var url = $scope.baseurl + "Board/getCell";
-                if ($scope.arrayScannedCells === null){
+                if ($scope.arrayScannedCells === null) {
                     $scope.InitScan();
                     return false;
                 }
@@ -685,7 +684,7 @@ angular.module('controllers', [])
                 $scope.userViewHeight = 100;
                 $scope.searchFolderHeight = 0;
                 var url = $scope.baseurl + "Board/loadCFG";
-                var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr'),lusuid: window.localStorage.getItem('languageid')};
+                var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr'), lusuid: window.localStorage.getItem('languageid')};
 
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
@@ -719,7 +718,7 @@ angular.module('controllers', [])
                     $scope.showmid();
                 }
                 $scope.showup();
-                
+
                 /*$scope.grid1hide = false;
                  $scope.grid2hide = false;
                  $scope.grid3hide = false;
@@ -728,7 +727,7 @@ angular.module('controllers', [])
                  $scope.grid3 = 2;*/
             };
 
-            $scope.getPrimaryUserBoard = function (){
+            $scope.getPrimaryUserBoard = function () {
                 var url = $scope.baseurl + "Board/getPrimaryUserBoard";
 
                 $http.post(url).success(function (response)
@@ -1019,6 +1018,9 @@ angular.module('controllers', [])
                     $scope.dataTemp = response.data;
                 });
 
+                $scope.autoReturn();
+            };
+            $scope.autoReturn = function () {
                 var url = $scope.baseurl + "Board/autoReturn";
                 var postdata = {id: $scope.idboard};
 
@@ -1050,10 +1052,13 @@ angular.module('controllers', [])
 
                         $http.post(url, postdata).success(function (response)
                         {
-                            $scope.dataTemp = response.data;
+                            if (response.control === "generate"){
+                                $scope.dataTemp = response.data;
+                            }
                             $scope.info = response.info;
                         });
                     }
+                    $scope.autoReturn();
                 });
             };
             /*
