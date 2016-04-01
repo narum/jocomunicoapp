@@ -47,10 +47,27 @@ class Main_model extends CI_Model {
         return $result;
     }
     
+    // Get data from table $table where content in column $column are like $data
+    public function getData($table, $column, $data){
+        $this->db->from($table);// Seleccionem la taula
+        $this->db->where($column, $data);// filtrem per columnes
+        $data = $this->db->get()->result_array();
+        
+        return $data[0];
+    }
+    
     // Guardar contenido en una tabla.
     public function saveData($table, $data){
 
         $saved = $this->db->insert($table, $data);
+
+        return $saved;
+    }
+    // Cambiar contenido de una tabla.
+    public function changeData($table, $column, $id, $data){
+
+        $this->db->where($column, $id);
+        $saved = $this->db->update($table, $data);
 
         return $saved;
     }
@@ -94,17 +111,22 @@ class Main_model extends CI_Model {
 
         $hash = md5($pass[0] . $ID_SU);
 
-        if($userValidated[0] == 1){
-            return false;
-        }else if($hash == $emailKey){
+        $userExist=false;
+        $validated=false;
 
+        if($hash == $emailKey){
+            $userExist=true;
+        }
+        if($userValidated[0] == 0){
             $this->db->set('UserValidated', '1');
             $this->db->where('ID_SU', $ID_SU);
-            $saved = $this->db->update('SuperUser');
-
-            return $saved;
-        }else{
-            return false;
+            $validated = $this->db->update('SuperUser');
         }
+
+        $response = [
+                "validated" => $validated,
+                "userExist" => $userExist
+            ];
+        return $response;
     }
 }
