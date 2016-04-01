@@ -14,6 +14,9 @@ class Myword {
                             // Ex: Per noms (lloc, event)...
     var $text; // Paraula en text
     var $img; // Enllaç al pictograma
+    var $supportsExpansion; // Si la paraula pot ser utilitzada dins el sistema d'expansió
+    var $defaultverb = 0; // Pels noms i pels adjectius, el verb per defecte si no hi ha més paraules a la frase
+    var $subjdef = false; // Pels adjectius, el subjecte per defecte si no hi ha més paraules a la frase
     
     var $propietats = array(); // Varia segons el tipus de paraula. És la fila de la BBDD
     var $patterns = array(); // Només pels verbs
@@ -50,6 +53,7 @@ class Myword {
         else $this->identry = $paraula->ID_RSHPSentence;
         $this->tipus = $paraula->pictoType;
         $this->img = $paraula->imgPicto;
+        $this->supportsExpansion = $paraula->supportsExpansion;
         
         if ($paraula->isplural == '1') $this->plural = true;
         else $this->plural = false;
@@ -64,6 +68,7 @@ class Myword {
         {
             case 'name':
                 $this->text = $infobbdd[0]->nomtext;
+                $this->defaultverb = $infobbdd[0]->defaultverb;
                 $this->propietats = $infobbdd[0];
                 foreach ($infobbdd as $row) {
                     array_push($this->classes, $row->class);
@@ -79,6 +84,8 @@ class Myword {
             
             case 'adj':
                 $this->text = $infobbdd[0]->masc;
+                $this->defaultverb = $infobbdd[0]->defaultverb;
+                $this->subjdef = $infobbdd[0]->subjdef;
                 $this->propietats = $infobbdd[0];
                 foreach ($infobbdd as $row) {
                     array_push($this->classes, $row->class);
@@ -441,11 +448,11 @@ class Myword {
         mb_internal_encoding( 'utf-8' );
         
         // letters that we want to replace
-        $patterns[0] = '/[à]/u'; 
-        $patterns[1] = '/[è|é]/u';
-        $patterns[2] = '/[í|ï]/u';
-        $patterns[3] = '/[ò|ó]/u';
-        $patterns[4] = '/[ú|ü]/u';
+        $patterns[0] = '/[à|À]/u'; 
+        $patterns[1] = '/[è|é|É|È]/u';
+        $patterns[2] = '/[í|ï|Í|Ï]/u';
+        $patterns[3] = '/[ò|ó|Ò|Ó]/u';
+        $patterns[4] = '/[ú|ü|Ú|Ü]/u';
         
         $replacements[0] = 'a';
         $replacements[1] = 'e';
@@ -469,7 +476,9 @@ class Myword {
             }
             else {
                 // m -> New rule: if it's a proper noun, the article is "en"
-                if ($this->propietats->ispropernoun == '1') return $matching->answers["T"];
+                if ($this->propietats->ispropernoun == '1' && $masc) {
+                    return $matching->answers["T"];
+                }
                 else { 
                     // c -> We use regular expressions to verify the condition        
                     if (preg_match('/^[bcdfgjklmnpqrstvwxyz]/', $wordlowerednoaccents) == '1') {
@@ -480,7 +489,6 @@ class Myword {
                     }
                     // e -> We use regular expressions to verify the condition
                     else if (preg_match('/^([aeo]|[h][aeo])/', $wordlowerednoaccents) == '1') {
-
                         //f
                         if (isset($matching->listB[$wordlowered]) || isset($matching->listD[$wordlowered]) || isset($matching->listF[$wordlowered])) {
                             return $matching->answers["P"];

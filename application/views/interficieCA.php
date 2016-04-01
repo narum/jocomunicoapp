@@ -268,6 +268,7 @@
                                 <input type="radio" name="tense" value="present"><span class="radiotop">Present</span></input>
                                 <input type="radio" name="tense" value="perifrastic"><span class="radiotop">Passat</span></input><br />
                                 <input type="radio" name="tense" value="perfet"><span class="radiotop">Passat inmediat</span></input>
+                                <input type="radio" name="tense" value="imperfecte"><span class="radiotop">Passat llunyà</span></input><br />
                                 <input type="radio" name="tense" value="futur"><span class="radiotop">Futur</span></input><br />
                             </div> <br /><br />
 
