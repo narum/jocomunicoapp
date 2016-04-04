@@ -1716,10 +1716,10 @@ class Mypattern {
             $keymodifaux = $slotmainverb->CModassignedkey[$i];
             $slotmodifaux = $slotmainverb->cmpMod[$keymodifaux];
             
-            // si no és del grup que va darrere el subjecte el posem al principi de la frase (ex: si, perquè)
+            // si no és del grup que va darrere el subjecte el posem al principi de la frase (ex: si, perquè, però)
             if (!$matching->isModAfterSubj($slotmodifaux->paraulafinal->text)) {
                 
-                $this->frasefinal = $slotmodifaux->paraulafinal->text." ".$this->frasefinal;
+                $this->frasefinal = " ".$slotmodifaux->paraulafinal->text." ".$this->frasefinal;
             }
             // marquem si la frase és negativa pel modificador no
             else if ($slotmodifaux->paraulafinal->text == "no") $this->frasenegativa = true;
@@ -2112,10 +2112,10 @@ class Mypattern {
             $keymodifaux = $slotmainverb->CModassignedkey[$i];
             $slotmodifaux = $slotmainverb->cmpMod[$keymodifaux];
             
-            // si no és del grup que va darrere el subjecte el posem al principi de la frase (ex: si, perquè)
+            // si no és del grup que va darrere el subjecte el posem al principi de la frase (ex: si, perquè, pero)
             if (!$matching->isModAfterSubjES($slotmodifaux->paraulafinal->text)) {
                 
-                $this->frasefinal = $slotmodifaux->paraulafinal->text." ".$this->frasefinal;
+                $this->frasefinal = " ".$slotmodifaux->paraulafinal->text." ".$this->frasefinal;
             }
             /**
              * INFO LANGUAGE DEPENDENT!!
@@ -3932,7 +3932,8 @@ class Mypattern {
                     if (($slotaux->level == 1 && $mainverbinf) 
                             || ($slotaux->level == 1 && $ordre && !$this->frasenegativa)) {
                         // si són pronoms personals, posem la forma correcta pels themes de darrere el verb
-                        if ($matching->isPronomPers($parauladerivada)) {
+                        // menys si és un patró verbless, on la frase només tindrà el pronom
+                        if ($matching->isPronomPers($parauladerivada) && !$this->verbless) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsAfterTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -3943,7 +3944,8 @@ class Mypattern {
                     }
                     else if ($slotaux->level == 1) {
                         // si són pronoms personals, posem la forma correcta pels themes d'abans del verb
-                        if ($matching->isPronomPers($parauladerivada)) {
+                        // menys si és un patró verbless, on la frase només tindrà el pronom
+                        if ($matching->isPronomPers($parauladerivada) && !$this->verbless) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsFrontTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4579,7 +4581,8 @@ class Mypattern {
                     if (($slotaux->level == 1 && $mainverbinf) 
                             || ($slotaux->level == 1 && $ordre && !$this->frasenegativa)) {
                         // si són pronoms personals, posem la forma correcta pels receivers de darrere el verb
-                        if ($matching->isPronomPersES($parauladerivada)) {
+                        // menys si és un patró verbless, on la frase només tindrà el pronom
+                        if ($matching->isPronomPersES($parauladerivada) && !$this->verbless) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4590,7 +4593,8 @@ class Mypattern {
                     }
                     else if ($slotaux->level == 1) {
                         // si són pronoms personals, posem la forma correcta pels receivers d'abans del verb
-                        if ($matching->isPronomPersES($parauladerivada)) {
+                        // menys si és un patró verbless, on la frase només tindrà el pronom
+                        if ($matching->isPronomPersES($parauladerivada) && !$this->verbless) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
