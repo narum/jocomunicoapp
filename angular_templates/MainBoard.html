@@ -3,6 +3,14 @@
 -->
 <div class="fullheight row" ng-init="config(4)" style="padding: 5vh;" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
 
+    <div  ng-if="inPred" id="predView" ng-if="inPred" class="col-xs-{{predViewWidth}} fullheight">
+        <div  class="row fullheight">
+            <div class="col-sm-12" ng-include="baseurl + '/angular_templates/PredView.html'">
+
+            </div>
+        </div>
+    </div>
+    
     <div id="userview" class="col-xs-{{userViewWidth}}" style="height:{{userViewHeight}}%" >
         <div id="sentenceView" class="container-fluid Defmargin" ng-if="sentenceViewTop && !inEdit" style="height:{{sentenceViewHeight}}%">
             <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     

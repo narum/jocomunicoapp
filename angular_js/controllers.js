@@ -626,8 +626,7 @@ angular.module('controllers', [])
                         ($scope.currentScanBlock == 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1) ||
                         ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && picto.posInBoard % $scope.columns == $scope.currentScanBlock2))) {
                     return true;
-                }
-                else if ($scope.inScan && $scope.scanType == 2 && (
+                } else if ($scope.inScan && $scope.scanType == 2 && (
                         ($scope.currentScanBlock == 1 && picto.posInBoard % $scope.columns == $scope.currentScanBlock1) ||
                         ($scope.currentScanBlock == 2 && picto.posInBoard % $scope.columns == $scope.currentScanBlock1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
                     return true;
@@ -761,22 +760,21 @@ angular.module('controllers', [])
                     } // If we are not in custom scan there are no null group so pass to the next(cyclic) 
                     else if ($scope.currentScanBlock === 2 && $scope.scanType === 1) {
                         // All cells were scanned. Start again
-                        if ($scope.currentScanBlock2 === 0){
+                        if ($scope.currentScanBlock2 === 0) {
                             $scope.InitScan();
                             return;
                         }
                         $scope.currentScanBlock2 = ($scope.currentScanBlock2 + 1) % $scope.maxScanBlock2;
-                    }
-                    else if ($scope.currentScanBlock === 2 && $scope.scanType === 2) {
+                    } else if ($scope.currentScanBlock === 2 && $scope.scanType === 2) {
                         // All cells were scanned. Start again
-                        if ($scope.currentScanBlock2 === 0){
+                        if ($scope.currentScanBlock2 === 0) {
                             $scope.InitScan();
                         }
                         $scope.currentScanBlock2 = $scope.currentScanBlock2 % $scope.maxScanBlock2 + 1;
                     }// If we are in the third scan pass one by one over the array (cyclic)
                     else if ($scope.currentScanBlock === 3) {
                         $scope.indexScannedCells = $scope.indexScannedCells + 1;
-                        if ($scope.indexScannedCells >= $scope.arrayScannedCells.length){
+                        if ($scope.indexScannedCells >= $scope.arrayScannedCells.length) {
                             $scope.InitScan();
                         }
                     }
@@ -885,7 +883,15 @@ angular.module('controllers', [])
                     $scope.showmid();
                 }
                 $scope.showup();
-
+                $scope.inPred = true;
+                if ($scope.inPred) {
+                    $scope.predViewWidth = 1;
+                    $scope.userViewWidth = 11;
+                    if (window.innerWidth < 1050) {
+                        $scope.predViewWidth = 2;
+                        $scope.userViewWidth = 10;
+                    }
+                }
                 /*$scope.grid1hide = false;
                  $scope.grid2hide = false;
                  $scope.grid3hide = false;
@@ -939,7 +945,7 @@ angular.module('controllers', [])
             {
                 $scope.sentenceViewTop = true;
                 $scope.sentenceViewHeight = 20;
-                $scope.userViewWidth = 100;
+                $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
                 $scope.boardHeight = 60;
             };
@@ -947,7 +953,7 @@ angular.module('controllers', [])
             {
                 $scope.sentenceViewTop = false;
                 $scope.sentenceViewHeight = 0;
-                $scope.userViewWidth = 100;
+                $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
                 $scope.boardHeight = 80;
             };
@@ -955,7 +961,7 @@ angular.module('controllers', [])
             {
                 $scope.sentenceViewTop = true;
                 $scope.sentenceViewHeight = 16;
-                $scope.userViewWidth = 100;
+                $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
                 $scope.boardHeight = 78;
             };
@@ -963,7 +969,7 @@ angular.module('controllers', [])
             {
                 $scope.sentenceViewTop = false;
                 $scope.sentenceViewHeight = 0;
-                $scope.userViewWidth = 100;
+                $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
                 $scope.boardHeight = 100;
             };
@@ -999,6 +1005,8 @@ angular.module('controllers', [])
                 $scope.getPrimaryBoard();
                 $scope.inEdit = true;
                 $scope.inScan = false;
+                $scope.inPred = false;
+                $scope.predViewWidth = 0;
                 $scope.boardHeight = 96;
                 $scope.userViewWidth = 9;
                 $scope.editViewWidth = 3;
@@ -1458,6 +1466,12 @@ angular.module('controllers', [])
 
                 }, function (value) {
                 });
+            };
+
+
+            $scope.getPred = function () {
+                //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia
+                return $scope.data;
             };
 
 
