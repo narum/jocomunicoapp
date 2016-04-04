@@ -223,7 +223,16 @@ class Myexpander {
                // Els modificadors
                $auxpattern->solveModifs($arrayModifs);
 
-               $puntspattern = $auxpattern->calcPuntsFinalPattern();
+               $auxreturn = $auxpattern->calcPuntsFinalPattern();
+               $puntspattern = $auxreturn[0];
+               $notusedpicto = $auxreturn[1];
+               
+               // si no ha pogut posar una paraula, activem un error temporal del patró
+               if ($notusedpicto) {
+                   $this->errormessagetemp = "Warning. No s'ha trobat lloc per una de les paraules.";
+                   $this->errorcodetemp = 7;
+                   $this->errortemp = true;
+               }
 
                $this->puntsallpatterns[] = $puntspattern;
 
@@ -231,6 +240,11 @@ class Myexpander {
                $this->errorcode[] = $this->errorcodetemp;
                $this->error[] = $this->errortemp;
                $this->preguntaposada[] = $partpreguntaposada;
+               
+               // reiniciem els errors pel següent patró
+               $this->errormessagetemp = null;
+               $this->errorcodetemp = null;
+               $this->errortemp = false;
                // DEBUG
                // echo $auxpattern->printPattern();
 
@@ -271,6 +285,9 @@ class Myexpander {
                 $frasefinal = $this->generateSentenceES($bestpattern, $propietatsfrase, $this->preguntaposada[$bestpatternindex]);
             }
 
+            // si el millor patró té un codi d'error 7 (paraula no utilitzada), aleshores llegim sense expansió
+            if ($this->errorcode[$bestpatternindex] == 7) $this->readwithoutexpansion = true;
+            
             // si hi ha hagut algun error o s'ha desactivat el sistema d'expansió, aleshores es llegeix sense expandir la frase
             if ($this->readwithoutexpansion) $this->info['frasefinal'] = $frasefinalnotexpanded;
             else $this->info['frasefinal'] = $frasefinal;

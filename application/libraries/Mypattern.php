@@ -1409,6 +1409,9 @@ class Mypattern {
     
     public function calcPuntsFinalPattern()
     {
+        // ens diu si una paraula introduïda no s'ha utilitzat al patró
+        $paraulanoposada = false;
+        
         foreach ($this->slotarray as $slot) {
                         
             if ($slot->full) {
@@ -1492,10 +1495,18 @@ class Mypattern {
                 
         // restem els punts de les paraules no fetes servir
         for ($i=0; $i<count($this->paraules); $i++) {
-            if ($this->paraules[$i]->used == false) $this->puntuaciofinal -= 25;
+            if ($this->paraules[$i]->used == false) {
+                $this->puntuaciofinal -= 25;
+                $paraulanoposada = true;
+            }
         }
         
-        return $this->puntuaciofinal;
+        // retorna un array on [0] = puntuaciofinal i [1] = si no ha pogut posar alguna paraula
+        $aux = array();
+        $aux[0] = $this->puntuaciofinal;
+        $aux[1] = $paraulanoposada;
+        
+        return $aux;
     }
 
 
@@ -1986,6 +1997,12 @@ class Mypattern {
                 $this->ordrefrase[] = $temp;  
             }
         }
+        
+        // IMPERATIVE
+        if ($propietatsfrase['tipusfrase'] == "ordre") {
+            // afegir si us plau
+            $this->exprsarray[] = "si us plau";
+        }
            
         // DEBUG
         // echo $this->printOrdreFrase()."<br /><br />";
@@ -2378,6 +2395,12 @@ class Mypattern {
                 // l'insertem al final de la frase
                 $this->ordrefrase[] = $temp; 
             }
+        }
+        
+        // IMPERATIVE
+        if ($propietatsfrase['tipusfrase'] == "ordre") {
+            // afegir por favor
+            $this->exprsarray[] = "por favor";
         }
            
         // DEBUG

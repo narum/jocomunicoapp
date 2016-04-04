@@ -541,18 +541,34 @@ class Lexicon extends CI_Model {
     }
     
     /**
-     *
+     * INSERTS A PICTOGRAM TO THE DB. AVOIDS ENTERING TWO EQUAL CONSECUTIVE PICTOGRAMS
      * @param type $idusu
      * @param type $idparaula
      * @param type $taula Aquest paràmetre ha quedat obsolet amb la nova BBDD.
      */
     function afegirParaula($idusu, $idparaula, $taula)
     {
-        $data = array(
-            'pictoid' => $idparaula,
-            'ID_RSTPUser' => $idusu,
-        );
-        $this->db->insert('R_S_TempPictograms', $data);
+        $paraula = array();
+        $pictoid = -1;
+        
+        // gets the last inserted pictogram
+        $this->db->where('ID_RSTPUser', $idusu);
+        $this->db->order_by('ID_RSTPSentencePicto', 'desc');
+        $query = $this->db->get('R_S_TempPictograms', 1, 0);
+        
+        if ($query->num_rows() > 0) {
+            $paraula = $query->result();
+            $pictoid = $paraula[0]->pictoid;
+        }
+        
+        // if it's not equal to the last inserted pictogram
+        if ($idparaula != $pictoid) {
+            $data = array(
+                'pictoid' => $idparaula,
+                'ID_RSTPUser' => $idusu,
+            );
+            $this->db->insert('R_S_TempPictograms', $data);
+        }
     }
     /*
      * GET THE WORDS ALREADY ENTERED IN THE USER INTERFACE

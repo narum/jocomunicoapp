@@ -2462,6 +2462,7 @@ class Myslot {
                                 $wordaux->isClass("human") ||
                                 $wordaux->isClass("event") ||
                                 $wordaux->isClass("objecte") ||
+                                $wordaux->isClass("lloc") ||
                                 $wordaux->isClass("planta")) $definite = true;
                         else $noarticle = true;
                     }
@@ -2615,6 +2616,7 @@ class Myslot {
                                 $wordaux->isClass("human") ||
                                 $wordaux->isClass("event") ||
                                 $wordaux->isClass("objecte") ||
+                                $wordaux->isClass("lloc") ||
                                 $wordaux->isClass("planta")) $definite = true;
                         else $noarticle = true;
                     }
