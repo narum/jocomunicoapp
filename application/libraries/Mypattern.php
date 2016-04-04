@@ -1093,6 +1093,7 @@ class Mypattern {
             $aux = array();
             $aux[0] = $keyslot;
             $aux[1] = $slot->slotCalcPuntsGuanyats();
+            $aux[2] = $slot->grade;
             
             if (!$slot->full && count($slot->paraulestemp) > 0) $this->virtualslotsort[] = $aux;
         }
@@ -1103,7 +1104,6 @@ class Mypattern {
     
     function mySort($virtualslotorder)
     {
-        
         $auxorder = array();
         
         for ($i=0; $i<count($virtualslotorder); $i++) {
@@ -1131,8 +1131,10 @@ class Mypattern {
                     }
                     else if ($infoaux[1] == $infoactual[1]) {
                         
-                        // en cas d'empat el receiver té prioritat sobre el qualsevol slot, excepte el Theme, si no és pseudoimpersonal
-                        if (strpos($infoaux[0], "Receiver") === 0 && !(strpos($infoactual[0], "Theme") === 0) && !$this->pseudoimpersonal) {
+                        // en cas d'empat, si és són del mateix grade o el Receiver té més grade, 
+                        // el receiver té prioritat sobre el qualsevol slot, excepte el Theme, si no és pseudoimpersonal
+                        if (strpos($infoaux[0], "Receiver") === 0 && !($infoaux[2] == "opt" && $infoactual[2] == '1') 
+                                && !(strpos($infoactual[0], "Theme") === 0) && !$this->pseudoimpersonal) {
                             $indexinsert = $j;
                             $found = true;
                         }

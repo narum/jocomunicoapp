@@ -360,6 +360,9 @@ class Mymatching {
         "demà" => true,
         "després" => true,
         "abans" => true,
+        "mai" => true,
+        "sempre" => true,
+        "encara" => true,
     );
     
     // Modificadors de frase que van darrere els adverbis de temps i no a l'inici de la frase
@@ -468,6 +471,9 @@ class Mymatching {
         "mañana" => true,
         "después" => true,
         "antes" => true,
+        "nunca" => true,
+        "siempre" => true,
+        "todavía" => true,
     );
     
     // Modificadors de frase que van darrere els adverbis de temps i no a l'inici de la frase

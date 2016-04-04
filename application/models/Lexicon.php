@@ -823,6 +823,7 @@ class Lexicon extends CI_Model {
             'intendedSentence' => $this->input->post('fraseobj', true),
             'sentenceFinished' => '1',
             'inputWords' => $inputwords,
+            'inputIds' => $inputids,
         );
         $this->db->insert('S_Historic', $data);
         $identry = $this->db->insert_id();
@@ -860,10 +861,17 @@ class Lexicon extends CI_Model {
         // a Elements Seleccionats, just abans de prémer Generar
         $paraulesFrase = $this->recuperarFrase($idusu);
         $inputwords = "";
+        $inputids = "";
         for ($i=0; $i<count($paraulesFrase); $i++) {
             if ($paraulesFrase[$i] != null) {
                 $word = $paraulesFrase[$i];
                 $inputwords .= $word->text;
+                
+                $inputids .= "{".$word->id."}";
+                if ($word->plural) $inputids .= " / \$pl";
+                if ($word->fem) $inputids .= " / \$fem";
+                if ($word->coord) $inputids .= " / \$i";
+                
                 if($word->plural || $word->fem || $word->coord) {
                     $inputwords .= '(';
                     if ($word->plural) $inputwords .= 'pl';
@@ -874,8 +882,17 @@ class Lexicon extends CI_Model {
                     $inputwords .= ')';
                 } 
                 if ($i < (count($paraulesFrase))) $inputwords .= " / ";
+                if ($i < (count($paraulesFrase) - 1)) $inputids .= " / ";
             }
         }
+        
+        $inputids .= " / #".$tipusfrase;
+        $inputids .= " / @".$tense;
+        if ($negativa) $inputids .= " / %no";
+        $inputids .= " /";
+        
+        $inputwords .="<br /><br />".$inputids;
+        
         $data = array(
             'ID_SHUser' => $idusu,
             'sentenceType' => $tipusfrase,
@@ -885,6 +902,7 @@ class Lexicon extends CI_Model {
             'intendedSentence' => "",
             'sentenceFinished' => '1',
             'inputWords' => $inputwords,
+            'inputIds' => $inputids,
         );
         $this->db->insert('S_Historic', $data);
         $identry = $this->db->insert_id();
