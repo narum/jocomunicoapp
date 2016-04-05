@@ -31,13 +31,31 @@ class Lexicon extends CI_Model {
             $idusu = $output[0]->ID_SU;
             $ulanguage = $output[0]->cfgDefLanguage;
             $isfem = $output[0]->cfgIsFem;
+            
+            // By default
+            $uexplanguage = $ulanguage;
+            
+            // We get the language for the expansion system 
+            // just in case the user has changed it
+            $output3 = array();
+            $this->db->where('ID_USU', $idusu);
+            $this->db->where('ID_ULanguage', $ulanguage);
+            
+            $query3 = $this->db->get('User');
+            
+            if ($query3->num_rows() > 0) {
+                $output3 = $query3->result();
+                $uexplanguage = $output3[0]->cfgExpansionLanguage;
+            }
+            
             $this->session->set_userdata('idusu', $idusu);
             $this->session->set_userdata('uname', $usuari);
-            $this->session->set_userdata('ulanguage', $ulanguage);
+            $this->session->set_userdata('ulanguage', $uexplanguage);
+            $this->session->set_userdata('uinterfacelangauge', $ulanguage);
             $this->session->set_userdata('isfem', $isfem);
             
             $output2 = array();
-            $this->db->where('ID_Language', $ulanguage);  
+            $this->db->where('ID_Language', $uexplanguage);  
             $query2 = $this->db->get('Languages');
             
             if ($query2->num_rows() > 0) {
@@ -46,7 +64,7 @@ class Lexicon extends CI_Model {
                 $this->session->set_userdata('ulangabbr', $ulangabbr);
             }
             else {
-                $this->session->set_userdata('ulangabbr', 'CA');
+                $this->session->set_userdata('ulangabbr', 'ES');
             }
             
             return true;
