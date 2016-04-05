@@ -9,7 +9,10 @@ CREATE TABLE Languages (
 	ID_Language INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	languageabbr VARCHAR(20),
 	languageName VARCHAR(100),
-	canExpand ENUM('0', '1') DEFAULT '1'
+	canExpand ENUM('0', '1') DEFAULT '1',
+	type ENUM('svo', 'sov') DEFAULT 'svo',
+	nounAdjOrder ENUM('0', '1') DEFAULT '0',
+	nounComplementOrder ENUM('0', '1') DEFAULT '1'
 ) ENGINE=INNODB;
 
 
@@ -81,7 +84,7 @@ CREATE TABLE GroupBoards (
 	ID_GB INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	ID_GBUser INT,
 	GBname VARCHAR(100),
-	primaryGroup ENUM('0', '1') DEFAULT '0',
+	primaryGroupBoard ENUM('0', '1') DEFAULT '0',
 	defWidth INT DEFAULT '8',
 	defHeight INT DEFAULT '5',
 	imgGB VARCHAR(300),

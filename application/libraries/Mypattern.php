@@ -496,7 +496,7 @@ class Mypattern {
         }
                 
         // QUAN JA TENIM POSADES TOTES LES PARAULES, RESOLEM ELS SLOTS ENCARA NO RESOLTS
-        // HI HAURÂ SLOTS AMB JA NOMËS UNA PARAULA O ALTRES SLOTS AMB VÀRIES PARAULES
+        // HI HAURÂ SLOTS AMB JA NOMÉS UNA PARAULA O ALTRES SLOTS AMB VÀRIES PARAULES
         
         $mand2level = array();
         $mand1level = array();
@@ -530,6 +530,13 @@ class Mypattern {
         // $this->disambiguateSlots($subjectes, "NC");
         // Finalment els optatius
         // $this->disambiguateSlots($opts, "NC");
+        
+        $CI = &get_instance();
+        $langnouncorder = $CI->session->userdata('uinterfacelangncorder');
+        
+        $langtype = $CI->session->userdata('uinterfacelangtype');
+        $svo = true;
+        if ($langtype != 'svo') $svo = false;
                 
         // un cop desambiguats tots els slots, veiem si alguna paraula aniria millor com a NC
         // en comptes de com a opt.
@@ -538,10 +545,10 @@ class Mypattern {
             // Només si l'slot és full i no té un altre complement assignat, que aleshores no el podem eliminar
             if ($slotopt->full && !$slotopt->NCassigned) {
                 
-                // si no era un perfect fill o si els dos noms anaven contigus abans del verb
+                // si no era un perfect fill o si els dos noms anaven contigus abans del verb (en cas de SVO)
                 // i la frase no era pseudoimpersonal o de pregunta que tenen els valors de subverb invertits
                 if ($slotopt->puntsfinal > 0  || 
-                        ($slotopt->paraulafinal->beforeverb && !$this->pseudoimpersonal && !$this->partpreguntabona)) {
+                        ($svo && $slotopt->paraulafinal->beforeverb && !$this->pseudoimpersonal && !$this->partpreguntabona)) {
                     
                     $wordfill = $slotopt->paraulafinal;
                                                             
@@ -575,9 +582,10 @@ class Mypattern {
                                 else $keyparent = $auxstring[0];
 
                                 // mirem si és d'un slot que està ple i que la paraula que l'omple sigui la que complia la condició
-                                // de ser l'anterior a la paraula que fa de complement
-                                if ($this->slotarray[$keyparent]->full && ($this->slotarray[$keyparent]->paraulafinal->inputorder 
-                                                                            - $wordfill->inputorder == -1)) {
+                                // de ser l'anterior a la paraula que fa de complement (si langnouncorder == 1) o posterior (si langnouncorder == 0)
+                                if ($this->slotarray[$keyparent]->full && 
+                                        (($langnouncorder == '1' && ($this->slotarray[$keyparent]->paraulafinal->inputorder - $wordfill->inputorder == -1))
+                                        || ($langnouncorder == '0' && ($this->slotarray[$keyparent]->paraulafinal->inputorder - $wordfill->inputorder == 1)))) {
 
                                     // fem el canvi: dessassignem slotopt
                                     $slotopt->full = false;
@@ -600,6 +608,41 @@ class Mypattern {
             }
         } // Fi de per cada slot optatiu mirar si la paraula que el fit fa millor de NC
         
+        // Si han quedat noms sense slot, mirar si poden fer de NC
+        for ($i=0; $i<$numNouns; $i++) {
+            $word = $arrayNouns[$i];
+            
+            if ($word->slotfinal == null) {
+            
+                $slotstemps = $word->slotstemps;
+                
+                foreach ($slotstemps as $num => $keyslot) {
+                    if (strpos($keyslot, " NC")) {
+                        
+                        $str = explode(" NC", $keyslot);
+                        
+                        // si l'slot on podia fer de complement existeix, té un nucli i 
+                        // no té ja un complement assignat
+                        if (isset($this->slotarray[$str[0]]) && $this->slotarray[$str[0]]->full
+                                && !$this->slotarray[$str[0]]->NCassigned) {
+                            
+                            // comprovem que el nucli estés a la distància de NC
+                            if ((($langnouncorder == '1' && $this->slotarray[$str[0]]->paraulafinal->inputorder == $word->inputorder - 1))
+                                    || (($langnouncorder == '0' && $this->slotarray[$str[0]]->paraulafinal->inputorder == $word->inputorder + 1))) {
+                            
+                                $word->used = true;
+                                // indiquem que ara l'slot superior té un NC assignat
+                                $this->slotarray[$str[0]]->NCassigned = true;
+                                $this->slotarray[$str[0]]->NCassignedkey = $keyslot;
+
+                                // un cop trobem el que compleix les condicions, ja no seguim amb el foreach
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        } // fi si han quedat noms sense slot
     }
     
     public function solveAdverbs($arrayadverbs)
@@ -1313,6 +1356,16 @@ class Mypattern {
     
     function disambiguateSlotsNew($stringCMP)
     {
+        $CI = &get_instance();
+        
+        // agafem el tipus d'idioma, ja que per desambiguar si l'idioma és svo
+        // les paraules que vagin abans del verb tindran punts extra per fer de subjecte
+        // i les que vagin darrere per fer dels altres slots
+        $langtype = $CI->session->userdata('uinterfacelangtype');
+        
+        $svo = true;
+        if ($langtype != 'svo') $svo = false;
+        
         $numslots = count($this->virtualslotsort);
         
         $slotsleft = true;
@@ -1343,20 +1396,31 @@ class Mypattern {
                         }
                         // si dues paraules estan empatades i omplen igual de bé l'slot
                         else if ($slot->paraulestemp[$i][1] == $penalty) {
-                            if ($slot->category != "Subjecte") { // si l'slot no és de categoria subjecte
-                                if (!$slot->paraulestemp[$i][0]->beforeverb && $slot->paraulestemp[$indexselect][0]->beforeverb) {
-                                    $penalty = $slot->paraulestemp[$i][1];
-                                    $indexselect = $i;
+                            // si l'idioma té estructura SVO
+                            if ($svo) {
+                                if ($slot->category != "Subjecte") { // si l'slot no és de categoria subjecte
+                                    if (!$slot->paraulestemp[$i][0]->beforeverb && $slot->paraulestemp[$indexselect][0]->beforeverb) {
+                                        $penalty = $slot->paraulestemp[$i][1];
+                                        $indexselect = $i;
+                                    }
+                                    // potser no cal xq les paraules han estat introduïdes en ordre als slots
+                                    else if ($slot->paraulestemp[$i][0]->inputorder < $slot->paraulestemp[$indexselect][0]->inputorder) {
+                                        $penalty = $slot->paraulestemp[$i][1];
+                                        $indexselect = $i;
+                                    }
                                 }
-                                // potser no cal xq les paraules han estat introduïdes en ordre als slots
-                                else if ($slot->paraulestemp[$i][0]->inputorder < $slot->paraulestemp[$indexselect][0]->inputorder) {
-                                    $penalty = $slot->paraulestemp[$i][1];
-                                    $indexselect = $i;
+                                else { // si és de categoria subjecte
+                                    // només fem el canvi si la nova és before verb i l'altre no
+                                    if ($slot->paraulestemp[$i][0]->beforeverb && !$slot->paraulestemp[$indexselect][0]->beforeverb) {
+                                        $penalty = $slot->paraulestemp[$i][1];
+                                        $indexselect = $i;
+                                    }
                                 }
                             }
-                            else { // si és de categoria subjecte
-                                // només fem el canvi si la nova és before verb i l'altre no
-                                if ($slot->paraulestemp[$i][0]->beforeverb && !$slot->paraulestemp[$indexselect][0]->beforeverb) {
+                            // si no té estructura SVO
+                            else {
+                                // es quedarà amb la primera paraula que podia fer fit a l'slot
+                                if ($slot->paraulestemp[$i][0]->inputorder < $slot->paraulestemp[$indexselect][0]->inputorder) {
                                     $penalty = $slot->paraulestemp[$i][1];
                                     $indexselect = $i;
                                 }
@@ -1413,7 +1477,7 @@ class Mypattern {
     {
         // ens diu si una paraula introduïda no s'ha utilitzat al patró
         $paraulanoposada = false;
-        
+                
         foreach ($this->slotarray as $slot) {
                         
             if ($slot->full) {
@@ -1421,7 +1485,7 @@ class Mypattern {
                 if ($slot->grade == '1' && $slot->puntsfinal == 0) $this->puntuaciofinal += 1;
                 else $this->puntuaciofinal -= $slot->puntsfinal;
                 
-                // echo $slot->category.": ".$slot->puntsfinal.'<br />';
+                // echo $slot->category.": ".$slot->puntsfinal." (".$slot->paraulafinal->text.')<br />';
                 // punts de coordinacions
                 $wordaux = $slot->paraulafinal;
                 if ($wordaux->paraulacoord != null) $this->puntuaciofinal += 7;
@@ -1488,8 +1552,7 @@ class Mypattern {
                     // echo $slot->category.": -".$slot->puntsfinal.'<br />';
                 }
                 // que resti un punt pels slots anteriors no plens
-                else if ($slot->category == "Manner" || $slot->category == "Time" 
-                        || $slot->category == "LocAt" || $slot->category == "Company" || $slot->category == "Tool") {
+                else if ($slot->category == "Company" || $slot->category == "Tool") {
                     $this->puntuaciofinal -= 1;
                 }
             }
@@ -1507,7 +1570,7 @@ class Mypattern {
         $aux = array();
         $aux[0] = $this->puntuaciofinal;
         $aux[1] = $paraulanoposada;
-        
+                
         return $aux;
     }
 

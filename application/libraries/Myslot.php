@@ -71,6 +71,8 @@ class Myslot {
         
         $matching = new Mymatching();
         
+        $langnouncorder = $CI->session->userdata('uinterfacelangncorder');
+        
         $numclasses = count($word->classes);
         
         $matchscore = 1000;
@@ -102,12 +104,14 @@ class Myslot {
             $found = false;
             $numparaulestemp = count($this->paraulestemp); 
             
-            // si l'slot està ja ple, mirem si pot fer de complement de nom i el posem
+            // si l'slot està ja ple, mirem si pot fer de complement de nom i
+            // si l'idioma posa després o abans del nom els NC i el posem
             // no es pot fer de complement de nom de pronoms
             if ($this->full) {
-                if ($this->paraulafinal->inputorder == $word->inputorder - 1 && !$this->paraulafinal->isClass("pronoun")) {
+                if ((($langnouncorder == '1' && $this->paraulafinal->inputorder == $word->inputorder - 1) 
+                        || ($langnouncorder == '0' && $this->paraulafinal->inputorder == $word->inputorder + 1)) && !$this->paraulafinal->isClass("pronoun")) {
                     $numcomplements = count($this->complements);
-                    
+                                        
                     $newslot = new Myslot();
                     $word->slotstemps[] = $keyslot." NC ".$numcomplements; // per dir que està de compl. de nom
                     $newslot->category = $this->category." NC";
@@ -128,10 +132,13 @@ class Myslot {
             else {
                 while (($i<$numparaulestemp) && !$found) {
 
+                    // mirem si pot fer de complement de nom i
+                    // si l'idioma posa després o abans del nom els NC i el posem
                     // no es pot fer de complement de nom de pronoms
-                    if ($this->paraulestemp[$i][0]->inputorder == $word->inputorder - 1 && !$this->paraulestemp[$i][0]->isClass("pronoun")) {
+                    if ((($langnouncorder == '1' && $this->paraulestemp[$i][0]->inputorder == $word->inputorder - 1) 
+                        || ($langnouncorder == '0' && $this->paraulestemp[$i][0]->inputorder == $word->inputorder + 1)) && !$this->paraulestemp[$i][0]->isClass("pronoun")) {
                         // POT FER EL MATCH I ES POSA A LA LLISTA DE COMPLEMENTS PROVISIONAL EN UN NOU SLOT
-
+                        
                         $numcomplements = count($this->complements);
 
                         $newslot = new Myslot();
@@ -231,6 +238,9 @@ class Myslot {
         $CI = &get_instance();
         $CI->load->library('Mymatching');
         
+        // we get the usual order of adjectives that complement nouns for the given user interface language
+        $langnounadjorder = $CI->session->userdata('uinterfacelangnadjorder');
+        
         $matching = new Mymatching();
         
         $numclasses = count($word->classes);
@@ -301,7 +311,8 @@ class Myslot {
                 // com més lluny i com menys fit facin, pitjor
                 $newslot->puntsfinal = 7 - $scoreadjcmp - abs($distance);
                 
-                if ($distance == -1) $newslot->puntsfinal += 1; // Si l'adjectiu va just darrere el nom és la millor opció
+                if ($langnounadjorder == '0' && $distance == -1) $newslot->puntsfinal += 1; // Si l'adjectiu va just darrere el nom és la millor opció
+                if ($langnounadjorder == '1' && $distance == 1) $newslot->puntsfinal += 1; // Si l'adjectiu va just abans del nom és la millor opció
                 
                 $aux = array();
                 $aux[0] = $keyslot." ADJ ".$numcomplements; // la clau de l'slot on pot fer de complement
@@ -451,21 +462,44 @@ class Myslot {
     
     public function slotPuntuation ($word, $penalty)
     {
-        $punts;
+        
+        $CI = &get_instance();
+        
+        // agafem el tipus d'idioma, ja que per desambiguar si l'idioma és svo
+        // les paraules que vagin abans del verb tindran punts extra per fer de subjecte
+        // i les que vagin darrere per fer dels altres slots
+        $langtype = $CI->session->userdata('uinterfacelangtype');
+        
+        $svo = true;
+        if ($langtype != 'svo') $svo = false;
+        
+        $punts = 0;
         if ($this->category == "Subject") {
             $punts = $penalty;
-            // si la paraula va abans del verb, el patró no era verbless i el fit no és horrible, li donem un bonus per 
-            // igualar als altres camps obligatoris en l'ordre de prioritat
-            // pel subjecte principal
-            if ($this->level == 1 && $word->beforeverb && $penalty < 5 && !$this->verbless) $punts -= 18;
-            // pel secundari si n'hi ha
-            if ($this->level == 2 && $word->beforeverb2 && $penalty < 5 && !$this->verbless) $punts -= 18;
+            
+            if ($svo) {
+                // si la paraula va abans del verb, el patró no era verbless i el fit no és horrible, li donem un bonus per 
+                // igualar als altres camps obligatoris en l'ordre de prioritat
+                // pel subjecte principal
+                if ($this->level == 1 && $word->beforeverb && $penalty < 5 && !$this->verbless) $punts -= 18;
+                // pel secundari si n'hi ha
+                if ($this->level == 2 && $word->beforeverb2 && $penalty < 5 && !$this->verbless) $punts -= 18;
+            }
+            else {
+                // igualem el grade del subjecte a slot obligatori si no era un fit terrible i no era verbless
+                if ($this->level == 1 && $penalty < 5 && !$this->verbless) $punts -= 18;
+                // pel secundari si n'hi ha
+                if ($this->level == 2 && $penalty < 5 && !$this->verbless) $punts -= 18;
+            }
         }
         else if ($this->category == "Main Verb") $punts = 0;
         else if ($this->grade == '1') {
             $punts = $penalty*5;
-            if ($this->level == 1 && $word->beforeverb) $punts += 1;
-            else if ($this->level == 2 && ($word->beforeverb || $word->beforeverb2)) $punts += 1;
+            // si l'idioma és svo, el que va abans del verb perd punts si estava introduït abans del verb
+            if ($svo) {
+                if ($this->level == 1 && $word->beforeverb) $punts += 1;
+                else if ($this->level == 2 && ($word->beforeverb || $word->beforeverb2)) $punts += 1;
+            }
         }
         else if ($this->grade == 'opt') $punts = $penalty;
         else $punts = 7; // serà un de NC, tot i que aquests ja es tracten abans i en prinicipi no
