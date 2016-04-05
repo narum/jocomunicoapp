@@ -17,7 +17,7 @@
                          Only if we are in Scan mode
                     MODIF: Añadir variable if inScan-->
 
-                    <div ng-if="inScan && ((picto.customScanBlock1 == currentScanBlock1 && currentScanBlock == 1) || (picto.customScanBlock1 == currentScanBlock1 && currentScanBlock == 2 && picto.customScanBlock2 == currentScanBlock2) || (picto.posInBoard == arrayScannedCells[indexScannedCells].posInBoard))" class="scaneo"></div>
+                    <div ng-if="inScan && ((picto.customScanBlock1 === currentScanBlock1 && currentScanBlock === 1) || (picto.customScanBlock1 === currentScanBlock1 && currentScanBlock === 2 && picto.customScanBlock2 === currentScanBlock2) || (currentScanBlock === 3 && picto.posInBoard === arrayScannedCells[indexScannedCells].posInBoard))" class="scaneo"></div>
 
                     <!-- If there is an custom image this line mades it draggable and dropable.
                          Only if we are in edit mode-->
