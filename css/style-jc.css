@@ -68,6 +68,10 @@
     height:100%;
     
 }
+#predView{
+    height:100%;
+    padding: 0.5vh 0% 4vh 0%;
+}
 
 #searchView{
     height:50%;
@@ -225,4 +229,16 @@
 
 .shadow{
     box-shadow: 3px -2px #4a4a4a;
+}
+.contentPredCell{
+    padding: 2.5%;
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background: #fff;
+}
+
+.containerPredCell{
+    padding: 1vh 15% 1vh 15%;
 }

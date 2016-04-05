@@ -3,6 +3,14 @@
 -->
 <div class="fullheight row" ng-init="config(4)" style="padding: 5vh;" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
 
+    <div  ng-if="inPred" id="predView" ng-if="inPred" class="col-xs-{{predViewWidth}} fullheight">
+        <div  class="row fullheight">
+            <div class="col-sm-12" ng-include="baseurl + '/angular_templates/PredView.html'">
+
+            </div>
+        </div>
+    </div>
+    
     <div id="userview" class="col-xs-{{userViewWidth}}" style="height:{{userViewHeight}}%" >
         <div id="sentenceView" class="container-fluid Defmargin" ng-if="sentenceViewTop && !inEdit" style="height:{{sentenceViewHeight}}%">
             <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     
@@ -17,13 +25,13 @@
                          Only if we are in Scan mode
                     MODIF: Añadir variable if inScan-->
 
-                    <div ng-if="inScan && ((picto.customScanBlock1 === currentScanBlock1 && currentScanBlock === 1) || (picto.customScanBlock1 === currentScanBlock1 && currentScanBlock === 2 && picto.customScanBlock2 === currentScanBlock2) || (currentScanBlock === 3 && picto.posInBoard === arrayScannedCells[indexScannedCells].posInBoard))" class="scaneo"></div>
+                    <div ng-if="isScanned(picto);" class="scaneo"></div>
 
                     <!-- If there is an custom image this line mades it draggable and dropable.
                          Only if we are in edit mode-->
                     <div ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-click="clickOnCell(picto)" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
-                        <div ng-if="picto.textInCell === null" class="text-center text-capitalize">{{picto.pictotext}}</div>
-                        <div ng-if="picto.textInCell !== null" class="text-center text-capitalize">{{picto.textInCell}}</div>
+                        <div ng-if="picto.textInCell === null" class="text-center text-capitalize text-nowrap">{{picto.pictotext}}</div>
+                        <div ng-if="picto.textInCell !== null" class="text-center text-capitalize text-nowrap">{{picto.textInCell}}</div>
                         <div ng-style="picto.pictotext !== null || picto.textInCell !== null  ? {'height':'70%'}:{'height':'100%'}">
                             <img class="imgResponsive" src="{{baseurl}}img{{picto.imgCell}}"/>
                             <img ng-if="picto.ID_CFunction !== null" src="{{baseurl}}img/srcWeb/functions.png" class="function"/>
@@ -33,7 +41,7 @@
                          Only if we are in edit mode-->
                     <div ng-if="picto.imgPicto && !picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-click="clickOnCell(picto);" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
                         <div class="text-center text-capitalize">{{picto.pictotext}}</div>
-                        <div ng-if="picto.textInCell !== null" class="text-center text-capitalize">{{picto.textInCell}}</div>
+                        <div ng-if="picto.textInCell !== null" class="text-center text-capitalize text-nowrap">{{picto.textInCell}}</div>
                         <div ng-style="picto.pictotext !== null || picto.textInCell !== null ? {'height':'70%'}:{'height':'100%'}">
                             <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
                             <img ng-if="picto.ID_CFunction !== null" src="{{baseurl}}img/srcWeb/functions.png" class="function"/>

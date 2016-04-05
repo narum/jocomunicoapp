@@ -203,6 +203,9 @@ class BoardInterface extends CI_Model {
 
         $data = array(
             'ID_Cell' => 'NULL'
+            /*MODIF: Probar despues del lunes por si acaso falla que no nos pille en la presentacion
+            ,
+            'color' => 'fff'*/
         );
 
         $this->db->insert('Cell', $data);
