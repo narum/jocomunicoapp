@@ -1,4 +1,4 @@
-<div class="row fullheight imgRounded" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
+<div ng-class="true ? 'scaneo' : ''" class="row fullheight imgRounded" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
     <div class="col-xs-12 containerPredCell" ng-repeat="picto in $parent.data| limitTo: 7" style="height: {{100/7}}%" >
         <!-- If there is an custom image this line mades it draggable and dropable.
              Only if we are in edit mode-->
