@@ -745,4 +745,17 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+    function getAudioSentence($md5){
+        $output = array();
+        
+        $this->db->where('mp3TSMd5Encoded', $md5);
+        $query = $this->db->get('mp3');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
 }

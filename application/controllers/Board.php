@@ -762,5 +762,26 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    public function getAudioSentence_post() {
+        
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $sentence = $request->sentence;
+        $voice = $request->voice;
+
+        $md5 = MD5($sentence + $voice);
+        $array = $this->BoardInterface->getAudioSentence($md5);
+        if ($md5 != null) {
+            $response = [
+                'array' => $array[3]->mp3Path
+            ];
+        }else{
+            $response = [
+                //MODIF: NO ESTA EL MP3, DESCARREGAR MP3 VOICEWARE
+                'array' => "No group found"
+            ];
+        }
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 
 }

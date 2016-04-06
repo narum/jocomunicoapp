@@ -1289,6 +1289,21 @@ angular.module('controllers', [])
                 $scope.negativa = false;
 
                 //MODIF: dir frase
+                
+
+                var postdata = {voice: 0, sentence: $scope.info.frasefinal};
+                var URL = $scope.baseurl + "Board/getAudioSentence_post";
+
+
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.statusWord = response.status;
+                            $scope.data = response.data;
+                        });
+                
+                
+                
                 $scope.sound = ngAudio.load($scope.baseurl + "mp3/sound.mp3");
                 $scope.sound.play();
             };
