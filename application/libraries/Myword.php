@@ -22,6 +22,7 @@ class Myword {
     var $patterns = array(); // Només pels verbs
     
     var $inputorder; // Número a l'entrada, de 0 a n-1
+    // només s'utilitzaran si l'idioma té estructura SVO (Subject-Verb-Object)
     var $beforeverb = false; // Si apareix abans o després del 1er verb
     var $beforeverb2 = false; // Si apareix entre dos verbs: només quan hi ha dos verbs, quan n'hi ha un sempre està a true
     
@@ -476,7 +477,9 @@ class Myword {
             }
             else {
                 // m -> New rule: if it's a proper noun, the article is "en"
-                if ($this->propietats->ispropernoun == '1') return $matching->answers["T"];
+                if ($this->propietats->ispropernoun == '1' && $masc) {
+                    return $matching->answers["T"];
+                }
                 else { 
                     // c -> We use regular expressions to verify the condition        
                     if (preg_match('/^[bcdfgjklmnpqrstvwxyz]/', $wordlowerednoaccents) == '1') {

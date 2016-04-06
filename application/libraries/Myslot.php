@@ -71,6 +71,8 @@ class Myslot {
         
         $matching = new Mymatching();
         
+        $langnouncorder = $CI->session->userdata('uinterfacelangncorder');
+        
         $numclasses = count($word->classes);
         
         $matchscore = 1000;
@@ -102,12 +104,14 @@ class Myslot {
             $found = false;
             $numparaulestemp = count($this->paraulestemp); 
             
-            // si l'slot està ja ple, mirem si pot fer de complement de nom i el posem
+            // si l'slot està ja ple, mirem si pot fer de complement de nom i
+            // si l'idioma posa després o abans del nom els NC i el posem
             // no es pot fer de complement de nom de pronoms
             if ($this->full) {
-                if ($this->paraulafinal->inputorder == $word->inputorder - 1 && !$this->paraulafinal->isClass("pronoun")) {
+                if ((($langnouncorder == '1' && $this->paraulafinal->inputorder == $word->inputorder - 1) 
+                        || ($langnouncorder == '0' && $this->paraulafinal->inputorder == $word->inputorder + 1)) && !$this->paraulafinal->isClass("pronoun")) {
                     $numcomplements = count($this->complements);
-                    
+                                        
                     $newslot = new Myslot();
                     $word->slotstemps[] = $keyslot." NC ".$numcomplements; // per dir que està de compl. de nom
                     $newslot->category = $this->category." NC";
@@ -128,10 +132,13 @@ class Myslot {
             else {
                 while (($i<$numparaulestemp) && !$found) {
 
+                    // mirem si pot fer de complement de nom i
+                    // si l'idioma posa després o abans del nom els NC i el posem
                     // no es pot fer de complement de nom de pronoms
-                    if ($this->paraulestemp[$i][0]->inputorder == $word->inputorder - 1 && !$this->paraulestemp[$i][0]->isClass("pronoun")) {
+                    if ((($langnouncorder == '1' && $this->paraulestemp[$i][0]->inputorder == $word->inputorder - 1) 
+                        || ($langnouncorder == '0' && $this->paraulestemp[$i][0]->inputorder == $word->inputorder + 1)) && !$this->paraulestemp[$i][0]->isClass("pronoun")) {
                         // POT FER EL MATCH I ES POSA A LA LLISTA DE COMPLEMENTS PROVISIONAL EN UN NOU SLOT
-
+                        
                         $numcomplements = count($this->complements);
 
                         $newslot = new Myslot();
@@ -231,6 +238,9 @@ class Myslot {
         $CI = &get_instance();
         $CI->load->library('Mymatching');
         
+        // we get the usual order of adjectives that complement nouns for the given user interface language
+        $langnounadjorder = $CI->session->userdata('uinterfacelangnadjorder');
+        
         $matching = new Mymatching();
         
         $numclasses = count($word->classes);
@@ -301,7 +311,8 @@ class Myslot {
                 // com més lluny i com menys fit facin, pitjor
                 $newslot->puntsfinal = 7 - $scoreadjcmp - abs($distance);
                 
-                if ($distance == -1) $newslot->puntsfinal += 1; // Si l'adjectiu va just darrere el nom és la millor opció
+                if ($langnounadjorder == '0' && $distance == -1) $newslot->puntsfinal += 1; // Si l'adjectiu va just darrere el nom és la millor opció
+                if ($langnounadjorder == '1' && $distance == 1) $newslot->puntsfinal += 1; // Si l'adjectiu va just abans del nom és la millor opció
                 
                 $aux = array();
                 $aux[0] = $keyslot." ADJ ".$numcomplements; // la clau de l'slot on pot fer de complement
@@ -451,21 +462,44 @@ class Myslot {
     
     public function slotPuntuation ($word, $penalty)
     {
-        $punts;
+        
+        $CI = &get_instance();
+        
+        // agafem el tipus d'idioma, ja que per desambiguar si l'idioma és svo
+        // les paraules que vagin abans del verb tindran punts extra per fer de subjecte
+        // i les que vagin darrere per fer dels altres slots
+        $langtype = $CI->session->userdata('uinterfacelangtype');
+        
+        $svo = true;
+        if ($langtype != 'svo') $svo = false;
+        
+        $punts = 0;
         if ($this->category == "Subject") {
             $punts = $penalty;
-            // si la paraula va abans del verb, el patró no era verbless i el fit no és horrible, li donem un bonus per 
-            // igualar als altres camps obligatoris en l'ordre de prioritat
-            // pel subjecte principal
-            if ($this->level == 1 && $word->beforeverb && $penalty < 5 && !$this->verbless) $punts -= 18;
-            // pel secundari si n'hi ha
-            if ($this->level == 2 && $word->beforeverb2 && $penalty < 5 && !$this->verbless) $punts -= 18;
+            
+            if ($svo) {
+                // si la paraula va abans del verb, el patró no era verbless i el fit no és horrible, li donem un bonus per 
+                // igualar als altres camps obligatoris en l'ordre de prioritat
+                // pel subjecte principal
+                if ($this->level == 1 && $word->beforeverb && $penalty < 5 && !$this->verbless) $punts -= 18;
+                // pel secundari si n'hi ha
+                if ($this->level == 2 && $word->beforeverb2 && $penalty < 5 && !$this->verbless) $punts -= 18;
+            }
+            else {
+                // igualem el grade del subjecte a slot obligatori si no era un fit terrible i no era verbless
+                if ($this->level == 1 && $penalty < 5 && !$this->verbless) $punts -= 18;
+                // pel secundari si n'hi ha
+                if ($this->level == 2 && $penalty < 5 && !$this->verbless) $punts -= 18;
+            }
         }
         else if ($this->category == "Main Verb") $punts = 0;
         else if ($this->grade == '1') {
             $punts = $penalty*5;
-            if ($this->level == 1 && $word->beforeverb) $punts += 1;
-            else if ($this->level == 2 && ($word->beforeverb || $word->beforeverb2)) $punts += 1;
+            // si l'idioma és svo, el que va abans del verb perd punts si estava introduït abans del verb
+            if ($svo) {
+                if ($this->level == 1 && $word->beforeverb) $punts += 1;
+                else if ($this->level == 2 && ($word->beforeverb || $word->beforeverb2)) $punts += 1;
+            }
         }
         else if ($this->grade == 'opt') $punts = $penalty;
         else $punts = 7; // serà un de NC, tot i que aquests ja es tracten abans i en prinicipi no
@@ -564,6 +598,17 @@ class Myslot {
                     // si el verb és copulatiu (amb un patró no impersonal) el nom del theme concorda amb el subjecte
                     if ($this->category == "Theme" && $copulatiu && !$impersonal) {
                         
+                        // si el nom és femení
+                        if ($nucli->propietats->mf == "fem") $masc = false;
+                        // si el nom és plural
+                        if ($nucli->propietats->singpl == "pl") $plural = true;
+                        // si té modificadors de femení i l'accepta
+                        if ($nucli->propietats->femeni != "" && $nucli->fem) $masc = false;
+                        // si té modificador de plural
+                        if ($nucli->plural) $plural = true;
+                        
+                        
+                        // sobreescrivim els valors si cal
                         if (!$subjmasc && $subjpl) {
                             if ($nucli->propietats->femeni != "") {
                                 $masc = false;
@@ -740,11 +785,12 @@ class Myslot {
                         // afegim la paraula coordinada, el plural es passa, però el femení
                         // s'ha de mirar si la paraula ho era o no el tenia el modificador
                         $masccoord = true;
-                        $pluralcoord = $plural;
+                        $pluralcoord = false;
+                        
                         if ($paraulacoord->propietats->mf == "fem" || $paraulacoord->fem) $masccoord = false;
                         // el plural només pot canviar si plural era false i la paraulacoord sempre és plural
                         // que aleshores ha de passar a true o si volíem que la paraulacoord fos plural
-                        if ($paraulacoord->propietats->singpl == "pl" || $paraulacoord->plural) $plural = true;
+                        if ($paraulacoord->propietats->singpl == "pl" || $paraulacoord->plural) $pluralcoord = true;
                         
                         if ($pluralcoord) $elementaux[0] = $paraulacoord->propietats->plural;
                         else if ($masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
@@ -1473,6 +1519,16 @@ class Myslot {
                     // si el verb és copulatiu el nom del theme concorda amb el subjecte
                     if ($this->category == "Theme" && $copulatiu && !$impersonal) {
                         
+                        // si el nom és femení
+                        if ($nucli->propietats->mf == "fem") $masc = false;
+                        // si el nom és plural
+                        if ($nucli->propietats->singpl == "pl") $plural = true;
+                        // si té modificadors de femení i l'accepta
+                        if ($nucli->propietats->femeni != "" && $nucli->fem) $masc = false;
+                        // si té modificador de plural
+                        if ($nucli->plural) $plural = true;
+                        
+                        // sobreescrivim els valors si cal
                         if (!$subjmasc && $subjpl) {
                             if ($nucli->propietats->femeni != "") {
                                 $masc = false;
@@ -1496,11 +1552,14 @@ class Myslot {
                     }
                     
                     // PREPOSICIÓ
-                    // posem la preposició, si n'hi ha, excepte si el nom és el nucli d'un slot de LocAt i 
-                    // el complementa un adverbi de lloc. Per evitar ex: "Está en debajo la mesa."
+                    // posem la preposició, si n'hi ha, excepte: Si el nom és el nucli d'un slot de LocAt i 
+                    // el complementa un adverbi de lloc. Per evitar ex: "Está en debajo la mesa." SI és un
+                    // Theme amb un pronom i la preposició "a" davant, que no la posarem -> Per evitar: A te quiero.
                     if ($this->prep != null) {
-                        if (!($this->category == "LocAt" && $this->CAdvassigned && 
-                                $this->cmpAdvs[$this->CAdvassignedkey]->paraulafinal->isClass("lloc"))) {
+                        if (!(($this->category == "LocAt" && $this->CAdvassigned && 
+                                $this->cmpAdvs[$this->CAdvassignedkey]->paraulafinal->isClass("lloc"))
+                                || ($this->category == "Theme" && $this->paraulafinal->isClass("pronoun") &&
+                                    $this->prep == "a"))) {
                             $elementaux[0] = $this->prep;
                             $elementaux[1] = null;
                             $this->slotstring[] = $elementaux; 
@@ -1657,11 +1716,11 @@ class Myslot {
                         // afegim la paraula coordinada, el plural es passa, però el femení
                         // s'ha de mirar si la paraula ho era o no el tenia el modificador
                         $masccoord = true;
-                        $pluralcoord = $plural;
+                        $pluralcoord = false;
                         if ($paraulacoord->propietats->mf == "fem" || $paraulacoord->fem) $masccoord = false;
                         // el plural només pot canviar si plural era false i la paraulacoord sempre és plural
                         // que aleshores ha de passar a true o si volíem que la paraulacoord fos plural
-                        if ($paraulacoord->propietats->singpl == "pl" || $paraulacoord->plural) $plural = true;
+                        if ($paraulacoord->propietats->singpl == "pl" || $paraulacoord->plural) $pluralcoord = true;
                         
                         if ($pluralcoord) $elementaux[0] = $paraulacoord->propietats->plural;
                         else if ($masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
@@ -2124,7 +2183,9 @@ class Myslot {
                             // el quantificador és invariable
                             // excepte "mucho" que pasa a ser "muy"
                             if ($quantifierslot->paraulafinal->propietats->masc == "mucho") {
-                                $elementaux[0] = "muy";
+                                // si té més d'un quantificador ja no. Ex: mucho más alto
+                                if (count($this->CModassignedkey) == 1) $elementaux[0] = "muy";
+                                else $elementaux[0] = "mucho";
                             }
                             else {
                                 $elementaux[0] = $quantifierslot->paraulafinal->propietats->masc;
@@ -2299,7 +2360,11 @@ class Myslot {
                             
                             $quantifier = $this->cmpMod[$this->CModassignedkey[$i]]->paraulafinal;
                             // Excepció: Ex: "Muy arriba".
-                            if ($quantifier->text == "mucho") $elementaux[0] = "muy";
+                            if ($quantifier->text == "mucho") {
+                                // si té més d'un quantificador ja no. Ex: mucho más arriba
+                                if (count($this->CModassignedkey) == 1) $elementaux[0] = "muy";
+                                else $elementaux[0] = "mucho";
+                            }
                             else $elementaux[0] = $quantifier->text;
                             $elementaux[1] = $quantifier;
 
@@ -2415,6 +2480,8 @@ class Myslot {
                 // és un pronom personal
                 
                 if ($auxstring[5] || $wordaux->isClass("pronoun")) $noarticle = true;
+                // si és un nom propi va amb article determinat
+                else if ($wordaux->propietats->ispropernoun == '1') $definite = true;
                 // si no té quantificador davant, procedim amb l'algoritme normal
                 else {
                     // si són complements (al nostre sistema no poden tenir possessius)
@@ -2422,11 +2489,14 @@ class Myslot {
                     // i si no sense, JA QUE ÉS EL CAS MÉS COMÚ
                     if ($auxstring[6]) {
                         if ($wordaux->propietats->determinat == 'sense') $noarticle = true;
+                        else if ($wordaux->isClass("material")) $noarticle = true;
                         else if ($wordaux->isClass("animate") ||
                                 $wordaux->isClass("animal") ||
                                 $wordaux->isClass("vehicle") ||
                                 $wordaux->isClass("human") ||
                                 $wordaux->isClass("event") ||
+                                $wordaux->isClass("objecte") ||
+                                $wordaux->isClass("lloc") ||
                                 $wordaux->isClass("planta")) $definite = true;
                         else $noarticle = true;
                     }
@@ -2452,7 +2522,7 @@ class Myslot {
                             // si és un locatiu
                             else if ($this->category == "LocAt" || $this->category == "LocTo" 
                                     || $this->category == "LocFrom") {
-                                if ($wordaux->isClass("lloc")) {
+                                if ($wordaux->isClass("lloc") || $wordaux->isClass("joc")) {
                                     // si no porten article, sense article, i si no determinat
                                     if ($wordaux->propietats->determinat == 'sense') $noarticle = true;
                                     else $definite = true;
@@ -2573,11 +2643,14 @@ class Myslot {
                     // i si no sense, JA QUE ÉS EL CAS MÉS COMÚ
                     if ($auxstring[6]) {
                         if ($wordaux->propietats->determinat == 'sense') $noarticle = true;
+                        else if ($wordaux->isClass("material")) $noarticle = true;
                         else if ($wordaux->isClass("animate") ||
                                 $wordaux->isClass("animal") ||
                                 $wordaux->isClass("vehicle") ||
                                 $wordaux->isClass("human") ||
                                 $wordaux->isClass("event") ||
+                                $wordaux->isClass("objecte") ||
+                                $wordaux->isClass("lloc") ||
                                 $wordaux->isClass("planta")) $definite = true;
                         else $noarticle = true;
                     }
@@ -2603,7 +2676,7 @@ class Myslot {
                             // si és un locatiu
                             else if ($this->category == "LocAt" || $this->category == "LocTo" 
                                     || $this->category == "LocFrom") {
-                                if ($wordaux->isClass("lloc")) {
+                                if ($wordaux->isClass("lloc") || $wordaux->isClass("joc")) {
                                     // si no porten article, sense article, i si no determinat
                                     if ($wordaux->propietats->determinat == 'sense') $noarticle = true;
                                     else $definite = true;

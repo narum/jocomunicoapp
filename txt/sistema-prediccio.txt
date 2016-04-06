@@ -1,0 +1,5 @@
+SISTEMA DE PREDICCIÓ
+
+Reservar la meitat de les caselles de predicció arrodonint per baix pels pictogrames extrets de l’estructura del nostre sistema d’expansió (primer subjectes, després verbs, després segons els patrons, etc.).
+
+L’altre és per aprenentatge de l’ús. Número de clics, etc.

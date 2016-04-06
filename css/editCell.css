@@ -1,0 +1,213 @@
+@charset "UTF-8";
+/* CSS Document */
+.marginTop{
+    height:1%;
+}
+.title1{ 
+    background-color: #fff;
+    height: 8%;
+    padding-right: 2%;
+}
+.title2{ 
+    background-color: #fff;
+    height: 16%;
+}
+.content1{ 
+    background-color: #fddfad;
+    height: 8%;
+    padding-left: 25% !important;
+    padding-right: 25% !important;
+}
+.content1nocolor{ 
+    height: 8%;
+    padding-left: 3% !important;
+    padding-right: 3% !important;
+}
+.content1-5{ 
+    background-color: #fddfad;
+    height: 12%;
+    margin-top: -0.1px;/*to solve a little problem in chrome*/
+}
+.content2{ 
+    background-color: #fddfad;
+    height: 16%;
+}
+.content3{ 
+    background-color: #fddfad;
+    height: 24%;
+}
+.content4{ 
+    height: 30%;
+
+}
+.saveEdit{
+    margin-left: 8%;
+    border-radius: 150px;
+}
+.marginEditcell{
+    margin-left: 2.5%; 
+    width: 39%;
+}
+
+.titleTextTypus{
+    font-weight: bold;
+    padding-left: 5% !important;
+    /*vertical align*/
+    margin-top: 2%;
+}
+.titleText{
+    font-weight: bold;
+    padding-left: 5% !important;
+    /*vertical align*/
+    top: 50%;
+    transform:translate(0%,-50%);
+}
+.buttonTitle{
+    padding-right: 5% !important;
+    top: 50%;
+    transform:translate(0%,-50%);
+}
+.typeCellText{
+    text-align: center;
+}
+.boxEdit{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 27px;
+    margin-top: 2%;
+}
+.checkboxEdit{
+    float: right;
+
+}
+.cellEditSearch{
+    width: 75%;
+    height: 75%;
+    margin: 5% 10% 5% 10%;
+}
+.pictoEditSearch{
+    margin-left: 5%
+}
+.imgRounded{
+    border-radius: 7px;
+}
+.cruz{
+    background-color: #151515;
+    height: 100%;
+    float: right;
+    width: 35px;
+    border-top-right-radius: 10px;
+}
+.editTitle{
+    position: relative;
+    color: #fff;
+    height: 75%;
+    float: left;
+    top: 50%;
+    transform:translate(0%,-50%);
+    margin-left: 2em;
+    font-weight: bold;
+}
+.topBar{
+
+    height: 7%;
+    width: 100%;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    /*gradient in all browsers*/
+    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
+    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background-color: #4c4c4c;
+}
+.dialogContent{
+    padding: 1em;
+}
+
+
+#sentenceSearchContent{
+    position:relative;
+    top:0px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+}
+.boxSearch{
+    border-bottom: 2px solid;
+}
+#scrollbox1 {
+    overflow: auto;
+    padding: 0 5px;
+    border: 1px solid #b7b7b7;
+}
+.track1 {
+    width: 10px;
+    background: rgba(0, 0, 0, 0);
+    margin-right: 2px;
+    border-radius: 10px;
+    -webkit-transition: background 250ms linear;
+    transition: background 250ms linear;
+}
+
+.track1:hover,
+.track1.dragging {
+    background: #d9d9d9; 
+    background: rgba(0, 0, 0, 0.30);
+}
+
+.handle1 {
+    width: 7px;
+    right: 0;
+    background: #999;
+    background: rgba(0, 0, 0, 0);
+    border-radius: 7px;
+    -webkit-transition: width 250ms;
+    transition: width 250ms;
+}
+
+.track1:hover .handle1,
+.track1.dragging .handle1 {
+    width: 10px;
+}
+.Defpadding
+{
+    padding: 1%;
+}
+.PaddingSent
+{
+    padding-top: 0.5% !important;
+    padding-bottom: 0.5% !important;
+    padding-left: 2.5% !important;
+    padding-right: 1.5% !important;
+}
+.Defmargin
+{
+    margin: 1%;
+}
+.dropdown-arrow:disabled {
+    background-color: #dddddd;
+    z-index: -12;
+} 
+.dropdown-arrow{
+    -webkit-appearance: none;
+    -moz-appearance:none;
+    background: url("http://localhost/jocomunicoapp/img/srcWeb/boto_desplegable.jpg") no-repeat right #fff;
+    background-size: 20px 100%;
+    border: 0px;
+    min-width:40px;
+}
+.dropdown-arrow.panellPrincipal{
+    width: 50%;
+}
+.dropdown-arrow.color{
+    border: 1px solid;
+    border-color: #cbcbcb;
+}
+.verticalCenter{
+    transform: translate(0%, -50%);
+    top: 50%; 
+}

@@ -104,7 +104,7 @@
                             </div> <br /><br />
 
                             <div class="grupsubsubclasse">
-                                <span class="titolsubsubclasse">Vehicles i Altres: </span>
+                                <span class="titolsubsubclasse">Vehicles: </span>
                                 <select id="noms-animat" name="nomanimat" onchange="afegirParaula('<?=base_url();?>' ,'nomanimat', 'Nom');" size=1 tabindex="1" class="selectbox">
                                     <?php for ($i=0; $i<count($nomsAnimat); $i++) { ?>
                                         <option value="<?=$nomsAnimat[$i]->nameid;?>"> <?=$nomsAnimat[$i]->nomtext;?></option>

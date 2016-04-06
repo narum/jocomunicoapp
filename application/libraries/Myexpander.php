@@ -121,9 +121,10 @@ class Myexpander {
         else {
 
             $partpreguntaposada = false;
+            $preguntabona = false;
             // Per cada PATTERN
             for ($i=0; $i<count($this->allpatterns); $i++) {
-
+                
                 // fem una còpia de les paraules per treballar des de 0 a cada pattern
                 $paraules = unserialize(serialize($this->paraulescopia));
                 $partPregunta = array();
@@ -174,17 +175,26 @@ class Myexpander {
                else if ($numpreguntes == 1) {
                    $partpreguntaposada = $auxpattern->fillPartPregunta($partPregunta[0]);
 
-                   if (!$partpreguntaposada) {
+                   if (!$partpreguntaposada && !$preguntabona) {
                        $this->errormessagetemp = "Warning. No s'ha trobat lloc per la partícula de la pregunta.";
                        $this->errorcodetemp = 4;
                        $this->errortemp = true;
                        $this->readwithoutexpansion = true;
+                   }
+                   else {
+                       // només que hi hagi un patró on encaixi la partícula de pregunta, ja va bé
+                       $preguntabona = true;
+                       $this->errormessagetemp = null;
+                       $this->errorcodetemp = null;
+                       $this->errortemp = false;
+                       $this->readwithoutexpansion = false;
                    }
                } // Fi tractament de pregunta
 
 
                // Si el verb és pseudoimpersonal o si hi ha una pregunta, invertim les preferències
                // d'aparèxier abans i després del verb, ja que ara el subjecte va darrere del verb
+               // Les variables beforeverb només s'utilitzaran al codi si l'idioma té estructura SVO (Subject-Verb-Object)
                if ($auxpattern->pseudoimpersonal || $partpreguntaposada) {
                    for ($j=0; $j<count($paraules); $j++) {
                        $auxword = &$paraules[$j];
@@ -214,7 +224,16 @@ class Myexpander {
                // Els modificadors
                $auxpattern->solveModifs($arrayModifs);
 
-               $puntspattern = $auxpattern->calcPuntsFinalPattern();
+               $auxreturn = $auxpattern->calcPuntsFinalPattern();
+               $puntspattern = $auxreturn[0];
+               $notusedpicto = $auxreturn[1];
+               
+               // si no ha pogut posar una paraula, activem un error temporal del patró
+               if ($notusedpicto) {
+                   $this->errormessagetemp = "Warning. No s'ha trobat lloc per una de les paraules.";
+                   $this->errorcodetemp = 7;
+                   $this->errortemp = true;
+               }
 
                $this->puntsallpatterns[] = $puntspattern;
 
@@ -222,6 +241,11 @@ class Myexpander {
                $this->errorcode[] = $this->errorcodetemp;
                $this->error[] = $this->errortemp;
                $this->preguntaposada[] = $partpreguntaposada;
+               
+               // reiniciem els errors pel següent patró
+               $this->errormessagetemp = null;
+               $this->errorcodetemp = null;
+               $this->errortemp = false;
                // DEBUG
                // echo $auxpattern->printPattern();
 
@@ -262,6 +286,9 @@ class Myexpander {
                 $frasefinal = $this->generateSentenceES($bestpattern, $propietatsfrase, $this->preguntaposada[$bestpatternindex]);
             }
 
+            // si el millor patró té un codi d'error 7 (paraula no utilitzada), aleshores llegim sense expansió
+            if ($this->errorcode[$bestpatternindex] == 7) $this->readwithoutexpansion = true;
+            
             // si hi ha hagut algun error o s'ha desactivat el sistema d'expansió, aleshores es llegeix sense expandir la frase
             if ($this->readwithoutexpansion) $this->info['frasefinal'] = $frasefinalnotexpanded;
             else $this->info['frasefinal'] = $frasefinal;
@@ -314,8 +341,12 @@ class Myexpander {
                 }
                 // si hi ha algun nom i no hi ha altres paraules excepte modificadors i/o adjectius
                 // agafem el verb per defecte del primer nom introduït
+                // si el nom no tenia verb per defecte i hi havia un adjectiu, agafem el verb per
+                // defecte de l'adjectiu
                 else if ($countnouns > 0 && !$othertypes) {
-                    $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($noundefverb, false);
+                    if ($noundefverb != 0) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($noundefverb, false);
+                    else if ($thereisadj) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, true);
+                    else $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(0, false); // Verbless
                 }
                 else {
                     // Agafem els verbless patterns

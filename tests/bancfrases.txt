@@ -1,4 +1,1 @@
-{444} / {86} / {602} / {687} / #defecte / @defecte
-{444} / {86} / {687} / {602} / #defecte / @defecte
-{444} / {2} / {171} / $pl / {687} / #defecte / @defecte
-{444} / {2} / {687} / {171} / $pl / #defecte / @defecte
+{444} / {86} / {602} / {687} / #defecte / @futur /

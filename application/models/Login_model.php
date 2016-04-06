@@ -53,7 +53,7 @@ class Login_model extends CI_Model {
         //Miramos el default language del Super User
         $this->db->select('cfgDefLanguage, languageabbr'); // Seleccionar les columnes
         $this->db->from('SuperUser');// Seleccionem la taula
-        $this->db->join('languages', 'SuperUser.cfgDefLanguage = languages.ID_Language', 'left');
+        $this->db->join('Languages', 'SuperUser.cfgDefLanguage = Languages.ID_Language', 'left');
         $this->db->where('SUname', $user);// filtrem per columnes
         $query2 = $this->db->get()->result_array();// Fem la query i la guardem a la variable query2
 
@@ -65,7 +65,8 @@ class Login_model extends CI_Model {
         $unencodedArray = [
             'token' => $jwt,
             'languageid' => $languageid,
-            'languageabbr' => $languageabbr
+            'languageabbr' => $languageabbr,
+            'userID' => $output[0]->ID_User
         ];
 
         return $unencodedArray;
