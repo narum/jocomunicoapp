@@ -587,7 +587,7 @@ angular.module('controllers', [])
             $scope.InitScan = function ()
             {
                 // 0 custom, 1 rows, 2 columns
-                $scope.scanType = 0;
+                $scope.scanType = 1;
                 $scope.inScan = true;
                 $scope.longclick = true;
                 function myTimer() {
@@ -607,44 +607,35 @@ angular.module('controllers', [])
                 $scope.arrayScannedCells = null;
                 $scope.indexScannedCells = 0;
                 $scope.currentScanBlock = 1;
-                $scope.currentScanBlock1 = 1;
+                $scope.currentScanBlock1 = -1;
                 $scope.currentScanBlock2 = 1;
                 $scope.getMaxScanBlock1();
 
             };
-
+            // picto is -1 pred, 0 sentemce, others mainboard.
             $scope.isScanned = function (picto) {
                 //Custom scan
-                if ($scope.inScan && $scope.scanType == 0 && (
-                        (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 1) ||
-                        (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 2 && picto.customScanBlock2 == $scope.currentScanBlock2) ||
-                        ($scope.currentScanBlock == 3 && $scope.arrayScannedCells != null && picto.posInBoard == $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard))) {
-                    return true;
-                }
-                // Rows first
-                else if ($scope.inScan && $scope.scanType == 1 && (
-                        ($scope.currentScanBlock == 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1) ||
-                        ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && picto.posInBoard % $scope.columns == $scope.currentScanBlock2))) {
-                    return true;
-                } else if ($scope.inScan && $scope.scanType == 2 && (
-                        ($scope.currentScanBlock == 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1) ||
-                        ($scope.currentScanBlock == 2 && picto.posInBoard % $scope.columns == $scope.currentScanBlock1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
-                    return true;
+                if ($scope.inScan && $scope.currentScanBlock1 != -1 && $scope.currentScanBlock1 != 0 ){
+                    if ($scope.scanType == 0 && (
+                            (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 1) ||
+                            (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 2 && picto.customScanBlock2 == $scope.currentScanBlock2) ||
+                            ($scope.currentScanBlock == 3 && $scope.arrayScannedCells != null && picto.posInBoard == $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard))) {
+                        return true;
+                    }
+                    // Rows first
+                    else if ($scope.scanType == 1 && (
+                            ($scope.currentScanBlock == 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1) ||
+                            ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && picto.posInBoard % $scope.columns == $scope.currentScanBlock2))) {
+                        return true;
+                    } else if ($scope.scanType == 2 && (
+                            ($scope.currentScanBlock == 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1) ||
+                            ($scope.currentScanBlock == 2 && picto.posInBoard % $scope.columns == $scope.currentScanBlock1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
+                        return true;
+                    }
                 }
                 return false;
 
 
-            };
-            // Check if the cell is being scanned
-            // MODIF: Cambiar nombre 
-            $scope.isScanned = function (picto){
-                
-                if ($scope.inScan && ((picto.customScanBlock1 === $scope.currentScanBlock1 && $scope.currentScanBlock === 1) || (picto.customScanBlock1 === $scope.currentScanBlock1 && $scope.currentScanBlock === 2 && picto.customScanBlock2 === $scope.currentScanBlock2) || ($scope.currentScanBlock === 3 && picto.posInBoard === $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard))){
-                    alert(picto.posInBoard);
-                    return true;
-                    
-                }
-                    return false;
             };
             // When we get out from scanMode stops the interval
             $scope.$watch('inScan', function () {
@@ -723,7 +714,9 @@ angular.module('controllers', [])
             // Get the number of level 2 scan blocks
             $scope.getMaxScanBlock2 = function ()
             {
-                if ($scope.scanType === 1) {
+                if ($scope.currentScanBlock1 == 0) {
+                    $scope.maxScanBlock2 = 3;
+                } else if ($scope.scanType === 1) {
                     $scope.maxScanBlock2 = $scope.columns;
                 } else if ($scope.scanType === 2) {
                     $scope.maxScanBlock2 = $scope.rows;
@@ -751,7 +744,11 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     // If we are in the first scan level passes to the next (cyclic)
                     if ($scope.currentScanBlock === 1) {
-                        $scope.currentScanBlock1 = $scope.currentScanBlock1 % $scope.maxScanBlock1 + 1;
+                        $scope.currentScanBlock1 = $scope.currentScanBlock1 + 1;
+                        if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
+                            $scope.currentScanBlock1 = -1;
+                        }
+                        alert($scope.currentScanBlock1 + " " + $scope.currentScanBlock);
                     }// If we are in the second scan level passes to the next (cyclic) but...
                     else if ($scope.currentScanBlock === 2 && $scope.scanType === 0) {
                         // CurrentScanBlock will be null when we are over all the cell that have no scan block
@@ -804,7 +801,20 @@ angular.module('controllers', [])
                         $scope.getMaxScanBlock2();
                         //If we are in the third level, get all the cells (arraScannedCells)
                     } else if ($scope.currentScanBlock === 3) {
-                        if ($scope.scanType !== 0) {
+                        // If we are over the sentence bar
+                        if ($scope.currentScanBlock1 == 0) {
+                            switch ($scope.currentScanBlock2) {
+                                case 1:
+                                    $scope.generate();
+                                case 2:
+                                    $scope.deleteLast();
+                                    break;
+                                case 3:
+                                    $scope.deleteAll();
+                                    break;
+                            }//MODIF: Maybe we have to put control to perd
+                            $scope.InitScan();
+                        } else if ($scope.scanType !== 0) {
                             $scope.selectScannedCell();
                         } else {
                             var url = $scope.baseurl + "Board/getScannedCells";
@@ -1289,7 +1299,7 @@ angular.module('controllers', [])
                 $scope.negativa = false;
 
                 //MODIF: dir frase
-                
+
 
                 var postdata = {voice: 0, sentence: $scope.info.frasefinal};
                 var URL = $scope.baseurl + "Board/getAudioSentence_post";
@@ -1301,9 +1311,9 @@ angular.module('controllers', [])
                             $scope.statusWord = response.status;
                             $scope.data = response.data;
                         });
-                
-                
-                
+
+
+
                 $scope.sound = ngAudio.load($scope.baseurl + "mp3/sound.mp3");
                 $scope.sound.play();
             };

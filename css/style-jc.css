@@ -66,6 +66,10 @@ html, body{
 #footer{
     height:00%;
 }
+#sentenceView{
+    height:100%;
+
+}
 
 #userview{
     height:100%;
@@ -219,6 +223,13 @@ html, body{
     border-radius: 7px;
     z-index: 24;
     position: absolute;
+}
+.scaneoSent{
+    border: 7px solid #2e758a;
+    border-radius: 7px;
+    z-index: 24;
+    position: absolute;
+    width: 97.6%;
 }
 .backgroundCell{
     padding: 2.5%;
