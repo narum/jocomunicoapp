@@ -587,7 +587,7 @@ angular.module('controllers', [])
             $scope.InitScan = function ()
             {
                 // 0 custom, 1 rows, 2 columns
-                $scope.scanType = 2;
+                $scope.scanType = 0;
                 $scope.inScan = true;
                 $scope.longclick = true;
                 function myTimer() {
@@ -627,7 +627,7 @@ angular.module('controllers', [])
                         ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && picto.posInBoard % $scope.columns == $scope.currentScanBlock2))) {
                     return true;
                 } else if ($scope.inScan && $scope.scanType == 2 && (
-                        ($scope.currentScanBlock == 1 && picto.posInBoard % $scope.columns == $scope.currentScanBlock1) ||
+                        ($scope.currentScanBlock == 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1) ||
                         ($scope.currentScanBlock == 2 && picto.posInBoard % $scope.columns == $scope.currentScanBlock1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
                     return true;
                 }
@@ -752,7 +752,6 @@ angular.module('controllers', [])
                     // If we are in the first scan level passes to the next (cyclic)
                     if ($scope.currentScanBlock === 1) {
                         $scope.currentScanBlock1 = $scope.currentScanBlock1 % $scope.maxScanBlock1 + 1;
-
                     }// If we are in the second scan level passes to the next (cyclic) but...
                     else if ($scope.currentScanBlock === 2 && $scope.scanType === 0) {
                         // CurrentScanBlock will be null when we are over all the cell that have no scan block
@@ -777,11 +776,11 @@ angular.module('controllers', [])
                         }
                         $scope.currentScanBlock2 = ($scope.currentScanBlock2 + 1) % $scope.maxScanBlock2;
                     } else if ($scope.currentScanBlock === 2 && $scope.scanType === 2) {
+                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
                         // All cells were scanned. Start again
-                        if ($scope.currentScanBlock2 === 0) {
+                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
                             $scope.InitScan();
                         }
-                        $scope.currentScanBlock2 = $scope.currentScanBlock2 % $scope.maxScanBlock2 + 1;
                     }// If we are in the third scan pass one by one over the array (cyclic)
                     else if ($scope.currentScanBlock === 3) {
                         $scope.indexScannedCells = $scope.indexScannedCells + 1;
@@ -1290,6 +1289,21 @@ angular.module('controllers', [])
                 $scope.negativa = false;
 
                 //MODIF: dir frase
+                
+
+                var postdata = {voice: 0, sentence: $scope.info.frasefinal};
+                var URL = $scope.baseurl + "Board/getAudioSentence_post";
+
+
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.statusWord = response.status;
+                            $scope.data = response.data;
+                        });
+                
+                
+                
                 $scope.sound = ngAudio.load($scope.baseurl + "mp3/sound.mp3");
                 $scope.sound.play();
             };
