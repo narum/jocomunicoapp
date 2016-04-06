@@ -31,13 +31,32 @@ class Lexicon extends CI_Model {
             $idusu = $output[0]->ID_SU;
             $ulanguage = $output[0]->cfgDefLanguage;
             $isfem = $output[0]->cfgIsFem;
+            
+            // By default
+            $uexplanguage = $ulanguage;
+            
+            // We get the language for the expansion system 
+            // just in case the user has changed it
+            $output3 = array();
+            $this->db->where('ID_USU', $idusu);
+            $this->db->where('ID_ULanguage', $ulanguage);
+            
+            $query3 = $this->db->get('User');
+            
+            if ($query3->num_rows() > 0) {
+                $output3 = $query3->result();
+                $uexplanguage = $output3[0]->cfgExpansionLanguage;
+            }
+            
             $this->session->set_userdata('idusu', $idusu);
             $this->session->set_userdata('uname', $usuari);
-            $this->session->set_userdata('ulanguage', $ulanguage);
+            $this->session->set_userdata('ulanguage', $uexplanguage);
+            $this->session->set_userdata('uinterfacelangauge', $ulanguage);
             $this->session->set_userdata('isfem', $isfem);
             
             $output2 = array();
-            $this->db->where('ID_Language', $ulanguage);  
+            $this->db->where('ID_Language', $uexplanguage);
+            $this->db->where('canExpand', '1');
             $query2 = $this->db->get('Languages');
             
             if ($query2->num_rows() > 0) {
@@ -45,8 +64,33 @@ class Lexicon extends CI_Model {
                 $ulangabbr = $output2[0]->languageabbr;
                 $this->session->set_userdata('ulangabbr', $ulangabbr);
             }
+            // If the expansion language cannot expand, the Spanish expander will be used by default
             else {
-                $this->session->set_userdata('ulangabbr', 'CA');
+                $this->session->set_userdata('ulangabbr', 'ES');
+            }
+            
+            $output4 = array();
+            $this->db->where('ID_Language', $ulanguage);  
+            $query4 = $this->db->get('Languages');
+            
+            if ($query4->num_rows() > 0) {
+                $output4 = $query4->result();
+                
+                // We get the info on the interface language, it will be used by the parser
+                $uinterfacelangtype = $output4[0]->type;
+                $this->session->set_userdata('uinterfacelangtype', $uinterfacelangtype);
+                $uinterfacelangnadjorder = $output4[0]->nounAdjOrder;
+                $this->session->set_userdata('uinterfacelangnadjorder', $uinterfacelangnadjorder);
+                $uinterfacelangncorder = $output4[0]->nounComplementOrder;
+                $this->session->set_userdata('uinterfacelangncorder', $uinterfacelangncorder);
+                $ulangabbr = $output4[0]->languageabbr;
+                $this->session->set_userdata('uinterfacelangabbr', $ulangabbr);
+            }
+            else {
+                $this->session->set_userdata('uinterfacelangabbr', 'ES');
+                $this->session->set_userdata('uinterfacelangtype', 'svo');
+                $this->session->set_userdata('uinterfacelangnadjorder', '0');
+                $this->session->set_userdata('uinterfacelangncorder', '1');
             }
             
             return true;
