@@ -1,6 +1,9 @@
 @charset "UTF-8";
 /* CSS Document */
 /*MODIF: mi idea era poner aqui lo comun*/
+html, body{
+    font-size: 1.5vw;
+} 
 .row{ 
     margin-left: 0px;
     margin-right: 0px;
@@ -49,10 +52,10 @@
 
 @media (max-width:1000px){
     .col-xs-12{
-        font-size: 12.5px;
+        /*font-size: 12.5px;*/
     }
     .col-xs-6{
-        font-size: 12px;
+        /*font-size: 12px;*/
     }
     input[type="radio"]{
             margin: 0px;
