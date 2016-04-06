@@ -30,8 +30,8 @@
                     <!-- If there is an custom image this line mades it draggable and dropable.
                          Only if we are in edit mode-->
                     <div ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-click="clickOnCell(picto)" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
-                        <div ng-if="picto.textInCell === null" class="text-center text-capitalize text-nowrap">{{picto.pictotext}}</div>
-                        <div ng-if="picto.textInCell !== null" class="text-center text-capitalize text-nowrap">{{picto.textInCell}}</div>
+                        <div ng-if="picto.textInCell === null" class="textCell">{{picto.pictotext}}</div>
+                        <div ng-if="picto.textInCell !== null" class="textCell">{{picto.textInCell}}</div>
                         <div ng-style="picto.pictotext !== null || picto.textInCell !== null  ? {'height':'70%'}:{'height':'100%'}">
                             <img class="imgResponsive" src="{{baseurl}}img{{picto.imgCell}}"/>
                             <img ng-if="picto.ID_CFunction !== null" src="{{baseurl}}img/srcWeb/functions.png" class="function"/>
@@ -40,8 +40,8 @@
                     <!-- If there is an image this line mades it draggable and dropable.
                          Only if we are in edit mode-->
                     <div ng-if="picto.imgPicto && !picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell" ng-style="{'background-color':'#{{picto.color}}'}" ng-click="clickOnCell(picto);" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
-                        <div class="text-center text-capitalize">{{picto.pictotext}}</div>
-                        <div ng-if="picto.textInCell !== null" class="text-center text-capitalize text-nowrap">{{picto.textInCell}}</div>
+                        <div ng-if="picto.textInCell === null" class="textCell">{{picto.pictotext}}</div>
+                        <div ng-if="picto.textInCell !== null" class="textCell">{{picto.textInCell}}</div>
                         <div ng-style="picto.pictotext !== null || picto.textInCell !== null ? {'height':'70%'}:{'height':'100%'}">
                             <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
                             <img ng-if="picto.ID_CFunction !== null" src="{{baseurl}}img/srcWeb/functions.png" class="function"/>

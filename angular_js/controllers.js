@@ -635,6 +635,17 @@ angular.module('controllers', [])
 
 
             };
+            // Check if the cell is being scanned
+            // MODIF: Cambiar nombre 
+            $scope.isScanned = function (picto){
+                
+                if ($scope.inScan && ((picto.customScanBlock1 === $scope.currentScanBlock1 && $scope.currentScanBlock === 1) || (picto.customScanBlock1 === $scope.currentScanBlock1 && $scope.currentScanBlock === 2 && picto.customScanBlock2 === $scope.currentScanBlock2) || ($scope.currentScanBlock === 3 && picto.posInBoard === $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard))){
+                    alert(picto.posInBoard);
+                    return true;
+                    
+                }
+                    return false;
+            };
             // When we get out from scanMode stops the interval
             $scope.$watch('inScan', function () {
                 if ($scope.inScan === false) {
