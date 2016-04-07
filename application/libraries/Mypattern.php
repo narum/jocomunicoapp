@@ -4463,22 +4463,59 @@ class Mypattern {
             else if ($slotaux->category == "Desire") $indexdesire = $i;
             else if ($slotaux->category == "Permission") $indexpermission = $i;
             else if ($slotaux->category == "Subject") {
+                
+                // si l'idioma d'expansió no podia expandir i s'ha fet servir el castellà per defecte
+                // que no elimini els subjectes perquè així per la posterior traducció hi haurà menys
+                // ambigüitats
                 if ($slotaux->defvalueused) {
-                    // esborrem el tú o yo, 3a persona impersonal o usted quan hi són per defecte
-                    if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2' 
-                            || $slotaux->defvalue == '3' || $slotaux->defvalue == '7') $slotaux->slotstring = array();
+                    if ($CI->session->userdata('explangcannotexpand') == '1') {
+                        switch ($slotaux->defvalue) {
+                            case '1':
+                                $slotaux->slotstring = array();
+                                $elementaux[0] = "yo";
+                                $elementaux[1] = null;
+                                $slotaux->slotstring[] = $elementaux;
+                                break;
+                            case '2':
+                                $slotaux->slotstring = array();
+                                $elementaux[0] = "tú";
+                                $elementaux[1] = null;
+                                $slotaux->slotstring[] = $elementaux;
+                                break;
+                            case '3':
+                                $slotaux->slotstring = array();
+                                break;
+                            case '7':
+                                $slotaux->slotstring = array();
+                                $elementaux[0] = "usted";
+                                $elementaux[1] = null;
+                                $slotaux->slotstring[] = $elementaux;
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else {
+                        // esborrem el tú o yo, 3a persona impersonal o usted quan hi són per defecte
+                        if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2' 
+                                || $slotaux->defvalue == '3' || $slotaux->defvalue == '7') $slotaux->slotstring = array();
+                    }
                 }
                 // si no s'ha fet servir el subjecte per defecte
                 else {
-                    // esborrem el tú o el yo
-                    if ($slotaux->paraulafinal->text == "yo" || $slotaux->paraulafinal->text == "tú") {
-                        $slotaux->slotstring = array();
-                    }
-                    // esborrem el subjecte del verb secundari, si és el mateix que el del principal
-                    if ($slotaux->level == 2 && $this->subjsiguals) {
-                        $slotaux->slotstring = array();
+                    if ($CI->session->userdata('explangcannotexpand') != '1') {
+                        // esborrem el tú o el yo
+                        if ($slotaux->paraulafinal->text == "yo" || $slotaux->paraulafinal->text == "tú") {
+                            $slotaux->slotstring = array();
+                        }
+                        // esborrem el subjecte del verb secundari, si és el mateix que el del principal
+                        if ($slotaux->level == 2 && $this->subjsiguals) {
+                            $slotaux->slotstring = array();
+                        }
                     }
                 }
+                
             }
         }
         
