@@ -713,7 +713,9 @@ angular.module('controllers', [])
             };
             // Get the number of level 2 scan blocks
             $scope.getMaxScanBlock2 = function ()
-            {
+            {   
+                // MODIF: poner en caso de prediccion
+                //If we select the sentence view, there are just 3 cells to scan
                 if ($scope.currentScanBlock1 == 0) {
                     $scope.maxScanBlock2 = 3;
                 } else if ($scope.scanType === 1) {
