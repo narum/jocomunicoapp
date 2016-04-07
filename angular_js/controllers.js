@@ -587,7 +587,7 @@ angular.module('controllers', [])
             $scope.InitScan = function ()
             {
                 // 0 custom, 1 rows, 2 columns
-                $scope.scanType = 1;
+                $scope.scanType = 0;
                 $scope.inScan = true;
                 $scope.longclick = true;
                 function myTimer() {
@@ -625,11 +625,11 @@ angular.module('controllers', [])
                     // Rows first
                     else if ($scope.scanType == 1 && (
                             ($scope.currentScanBlock == 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1) ||
-                            ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && picto.posInBoard % $scope.columns == $scope.currentScanBlock2))) {
+                            ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && (picto.posInBoard - 1)% $scope.columns == $scope.currentScanBlock2 - 1))) {
                         return true;
                     } else if ($scope.scanType == 2 && (
                             ($scope.currentScanBlock == 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1) ||
-                            ($scope.currentScanBlock == 2 && picto.posInBoard % $scope.columns == $scope.currentScanBlock1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
+                            ($scope.currentScanBlock == 2 && (picto.posInBoard -1) % $scope.columns == $scope.currentScanBlock1 - 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
                         return true;
                     }
                 }
@@ -748,7 +748,6 @@ angular.module('controllers', [])
                         if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
                             $scope.currentScanBlock1 = -1;
                         }
-                        alert($scope.currentScanBlock1 + " " + $scope.currentScanBlock);
                     }// If we are in the second scan level passes to the next (cyclic) but...
                     else if ($scope.currentScanBlock === 2 && $scope.scanType === 0) {
                         // CurrentScanBlock will be null when we are over all the cell that have no scan block
@@ -766,12 +765,13 @@ angular.module('controllers', [])
 
                     } // If we are not in custom scan there are no null group so pass to the next(cyclic) 
                     else if ($scope.currentScanBlock === 2 && $scope.scanType === 1) {
+                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
                         // All cells were scanned. Start again
-                        if ($scope.currentScanBlock2 === 0) {
+                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
                             $scope.InitScan();
                             return;
                         }
-                        $scope.currentScanBlock2 = ($scope.currentScanBlock2 + 1) % $scope.maxScanBlock2;
+                        
                     } else if ($scope.currentScanBlock === 2 && $scope.scanType === 2) {
                         $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
                         // All cells were scanned. Start again
@@ -1096,7 +1096,6 @@ angular.module('controllers', [])
             {
                 var postdata = {Name: nameboard, ID: boardindex};
                 var URL = $scope.baseurl + "Board/modifyNameboard";
-                alert(postdata.Name);
                 $http.post(URL, postdata).
                         success(function (response)
                         {
