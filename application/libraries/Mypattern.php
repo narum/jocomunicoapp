@@ -687,119 +687,95 @@ class Mypattern {
         // QUAN JA TENIM POSADES TOTES ELS ADVERBIS, RESOLEM ELS SLOTS ENCARA NO RESOLTS
         // HI HAURÂ SLOTS AMB JA NOMËS UNA PARAULA O ALTRES SLOTS AMB VÀRIES PARAULES
         
-        $mand2level = array();
-        $mand1level = array();
-        $subjectes = array();
-        $opts = array();
-        $slotsDeLloc = array();
-        
-        // Ordenem els slots en differents arrays Mandatory 2on nivell, Mandatory 1er nivell, subjecte, opts
-        foreach ($this->slotarray as $keyslot => $slot) {
-            
-            // separem els slots de lloc perquè són els únics on els ADV poden fer de complement
-            if ($slot->type == "lloc") $slotsDeLloc[$keyslot] = $slot;
-            
-            if ($slot->level == 2) {
-                if ($slot->category == 'Subject') $subjectes[$keyslot] = $slot;
-                else if ($slot->grade == '1') $mand2level[$keyslot] = $slot;
-                else $opts[] = $slot;
-            }
-            else {
-                if ($slot->category == 'Subject') $subjectes[$keyslot] = $slot;
-                else if ($slot->grade == '1') $mand1level[$keyslot] = $slot;
-                else $opts[$keyslot] = $slot;
-            }
-        }
-        
         $this->calculateVirtualOrder();
         $this->disambiguateSlotsNew("ADV");
-        
-        // Primer els obligatoris de 2on nivell
-        // $this->disambiguateSlots($mand2level, "ADV");
-        // Després els obligatoris del 1er nivell
-        // $this->disambiguateSlots($mand1level, "ADV");
-        // Després els de subjecte
-        // $this->disambiguateSlots($subjectes, "ADV");
-        // Finalment els optatius
-        // $this->disambiguateSlots($opts, "ADV");
                 
         // un cop desambiguats tots els slots, veiem si alguna paraula aniria millor com a NC ADV
         // en comptes de com a opt.
-        // Per cada slot de lloc mirem té advs que puguin fer de complement (ex: darrere, sota...)
-        foreach ($slotsDeLloc as $keyslotopt => $slotopt) {
-            // Només si l'slot és full i no té un altre complement assignat, que aleshores no el podem eliminar
-            if ($slotopt->full && !$slotopt->CAdvassigned) {
-                                
-                $indexmillor = -1;
-                $bestdistance = 1000;
-                $orderwordfillslot = $slotopt->paraulafinal->inputorder;
+        for ($i=0; $i<$numAdverbs; $i++) {
+            
+            $indexmillor = -1;
+            $bestdistance = 1000;
+            $bestpoints = 1000;
+           
+            $word = $arrayadverbs[$i];
+            // si la paraula està en un slot (no de temps), mirem si aquest slot és opt i el comparem amb els
+            // slots als que l'adv pot fer de complement, si no, compararem només els slots als 
+            // que pot der de complement entre ells
+            if ($word->used && !$word->isClass("temps")) {
+                $keyslotaux = $word->slotfinal;
                 
-                // busquem quin dels advs que podien fer de complement és el millor
-                // tots són perfect fill, sinó no haurien entrat, així que decideix la distància amb la paraula
-                // que complementen
-                // de totes maneres, només poden ser advs que no facin fill a cap slot obligatori
-                // és a dir, fan fill a un slot optatiu o no fan fill a cap slot
-                foreach ($slotopt->cmpAdvs as $keyslotaux => $slotaux) {
-                    
-                    // $slotaux = $slotopt->cmpAdvs[$i];
-                    
-                    $wordprov = $slotaux->paraulafinal; 
-                                        
-                    if ($wordprov->slotfinal == null || 
-                            !isset($this->slotarray[$wordprov->slotfinal]) || $this->slotarray[$wordprov->slotfinal]->grade == "opt") {
-                        
-                        // si la paraula no ha estat ja assignada a un altre complement
-                        if (!$slotaux->paraulafinal->assignadaAComplement) {
-                            
-                            $distance = $orderwordfillslot - $slotaux->paraulafinal->inputorder;
-                    
-                            if (abs($distance) < abs($bestdistance)) {
-                                $bestdistance = $distance;
-                                $indexmillor = $keyslotaux;
-                            }
-                            else if (abs($distance) == abs($bestdistance)) {
-                                // en cas d'empat ens quedem amb la positiva, que vol dir un adverbi de lloc que vagi abans del nom
-                                // al que complementa
-                                if ($distance > $bestdistance) {
-                                    $bestdistance = $distance;
-                                    $indexmillor = $keyslotaux;
-                                }
-                            }
-                        }
-                    }                        
-                }
-                
-                // si hem trobat el millor slot fem la substitució
-                if ($indexmillor != -1) {
-                    
-                    $wordaux = $slotopt->cmpAdvs[$indexmillor]->paraulafinal;
-                    // si l'adverbi que hem seleccionat feia fill a un altre slot (optatiu, com hem comprovat abans)
-                    // que no fos ja de complement
-                    if ($wordaux->slotfinal != null && !strpos($wordaux->slotfinal, "ADV")) {
-                        
-                        $keyslotfinal = $wordaux->slotfinal;
-                        $this->slotarray[$keyslotfinal]->full = false;
-                        $this->slotarray[$keyslotfinal]->paraulafinal = null;
-                        $this->slotarray[$keyslotfinal]->puntsfinal = 7;
-                        $this->slotarray[$keyslotfinal]->indexclassfinalword = 0;
-                    }
-                    
-                    $wordaux->slotfinal = $indexmillor;
-                    if (!$wordaux->used) $usedAdverbs[] = $wordaux;
-                    $wordaux->used = true;
-                    $wordaux->assignadaAComplement = true;
-                    
-                    $this->slotarray[$keyslotopt]->CAdvassigned = true;
-                    $this->slotarray[$keyslotopt]->CAdvassignedkey = $indexmillor;
-
-                    // no cal que l'esborrem de les altres cues de complements xq només acceptàvem paraules que no estessin
-                    // ja assignades a un altre complement
-                   
+                $slotaux = $this->slotarray[$keyslotaux];
+                if ($slotaux->grade == "opt") {
+                    $bestdistance = 0;
+                    $bestpoints = $slotaux->puntsfinal;
                 }
             }
             
-        } // Fi de per cada slot optatiu mirar si la paraula que el fit fa millor de NC
-        
+            for ($j=0; $j<count($word->slotstemps); $j++) {
+                $aux = explode(" ADV", $word->slotstemps[$j]);
+
+                $keyslotnoun = $aux[0];
+                $slotnoun = $this->slotarray[$keyslotnoun];
+                
+                // si no té ja un adverbi assignat
+                if (!$slotnoun->CAdvassigned) {
+                    
+                    $slotadv = $slotnoun->cmpAdvs[$word->slotstemps[$j]];
+                    $distance = $slotnoun->paraulafinal->inputorder - $word->inputorder;
+                    $points = $slotadv->puntsfinal + abs($distance);
+                    
+                    if ($points < $bestpoints) {
+                        $bestdistance = $distance;
+                        $bestpoints = $points;
+                        $indexmillor = $word->slotstemps[$j];
+                    }
+                    else if ($points == $bestpoints) {
+                        // en cas d'empat ens quedem amb la que tenia distància positiva, 
+                        // que vol dir un adverbi de lloc que vagi abans del nom al que complementa
+                        if ($distance > $bestdistance) {
+                            $bestdistance = $distance;
+                            $bestpoints = $points;
+                            $indexmillor = $word->slotstemps[$j];
+                        }
+                    }
+                }
+            }
+            
+            // si hem trobat un slot millor fem la substitució
+            if ($indexmillor != -1) {
+                
+                // si l'adverbi que hem seleccionat feia fill a un altre slot (optatiu, com hem comprovat abans)
+                // que no fos ja de complement el desassignem a l'slot que feia fill
+                if ($word->slotfinal != null && !strpos($word->slotfinal, "ADV")) {
+
+                    $keyslotfinal = $word->slotfinal;
+                    $this->slotarray[$keyslotfinal]->full = false;
+                    $this->slotarray[$keyslotfinal]->paraulafinal = null;
+                    $this->slotarray[$keyslotfinal]->puntsfinal = 7;
+                    $this->slotarray[$keyslotfinal]->indexclassfinalword = 0;
+                }
+                
+                $word->slotfinal = $indexmillor;
+                if (!$word->used) $usedAdverbs[] = $word;
+                $word->used = true;
+                $word->assignadaAComplement = true;
+                
+                $aux2 = explode(" ADV", $indexmillor);
+                $keyslotnoun = $aux2[0];                
+                
+                $this->slotarray[$keyslotnoun]->CAdvassigned = true;
+                $this->slotarray[$keyslotnoun]->CAdvassignedkey = $indexmillor;
+                // treiem la preposició que anava davant de l'slot, si n'hi havia
+                $this->slotarray[$keyslotnoun]->prep = null;
+
+                // no cal que l'esborrem de les altres cues de complements xq només acceptàvem paraules que no estessin
+                // ja assignades a un altre complement
+                
+            }
+            
+        } // fi for per cada adverbi
+                
     }
     
     

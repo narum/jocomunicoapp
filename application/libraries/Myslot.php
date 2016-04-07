@@ -182,6 +182,7 @@ class Myslot {
         $matchscore = 1000;
         $matchindexclass = -1;
         $output = 0;
+        $isadvlloc = false;
         
         for ($i=0; $i<$numclasses; $i++) {
                                                 
@@ -197,6 +198,7 @@ class Myslot {
                 }
                 
             }
+            if ($word->classes[$i] == "lloc") $isadvlloc = true;
         }
                 
         // Fins aquí hem vist si la paraula podia anar a un slot
@@ -205,29 +207,39 @@ class Myslot {
             $this->fillSlotTemp($word, $matchscore, $matchindexclass, $keyslot);
             $output = 1;
         }
-        // Pels slots de lloc, només poden anar-hi els de perfect fill per slot de lloc
-        else if ($matchscore == 0 && ($this->type == "lloc")) {
+        // Pels tots els slots plens amb noms, mirem com de bé fa de CAdv l'adverbi de lloc
+        if ($this->full && $isadvlloc) {
             // només poden anar els adverbis com a complement del nom que està omplint l'slot
             // per tant l'slot ha d'estar ple
-            if ($this->full) {
                 $numcomplements = count($this->cmpAdvs);
                 
-                $newslot = new Myslot();
-                $word->slotstemps[] = $keyslot." ADV ".$numcomplements; // per dir que està de compl. de nom
-                $newslot->category = $this->category." ADV";
-                $newslot->grade = "opt";
-                $newslot->prep = "de";
-                $newslot->full = true;
-                $newslot->paraulafinal = $word;
-                $newslot->level = $this->level + 1;
-                $newslot->parent = $keyslot;
-                $newslot->puntsfinal = $matchscore; // Són els punts del fit amb l'slot de lloc
-                                            // deixarien un slot opt buit
-                $newslot->indexclassfinalword = 0;
+                $noun = $this->paraulafinal;
+                $matchscore = 1000;
+                
+                // busquem com de bé fa fit l'adverbi de lloc a la classe del nom
+                for ($j=0; $j<count($noun->classes); $j++) {
+                    $nounclassindex = $matching->nounsFitKeys[$noun->classes[$j]];
+                    $matchscore = $matching->advLocNC[0][$nounclassindex];
+                }
+                
+                // si no fa un mal fit, l'afegim al llistat de complements temporals
+                if ($matchscore < 5) {
+                    $newslot = new Myslot();
+                    $word->slotstemps[] = $keyslot." ADV ".$numcomplements; // per dir que està de compl. de nom
+                    $newslot->category = $this->category." ADV";
+                    $newslot->grade = "opt";
+                    $newslot->prep = "de";
+                    $newslot->full = true;
+                    $newslot->paraulafinal = $word;
+                    $newslot->level = $this->level + 1;
+                    $newslot->parent = $keyslot;
+                    $newslot->puntsfinal = $matchscore; // Són els punts del fit amb l'slot de lloc
+                                                // deixarien un slot opt buit
+                    $newslot->indexclassfinalword = 0;
 
-                $this->cmpAdvs[$keyslot." ADV ".$numcomplements] = $newslot;
-                $output = 1;
-            }
+                    $this->cmpAdvs[$keyslot." ADV ".$numcomplements] = $newslot;
+                    $output = 1;
+                }
         }
                         
         return $output;

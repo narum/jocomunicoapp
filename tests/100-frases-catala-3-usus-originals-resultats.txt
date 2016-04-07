@@ -49,9 +49,9 @@ Vindré tard.
 No vull més verdura.
 No vull més verdura.
 No vull més verdura.
-quant croquetes tu voler 
-quant croquetes voler 
-quant croquetes tu voler 
+Quantes croquetes vols?
+Quantes croquetes vols?
+Quantes croquetes vols?
 Tinc fred.
 Tinc fred.
 Tinc fred.
@@ -274,9 +274,9 @@ La meva amiga està trista.
 He aparcat el cotxe a la plaça.
 He aparcat el cotxe a la plaça.
 He aparcat el cotxe a la plaça.
-és cent euros.
 Cent euros.
-és cent euros.
+Cent euros.
+Cent euros.
 La meva germana descansa a sobre el llit.
 La meva germana descansa a sobre el llit.
 La meva germana descansa a sobre el llit.
