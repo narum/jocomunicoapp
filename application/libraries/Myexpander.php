@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
-use Stichoza\GoogleTranslate\TranslateClient;
+// use Stichoza\GoogleTranslate\TranslateClient;
 
 class Myexpander {
     
@@ -296,17 +296,17 @@ class Myexpander {
             
             // si l'idioma d'expansió no podia expandir i fa servir el castellà per defecte, traduïm la frase
             // amb el Google Translate
-            if ($CI->session->userdata('explangcannotexpand') == '1') {
-                
-                try {
-                    $tr = new TranslateClient($CI->session->userdata('ulangabbr'), $CI->session->userdata('ulangoriginalabbr'));
-                    $this->info['frasefinal'] = $tr->translate($this->info['frasefinal']);
-                } catch (Exception $exc) {
-                    $this->errormessage[$bestpatternindex] = "Error. Connection error. The sentence cannot be translated.";
-                    $this->error[$bestpatternindex] = true;
-                    $this->errorcode[$bestpatternindex] = 8;
-                }
-            }
+//            if ($CI->session->userdata('explangcannotexpand') == '1') {
+//                
+//                try {
+//                    $tr = new TranslateClient($CI->session->userdata('ulangabbr'), $CI->session->userdata('ulangoriginalabbr'));
+//                    $this->info['frasefinal'] = $tr->translate($this->info['frasefinal']);
+//                } catch (Exception $exc) {
+//                    $this->errormessage[$bestpatternindex] = "Error. Connection error. The sentence cannot be translated.";
+//                    $this->error[$bestpatternindex] = true;
+//                    $this->errorcode[$bestpatternindex] = 8;
+//                }
+//            }
 
             // Guardar parse tree i frase final a la base de dades
             $CI->Lexicon->guardarParseIFraseResultat($propietatsfrase['identry'], $printparsepattern, $frasefinal);
