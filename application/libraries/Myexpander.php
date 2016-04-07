@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+use Stichoza\GoogleTranslate\TranslateClient;
 
 class Myexpander {
     
@@ -292,6 +293,20 @@ class Myexpander {
             // si hi ha hagut algun error o s'ha desactivat el sistema d'expansió, aleshores es llegeix sense expandir la frase
             if ($this->readwithoutexpansion) $this->info['frasefinal'] = $frasefinalnotexpanded;
             else $this->info['frasefinal'] = $frasefinal;
+            
+            // si l'idioma d'expansió no podia expandir i fa servir el castellà per defecte, traduïm la frase
+            // amb el Google Translate
+            if ($CI->session->userdata('explangcannotexpand') == '1') {
+                
+                try {
+                    $tr = new TranslateClient($CI->session->userdata('ulangabbr'), $CI->session->userdata('ulangoriginalabbr'));
+                    $this->info['frasefinal'] = $tr->translate($this->info['frasefinal']);
+                } catch (Exception $exc) {
+                    $this->errormessage[$bestpatternindex] = "Error. Connection error. The sentence cannot be translated.";
+                    $this->error[$bestpatternindex] = true;
+                    $this->errorcode[$bestpatternindex] = 8;
+                }
+            }
 
             // Guardar parse tree i frase final a la base de dades
             $CI->Lexicon->guardarParseIFraseResultat($propietatsfrase['identry'], $printparsepattern, $frasefinal);
@@ -349,7 +364,6 @@ class Myexpander {
                     else $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(0, false); // Verbless
                 }
                 else {
-                    echo "IN2";
                     // Agafem els verbless patterns
                     $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(0, false); // Verbless
                 }

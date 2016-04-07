@@ -56,19 +56,22 @@ class Lexicon extends CI_Model {
             
             $output2 = array();
             $this->db->where('ID_Language', $uexplanguage);
-            $this->db->where('canExpand', '1');
             $query2 = $this->db->get('Languages');
             
             if ($query2->num_rows() > 0) {
                 $output2 = $query2->result();
                 $ulangabbr = $output2[0]->languageabbr;
-                $this->session->set_userdata('ulangabbr', $ulangabbr);
-                $this->session->set_userdata('explangcannotexpand', '0');
-            }
-            // If the expansion language cannot expand, the Spanish expander will be used by default
-            else {
-                $this->session->set_userdata('ulangabbr', 'ES');
-                $this->session->set_userdata('explangcannotexpand', '1');
+                $this->session->set_userdata('ulangoriginalabbr', $ulangabbr);
+                
+                if ($output2[0]->canExpand == '1') {
+                    $this->session->set_userdata('ulangabbr', $ulangabbr);
+                    $this->session->set_userdata('explangcannotexpand', '0');
+                }
+                // If the expansion language cannot expand, the Spanish expander will be used by default
+                else {
+                    $this->session->set_userdata('ulangabbr', 'ES');
+                    $this->session->set_userdata('explangcannotexpand', '1');
+                }
             }
             
             $output4 = array();
