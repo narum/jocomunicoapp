@@ -288,3 +288,14 @@ html, body{
     position: absolute;
     z-index: 1;
 }
+
+.indicatorTenseSentence{
+    background: #FEE8B6;
+    height: 50%;
+    border-top-right-radius: 10px;
+}
+.indicatorTipusSentence{
+    background: #FEE8B6;
+    height: 50%;
+    border-bottom-right-radius: 10px;
+}
