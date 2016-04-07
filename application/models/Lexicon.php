@@ -931,7 +931,7 @@ class Lexicon extends CI_Model {
         }
         
         $inputids .= " / #".$tipusfrase;
-        $inputids .= " / @".$tense;
+        $inputids .= " / @".$tempsverbal;
         if ($negativa) $inputids .= " / %no";
         $inputids .= " /";
         

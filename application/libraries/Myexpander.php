@@ -337,7 +337,7 @@ class Myexpander {
                 // si hi ha un adjectiu i no hi ha noms, ni altres paraules excepte modificadors
                 // agafem el verb per defecte del primer adjectiu introduït
                 if ($thereisadj && $countnouns == 0 && !$othertypes) {
-                    $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, true); 
+                    $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, ($adjdefverb != 0)); 
                 }
                 // si hi ha algun nom i no hi ha altres paraules excepte modificadors i/o adjectius
                 // agafem el verb per defecte del primer nom introduït
@@ -345,10 +345,11 @@ class Myexpander {
                 // defecte de l'adjectiu
                 else if ($countnouns > 0 && !$othertypes) {
                     if ($noundefverb != 0) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($noundefverb, false);
-                    else if ($thereisadj) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, true);
+                    else if ($thereisadj) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, ($adjdefverb != 0));
                     else $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(0, false); // Verbless
                 }
                 else {
+                    echo "IN2";
                     // Agafem els verbless patterns
                     $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(0, false); // Verbless
                 }

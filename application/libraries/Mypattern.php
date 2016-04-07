@@ -1558,9 +1558,12 @@ class Mypattern {
             }
         } // Fi per cada slot
                 
-        // restem els punts de les paraules no fetes servir (les expressions no conten)
+        // restem els punts de les paraules no fetes servir (les expressions no conten i
+        // les preguntes tampoc (aquestes ja es tracten prèviament si no hi ha lloc per la
+        // partícula de la pregunta)
         for ($i=0; $i<count($this->paraules); $i++) {
-            if ($this->paraules[$i]->used == false && $this->paraules[$i]->tipus != "expression") {
+            if ($this->paraules[$i]->used == false && $this->paraules[$i]->tipus != "expression"
+                    && $this->paraules[$i]->tipus != "questpart") {
                 $this->puntuaciofinal -= 25;
                 $paraulanoposada = true;
             }
