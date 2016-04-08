@@ -493,15 +493,15 @@ class Myslot {
                 // si la paraula va abans del verb, el patró no era verbless i el fit no és horrible, li donem un bonus per 
                 // igualar als altres camps obligatoris en l'ordre de prioritat
                 // pel subjecte principal
-                if ($this->level == 1 && $word->beforeverb && $penalty < 5 && !$this->verbless) $punts -= 18;
+                if ($this->level == 1 && $word->beforeverb && $penalty < 5 && !$this->verbless) $punts = $punts - 17 + $penalty*4;
                 // pel secundari si n'hi ha
-                if ($this->level == 2 && $word->beforeverb2 && $penalty < 5 && !$this->verbless) $punts -= 18;
+                if ($this->level == 2 && $word->beforeverb2 && $penalty < 5 && !$this->verbless) $punts = $punts - 17 + $penalty*4;
             }
             else {
                 // igualem el grade del subjecte a slot obligatori si no era un fit terrible i no era verbless
-                if ($this->level == 1 && $penalty < 5 && !$this->verbless) $punts -= 18;
+                if ($this->level == 1 && $penalty < 5 && !$this->verbless) $punts = $punts - 18 + $penalty*4;
                 // pel secundari si n'hi ha
-                if ($this->level == 2 && $penalty < 5 && !$this->verbless) $punts -= 18;
+                if ($this->level == 2 && $penalty < 5 && !$this->verbless) $punts = $punts - 18 + $penalty*4;
             }
         }
         else if ($this->category == "Main Verb") $punts = 0;
