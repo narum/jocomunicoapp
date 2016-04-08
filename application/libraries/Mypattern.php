@@ -1005,7 +1005,7 @@ class Mypattern {
         
         $this->calculateVirtualOrder();
         $this->disambiguateSlotsNew("MOD");
-                
+                        
         // un cop desambiguats tots els slots, veiem a quin slot fan millor de complements
         // els modifs que no estan omplint ja un slot obligatori
         // PER CADA MODIF
@@ -1350,6 +1350,7 @@ class Mypattern {
         while ($slotsleft) {
             
             // DEBUG
+            // echo "Pattern id ".$this->id.": ";
             // print_r($this->virtualslotsort); echo '<br /><br />';
                                             
             $infoslot = $this->virtualslotsort[0];
