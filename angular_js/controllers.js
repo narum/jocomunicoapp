@@ -587,7 +587,7 @@ angular.module('controllers', [])
             $scope.InitScan = function ()
             {
                 // 0 custom, 1 rows, 2 columns
-                $scope.scanType = 0;
+                $scope.scanType = 2;
                 $scope.inScan = true;
                 $scope.longclick = true;
                 function myTimer() {
@@ -615,7 +615,7 @@ angular.module('controllers', [])
             // picto is -1 pred, 0 sentemce, others mainboard.
             $scope.isScanned = function (picto) {
                 //Custom scan
-                if ($scope.inScan && $scope.currentScanBlock1 != -1 && $scope.currentScanBlock1 != 0 ){
+                if ($scope.inScan && $scope.currentScanBlock1 != -1 && $scope.currentScanBlock1 != 0) {
                     if ($scope.scanType == 0 && (
                             (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 1) ||
                             (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 2 && picto.customScanBlock2 == $scope.currentScanBlock2) ||
@@ -625,11 +625,11 @@ angular.module('controllers', [])
                     // Rows first
                     else if ($scope.scanType == 1 && (
                             ($scope.currentScanBlock == 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1) ||
-                            ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && (picto.posInBoard - 1)% $scope.columns == $scope.currentScanBlock2 - 1))) {
+                            ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock2 - 1))) {
                         return true;
                     } else if ($scope.scanType == 2 && (
                             ($scope.currentScanBlock == 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1) ||
-                            ($scope.currentScanBlock == 2 && (picto.posInBoard -1) % $scope.columns == $scope.currentScanBlock1 - 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
+                            ($scope.currentScanBlock == 2 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
                         return true;
                     }
                 }
@@ -713,7 +713,7 @@ angular.module('controllers', [])
             };
             // Get the number of level 2 scan blocks
             $scope.getMaxScanBlock2 = function ()
-            {   
+            {
                 // MODIF: poner en caso de prediccion
                 //If we select the sentence view, there are just 3 cells to scan
                 if ($scope.currentScanBlock1 == 0) {
@@ -754,32 +754,40 @@ angular.module('controllers', [])
                     else if ($scope.currentScanBlock === 2 && $scope.scanType === 0) {
                         // CurrentScanBlock will be null when we are over all the cell that have no scan block
                         if ($scope.currentScanBlock2 !== null) {
-                            // If we are not over the mentioned scanblock pass to the next (cyclic... almost)
+                            // If we are not over the mentioned scanblock pass to the next
                             $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                            // If we pass the last scan scan block instead of go to the first one, go to the null block (those cells which are no assigned to a scan block)
+                            // If we pass the last scan block...
                             if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                                $scope.currentScanBlock2 = null;
+                                // We are scannig the prediction bar or the sentece bar so start again
+                                if ($scope.currentScanBlock1 != 0 || $scope.currentScanBlock1 != -1 ) {
+                                    $scope.InitScan();
+                                    //We have to go to the cells that have no scan block
+                                } else {
+                                    $scope.currentScanBlock2 = null;
+                                }
+                                
+
                             }
-                            // If we are over this strange block, int scan again
+                        // If we are over this strange block, int scan again
                         } else {
                             $scope.InitScan();
                         }
 
                     } // If we are not in custom scan there are no null group so pass to the next(cyclic) 
-                    else if ($scope.currentScanBlock === 2 && $scope.scanType === 1) {
+                    else if ($scope.currentScanBlock === 2 && ($scope.scanType === 1 || $scope.scanType === 2)) {
                         $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
                         // All cells were scanned. Start again
                         if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
                             $scope.InitScan();
                             return;
                         }
-                        
-                    } else if ($scope.currentScanBlock === 2 && $scope.scanType === 2) {
-                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                        // All cells were scanned. Start again
-                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                            $scope.InitScan();
-                        }
+
+//                    } else if ($scope.currentScanBlock === 2 && $scope.scanType === 2) {
+//                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
+//                        // All cells were scanned. Start again
+//                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
+//                            $scope.InitScan();
+//                        }
                     }// If we are in the third scan pass one by one over the array (cyclic)
                     else if ($scope.currentScanBlock === 3) {
                         $scope.indexScannedCells = $scope.indexScannedCells + 1;

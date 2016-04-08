@@ -1,7 +1,8 @@
 <div ng-if="inScan && currentScanBlock == 1 && currentScanBlock1 == 0" class="col-xs-12 scaneoSent" style="height:{{sentenceViewHeight}}%"></div>
-<div class="col-xs-1" style="padding-right: 0.6%">
+<div class="col-xs-1"  ng-click="generate()">
     <div ng-if="inScan && currentScanBlock == 2 && currentScanBlock1 == 0 && currentScanBlock2 == 1" class="scaneo" style="margin: 0px;"></div>
-    <img class="imgRounded" width="100%" height="100%" src="{{baseurl}}img/srcWeb/Menu/llegir.jpg" ng-click="generate()"/>
+    <img class="imgRounded backgroundLlegir" width="100%" height="100%" src="{{baseurl}}img/srcWeb/Menu/llegir_fons.png"/>
+    <img class="imgResponsive icon" src="{{baseurl}}img/srcWeb/Menu/llegir_icon.png"/>
 
 </div>
 
@@ -20,23 +21,23 @@
         </div>
         <div class="col-xs-1">
             <div class="col-xs-12  indicatorTenseSentence">
-                <img ng-if='tense != "defecte"' class="imgRounded" width="100%" height="100%" src="{{baseurl}}img/indicadors/{{tense}}.png"/>
+                <img ng-if='tense != "defecte"' class="imgRounded imgResponsive" width="100%" height="100%" src="{{baseurl}}img/indicadors/{{tense}}.png"/>
             </div>
             <div class="col-xs-12 indicatorTipusSentence">
-                <img ng-if='tipusfrase != "defecte"' class="imgRounded" width="100%" height="100%" src="{{baseurl}}img/indicadors/{{tipusfrase}}.png"/>
+                <img ng-if='tipusfrase != "defecte"' class="imgRounded imgResponsive" width="100%" height="100%" src="{{baseurl}}img/indicadors/{{tipusfrase}}.png"/>
             </div>
         </div>
     </div>
 
 </div>
 
-<div class="col-xs-2" style="padding-left: 0.6%">
-    <div class="col-xs-6">
+    <div class="col-xs-1"  ng-click="deleteLast()">
         <div ng-if="inScan && currentScanBlock == 2 && currentScanBlock1 == 0 && currentScanBlock2 == 2" class="scaneo" style="margin: 0px;"></div>
-        <img class="imgRounded" width="96%" height="100%" src="{{baseurl}}img/srcWeb/Menu/borrar ultim.jpg" ng-click="deleteLast()"/>
+        <img class="imgRounded backgroundDelete" width="96%" height="100%" src="{{baseurl}}img/srcWeb/Menu/borrar_ultim_fons.png"/>
+        <img class="imgResponsive icon" src="{{baseurl}}img/srcWeb/Menu/borrar_ultim_icon.png" style="padding:0%"/>
     </div>
-    <div class="col-xs-6">
+    <div class="col-xs-1" ng-click="deleteAll()">
         <div ng-if="inScan && currentScanBlock == 2 && currentScanBlock1 == 0 && currentScanBlock2 == 3" class="scaneo" style="margin: 0px;"></div>
-        <img class="imgRounded" width="96%" height="100%" src="{{baseurl}}img/srcWeb/Menu/borrar.jpg" ng-click="deleteAll()"/>
+        <img class="imgRounded" width="96%" height="100%" src="{{baseurl}}img/srcWeb/Menu/borrar_fons.png" />
+        <img class="imgResponsive icon" src="{{baseurl}}img/srcWeb/Menu/borrar_icon.png"/>
     </div>
-</div>

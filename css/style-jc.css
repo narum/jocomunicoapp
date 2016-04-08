@@ -1,9 +1,6 @@
 @charset "UTF-8";
 /* CSS Document */
 /*MODIF: mi idea era poner aqui lo comun*/
-html, body{
-    font-size: 1.2vw;
-} 
 .row{ 
     margin-left: 0px;
     margin-right: 0px;
@@ -52,10 +49,10 @@ html, body{
 
 @media (max-width:1000px){
     .col-xs-12{
-        /*font-size: 12.5px;*/
+        font-size: 11.5px;
     }
     .col-xs-6{
-        /*font-size: 12px;*/
+        font-size: 12px;
     }
     input[type="radio"]{
         margin: 0px;
@@ -298,4 +295,16 @@ html, body{
     background: #FEE8B6;
     height: 50%;
     border-bottom-right-radius: 10px;
+}
+.backgroundLlegir{
+    padding-right: 6%;
+}
+.backgroundDelete{
+    padding-left: 6%;
+}
+.icon{
+    position: absolute;
+    max-height: 85%;
+    max-width: 85%;
+    padding:10%
 }
