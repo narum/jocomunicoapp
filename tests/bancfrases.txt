@@ -1,1 +1,300 @@
-{444} / {86} / {602} / {687} / #defecte / @futur /
+{55} / {687} / #defecte / @perfet /
+{444} / {55} / {687} / #defecte / @perfet /
+{444} / {55} / {687} / #defecte / @perfet /
+{445} / {100} / {634} / #defecte / @defecte /
+{445} / {100} / {634} / #defecte / @defecte /
+{445} / {100} / {634} / #defecte / @defecte /
+{703} / #defecte / @defecte /
+{703} / #defecte / @defecte /
+{703} / #defecte / @defecte /
+{746} / {86} / {691} / {287} / #defecte / @defecte /
+{746} / {86} / {691} / {287} / #pregunta / @defecte /
+{746} / {86} / {691} / {287} / #defecte / @defecte /
+{91} / {245} / #defecte / @defecte / %no /
+{444} / {91} / {245} / #defecte / @defecte / %no /
+{91} / {245} / #defecte / @defecte / %no /
+{2} / {551} / #defecte / @defecte /
+{444} / {2} / {551} / #defecte / @defecte /
+{444} / {2} / {551} / #defecte / @defecte /
+{31} / #desig / @defecte /
+{31} / #desig / @defecte /
+{31} / #desig / @defecte /
+{149} / {86} / {687} / {571} / #defecte / @defecte /
+{149} / {86} / {687} / {571} / #defecte / @defecte /
+{149} / {86} / {687} / {571} / #defecte / @defecte /
+{60} / {409} / {561} / #defecte / @futur /
+{561} / {444} / {60} / {409} / #defecte / @futur /
+{561} / {444} / {60} / {409} / #defecte / @futur /
+{30} / {356} / {730} / #ordre / @defecte /
+{466} / {30} / {356} / {730} / #ordre / @defecte /
+{466} / {30} / {356} / {444} / {730} / #ordre / @defecte /
+{454} / {86} / {309} / #defecte / @defecte / %no /
+{454} / {86} / {309} / #defecte / @defecte / %no /
+{454} / {86} / {309} / #defecte / @defecte / %no /
+{171} / #desig / @defecte /
+{444} / {99} / {171} / #defecte / @defecte /
+{171} / #desig / @defecte /
+{7} / {317} / #desig / @defecte /
+{444} / {7} / {317} / #desig / @defecte /
+{444} / {7} / {317} / #desig / @defecte /
+{326} / {86} / {687} / {637} / #defecte / @defecte /
+{326} / {86} / {687} / {637} / #defecte / @defecte /
+{326} / {86} / {687} / {637} / #defecte / @defecte /
+{275} / {86} / {687} / {628} / #defecte / @defecte /
+{275} / {86} / {687} / {628} / #defecte / @defecte /
+{275} / {86} / {687} / {628} / #defecte / @defecte /
+{96} / {685} / #defecte / @futur /
+{96} / {685} / #defecte / @futur /
+{444} / {96} / {685} / #defecte / @defecte /
+{697} / {184} / #desig / @defecte / %no /
+{99} / {697} / {184} / #defecte / @defecte / %no /
+{444} / {99} / {697} / {184} / #defecte / @defecte / %no /
+{749} / {128} / {466} / {99} / #defecte / @defecte /
+{749} / {128} / {99} / #pregunta / @defecte /
+{749} / {128} / {466} / {99} / #pregunta / @defecte /
+{91} / {471} / #defecte / @defecte /
+{91} / {471} / #defecte / @defecte /
+{444} / {91} / {471} / #defecte / @defecte /
+{466} / {99} / {447} / {7} / {301} / #pregunta / @defecte /
+{99} / {447} / {7} / {301} / #pregunta / @defecte /
+{466} / {99} / {447} / {7} / {301} / #pregunta / @defecte /
+{466} / {37} / {444} / {296} / #ordre / @defecte /
+{466} / {37} / {444} / {296} / #ordre / @defecte /
+{466} / {37} / {444} / {296} / #ordre / @defecte /
+{7} / {297} / #defecte / @defecte /
+{7} / {297} / #defecte / @defecte /
+{444} / {7} / {297} / #defecte / @defecte /
+{744} / {7} / {466} / #defecte / @defecte /
+{744} / {7} / #pregunta / @defecte /
+{744} / {466} / {7} / #pregunta / @defecte /
+{733} / #pregunta / @defecte /
+{733} / #pregunta / @defecte /
+{733} / #pregunta / @defecte /
+{679} / {21} / {493} / {605} / #defecte / @defecte /
+{679} / {21} / {493} / {605} / #defecte / @perifrastic /
+{679} / {444} / {21} / {493} / {605} / #defecte / @defecte /
+{194} / {687} / {596} / {6} / {671} / {258} / #defecte / @perfet /
+{194} / {687} / {596} / {6} / {671} / {258} / #defecte / @perfet /
+{194} / {687} / {596} / {6} / {671} / {258} / #defecte / @perfet /
+{86} / {370} / #defecte / @defecte /
+{86} / {370} / #defecte / @defecte /
+{86} / {642} / {370} / #defecte / @defecte /
+{96} / #ordre / @defecte / %no /
+{96} / #ordre / @defecte / %no /
+{466} / {696} / {96} / #ordre / @defecte /
+{687} / {469} / #defecte / @defecte /
+{91} / {687} / {469} / #defecte / @defecte /
+{444} / {91} / {687} / {469} / #defecte / @defecte /
+{96} / #ordre / @defecte /
+{96} / #ordre / @defecte /
+{466} / {96} / #ordre / @defecte /
+{748} / {448} / {96} / {301} / #pregunta / @defecte /
+{748} /  {96} / {448} / {301} / #defecte / @futur /
+{748} / {448} / {96} / {301} / #pregunta / @defecte /
+{447} / {96} / {683} / #defecte / @futur /
+{683} / {447} / {96} / #defecte / @defecte /
+{447} / {96} / {683} / #defecte / @defecte /
+{55} / {142} / {186} / #defecte / @defecte /
+{55} / {142} / {186} / #defecte / @defecte /
+{444} / {55} / {642} / {142} / {186} / #defecte / @defecte /
+{444} / {2} / {54} / {364} / $pl / {469} / #defecte / @defecte /
+{444} / {2} / {444} / {54} / {364} / $pl / {469} / #defecte / @defecte /
+{444} / {2} / {54} / {364} / $pl / {469} / #defecte / @defecte /
+{447} / {7} / {331} / #defecte / @futur /
+{447} / {7} / {331} / #defecte / @futur /
+{447} / {7} / {331} / #defecte / @futur /
+{682} / {1} / {474} / #ordre / @defecte / %no /
+{682} / {1} / {474} / #ordre / @defecte / %no /
+{682} / {466} / {696} / {1} / {474} / #ordre / @defecte /
+{538} / {447} / {11} / {328} / #defecte / @futur /
+{447} / {11} / {328} / {538} / #defecte / @futur /
+{447} / {11} / {328} / {538} / #defecte / @futur /
+{679} / {7} / {453} / #defecte / @defecte /
+{679} / {7} / {453} / #defecte / @defecte /
+{679} / {444} / {7} / {453} / #defecte / @defecte /
+{442} / {486} / {614} / {86} / {578} / #defecte / @defecte /
+{442} / {486} / {614} / {86} / {578} / #defecte / @defecte /
+{442} / {486} / {614} / {86} / {578} / #defecte / @defecte /
+{444} / {2} / {163} / {171} / #defecte / @defecte / %no /
+{2} / {163} / {171} / #defecte / @defecte / %no /
+{444} / {2} / {163} / {171} / #defecte / @defecte / %no /
+{534} / {447} / {7} / {15} / #defecte / @futur /
+{534} / {447} / {7} / {15} / #defecte / @futur /
+{534} / {447} / {7} / {15} / #defecte / @futur /
+{447} / {13} / {359} / {146} / {625} / #defecte / @perfet /
+{447} / {13} / {359} / {146} / {625} / #defecte / @perfet /
+{447} / {13} / {359} / {146} / {625} / #defecte / @perfet /
+{739} / {44} / {451} / #pregunta / @defecte /
+{739} / {44} / {451} / #pregunta / @defecte /
+{739} / {44} / {451} / #defecte / @defecte /
+{443} / $fem / {86} / {687} / {623} / #defecte / @defecte /
+{443} / $fem / {86} / {687} / {623} / #defecte / @defecte /
+{443} / $fem / {86} / {623} / {687} / #defecte / @defecte /
+{444} / {99} / {103} / {288} / #defecte / @defecte /
+{103} / {288} / #desig / @present /
+{103} / {288} / #desig / @present /
+{497} / {86} / {593} / #defecte / @defecte /
+{497} / {86} / {593} / #defecte / @defecte /
+{497} / {86} / {593} / #defecte / @defecte /
+{444} / {99} / {144} / {730} / #defecte / @defecte /
+{144} / {730} / #defecte / @defecte /
+{144} / {730} / #resposta / @defecte /
+{445} / {67} / {687} / #pregunta / @defecte /
+{67} / {687} / {445} / #pregunta / @defecte /
+{445} / {67} / {687} / #pregunta / @defecte /
+{441} / {691} / {54} / {686} / #defecte / @defecte /
+{691} / {441} / {54} / {686} / #defecte / @defecte /
+{691} / {441} / {54} / {686} / #defecte / @defecte /
+{444} / {103} / {661} / #defecte / @perfet /
+{103} / {661} / #defecte / @perfet /
+{103} / {661} / #defecte / @perfet /
+{716} / #defecte / @defecte /
+{716} / #defecte / @defecte /
+{716} / #defecte / @defecte /
+{717} / #exclamacio / @defecte /
+{717} / #exclamacio / @defecte /
+{717} / #exclamacio / @defecte /
+{560} / {86} / {619} / $i / {621} / {561} / #defecte / @defecte /
+{560} / {86} / {619} / $i / {621} / {561} / #defecte / @defecte /
+{560} / {86} / {619} / $i / {621} / {561} / #defecte / @defecte /
+{444} / {99} / {359} / {110} / {730} / #defecte / @defecte /
+{359} / {110} / {730} / #defecte / @defecte /
+{359} / {110} / {730} / #resposta / @defecte /
+{444} / {100} / {666} / #defecte / @defecte /
+{100} / {666} / #defecte / @defecte /
+{100} / {666} / #defecte / @defecte /
+{714} / #exclamacio / @defecte /
+{714} / #exclamacio / @defecte /
+{714} / #exclamacio / @defecte /
+{448} / {91} / {181} / $pl / #pregunta / @defecte /
+{448} / {91} / {181} / $pl / #pregunta / @defecte /
+{448} / {91} / {181} / $pl / #pregunta / @defecte /
+{3} / {444} / {9} / {308} / $pl / #ordre / @defecte /
+{466} / {3} / {444} / {9} / {308} / $pl / {730} / #defecte / @defecte /
+{3} / {444} / {9} / {308} / $pl / #ordre / @defecte /
+{447} / {100} / {687} / {627} / #defecte / @perifrastic /
+{447} / {100} / {687} / {627} / #defecte / @perifrastic /
+{447} / {100} / {687} / {627} / #defecte / @perifrastic /
+{37} / {466} / {642} / {550} / #ordre / @defecte /
+{37} / {642} / {550} / #ordre / @defecte /
+{37} / {642} / {550} / #ordre / @defecte /
+{444} / {99} / {466} / {12} / #defecte / @defecte / %no /
+{99} / {466} / {12} / #defecte / @defecte / %no /
+{444} / {99} / {466} / {12} / #defecte / @defecte / %no /
+{508} / {7} / {687} / {588} / #defecte / @imperfecte /
+{508} / {7} / {687} / {588} / #defecte / @imperfecte /
+{508} / {7} / {687} / {588} / #defecte / @imperfecte /
+{568} / {86} / {642} / {473} / #defecte / @futur /
+{568} / {86} / {473} / #defecte / @futur /
+{568} / {86} / {473} / #defecte / @futur /
+{444} / {91} / {468} / {418} / #defecte / @defecte /
+{91} / {468} / {418} / #defecte / @defecte /
+{91} / {468} / {418} / #defecte / @defecte /
+{514} / #defecte / @defecte /
+{514} / #resposta / @defecte /
+{514} / #defecte / @defecte /
+{731} / #defecte / @defecte /
+{731} / #defecte / @defecte /
+{39} / #defecte / @defecte /
+{436} / $i / {436} / $fem / {44} / {163} / $pl / #defecte / @defecte /
+{436} / $i / {436} / $fem / {44} / {163} / $pl / #defecte / @defecte /
+{436} / $i / {436} / $fem / {44} / {163} / $pl / #defecte / @defecte /
+{16} / #defecte / @defecte /
+{444} / {16} / #defecte / @perfet /
+{444} / {16} / #defecte / @defecte /
+{466} / {86} / {687} / {697} / {602} / #defecte / @defecte /
+{466} / {86} / {687} / {697} / {602} / #defecte / @defecte /
+{466} / {86} / {687} / {697} / {602} / #defecte / @defecte /
+{734} / #defecte / @defecte /
+{734} / #defecte / @defecte /
+{734} / #defecte / @defecte /
+{741} / {43} / {444} / #pregunta / @defecte /
+{741} / {444} / {43} / #pregunta / @defecte /
+{741} / {444} / {43} / #enunciativa / @defecte /
+{447} / {86} / {312} / {531} / #defecte / @futur /
+{447} / {86} / {312} / {531} / #defecte / @futur /
+{531} / {447} / {86} / {312} / #defecte / @futur /
+{743} / {84} / {447} / #pregunta / @futur /
+{743} / {447} / {84} / #pregunta / @futur /
+{743} / {447} / {84} / #defecte / @futur /
+{451} / {100} / {462} / #defecte / @defecte /
+{451} / {100} / {462} / #defecte / @defecte /
+{451} / {100} / {462} / #defecte / @defecte /
+{696} / #resposta / @defecte /
+{696} / #defecte / @defecte /
+{696} / #defecte / @defecte /
+{725} / #defecte / @defecte /
+{725} / #defecte / @defecte /
+{725} / #defecte / @defecte /
+{466} / {17} / {244} / {270} / {612} / #ordre / @defecte /
+{466} / {17} / {244} / {270} / {612} / #ordre / @defecte /
+{17} / {244} / {270} / {612} / #ordre / @defecte /
+{719} / #defecte / @defecte /
+{719} / #defecte / @defecte /
+{719} / #defecte / @defecte /
+{215} / {691} / {86} / {687} / {639} / #defecte / @defecte /
+{691} / {215} / {86} / {687} / {639} / #defecte / @defecte /
+{691} / {215} / {86} / {687} / {639} / #defecte / @defecte /
+{722} / #defecte / @defecte /
+{722} / #defecte / @defecte /
+{722} / #defecte / @defecte /
+{444} / {37} / {466} / {683} / {96} / #defecte / @present /
+{444} / {37} / {466} / {96} / {683} / #defecte / @defecte /
+{444} / {37} / {466} / {96} / {683} / #defecte / @present /
+{466} / {6} / #ordre / @defecte /
+{6} / #ordre / @defecte /
+{6} / #ordre / @defecte /
+{449} / {19} / {693} / {105} / {323} / #defecte / @defecte /
+{449} / {19} / {693} / {105} / {323} / #defecte / @defecte /
+{449} / {19} / {693} / {105} / {323} / #defecte / @defecte /
+{21} / {568} / {313} / #ordre / @defecte /
+{21} / {568} / {313} / #ordre / @defecte /
+{21} / {568} / {313} / #ordre / @defecte /
+{447} / {13} / {116} / {107} / #defecte / @perifrastic /
+{447} / {13} / {116} / {107} / #defecte / @perifrastic /
+{447} / {13} / {116} / {107} / #defecte / @perifrastic /
+{646} / {464} / {100} / {632} / {673} / {507} / #defecte / @imperfecte /
+{646} / {464} / {100} / {632} / {673} / {507} / #defecte / @imperfecte /
+{646} / {464} / {100} / {632} / {673} / {507} / #defecte / @imperfecte /
+{691} / {215} / $fem / {60} / {307} / #defecte / @defecte /
+{691} / $fem / {215} / $fem / {60} / {307} / #defecte / @present /
+{215} / $fem / {691} / {60} / {307} / #defecte / @defecte /
+{718} / #defecte / @defecte /
+{718} / #resposta / @defecte /
+{718} / #defecte / @defecte /
+{701} / #defecte / @defecte /
+{701} / #defecte / @defecte /
+{701} / #defecte / @defecte /
+{53} / {290} / #permis / @defecte /
+{53} / {290} / #permis / @defecte /
+{444} / {53} / {290} / #permis / @defecte /
+{691} / {430} / $fem / {100} / {636} / #defecte / @defecte /
+{691} / {430} / $fem / {100} / {636} / #defecte / @defecte /
+{691} / {430} / $fem / {100} / {636} / #defecte / @defecte /
+{444} / {8} / {503} / {327} / #defecte / @perfet /
+{8} / {503} / {327} / #defecte / @perfet /
+{8} / {503} / {327} / #defecte / @perfet /
+{656} / {353} / #defecte / @defecte /
+{656} / {353} / #resposta / @defecte /
+{656} / {353} / #defecte / @defecte /
+{691} / {441} / {27} / {676} / {254} / #defecte / @defecte /
+{691} / {441} / {27} / {676} / {254} / #defecte / @defecte /
+{691} / {441} / {27} / {676} / {254} / #defecte / @defecte /
+{43} / {444} / {347} / #ordre / @defecte /
+{43} / {444} / {347} / #ordre / @defecte /
+{43} / {444} / {347} / #ordre / @defecte /
+{684} / {447} / {56} / {256} / {303} / #defecte / @futur /
+{684} / {447} / {56} / {256} / {303} / #defecte / @futur /
+{684} / {447} / {56} / {256} / {303} / #defecte / @defecte /
+{448} / {53} / {697} / {685} / #defecte / @futur /
+{448} / {53} / {697} / {685} / #defecte / @futur /
+{448} / {53} / {697} / {685} / #defecte / @futur /
+{433} / {14} / {681} / #defecte / @futur /
+{433} / {14} / {681} / #defecte / @futur /
+{433} / {14} / {681} / #defecte / @futur /
+{690} / {444} / {99} / {477} / {610} / $i / {611} / #defecte / @defecte /
+{99} / {690} / {477} / {610} / $i / {611} / #defecte / @defecte /
+{99} / {477} / {610} / $i / {611} / {690} / #defecte / @defecte /
+{707} / #defecte / @defecte /
+{707} / #defecte / @defecte /
+{707} / #defecte / @defecte /

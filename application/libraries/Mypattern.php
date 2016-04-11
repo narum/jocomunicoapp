@@ -2049,7 +2049,7 @@ class Mypattern {
         }
         
         // IMPERATIVE
-        if ($propietatsfrase['tipusfrase'] == "ordre") {
+        if ($propietatsfrase['tipusfrase'] == "ordre" && !$propietatsfrase['negativa']) {
             // afegir si us plau
             $this->exprsarray[] = "si us plau";
         }
@@ -2448,7 +2448,7 @@ class Mypattern {
         }
         
         // IMPERATIVE
-        if ($propietatsfrase['tipusfrase'] == "ordre") {
+        if ($propietatsfrase['tipusfrase'] == "ordre"  && !$propietatsfrase['negativa']) {
             // afegir por favor
             $this->exprsarray[] = "por favor";
         }
