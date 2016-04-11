@@ -185,6 +185,7 @@ class Myexpander {
                    else {
                        // només que hi hagi un patró on encaixi la partícula de pregunta, ja va bé
                        $preguntabona = true;
+                       $CI->session->set_userdata('preguntabona', true);
                        $this->errormessagetemp = null;
                        $this->errorcodetemp = null;
                        $this->errortemp = false;
@@ -196,7 +197,7 @@ class Myexpander {
                // Si el verb és pseudoimpersonal o si hi ha una pregunta, invertim les preferències
                // d'aparèxier abans i després del verb, ja que ara el subjecte va darrere del verb
                // Les variables beforeverb només s'utilitzaran al codi si l'idioma té estructura SVO (Subject-Verb-Object)
-               if ($auxpattern->pseudoimpersonal) {
+               if ($auxpattern->pseudoimpersonal || $partpreguntaposada) {
                    for ($j=0; $j<count($paraules); $j++) {
                        $auxword = &$paraules[$j];
                        $auxword->beforeverb = !$auxword->beforeverb;
@@ -247,10 +248,12 @@ class Myexpander {
                $this->errormessagetemp = null;
                $this->errorcodetemp = null;
                $this->errortemp = false;
+               
+               $CI->session->set_userdata('preguntabona', false);
                // DEBUG
                // echo $auxpattern->printPattern();
 
-            }
+            } // fi per cada pattern
 
             // escollim el pattern amb més puntuació com a resultat
             $bestpatternindex = 0;

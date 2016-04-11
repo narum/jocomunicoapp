@@ -7,9 +7,9 @@ Ell està marejat.
 Adéu.
 Adéu.
 Adéu.
-On és la meva nina?
-On és la meva nina?
-On és la meva nina?
+és la meva nina.
+és la meva nina?
+és la meva nina.
 No tinc la cadira de rodes.
 No tinc la cadira de rodes.
 No tinc la cadira de rodes.
@@ -88,9 +88,9 @@ Tinc molta por.
 Vine, si us plau.
 Vine, si us plau.
 Vine, si us plau.
-Quan vindràs amb vosaltres a casa?
 Quan vindreu a casa vosaltres?
 Quan vindràs amb vosaltres a casa?
+Quan vindreu a casa vosaltres?
 Demà nosaltres vindrem.
 Demà nosaltres vindrem.
 Demà nosaltres vindrem.
@@ -124,9 +124,9 @@ Nosaltres anirem a cantar el dimecres.
 Nosaltres hem begut un got de llet calenta.
 Nosaltres hem begut un got de llet calenta.
 Nosaltres hem begut un got de llet calenta.
-Què fa la mare?
-Què fa la mare?
-Què fa la mare?
+Què fas a la mare?
+Què fas a la mare?
+Què fas a la mare?
 La infermera és molt alegre.
 La infermera és molt alegre.
 La infermera és molt alegre.

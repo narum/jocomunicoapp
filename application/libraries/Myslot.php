@@ -490,14 +490,15 @@ class Myslot {
             $punts = $penalty;
             
             if ($svo) {
-                // si la paraula va abans del verb, el patró no era verbless i el fit no és horrible, li donem un bonus per 
+                // si la paraula va abans del verb, el patró no era verbless, ni amb una pregunta 
+                // (que el subjecte pot anar davant o darrere) i el fit no és horrible, li donem un bonus per 
                 // igualar als altres camps obligatoris en l'ordre de prioritat
                 // pel subjecte principal
                 if ($this->level == 1 && $word->beforeverb && $penalty < 5 && !$this->verbless) $punts = $punts - 17 + $penalty*4;
-                else if ($this->level == 1 && !$word->beforeverb && !$this->verbless) $punts += 1;
+                else if ($this->level == 1 && !$word->beforeverb && !$this->verbless && !$CI->session->userdata('preguntabona')) $punts += 1;
                 // pel secundari si n'hi ha
                 if ($this->level == 2 && $word->beforeverb2 && $penalty < 5 && !$this->verbless) $punts = $punts - 17 + $penalty*4;
-                else if ($this->level == 2 && !$word->beforeverb2 && !$this->verbless) $punts += 1;
+                else if ($this->level == 2 && !$word->beforeverb2 && !$this->verbless && !$CI->session->userdata('preguntabona')) $punts += 1;
             }
             else {
                 // igualem el grade del subjecte a slot obligatori si no era un fit terrible i no era verbless
