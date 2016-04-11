@@ -1489,8 +1489,10 @@ class Myslot {
         // posar primer la preposició, si n'hi ha, i després el valor per defecte
         else {
             // PREPOSICIÓ
-            // posem la preposició, si n'hi ha
-            if ($this->prep != null) {
+            // posem la preposició, si n'hi ha, excepte si l'slot obligatori s'ha quedat buit ->
+            // ha utilitzat el defvalue i aquest era null            
+            if ($this->prep != null 
+                    && !($this->defvalueused && ($this->defvalue == null || $this->defvalue == ""))) {
                 $elementaux[0] = $this->prep;
                 $elementaux[1] = null;
                 
@@ -2451,8 +2453,10 @@ class Myslot {
         // posar primer la preposició, si n'hi ha, i després el valor per defecte
         else {
             // PREPOSICIÓ
-            // posem la preposició, si n'hi ha
-            if ($this->prep != null) {
+            // posem la preposició, si n'hi ha, excepte si l'slot obligatori s'ha quedat buit ->
+            // ha utilitzat el defvalue i aquest era null            
+            if ($this->prep != null 
+                    && !($this->defvalueused && ($this->defvalue == null || $this->defvalue == ""))) {
                 $elementaux[0] = $this->prep;
                 $elementaux[1] = null;
                 

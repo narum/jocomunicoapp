@@ -88,9 +88,9 @@ Tinc molta por.
 Vine, si us plau.
 Vine, si us plau.
 Vine, si us plau.
+Quan vindràs amb vosaltres a casa?
 Quan vindreu a casa vosaltres?
-Quan vindreu a casa vosaltres?
-Quan vindreu a casa vosaltres?
+Quan vindràs amb vosaltres a casa?
 Demà nosaltres vindrem.
 Demà nosaltres vindrem.
 Demà nosaltres vindrem.
@@ -140,7 +140,7 @@ Vull un iogurt, si us plau.
 Un iogurt, si us plau.
 Un iogurt, si us plau.
 Ell parla molt?
-Ell parla molt?
+Parles amb ell molt?
 Ell parla molt?
 La meva germana llegeix malament.
 La meva germana llegeix malament.
@@ -160,9 +160,9 @@ El sol és taronja i vermell a la tarda.
 Vull un got d'aigua, si us plau.
 Un got d'aigua, si us plau.
 Un got d'aigua, si us plau.
-Estic amb algú bé.
-Estic amb algú bé.
-Estic amb algú bé.
+Estic bé.
+Estic bé.
+Estic bé.
 Felicitats!
 Felicitats!
 Felicitats!
@@ -241,7 +241,7 @@ Mala sort.
 Demà espero que vinguis.
 Demà esperaré que vinguis.
 Demà espero que vinguis.
-Amaga't, si us plau.
+Amaga't amb tu, si us plau.
 Amaga't, si us plau.
 Amaga't, si us plau.
 Ells celebren el seu aniversari al parc.
@@ -280,9 +280,9 @@ Cent euros.
 La meva germana descansa sobre el llit.
 La meva germana descansa sobre el llit.
 La meva germana descansa sobre el llit.
-Explico un conte, si us plau.
-Explico un conte, si us plau.
-Explico un conte, si us plau.
+Explica'm un conte, si us plau.
+Explica'm un conte, si us plau.
+Explica'm un conte, si us plau.
 Després nosaltres mirarem una pel·lícula al cine.
 Després nosaltres mirarem una pel·lícula al cine.
 Després nosaltres mirarem una pel·lícula al cine.

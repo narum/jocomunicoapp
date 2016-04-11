@@ -15,6 +15,15 @@ CREATE TABLE Languages (
 	nounComplementOrder ENUM('0', '1') DEFAULT '1'
 ) ENGINE=INNODB;
 
+CREATE TABLE Voices (
+	ID_Voice INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	IDLang_L INT,
+	voiceName VARCHAR(200),
+	mascfem ENUM('masc', 'fem') DEFAULT 'masc',
+	INDEX IDLang (IDLang_L),
+	FOREIGN KEY (IDLang_L) REFERENCES Languages (ID_Language) ON DELETE SET NULL
+) ENGINE=INNODB;
+
 
 CREATE TABLE SuperUser (
 	ID_SU INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -28,6 +37,7 @@ CREATE TABLE SuperUser (
 	cfgAppConfUsageMouseOneCTwoC ENUM('0', '1', '2') DEFAULT '0',
 	cfgTimeClick INT DEFAULT '1000',
 	cfgExpansionOnOff ENUM('0', '1') DEFAULT '1',
+	cfgAutoEraseSentenceBar ENUM('0', '1') DEFAULT '0',
 	cfgPredOnOff ENUM('0', '1') DEFAULT '1',
 	cfgPredBarVertHor ENUM('0', '1') DEFAULT '0',
 	cfgPredBarNumPred INT DEFAULT '5',

@@ -196,7 +196,7 @@ class Myexpander {
                // Si el verb és pseudoimpersonal o si hi ha una pregunta, invertim les preferències
                // d'aparèxier abans i després del verb, ja que ara el subjecte va darrere del verb
                // Les variables beforeverb només s'utilitzaran al codi si l'idioma té estructura SVO (Subject-Verb-Object)
-               if ($auxpattern->pseudoimpersonal || $partpreguntaposada) {
+               if ($auxpattern->pseudoimpersonal) {
                    for ($j=0; $j<count($paraules); $j++) {
                        $auxword = &$paraules[$j];
                        $auxword->beforeverb = !$auxword->beforeverb;
