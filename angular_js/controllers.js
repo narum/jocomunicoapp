@@ -587,15 +587,17 @@ angular.module('controllers', [])
             $scope.InitScan = function ()
             {
                 // 0 custom, 1 rows, 2 columns
-                $scope.scanType = 2;
+                $scope.scanType = 0;
                 $scope.inScan = true;
-                $scope.longclick = true;
+                // MODIF: manualScan == cfgScanningAutoOnOff
+                $scope.timerScan = 1;
+                $scope.longclick = false;
                 function myTimer() {
                     $scope.NextBlockScan();
                 }
-                if (false) {
+                if ($scope.timerScan) {
                     $interval.cancel($scope.intervalScan);
-                    var Intervalscan = 450;
+                    var Intervalscan = 1500;
                     function myTimer() {
                         $scope.nextBlockScan();
                     }
@@ -605,10 +607,15 @@ angular.module('controllers', [])
                 }
 
                 $scope.arrayScannedCells = null;
-                $scope.indexScannedCells = 0;
                 $scope.currentScanBlock = 1;
                 $scope.currentScanBlock1 = -1;
-                $scope.currentScanBlock2 = 1;
+                if ($scope.timerScan) {
+                    $scope.currentScanBlock2 = 0;
+                    $scope.indexScannedCells = -1;
+                } else {
+                    $scope.currentScanBlock2 = 1;
+                    $scope.indexScannedCells = 0;
+                }
                 $scope.getMaxScanBlock1();
 
             };
@@ -619,7 +626,7 @@ angular.module('controllers', [])
                     if ($scope.scanType == 0 && (
                             (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 1) ||
                             (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 2 && picto.customScanBlock2 == $scope.currentScanBlock2) ||
-                            ($scope.currentScanBlock == 3 && $scope.arrayScannedCells != null && picto.posInBoard == $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard))) {
+                            ($scope.currentScanBlock == 3 && $scope.arrayScannedCells != null && $scope.indexScannedCells != -1 && picto.posInBoard == $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard))) {
                         return true;
                     }
                     // Rows first
@@ -651,6 +658,8 @@ angular.module('controllers', [])
                     if (!$scope.longclick)
                     {
                         $scope.selectBlockScan();
+                    } else if ($scope.manualScan == 0) {
+                        $scope.nextBlockScan();
                     }
                 }
             };
@@ -689,6 +698,8 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     if (!$scope.longclick)
                     {
+                        $scope.nextBlockScan();
+                    } else if ($scope.manualScan == 0) {
                         $scope.nextBlockScan();
                     }
                 }
@@ -759,16 +770,16 @@ angular.module('controllers', [])
                             // If we pass the last scan block...
                             if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
                                 // We are scannig the prediction bar or the sentece bar so start again
-                                if ($scope.currentScanBlock1 != 0 || $scope.currentScanBlock1 != -1 ) {
+                                if ($scope.currentScanBlock1 == 0 || $scope.currentScanBlock1 == -1) {
                                     $scope.InitScan();
                                     //We have to go to the cells that have no scan block
                                 } else {
                                     $scope.currentScanBlock2 = null;
                                 }
-                                
+
 
                             }
-                        // If we are over this strange block, int scan again
+                            // If we are over this strange block, int scan again
                         } else {
                             $scope.InitScan();
                         }
@@ -781,13 +792,6 @@ angular.module('controllers', [])
                             $scope.InitScan();
                             return;
                         }
-
-//                    } else if ($scope.currentScanBlock === 2 && $scope.scanType === 2) {
-//                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-//                        // All cells were scanned. Start again
-//                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-//                            $scope.InitScan();
-//                        }
                     }// If we are in the third scan pass one by one over the array (cyclic)
                     else if ($scope.currentScanBlock === 3) {
                         $scope.indexScannedCells = $scope.indexScannedCells + 1;
@@ -816,6 +820,7 @@ angular.module('controllers', [])
                             switch ($scope.currentScanBlock2) {
                                 case 1:
                                     $scope.generate();
+                                    break;
                                 case 2:
                                     $scope.deleteLast();
                                     break;
@@ -824,16 +829,24 @@ angular.module('controllers', [])
                                     break;
                             }//MODIF: Maybe we have to put control to perd
                             $scope.InitScan();
+                            // We are over the cancel/return cell
+                        } else if ($scope.currentScanBlock2 == 0) {
+                            $scope.InitScan();
                         } else if ($scope.scanType !== 0) {
                             $scope.selectScannedCell();
                         } else {
                             var url = $scope.baseurl + "Board/getScannedCells";
                             var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
-
                             $http.post(url, postdata).success(function (response)
                             {
                                 $scope.arrayScannedCells = response.array;
-                                $scope.indexScannedCells = 0;
+                                if ($scope.timerScan) {
+                                    $scope.currentScanBlock2 = 0;
+                                    $scope.indexScannedCells = -1;
+                                } else {
+                                    $scope.currentScanBlock2 = 1;
+                                    $scope.indexScannedCells = 0;
+                                }
                                 //There is one cell in that group
 
                                 if ($scope.arrayScannedCells.length === 1) {
@@ -843,7 +856,12 @@ angular.module('controllers', [])
                         }
                         // This is, we selected a cell.
                     } else if ($scope.currentScanBlock === 4) {
-                        $scope.selectScannedCell();
+                        // We are over the cancel/return cell
+                        if ($scope.currentScanBlock2 == 0 || $scope.indexScannedCells == -1) {
+                            $scope.InitScan();
+                        } else {
+                            $scope.selectScannedCell();
+                        }
                     }
                 }
             };
@@ -1302,29 +1320,31 @@ angular.module('controllers', [])
                     console.log(response);
                     //$scope.dataTemp = response.data;
                     $scope.info = response.info;
+
+                    //MODIF: dir frase
+
+
+                    var postdata = {voice: 0, sentence: $scope.info.frasefinal};
+                    var URL = $scope.baseurl + "Board/getAudioSentence_post";
+
+
+                    $http.post(URL, postdata).
+                            success(function (response)
+                            {
+                                $scope.statusWord = response.status;
+                                $scope.data = response.data;
+                            });
+
+
+
+                    $scope.sound = ngAudio.load($scope.baseurl + "mp3/sound.mp3");
+                    $scope.sound.play();
                 });
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
 
-                //MODIF: dir frase
 
-
-                var postdata = {voice: 0, sentence: $scope.info.frasefinal};
-                var URL = $scope.baseurl + "Board/getAudioSentence_post";
-
-
-                $http.post(URL, postdata).
-                        success(function (response)
-                        {
-                            $scope.statusWord = response.status;
-                            $scope.data = response.data;
-                        });
-
-
-
-                $scope.sound = ngAudio.load($scope.baseurl + "mp3/sound.mp3");
-                $scope.sound.play();
             };
 
             /*
