@@ -701,7 +701,7 @@ class Mypattern {
             $word = $arrayadverbs[$i];
             // si la paraula està en un slot (no de temps), mirem si aquest slot és opt i el comparem amb els
             // slots als que l'adv pot fer de complement, si no, compararem només els slots als 
-            // que pot der de complement entre ells
+            // que pot fer de complement entre ells
             if ($word->used && !$word->isClass("temps")) {
                 $keyslotaux = $word->slotfinal;
                 
@@ -714,29 +714,34 @@ class Mypattern {
             
             for ($j=0; $j<count($word->slotstemps); $j++) {
                 $aux = explode(" ADV", $word->slotstemps[$j]);
-
-                $keyslotnoun = $aux[0];
-                $slotnoun = $this->slotarray[$keyslotnoun];
                 
-                // si no té ja un adverbi assignat
-                if (!$slotnoun->CAdvassigned) {
-                    
-                    $slotadv = $slotnoun->cmpAdvs[$word->slotstemps[$j]];
-                    $distance = $slotnoun->paraulafinal->inputorder - $word->inputorder;
-                    $points = $slotadv->puntsfinal + abs($distance);
-                    
-                    if ($points < $bestpoints) {
-                        $bestdistance = $distance;
-                        $bestpoints = $points;
-                        $indexmillor = $word->slotstemps[$j];
-                    }
-                    else if ($points == $bestpoints) {
-                        // en cas d'empat ens quedem amb la que tenia distància positiva, 
-                        // que vol dir un adverbi de lloc que vagi abans del nom al que complementa
-                        if ($distance > $bestdistance) {
+                // comprovem que l'slot sigui del tipus ADV que complementa a nom, ja que
+                // els altres opts als que pugui fer fit, com ara els de manner, també hi seran
+                if (count($aux) > 1) {
+                
+                    $keyslotnoun = $aux[0];
+                    $slotnoun = $this->slotarray[$keyslotnoun];
+
+                    // si no té ja un adverbi assignat
+                    if (!$slotnoun->CAdvassigned) {
+
+                        $slotadv = $slotnoun->cmpAdvs[$word->slotstemps[$j]];
+                        $distance = $slotnoun->paraulafinal->inputorder - $word->inputorder;
+                        $points = $slotadv->puntsfinal + abs($distance);
+
+                        if ($points < $bestpoints) {
                             $bestdistance = $distance;
                             $bestpoints = $points;
                             $indexmillor = $word->slotstemps[$j];
+                        }
+                        else if ($points == $bestpoints) {
+                            // en cas d'empat ens quedem amb la que tenia distància positiva, 
+                            // que vol dir un adverbi de lloc que vagi abans del nom al que complementa
+                            if ($distance > $bestdistance) {
+                                $bestdistance = $distance;
+                                $bestpoints = $points;
+                                $indexmillor = $word->slotstemps[$j];
+                            }
                         }
                     }
                 }
