@@ -25,9 +25,9 @@
 {60} / {409} / {561} / #defecte / @futur /
 {561} / {444} / {60} / {409} / #defecte / @futur /
 {561} / {444} / {60} / {409} / #defecte / @futur /
-{30} / {356} / {730} / #ordre / @defecte /
-{466} / {30} / {356} / {730} / #ordre / @defecte /
-{466} / {30} / {356} / {444} / {730} / #ordre / @defecte /
+{30} / {356} / #ordre / @defecte /
+{466} / {30} / {356} / #ordre / @defecte /
+{466} / {30} / {356} / {444} / #ordre / @defecte /
 {454} / {86} / {309} / #defecte / @defecte / %no /
 {454} / {86} / {309} / #defecte / @defecte / %no /
 {454} / {86} / {309} / #defecte / @defecte / %no /
@@ -170,7 +170,7 @@
 {448} / {91} / {181} / $pl / #pregunta / @defecte /
 {448} / {91} / {181} / $pl / #pregunta / @defecte /
 {3} / {444} / {9} / {308} / $pl / #ordre / @defecte /
-{466} / {3} / {444} / {9} / {308} / $pl / {730} / #defecte / @defecte /
+{466} / {3} / {444} / {9} / {308} / $pl / #defecte / @defecte /
 {3} / {444} / {9} / {308} / $pl / #ordre / @defecte /
 {447} / {100} / {687} / {627} / #defecte / @perifrastic /
 {447} / {100} / {687} / {627} / #defecte / @perifrastic /
