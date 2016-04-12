@@ -771,7 +771,7 @@ angular.module('controllers', [])
                             $scope.InitScan();
                             return;
                         }
-                        
+
                     } else if ($scope.currentScanBlock === 2 && $scope.scanType === 2) {
                         $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
                         // All cells were scanned. Start again
@@ -1283,6 +1283,7 @@ angular.module('controllers', [])
              * Generate the current senence under contruction.
              * Add the pictograms (and the sentence itself) in the history
              */
+            
             $scope.generate = function () {
 
                 var url = $scope.baseurl + "Board/generate";
@@ -1292,31 +1293,30 @@ angular.module('controllers', [])
                     console.log(response);
                     //$scope.dataTemp = response.data;
                     $scope.info = response.info;
+                    $scope.playSentenceAudio();
                 });
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
-
                 //MODIF: dir frase
-
-
-                var postdata = {voice: 0, sentence: $scope.info.frasefinal};
-                var URL = $scope.baseurl + "Board/getAudioSentence_post";
-
-
-                $http.post(URL, postdata).
-                        success(function (response)
-                        {
-                            $scope.statusWord = response.status;
-                            $scope.data = response.data;
-                        });
-
-
-
-                $scope.sound = ngAudio.load($scope.baseurl + "mp3/sound.mp3");
-                $scope.sound.play();
             };
+            
+            $scope.playSentenceAudio = function ()
+            {
+                var postdata = {voice: 0, sentence: $scope.info.frasefinal};
+                    var URL = $scope.baseurl + "Board/getAudioSentence";
 
+                    $http.post(URL, postdata).
+                            success(function (response)
+                            {
+                                $scope.dataAudio = response.data;
+
+                                alert($scope.dataAudio);
+                                $scope.sound = ngAudio.load($scope.baseurl + $scope.dataAudio);
+                                $scope.sound.play();
+
+                            });
+            };
             /*
              * Return pictograms from database. The result depends on 
              * Searchtype (noms, verbs...) and Name (letters with the word start with)

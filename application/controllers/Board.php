@@ -769,16 +769,17 @@ class Board extends REST_Controller {
         $sentence = $request->sentence;
         $voice = $request->voice;
 
-        $md5 = MD5($sentence + $voice);
+        
+        $md5 = MD5(strval($voice) . $sentence);
         $array = $this->BoardInterface->getAudioSentence($md5);
-        if ($md5 != null) {
+        if ($array != null) {
             $response = [
-                'array' => $array[3]->mp3Path
+                'data' => $array[0]->mp3Path
             ];
         }else{
             $response = [
-                //MODIF: NO ESTA EL MP3, DESCARREGAR MP3 VOICEWARE
-                'array' => "No group found"
+                //MODIF: NO ESTA EL MP3, DESCARREGAR MP3 VOCALWARE
+                'data' => MD5(strval($voice) . $sentence)
             ];
         }
         $this->response($response, REST_Controller::HTTP_OK);
