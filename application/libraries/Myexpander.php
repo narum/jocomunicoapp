@@ -156,6 +156,9 @@ class Myexpander {
                    $auxpattern->exprsarray[] = $arrayExpressions[$j]->text;
                }
 
+               // si la frase era de pregunta, ho guardem a les cookies
+               if ($propietatsfrase['tipusfrase'] == "pregunta") $CI->session->set_userdata('preguntapattern', true);
+               
                // Si hi ha una partícula de pregunta
                $numpreguntes = count($partPregunta);
                if ($numpreguntes > 1) {
@@ -185,7 +188,7 @@ class Myexpander {
                    else {
                        // només que hi hagi un patró on encaixi la partícula de pregunta, ja va bé
                        $preguntabona = true;
-                       $CI->session->set_userdata('preguntabona', true);
+                       $CI->session->set_userdata('preguntapattern', true);
                        $this->errormessagetemp = null;
                        $this->errorcodetemp = null;
                        $this->errortemp = false;
@@ -193,11 +196,10 @@ class Myexpander {
                    }
                } // Fi tractament de pregunta
 
-
                // Si el verb és pseudoimpersonal o si hi ha una pregunta, invertim les preferències
                // d'aparèxier abans i després del verb, ja que ara el subjecte va darrere del verb
                // Les variables beforeverb només s'utilitzaran al codi si l'idioma té estructura SVO (Subject-Verb-Object)
-               if ($auxpattern->pseudoimpersonal || $partpreguntaposada || $auxpattern->tipusfrase == "pregunta") {
+               if ($auxpattern->pseudoimpersonal || $partpreguntaposada) {
                    for ($j=0; $j<count($paraules); $j++) {
                        $auxword = &$paraules[$j];
                        $auxword->beforeverb = !$auxword->beforeverb;
@@ -249,7 +251,7 @@ class Myexpander {
                $this->errorcodetemp = null;
                $this->errortemp = false;
                
-               $CI->session->set_userdata('preguntabona', false);
+               $CI->session->set_userdata('preguntapattern', false);
                // DEBUG
                // echo $auxpattern->printPattern();
 
