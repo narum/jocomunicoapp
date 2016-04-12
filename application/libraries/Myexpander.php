@@ -508,18 +508,35 @@ class Myexpander {
         $pattern = new Mypattern();
         $pattern = $patternfinal;
         
+        if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
+        // si el temps per defecte és l'imperatiu, però hi ha modificadors de frase o de tense
+        // sobreescrivim els valors
+        if ($pattern->defaulttense == "imperatiu") {
+            if ($propietatsfrase['tense'] != "defecte") {
+                $pattern->defaulttense = $propietatsfrase['tense'];
+                $pattern->tipusfrase = $propietatsfrase['tipusfrase'];
+            }
+            else if ($propietatsfrase['tipusfrase'] != "defecte" && 
+                    !($propietatsfrase['tipusfrase'] == "exclamacio" || $propietatsfrase['tipusfrase'] == "resposta")) {
+                $pattern->defaulttense = "present";
+                $pattern->tipusfrase = $propietatsfrase['tipusfrase'];
+            }
+        }
+        // Si el tipus de frase triat era per defecte, ara el tipus de frase és el per defecte del patró
+        if ($propietatsfrase['tipusfrase'] == "defecte") $propietatsfrase['tipusfrase'] = $pattern->tipusfrase;
+        
         // Indiquem que si el temps per defecte és l'imperatiu, que la frase és una ordre
         // a no ser que estigui activat el modificador de desig o permís que tenen preferència o
         // que hi hagi una partícula de pregunta.
-        if ($propietatsfrase['tense'] == "defecte" && $pattern->defaulttense == "imperatiu"
-                && (!$propietatsfrase['tipusfrase'] == "desig" || !$propietatsfrase['tipusfrase'] == "permis"
-                || !$partpreguntaposada)) {
-            $propietatsfrase['tipusfrase'] = "ordre";
-        }
-        else if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
-        
-        // Si el tipus de frase triat era per defecte, ara el tipus de frase és el per defecte del patró
-        if ($propietatsfrase['tipusfrase'] == "defecte") $propietatsfrase['tipusfrase'] = $pattern->tipusfrase;
+//        if ($propietatsfrase['tense'] == "defecte" && $pattern->defaulttense == "imperatiu"
+//                && (!$propietatsfrase['tipusfrase'] == "desig" || !$propietatsfrase['tipusfrase'] == "permis"
+//                || !$partpreguntaposada)) {
+//            $propietatsfrase['tipusfrase'] = "ordre";
+//        }
+//        else if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
+//        
+//        // Si el tipus de frase triat era per defecte, ara el tipus de frase és el per defecte del patró
+//        if ($propietatsfrase['tipusfrase'] == "defecte") $propietatsfrase['tipusfrase'] = $pattern->tipusfrase;
 
         // 1. Ordenem els slots segons el tipus de frase
         $pattern->ordenarSlotsFrase($propietatsfrase);
@@ -554,18 +571,35 @@ class Myexpander {
         $pattern = new Mypattern();
         $pattern = $patternfinal;
 
-        // Indiquem que si el temps per defecte és l'imperatiu, que la frase és una ordre
-        // a no ser que estigui activat el modificador de desig o permís que tenen preferència o
-        // que hi hagi una partícula de pregunta.
-        if ($propietatsfrase['tense'] == "defecte" && $pattern->defaulttense == "imperatiu"
-                && (!$propietatsfrase['tipusfrase'] == "desig" || !$propietatsfrase['tipusfrase'] == "permis"
-                || !$partpreguntaposada)) {
-            $propietatsfrase['tipusfrase'] = "ordre";
+        if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
+        // si el temps per defecte és l'imperatiu, però hi ha modificadors de frase o de tense
+        // sobreescrivim els valors
+        if ($pattern->defaulttense == "imperatiu") {
+            if ($propietatsfrase['tense'] != "defecte") {
+                $pattern->defaulttense = $propietatsfrase['tense'];
+                $pattern->tipusfrase = $propietatsfrase['tipusfrase'];
+            }
+            else if ($propietatsfrase['tipusfrase'] != "defecte" && 
+                    !($propietatsfrase['tipusfrase'] == "exclamacio" || $propietatsfrase['tipusfrase'] == "resposta")) {
+                $pattern->defaulttense = "present";
+                $pattern->tipusfrase = $propietatsfrase['tipusfrase'];
+            }
         }
-        else if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
-        
         // Si el tipus de frase triat era per defecte, ara el tipus de frase és el per defecte del patró
         if ($propietatsfrase['tipusfrase'] == "defecte") $propietatsfrase['tipusfrase'] = $pattern->tipusfrase;
+        
+//        // Indiquem que si el temps per defecte és l'imperatiu, que la frase és una ordre
+//        // a no ser que estigui activat el modificador de desig o permís que tenen preferència o
+//        // que hi hagi una partícula de pregunta.
+//        if ($propietatsfrase['tense'] == "defecte" && $pattern->defaulttense == "imperatiu"
+//                && (!$propietatsfrase['tipusfrase'] == "desig" || !$propietatsfrase['tipusfrase'] == "permis"
+//                || !$partpreguntaposada)) {
+//            $propietatsfrase['tipusfrase'] = "ordre";
+//        }
+//        else if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
+//        
+//        // Si el tipus de frase triat era per defecte, ara el tipus de frase és el per defecte del patró
+//        if ($propietatsfrase['tipusfrase'] == "defecte") $propietatsfrase['tipusfrase'] = $pattern->tipusfrase;
 
         // 1. Ordenem els slots segons el tipus de frase
         $pattern->ordenarSlotsFraseES($propietatsfrase);

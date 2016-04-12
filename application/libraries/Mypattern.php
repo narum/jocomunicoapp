@@ -2452,7 +2452,7 @@ class Mypattern {
             // afegir por favor
             $this->exprsarray[] = "por favor";
         }
-           
+                   
         // DEBUG
         // echo $this->printOrdreFrase()."<br /><br />";
     }
@@ -3297,6 +3297,7 @@ class Mypattern {
                 
                 if ($persona == 1 && $numero == "sing") {
                     $verbconjugat = $CI->Lexicon->conjugarES($mainverbslot->paraulafinal->id, 'infinitiu', $persona, $numero, $this->pronominal);
+                    $mainverbslot->isInfinitive = true;
                 }
                 else {
                     $verbconjugat = $CI->Lexicon->conjugarES($mainverbslot->paraulafinal->id, 'prsubj', $persona, $numero, $this->pronominal);
@@ -3313,7 +3314,6 @@ class Mypattern {
                 $auxtupla[1] = $mainverbslot->paraulafinal;
 
                 $mainverbslot->slotstring[] = $auxtupla; // omplim l'slotstring
-                $mainverbslot->isInfinitive = true;
                 
                 if ($secondaryverbslot != null) {
                     
@@ -3562,6 +3562,7 @@ class Mypattern {
                 
                 if ($persona == 1 && $numero == "sing") {
                     $verbconjugat = $CI->Lexicon->conjugarES($mainverbslot->paraulafinal->id, 'infinitiu', $persona, $numero, $this->pronominal);
+                    $mainverbslot->isInfinitive = true;
                 }
                 else {
                     $verbconjugat = $CI->Lexicon->conjugarES($mainverbslot->paraulafinal->id, 'prsubj', $persona, $numero, $this->pronominal);
@@ -3578,7 +3579,6 @@ class Mypattern {
                 $auxtupla[1] = $mainverbslot->paraulafinal;
 
                 $mainverbslot->slotstring[] = $auxtupla; // omplim l'slotstring
-                $mainverbslot->isInfinitive = true;
                 
                 if ($secondaryverbslot != null) {
                     
@@ -4512,7 +4512,7 @@ class Mypattern {
         // si és una ordre els pronoms aniran darrere el verb i tindran una altra forma
         $ordre = ($tipusfrase == "ordre");
         $elementaux = array();
-        
+                
         
         // TRANSFORMAR ELS PRONOMS A FEBLES DEL RECEIVER O DEL THEME
         for ($i=0; $i<$numslots; $i++) {
@@ -4715,7 +4715,7 @@ class Mypattern {
             
         } // Fi for transformar pronoms
                 
-                
+                        
         // ORDRE DELS PRONOMS
         // amb tota la info recollida, movem els pronoms de lloc si cal
         // pel main verb si és infinitiu (els d'ordre ja són a darrere)
