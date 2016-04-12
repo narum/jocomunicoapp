@@ -1118,6 +1118,7 @@ class Mypattern {
             $aux[0] = $keyslot;
             $aux[1] = $slot->slotCalcPuntsGuanyats();
             $aux[2] = $slot->grade;
+            $aux[3] = $slot->level;
             
             if (!$slot->full && count($slot->paraulestemp) > 0) $this->virtualslotsort[] = $aux;
         }
@@ -1155,16 +1156,21 @@ class Mypattern {
                     }
                     else if ($infoaux[1] == $infoactual[1]) {
                         
-                        // en cas d'empat, si és són del mateix grade o el Receiver té més grade, 
+                        // DEBUG:
+                        // echo "Infoaux: "; print_r($infoaux); echo "/ Infoactual: "; print_r($infoactual);
+                        
+                        
+                        // en cas d'empat, si és són del mateix grade i del mateix nivell o el Receiver té més grade, 
                         // el receiver té prioritat sobre el qualsevol slot, excepte el Theme, si no és pseudoimpersonal
-                        if (strpos($infoaux[0], "Receiver") === 0 && !($infoaux[2] == "opt" && $infoactual[2] == '1') 
+                        if (strpos($infoaux[0], "Receiver") === 0 && !($infoaux[3] == 2 && (strpos($infoactual[0], "Subject 1") === 0))
+                                && !($infoaux[2] == "opt" && $infoactual[2] == '1') 
                                 && !(strpos($infoactual[0], "Theme") === 0) && !$this->pseudoimpersonal) {
                             $indexinsert = $j;
                             $found = true;
                         }
                         // els slots secundaris tenen preferència sobre els de primer nivell
                         // menys si és el subjecte
-                        else if (strpos($infoaux[0], "2") != 0 && !(strpos($infoaux[0], "Subject") === 0)) {
+                        else if (strpos($infoaux[0], "2") != 0 && !(strpos($infoactual[0], "Subject") === 0)) {
                             $indexinsert = $j;
                             $found = true;
                         }
@@ -1356,7 +1362,7 @@ class Mypattern {
             
             // DEBUG
             // echo "Pattern id ".$this->id.": ";
-            // print_r($this->virtualslotsort); echo '<br /><br />';
+            // print_r($this->virtualslotsort); echo '<br />';
                                             
             $infoslot = $this->virtualslotsort[0];
             $keyslot = $infoslot[0];
@@ -1364,7 +1370,7 @@ class Mypattern {
             
             $indexselect = -1;
             $penalty = 1000;
-            
+                        
             if (!$slot->full && count($slot->paraulestemp) > 0) {
                 
                 // per cada paraula que podia anar a l'slot busquem la que fa millor fit
@@ -1412,18 +1418,18 @@ class Mypattern {
                 }
                 
                 if ($indexselect == -1 ) $indexselect = 0;
-                
+                                
                 // Ja tenim la paraula seleccionada
                 $wordaux = $slot->paraulestemp[$indexselect][0];
                 $this->forceFillSlot($keyslot, $wordaux, $slot->paraulestemp[$indexselect][1], $slot->paraulestemp[$indexselect][2]);
-                
+                                
                 // esborrem la paraula del llistat de paraulestemp de l'slot
                 array_splice($slot->paraulestemp, $indexselect, 1);
-                
+                                                
                 // esborrem l'slot del llistat d'slots temps de la paraula
                 $indexslotaux = $wordaux->searchSlotIndex($keyslot);
                 if ($indexslotaux != -1) array_splice($wordaux->slotstemps, $indexslotaux, 1);
-                
+                                
                 // per la resta d'slots que quedin esborrem la paraula del llistat de paraulestemp
                 for ($i=0; $i<count($wordaux->slotstemps); $i++) {
                     $keyaux = $wordaux->slotstemps[$i];
@@ -1431,7 +1437,7 @@ class Mypattern {
                     if (!strpos($keyaux, $stringCMP)) {
                         $slotaux = $this->slotarray[$keyaux];
                         $indexinslot = $slotaux->searchIndexWordInSlot($wordaux);
-
+                        
                         // esborrem la paraula seleccionada
                         if ($indexinslot != -1) array_splice($slotaux->paraulestemp, $indexinslot, 1);
                     }
@@ -1547,7 +1553,7 @@ class Mypattern {
             if ($this->paraules[$i]->used == false && $this->paraules[$i]->tipus != "expression"
                     && $this->paraules[$i]->tipus != "questpart") {
                 $this->puntuaciofinal -= 25;
-                $paraulanoposada = true;
+                $paraulanoposada = false;
             }
         }
         

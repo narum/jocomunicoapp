@@ -494,10 +494,10 @@ class Myslot {
                 // (que el subjecte pot anar davant o darrere) i el fit no és horrible, li donem un bonus per 
                 // igualar als altres camps obligatoris en l'ordre de prioritat
                 // pel subjecte principal
-                if ($this->level == 1 && $word->beforeverb && $penalty < 5 && !$this->verbless) $punts = $punts - 17 + $penalty*4;
+                if ($this->level == 1 && $word->beforeverb && $penalty < 5 && !$this->verbless) $punts = $punts - 18 + $penalty*4;
                 else if ($this->level == 1 && !$word->beforeverb && !$this->verbless && !$CI->session->userdata('preguntabona')) $punts += 1;
                 // pel secundari si n'hi ha
-                if ($this->level == 2 && $word->beforeverb2 && $penalty < 5 && !$this->verbless) $punts = $punts - 17 + $penalty*4;
+                if ($this->level == 2 && $word->beforeverb2 && $penalty < 5 && !$this->verbless) $punts = $punts - 18 + $penalty*4;
                 else if ($this->level == 2 && !$word->beforeverb2 && !$this->verbless && !$CI->session->userdata('preguntabona')) $punts += 1;
             }
             else {
@@ -533,7 +533,7 @@ class Myslot {
         else $this->puntsfinal = 1;
     }
 
-        // retorna l'index d'on es troba la paraula dins de les paraulestemp que poden fill l'slot
+    // retorna l'index d'on es troba la paraula dins de les paraulestemp que poden fill l'slot
     public function searchIndexWordInSlot($word)
     {
         $index = -1;
@@ -544,7 +544,10 @@ class Myslot {
         
         while ($i<count($this->paraulestemp) && !$found) {
             
-            if (($word->id == $this->paraulestemp[$i][0]->id) && ($word->tipus == $this->paraulestemp[$i][0]->tipus)) {
+            // l'inputorder és necessari per si hi ha dues paraules iguals que poden fer fill a l'slot
+            // per exemple, dos subjecte "jo" quan hi ha més d'un verb a la frase
+            if (($word->id == $this->paraulestemp[$i][0]->id) && ($word->tipus == $this->paraulestemp[$i][0]->tipus)
+                    && ($word->inputorder == $this->paraulestemp[$i][0]->inputorder)) {
                 $index = $i;
                 $found = true;
             }
