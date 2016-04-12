@@ -26,7 +26,7 @@ Necessitaré el medicament a la tarda.
 Necessitaré el medicament a la tarda.
 Necessitaré el medicament a la tarda.
 Dóna'm una forquilla, si us plau si us plau.
-Dóna't una forquilla, si us plau si us plau.
+Dóna'm una forquilla, si us plau si us plau.
 Dóna'm una forquilla, si us plau si us plau.
 El monitor no és a l'escola.
 El monitor no és a l'escola.
@@ -79,8 +79,8 @@ El bitxo molt raro s'ha amagat darrera la porta.
 és un pal.
 és un pal.
 és un pal.
-No vinguis, si us plau.
-No vinguis, si us plau.
+No vinguis.
+No vinguis.
 No vinguis, si us plau.
 Tinc molta por.
 Tinc molta por.
@@ -103,8 +103,8 @@ Llegir uns llibres de por m'agrada.
 Nosaltres anirem al restaurant.
 Nosaltres anirem al restaurant.
 Nosaltres anirem al restaurant.
-Avui no agafis l'abric, si us plau.
-Avui no agafis l'abric, si us plau.
+Avui no agafis l'abric.
+Avui no agafis l'abric.
 Avui no agafis l'abric, si us plau.
 Nosaltres ens banyarem a la platja a l'estiu.
 Nosaltres ens banyarem a la platja a l'estiu.

@@ -1125,6 +1125,10 @@ class Mypattern {
                 
         $this->mySort($this->virtualslotsort);
         
+        // DEBUG:
+        // print_r($this->virtualslotsort);
+        // echo "<br /><br />";
+        
     }
     
     function mySort($virtualslotorder)
@@ -1170,9 +1174,14 @@ class Mypattern {
                         }
                         // els slots secundaris tenen preferència sobre els de primer nivell
                         // menys si és el subjecte
-                        else if (strpos($infoaux[0], "2") != 0 && !(strpos($infoactual[0], "Subject") === 0)) {
+                        else if (strpos($infoaux[0], "2") != 0 && !(strpos($infoactual[0], "Subject") === 0) && !$this->pseudoimpersonal) {
                             $indexinsert = $j;
                             $found = true;
+                        }
+                        // si és pseudoimpersonal el Receiver 1 té més importància que els slots de segon nivell
+                        else if ($this->pseudoimpersonal && strpos($infoaux[0], "Receiver") === 0 && strpos($infoactual[0], "2") != 0) {
+                            $indexinsert = $j;
+                            $found = true;    
                         }
                     }
                 }
