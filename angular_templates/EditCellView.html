@@ -223,7 +223,10 @@
         <div class="col-xs-12 marginTop"></div>
         <div class="col-xs-12 content4" >
             <div class="col-xs-7" >
+                <input type="file" file-model="myFile"/>
+                <button ng-click="uploadFile()">upload me</button>
                 <img class="imgRounded" width="100%" height="100%" src="{{baseurl}}img/pictos/{{imgPictoEdit}}"/>
+
             </div>
             <div class="col-xs-4 saveEdit" >
                 <img class="imgRounded" ng-click="aceptar()" width="100%" height="100%" src="{{baseurl}}img/srcWeb/guardar.png"/>

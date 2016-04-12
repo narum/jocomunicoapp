@@ -1557,6 +1557,21 @@ angular.module('controllers', [])
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
 
+                $scope.uploadFile = function () {
+                    var file = $scope.myFile;
+                    console.log('file is ');
+                    console.dir(file);
+                    var uploadUrl = "/img/upload.php";
+                    var fd = new FormData();
+                    fd.append('file', file);
+                    $http.post(uploadUrl, fd, { 
+                        headers: {'Content-Type': undefined}
+                    })
+                            .success(function () {
+                            })
+                            .error(function () {
+                            });
+                };
 
                 // Gets functions from database and shows them the dropmenu
                 $scope.getFunctions = function () {
@@ -1803,4 +1818,19 @@ angular.module('controllers', [])
                     }
                 };
             }
-        ]);
+        ])
+        .directive('fileModel', ['$parse', function ($parse) {
+                return {
+                    restrict: 'A',
+                    link: function (scope, element, attrs) {
+                        var model = $parse(attrs.fileModel);
+                        var modelSetter = model.assign;
+
+                        element.bind('change', function () {
+                            scope.$apply(function () {
+                                modelSetter(scope, element[0].files[0]);
+                            });
+                        });
+                    }
+                };
+            }]);
