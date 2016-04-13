@@ -4,7 +4,7 @@
 require APPPATH . '/libraries/REST_Controller.php';
 
 class Login extends REST_Controller {
-    
+
     public function __construct()
     {
         parent::__construct('rest', TRUE);
@@ -15,17 +15,17 @@ class Login extends REST_Controller {
     {
         $user = $this->post('user');
         $pass = $this->post('pass');
-        
+
         if($user == NULL || $pass == NULL) {
             $this->response("missing arguments", 400);
             return;
         }
-        
+
         $userLoged = $this->login_model->Login($user,$pass);
-        
+
         if($userLoged) {
-            
-            // Guardamos los dos resultados como objeto
+
+            // Guardamos los resultados como objeto
             $response = [
                 "data" => $userLoged
             ];

@@ -47,13 +47,11 @@ angular.module('controllers', [])
                 // Petición del login
                 loginResource.save(body).$promise  // POST (en angular 'save') del user y pass
                         .then(function (result) {				// respuesta ok!
+                            console.log(result.data.userConfig);
                             var token = result.data.token;
-                            var languageid = result.data.languageid;
-                            var languageabbr = result.data.languageabbr;
-                            var userid = result.data.userID;
-                            var userValidated = result.data.userValidated;
-                            if (userValidated == '1') {
-                                AuthService.login(token, languageid, languageabbr, userid);
+                            var userConfig=result.data.userConfig;
+                            if (userConfig.UserValidated == '1') {
+                                AuthService.login(token, userConfig);
                                 $location.path('/');
                             } else {
                                 $scope.state = 'has-warning';
