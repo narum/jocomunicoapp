@@ -203,6 +203,9 @@ class BoardInterface extends CI_Model {
 
         $data = array(
             'ID_Cell' => 'NULL'
+            /*MODIF: Probar despues del lunes por si acaso falla que no nos pille en la presentacion
+            ,
+            'color' => 'fff'*/
         );
 
         $this->db->insert('Cell', $data);
@@ -734,6 +737,19 @@ class BoardInterface extends CI_Model {
         $this->db->where('customScanBlock1', $csb1);
         $this->db->where('ID_RBoard', $IDboard);
         $query = $this->db->get('R_BoardCell');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    function getAudioSentence($md5){
+        $output = array();
+        
+        $this->db->where('mp3TSMd5Encoded', $md5);
+        $query = $this->db->get('mp3');
 
         if ($query->num_rows() > 0) {
             $output = $query->result();

@@ -38,51 +38,51 @@ angular.module('controllers', [])
                 }
             };
 
-    // Función que coje el user y pass y comprueba que sean correctos
-    $scope.login = function() {
-        var body = {
-            user: $scope.username,
-            pass: $scope.password
-        };
-    // Petición del login
-    loginResource.save(body).$promise  // POST (en angular 'save') del user y pass
-        .then(function(result){				// respuesta ok!
-            var token = result.data.token;
-            var languageid = result.data.languageid;
-            var languageabbr = result.data.languageabbr;
-            var userid = result.data.userID;
-            var userValidated = result.data.userValidated;
-            if(userValidated=='1'){
-                AuthService.login(token, languageid, languageabbr, userid);
-                $location.path('/');
-            }else{
-                $scope.state = 'has-warning';
-            }
-        })
-        .catch(function(error){	// no respuesta
-            $scope.state = 'has-error';
-            console.log(error);
-        });
-    };
-    // Cambiar estados del formulario
-    $scope.changeFormState=function(){
-            $scope.state = '';
-            $scope.state2 = '';
-    };
+            // Función que coje el user y pass y comprueba que sean correctos
+            $scope.login = function () {
+                var body = {
+                    user: $scope.username,
+                    pass: $scope.password
+                };
+                // Petición del login
+                loginResource.save(body).$promise  // POST (en angular 'save') del user y pass
+                        .then(function (result) {				// respuesta ok!
+                            var token = result.data.token;
+                            var languageid = result.data.languageid;
+                            var languageabbr = result.data.languageabbr;
+                            var userid = result.data.userID;
+                            var userValidated = result.data.userValidated;
+                            if (userValidated == '1') {
+                                AuthService.login(token, languageid, languageabbr, userid);
+                                $location.path('/');
+                            } else {
+                                $scope.state = 'has-warning';
+                            }
+                        })
+                        .catch(function (error) {	// no respuesta
+                            $scope.state = 'has-error';
+                            console.log(error);
+                        });
+            };
+            // Cambiar estados del formulario
+            $scope.changeFormState = function () {
+                $scope.state = '';
+                $scope.state2 = '';
+            };
 
-    // Renovar la contrasseña
-    $scope.forgotPass=function(){
-        Resources.register.save({'user':$scope.user},{'funct':"passRecoveryMail"}).$promise
-        .then(function(results){
-            console.log(results.message);
-            if(results.exist){ // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                $location.path('/emailSended');
-            }else{
-                $scope.state2 = 'has-error';
-            }
-        });
-    };
-})
+            // Renovar la contrasseña
+            $scope.forgotPass = function () {
+                Resources.register.save({'user': $scope.user}, {'funct': "passRecoveryMail"}).$promise
+                        .then(function (results) {
+                            console.log(results.message);
+                            if (results.exist) { // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                $location.path('/emailSended');
+                            } else {
+                                $scope.state2 = 'has-error';
+                            }
+                        });
+            };
+        })
 
 //Controlador del registro de usuario
         .controller('RegisterCtrl', function ($scope, $rootScope, Resources, md5, $q, $location) {
@@ -135,354 +135,354 @@ angular.module('controllers', [])
             };
 
             //Validación del usuario
-            $scope.checkUser=function(formData){
-        if(formData.SUname == null){
-            $scope.state.user = 'has-warning';
-            userOk = false;  // Usamos una variable en vez del return por que la función promise tarda mas en retornar el resultado y nos dava error al comprobarlo en el submit
-            return;
-        }
-        if (formData.SUname.length < 4 || formData.SUname.length >= 50) { // minimo y maximo de caracteres requeridos
-            $scope.state.user = 'has-warning';
-            userOk = false;
-        } else {
-            Resources.register.get({ //enviamos los datos de la tabla de la base de datos donde queremos comprobar el nombre
-                'table':"SuperUser",
-                'column':"SUname",
-                'data':formData.SUname},{'funct':"checkData"}).$promise
-                    .then(function(results){
-                        if (results.exist == "false") {
-                            $scope.state.user = 'has-success'; //Si no exixte el nombre ponemos el checkbox en success
-                    userOk = true;
-                } else if (results.exist == "true") {
-                    $scope.state.user = 'has-error'; //Si exixte el nombre ponemos el checkbox en error
+            $scope.checkUser = function (formData) {
+                if (formData.SUname == null) {
+                    $scope.state.user = 'has-warning';
+                    userOk = false;  // Usamos una variable en vez del return por que la función promise tarda mas en retornar el resultado y nos dava error al comprobarlo en el submit
+                    return;
+                }
+                if (formData.SUname.length < 4 || formData.SUname.length >= 50) { // minimo y maximo de caracteres requeridos
+                    $scope.state.user = 'has-warning';
                     userOk = false;
-                }
-            })
-                    .catch(function(error){ // no respuesta
-                console.log('get_error:',error);
-                userOk = false;
-            });
-        }
-    };
-    
-    //Validar la igualdad de los dos passwords
-    $scope.checkPassword=function(formData){
-        if(formData.pswd == null || formData.pswd.length >= 32){ // minimo y maximo de caracteres requeridos
-            $scope.state.password = 'has-warning';
-            $scope.state.confirmPassword = 'has-warning';
-            return false;
-        }
-        if (formData.pswd.length < 4) {
-            $scope.state.password = 'has-warning';
-            return false;
-        } else {
-            $scope.state.password = 'has-success';
-            var passOk=true;
-        }
-        if (formData.pswd != formData.confirmPassword && passOk && $scope.registerForm.confirmPassword.$dirty) {
-            $scope.state.confirmPassword = 'has-warning';
-            return false;
-        }else
-            if (formData.pswd == formData.confirmPassword) {
-                $scope.state.confirmPassword = 'has-success';
-                return true;
-            }
-    };
-    
-    //Comprobar que ha entrado texto en el campo nombre
-    $scope.checkName=function(formData){
-        if(formData.realname == null || formData.realname == '' || formData.realname.length >= 200){ // minimo y maximo de caracteres requeridos
-            $scope.state.name = 'has-error';
-            return false;
-        }else{
-            $scope.state.name = 'has-success';
-            return true;
-        }
-    };
-    
-    //Comprobar que ha entrado texto en el campo apellidos
-    $scope.checkLastname=function(formData){
-        if(formData.surnames == null || formData.surnames == '' || formData.surnames.length >= 300){ // minimo y maximo de caracteres requeridos
-            $scope.state.lastname = 'has-error';
-            return false;
-        }else{
-            $scope.state.lastname = 'has-success';
-            return true;
-        }
-    };
-    
-    //Validación del email
-    var emailFormat = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
-    $scope.checkEmail=function(formData){
-        if(formData.email == null || formData.email == '' || formData.email.length >= 300){ // comprovacion de formato y minimo y maximo de caracteres requeridos
-            $scope.state.email = 'has-warning';
-            emailOk = false;
-            return;
-        }
-        if (String(formData.email).search(emailFormat) == -1) {
-            $scope.state.email = 'has-warning';
-            emailOk = false;
-        } else {
-            Resources.register.get({ //enviamos los datos de la tabla de la base de datos donde queremos comprobar el nombre
-                'table':"SuperUser",
-                'column':"email",
-                'data':formData.email},{'funct':"checkData"}).$promise
-                    .then(function(results){
-                        if (results.exist == "false") {
-                            $scope.state.email = 'has-success'; //Si no exixte el nombre ponemos el checkbox en success
-                    emailOk = true;
-                } else if (results.exist == "true") {
-                    $scope.state.email = 'has-error'; //Si exixte el nombre ponemos el checkbox en error
-                    emailOk = false;
-                }
-            });
-        }
-    };
-    
-    //Añadir idiomas
-    $scope.addLanguage=function(idLanguage){
-        angular.forEach($scope.availableLanguageOptions, function(value, key) {
-            if(value.ID_Language == idLanguage){
-                $scope.languageList.push($scope.availableLanguageOptions[key]);//añadimos el idioma a la lista .push(objeto)
-                $scope.availableLanguageOptions.splice(key,1);//Borrar idioma de las opciones .splice(posicion, numero de items)
-                $scope.state.languageSelected = 'has-success';
-                languageOk=true;
-            }
-        });
-    };
-    
-    //Quitar idiomas
-    $scope.removeLanguage=function(index){
-        $scope.availableLanguageOptions.push($scope.languageList[index]);
-        $scope.languageList.splice(index,1);//Borrar item de un array .splice(posicion, numero de items)
-    };
-    
-    //Genero de la aplicación (Masculino/femenino)
-    $scope.sex=function(sex){
-        if(sex=='female'){
-            $scope.state.female ='has-success';
-            $scope.state.male='';
-            $scope.formData.cfgIsFem = '1';
-            return true;
-        }else if(sex=='male'){
-            $scope.state.female ='';
-            $scope.state.male='has-success';
-            $scope.formData.cfgIsFem = '0';
-            return true;
-        }
-        if(sex.cfgIsFem == null || sex.cfgIsFem ==''){
-            $scope.state.female ='has-error';
-            $scope.state.male ='has-error';
-            return false;
-        }else{
-            return true;
-        }
-    }
-    
-    $scope.submitForm = function (formData) {
-        // Llamamos las funciones para printar el error en el formulario si nunca se han llamado
-        $scope.checkUser(formData);
-        $scope.checkEmail(formData);
-        $scope.checkPassword(formData);
-        $scope.checkName(formData);
-        $scope.checkLastname(formData);
-        $scope.sex(formData);
-        // Comprobamos si el usuario ha introducido algun idioma
-        if ($scope.languageList.length==0){
-            $scope.state.languageSelected = 'has-error';
-            languageOk=false;
-        }
-        // Comprobamos todos los campos del formulario accediendo a las funciones o mirando las variables de estado
-        if (userOk&&$scope.checkPassword(formData)&&$scope.checkName(formData)&&$scope.checkLastname(formData)&&emailOk&&languageOk&&$scope.sex(formData)) {
-            $location.path('/registerComplete');
-
-            //Borramos los campos inecesarios
-            delete formData.confirmPassword;
-            delete formData.languageSelected;
-            //Ponemos como idioma por defecto el primero de la lista que ha seleccionado el usuario
-            formData.cfgDefLanguage = $scope.languageList[0].ID_Language;
-            //Ciframos el password en md5
-            $pass = formData.pswd;
-            formData.pswd = md5.createHash($pass);
-            //Pasamos los datos a formato JSON string
-            var data = {'data':JSON.stringify(formData),'table':'SuperUser'};
-            //enviamos los datos del formulario.
-            Resources.register.save(data,{'funct':"saveData"}).$promise
-                .then(function(results){
-                    console.log('response:', results);
-                    var promises = []; //PROMESAS
-                    angular.forEach($scope.languageList, function(value) {
-                        var deferred = $q.defer();//PROMESAS
-                        //enviamos los usuarios con cada idioma.
-                        Resources.register.save({'SUname':formData.SUname,'ID_ULanguage':value.ID_Language},{'funct':"saveUserData"}).$promise
-                            .then(function(results){
-                                deferred.resolve(results);//PROMESAS
-                                $id_su=results.ID_SU;
-                                console.log('response:', results);
+                } else {
+                    Resources.register.get({//enviamos los datos de la tabla de la base de datos donde queremos comprobar el nombre
+                        'table': "SuperUser",
+                        'column': "SUname",
+                        'data': formData.SUname}, {'funct': "checkData"}).$promise
+                            .then(function (results) {
+                                if (results.exist == "false") {
+                                    $scope.state.user = 'has-success'; //Si no exixte el nombre ponemos el checkbox en success
+                                    userOk = true;
+                                } else if (results.exist == "true") {
+                                    $scope.state.user = 'has-error'; //Si exixte el nombre ponemos el checkbox en error
+                                    userOk = false;
+                                }
+                            })
+                            .catch(function (error) { // no respuesta
+                                console.log('get_error:', error);
+                                userOk = false;
                             });
-                        promises.push(deferred.promise);//PROMESAS
-                    });
+                }
+            };
 
-                    //Funcion que se llama al finalizar todas las promesas
-                    $q.all(promises).then(function(){
-                        //Vista confirmación
-                        Resources.register.save({'user':$id_su},{'funct':"generateValidationMail"}).$promise
-                        .then(function(results){
-                            console.log(results.message);
-                            if(results.exist){ // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                $scope.viewActived = true; // para activar la vista
-                            }
-                        });
-                    });
-            });
-        }
-    };
-})
+            //Validar la igualdad de los dos passwords
+            $scope.checkPassword = function (formData) {
+                if (formData.pswd == null || formData.pswd.length >= 32) { // minimo y maximo de caracteres requeridos
+                    $scope.state.password = 'has-warning';
+                    $scope.state.confirmPassword = 'has-warning';
+                    return false;
+                }
+                if (formData.pswd.length < 4) {
+                    $scope.state.password = 'has-warning';
+                    return false;
+                } else {
+                    $scope.state.password = 'has-success';
+                    var passOk = true;
+                }
+                if (formData.pswd != formData.confirmPassword && passOk && $scope.registerForm.confirmPassword.$dirty) {
+                    $scope.state.confirmPassword = 'has-warning';
+                    return false;
+                } else
+                if (formData.pswd == formData.confirmPassword) {
+                    $scope.state.confirmPassword = 'has-success';
+                    return true;
+                }
+            };
+
+            //Comprobar que ha entrado texto en el campo nombre
+            $scope.checkName = function (formData) {
+                if (formData.realname == null || formData.realname == '' || formData.realname.length >= 200) { // minimo y maximo de caracteres requeridos
+                    $scope.state.name = 'has-error';
+                    return false;
+                } else {
+                    $scope.state.name = 'has-success';
+                    return true;
+                }
+            };
+
+            //Comprobar que ha entrado texto en el campo apellidos
+            $scope.checkLastname = function (formData) {
+                if (formData.surnames == null || formData.surnames == '' || formData.surnames.length >= 300) { // minimo y maximo de caracteres requeridos
+                    $scope.state.lastname = 'has-error';
+                    return false;
+                } else {
+                    $scope.state.lastname = 'has-success';
+                    return true;
+                }
+            };
+
+            //Validación del email
+            var emailFormat = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
+            $scope.checkEmail = function (formData) {
+                if (formData.email == null || formData.email == '' || formData.email.length >= 300) { // comprovacion de formato y minimo y maximo de caracteres requeridos
+                    $scope.state.email = 'has-warning';
+                    emailOk = false;
+                    return;
+                }
+                if (String(formData.email).search(emailFormat) == -1) {
+                    $scope.state.email = 'has-warning';
+                    emailOk = false;
+                } else {
+                    Resources.register.get({//enviamos los datos de la tabla de la base de datos donde queremos comprobar el nombre
+                        'table': "SuperUser",
+                        'column': "email",
+                        'data': formData.email}, {'funct': "checkData"}).$promise
+                            .then(function (results) {
+                                if (results.exist == "false") {
+                                    $scope.state.email = 'has-success'; //Si no exixte el nombre ponemos el checkbox en success
+                                    emailOk = true;
+                                } else if (results.exist == "true") {
+                                    $scope.state.email = 'has-error'; //Si exixte el nombre ponemos el checkbox en error
+                                    emailOk = false;
+                                }
+                            });
+                }
+            };
+
+            //Añadir idiomas
+            $scope.addLanguage = function (idLanguage) {
+                angular.forEach($scope.availableLanguageOptions, function (value, key) {
+                    if (value.ID_Language == idLanguage) {
+                        $scope.languageList.push($scope.availableLanguageOptions[key]);//añadimos el idioma a la lista .push(objeto)
+                        $scope.availableLanguageOptions.splice(key, 1);//Borrar idioma de las opciones .splice(posicion, numero de items)
+                        $scope.state.languageSelected = 'has-success';
+                        languageOk = true;
+                    }
+                });
+            };
+
+            //Quitar idiomas
+            $scope.removeLanguage = function (index) {
+                $scope.availableLanguageOptions.push($scope.languageList[index]);
+                $scope.languageList.splice(index, 1);//Borrar item de un array .splice(posicion, numero de items)
+            };
+
+            //Genero de la aplicación (Masculino/femenino)
+            $scope.sex = function (sex) {
+                if (sex == 'female') {
+                    $scope.state.female = 'has-success';
+                    $scope.state.male = '';
+                    $scope.formData.cfgIsFem = '1';
+                    return true;
+                } else if (sex == 'male') {
+                    $scope.state.female = '';
+                    $scope.state.male = 'has-success';
+                    $scope.formData.cfgIsFem = '0';
+                    return true;
+                }
+                if (sex.cfgIsFem == null || sex.cfgIsFem == '') {
+                    $scope.state.female = 'has-error';
+                    $scope.state.male = 'has-error';
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            $scope.submitForm = function (formData) {
+                // Llamamos las funciones para printar el error en el formulario si nunca se han llamado
+                $scope.checkUser(formData);
+                $scope.checkEmail(formData);
+                $scope.checkPassword(formData);
+                $scope.checkName(formData);
+                $scope.checkLastname(formData);
+                $scope.sex(formData);
+                // Comprobamos si el usuario ha introducido algun idioma
+                if ($scope.languageList.length == 0) {
+                    $scope.state.languageSelected = 'has-error';
+                    languageOk = false;
+                }
+                // Comprobamos todos los campos del formulario accediendo a las funciones o mirando las variables de estado
+                if (userOk && $scope.checkPassword(formData) && $scope.checkName(formData) && $scope.checkLastname(formData) && emailOk && languageOk && $scope.sex(formData)) {
+                    $location.path('/registerComplete');
+
+                    //Borramos los campos inecesarios
+                    delete formData.confirmPassword;
+                    delete formData.languageSelected;
+                    //Ponemos como idioma por defecto el primero de la lista que ha seleccionado el usuario
+                    formData.cfgDefLanguage = $scope.languageList[0].ID_Language;
+                    //Ciframos el password en md5
+                    $pass = formData.pswd;
+                    formData.pswd = md5.createHash($pass);
+                    //Pasamos los datos a formato JSON string
+                    var data = {'data': JSON.stringify(formData), 'table': 'SuperUser'};
+                    //enviamos los datos del formulario.
+                    Resources.register.save(data, {'funct': "saveData"}).$promise
+                            .then(function (results) {
+                                console.log('response:', results);
+                                var promises = []; //PROMESAS
+                                angular.forEach($scope.languageList, function (value) {
+                                    var deferred = $q.defer();//PROMESAS
+                                    //enviamos los usuarios con cada idioma.
+                                    Resources.register.save({'SUname': formData.SUname, 'ID_ULanguage': value.ID_Language}, {'funct': "saveUserData"}).$promise
+                                            .then(function (results) {
+                                                deferred.resolve(results);//PROMESAS
+                                                $id_su = results.ID_SU;
+                                                console.log('response:', results);
+                                            });
+                                    promises.push(deferred.promise);//PROMESAS
+                                });
+
+                                //Funcion que se llama al finalizar todas las promesas
+                                $q.all(promises).then(function () {
+                                    //Vista confirmación
+                                    Resources.register.save({'user': $id_su}, {'funct': "generateValidationMail"}).$promise
+                                            .then(function (results) {
+                                                console.log(results.message);
+                                                if (results.exist) { // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                                    $scope.viewActived = true; // para activar la vista
+                                                }
+                                            });
+                                });
+                            });
+                }
+            };
+        })
 
 //User email validation
-.controller('emailValidationCtrl', function($scope, $routeParams, Resources) {
-    $scope.activedValidation=false;// para activar el gif de loading
-    $scope.viewActived = false; // para activar el gif de loading...
-    //Pedimos los idiomas disponibles
-    var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
-    Resources.register.get({'section':'emailValidation'},{'funct':"allContent"}).$promise
-            .then(function(results){
-                $scope.availableLanguageOptions=results.languages;// Idiomas disponibles para el desplegable del formulario
-                content=results.content;// Contenido en cada idioma
-                $scope.content=content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
-                $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
-                numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
-                $scope.viewActived = true; // para activar la vista
-            
-    });
-    //Cambiar el idioma del contenido
-    $scope.changeContentLanguage=function(){
-        currentLanguage ++;
-        // El content esta dentro de un array que empieza por la posición 1 y el nombre de cada idioma en un array que empieza en la posicion 0.
-        if(currentLanguage > numberOfLanguages){
-            currentLanguage = 1;
-            $scope.content=content[1];
-            $scope.languageNameNext = $scope.availableLanguageOptions[1].languageName;
-        }else{
-            $scope.content=content[currentLanguage];
-            if((currentLanguage+1) > numberOfLanguages){
-                $scope.languageNameNext = $scope.availableLanguageOptions[0].languageName;
-            }else{
-                $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;
-            }
-        }
-    };
-  
-    //Enviamos la clave y el id para comprobar el email del usuario
-    Resources.register.save({'emailKey':$routeParams.emailKey,'ID_SU':$routeParams.id},{'funct':"emailValidation"}).$promise
-        .then(function(results){
-            $scope.validated=results.validated;
-            $scope.activedValidation=true;// para activar la vista;
-        });
-})
+        .controller('emailValidationCtrl', function ($scope, $routeParams, Resources) {
+            $scope.activedValidation = false;// para activar el gif de loading
+            $scope.viewActived = false; // para activar el gif de loading...
+            //Pedimos los idiomas disponibles
+            var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
+            Resources.register.get({'section': 'emailValidation'}, {'funct': "allContent"}).$promise
+                    .then(function (results) {
+                        $scope.availableLanguageOptions = results.languages;// Idiomas disponibles para el desplegable del formulario
+                        content = results.content;// Contenido en cada idioma
+                        $scope.content = content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
+                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
+                        numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
+                        $scope.viewActived = true; // para activar la vista
+
+                    });
+            //Cambiar el idioma del contenido
+            $scope.changeContentLanguage = function () {
+                currentLanguage++;
+                // El content esta dentro de un array que empieza por la posición 1 y el nombre de cada idioma en un array que empieza en la posicion 0.
+                if (currentLanguage > numberOfLanguages) {
+                    currentLanguage = 1;
+                    $scope.content = content[1];
+                    $scope.languageNameNext = $scope.availableLanguageOptions[1].languageName;
+                } else {
+                    $scope.content = content[currentLanguage];
+                    if ((currentLanguage + 1) > numberOfLanguages) {
+                        $scope.languageNameNext = $scope.availableLanguageOptions[0].languageName;
+                    } else {
+                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;
+                    }
+                }
+            };
+
+            //Enviamos la clave y el id para comprobar el email del usuario
+            Resources.register.save({'emailKey': $routeParams.emailKey, 'ID_SU': $routeParams.id}, {'funct': "emailValidation"}).$promise
+                    .then(function (results) {
+                        $scope.validated = results.validated;
+                        $scope.activedValidation = true;// para activar la vista;
+                    });
+        })
 
 //Password recovery controller
-.controller('passRecoveryCtrl', function($scope, $routeParams, Resources, md5) {
-    
-    //HTML views
-    $scope.linkExpiredView=false;
-    $scope.enterPassView=false;
-    $scope.passChangedView=false;
-    
-    //initialize variables
-    $scope.formData = {};  //Datos del formulario
-    $scope.state ={password:"", confirmPassword:""};// estado de cada campo del formulario
-    var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
-    
-    //HTML text content
-    Resources.register.get({'section':'passRecovery'},{'funct':"allContent"}).$promise
-            .then(function(results){
-                $scope.availableLanguageOptions=results.languages;// Idiomas disponibles para el desplegable del formulario
-                content=results.content;// Contenido en cada idioma
-                $scope.content=content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
-                $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
-                numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
-                $scope.viewActived = true; // para activar la vista
-    });
-    
-    //Check if url user exists
-    Resources.register.save({'emailKey':$routeParams.emailKey,'ID_SU':$routeParams.id},{'funct':"emailValidation"}).$promise
-        .then(function(results){
-            if(results.userExist){
-                $scope.linkExpiredView=false;
-                $scope.enterPassView=true;
-                $scope.passChangedView=false;
-            }else{
-                $scope.linkExpiredView=true;
-                $scope.enterPassView=false;
-                $scope.passChangedView=false;
-            }
-        });
-        
-    //Change HTML text content language
-    $scope.changeContentLanguage=function(){
-        currentLanguage ++;
-        // El content esta dentro de un array que empieza por la posición 1 y el nombre de cada idioma en un array que empieza en la posicion 0.
-        if(currentLanguage > numberOfLanguages){
-            currentLanguage = 1;
-            $scope.content=content[1];
-            $scope.languageNameNext = $scope.availableLanguageOptions[1].languageName;
-        }else{
-            $scope.content=content[currentLanguage];
-            if((currentLanguage+1) > numberOfLanguages){
-                $scope.languageNameNext = $scope.availableLanguageOptions[0].languageName;
-            }else{
-                $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;
-            }
-        }
-    };
-    
-    //Check if passwords are equal.
-     $scope.checkPassword=function(formData){
-        if(formData.pswd == null || formData.pswd.length >= 32){ // minimo y maximo de caracteres requeridos
-            $scope.state.password = 'has-warning';
-            $scope.state.confirmPassword = 'has-warning';
-            return false;
-        }
-        if (formData.pswd.length < 4) {
-            $scope.state.password = 'has-warning';
-            return false;
-        } else {
-            $scope.state.password = 'has-success';
-            var passOk=true;
-        }
-        if (formData.pswd != formData.confirmPassword && passOk && $scope.PassForm.confirmPassword.$dirty) {
-            $scope.state.confirmPassword = 'has-warning';
-            return false;
-        }else
-            if (formData.pswd == formData.confirmPassword) {
-                $scope.state.confirmPassword = 'has-success';
-                return true;
-            }
-    };
-    //Send new password
-    $scope.sendPass=function(formData){
+        .controller('passRecoveryCtrl', function ($scope, $routeParams, Resources, md5) {
 
-        if ($scope.checkPassword(formData)) {
             //HTML views
-            $scope.linkExpiredView=false;
-            $scope.enterPassView=false;
-            $scope.passChangedView=false;
-            //md5 password encode and Json formating
-            $password = md5.createHash(formData.pswd);
-            $pass ='{"pswd":"'+ $password +'"}';
-            //Send new password
-            Resources.register.save({'emailKey':$routeParams.emailKey,'ID_SU':$routeParams.id,'pass':$pass},{'funct':"changePass"}).$promise
-            .then(function(results){
-                if(results.passChanged){
-                $scope.linkExpiredView=false;
-                $scope.enterPassView=false;
-                $scope.passChangedView=true;
+            $scope.linkExpiredView = false;
+            $scope.enterPassView = false;
+            $scope.passChangedView = false;
+
+            //initialize variables
+            $scope.formData = {};  //Datos del formulario
+            $scope.state = {password: "", confirmPassword: ""};// estado de cada campo del formulario
+            var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
+
+            //HTML text content
+            Resources.register.get({'section': 'passRecovery'}, {'funct': "allContent"}).$promise
+                    .then(function (results) {
+                        $scope.availableLanguageOptions = results.languages;// Idiomas disponibles para el desplegable del formulario
+                        content = results.content;// Contenido en cada idioma
+                        $scope.content = content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
+                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
+                        numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
+                        $scope.viewActived = true; // para activar la vista
+                    });
+
+            //Check if url user exists
+            Resources.register.save({'emailKey': $routeParams.emailKey, 'ID_SU': $routeParams.id}, {'funct': "emailValidation"}).$promise
+                    .then(function (results) {
+                        if (results.userExist) {
+                            $scope.linkExpiredView = false;
+                            $scope.enterPassView = true;
+                            $scope.passChangedView = false;
+                        } else {
+                            $scope.linkExpiredView = true;
+                            $scope.enterPassView = false;
+                            $scope.passChangedView = false;
+                        }
+                    });
+
+            //Change HTML text content language
+            $scope.changeContentLanguage = function () {
+                currentLanguage++;
+                // El content esta dentro de un array que empieza por la posición 1 y el nombre de cada idioma en un array que empieza en la posicion 0.
+                if (currentLanguage > numberOfLanguages) {
+                    currentLanguage = 1;
+                    $scope.content = content[1];
+                    $scope.languageNameNext = $scope.availableLanguageOptions[1].languageName;
+                } else {
+                    $scope.content = content[currentLanguage];
+                    if ((currentLanguage + 1) > numberOfLanguages) {
+                        $scope.languageNameNext = $scope.availableLanguageOptions[0].languageName;
+                    } else {
+                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;
+                    }
                 }
-            });
-        }
-    }
-})
+            };
+
+            //Check if passwords are equal.
+            $scope.checkPassword = function (formData) {
+                if (formData.pswd == null || formData.pswd.length >= 32) { // minimo y maximo de caracteres requeridos
+                    $scope.state.password = 'has-warning';
+                    $scope.state.confirmPassword = 'has-warning';
+                    return false;
+                }
+                if (formData.pswd.length < 4) {
+                    $scope.state.password = 'has-warning';
+                    return false;
+                } else {
+                    $scope.state.password = 'has-success';
+                    var passOk = true;
+                }
+                if (formData.pswd != formData.confirmPassword && passOk && $scope.PassForm.confirmPassword.$dirty) {
+                    $scope.state.confirmPassword = 'has-warning';
+                    return false;
+                } else
+                if (formData.pswd == formData.confirmPassword) {
+                    $scope.state.confirmPassword = 'has-success';
+                    return true;
+                }
+            };
+            //Send new password
+            $scope.sendPass = function (formData) {
+
+                if ($scope.checkPassword(formData)) {
+                    //HTML views
+                    $scope.linkExpiredView = false;
+                    $scope.enterPassView = false;
+                    $scope.passChangedView = false;
+                    //md5 password encode and Json formating
+                    $password = md5.createHash(formData.pswd);
+                    $pass = '{"pswd":"' + $password + '"}';
+                    //Send new password
+                    Resources.register.save({'emailKey': $routeParams.emailKey, 'ID_SU': $routeParams.id, 'pass': $pass}, {'funct': "changePass"}).$promise
+                            .then(function (results) {
+                                if (results.passChanged) {
+                                    $scope.linkExpiredView = false;
+                                    $scope.enterPassView = false;
+                                    $scope.passChangedView = true;
+                                }
+                            });
+                }
+            }
+        })
 
 //Controlador de la configuración de usuario
 .controller('UserConfCtrl', function ($scope, Resources, AuthService, txtContent, $location) {
@@ -584,14 +584,18 @@ angular.module('controllers', [])
             //MODIF: Coger de BBDD escaneo por intervalo o no en el if
             $scope.InitScan = function ()
             {
+                // 0 custom, 1 rows, 2 columns
+                $scope.scanType = 0;
                 $scope.inScan = true;
-                $scope.longclick = true;
+                // MODIF: manualScan == cfgScanningAutoOnOff
+                $scope.timerScan = 1;
+                $scope.longclick = false;
                 function myTimer() {
-                        $scope.NextBlockScan();
+                    $scope.NextBlockScan();
                 }
-                if(false){
+                if ($scope.timerScan) {
                     $interval.cancel($scope.intervalScan);
-                    var Intervalscan = 450;
+                    var Intervalscan = 1500;
                     function myTimer() {
                         $scope.nextBlockScan();
                     }
@@ -599,136 +603,206 @@ angular.module('controllers', [])
                     $scope.intervalScan = $interval(myTimer, Intervalscan);
 
                 }
-                
+
                 $scope.arrayScannedCells = null;
-                $scope.indexScannedCells = 0;
                 $scope.currentScanBlock = 1;
-                $scope.currentScanBlock1 = 1;
-                $scope.currentScanBlock2 = 1;
+                $scope.currentScanBlock1 = -1;
+                if ($scope.timerScan) {
+                    $scope.currentScanBlock2 = 0;
+                    $scope.indexScannedCells = -1;
+                } else {
+                    $scope.currentScanBlock2 = 1;
+                    $scope.indexScannedCells = 0;
+                }
                 $scope.getMaxScanBlock1();
-                
+
+            };
+            // picto is -1 pred, 0 sentemce, others mainboard.
+            $scope.isScanned = function (picto) {
+                //Custom scan
+                if ($scope.inScan && $scope.currentScanBlock1 != -1 && $scope.currentScanBlock1 != 0) {
+                    if ($scope.scanType == 0 && (
+                            (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 1) ||
+                            (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 2 && picto.customScanBlock2 == $scope.currentScanBlock2) ||
+                            ($scope.currentScanBlock == 3 && $scope.arrayScannedCells != null && $scope.indexScannedCells != -1 && picto.posInBoard == $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard))) {
+                        return true;
+                    }
+                    // Rows first
+                    else if ($scope.scanType == 1 && (
+                            ($scope.currentScanBlock == 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1) ||
+                            ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock2 - 1))) {
+                        return true;
+                    } else if ($scope.scanType == 2 && (
+                            ($scope.currentScanBlock == 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1) ||
+                            ($scope.currentScanBlock == 2 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
+                        return true;
+                    }
+                }
+                return false;
+
+
             };
             // When we get out from scanMode stops the interval
             $scope.$watch('inScan', function () {
-                if($scope.inScan === false){
+                if ($scope.inScan === false) {
                     $interval.cancel($scope.intervalScan);
                 }
             });
-            
-            
-            $scope.scanLeftClick = function()
+
+
+            $scope.scanLeftClick = function ()
             {
-                if($scope.inScan){
-                    if(!$scope.longclick)
+                if ($scope.inScan) {
+                    if (!$scope.longclick)
                     {
                         $scope.selectBlockScan();
+                    } else if ($scope.manualScan == 0) {
+                        $scope.nextBlockScan();
                     }
                 }
             };
-            $scope.playLongClick = function()
+            $scope.playLongClick = function ()
             {
-                if($scope.inScan){
-                    if($scope.longclick)
+                if ($scope.inScan) {
+                    if ($scope.longclick)
                     {
                         $timeout.cancel($scope.scanLongClickTime);
                         $scope.scanLongClickController = true;
-                        $scope.scanLongClickTime = $timeout($scope.selectBlockScan,1000);
+                        $scope.scanLongClickTime = $timeout($scope.selectBlockScan, 1000);
                     }
                 }
             };
-            $scope.cancelLongClick = function()
+            $scope.cancelLongClick = function ()
             {
-                if($scope.inScan){
-                    if($scope.longclick)
+                if ($scope.inScan) {
+                    if ($scope.longclick)
                     {
-                      if($scope.scanLongClickController)
-                      {
-                        $timeout.cancel($scope.scanLongClickTime);
-                        $scope.nextBlockScan();
-                        
-                          
-                      }
-                      else
-                      {
-                          
-                      }
+                        if ($scope.scanLongClickController)
+                        {
+                            $timeout.cancel($scope.scanLongClickTime);
+                            $scope.nextBlockScan();
+
+
+                        } else
+                        {
+
+                        }
                     }
                 }
             };
-            
-            $scope.scanRightClick = function()
+
+            $scope.scanRightClick = function ()
             {
-                if($scope.inScan){
-                    if(!$scope.longclick)
+                if ($scope.inScan) {
+                    if (!$scope.longclick)
                     {
+                        $scope.nextBlockScan();
+                    } else if ($scope.manualScan == 0) {
                         $scope.nextBlockScan();
                     }
                 }
             };
-            
+
             // Get the number of scan blocks
             $scope.getMaxScanBlock1 = function ()
             {
-                var url = $scope.baseurl + "Board/getMaxScanBlock1";
-                var postdata = {idboard: $scope.idboard};
+                if ($scope.scanType === 1) {
+                    $scope.maxScanBlock1 = $scope.rows;
+                } else if ($scope.scanType === 2) {
+                    $scope.maxScanBlock1 = $scope.columns;
+                } else if ($scope.scanType === 0) {
+                    var url = $scope.baseurl + "Board/getMaxScanBlock1";
+                    var postdata = {idboard: $scope.idboard};
 
-                $http.post(url, postdata).success(function (response)
-                {
-                    $scope.maxScanBlock1 = response.max;
-                });
+                    $http.post(url, postdata).success(function (response)
+                    {
+                        $scope.maxScanBlock1 = response.max;
+                    });
+                }
             };
             // Get the number of level 2 scan blocks
             $scope.getMaxScanBlock2 = function ()
             {
-                var url = $scope.baseurl + "Board/getMaxScanBlock2";
-                var postdata = {idboard: $scope.idboard, scanGroup: $scope.currentScanBlock1};
+                // MODIF: poner en caso de prediccion
+                //If we select the sentence view, there are just 3 cells to scan
+                if ($scope.currentScanBlock1 == 0) {
+                    $scope.maxScanBlock2 = 3;
+                } else if ($scope.scanType === 1) {
+                    $scope.maxScanBlock2 = $scope.columns;
+                } else if ($scope.scanType === 2) {
+                    $scope.maxScanBlock2 = $scope.rows;
+                } else if ($scope.scanType === 0) {
+                    var url = $scope.baseurl + "Board/getMaxScanBlock2";
+                    var postdata = {idboard: $scope.idboard, scanGroup: $scope.currentScanBlock1};
 
-                $http.post(url, postdata).success(function (response)
-                {
-                    $scope.maxScanBlock2 = response.max;
-                    // If there is no subgroup passes to the next scan level (3)
-                    if ($scope.maxScanBlock2 === null) {
-                        $scope.currentScanBlock2 = null;
-                        $scope.selectBlockScan();
-                    }
-                    // There is no group selected
-                    if ($scope.maxScanBlock2 === "No group found") {
-                        $scope.InitScan();
-                    }
-                });
+                    $http.post(url, postdata).success(function (response)
+                    {
+                        $scope.maxScanBlock2 = response.max;
+                        // If there is no subgroup passes to the next scan level (3)
+                        if ($scope.maxScanBlock2 === null) {
+                            $scope.currentScanBlock2 = null;
+                            $scope.selectBlockScan();
+                        }
+                        // There is no group selected
+                        if ($scope.maxScanBlock2 === "No group found") {
+                            $scope.InitScan();
+                        }
+                    });
+                }
             };
             // Change teh current scan block
             $scope.nextBlockScan = function () {
                 if ($scope.inScan) {
-                    
                     // If we are in the first scan level passes to the next (cyclic)
                     if ($scope.currentScanBlock === 1) {
-                        $scope.currentScanBlock1 = $scope.currentScanBlock1 % $scope.maxScanBlock1 + 1;
-                        // If we are in the second scan level passes to the next (cyclic) but...
-                    } else if ($scope.currentScanBlock === 2) {
+                        $scope.currentScanBlock1 = $scope.currentScanBlock1 + 1;
+                        if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
+                            $scope.currentScanBlock1 = -1;
+                        }
+                    }// If we are in the second scan level passes to the next (cyclic) but...
+                    else if ($scope.currentScanBlock === 2 && $scope.scanType === 0) {
                         // CurrentScanBlock will be null when we are over all the cell that have no scan block
                         if ($scope.currentScanBlock2 !== null) {
-                            // If we are not over the mentioned scanblock pass to the next (cyclic... almost)
+                            // If we are not over the mentioned scanblock pass to the next
                             $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                            // If we pass the last scan scan block instead of go to the first one, go to the null block (those cells which are no assigned to a scan block)
+                            // If we pass the last scan block...
                             if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                                $scope.currentScanBlock2 = null;
+                                // We are scannig the prediction bar or the sentece bar so start again
+                                if ($scope.currentScanBlock1 == 0 || $scope.currentScanBlock1 == -1) {
+                                    $scope.InitScan();
+                                    //We have to go to the cells that have no scan block
+                                } else {
+                                    $scope.currentScanBlock2 = null;
+                                }
+
+
                             }
-                            // If we are over this strange block, go to the first one.
+                            // If we are over this strange block, int scan again
                         } else {
-                            $scope.currentScanBlock2 = 1;
+                            $scope.InitScan();
                         }
-                        // If we are in the third scan pass one by one over the array (cyclic)  
-                    } else if ($scope.currentScanBlock === 3) {
-                        
-                        $scope.indexScannedCells = ($scope.indexScannedCells + 1) % ($scope.arrayScannedCells.length);
+
+                    } // If we are not in custom scan there are no null group so pass to the next(cyclic) 
+                    else if ($scope.currentScanBlock === 2 && ($scope.scanType === 1 || $scope.scanType === 2)) {
+                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
+                        // All cells were scanned. Start again
+                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
+                            $scope.InitScan();
+                            return;
+                        }
+                    }// If we are in the third scan pass one by one over the array (cyclic)
+                    else if ($scope.currentScanBlock === 3) {
+                        $scope.indexScannedCells = $scope.indexScannedCells + 1;
+                        if ($scope.indexScannedCells >= $scope.arrayScannedCells.length) {
+                            $scope.InitScan();
+                        }
                     }
                 }
             };
             //Pass to the next scan level (subgroup)
             $scope.selectBlockScan = function () {
                 if ($scope.inScan) {
-                    if($scope.longclick)
+                    if ($scope.longclick)
                     {
                         $scope.scanLongClickController = false;
                     }
@@ -739,23 +813,53 @@ angular.module('controllers', [])
                         $scope.getMaxScanBlock2();
                         //If we are in the third level, get all the cells (arraScannedCells)
                     } else if ($scope.currentScanBlock === 3) {
+                        // If we are over the sentence bar
+                        if ($scope.currentScanBlock1 == 0) {
+                            switch ($scope.currentScanBlock2) {
+                                case 1:
+                                    $scope.generate();
+                                    break;
+                                case 2:
+                                    $scope.deleteLast();
+                                    break;
+                                case 3:
+                                    $scope.deleteAll();
+                                    break;
+                            }//MODIF: Maybe we have to put control to perd
+                            $scope.InitScan();
+                            // We are over the cancel/return cell
+                        } else if ($scope.currentScanBlock2 == 0) {
+                            $scope.InitScan();
+                        } else if ($scope.scanType !== 0) {
+                            $scope.selectScannedCell();
+                        } else {
+                            var url = $scope.baseurl + "Board/getScannedCells";
+                            var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
+                            $http.post(url, postdata).success(function (response)
+                            {
+                                $scope.arrayScannedCells = response.array;
+                                if ($scope.timerScan) {
+                                    $scope.currentScanBlock2 = 0;
+                                    $scope.indexScannedCells = -1;
+                                } else {
+                                    $scope.currentScanBlock2 = 1;
+                                    $scope.indexScannedCells = 0;
+                                }
+                                //There is one cell in that group
 
-                        var url = $scope.baseurl + "Board/getScannedCells";
-                        var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
-
-                        $http.post(url, postdata).success(function (response)
-                        {
-                            $scope.arrayScannedCells = response.array;
-                            $scope.indexScannedCells = 0;
-                            //There is one cell in that group
-
-                            if ($scope.arrayScannedCells.length === 1) {
-                                $scope.selectScannedCell();
-                            }
-                        });
+                                if ($scope.arrayScannedCells.length === 1) {
+                                    $scope.selectScannedCell();
+                                }
+                            });
+                        }
                         // This is, we selected a cell.
                     } else if ($scope.currentScanBlock === 4) {
-                        $scope.selectScannedCell();
+                        // We are over the cancel/return cell
+                        if ($scope.currentScanBlock2 == 0 || $scope.indexScannedCells == -1) {
+                            $scope.InitScan();
+                        } else {
+                            $scope.selectScannedCell();
+                        }
                     }
                 }
             };
@@ -763,12 +867,19 @@ angular.module('controllers', [])
             // Select the current cell (the index point to the array with all the cells)
             $scope.selectScannedCell = function ()
             {
+                var postdata = {idboard: "", pos: ""};
                 var url = $scope.baseurl + "Board/getCell";
-                if ($scope.arrayScannedCells === null){
-                    $scope.InitScan();
-                    return false;
+                if ($scope.scanType === 1) {
+                    var postdata = {idboard: $scope.idboard, pos: $scope.columns * ($scope.currentScanBlock1 - 1) + $scope.currentScanBlock2};
+                } else if ($scope.scanType === 2) {
+                    var postdata = {idboard: $scope.idboard, pos: $scope.columns * ($scope.currentScanBlock2 - 1) + $scope.currentScanBlock1};
+                } else {
+                    if ($scope.arrayScannedCells === null) {
+                        $scope.InitScan();
+                        return false;
+                    }
+                    var postdata = {idboard: $scope.arrayScannedCells[$scope.indexScannedCells].ID_RBoard, pos: $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard};
                 }
-                var postdata = {idboard: $scope.arrayScannedCells[$scope.indexScannedCells].ID_RBoard, pos: $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard};
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.clickOnCell(response.info);
@@ -784,7 +895,7 @@ angular.module('controllers', [])
                 $scope.userViewHeight = 100;
                 $scope.searchFolderHeight = 0;
                 var url = $scope.baseurl + "Board/loadCFG";
-                var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr'),lusuid: window.localStorage.getItem('languageid')};
+                var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr'), lusuid: window.localStorage.getItem('languageid')};
 
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
@@ -818,7 +929,15 @@ angular.module('controllers', [])
                     $scope.showmid();
                 }
                 $scope.showup();
-                
+                $scope.inPred = true;
+                if ($scope.inPred) {
+                    $scope.predViewWidth = 1;
+                    $scope.userViewWidth = 11;
+                    if (window.innerWidth < 1050) {
+                        $scope.predViewWidth = 2;
+                        $scope.userViewWidth = 10;
+                    }
+                }
                 /*$scope.grid1hide = false;
                  $scope.grid2hide = false;
                  $scope.grid3hide = false;
@@ -827,7 +946,7 @@ angular.module('controllers', [])
                  $scope.grid3 = 2;*/
             };
 
-            $scope.getPrimaryUserBoard = function (){
+            $scope.getPrimaryUserBoard = function () {
                 var url = $scope.baseurl + "Board/getPrimaryUserBoard";
 
                 $http.post(url).success(function (response)
@@ -872,7 +991,7 @@ angular.module('controllers', [])
             {
                 $scope.sentenceViewTop = true;
                 $scope.sentenceViewHeight = 20;
-                $scope.userViewWidth = 100;
+                $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
                 $scope.boardHeight = 60;
             };
@@ -880,7 +999,7 @@ angular.module('controllers', [])
             {
                 $scope.sentenceViewTop = false;
                 $scope.sentenceViewHeight = 0;
-                $scope.userViewWidth = 100;
+                $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
                 $scope.boardHeight = 80;
             };
@@ -888,7 +1007,7 @@ angular.module('controllers', [])
             {
                 $scope.sentenceViewTop = true;
                 $scope.sentenceViewHeight = 16;
-                $scope.userViewWidth = 100;
+                $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
                 $scope.boardHeight = 78;
             };
@@ -896,7 +1015,7 @@ angular.module('controllers', [])
             {
                 $scope.sentenceViewTop = false;
                 $scope.sentenceViewHeight = 0;
-                $scope.userViewWidth = 100;
+                $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
                 $scope.boardHeight = 100;
             };
@@ -932,6 +1051,8 @@ angular.module('controllers', [])
                 $scope.getPrimaryBoard();
                 $scope.inEdit = true;
                 $scope.inScan = false;
+                $scope.inPred = false;
+                $scope.predViewWidth = 0;
                 $scope.boardHeight = 96;
                 $scope.userViewWidth = 9;
                 $scope.editViewWidth = 3;
@@ -1001,7 +1122,6 @@ angular.module('controllers', [])
             {
                 var postdata = {Name: nameboard, ID: boardindex};
                 var URL = $scope.baseurl + "Board/modifyNameboard";
-                alert(postdata.Name);
                 $http.post(URL, postdata).
                         success(function (response)
                         {
@@ -1118,6 +1238,9 @@ angular.module('controllers', [])
                     $scope.dataTemp = response.data;
                 });
 
+                $scope.autoReturn();
+            };
+            $scope.autoReturn = function () {
                 var url = $scope.baseurl + "Board/autoReturn";
                 var postdata = {id: $scope.idboard};
 
@@ -1149,10 +1272,13 @@ angular.module('controllers', [])
 
                         $http.post(url, postdata).success(function (response)
                         {
-                            $scope.dataTemp = response.data;
+                            if (response.control === "generate") {
+                                $scope.dataTemp = response.data;
+                            }
                             $scope.info = response.info;
                         });
                     }
+                    $scope.autoReturn();
                 });
             };
             /*
@@ -1192,14 +1318,31 @@ angular.module('controllers', [])
                     console.log(response);
                     //$scope.dataTemp = response.data;
                     $scope.info = response.info;
+
+                    //MODIF: dir frase
+
+
+                    var postdata = {voice: 0, sentence: $scope.info.frasefinal};
+                    var URL = $scope.baseurl + "Board/getAudioSentence_post";
+
+
+                    $http.post(URL, postdata).
+                            success(function (response)
+                            {
+                                $scope.statusWord = response.status;
+                                $scope.data = response.data;
+                            });
+
+
+
+                    $scope.sound = ngAudio.load($scope.baseurl + "mp3/sound.mp3");
+                    $scope.sound.play();
                 });
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
 
-                //MODIF: dir frase
-                $scope.sound = ngAudio.load($scope.baseurl + "mp3/sound.mp3");
-                $scope.sound.play();
+
             };
 
             /*
@@ -1388,6 +1531,12 @@ angular.module('controllers', [])
             };
 
 
+            $scope.getPred = function () {
+                //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia
+                return $scope.data;
+            };
+
+
 
 
 
@@ -1406,6 +1555,21 @@ angular.module('controllers', [])
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
 
+                $scope.uploadFile = function () {
+                    var file = $scope.myFile;
+                    console.log('file is ');
+                    console.dir(file);
+                    var uploadUrl = "/img/upload.php";
+                    var fd = new FormData();
+                    fd.append('file', file);
+                    $http.post(uploadUrl, fd, { 
+                        headers: {'Content-Type': undefined}
+                    })
+                            .success(function () {
+                            })
+                            .error(function () {
+                            });
+                };
 
                 // Gets functions from database and shows them the dropmenu
                 $scope.getFunctions = function () {
@@ -1655,4 +1819,19 @@ angular.module('controllers', [])
                     }
                 };
             }
-        ]);
+        ])
+        .directive('fileModel', ['$parse', function ($parse) {
+                return {
+                    restrict: 'A',
+                    link: function (scope, element, attrs) {
+                        var model = $parse(attrs.fileModel);
+                        var modelSetter = model.assign;
+
+                        element.bind('change', function () {
+                            scope.$apply(function () {
+                                modelSetter(scope, element[0].files[0]);
+                            });
+                        });
+                    }
+                };
+            }]);

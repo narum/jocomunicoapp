@@ -49,13 +49,13 @@
 
 @media (max-width:1000px){
     .col-xs-12{
-        font-size: 12.5px;
+        font-size: 11.5px;
     }
     .col-xs-6{
         font-size: 12px;
     }
     input[type="radio"]{
-            margin: 0px;
+        margin: 0px;
     }
 }
 
@@ -63,10 +63,18 @@
 #footer{
     height:00%;
 }
+#sentenceView{
+    height:100%;
+
+}
 
 #userview{
     height:100%;
-    
+
+}
+#predView{
+    height:100%;
+    padding: 0.5vh 0% 4vh 0%;
 }
 
 #searchView{
@@ -187,7 +195,7 @@
 
 .containerCell{
     padding: 2px;
-    
+
 }
 .contentCell{
     padding: 2.5%;
@@ -195,6 +203,7 @@
     height: 100%;
     width: 100%;
     position: relative;
+
 }
 .ngdialog-overlay{
     background: rgba(255,255,255,0.8);
@@ -202,6 +211,20 @@
 .FolderButton{
     margin: 10%;
     background-color: white;
+}
+.returnScan{
+    width: 25% ;
+    height: 25%;
+    z-index: 24;
+    position: absolute;
+    border: 7px solid #2e758a;
+    border-radius: 7px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: url("/img/pictos/no_querer.png");
+    background-size: 100% 100%;
+    background-color: rgba(255,255,255,0.8);
 }
 .scaneo{
     margin: -2px;
@@ -212,6 +235,22 @@
     z-index: 24;
     position: absolute;
 }
+.scaneoSent{
+    border: 7px solid #2e758a;
+    border-radius: 7px;
+    z-index: 24;
+    position: absolute;
+    width: 97.6%;
+}
+.backgroundCell{
+    padding: 2.5%;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    z-index: 0;
+    position: absolute;
+    background-clip: content-box;
+}
 .function{
     right: 0px;
     bottom: 0px;
@@ -219,10 +258,67 @@
     height: auto;
     max-height: 100%;
     width: auto;
-    z-index: 24;
+    z-index: 3;
     position: absolute;
 }
 
 .shadow{
     box-shadow: 3px -2px #4a4a4a;
+}
+.contentPredCell{
+    padding: 2.5%;
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background: #fff;
+}
+
+.containerPredCell{
+    padding: 1vh 15% 1vh 15%;
+}
+
+.textCell{
+    top: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+    z-index: 2;
+    position: relative;
+    padding-left: 4px;
+}
+
+.textCell:first-letter {text-transform: uppercase}
+
+.sfolder{
+    padding:2.5%;
+    color:red;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+}
+
+.indicatorTenseSentence{
+    background: #FEE8B6;
+    height: 50%;
+    border-top-right-radius: 10px;
+}
+.indicatorTipusSentence{
+    background: #FEE8B6;
+    height: 50%;
+    border-bottom-right-radius: 10px;
+}
+.backgroundLlegir{
+    padding-right: 6%;
+}
+.backgroundDelete{
+    padding-left: 6%;
+}
+.icon{
+    position: absolute;
+    max-height: 85%;
+    max-width: 85%;
+    padding:10%
 }

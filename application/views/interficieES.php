@@ -267,7 +267,8 @@
                                 <input type="radio" name="tense" value="defecte" checked><span class="radiotop">Defecto</span></input>
                                 <input type="radio" name="tense" value="present"><span class="radiotop">Presente</span></input>
                                 <input type="radio" name="tense" value="perifrastic"><span class="radiotop">Pasado</span></input><br />
-                                <input type="radio" name="tense" value="perfet"><span class="radiotop">Pasado reciente</span></input>
+                                <input type="radio" name="tense" value="perfet"><span class="radiotop">Pasado inmediato</span></input>
+                                <input type="radio" name="tense" value="imperfecte"><span class="radiotop">Pasado lejano</span></input><br />
                                 <input type="radio" name="tense" value="futur"><span class="radiotop">Futuro</span></input><br />
                             </div> <br /><br />
 
