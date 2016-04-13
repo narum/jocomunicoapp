@@ -32,7 +32,7 @@ CREATE TABLE SuperUser (
 	realname VARCHAR(200),
 	surnames VARCHAR(300),
 	email VARCHAR(300),
-	cfgDefLanguage INT DEFAULT '1',
+	cfgDefUser INT,
 	cfgIsFem ENUM('0', '1') DEFAULT '0',
 	cfgAppConfUsageMouseOneCTwoC ENUM('0', '1', '2') DEFAULT '0',
 	cfgTimeClick INT DEFAULT '1000',
@@ -55,11 +55,8 @@ CREATE TABLE SuperUser (
 	cfgTextInCell ENUM('0', '1') DEFAULT '1',
 	cfgHistOnOff ENUM('0', '1') DEFAULT '1',
 	cfgBlackOnWhiteVSWhiteOnBlack ENUM('0', '1') DEFAULT '0',
-	UserValidated ENUM('0', '1') DEFAULT '0',
-	INDEX DefLanguage (cfgDefLanguage),
-	FOREIGN KEY (cfgDefLanguage) REFERENCES Languages (ID_Language) ON DELETE SET NULL
+	UserValidated ENUM('0', '1') DEFAULT '0'
 ) ENGINE=INNODB;
-
 
 
 CREATE TABLE Organization (

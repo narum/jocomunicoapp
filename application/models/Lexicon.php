@@ -29,8 +29,9 @@ class Lexicon extends CI_Model {
             // If the user is found, it fills the COOKIES
             $output = $query->result();
             $idusu = $output[0]->ID_SU;
-            $ulanguage = $output[0]->cfgDefLanguage;
+            $ulanguage = $output[0]->cfgDefUser;
             $isfem = $output[0]->cfgIsFem;
+            $autoerase = $output[0]->cfgAutoEraseSentenceBar;
             
             // By default
             $uexplanguage = $ulanguage;
@@ -53,6 +54,7 @@ class Lexicon extends CI_Model {
             $this->session->set_userdata('ulanguage', $uexplanguage);
             $this->session->set_userdata('uinterfacelangauge', $ulanguage);
             $this->session->set_userdata('isfem', $isfem);
+            $this->session->set_userdata('cfgAutoEraseSentenceBar', $autoerase);
             
             $output2 = array();
             $this->db->where('ID_Language', $uexplanguage);
@@ -891,8 +893,10 @@ class Lexicon extends CI_Model {
             }
         }
         // Eliminar les paraules de la taula provisional
-        $this->db->where('ID_RSTPUser', $idusu);
-        $this->db->delete('R_S_TempPictograms');
+        if ($this->session->userdata('cfgAutoEraseSentenceBar') == '1') {
+            $this->db->where('ID_RSTPUser', $idusu);
+            $this->db->delete('R_S_TempPictograms');
+        }
     }
     
     /*
