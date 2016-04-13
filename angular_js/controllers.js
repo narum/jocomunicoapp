@@ -1557,7 +1557,7 @@ angular.module('controllers', [])
                     var file = $scope.myFile;
                     console.log('file is ');
                     console.dir(file);
-                    var uploadUrl = "/img/upload.php";
+                    var uploadUrl = $scope.baseurl + "/ImgUploader/upload";
                     var fd = new FormData();
                     fd.append('file', file);
                     $http.post(uploadUrl, fd, { 
