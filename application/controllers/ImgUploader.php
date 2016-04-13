@@ -30,9 +30,8 @@ class ImgUploader extends REST_Controller {
         //$target_dir = "/opt/lampp/htdocs/jocomunicoapp/img/";
         $target_dir = "img/";
         $target_file = basename($_FILES['file']['name']);
-        var_dump($_FILES);
-        //MODIF: poner tamaño a 100 kb y tamaño 150
-        if ($_FILES['file']['size'] > 1000) {
+        //MODIF: poner tamaño a 100 kb y tamaño 150 minimo
+        if ($_FILES['file']['size'] > 100000) {
             $this->Img_Resize($_FILES['file']['tmp_name'], $target_dir, $target_file);
         } else {
             move_uploaded_file($_FILES['file']['tmp_name'], $target_dir . $target_file);
@@ -45,27 +44,40 @@ class ImgUploader extends REST_Controller {
         
         $width = $x['0'];
         $height = $x['1'];
-
+        $type = $x['mime'];
+        
         $rs_width = $width / 2; //resize to half of the original width.
         $rs_height = $height / 2; //resize to half of the original height.
-
-        switch ($x['mime']) {
+        
+        // The grater value between height and width have to be, at least, 150
+        if($rs_height < 150 || $rs_width  < 150){
+            if ($rs_height > $rs_width && $rs_height < 150 ){
+                $ratio = 150 / $rs_height;
+            }else if($rs_height < $rs_width && $rs_width < 150 ){
+                $ratio = 150 / $rs_width;
+            }else{
+                $ratio = 1;
+            }
+            $rs_height = $rs_height * $ratio;
+            $rs_width = $rs_width * $ratio;
+        } 
+        
+        switch ($type) {
             case "image/gif":
                 $img = imagecreatefromgif($src_path);
                 break;
-            case "image/jpeg":
+            case "image/jpeg": // jpeg and jpg
                 $img = imagecreatefromjpeg($src_path);
                 break;
             case "image/png":
                 $img = imagecreatefrompng($src_path);
                 break;
         }
-
+        // Create an empty img
         $img_base = imagecreatetruecolor($rs_width, $rs_height);
-        
-        switch ($x['mime']) {
+        // Set the alpha transparency if needed
+        switch ($type) {
             case "image/png":
-                echo "si";
                 // integer representation of the color black (rgb: 0,0,0)
                 $background = imagecolorallocate($img_base, 0, 0, 0);
                 // removing the black from the placeholder
@@ -89,9 +101,10 @@ class ImgUploader extends REST_Controller {
 
                 break;
         }
+        //Copy the img
         imagecopyresampled($img_base, $img, 0, 0, 0, 0, $rs_width, $rs_height, $width, $height);
-
-        switch ($x['mime']) {
+        // Create the image with the correct extension
+        switch ($type) {
             case "image/gif":
                 imagegif($img_base, $target_dir.$dst_path);
                 break;
@@ -103,12 +116,16 @@ class ImgUploader extends REST_Controller {
                 break;
         }
         // If we have to resize the img again
-        if (filesize($target_dir.$dst_path) > 50000) {
+        // MODIF: Se puede quedar en bucle?? yo diria que no pero puede ser mirar que se puede hacer.
+        if (filesize($target_dir.$dst_path) > 100000) {
             // The new source img will be the last output img
             $newsrc_path = $target_dir.$dst_path;
+            // And the new output will be r(esized) + name
             $newdst_path = "r".$dst_path;
             $this->Img_Resize($newsrc_path, $target_dir, $newdst_path);
+            // Remove the last output
             unlink($newsrc_path);
+            // Rename de new output
             rename($target_dir.$newdst_path, $newsrc_path);
         }
     }
