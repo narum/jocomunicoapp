@@ -1562,7 +1562,7 @@ class Mypattern {
             if ($this->paraules[$i]->used == false && $this->paraules[$i]->tipus != "expression"
                     && $this->paraules[$i]->tipus != "questpart") {
                 $this->puntuaciofinal -= 25;
-                $paraulanoposada = false;
+                $paraulanoposada = true;
             }
         }
         
