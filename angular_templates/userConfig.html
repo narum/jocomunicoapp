@@ -1,27 +1,49 @@
 <link rel="stylesheet" type="text/css" href="css/userConfig.css">
-    <div class="row barraSuperior">
-        <div class='col-xs-8 col-xs-offset-2'>
-            <div class="col-xs-4"><p class="contingutBarraSuperior">Configuració d'usuari</p></div>
-                <div class="col-xs-5 col-xs-offset-3 butonsBarraSuperiorRegistre">
-                    <button
-                        type="button"
-                        class="icon-home btn-idioma"
-                        ng-click=""> &nbsp;Inici
-                    </button>
-                     <a class="icon-remove-sign pull-right butoSortirBarraSuperiorRegistre" ng-href="" ng-click="resetForm()"></a>
+<link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
+<div id="main" style="background-image: url('/img/FonsRegistre.png');background-size:100% 100%">
+    <div id="header" class="container-fluid text-center row">
+        <div id="menuText" class="col-xs-offset-2 col-xs-10">
+            <div class="col-xs-2" ng-click="editMenu();">
+                Edita panell
+            </div>
+            <div class="col-xs-1">
+                Grups
+            </div>
+            <div class="col-xs-3" ng-click="userConfig();">
+                Configuracio d'usuari
+            </div>
+            <div class="col-xs-offset-1 col-xs-1" ng-click="home();">
+                Inici
+            </div>
+            <div class="col-xs-1"  ng-click="logOut();">
+                Log out
+            </div>
+            <div class="col-xs-1"  ng-click="IniciScan();">
+                Scan
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2 scrollMenuUserConfig" id="scrollBar">
+            <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-12.png')">
+                <div class="col-xs-12">
+                    <div id="header" class="row">
+                        <div class="headerTitle">{{content.titleBar1}}</div>
+                    </div>
+                    <div class="row backgroundUserDataBox">
+                    A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>
+                    </div>
+                    
+                </div>
+            </div><br/>
+            <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-08.png')">
+                <div class="col-xs-12">
+                    <div id="header" class="row"></div>
+                    A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>
+                    A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>
+                    
                 </div>
             </div>
         </div>
     </div>
-<div class="container container-table">
-            
-    <div class="row vertical-center-row">
-        <a ng-click="sortir()">SORTIR</a>
-    </div>
-            
-            
-            
-        
-		
-	
 </div>

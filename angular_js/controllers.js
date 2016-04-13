@@ -485,16 +485,14 @@ angular.module('controllers', [])
 })
 
 //Controlador de la configuración de usuario
-        .controller('UserConfCtrl', function ($scope, Resources, AuthService, txtContent, $location) {
+.controller('UserConfCtrl', function ($scope, Resources, AuthService, txtContent, $location) {
 
+    // Pedimos los textos para cargar la pagina
+    txtContent("userConfig").then(function(results){
+                    $scope.content = results.data;
+    });
 
-            // Función salir del login
-            $scope.sortir = function () {
-                AuthService.logout();
-                $location.path('/login');
-            };
-
-        })
+})
 // Controlador del buscador de pictogramas
 
         .controller('MainCtrl', function ($rootScope, $scope, $location, Resources, AuthService, txtContent) {
@@ -1581,6 +1579,9 @@ angular.module('controllers', [])
         })
 
         .controller('menuCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope, AuthService, $location) {
+            $scope.userConfig=function(){
+                $location.path('/userConfig');
+            }
             $scope.editMenu = function () {
                 $rootScope.$emit("EditCallFromMenu", {});
             };
