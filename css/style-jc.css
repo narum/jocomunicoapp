@@ -1,9 +1,6 @@
 @charset "UTF-8";
 /* CSS Document */
 /*MODIF: mi idea era poner aqui lo comun*/
-html, body{
-    font-size: 1.2vw;
-} 
 .row{ 
     margin-left: 0px;
     margin-right: 0px;
@@ -52,10 +49,10 @@ html, body{
 
 @media (max-width:1000px){
     .col-xs-12{
-        /*font-size: 12.5px;*/
+        font-size: 11.5px;
     }
     .col-xs-6{
-        /*font-size: 12px;*/
+        font-size: 12px;
     }
     input[type="radio"]{
         margin: 0px;
@@ -215,6 +212,20 @@ html, body{
     margin: 10%;
     background-color: white;
 }
+.returnScan{
+    width: 25% ;
+    height: 25%;
+    z-index: 24;
+    position: absolute;
+    border: 7px solid #2e758a;
+    border-radius: 7px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: url("/img/pictos/no_querer.png");
+    background-size: 100% 100%;
+    background-color: rgba(255,255,255,0.8);
+}
 .scaneo{
     margin: -2px;
     width: 100%;
@@ -287,4 +298,27 @@ html, body{
     height: 100%;
     position: absolute;
     z-index: 1;
+}
+
+.indicatorTenseSentence{
+    background: #FEE8B6;
+    height: 50%;
+    border-top-right-radius: 10px;
+}
+.indicatorTipusSentence{
+    background: #FEE8B6;
+    height: 50%;
+    border-bottom-right-radius: 10px;
+}
+.backgroundLlegir{
+    padding-right: 6%;
+}
+.backgroundDelete{
+    padding-left: 6%;
+}
+.icon{
+    position: absolute;
+    max-height: 85%;
+    max-width: 85%;
+    padding:10%
 }

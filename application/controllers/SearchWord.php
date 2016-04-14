@@ -22,16 +22,17 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
-        $Names = $this->DBwords->getDBNamesLike($startswith, $language);
-        $Verbs = $this->DBwords->getDBVerbsLike($startswith, $language);
-        $Adj = $this->DBwords->getDBAdjLike($startswith, $language);
-        $Exprs = $this->DBwords->getDBExprsLike($startswith, $language);
-        $Advs = $this->DBwords->getDBAdvsLike($startswith, $language);
-        $Modifs = $this->DBwords->getDBModifsLike($startswith, $language);
-        $QuestionPart = $this->DBwords->getDBQuestionPartLike($startswith, $language);
+        $Names = $this->DBwords->getDBNamesLike($startswith, $language, $user);
+        $Verbs = $this->DBwords->getDBVerbsLike($startswith, $language, $user);
+        $Adj = $this->DBwords->getDBAdjLike($startswith, $language, $user);
+        $Exprs = $this->DBwords->getDBExprsLike($startswith, $language, $user);
+        $Advs = $this->DBwords->getDBAdvsLike($startswith, $language, $user);
+        $Modifs = $this->DBwords->getDBModifsLike($startswith, $language, $user);
+        $QuestionPart = $this->DBwords->getDBQuestionPartLike($startswith, $language, $user);
         
         // Marge all arrays to one
         $DataArray = array_merge($Names, $Verbs, $Adj, $Exprs, $Advs, $Modifs, $QuestionPart);
@@ -48,10 +49,11 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
-        $DataArray = $this->DBwords->getDBNamesLike($startswith, $language);
+        $DataArray = $this->DBwords->getDBNamesLike($startswith, $language, $user);
         $response = [
             "data" => $DataArray
         ];
@@ -65,10 +67,11 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
-        $DataArray = $this->DBwords->getDBVerbsLike($startswith, $language);
+        $DataArray = $this->DBwords->getDBVerbsLike($startswith, $language, $user);
         $response = [
             "data" => $DataArray
         ];
@@ -82,10 +85,11 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
-        $DataArray = $this->DBwords->getDBAdjLike($startswith, $language);
+        $DataArray = $this->DBwords->getDBAdjLike($startswith, $language, $user);
         $response = [
             "data" => $DataArray
         ];
@@ -99,10 +103,11 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
-        $DataArray = $this->DBwords->getDBExprsLike($startswith, $language);
+        $DataArray = $this->DBwords->getDBExprsLike($startswith, $language, $user);
         $response = [
             "data" => $DataArray
         ];
@@ -116,12 +121,13 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
-        $Advs = $this->DBwords->getDBAdvsLike($startswith, $language);
-        $Modifs = $this->DBwords->getDBModifsLike($startswith, $language);
-        $QuestionPart = $this->DBwords->getDBQuestionPartLike($startswith, $language);
+        $Advs = $this->DBwords->getDBAdvsLike($startswith, $language, $user);
+        $Modifs = $this->DBwords->getDBModifsLike($startswith, $language, $user);
+        $QuestionPart = $this->DBwords->getDBQuestionPartLike($startswith, $language, $user);
         
         $DataArray = array_merge($Advs, $Modifs, $QuestionPart);
         $response = [

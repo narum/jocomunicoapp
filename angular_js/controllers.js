@@ -589,13 +589,15 @@ angular.module('controllers', [])
                 // 0 custom, 1 rows, 2 columns
                 $scope.scanType = 0;
                 $scope.inScan = true;
-                $scope.longclick = true;
+                // MODIF: manualScan == cfgScanningAutoOnOff
+                $scope.timerScan = 1;
+                $scope.longclick = false;
                 function myTimer() {
                     $scope.NextBlockScan();
                 }
-                if (false) {
+                if ($scope.timerScan) {
                     $interval.cancel($scope.intervalScan);
-                    var Intervalscan = 450;
+                    var Intervalscan = 1500;
                     function myTimer() {
                         $scope.nextBlockScan();
                     }
@@ -605,31 +607,36 @@ angular.module('controllers', [])
                 }
 
                 $scope.arrayScannedCells = null;
-                $scope.indexScannedCells = 0;
                 $scope.currentScanBlock = 1;
                 $scope.currentScanBlock1 = -1;
-                $scope.currentScanBlock2 = 1;
+                if ($scope.timerScan) {
+                    $scope.currentScanBlock2 = 0;
+                    $scope.indexScannedCells = -1;
+                } else {
+                    $scope.currentScanBlock2 = 1;
+                    $scope.indexScannedCells = 0;
+                }
                 $scope.getMaxScanBlock1();
 
             };
             // picto is -1 pred, 0 sentemce, others mainboard.
             $scope.isScanned = function (picto) {
                 //Custom scan
-                if ($scope.inScan && $scope.currentScanBlock1 != -1 && $scope.currentScanBlock1 != 0 ){
+                if ($scope.inScan && $scope.currentScanBlock1 != -1 && $scope.currentScanBlock1 != 0) {
                     if ($scope.scanType == 0 && (
                             (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 1) ||
                             (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 2 && picto.customScanBlock2 == $scope.currentScanBlock2) ||
-                            ($scope.currentScanBlock == 3 && $scope.arrayScannedCells != null && picto.posInBoard == $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard))) {
+                            ($scope.currentScanBlock == 3 && $scope.arrayScannedCells != null && $scope.indexScannedCells != -1 && picto.posInBoard == $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard))) {
                         return true;
                     }
                     // Rows first
                     else if ($scope.scanType == 1 && (
                             ($scope.currentScanBlock == 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1) ||
-                            ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && (picto.posInBoard - 1)% $scope.columns == $scope.currentScanBlock2 - 1))) {
+                            ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock2 - 1))) {
                         return true;
                     } else if ($scope.scanType == 2 && (
                             ($scope.currentScanBlock == 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1) ||
-                            ($scope.currentScanBlock == 2 && (picto.posInBoard -1) % $scope.columns == $scope.currentScanBlock1 - 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
+                            ($scope.currentScanBlock == 2 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
                         return true;
                     }
                 }
@@ -651,6 +658,8 @@ angular.module('controllers', [])
                     if (!$scope.longclick)
                     {
                         $scope.selectBlockScan();
+                    } else if ($scope.manualScan == 0) {
+                        $scope.nextBlockScan();
                     }
                 }
             };
@@ -690,6 +699,8 @@ angular.module('controllers', [])
                     if (!$scope.longclick)
                     {
                         $scope.nextBlockScan();
+                    } else if ($scope.manualScan == 0) {
+                        $scope.nextBlockScan();
                     }
                 }
             };
@@ -714,6 +725,8 @@ angular.module('controllers', [])
             // Get the number of level 2 scan blocks
             $scope.getMaxScanBlock2 = function ()
             {
+                // MODIF: poner en caso de prediccion
+                //If we select the sentence view, there are just 3 cells to scan
                 if ($scope.currentScanBlock1 == 0) {
                     $scope.maxScanBlock2 = 3;
                 } else if ($scope.scanType === 1) {
@@ -752,11 +765,19 @@ angular.module('controllers', [])
                     else if ($scope.currentScanBlock === 2 && $scope.scanType === 0) {
                         // CurrentScanBlock will be null when we are over all the cell that have no scan block
                         if ($scope.currentScanBlock2 !== null) {
-                            // If we are not over the mentioned scanblock pass to the next (cyclic... almost)
+                            // If we are not over the mentioned scanblock pass to the next
                             $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                            // If we pass the last scan scan block instead of go to the first one, go to the null block (those cells which are no assigned to a scan block)
+                            // If we pass the last scan block...
                             if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                                $scope.currentScanBlock2 = null;
+                                // We are scannig the prediction bar or the sentece bar so start again
+                                if ($scope.currentScanBlock1 == 0 || $scope.currentScanBlock1 == -1) {
+                                    $scope.InitScan();
+                                    //We have to go to the cells that have no scan block
+                                } else {
+                                    $scope.currentScanBlock2 = null;
+                                }
+
+
                             }
                             // If we are over this strange block, int scan again
                         } else {
@@ -764,19 +785,12 @@ angular.module('controllers', [])
                         }
 
                     } // If we are not in custom scan there are no null group so pass to the next(cyclic) 
-                    else if ($scope.currentScanBlock === 2 && $scope.scanType === 1) {
+                    else if ($scope.currentScanBlock === 2 && ($scope.scanType === 1 || $scope.scanType === 2)) {
                         $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
                         // All cells were scanned. Start again
                         if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
                             $scope.InitScan();
                             return;
-                        }
-
-                    } else if ($scope.currentScanBlock === 2 && $scope.scanType === 2) {
-                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                        // All cells were scanned. Start again
-                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                            $scope.InitScan();
                         }
                     }// If we are in the third scan pass one by one over the array (cyclic)
                     else if ($scope.currentScanBlock === 3) {
@@ -806,6 +820,7 @@ angular.module('controllers', [])
                             switch ($scope.currentScanBlock2) {
                                 case 1:
                                     $scope.generate();
+                                    break;
                                 case 2:
                                     $scope.deleteLast();
                                     break;
@@ -814,16 +829,24 @@ angular.module('controllers', [])
                                     break;
                             }//MODIF: Maybe we have to put control to perd
                             $scope.InitScan();
+                            // We are over the cancel/return cell
+                        } else if ($scope.currentScanBlock2 == 0) {
+                            $scope.InitScan();
                         } else if ($scope.scanType !== 0) {
                             $scope.selectScannedCell();
                         } else {
                             var url = $scope.baseurl + "Board/getScannedCells";
                             var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
-
                             $http.post(url, postdata).success(function (response)
                             {
                                 $scope.arrayScannedCells = response.array;
-                                $scope.indexScannedCells = 0;
+                                if ($scope.timerScan) {
+                                    $scope.currentScanBlock2 = 0;
+                                    $scope.indexScannedCells = -1;
+                                } else {
+                                    $scope.currentScanBlock2 = 1;
+                                    $scope.indexScannedCells = 0;
+                                }
                                 //There is one cell in that group
 
                                 if ($scope.arrayScannedCells.length === 1) {
@@ -833,7 +856,12 @@ angular.module('controllers', [])
                         }
                         // This is, we selected a cell.
                     } else if ($scope.currentScanBlock === 4) {
-                        $scope.selectScannedCell();
+                        // We are over the cancel/return cell
+                        if ($scope.currentScanBlock2 == 0 || $scope.indexScannedCells == -1) {
+                            $scope.InitScan();
+                        } else {
+                            $scope.selectScannedCell();
+                        }
                     }
                 }
             };
@@ -1527,6 +1555,21 @@ angular.module('controllers', [])
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
 
+                $scope.uploadFile = function () {
+                    var file = $scope.myFile;
+                    console.log('file is ');
+                    console.dir(file);
+                    var uploadUrl = "/img/upload.php";
+                    var fd = new FormData();
+                    fd.append('file', file);
+                    $http.post(uploadUrl, fd, { 
+                        headers: {'Content-Type': undefined}
+                    })
+                            .success(function () {
+                            })
+                            .error(function () {
+                            });
+                };
 
                 // Gets functions from database and shows them the dropmenu
                 $scope.getFunctions = function () {
@@ -1773,4 +1816,19 @@ angular.module('controllers', [])
                     }
                 };
             }
-        ]);
+        ])
+        .directive('fileModel', ['$parse', function ($parse) {
+                return {
+                    restrict: 'A',
+                    link: function (scope, element, attrs) {
+                        var model = $parse(attrs.fileModel);
+                        var modelSetter = model.assign;
+
+                        element.bind('change', function () {
+                            scope.$apply(function () {
+                                modelSetter(scope, element[0].files[0]);
+                            });
+                        });
+                    }
+                };
+            }]);

@@ -19,8 +19,8 @@
 
         <div class="container-fluid Defmargin" style="height:{{boardHeight}}%">
             <div class="row fullheight imgRounded Defpadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
-
-                <div class="col-xs-12 containerCell" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}" ng-click="clickOnCell(picto)" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
+                <div ng-if="(inScan && currentScanBlock2 == 0 && currentScanBlock == 2) || (inScan &&  currentScanBlock == 3 && indexScannedCells == -1 && scanType == 0)" class="returnScan"></div>
+                <div class="col-xs-12 containerCell" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}" ng-click="!inScan?clickOnCell(picto):null" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
                     <svg ng-if="picto.boardLink != null" class="sfolder" version="1.1" id="Capa_1" preserveAspectRatio="none" viewBox="0 0 1020 1020" enable-background="new 0 0 1020 1020" xml:space="preserve">
 
 <path fill="#{{picto.color}}" d="M185.127,0H425.89c17.358,3.666,33.149,15.672,39.751,32.354c4.051,9.47,4.409,19.842,5.671,29.909

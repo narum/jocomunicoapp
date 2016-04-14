@@ -303,4 +303,33 @@
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
-
+.backgroundFolderWhite{
+   background:  url('/img/folder.png') no-repeat;
+   background-size: 100% 100%;
+   padding: 10%;
+   height: 75%;
+}
+.backgroundFolderBlue{
+   background:  url('/img/folderblue.png') no-repeat;
+   background-size: 100% 100%;
+   padding: 10px;
+   height: 100%;
+   width: 25%;
+}
+.folderContent{
+    margin: 2vh 3%;
+    height: 75%;
+}
+.textBlue{
+    background:  #79d2da;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.textWhite{
+    background:  #ffffff;
+    padding-left: 5%;
+    padding-right: 5%;
+    background-clip: content-box;
+    margin-bottom: 2.5%;
+    margin-top: 2.5%;
+}
