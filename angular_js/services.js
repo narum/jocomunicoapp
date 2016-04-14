@@ -22,29 +22,29 @@ angular.module('services', [])
 		"init": function() {
 			$rootScope.isLogged = false;
 			var token = window.localStorage.getItem('token'); //mirem si hi ha un token al LocalStorage de html5
-			var languageid = window.localStorage.getItem('languageid'); 
-			var languageabbr = window.localStorage.getItem('languageabbr');
-                        var userid = window.localStorage.getItem('userid');
+			var userConfig = window.localStorage.getItem('userConfig');
 			if(token)
-				this.login(token, languageid, languageabbr, userid);
+				this.login(token, userConfig);
 		},
-		"login": function(token, languageid, languageabbr, userid) {
+		"login": function(token, userConfig) {
 			window.localStorage.setItem('token', token); // guardem el token al localStorage
-			window.localStorage.setItem('languageid', languageid); // guardem el idlanguage al localStorage
-			window.localStorage.setItem('languageabbr', languageabbr); // guardem el nomlanguage al localStorage
-            window.localStorage.setItem('userid', userid);
+			window.localStorage.setItem('languageid', userConfig.cfgDefLanguage); // guardem el idlanguage al localStorage
+			window.localStorage.setItem('languageabbr', userConfig.languageabbr); // guardem el nomlanguage al localStorage
+                        window.localStorage.setItem('userid', userConfig.ID_User);
+                        window.localStorage.setItem('userConfig', userConfig);
 			$http.defaults.headers.common['Authorization'] = 'Bearer '+token; // posem el token al header per a totes les peticions
 			$http.defaults.headers.common['X-Authorization'] = 'Bearer '+token; // posem el token al header per a totes les peticions
 			$rootScope.isLogged = true;
-			$rootScope.languageid = languageid;
-			$rootScope.languageabbr = languageabbr;
-            $rootScope.userid = userid;
+			$rootScope.languageid = userConfig.cfgDefLanguage;
+			$rootScope.languageabbr = userConfig.languageabbr;
+                        $rootScope.userid = userConfig.ID_User;
 		},
 		"logout": function() {
 			window.localStorage.removeItem('token');
 			window.localStorage.removeItem('languageid');
 			window.localStorage.removeItem('languageabbr');
-            window.localStorage.removeItem('userid');
+                        window.localStorage.removeItem('userid');
+                        window.localStorage.removeItem('userConfig');
 			delete $http.defaults.headers.common['Authorization'];
 			delete $http.defaults.headers.common['X-Authorization'];
 			$rootScope.isLogged = false;

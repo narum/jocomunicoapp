@@ -1,37 +1,46 @@
-html, body, .container-table {
-    height: 100%;
-    /*background: #f2f2f2;*/
-    background: url("/img/FonsRegistre.png") no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+.scrollMenuUserConfig{
+    height: 80vh;
+    margin-top: 7vh;
+    overflow-y: scroll;
 }
-/*Per centrar el div del boxRegistreUsuari*/
-.container-table {
-    display: table;
-    background: none;
+/*Scroll properties*/
+#scrollBar::-webkit-scrollbar{
+width:15px;
+background-color:none;
+} 
+#scrollBar::-webkit-scrollbar-thumb{
+background:-webkit-linear-gradient(0, #92dbe1/*Turquesa*/ 40%, #78b3b8/*Turquesa Oscuro*/ 100%);
+border-radius:10px;
 }
-.vertical-center-row {
-    display: table-cell;
-    vertical-align: middle;
+#scrollBar::-webkit-scrollbar-thumb:hover{
+background:#78b3b8; /*Turquesa Oscuro*/
 }
-.barraSuperior{
-    /*background: #333333;*/
-    background-image: url("/img/BarraMenuSuperior.png");
+#scrollBar::-webkit-scrollbar-thumb:active{
+background-color:#92dbe1;/*Turquesa*/
+}
+/*#scrollBar::-webkit-scrollbar-track{
+border:1px gray solid;
+border-radius:10px;
+-webkit-box-shadow:0 0 6px gray inset;
+}*/
+/*box User config*/
+#boxUserConfig{
+    margin-left:1vh;
+    margin-right:1vh;
+    border-radius: 15px;
+}
+#boxUserConfig #header{
+    height:6vh;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.headerTitle{
     color:white;
+    margin-top: 1vh;
+    margin-left: 2vw;
 }
-.contingutBarraSuperior{
-    margin-bottom: 7px;
-    margin-top: 10px;
+.backgroundUserDataBox{
+    margin:3vh;
+    border-radius: 15px;
+    background-color: white;
 }
-.btn-idioma {
-    color: white;
-    background-color: #333333;
-    border-color: #333333;
-    border-radius: 5px;
-}
-.butonsBarraSuperiorRegistre{
-    margin-top: 10px;
-}
-

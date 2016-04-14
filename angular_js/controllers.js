@@ -47,13 +47,11 @@ angular.module('controllers', [])
                 // Petición del login
                 loginResource.save(body).$promise  // POST (en angular 'save') del user y pass
                         .then(function (result) {				// respuesta ok!
+                            console.log(result.data.userConfig);
                             var token = result.data.token;
-                            var languageid = result.data.languageid;
-                            var languageabbr = result.data.languageabbr;
-                            var userid = result.data.userID;
-                            var userValidated = result.data.userValidated;
-                            if (userValidated == '1') {
-                                AuthService.login(token, languageid, languageabbr, userid);
+                            var userConfig=result.data.userConfig;
+                            if (userConfig.UserValidated == '1') {
+                                AuthService.login(token, userConfig);
                                 $location.path('/');
                             } else {
                                 $scope.state = 'has-warning';
@@ -485,16 +483,14 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-        .controller('UserConfCtrl', function ($scope, Resources, AuthService, txtContent, $location) {
+.controller('UserConfCtrl', function ($scope, Resources, AuthService, txtContent, $location) {
 
+    // Pedimos los textos para cargar la pagina
+    txtContent("userConfig").then(function(results){
+                    $scope.content = results.data;
+    });
 
-            // Función salir del login
-            $scope.sortir = function () {
-                AuthService.logout();
-                $location.path('/login');
-            };
-
-        })
+})
 // Controlador del buscador de pictogramas
 
         .controller('MainCtrl', function ($rootScope, $scope, $location, Resources, AuthService, txtContent) {
@@ -1321,12 +1317,31 @@ angular.module('controllers', [])
                     console.log(response);
                     //$scope.dataTemp = response.data;
                     $scope.info = response.info;
-                    $scope.playSentenceAudio();
+
+                    //MODIF: dir frase
+
+
+                    var postdata = {voice: 0, sentence: $scope.info.frasefinal};
+                    var URL = $scope.baseurl + "Board/getAudioSentence_post";
+
+
+                    $http.post(URL, postdata).
+                            success(function (response)
+                            {
+                                $scope.statusWord = response.status;
+                                $scope.data = response.data;
+                            });
+
+
+
+                    $scope.sound = ngAudio.load($scope.baseurl + "mp3/sound.mp3");
+                    $scope.sound.play();
                 });
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
-                //MODIF: dir frase
+
+
             };
             
             $scope.playSentenceAudio = function ()
@@ -1559,7 +1574,7 @@ angular.module('controllers', [])
                     var file = $scope.myFile;
                     console.log('file is ');
                     console.dir(file);
-                    var uploadUrl = "/img/upload.php";
+                    var uploadUrl = $scope.baseurl + "/ImgUploader/upload";
                     var fd = new FormData();
                     fd.append('file', file);
                     $http.post(uploadUrl, fd, { 
@@ -1743,6 +1758,9 @@ angular.module('controllers', [])
         })
 
         .controller('menuCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope, AuthService, $location) {
+            $scope.userConfig=function(){
+                $location.path('/userConfig');
+            }
             $scope.editMenu = function () {
                 $rootScope.$emit("EditCallFromMenu", {});
             };
