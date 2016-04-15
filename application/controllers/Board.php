@@ -16,6 +16,7 @@ class Board extends REST_Controller {
         $this->load->library('Myslot');
         $this->load->library('Mypattern');
         $this->load->library('Myexpander');
+        $this->load->library('Myprediction');
         $this->load->library('session');
     }
 
@@ -783,6 +784,15 @@ class Board extends REST_Controller {
                 'data' => MD5(strval($voice) . $sentence)
             ];
         }
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    
+    public function getPrediction_post() {
+        // CARGA recommenderArray                 
+        $prediction = new Myprediction();  
+        $recommenderArray = $prediction->getPrediction(); 
+        
+        $response = [ 'recommenderArray' => $recommenderArray ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
 

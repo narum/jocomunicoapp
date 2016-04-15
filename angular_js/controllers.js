@@ -957,6 +957,7 @@ angular.module('controllers', [])
                  $scope.grid1 = 2;
                  $scope.grid2 = 8;
                  $scope.grid3 = 2;*/
+                $scope.getPred();
             };
 
             $scope.getPrimaryUserBoard = function () {
@@ -1050,6 +1051,17 @@ angular.module('controllers', [])
                     $scope.data = response.data;
                     //                    $scope.oldW = response.col;
                     //                    $scope.oldH = response.row;
+                });
+            };
+            $scope.getPred = function ()
+            {
+                var url = $scope.baseurl + "Board/getPrediction";
+                $http.post(url).success(function (response)
+                {
+                    $scope.recommenderArray = response.recommenderArray;
+                }).error(function(error) {
+                    alert(error);
+                    alert("error on predictor update building");
                 });
             };
 
@@ -1246,6 +1258,7 @@ angular.module('controllers', [])
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.dataTemp = response.data;
+                    $scope.getPred();
                 });
 
                 $scope.autoReturn();
@@ -1301,6 +1314,7 @@ angular.module('controllers', [])
                 $http.post(url).success(function (response)
                 {
                     $scope.dataTemp = response.data;
+                    $scope.getPred();
                 });
             };
             /*
@@ -1313,6 +1327,7 @@ angular.module('controllers', [])
                 $http.post(url).success(function (response)
                 {
                     $scope.dataTemp = response.data;
+                    $scope.getPred();
                 });
             };
             /*
@@ -1557,19 +1572,6 @@ angular.module('controllers', [])
                 }, function (value) {
                 });
             };
-
-
-            $scope.getPred = function () {
-                //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia
-                return $scope.data;
-            };
-
-
-
-
-
-
-
         })
 
         // Edit controller 
