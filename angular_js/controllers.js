@@ -1564,12 +1564,14 @@ angular.module('controllers', [])
                     var uploadUrl = $scope.baseurl + "/ImgUploader/upload";
                     var fd = new FormData();
                     fd.append('file', file);
-                    $http.post(uploadUrl, fd, { 
+                    $http.post(uploadUrl, fd, {
                         headers: {'Content-Type': undefined}
                     })
                             .success(function () {
                             })
-                            .error(function () {
+                            .catch(function (response) {
+                                var a = response.errorText;
+                                alert(response);
                             });
                 };
 
