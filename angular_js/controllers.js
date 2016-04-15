@@ -47,13 +47,11 @@ angular.module('controllers', [])
                 // Petición del login
                 loginResource.save(body).$promise  // POST (en angular 'save') del user y pass
                         .then(function (result) {				// respuesta ok!
+                            console.log(result.data.userConfig);
                             var token = result.data.token;
-                            var languageid = result.data.languageid;
-                            var languageabbr = result.data.languageabbr;
-                            var userid = result.data.userID;
-                            var userValidated = result.data.userValidated;
-                            if (userValidated == '1') {
-                                AuthService.login(token, languageid, languageabbr, userid);
+                            var userConfig=result.data.userConfig;
+                            if (userConfig.UserValidated == '1') {
+                                AuthService.login(token, userConfig);
                                 $location.path('/');
                             } else {
                                 $scope.state = 'has-warning';
@@ -485,16 +483,14 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-        .controller('UserConfCtrl', function ($scope, Resources, AuthService, txtContent, $location) {
+.controller('UserConfCtrl', function ($scope, Resources, AuthService, txtContent, $location) {
 
+    // Pedimos los textos para cargar la pagina
+    txtContent("userConfig").then(function(results){
+                    $scope.content = results.data;
+    });
 
-            // Función salir del login
-            $scope.sortir = function () {
-                AuthService.logout();
-                $location.path('/login');
-            };
-
-        })
+})
 // Controlador del buscador de pictogramas
 
         .controller('MainCtrl', function ($rootScope, $scope, $location, Resources, AuthService, txtContent) {
@@ -897,7 +893,7 @@ angular.module('controllers', [])
                 $scope.userViewHeight = 100;
                 $scope.searchFolderHeight = 0;
                 var url = $scope.baseurl + "Board/loadCFG";
-                var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr'), lusuid: window.localStorage.getItem('languageid')};
+                var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr'), lusuid: window.localStorage.getItem('languageid'), cfguser: window.localStorage.getItem('userConfig')};
 
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
@@ -1311,6 +1307,7 @@ angular.module('controllers', [])
              * Generate the current senence under contruction.
              * Add the pictograms (and the sentence itself) in the history
              */
+            
             $scope.generate = function () {
 
                 var url = $scope.baseurl + "Board/generate";
@@ -1346,7 +1343,23 @@ angular.module('controllers', [])
 
 
             };
+            
+            $scope.playSentenceAudio = function ()
+            {
+                var postdata = {voice: 0, sentence: $scope.info.frasefinal};
+                    var URL = $scope.baseurl + "Board/getAudioSentence";
 
+                    $http.post(URL, postdata).
+                            success(function (response)
+                            {
+                                $scope.dataAudio = response.data;
+
+                                alert($scope.dataAudio);
+                                $scope.sound = ngAudio.load($scope.baseurl + $scope.dataAudio);
+                                $scope.sound.play();
+
+                            });
+            };
             /*
              * Return pictograms from database. The result depends on 
              * Searchtype (noms, verbs...) and Name (letters with the word start with)
@@ -1747,6 +1760,9 @@ angular.module('controllers', [])
         })
 
         .controller('menuCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope, AuthService, $location) {
+            $scope.userConfig=function(){
+                $location.path('/userConfig');
+            }
             $scope.editMenu = function () {
                 $rootScope.$emit("EditCallFromMenu", {});
             };
