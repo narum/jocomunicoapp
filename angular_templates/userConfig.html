@@ -24,16 +24,57 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-8 col-xs-offset-2 scrollMenuUserConfig" id="scrollBar">
+        <div class="col-xs-2 col-xs-offset-5 loadingGif" ng-show="!viewActived"><img class="img-responsive" src="/img/srcWeb/Login/loading.gif"/></div>
+        <div class="col-xs-8 col-xs-offset-2 scrollMenuUserConfig" id="scrollBar" ng-show="viewActived">
             <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-12.png')">
                 <div class="col-xs-12">
                     <div id="header" class="row">
-                        <div class="headerTitle">{{content.titleBar1}}</div>
+                        <div class="col-xs-10 headerTitle">{{content.titleBar1}}</div>
+                        <div class="col-xs-2 editButton">
+                            <button
+                                type="button"
+                                class="icon-globe btn-idioma"
+                                ng-click="changeContentLanguage()"> &nbsp;{{languageNameNext}}
+                            </button>
+                        </div>
                     </div>
                     <div class="row backgroundUserDataBox">
-                    A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>
+                        <div id="DadesUsuariLeft" class="col-xs-6">
+                            <div class="row">
+                                <div class="col-xs-4">Nom d'usuari:</div>
+                                <div class="col-xs-8">
+                                    <input
+                                        class="inputDadesUsuari"
+                                        type="text"
+                                        ng-disabled="false"
+                                        ng-readonly="true"
+                                        uib-popover="Aquest camp no es pot modificar!"
+                                        popover-trigger="focus"
+                                        placeholder="Vierc5"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4">Nom:</div>
+                                <div class="col-xs-8">
+                                    <input class="inputDadesUsuari" type="text" placeholder="Luis Eduardo"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="DadesUsuariRight" class="col-xs-6">
+                            <div class="row">
+                                <div class="col-xs-3">E-mail:</div>
+                                <div class="col-xs-9">
+                                    <input class="inputDadesUsuari" type="text" placeholder="luiseduardo@yahooo.com"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3">Cognoms:</div>
+                                <div class="col-xs-9">
+                                    <input class="inputDadesUsuari" type="text" placeholder="Rodriguez Martinez"/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
                 </div>
             </div><br/>
             <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-08.png')">

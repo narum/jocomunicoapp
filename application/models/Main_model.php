@@ -85,9 +85,11 @@ class Main_model extends CI_Model {
         $data = [
             "ID_USU" => $id[0],
             "ID_ULanguage" => $ID_ULanguage,
+            "cfgExpansionLanguage" => $ID_ULanguage,
         ];
 
         $saved = $this->db->insert('User', $data);
+        
 
         //Retornamos el ID_USU
         $dataSaved = [

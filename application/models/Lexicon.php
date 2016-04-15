@@ -29,7 +29,7 @@ class Lexicon extends CI_Model {
             // If the user is found, it fills the COOKIES
             $output = $query->result();
             $idusu = $output[0]->ID_SU;
-            $ulanguage = $output[0]->cfgDefLanguage;
+            $ulanguage = $output[0]->cfgDefUser;
             $isfem = $output[0]->cfgIsFem;
             $this->session->set_userdata('idusu', $idusu);
             $this->session->set_userdata('uname', $usuari);

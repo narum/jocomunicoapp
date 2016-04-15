@@ -52,8 +52,8 @@ class Login_model extends CI_Model {
 
         // Get user data and user config data
         $this->db->from('SuperUser');
-        $this->db->join('Languages', 'SuperUser.cfgDefLanguage = Languages.ID_Language', 'right');
-        $this->db->join('User', 'SuperUser.ID_SU = User.ID_USU AND SuperUser.cfgDefLanguage = User.ID_ULanguage');
+        $this->db->join('Languages', 'SuperUser.cfgDefUser = Languages.ID_Language', 'right');
+        $this->db->join('User', 'SuperUser.ID_SU = User.ID_USU AND SuperUser.cfgDefUser = User.ID_ULanguage');
         $this->db->where('SUname', $user);
         $query2 = $this->db->get()->result_array();
         $userConfig = $query2[0];
@@ -62,7 +62,7 @@ class Login_model extends CI_Model {
         $this->session->set_userdata('idusu', $userConfig["ID_SU"]);
         $this->session->set_userdata('uname', $userConfig["SUname"]);
         $this->session->set_userdata('ulanguage', $userConfig["cfgExpansionLanguage"]);
-        $this->session->set_userdata('uinterfacelangauge', $userConfig["cfgDefLanguage"]);
+        $this->session->set_userdata('uinterfacelangauge', $userConfig["cfgDefUser"]);
         $this->session->set_userdata('uinterfacelangtype', $userConfig["type"]);
         $this->session->set_userdata('uinterfacelangnadjorder', $userConfig["nounAdjOrder"]);
         $this->session->set_userdata('uinterfacelangncorder', $userConfig["nounComplementOrder"]);

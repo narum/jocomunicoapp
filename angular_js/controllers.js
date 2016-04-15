@@ -298,7 +298,7 @@ angular.module('controllers', [])
                     delete formData.confirmPassword;
                     delete formData.languageSelected;
                     //Ponemos como idioma por defecto el primero de la lista que ha seleccionado el usuario
-                    formData.cfgDefLanguage = $scope.languageList[0].ID_Language;
+                    formData.cfgDefUser = $scope.languageList[0].ID_Language;
                     //Ciframos el password en md5
                     $pass = formData.pswd;
                     formData.pswd = md5.createHash($pass);
@@ -483,11 +483,16 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-.controller('UserConfCtrl', function ($scope, Resources, AuthService, txtContent, $location) {
-
+.controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, txtContent, $location) {
+    $scope.viewActived=false;
+    // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+    if (!$rootScope.isLogged) {
+        $location.path('/login');
+    }
     // Pedimos los textos para cargar la pagina
     txtContent("userConfig").then(function(results){
-                    $scope.content = results.data;
+        $scope.content = results.data;
+        $scope.viewActived=true;
     });
 
 })
