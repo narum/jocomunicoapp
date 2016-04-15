@@ -187,7 +187,7 @@ class Register extends REST_Controller {
                 $userName=$data["realname"] ." " . $data["surnames"] ;
                 $ID_SU=$data["ID_SU"];
                 $pass=$data["pswd"];
-                $language=$data["cfgDefLanguage"];
+                $language=$data["cfgDefUser"];
                 $hash=md5($pass . $ID_SU);
                 $url= base_url() . '#/emailValidation/' . $hash . '/' . $ID_SU;
     
@@ -254,7 +254,7 @@ class Register extends REST_Controller {
                 $userName=$data["realname"] ." " . $data["surnames"] ;
                 $ID_SU=$data["ID_SU"];
                 $pass=$data["pswd"];
-                $language=$data["cfgDefLanguage"];
+                $language=$data["cfgDefUser"];
                 $hash=md5($pass . $ID_SU);
                 $url= base_url() . '#/passRecovery/' . $hash . '/' . $ID_SU;
     
