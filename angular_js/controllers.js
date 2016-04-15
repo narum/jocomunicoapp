@@ -49,7 +49,7 @@ angular.module('controllers', [])
                         .then(function (result) {				// respuesta ok!
                             console.log(result.data.userConfig);
                             var token = result.data.token;
-                            var userConfig=result.data.userConfig;
+                            var userConfig = result.data.userConfig;
                             if (userConfig.UserValidated == '1') {
                                 AuthService.login(token, userConfig);
                                 $location.path('/');
@@ -483,19 +483,19 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-.controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, txtContent, $location) {
-    $scope.viewActived=false;
-    // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
-    if (!$rootScope.isLogged) {
-        $location.path('/login');
-    }
-    // Pedimos los textos para cargar la pagina
-    txtContent("userConfig").then(function(results){
-        $scope.content = results.data;
-        $scope.viewActived=true;
-    });
+        .controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, txtContent, $location) {
+            $scope.viewActived = false;
+            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+            if (!$rootScope.isLogged) {
+                $location.path('/login');
+            }
+            // Pedimos los textos para cargar la pagina
+            txtContent("userConfig").then(function (results) {
+                $scope.content = results.data;
+                $scope.viewActived = true;
+            });
 
-})
+        })
 // Controlador del buscador de pictogramas
 
         .controller('MainCtrl', function ($rootScope, $scope, $location, Resources, AuthService, txtContent) {
@@ -587,8 +587,9 @@ angular.module('controllers', [])
             //MODIF: Coger de BBDD escaneo por intervalo o no en el if
             $scope.InitScan = function ()
             {
+                var userConfig = JSON.parse(localStorage.getItem('testObject'));
                 // 0 custom, 1 rows, 2 columns
-                $scope.scanType = 0;
+                $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
                 $scope.inScan = true;
                 // MODIF: manualScan == cfgScanningAutoOnOff
                 $scope.timerScan = 1;
@@ -598,7 +599,7 @@ angular.module('controllers', [])
                 }
                 if ($scope.timerScan) {
                     $interval.cancel($scope.intervalScan);
-                    var Intervalscan = 1500;
+                    var Intervalscan = userConfig.cfgTimeScanning;
                     function myTimer() {
                         $scope.nextBlockScan();
                     }
@@ -609,8 +610,12 @@ angular.module('controllers', [])
 
                 $scope.arrayScannedCells = null;
                 $scope.currentScanBlock = 1;
-                $scope.currentScanBlock1 = -1;
-                if ($scope.timerScan) {
+                if ($scope.cfgPredOnOff === '1') {
+                    $scope.currentScanBlock1 = -1;
+                } else {
+                    $scope.currentScanBlock1 = 0;
+                }
+                if ($scope.timerScan == 1) {
                     $scope.currentScanBlock2 = 0;
                     $scope.indexScannedCells = -1;
                 } else {
@@ -624,18 +629,18 @@ angular.module('controllers', [])
             $scope.isScanned = function (picto) {
                 //Custom scan
                 if ($scope.inScan && $scope.currentScanBlock1 != -1 && $scope.currentScanBlock1 != 0) {
-                    if ($scope.scanType == 0 && (
+                    if ($scope.cfgScanningCustomRowCol == 0 && (
                             (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 1) ||
                             (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 2 && picto.customScanBlock2 == $scope.currentScanBlock2) ||
                             ($scope.currentScanBlock == 3 && $scope.arrayScannedCells != null && $scope.indexScannedCells != -1 && picto.posInBoard == $scope.arrayScannedCells[$scope.indexScannedCells].posInBoard))) {
                         return true;
                     }
                     // Rows first
-                    else if ($scope.scanType == 1 && (
+                    else if ($scope.cfgScanningCustomRowCol == 1 && (
                             ($scope.currentScanBlock == 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1) ||
                             ($scope.currentScanBlock == 2 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock1 && picto.posInBoard / $scope.columns > $scope.currentScanBlock1 - 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock2 - 1))) {
                         return true;
-                    } else if ($scope.scanType == 2 && (
+                    } else if ($scope.cfgScanningCustomRowCol == 2 && (
                             ($scope.currentScanBlock == 1 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1) ||
                             ($scope.currentScanBlock == 2 && (picto.posInBoard - 1) % $scope.columns == $scope.currentScanBlock1 - 1 && picto.posInBoard / $scope.columns <= $scope.currentScanBlock2 && picto.posInBoard / $scope.columns > $scope.currentScanBlock2 - 1))) {
                         return true;
@@ -666,12 +671,13 @@ angular.module('controllers', [])
             };
             $scope.playLongClick = function ()
             {
+                var userConfig = JSON.parse(localStorage.getItem('testObject'));
                 if ($scope.inScan) {
                     if ($scope.longclick)
                     {
                         $timeout.cancel($scope.scanLongClickTime);
                         $scope.scanLongClickController = true;
-                        $scope.scanLongClickTime = $timeout($scope.selectBlockScan, 1000);
+                        $scope.scanLongClickTime = $timeout($scope.selectBlockScan, userConfig.cfgTimeClick);
                     }
                 }
             };
@@ -709,11 +715,11 @@ angular.module('controllers', [])
             // Get the number of scan blocks
             $scope.getMaxScanBlock1 = function ()
             {
-                if ($scope.scanType === 1) {
+                if ($scope.cfgScanningCustomRowCol == 1) {
                     $scope.maxScanBlock1 = $scope.rows;
-                } else if ($scope.scanType === 2) {
+                } else if ($scope.cfgScanningCustomRowCol == 2) {
                     $scope.maxScanBlock1 = $scope.columns;
-                } else if ($scope.scanType === 0) {
+                } else if ($scope.cfgScanningCustomRowCol == 0) {
                     var url = $scope.baseurl + "Board/getMaxScanBlock1";
                     var postdata = {idboard: $scope.idboard};
 
@@ -730,11 +736,11 @@ angular.module('controllers', [])
                 //If we select the sentence view, there are just 3 cells to scan
                 if ($scope.currentScanBlock1 == 0) {
                     $scope.maxScanBlock2 = 3;
-                } else if ($scope.scanType === 1) {
+                } else if ($scope.cfgScanningCustomRowCol == 1) {
                     $scope.maxScanBlock2 = $scope.columns;
-                } else if ($scope.scanType === 2) {
+                } else if ($scope.cfgScanningCustomRowCol == 2) {
                     $scope.maxScanBlock2 = $scope.rows;
-                } else if ($scope.scanType === 0) {
+                } else if ($scope.cfgScanningCustomRowCol == 0) {
                     var url = $scope.baseurl + "Board/getMaxScanBlock2";
                     var postdata = {idboard: $scope.idboard, scanGroup: $scope.currentScanBlock1};
 
@@ -763,7 +769,7 @@ angular.module('controllers', [])
                             $scope.currentScanBlock1 = -1;
                         }
                     }// If we are in the second scan level passes to the next (cyclic) but...
-                    else if ($scope.currentScanBlock === 2 && $scope.scanType === 0) {
+                    else if ($scope.currentScanBlock === 2 && $scope.cfgScanningCustomRowCol == 0) {
                         // CurrentScanBlock will be null when we are over all the cell that have no scan block
                         if ($scope.currentScanBlock2 !== null) {
                             // If we are not over the mentioned scanblock pass to the next
@@ -786,7 +792,7 @@ angular.module('controllers', [])
                         }
 
                     } // If we are not in custom scan there are no null group so pass to the next(cyclic) 
-                    else if ($scope.currentScanBlock === 2 && ($scope.scanType === 1 || $scope.scanType === 2)) {
+                    else if ($scope.currentScanBlock === 2 && ($scope.cfgScanningCustomRowCol == 1 || $scope.cfgScanningCustomRowCol == 2)) {
                         $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
                         // All cells were scanned. Start again
                         if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
@@ -831,9 +837,9 @@ angular.module('controllers', [])
                             }//MODIF: Maybe we have to put control to perd
                             $scope.InitScan();
                             // We are over the cancel/return cell
-                        } else if ($scope.currentScanBlock2 == 0) {
+                        } else if ($scope.currentScanBlock2 === 0) {
                             $scope.InitScan();
-                        } else if ($scope.scanType !== 0) {
+                        } else if ($scope.cfgScanningCustomRowCol != 0) {
                             $scope.selectScannedCell();
                         } else {
                             var url = $scope.baseurl + "Board/getScannedCells";
@@ -841,8 +847,8 @@ angular.module('controllers', [])
                             $http.post(url, postdata).success(function (response)
                             {
                                 $scope.arrayScannedCells = response.array;
-                                if ($scope.timerScan) {
-                                    $scope.currentScanBlock2 = 0;
+                                if ($scope.timerScan == 1) {
+                                    //$scope.currentScanBlock2 = 0;
                                     $scope.indexScannedCells = -1;
                                 } else {
                                     $scope.currentScanBlock2 = 1;
@@ -856,9 +862,10 @@ angular.module('controllers', [])
                             });
                         }
                         // This is, we selected a cell.
-                    } else if ($scope.currentScanBlock === 4) {
+                    } else if ($scope.currentScanBlock == 4) {
                         // We are over the cancel/return cell
                         if ($scope.currentScanBlock2 == 0 || $scope.indexScannedCells == -1) {
+                            alert($scope.currentScanBlock2);
                             $scope.InitScan();
                         } else {
                             $scope.selectScannedCell();
@@ -872,9 +879,9 @@ angular.module('controllers', [])
             {
                 var postdata = {idboard: "", pos: ""};
                 var url = $scope.baseurl + "Board/getCell";
-                if ($scope.scanType === 1) {
+                if ($scope.cfgScanningCustomRowCol == 1) {
                     var postdata = {idboard: $scope.idboard, pos: $scope.columns * ($scope.currentScanBlock1 - 1) + $scope.currentScanBlock2};
-                } else if ($scope.scanType === 2) {
+                } else if ($scope.cfgScanningCustomRowCol == 2) {
                     var postdata = {idboard: $scope.idboard, pos: $scope.columns * ($scope.currentScanBlock2 - 1) + $scope.currentScanBlock1};
                 } else {
                     if ($scope.arrayScannedCells === null) {
@@ -895,11 +902,11 @@ angular.module('controllers', [])
             $scope.config = function (boardconf)
             {
                 //-----------Iniciacion-----------
-                
+
                 var url = $scope.baseurl + "Board/loadCFG";
                 var userConfig = JSON.parse(localStorage.getItem('testObject'));
                 var postdata = {idusu: userConfig.ID_User, lusu: userConfig.languageabbr, lusuid: userConfig.cfgDefUser};
-                
+
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
                 $scope.getPrimaryUserBoard();
@@ -937,6 +944,7 @@ angular.module('controllers', [])
                 // Prediction bar configuration
                 $scope.cfgPredOnOff = userConfig.cfgPredOnOff;
                 $scope.cfgPredBarVertHor = userConfig.cfgPredBarVertHor;
+                $scope.cfgPredBarNumPred = userConfig.cfgPredBarNumPred;
                 if ($scope.cfgPredOnOff === '1' && $scope.cfgPredBarVertHor === '0') { // Prediction on and vertical
                     $scope.predViewWidth = 1;
                     $scope.userViewWidth = 11;
@@ -1059,7 +1067,7 @@ angular.module('controllers', [])
                 $http.post(url).success(function (response)
                 {
                     $scope.recommenderArray = response.recommenderArray;
-                }).error(function(error) {
+                }).error(function (error) {
                     alert(error);
                     alert("error on predictor update building");
                 });
@@ -1334,12 +1342,11 @@ angular.module('controllers', [])
              * Generate the current senence under contruction.
              * Add the pictograms (and the sentence itself) in the history
              */
-            
+
             $scope.generate = function () {
 
                 var url = $scope.baseurl + "Board/generate";
                 var postdata = {tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
-                alert("asd");
                 $http.post(url, postdata).success(function (response)
                 {
                     console.log(response);
@@ -1371,22 +1378,22 @@ angular.module('controllers', [])
 
 
             };
-            
+
             $scope.playSentenceAudio = function ()
             {
                 var postdata = {voice: 0, sentence: $scope.info.frasefinal};
-                    var URL = $scope.baseurl + "Board/getAudioSentence";
+                var URL = $scope.baseurl + "Board/getAudioSentence";
 
-                    $http.post(URL, postdata).
-                            success(function (response)
-                            {
-                                $scope.dataAudio = response.data;
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.dataAudio = response.data;
 
-                                alert($scope.dataAudio);
-                                $scope.sound = ngAudio.load($scope.baseurl + $scope.dataAudio);
-                                $scope.sound.play();
+                            alert($scope.dataAudio);
+                            $scope.sound = ngAudio.load($scope.baseurl + $scope.dataAudio);
+                            $scope.sound.play();
 
-                            });
+                        });
             };
             /*
              * Return pictograms from database. The result depends on 
@@ -1775,7 +1782,7 @@ angular.module('controllers', [])
         })
 
         .controller('menuCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope, AuthService, $location) {
-            $scope.userConfig=function(){
+            $scope.userConfig = function () {
                 $location.path('/userConfig');
             }
             $scope.editMenu = function () {
