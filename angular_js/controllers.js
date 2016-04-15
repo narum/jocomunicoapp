@@ -895,15 +895,16 @@ angular.module('controllers', [])
             $scope.config = function (boardconf)
             {
                 //-----------Iniciacion-----------
-                $scope.userViewHeight = 100;
-                $scope.searchFolderHeight = 0;
+                
                 var url = $scope.baseurl + "Board/loadCFG";
-                var postdata = {idusu: window.localStorage.getItem('userid'), lusu: window.localStorage.getItem('languageabbr'), lusuid: window.localStorage.getItem('languageid'), cfguser: window.localStorage.getItem('userConfig')};
-
+                var userConfig = JSON.parse(localStorage.getItem('testObject'));
+                var postdata = {idusu: userConfig.ID_User, lusu: userConfig.languageabbr, lusuid: userConfig.cfgDefUser};
+                
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
                 $scope.getPrimaryUserBoard();
-
+                $scope.userViewHeight = 100;
+                $scope.searchFolderHeight = 0;
 
 
                 $scope.tense = "defecte";
@@ -914,7 +915,7 @@ angular.module('controllers', [])
                 $scope.inScan = false;
 
                 //-----------Iniciacion-----------
-
+                // Remove 
                 if (boardconf === 1)
                 {
                     $scope.showall();
@@ -932,8 +933,11 @@ angular.module('controllers', [])
                     $scope.showmid();
                 }
                 $scope.showup();
-                $scope.inPred = true;
-                if ($scope.inPred) {
+                // Remove ^
+                // Prediction bar configuration
+                $scope.cfgPredOnOff = userConfig.cfgPredOnOff;
+                $scope.cfgPredBarVertHor = userConfig.cfgPredBarVertHor;
+                if ($scope.cfgPredOnOff === '1' && $scope.cfgPredBarVertHor === '0') { // Prediction on and vertical
                     $scope.predViewWidth = 1;
                     $scope.userViewWidth = 11;
                     if (window.innerWidth < 1050) {
@@ -941,6 +945,12 @@ angular.module('controllers', [])
                         $scope.userViewWidth = 10;
                     }
                 }
+                // Sentece bar configuration
+                $scope.cfgMenuReadActive = userConfig.cfgMenuReadActive;
+                $scope.cfgMenuDeleteLastActive = userConfig.cfgMenuDeleteLastActive;
+                $scope.cfgMenuDeleteAllActive = userConfig.cfgMenuDeleteAllActive;
+                $scope.cfgSentenceBarUpDown = userConfig.cfgSentenceBarUpDown;
+                $scope.pictoBarWidth = 12 - $scope.cfgMenuReadActive - $scope.cfgMenuDeleteLastActive - $scope.cfgMenuDeleteAllActive;
                 /*$scope.grid1hide = false;
                  $scope.grid2hide = false;
                  $scope.grid3hide = false;
@@ -992,7 +1002,7 @@ angular.module('controllers', [])
 
             $scope.showupdown = function ()
             {
-                $scope.sentenceViewTop = true;
+
                 $scope.sentenceViewHeight = 20;
                 $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
@@ -1000,7 +1010,6 @@ angular.module('controllers', [])
             };
             $scope.showdown = function ()
             {
-                $scope.sentenceViewTop = false;
                 $scope.sentenceViewHeight = 0;
                 $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
@@ -1008,7 +1017,6 @@ angular.module('controllers', [])
             };
             $scope.showup = function ()
             {
-                $scope.sentenceViewTop = true;
                 $scope.sentenceViewHeight = 16;
                 $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
@@ -1016,7 +1024,6 @@ angular.module('controllers', [])
             };
             $scope.showmiddle = function ()
             {
-                $scope.sentenceViewTop = false;
                 $scope.sentenceViewHeight = 0;
                 $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
@@ -1054,7 +1061,7 @@ angular.module('controllers', [])
                 $scope.getPrimaryBoard();
                 $scope.inEdit = true;
                 $scope.inScan = false;
-                $scope.inPred = false;
+                $scope.cfgPredOnOff = 0;
                 $scope.predViewWidth = 0;
                 $scope.boardHeight = 96;
                 $scope.userViewWidth = 9;

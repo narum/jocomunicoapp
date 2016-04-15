@@ -39,13 +39,12 @@ class Board extends REST_Controller {
         $iu = $request->idusu;
         $lu = $request->lusu;
         $luid = $request->lusuid;
-        $cfguser = $request->cfguser;
 
         $data = array(
-            'idusu' => $iu,
-            'ulangabbr' => $lu,
-            'ulangid' => $luid,
-            'cfguser' => $cfguser);
+            'iduser' => $iu, // Id user
+            'ulangabbr' => $lu, // ES, CA...
+            'ulangid' => $luid // Id language
+                );
 
         $this->session->set_userdata($data);
     }
@@ -266,10 +265,10 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $id = $request->id;
 
-        $idusu = $this->session->userdata('idusu');
-        $this->Lexicon->afegirParaula($idusu, $id, null);
+        $iduser = $this->session->userdata('iduser');
+        $this->Lexicon->afegirParaula($iduser, $id, null);
 
-        $data = $this->Lexicon->recuperarFrase($idusu);
+        $data = $this->Lexicon->recuperarFrase($iduser);
 
         $response = [
             'data' => $data
@@ -284,12 +283,12 @@ class Board extends REST_Controller {
 
     public function deleteLastWord_post() {
 
-        $idusu = $this->session->userdata('idusu');
-        $id = $this->BoardInterface->getLastWord($idusu);
+        $iduser = $this->session->userdata('iduser');
+        $id = $this->BoardInterface->getLastWord($iduser);
 
         $this->Lexicon->eliminarParaula($id->ID_RSTPSentencePicto);
 
-        $data = $this->Lexicon->recuperarFrase($idusu);
+        $data = $this->Lexicon->recuperarFrase($iduser);
 
         $response = [
             'data' => $data
@@ -303,10 +302,10 @@ class Board extends REST_Controller {
 
     public function deleteAllWords_post() {
 
-        $idusu = $this->session->userdata('idusu');
-        $this->BoardInterface->removeSentence($idusu);
+        $iduser = $this->session->userdata('iduser');
+        $this->BoardInterface->removeSentence($iduser);
 
-        $data = $this->Lexicon->recuperarFrase($idusu);
+        $data = $this->Lexicon->recuperarFrase($iduser);
 
         $response = [
             'data' => $data
@@ -328,8 +327,8 @@ class Board extends REST_Controller {
         $tense = $request->tense;
         $tipusfrase = $request->tipusfrase;
         $negativa = $request->negativa;
-        $idusu = $this->session->userdata('idusu');
-        $this->Lexicon->insertarFrase($idusu, $tipusfrase, $tense, $negativa);
+        $iduser = $this->session->userdata('iduser');
+        $this->Lexicon->insertarFrase($iduser, $tipusfrase, $tense, $negativa);
 
 
         $this->BoardInterface->commitTrans();
@@ -521,8 +520,8 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $search = $request->search;
 
-        $idusu = $this->session->userdata('idusu');
-        $sentence = $this->BoardInterface->getSentences($idusu, $search);
+        $iduser = $this->session->userdata('iduser');
+        $sentence = $this->BoardInterface->getSentences($iduser, $search);
 
         $response = [
             'sentence' => $sentence
@@ -552,8 +551,8 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $search = $request->search;
 
-        $idusu = $this->session->userdata('idusu');
-        $sFolder = $this->BoardInterface->getSFolders($idusu, $search);
+        $iduser = $this->session->userdata('iduser');
+        $sFolder = $this->BoardInterface->getSFolders($iduser, $search);
 
         $response = [
             'sfolder' => $sFolder
