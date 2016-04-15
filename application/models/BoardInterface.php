@@ -33,7 +33,7 @@ class BoardInterface extends CI_Model {
     function getBoardStruct($id) {
         $output = array();
 
-        $idusu = $this->session->userdata('iduser');
+        $idusu = $this->session->userdata('idusu');
         $this->db->where('ID_GBUser', $idusu);
         $this->db->where('ID_Board', $id);
         $this->db->join('GroupBoards', 'GroupBoards.ID_GB = Boards.ID_GBBoard');
@@ -435,7 +435,7 @@ class BoardInterface extends CI_Model {
 
     function getPrimaryGroupBoard() {
 
-        $idusu = $this->session->userdata('iduser');
+        $idusu = $this->session->userdata('idusu');
         $this->db->where('primaryGroupBoard', '1');
         $this->db->where('ID_GBUser', $idusu);
         $query = $this->db->get('GroupBoards');
@@ -472,7 +472,7 @@ class BoardInterface extends CI_Model {
 
     function getAllBoards() {
 
-        $idusu = $this->session->userdata('iduser');
+        $idusu = $this->session->userdata('idusu');
         $this->db->where('ID_GBUser', $idusu);
         $this->db->join('GroupBoards', 'ID_GB = ID_GBBoard');
         $query = $this->db->get('Boards');
@@ -561,7 +561,7 @@ class BoardInterface extends CI_Model {
 
     function afegirModifNom($modif) {
 
-        $idusu = $this->session->userdata('iduser');
+        $idusu = $this->session->userdata('idusu');
 
         $this->db->where('ID_RSTPUser', $idusu);
         $query = $this->db->get('R_S_TempPictograms');

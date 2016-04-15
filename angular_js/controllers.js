@@ -1278,7 +1278,7 @@ angular.module('controllers', [])
                     $scope.negativa = response.negativa;
                     if (response.control !== "") {
                         var url = $scope.baseurl + "Board/" + response.control;
-                        var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
+                        var postdata = {tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
                         $http.post(url, postdata).success(function (response)
                         {
@@ -1324,6 +1324,7 @@ angular.module('controllers', [])
 
                 var url = $scope.baseurl + "Board/generate";
                 var postdata = {tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
+                alert("asd");
                 $http.post(url, postdata).success(function (response)
                 {
                     console.log(response);

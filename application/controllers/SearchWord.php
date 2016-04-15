@@ -22,7 +22,7 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
-        $user = $this->session->userdata('iduser');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
@@ -49,7 +49,7 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
-        $user = $this->session->userdata('iduser');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
@@ -67,7 +67,7 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
-        $user = $this->session->userdata('iduser');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
@@ -85,7 +85,7 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
-        $user = $this->session->userdata('iduser');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
@@ -103,7 +103,7 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
-        $user = $this->session->userdata('iduser');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
@@ -121,7 +121,7 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
-        $user = $this->session->userdata('iduser');
+        $user = $this->session->userdata('idusu');
 
         
         // Controller search all names from all picto table
