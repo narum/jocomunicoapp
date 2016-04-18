@@ -591,8 +591,7 @@ angular.module('controllers', [])
                 // 0 custom, 1 rows, 2 columns
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
                 $scope.inScan = true;
-                // MODIF: manualScan == cfgScanningAutoOnOff
-                $scope.timerScan = 1;
+                $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
                 $scope.longclick = false;
                 function myTimer() {
                     $scope.NextBlockScan();
@@ -610,17 +609,15 @@ angular.module('controllers', [])
 
                 $scope.arrayScannedCells = null;
                 $scope.currentScanBlock = 1;
+                $scope.currentScanBlock1 = 1;
+                $scope.currentScanBlock2 = 1;
+                $scope.isScanningCancel = false;
                 if ($scope.cfgPredOnOff === '1') {
-                    $scope.currentScanBlock1 = -1;
-                } else {
-                    $scope.currentScanBlock1 = 0;
-                }
-                if ($scope.timerScan == 1) {
-                    $scope.currentScanBlock2 = 0;
-                    $scope.indexScannedCells = -1;
-                } else {
-                    $scope.currentScanBlock2 = 1;
-                    $scope.indexScannedCells = 0;
+                    $scope.isScanning = "prediction";
+                } else if(userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive > 1){
+                    $scope.isScanning = "sentence";
+                }else{
+                    $scope.isScanning = "board";
                 }
                 $scope.getMaxScanBlock1();
 
@@ -628,7 +625,7 @@ angular.module('controllers', [])
             // picto is -1 pred, 0 sentemce, others mainboard.
             $scope.isScanned = function (picto) {
                 //Custom scan
-                if ($scope.inScan && $scope.currentScanBlock1 != -1 && $scope.currentScanBlock1 != 0) {
+                if ($scope.inScan && $scope.isScanning === "board" && $scope.isScanningCancel === false) {
                     if ($scope.cfgScanningCustomRowCol == 0 && (
                             (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 1) ||
                             (picto.customScanBlock1 == $scope.currentScanBlock1 && $scope.currentScanBlock == 2 && picto.customScanBlock2 == $scope.currentScanBlock2) ||
@@ -664,7 +661,7 @@ angular.module('controllers', [])
                     if (!$scope.longclick)
                     {
                         $scope.selectBlockScan();
-                    } else if ($scope.manualScan == 0) {
+                    } else if ($scope.timerScan == 0) {
                         $scope.nextBlockScan();
                     }
                 }
@@ -706,7 +703,7 @@ angular.module('controllers', [])
                     if (!$scope.longclick)
                     {
                         $scope.nextBlockScan();
-                    } else if ($scope.manualScan == 0) {
+                    } else if ($scope.timerScan == 0) {
                         $scope.nextBlockScan();
                     }
                 }
@@ -732,11 +729,8 @@ angular.module('controllers', [])
             // Get the number of level 2 scan blocks
             $scope.getMaxScanBlock2 = function ()
             {
-                // MODIF: poner en caso de prediccion
-                //If we select the sentence view, there are just 3 cells to scan
-                if ($scope.currentScanBlock1 == 0) {
-                    $scope.maxScanBlock2 = 3;
-                } else if ($scope.cfgScanningCustomRowCol == 1) {
+                $scope.currentScanBlock2 = 1;
+                if ($scope.cfgScanningCustomRowCol == 1) {
                     $scope.maxScanBlock2 = $scope.columns;
                 } else if ($scope.cfgScanningCustomRowCol == 2) {
                     $scope.maxScanBlock2 = $scope.rows;
@@ -750,6 +744,7 @@ angular.module('controllers', [])
                         // If there is no subgroup passes to the next scan level (3)
                         if ($scope.maxScanBlock2 === null) {
                             $scope.currentScanBlock2 = null;
+                            $scope.isScanningCancel = false;
                             $scope.selectBlockScan();
                         }
                         // There is no group selected
@@ -762,50 +757,120 @@ angular.module('controllers', [])
             // Change teh current scan block
             $scope.nextBlockScan = function () {
                 if ($scope.inScan) {
-                    // If we are in the first scan level passes to the next (cyclic)
-                    if ($scope.currentScanBlock === 1) {
-                        $scope.currentScanBlock1 = $scope.currentScanBlock1 + 1;
-                        if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
-                            $scope.currentScanBlock1 = -1;
-                        }
-                    }// If we are in the second scan level passes to the next (cyclic) but...
-                    else if ($scope.currentScanBlock === 2 && $scope.cfgScanningCustomRowCol == 0) {
-                        // CurrentScanBlock will be null when we are over all the cell that have no scan block
-                        if ($scope.currentScanBlock2 !== null) {
-                            // If we are not over the mentioned scanblock pass to the next
-                            $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                            // If we pass the last scan block...
-                            if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                                // We are scannig the prediction bar or the sentece bar so start again
-                                if ($scope.currentScanBlock1 == 0 || $scope.currentScanBlock1 == -1) {
+                    if ($scope.isScanningCancel === true) {
+                        $scope.isScanningCancel = false;
+                    } else {
+                        if ($scope.currentScanBlock == 1) {
+                            if ($scope.isScanning === "prediction") {
+                                $scope.isScanning = "sentence";
+                            } else if ($scope.isScanning === "sentence") {
+                                $scope.isScanning = "board";
+                                $scope.currentScanBlock1 = 1;
+                            } else if ($scope.isScanning === "board") {
+                                $scope.currentScanBlock1 = $scope.currentScanBlock1 + 1;
+                                if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
                                     $scope.InitScan();
-                                    //We have to go to the cells that have no scan block
-                                } else {
-                                    $scope.currentScanBlock2 = null;
                                 }
-
-
                             }
-                            // If we are over this strange block, int scan again
-                        } else {
-                            $scope.InitScan();
-                        }
-
-                    } // If we are not in custom scan there are no null group so pass to the next(cyclic) 
-                    else if ($scope.currentScanBlock === 2 && ($scope.cfgScanningCustomRowCol == 1 || $scope.cfgScanningCustomRowCol == 2)) {
-                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                        // All cells were scanned. Start again
-                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                            $scope.InitScan();
-                            return;
-                        }
-                    }// If we are in the third scan pass one by one over the array (cyclic)
-                    else if ($scope.currentScanBlock === 3) {
-                        $scope.indexScannedCells = $scope.indexScannedCells + 1;
-                        if ($scope.indexScannedCells >= $scope.arrayScannedCells.length) {
-                            $scope.InitScan();
+                        } else if ($scope.currentScanBlock == 2) {
+                            if ($scope.isScanning === "prediction") {
+                                $scope.indexScannedCells = $scope.indexScannedCells + 1;
+                                // MODIF: cambiar a la cfg de usuario
+                                if ($scope.indexScannedCells > $scope.arrayScannedCells.length) {
+                                    $scope.InitScan();
+                                }
+                            } else if ($scope.isScanning === "read") {
+                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteLastActive == 1) {
+                                    $scope.isScanning = "deletelast";
+                                } else if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive == 1) {
+                                    $scope.isScanning = "deleteall";
+                                } else {
+                                    $scope.InitScan();
+                                }
+                            } else if ($scope.isScanning === "deletelast") {
+                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive  == 1) {
+                                    $scope.isScanning = "deleteall";
+                                } else {
+                                    $scope.InitScan();
+                                }
+                            } else if ($scope.isScanning === "deleteall") {
+                                $scope.InitScan();
+                            } else if ($scope.isScanning === "board") {
+                                if ($scope.cfgScanningCustomRowCol == 0) {
+                                    if ($scope.currentScanBlock2 !== null) {
+                                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
+                                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
+                                            $scope.currentScanBlock2 = null;
+                                        }
+                                    } else {
+                                        $scope.InitScan();
+                                    }
+                                } else {
+                                    $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
+                                    if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
+                                        $scope.InitScan();
+                                    }
+                                }
+                            }
+                        }// Only custom scan
+                        else if ($scope.currentScanBlock === 3) {
+                            $scope.indexScannedCells = $scope.indexScannedCells + 1;
+                            if ($scope.indexScannedCells > $scope.arrayScannedCells.length) {
+                                $scope.InitScan();
+                            }
                         }
                     }
+
+
+
+
+
+
+
+//                    // If we are in the first scan level passes to the next (cyclic)
+//                    if ($scope.currentScanBlock === 1) {
+//                        $scope.currentScanBlock1 = $scope.currentScanBlock1 + 1;
+//                        if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
+//                            $scope.currentScanBlock1 = -1;
+//                        }
+//                    }// If we are in the second scan level passes to the next (cyclic) but...
+//                    else if ($scope.currentScanBlock === 2 && $scope.cfgScanningCustomRowCol == 0) {
+//                        // CurrentScanBlock will be null when we are over all the cell that have no scan block
+//                        if ($scope.currentScanBlock2 !== null) {
+//                            // If we are not over the mentioned scanblock pass to the next
+//                            $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
+//                            // If we pass the last scan block...
+//                            if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
+//                                // We are scannig the prediction bar or the sentece bar so start again
+//                                if ($scope.currentScanBlock1 == 0 || $scope.currentScanBlock1 == -1) {
+//                                    $scope.InitScan();
+//                                    //We have to go to the cells that have no scan block
+//                                } else {
+//                                    $scope.currentScanBlock2 = null;
+//                                }
+//
+//
+//                            }
+//                            // If we are over this strange block, int scan again
+//                        } else {
+//                            $scope.InitScan();
+//                        }
+//
+//                    } // If we are not in custom scan there are no null group so pass to the next(cyclic) 
+//                    else if ($scope.currentScanBlock === 2 && ($scope.cfgScanningCustomRowCol == 1 || $scope.cfgScanningCustomRowCol == 2)) {
+//                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
+//                        // All cells were scanned. Start again
+//                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
+//                            $scope.InitScan();
+//                            return;
+//                        }
+//                    }// If we are in the third scan pass one by one over the array (cyclic)
+//                    else if ($scope.currentScanBlock === 3) {
+//                        $scope.indexScannedCells = $scope.indexScannedCells + 1;
+//                        if ($scope.indexScannedCells >= $scope.arrayScannedCells.length) {
+//                            $scope.InitScan();
+//                        }
+//                    }
                 }
             };
             //Pass to the next scan level (subgroup)
@@ -815,59 +880,61 @@ angular.module('controllers', [])
                     {
                         $scope.scanLongClickController = false;
                     }
-                    $scope.currentScanBlock = $scope.currentScanBlock + 1;
-                    //If we are in the second level
-                    if ($scope.currentScanBlock === 2) {
-                        // Get the number of level 2 subgroup
-                        $scope.getMaxScanBlock2();
-                        //If we are in the third level, get all the cells (arraScannedCells)
-                    } else if ($scope.currentScanBlock === 3) {
-                        // If we are over the sentence bar
-                        if ($scope.currentScanBlock1 == 0) {
-                            switch ($scope.currentScanBlock2) {
-                                case 1:
-                                    $scope.generate();
-                                    break;
-                                case 2:
-                                    $scope.deleteLast();
-                                    break;
-                                case 3:
-                                    $scope.deleteAll();
-                                    break;
-                            }//MODIF: Maybe we have to put control to perd
-                            $scope.InitScan();
-                            // We are over the cancel/return cell
-                        } else if ($scope.currentScanBlock2 === 0) {
-                            $scope.InitScan();
-                        } else if ($scope.cfgScanningCustomRowCol != 0) {
-                            $scope.selectScannedCell();
-                        } else {
-                            var url = $scope.baseurl + "Board/getScannedCells";
-                            var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
-                            $http.post(url, postdata).success(function (response)
-                            {
-                                $scope.arrayScannedCells = response.array;
-                                if ($scope.timerScan == 1) {
-                                    //$scope.currentScanBlock2 = 0;
-                                    $scope.indexScannedCells = -1;
+                    if ($scope.isScanningCancel === true) {
+                        $scope.InitScan();
+                    } else {
+                        if ($scope.currentScanBlock === 1) {
+                            if($scope.timerScan == 1)$scope.isScanningCancel = true;
+                            $scope.currentScanBlock = 2;
+                            if ($scope.isScanning === "prediction") {
+                                $scope.arrayScannedCells = $scope.recommenderArray;
+                                $scope.indexScannedCells = 0;
+                            } else if ($scope.isScanning === "sentence") {
+                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuReadActive == 1) {
+                                    $scope.isScanning = "read";
+                                } else if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteLastActive == 1) {
+                                    $scope.isScanning = "deletelast";
+                                } else if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive == 1) {
+                                    $scope.isScanning = "deleteall";
                                 } else {
-                                    $scope.currentScanBlock2 = 1;
-                                    $scope.indexScannedCells = 0;
+                                    $scope.InitScan();
                                 }
-                                //There is one cell in that group
-
-                                if ($scope.arrayScannedCells.length === 1) {
+                            } else if ($scope.isScanning === "board") {
+                                $scope.getMaxScanBlock2();
+                            }
+                        } else if ($scope.currentScanBlock === 2) {
+                            $scope.currentScanBlock = 3;
+                            if ($scope.isScanning === "prediction") {
+                                $scope.addToSentence($scope.arrayScannedCells[$scope.indexScannedCells].pictoid);
+                            } else if ($scope.isScanning === "read") {
+                                $scope.generate();
+                                $scope.InitScan();
+                            } else if ($scope.isScanning === "deletelast") {
+                                $scope.deleteLast();
+                                $scope.InitScan();
+                            } else if ($scope.isScanning === "deleteall") {
+                                $scope.deleteAll();
+                                $scope.InitScan();
+                            } else if ($scope.isScanning === "board") {
+                                if ($scope.cfgScanningCustomRowCol != 0) {
                                     $scope.selectScannedCell();
+                                } else {
+                                     if($scope.timerScan == 1) $scope.isScanningCancel = true;
+                                    var url = $scope.baseurl + "Board/getScannedCells";
+                                    var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
+                                    $http.post(url, postdata).success(function (response)
+                                    {
+                                        $scope.arrayScannedCells = response.array;
+                                        $scope.indexScannedCells = 0;
+                                        //There is one cell in that group
+
+                                        if ($scope.arrayScannedCells.length === 1) {
+                                            $scope.selectScannedCell();
+                                        }
+                                    });
                                 }
-                            });
-                        }
-                        // This is, we selected a cell.
-                    } else if ($scope.currentScanBlock == 4) {
-                        // We are over the cancel/return cell
-                        if ($scope.currentScanBlock2 == 0 || $scope.indexScannedCells == -1) {
-                            alert($scope.currentScanBlock2);
-                            $scope.InitScan();
-                        } else {
+                            }
+                        } else if ($scope.currentScanBlock === 3) {
                             $scope.selectScannedCell();
                         }
                     }
@@ -1294,6 +1361,7 @@ angular.module('controllers', [])
                 $http.post(url, postdata).success(function (response)
                 {
                     //MODIF: Falta añadir picto especial
+                    $scope.dataTemp = response.data;
                     $scope.tense = response.tense;
                     $scope.tipusfrase = response.tipusfrase;
                     $scope.negativa = response.negativa;

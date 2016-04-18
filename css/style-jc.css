@@ -199,7 +199,7 @@
 }
 .contentCell{
     padding: 2.5%;
-    border-radius: 10px;
+    border-radius: 15px;
     height: 100%;
     width: 100%;
     position: relative;
@@ -243,10 +243,10 @@
     width: 97.6%;
 }
 .backgroundCell{
-    padding: 2.5%;
+    padding: 0.5vh 0.25vw;
     width: 100%;
     height: 100%;
-    border-radius: 10px;
+    border-radius: 15px;
     z-index: 0;
     position: absolute;
     background-clip: content-box;

@@ -437,11 +437,15 @@ class Board extends REST_Controller {
                 $control = $value;
                 break;
         }
+        $idusu = $this->session->userdata('idusu');
+        $data = $this->Lexicon->recuperarFrase($idusu);
+        
         $response = [
             'tense' => $tense,
             'tipusfrase' => $tipusfrase,
             'negativa' => $negativa,
-            'control' => $control
+            'control' => $control,
+            'data' => $data
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
