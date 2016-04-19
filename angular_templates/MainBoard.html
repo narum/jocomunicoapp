@@ -1,96 +1,100 @@
 <!-- This view is the main board where the picto will be shown. In addition it 
      includes others view like sentece, edit (board/cell) panel, etc etc
 -->
-<div class="fullheight row" ng-init="config(4)" style="padding: 5vh;" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
-
-    <div  ng-if="(cfgPredOnOff === '1' && cfgPredBarVertHor === '0')" id="predView" ng-if="inPred" class="col-xs-{{predViewWidth}} fullheight">
-        <div  class="row fullheight">
-            <div class="col-sm-12" ng-include="baseurl + '/angular_templates/PredView.html'">
-
-            </div>
-        </div>
+<div id="main" style="background-image: url('/img/FonsRegistre.png');background-size:100% 100%">
+    <div class="row" ng-controller="menuCtrl" ng-include="baseurl + '/angular_templates/MenuView.html'">                     
     </div>
+    <div class="fullheight row" ng-init="config(4)" style="padding: 5vh;" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
 
-    <div id="userview" class="col-xs-{{userViewWidth}}" style="height:{{userViewHeight}}%" >
-        <div id="sentenceView" class="container-fluid Defmargin" ng-if="cfgSentenceBarUpDown === '0' && !inEdit" style="height:{{sentenceViewHeight}}%">
-            <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     
-            </div>
-        </div>
+        <div  ng-if="(cfgPredOnOff === '1' && cfgPredBarVertHor === '0')" id="predView" ng-if="inPred" class="col-xs-{{predViewWidth}} fullheight">
+            <div  class="row fullheight">
+                <div class="col-sm-12" ng-include="baseurl + '/angular_templates/PredView.html'">
 
-        <div class="container-fluid Defmargin" style="height:{{boardHeight}}%">
-            <div class="row fullheight imgRounded Defpadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
-                <div ng-if="inScan && isScanningCancel === true" class="returnScan"></div>
-                <div class="col-xs-12 containerCell" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}" ng-click="!inScan?clickOnCell(picto):null" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
-                    <svg ng-if="picto.boardLink != null" class="sfolder" version="1.1" id="Capa_1" preserveAspectRatio="none" viewBox="0 0 1020 1020" enable-background="new 0 0 1020 1020" xml:space="preserve">
-
-                    <path fill="#{{picto.color}}" d="M185.127,0H425.89c17.358,3.666,33.149,15.672,39.751,32.354c4.051,9.47,4.409,19.842,5.671,29.909
-                          c145.722,0.425,291.443-0.014,437.165,0.186c33.509-0.598,66.938,14.583,87.604,41.119c13.122,17.611,21.104,38.701,23.92,60.43
-                          v755.796c-3.839,30.826-19.803,60.603-45.09,78.984c-15.686,11.873-35.023,17.199-53.949,21.223H98.892
-                          c-19.643-3.532-39.285-9.895-54.997-22.631C18.9,979.28,3.719,949.928,0,919.621V162.788C4.768,125.202,27.24,88.931,62.408,73.02
-                          c23.534-11.807,50.482-11.037,76.075-10.877c1.421-10.599,1.022-21.954,6.202-31.663C151.845,14.211,168.048,3.44,185.127,0z"/>
-                    </svg>
-                    <div ng-if="picto.boardLink == null" class="backgroundCell" ng-style="{'background-color':'#{{picto.color}}'}"></div>
-                    <!-- put the scan color over the image.
-                         Only if we are in Scan mode
-                    MODIF: Añadir variable if inScan-->
-
-                    <div ng-if="isScanned(picto);" class="scaneo"></div>
-                    <div ng-if="picto.textInCell === null" class="textCell">{{picto.pictotext}}</div>
-                    <div ng-if="picto.textInCell !== null" class="textCell">{{picto.textInCell}}</div>
-                    <img ng-if="picto.ID_CFunction !== null" src="{{baseurl}}img/srcWeb/functions.png" class="function"/>
-                    <!-- If there is an custom image this line mades it draggable and dropable.
-                         Only if we are in edit mode-->
-                    <div ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell">
-                        <div ng-style="picto.pictotext !== null || picto.textInCell !== null  ? {'height':'70%'}:{'height':'100%'}">
-                            <img class="imgResponsive" src="{{baseurl}}img{{picto.imgCell}}"/>
-                        </div>
-
-                    </div>
-                    <!-- If there is an image this line mades it draggable and dropable.
-                         Only if we are in edit mode-->
-                    <div ng-if="picto.imgPicto && !picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell">  
-                        <div ng-style="picto.pictotext !== null || picto.textInCell !== null ? {'height':'70%'}:{'height':'100%'}">
-                            <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
-                        </div>
-                    </div>
-
-                    <!-- Else, puts a "empty image" and mades it dropable
-                         Only if we are in edit mode-->
-                    <div ng-if="!picto.imgPicto && !picto.imgCell || (picto.activeCell == 0 && !inEdit)" class="contentCell">
-                        <!--There is no text -->
-                    </div>
                 </div>
             </div>
         </div>
-        <div id="sentenceView" class="container-fluid Defmargin" ng-if="cfgSentenceBarUpDown === '1' && !inEdit" style="height:{{sentenceViewHeight}}%">
-            <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     
+
+        <div id="userview" class="col-xs-{{userViewWidth}}" style="height:{{userViewHeight}}%" >
+            <div id="sentenceView" class="container-fluid Defmargin" ng-if="cfgSentenceBarUpDown === '0' && !inEdit" style="height:{{sentenceViewHeight}}%">
+                <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     
+                </div>
+            </div>
+
+            <div class="container-fluid Defmargin" style="height:{{boardHeight}}%">
+                <div class="row fullheight imgRounded Defpadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
+                    <div ng-if="inScan && isScanningCancel === true" class="returnScan"></div>
+                    <div class="col-xs-12 containerCell" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}" ng-click="!inScan?clickOnCell(picto):null" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
+                        <svg ng-if="picto.boardLink != null" class="sfolder" version="1.1" id="Capa_1" preserveAspectRatio="none" viewBox="0 0 1020 1020" enable-background="new 0 0 1020 1020" xml:space="preserve">
+
+                        <path fill="#{{picto.color}}" d="M185.127,0H425.89c17.358,3.666,33.149,15.672,39.751,32.354c4.051,9.47,4.409,19.842,5.671,29.909
+                              c145.722,0.425,291.443-0.014,437.165,0.186c33.509-0.598,66.938,14.583,87.604,41.119c13.122,17.611,21.104,38.701,23.92,60.43
+                              v755.796c-3.839,30.826-19.803,60.603-45.09,78.984c-15.686,11.873-35.023,17.199-53.949,21.223H98.892
+                              c-19.643-3.532-39.285-9.895-54.997-22.631C18.9,979.28,3.719,949.928,0,919.621V162.788C4.768,125.202,27.24,88.931,62.408,73.02
+                              c23.534-11.807,50.482-11.037,76.075-10.877c1.421-10.599,1.022-21.954,6.202-31.663C151.845,14.211,168.048,3.44,185.127,0z"/>
+                        </svg>
+                        <div ng-if="picto.boardLink == null" class="backgroundCell" ng-style="{'background-color':'#{{picto.color}}'}"></div>
+                        <!-- put the scan color over the image.
+                             Only if we are in Scan mode
+                        MODIF: Añadir variable if inScan-->
+
+                        <div ng-if="isScanned(picto);" class="scaneo"></div>
+                        <div ng-if="picto.textInCell === null" class="textCell">{{picto.pictotext}}</div>
+                        <div ng-if="picto.textInCell !== null" class="textCell">{{picto.textInCell}}</div>
+                        <img ng-if="picto.ID_CFunction !== null" src="{{baseurl}}img/srcWeb/functions.png" class="function"/>
+                        <!-- If there is an custom image this line mades it draggable and dropable.
+                             Only if we are in edit mode-->
+                        <div ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell">
+                            <div ng-style="picto.pictotext !== null || picto.textInCell !== null  ? {'height':'70%'}:{'height':'100%'}">
+                                <img class="imgResponsive" src="{{baseurl}}img{{picto.imgCell}}"/>
+                            </div>
+
+                        </div>
+                        <!-- If there is an image this line mades it draggable and dropable.
+                             Only if we are in edit mode-->
+                        <div ng-if="picto.imgPicto && !picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell">  
+                            <div ng-style="picto.pictotext !== null || picto.textInCell !== null ? {'height':'70%'}:{'height':'100%'}">
+                                <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
+                            </div>
+                        </div>
+
+                        <!-- Else, puts a "empty image" and mades it dropable
+                             Only if we are in edit mode-->
+                        <div ng-if="!picto.imgPicto && !picto.imgCell || (picto.activeCell == 0 && !inEdit)" class="contentCell">
+                            <!--There is no text -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="sentenceView" class="container-fluid Defmargin" ng-if="cfgSentenceBarUpDown === '1' && !inEdit" style="height:{{sentenceViewHeight}}%">
+                <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     
+                </div>
             </div>
         </div>
-    </div>
 
 
-    <div ng-if="inEdit" class="col-xs-{{editViewWidth}} fullheight" style="height:{{userViewHeight}}%">
-        <div id="trashview" class="row fullheight">
-            <div class="col-sm-12" ng-include="baseurl + '/angular_templates/EditViewTrash.html'">
+        <div ng-if="inEdit" class="col-xs-{{editViewWidth}} fullheight" style="height:{{userViewHeight}}%">
+            <div id="trashview" class="row fullheight">
+                <div class="col-sm-12" ng-include="baseurl + '/angular_templates/EditViewTrash.html'">
 
+                </div>
+            </div>
+            <div id="searchView" class="row fullheight">
+                <div class="col-sm-12" ng-include="baseurl + '/angular_templates/EditView.html'">
+
+                </div>
             </div>
         </div>
-        <div id="searchView" class="row fullheight">
-            <div class="col-sm-12" ng-include="baseurl + '/angular_templates/EditView.html'">
 
+        <div ng-if="inEdit" class="col-sm-12" id="searchFolder" ng-include="baseurl + '/angular_templates/EditFolder.html'" style="height: {{searchFolderHeight}}%">
+        </div>
+        <!-- MODIF: Poner control si no scan-->
+        <div ng-if="puntuando" class="goodPhrase" ng-click="feedback(1)">
+            <div ng-if="isScanning === 'goodPhrase'" class="scaneo">
             </div>
         </div>
-    </div>
-
-    <div ng-if="inEdit" class="col-sm-12" id="searchFolder" ng-include="baseurl + '/angular_templates/EditFolder.html'" style="height: {{searchFolderHeight}}%">
-    </div>
-    <!-- MODIF: Poner control si no scan-->
-    <div ng-if="puntuando" class="goodPhrase" ng-click="feedback(1)">
-        <div ng-if="isScanning === 'goodPhrase'" class="scaneo">
-        </div>
-    </div>
-    <div ng-if="puntuando" class="badPhrase" ng-click="feedback(- 1)">
-        <div ng-if="isScanning === 'badPhrase'" class="scaneo">
+        <div ng-if="puntuando" class="badPhrase" ng-click="feedback( - 1)">
+            <div ng-if="isScanning === 'badPhrase'" class="scaneo">
+            </div>
         </div>
     </div>
 </div>

@@ -25,8 +25,8 @@ angular.module('app', [
 			templateUrl:'../../angular_templates/login.html'
 		})
 		.when('/', {
-			controller:'menuCtrl',
-			templateUrl:'../../angular_templates/MenuView.html'
+			controller:'myCtrl',
+			templateUrl:'../../angular_templates/MainBoard.html'
 		})
 		.when('/adeu', {
 			controller:'AdeuCtrl',
@@ -35,10 +35,6 @@ angular.module('app', [
 		.when('/register', {
 			controller:'RegisterCtrl',
 			templateUrl:'../../angular_templates/register.html'
-		})
-                .when('/board', {
-			controller:'myCtrl',
-			templateUrl:'../../angular_templates/MainBoard.html'
 		})
 		.when('/userConfig', {
 			controller:'UserConfCtrl',
@@ -59,6 +55,10 @@ angular.module('app', [
                 .when('/passRecovery/:emailKey/:id', {
 			controller:'passRecoveryCtrl',
 			templateUrl:'../../angular_templates/passRecovery.html'
+		})
+                .when('/panelGroups', {
+			controller:'panelCtrl',
+			templateUrl:'../../angular_templates/PanelGroups.html'
 		})
 		.otherwise({ redirectTo:'/' });
 })

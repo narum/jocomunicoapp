@@ -614,9 +614,9 @@ angular.module('controllers', [])
                 $scope.isScanningCancel = false;
                 if ($scope.cfgPredOnOff === '1') {
                     $scope.isScanning = "prediction";
-                } else if(userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive > 1){
+                } else if (userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive > 1) {
                     $scope.isScanning = "sentence";
-                }else{
+                } else {
                     $scope.isScanning = "board";
                 }
                 $scope.getMaxScanBlock1();
@@ -759,11 +759,11 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     if ($scope.isScanningCancel === true) {
                         $scope.isScanningCancel = false;
-                    } else if($scope.isScanning === "goodPhrase"){
+                    } else if ($scope.isScanning === "goodPhrase") {
                         $scope.isScanning = "badPhrase";
-                    } else if($scope.isScanning === "badPhrase"){
+                    } else if ($scope.isScanning === "badPhrase") {
                         $scope.feedback(1);
-                    }else {
+                    } else {
                         if ($scope.currentScanBlock == 1) {
                             if ($scope.isScanning === "prediction") {
                                 $scope.isScanning = "sentence";
@@ -792,7 +792,7 @@ angular.module('controllers', [])
                                     $scope.InitScan();
                                 }
                             } else if ($scope.isScanning === "deletelast") {
-                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive  == 1) {
+                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive == 1) {
                                     $scope.isScanning = "deleteall";
                                 } else {
                                     $scope.InitScan();
@@ -886,13 +886,14 @@ angular.module('controllers', [])
                     }
                     if ($scope.isScanningCancel === true) {
                         $scope.InitScan();
-                    } else if($scope.isScanning === "goodPhrase"){
+                    } else if ($scope.isScanning === "goodPhrase") {
                         $scope.feedback(1);
-                    } else if($scope.isScanning === "badPhrase"){
+                    } else if ($scope.isScanning === "badPhrase") {
                         $scope.feedback(-1);
-                    }else {
+                    } else {
                         if ($scope.currentScanBlock === 1) {
-                            if($scope.timerScan == 1)$scope.isScanningCancel = true;
+                            if ($scope.timerScan == 1)
+                                $scope.isScanningCancel = true;
                             $scope.currentScanBlock = 2;
                             if ($scope.isScanning === "prediction") {
                                 $scope.arrayScannedCells = $scope.recommenderArray;
@@ -927,7 +928,8 @@ angular.module('controllers', [])
                                 if ($scope.cfgScanningCustomRowCol != 0) {
                                     $scope.selectScannedCell();
                                 } else {
-                                     if($scope.timerScan == 1) $scope.isScanningCancel = true;
+                                    if ($scope.timerScan == 1)
+                                        $scope.isScanningCancel = true;
                                     var url = $scope.baseurl + "Board/getScannedCells";
                                     var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
                                     $http.post(url, postdata).success(function (response)
@@ -1432,7 +1434,7 @@ angular.module('controllers', [])
                     $scope.playSentenceAudio();
                     $scope.puntuar();
 
-                    
+
                 });
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
@@ -1440,11 +1442,11 @@ angular.module('controllers', [])
 
 
             };
-            
+
             $scope.puntuar = function () {
 
                 $scope.puntuando = true;
-                if ($scope.inScan){
+                if ($scope.inScan) {
                     $scope.isScanning = "goodPhrase";
                 }
 
@@ -1452,13 +1454,13 @@ angular.module('controllers', [])
             };
             $scope.feedback = function (point) {
 
-                if(point === 1){
+                if (point === 1) {
                     alert("one point for Spain");
-                }else{
+                } else {
                     alert("Gracias por puntuar bien esta frase");
                 }
                 $scope.puntuando = false;
-                if($scope.inScan){
+                if ($scope.inScan) {
                     $scope.InitScan();
                 }
 
@@ -1898,6 +1900,29 @@ angular.module('controllers', [])
             $scope.IniciScan = function () {
                 $rootScope.$emit("ScanCallFromMenu", {});
             };
+        })
+
+
+        .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http) {
+            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+            if (!$rootScope.isLogged) {
+                $location.path('/login');
+            }
+            // Pedimos los textos para cargar la pagina
+            txtContent("panelgroup").then(function (results) {
+                $scope.content = results.data;
+            });
+
+            $scope.initPanelGroup = function () {
+                var URL = $scope.baseurl + "panelGroup/getUserPanels";
+
+                $http.post(URL).
+                        success(function (response)
+                        {
+                            $scope.panels = response.panels;
+                        });
+            };
+            $scope.initPanelGroup();
         })
 
 
