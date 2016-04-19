@@ -759,7 +759,11 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     if ($scope.isScanningCancel === true) {
                         $scope.isScanningCancel = false;
-                    } else {
+                    } else if($scope.isScanning === "goodPhrase"){
+                        $scope.isScanning = "badPhrase";
+                    } else if($scope.isScanning === "badPhrase"){
+                        $scope.feedback(1);
+                    }else {
                         if ($scope.currentScanBlock == 1) {
                             if ($scope.isScanning === "prediction") {
                                 $scope.isScanning = "sentence";
@@ -882,7 +886,11 @@ angular.module('controllers', [])
                     }
                     if ($scope.isScanningCancel === true) {
                         $scope.InitScan();
-                    } else {
+                    } else if($scope.isScanning === "goodPhrase"){
+                        $scope.feedback(1);
+                    } else if($scope.isScanning === "badPhrase"){
+                        $scope.feedback(-1);
+                    }else {
                         if ($scope.currentScanBlock === 1) {
                             if($scope.timerScan == 1)$scope.isScanningCancel = true;
                             $scope.currentScanBlock = 2;
@@ -908,7 +916,7 @@ angular.module('controllers', [])
                                 $scope.addToSentence($scope.arrayScannedCells[$scope.indexScannedCells].pictoid);
                             } else if ($scope.isScanning === "read") {
                                 $scope.generate();
-                                $scope.InitScan();
+                                //$scope.InitScan();
                             } else if ($scope.isScanning === "deletelast") {
                                 $scope.deleteLast();
                                 $scope.InitScan();
@@ -980,7 +988,7 @@ angular.module('controllers', [])
                 $scope.userViewHeight = 100;
                 $scope.searchFolderHeight = 0;
 
-
+                $scope.puntuando = false;
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
@@ -1420,29 +1428,39 @@ angular.module('controllers', [])
                     console.log(response);
                     //$scope.dataTemp = response.data;
                     $scope.info = response.info;
+                    //$scope.data = response.data;
+                    $scope.playSentenceAudio();
+                    $scope.puntuar();
 
-                    //MODIF: dir frase
-
-
-                    var postdata = {voice: 0, sentence: $scope.info.frasefinal};
-                    var URL = $scope.baseurl + "Board/getAudioSentence_post";
-
-
-                    $http.post(URL, postdata).
-                            success(function (response)
-                            {
-                                $scope.statusWord = response.status;
-                                $scope.data = response.data;
-                            });
-
-
-
-                    $scope.sound = ngAudio.load($scope.baseurl + "mp3/sound.mp3");
-                    $scope.sound.play();
+                    
                 });
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
+
+
+            };
+            
+            $scope.puntuar = function () {
+
+                $scope.puntuando = true;
+                if ($scope.inScan){
+                    $scope.isScanning = "goodPhrase";
+                }
+
+
+            };
+            $scope.feedback = function (point) {
+
+                if(point === 1){
+                    alert("one point for Spain");
+                }else{
+                    alert("Gracias por puntuar bien esta frase");
+                }
+                $scope.puntuando = false;
+                if($scope.inScan){
+                    $scope.InitScan();
+                }
 
 
             };
