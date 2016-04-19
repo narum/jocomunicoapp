@@ -20,7 +20,7 @@
         <div class="container-fluid Defmargin" style="height:{{boardHeight}}%">
             <div class="row fullheight imgRounded Defpadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
                 <div ng-if="inScan && isScanningCancel === true" class="returnScan"></div>
-                <div class="col-xs-12 containerCell" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}" ng-click="!inScan?clickOnCell(picto):null" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
+                <div class="col-xs-12 containerCell" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}" ng-mouseenter="cfgTimeOver?TimeoutOverClick(0,picto):null" ng-mouseleave="cfgTimeOver?CancelTimeoutOverClick():null" ng-click="!inScan?clickOnCell(picto):null" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
                     <svg ng-if="picto.boardLink != null" class="sfolder" version="1.1" id="Capa_1" preserveAspectRatio="none" viewBox="0 0 1020 1020" enable-background="new 0 0 1020 1020" xml:space="preserve">
 
                     <path fill="#{{picto.color}}" d="M185.127,0H425.89c17.358,3.666,33.149,15.672,39.751,32.354c4.051,9.47,4.409,19.842,5.671,29.909
@@ -85,11 +85,11 @@
     <div ng-if="inEdit" class="col-sm-12" id="searchFolder" ng-include="baseurl + '/angular_templates/EditFolder.html'" style="height: {{searchFolderHeight}}%">
     </div>
     <!-- MODIF: Poner control si no scan-->
-    <div ng-if="puntuando" class="goodPhrase" ng-click="feedback(1)">
+    <div ng-if="puntuando" class="goodPhrase" ng-click="feedback(1)" ng-mouseenter="cfgTimeOver?TimeoutOverClick(3,'Good'):null" ng-mouseleave="cfgTimeOver?CancelTimeoutOverClick():null" >
         <div ng-if="isScanning === 'goodPhrase'" class="scaneo">
         </div>
     </div>
-    <div ng-if="puntuando" class="badPhrase" ng-click="feedback(- 1)">
+    <div ng-if="puntuando" class="badPhrase" ng-click="feedback(- 1)" ng-mouseenter="cfgTimeOver?TimeoutOverClick(3,'Bad'):null" ng-mouseleave="cfgTimeOver?CancelTimeoutOverClick():null" >
         <div ng-if="isScanning === 'badPhrase'" class="scaneo">
         </div>
     </div>
