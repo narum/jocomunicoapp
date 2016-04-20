@@ -47,8 +47,8 @@ class Resultats extends CI_Controller {
                                         
                     switch ($language) {
                         case "CA":
-                            if ($isfem) $concatveus = "-r 165 -v Monica ";
-                            else $concatveus = "-r 180 -v Jorge ";
+                            if ($isfem) $concatveus = "-r 190 -v Laia ";
+                            else $concatveus = "-r 190 -v Laia ";
                             break;
                             
                         case "ES":
