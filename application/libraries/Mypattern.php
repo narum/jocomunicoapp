@@ -4369,14 +4369,14 @@ class Mypattern {
         }
         
         // afegim les expressions a darrere de la frase, si la frase no era buida,
-        // afegim una coma abans
+        // afegim una coma abans -> CANVIAT, ja no afegim la coma
         
         $numexprs = count($this->exprsarray);
         
-        if ($numexprs > 0 && $this->frasefinal != " ") {
+        /* if ($numexprs > 0 && $this->frasefinal != " ") {
             $frasebruta .= ", ";
             $frasebruta = preg_replace("/[[:space:]],/u", ",", $frasebruta);
-        }
+        } */
         for ($i=0; $i<$numexprs; $i++) {
             // l'hola sempre va a davant            
             if ($this->exprsarray[$i] == "hola") {
@@ -4997,14 +4997,14 @@ class Mypattern {
         }
         
         // afegim les expressions a darrere de la frase, si la frase no era buida,
-        // afegim una coma abans
+        // afegim una coma abans -> CANVIAT, ja no afegim la coma
         
         $numexprs = count($this->exprsarray);
         
-        if ($numexprs > 0 && $this->frasefinal != " ") {
+        /* if ($numexprs > 0 && $this->frasefinal != " ") {
             $frasebruta .= ", ";
             $frasebruta = preg_replace("/[[:space:]],/u", ",", $frasebruta);
-        }
+        } */
         for ($i=0; $i<$numexprs; $i++) {
             // l'hola sempre va a davant            
             if ($this->exprsarray[$i] == "hola") {

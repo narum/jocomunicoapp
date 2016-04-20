@@ -37,12 +37,13 @@ CREATE TABLE SuperUser (
 	cfgAppConfUsageMouseOneCTwoC ENUM('0', '1', '2') DEFAULT '0',
 	cfgTimeClick INT DEFAULT '1000',
 	cfgExpansionOnOff ENUM('0', '1') DEFAULT '1',
+	cfgFeedbackExpansion ENUM('0', '1') DEFAULT '0',
 	cfgAutoEraseSentenceBar ENUM('0', '1') DEFAULT '0',
 	cfgPredOnOff ENUM('0', '1') DEFAULT '1',
 	cfgPredBarVertHor ENUM('0', '1') DEFAULT '0',
 	cfgPredBarNumPred INT DEFAULT '5',
 	cfgScanningOnOff ENUM('0', '1') DEFAULT '0',
-	cfgScanningRowColCustom ENUM('0', '1', '2') DEFAULT '0',
+	cfgScanningCustomRowCol ENUM('0', '1', '2') DEFAULT '1',
 	cfgScanningAutoOnOff ENUM('0', '1') DEFAULT '0',
 	cfgTimeScanning INT DEFAULT '1000',
 	cfgNumLapScanRestart INT DEFAULT '2',
@@ -55,6 +56,8 @@ CREATE TABLE SuperUser (
 	cfgTextInCell ENUM('0', '1') DEFAULT '1',
 	cfgHistOnOff ENUM('0', '1') DEFAULT '1',
 	cfgBlackOnWhiteVSWhiteOnBlack ENUM('0', '1') DEFAULT '0',
+	cfgTimeLapseSelect INT DEFAULT '1500',
+	cfgTimeNoRepeatedClick INT DEFAULT ‘300',
 	UserValidated ENUM('0', '1') DEFAULT '0'
 ) ENGINE=INNODB;
 
@@ -204,6 +207,7 @@ CREATE TABLE S_Historic (
 	generatorScore INT NULL,
 	generatorString VARCHAR(500) NULL,
 	comments TEXT NULL,
+	userScore INT NULL,
 	INDEX SHUser (ID_SHUser),
 	FOREIGN KEY (ID_SHUser) REFERENCES User (ID_User) ON DELETE CASCADE
 ) ENGINE=INNODB;
@@ -255,6 +259,7 @@ CREATE TABLE S_Sentence (
 	generatorScore INT NULL,
 	generatorString VARCHAR(500) NULL,
 	comments TEXT NULL,
+	userScore INT NULL,
 	isPreRec ENUM('0', '1') DEFAULT '0',
 	sPreRecText TEXT,
 	sPreRecDate DATE,

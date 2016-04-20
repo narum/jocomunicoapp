@@ -32,6 +32,52 @@ class Resultats extends CI_Controller {
             $expander = new Myexpander();
             $expander->expand();
             $info = $expander->info;
+            
+            // si el sistema operatiu és un Mac
+            $server_data = $_SERVER['HTTP_USER_AGENT'];
+            $user_agent = $this->getOS($server_data);
+            
+            $language = $this->session->userdata('ulangabbr');
+            $isfem = $this->session->userdata('isfem');
+            
+            switch ($user_agent) {
+                case "Mac OS X":
+                    
+                    $concatveus = "";
+                                        
+                    switch ($language) {
+                        case "CA":
+                            if ($isfem) $concatveus = "-r 165 -v Monica ";
+                            else $concatveus = "-r 180 -v Jorge ";
+                            break;
+                            
+                        case "ES":
+                            if ($isfem) $concatveus = "-r 165 -v Monica ";
+                            else $concatveus = "-r 180 -v Jorge ";
+                            break;
+                            
+                        case "EN":
+                            if ($isfem) $concatveus = "-r 220 -v Vicki ";
+                            else $concatveus = "-r 220 -v Alex ";
+                            break;
+
+                        default:
+                            if ($isfem) $concatveus = "-r 165 -v Monica ";
+                            else $concatveus = "-r 180 -v Jorge ";
+                            break;
+                    }
+                    
+                    // $concatoutput = "-o mp3/filename.m4a ";
+                    
+                    $cmd='say '.$concatveus.'"'.$info['frasefinal'].'" > /dev/null 2>&1 &';
+                    // $cmd='say '.$concatveus.$concatoutput.'"'.$info['frasefinal'].'" > /dev/null 2>&1 &';
+                    shell_exec($cmd);
+                    break;
+
+                default:
+                    break;
+            }
+                        
             $this->load->view('resultats', $info); 
             
 	}
@@ -281,5 +327,45 @@ class Resultats extends CI_Controller {
             $this->Lexicon->addEntryScores($identry, $scoreparser, $scoregen, $comments);
 
             $this->load->view('gracies');
+        }
+        
+        function getOS($user_agent) { 
+
+            $os_platform    =   "Unknown OS Platform";
+
+            $os_array       =   array(
+                                    '/windows nt 10/i'     =>  'Windows 10',
+                                    '/windows nt 6.3/i'     =>  'Windows 8.1',
+                                    '/windows nt 6.2/i'     =>  'Windows 8',
+                                    '/windows nt 6.1/i'     =>  'Windows 7',
+                                    '/windows nt 6.0/i'     =>  'Windows Vista',
+                                    '/windows nt 5.2/i'     =>  'Windows Server 2003/XP x64',
+                                    '/windows nt 5.1/i'     =>  'Windows XP',
+                                    '/windows xp/i'         =>  'Windows XP',
+                                    '/windows nt 5.0/i'     =>  'Windows 2000',
+                                    '/windows me/i'         =>  'Windows ME',
+                                    '/win98/i'              =>  'Windows 98',
+                                    '/win95/i'              =>  'Windows 95',
+                                    '/win16/i'              =>  'Windows 3.11',
+                                    '/macintosh|mac os x/i' =>  'Mac OS X',
+                                    '/mac_powerpc/i'        =>  'Mac OS 9',
+                                    '/linux/i'              =>  'Linux',
+                                    '/ubuntu/i'             =>  'Ubuntu',
+                                    '/iphone/i'             =>  'iPhone',
+                                    '/ipod/i'               =>  'iPod',
+                                    '/ipad/i'               =>  'iPad',
+                                    '/android/i'            =>  'Android',
+                                    '/blackberry/i'         =>  'BlackBerry',
+                                    '/webos/i'              =>  'Mobile'
+                                );
+
+            foreach ($os_array as $regex => $value) { 
+
+                if (preg_match($regex, $user_agent)) {
+                    $os_platform    =   $value;
+                }
+            }   
+
+            return $os_platform;
         }
 }
