@@ -697,7 +697,9 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
-
+        
+        $board = $this->BoardInterface->getIDGroupBoards($id);
+        $primaryboard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
 
         $cell = $this->BoardInterface->getCellsBoard($id);
         for ($i = 0; $i < count($cell); $i++) {
@@ -707,6 +709,11 @@ class Board extends REST_Controller {
 
         $this->BoardInterface->removeBoard($id);
         $this->BoardInterface->commitTrans();
+        
+        $response = [
+            'idboard' => $primaryboard[0]->ID_Board
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
     }
 
     public function getIDGroupBoards_post() {

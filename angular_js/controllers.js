@@ -1760,11 +1760,12 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogRemoveBoard'
                 }).then(function () {
                     var postdata = {id: $scope.idboard};
-                    var URL = $scope.baseurl + "Board/removeBoard"
-
+                    var URL = $scope.baseurl + "Board/removeBoard";
+                    alert(postdata.id);
                     $http.post(URL, postdata).success(function (response)
                     {
-
+                        $scope.showBoard(response.idboard)
+                        $scope.edit();
                     });
                 }, function (value) {
                 });
