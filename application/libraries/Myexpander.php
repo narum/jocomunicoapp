@@ -153,7 +153,10 @@ class Myexpander {
 
                // Posem les expressions a la tira d'expressions
                for ($j=0; $j<count($arrayExpressions); $j++) {
-                   $auxpattern->exprsarray[] = $arrayExpressions[$j]->text;
+                   $aux = array();
+                   $aux[0] = $arrayExpressions[$j]->text;
+                   $aux[1] = $arrayExpressions[$j]->propietats->front;
+                   $auxpattern->exprsarray[] = $aux;
                }
 
                // si la frase era de pregunta, ho guardem a les cookies

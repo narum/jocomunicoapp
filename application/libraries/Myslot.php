@@ -709,6 +709,8 @@ class Myslot {
                                             $haspossessive++; 
                                             $hasnumorquant = false;
                                         }
+                                        // el nom precedit per semblant a portarà article
+                                        if (strpos($quantifierslot->paraulafinal->text, "semblant")) $hasnumorquant = false;
                                     }
                                 }
                                 else {
@@ -724,6 +726,8 @@ class Myslot {
                                         $haspossessive++; 
                                         $hasnumorquant = false;
                                     }
+                                    // el nom precedit per semblant a portarà article
+                                    if (strpos($quantifierslot->paraulafinal->text, "semblant")) $hasnumorquant = false;
                                 }
                             }
                         }                        
@@ -1603,7 +1607,7 @@ class Myslot {
                     // QUANTIFICADOR O POSSESSIUS
                     // si el nom té un modificador, que només pot ser un quantificador o possessiu
                     if ($this->CModassigned) {
-                        
+                                                
                         for ($i=0; $i<count($this->CModassignedkey); $i++) {
                             
                             $quantifierslot = $this->cmpMod[$this->CModassignedkey[$i]];
@@ -1638,6 +1642,8 @@ class Myslot {
                                             $haspossessive++; 
                                             $hasnumorquant = false;
                                         }
+                                        // el nom precedit per parecido a portarà article
+                                        if (strpos($quantifierslot->paraulafinal->text, "parecido")) $hasnumorquant = false;
                                     }
                                 }
                                 else {
@@ -1653,6 +1659,8 @@ class Myslot {
                                         $haspossessive++; 
                                         $hasnumorquant = false;
                                     }
+                                    // el nom precedit per parecido a portarà article
+                                    if (strpos($quantifierslot->paraulafinal->text, "parecido")) $hasnumorquant = false;
                                 }
                             }
                         }                        

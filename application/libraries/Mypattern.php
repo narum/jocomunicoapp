@@ -19,7 +19,7 @@ class Mypattern {
     var $subverb = false; // Tindrà el nom de l'slot que accepta el subverb
     var $allowstime = false; // diu si el pattern accepta expressions de temps
     var $timeexpr = array(); // Array amb les expressions de temps
-    var $exprsarray = array(); // array amb les expressions introduïdes que omplen el pattern
+    var $exprsarray = array(); // array amb les expressions introduïdes que omplen el pattern [0] text [1] front
     var $needexpr = false; // indica si una expressió és obligatòria al pattern
     
     var $exemple;
@@ -307,7 +307,12 @@ class Mypattern {
         
         // Slot EXPRESSIONS
         if ($patternbbdd->expressio == '1') $this->needexpr = true;
-        else if ($patternbbdd->expressio != "") $this->exprsarray[] = $patternbbdd->expressio;
+        else if ($patternbbdd->expressio != "") {
+            $aux = array();
+            $aux[0] = $patternbbdd->expressio;
+            $aux[1] = '0';
+            $this->exprsarray[] = $aux;
+        }
         $this->hasslot["Expression"] = true;
                                 
     }
@@ -1642,7 +1647,7 @@ class Mypattern {
         if ($numexpr > 0) {
             $string .= "Slot: Expressions = ";
             for ($i=0; $i<$numexpr; $i++) {
-                $string .= $this->exprsarray[$i]."; ";
+                $string .= $this->exprsarray[$i][0]."; ";
             }
             $string .= '<br /><br />';
         }
@@ -1942,7 +1947,10 @@ class Mypattern {
             array_unshift($this->ordrefrase, "Desire");
             
             // afegir si us plau: de moment NO
-            // $this->exprsarray[] = "si us plau";
+            // $aux = array();
+            // $aux[0] = "si us plau";
+            // $aux[1] = '0';
+            // $this->exprsarray[] = $aux;
         }
         
         
@@ -1965,7 +1973,10 @@ class Mypattern {
             $this->slotarray["Permission"] = $slotpoder;
             array_unshift($this->ordrefrase, "Permission");
             // afegir si us plau
-            $this->exprsarray[] = "si us plau";
+            $aux = array();
+            $aux[0] = "si us plau";
+            $aux[1] = '0';
+            $this->exprsarray[] = $aux;
         }
         
         
@@ -2066,7 +2077,10 @@ class Mypattern {
         // IMPERATIVE
         if ($propietatsfrase['tipusfrase'] == "ordre" && !$propietatsfrase['negativa']) {
             // afegir si us plau
-            $this->exprsarray[] = "si us plau";
+            $aux = array();
+            $aux[0] = "si us plau";
+            $aux[1] = '0';
+            $this->exprsarray[] = $aux;
         }
            
         // DEBUG
@@ -2341,7 +2355,10 @@ class Mypattern {
             array_unshift($this->ordrefrase, "Desire");
             
             // afegir por favor: de moment NO
-            // $this->exprsarray[] = "por favor";
+            // $aux = array();
+            // $aux[0] = "por favor";
+            // $aux[1] = '0';
+            // $this->exprsarray[] = $aux;
         }
         
         
@@ -2364,7 +2381,10 @@ class Mypattern {
             $this->slotarray["Permission"] = $slotpoder;
             array_unshift($this->ordrefrase, "Permission");
             // afegir por favor
-            $this->exprsarray[] = "por favor";
+            $aux = array();
+            $aux[0] = "por favor";
+            $aux[1] = '0';
+            $this->exprsarray[] = $aux;
         }
         
         
@@ -2465,7 +2485,10 @@ class Mypattern {
         // IMPERATIVE
         if ($propietatsfrase['tipusfrase'] == "ordre"  && !$propietatsfrase['negativa']) {
             // afegir por favor
-            $this->exprsarray[] = "por favor";
+            $aux = array();
+            $aux[0] = "por favor";
+            $aux[1] = '0';
+            $this->exprsarray[] = $aux;
         }
                    
         // DEBUG
@@ -2490,9 +2513,9 @@ class Mypattern {
         }
         
         // agafem les dades del primer subjecte
-        if (isset($this->slotarray[$keysubj1])) {
+        if (isset($this->slotarray[$keysubj1]) && $this->slotarray[$keysubj1]->full) {
             $slotsubj1 = $this->slotarray[$keysubj1];
-                                    
+                                                
             // si hi ha el subjecte per defecte
             if ($slotsubj1->defvalueused) {
                 $subj1 = $slotsubj1->defvalue;
@@ -2757,7 +2780,7 @@ class Mypattern {
         }
         
         // agafem les dades del primer subjecte
-        if (isset($this->slotarray[$keysubj1])) {
+        if (isset($this->slotarray[$keysubj1]) && $this->slotarray[$keysubj1]->full) {
             
             $slotsubj1 = $this->slotarray[$keysubj1];
             
@@ -4368,24 +4391,39 @@ class Mypattern {
             }
         }
         
-        // afegim les expressions a darrere de la frase, si la frase no era buida,
+        // afegim les expressions a davant o a darrere de la frase, si la frase no era buida,
         // afegim una coma abans -> CANVIAT, ja no afegim la coma
         
         $numexprs = count($this->exprsarray);
+        $capitalafterexpr = false;
         
         /* if ($numexprs > 0 && $this->frasefinal != " ") {
             $frasebruta .= ", ";
             $frasebruta = preg_replace("/[[:space:]],/u", ",", $frasebruta);
         } */
         for ($i=0; $i<$numexprs; $i++) {
-            // l'hola sempre va a davant            
-            if ($this->exprsarray[$i] == "hola") {
+            // l'hola sempre va a davant i les que tenen 1 a la propietat front           
+            if ($this->exprsarray[$i][1] == '1') {
                 $fraseaux = $frasebruta;
-                $frasebruta = " ".$this->exprsarray[$i];
+                $frasebruta = " ".$this->exprsarray[$i][0];
+                $llargexpr = strlen($this->exprsarray[$i][0]);
+                $lastcharexpr = $this->exprsarray[$i][0][$llargexpr-1];
+                // passem a majúscula la frase, si l'expressió de davant acaba en ".", "?", "!".
+                if ($lastcharexpr != "?" || $lastcharexpr != "." || $lastcharexpr == "!") {
+                    $fraseaux = preg_replace("/[[:space:]]$/u", "", $fraseaux);
+                    if (isset($fraseaux[0])) {
+                        if ($fraseaux[0] == " ") $fraseaux[1] = strtoupper($fraseaux[1]); 
+                        else $fraseaux[0] = strtoupper($fraseaux[0]); 
+                    }
+                }
+                
                 // si la frase no era buida, afegim una coma
-                if ($this->frasefinal != " ") $frasebruta = $frasebruta.", ".$fraseaux;
+                if (($this->frasefinal != " " || $numexprs > 1) && $lastcharexpr != "?"
+                        && $lastcharexpr != ".") $frasebruta = $frasebruta.", ";
+                
+                $frasebruta .= $fraseaux;
             }
-            else $frasebruta .= $this->exprsarray[$i]." ";
+            else $frasebruta .= $this->exprsarray[$i][0]." ";
         }
         
         // POSAR ELS PUNTS O EXCLAMACIONS O INTERROGANTS
@@ -4996,24 +5034,39 @@ class Mypattern {
             }
         }
         
-        // afegim les expressions a darrere de la frase, si la frase no era buida,
+        // afegim les expressions a davant o a darrere de la frase, si la frase no era buida,
         // afegim una coma abans -> CANVIAT, ja no afegim la coma
         
         $numexprs = count($this->exprsarray);
+        $capitalafterexpr = false;
         
         /* if ($numexprs > 0 && $this->frasefinal != " ") {
             $frasebruta .= ", ";
             $frasebruta = preg_replace("/[[:space:]],/u", ",", $frasebruta);
         } */
         for ($i=0; $i<$numexprs; $i++) {
-            // l'hola sempre va a davant            
-            if ($this->exprsarray[$i] == "hola") {
+            // l'hola sempre va a davant i les que tenen 1 a la propietat front           
+            if ($this->exprsarray[$i][1] == '1') {
                 $fraseaux = $frasebruta;
-                $frasebruta = " ".$this->exprsarray[$i];
+                $frasebruta = " ".$this->exprsarray[$i][0];
+                $llargexpr = strlen($this->exprsarray[$i][0]);
+                $lastcharexpr = $this->exprsarray[$i][0][$llargexpr-1];
+                // passem a majúscula la frase, si l'expressió de davant acaba en ".", "?", "!".
+                if ($lastcharexpr != "?" || $lastcharexpr != "." || $lastcharexpr == "!") {
+                    $fraseaux = preg_replace("/[[:space:]]$/u", "", $fraseaux);
+                    if (isset($fraseaux[0])) {
+                        if ($fraseaux[0] == " ") $fraseaux[1] = strtoupper($fraseaux[1]); 
+                        else $fraseaux[0] = strtoupper($fraseaux[0]); 
+                    }
+                }
+                
                 // si la frase no era buida, afegim una coma
-                if ($this->frasefinal != " ") $frasebruta = $frasebruta.", ".$fraseaux;
+                if (($this->frasefinal != " " || $numexprs > 1) && $lastcharexpr != "?"
+                        && $lastcharexpr != ".") $frasebruta = $frasebruta.", ";
+                
+                $frasebruta .= $fraseaux;
             }
-            else $frasebruta .= $this->exprsarray[$i]." ";
+            else $frasebruta .= $this->exprsarray[$i][0]." ";
         }
         
         // POSAR ELS PUNTS O EXCLAMACIONS O INTERROGANTS
