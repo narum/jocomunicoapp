@@ -7,3 +7,4 @@
 composer.phar
 /application/controllers/Inputfitxer.php
 /application/controllers/Autotests.php
+/application/controllers/Resultats.php
