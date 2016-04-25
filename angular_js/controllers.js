@@ -1043,6 +1043,10 @@ angular.module('controllers', [])
                 $scope.cfgMenuDeleteAllActive = userConfig.cfgMenuDeleteAllActive;
                 $scope.cfgSentenceBarUpDown = userConfig.cfgSentenceBarUpDown;
                 $scope.pictoBarWidth = 12 - $scope.cfgMenuReadActive - $scope.cfgMenuDeleteLastActive - $scope.cfgMenuDeleteAllActive;
+                //MODIF: Añadir de base de datos la configuracion del time over
+                $scope.cfgTimeOver = 0;
+                $scope.cfgTimeMultiClic = 0;
+                $scope.TimeMultiClic = 0;
                 /*$scope.grid1hide = false;
                  $scope.grid2hide = false;
                  $scope.grid3hide = false;
@@ -1347,20 +1351,93 @@ angular.module('controllers', [])
                     }
                 }
             };
+            
+            /*
+             * If this option is true on confing, it will automatic click when mouse is over the div and the timeout ends.
+             */
+            
+            $scope.TimeoutOverClick = function (type,object)
+            {
+                //This timeout.cancel avoid possible multiple calls.
+                $timeout.cancel($scope.OverAutoClick);
+                if(type === 0)
+                {
+                    //MODIF: No se perque tarda mes del temps que s'ha assignat
+                    $scope.OverAutoClick = $timeout(function(){ $scope.clickOnCell(object); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                }
+                else if(type === 1)
+                {
+                    //MODIF: No se perque tarda mes del temps que s'ha assignat
+                    $scope.OverAutoClick = $timeout(function(){ $scope.addToSentence(object); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                }
+                else if(type === 2)
+                {
+                    if(object === 'generate')
+                    {
+                    //MODIF: No se perque tarda mes del temps que s'ha assignat
+                    $scope.OverAutoClick = $timeout(function(){ $scope.generate(); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    }
+                    else if(object === 'deleteLast')
+                    {
+                    //MODIF: No se perque tarda mes del temps que s'ha assignat
+                    $scope.OverAutoClick = $timeout(function(){ $scope.deleteLast(); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    }
+                    else if(object === 'deleteAll')
+                    {
+                    //MODIF: No se perque tarda mes del temps que s'ha assignat
+                    $scope.OverAutoClick = $timeout(function(){ $scope.deleteAll(); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    }
+                }
+                else if(type === 3)
+                {
+                    if(object === 'Good')
+                    {
+                    //MODIF: No se perque tarda mes del temps que s'ha assignat
+                    $scope.OverAutoClick = $timeout(function(){ $scope.feedback(1); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    }
+                    else if(object === 'Bad')
+                    {
+                    //MODIF: No se perque tarda mes del temps que s'ha assignat
+                    $scope.OverAutoClick = $timeout(function(){ $scope.feedback(-1); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    }
+                }
+            };
+            
+            $scope.CancelTimeoutOverClick = function ()
+            {
+                $timeout.cancel($scope.OverAutoClick);
+            };
+            
             /*
              * Add the selected pictogram to the sentence
              */
             $scope.addToSentence = function (id) {
-                var url = $scope.baseurl + "Board/addWord";
-                var postdata = {id: id};
-
-                $http.post(url, postdata).success(function (response)
+                if($scope.TimeMultiClic === 0)
                 {
-                    $scope.dataTemp = response.data;
-                    $scope.getPred();
-                });
+                    
+                    if($scope.cfgTimeMultiClic === 1)
+                    {
+                        $scope.TimeMultiClic = 1;
+                    }
+                    
+                    var url = $scope.baseurl + "Board/addWord";
+                    var postdata = {id: id};
 
-                $scope.autoReturn();
+                        //MODIF: 19-04-2016: timeout pulsar molts cops conti 1 per X unitats de temps
+
+                    $http.post(url, postdata).success(function (response)
+                    {
+                        $scope.dataTemp = response.data;
+                        $scope.getPred();
+                    });
+
+                    $scope.autoReturn();
+                }
+                if($scope.cfgTimeMultiClic === 1)
+                {
+                    $scope.cfgTimeMultiClic = 2;
+                    $scope.TimeoutMultiClic = $timeout(function(){$scope.cfgTimeMultiClic = 1;$scope.TimeMultiClic = 0;}, 2000);
+                }
             };
             $scope.autoReturn = function () {
                 var url = $scope.baseurl + "Board/autoReturn";
