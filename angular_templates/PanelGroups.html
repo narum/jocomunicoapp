@@ -1,0 +1,37 @@
+<link rel="stylesheet" type="text/css" href="{{baseurl}}css/panelGroup.css">
+<div id="main" style="background-image: url('/img/FonsRegistre.png');background-size:100% 100%">
+    <div class="row" ng-controller="menuCtrl" ng-include="baseurl + '/angular_templates/MenuView.html'">   
+    </div>
+    <div class="row folderContainer">
+        <div class="col-xs-4 imgRounded panelGroupContainer" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
+            <div class="topBar"></div>
+            <div class="col-xs-12 addPanel" ng-click="newPanellGroup()">
+                hola
+            </div>
+            <div class="col-xs-12 panelContainer" ng-repeat="panel in panels">
+                <div class="col-xs-8 panelTitle">
+                    {{panel.GBname}}
+                </div>
+                <div class="col-xs-4 editaPanel" ng-click="editPanel(panel.ID_GB)">
+                    edita
+                </div>
+                <div ng-if="panel.primaryGroupBoard == 0" class="col-xs-4 noPrimaryPanel" ng-click="principal(panel.ID_GB)">
+                    Fes principal
+                </div>
+                <div ng-if="panel.primaryGroupBoard == 1" class="col-xs-4 primaryPanel">
+                    Principal
+                </div>
+                <div class="col-xs-4 nouPanel" ng-click="CreateBoard(panel.ID_GB)">
+                    nou
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-4 imgRounded historicContainer" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-09.png)">
+
+        </div>
+    </div>
+</div>
+
+
+
+

@@ -1,13 +1,13 @@
 <!-- This view is the main board where the picto will be shown. In addition it 
      includes others view like sentece, edit (board/cell) panel, etc etc
 -->
-<div id="main" style="background-image: url('/img/FonsRegistre.png');background-size:100% 100%">
+
     <div id="header" class="container-fluid text-center row">
         <div id="menuText" class="col-xs-offset-2 col-xs-10">
             <div class="col-xs-2" ng-click="editMenu();">
                 Edita panell
             </div>
-            <div class="col-xs-1">
+            <div class="col-xs-1" ng-click="panelMenu()">
                 Grups
             </div>
             <div class="col-xs-3" ng-click="userConfig();">
@@ -24,11 +24,6 @@
             </div>
         </div>
     </div>
-    
-    <div id="body" class="col-xs-12 fullheight" ng-controller="myCtrl" ng-include="baseurl + '/angular_templates/MainBoard.html'">
-    </div>
-
-</div>
 
 
 

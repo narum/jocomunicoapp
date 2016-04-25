@@ -570,23 +570,30 @@ angular.module('controllers', [])
                 $rootScope.content = results.data;
             });
             // Get event Edit call in the mune bar
-            $rootScope.$on("EditCallFromMenu", function () {
+            $scope.$on("EditCallFromMenu", function () {
                 $scope.edit();
             });
             // Get event Init call in the mune bar
-            $rootScope.$on("IniciCallFromMenu", function () {
+            $scope.$on("IniciCallFromMenu", function () {
                 //MODIF: Se tiene que hacer con configuracion de usuario
 
                 $scope.config(4);
             });
             //MODIF: Solo para hacer pruebas
-            $rootScope.$on("ScanCallFromMenu", function () {
+            $scope.$on("ScanCallFromMenu", function () {
                 $scope.InitScan();
+            });
+
+            $scope.$on("editCallFromPanell", function () {
+                alert("ueep");
             });
 
             //MODIF: Coger de BBDD escaneo por intervalo o no en el if
             $scope.InitScan = function ()
             {
+                if ($scope.inEdit) {
+                    return false;
+                }
                 var userConfig = JSON.parse(localStorage.getItem('testObject'));
                 // 0 custom, 1 rows, 2 columns
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
@@ -614,9 +621,9 @@ angular.module('controllers', [])
                 $scope.isScanningCancel = false;
                 if ($scope.cfgPredOnOff === '1') {
                     $scope.isScanning = "prediction";
-                } else if(userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive > 1){
+                } else if (userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive > 1) {
                     $scope.isScanning = "sentence";
-                }else{
+                } else {
                     $scope.isScanning = "board";
                 }
                 $scope.getMaxScanBlock1();
@@ -759,11 +766,11 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     if ($scope.isScanningCancel === true) {
                         $scope.isScanningCancel = false;
-                    } else if($scope.isScanning === "goodPhrase"){
+                    } else if ($scope.isScanning === "goodPhrase") {
                         $scope.isScanning = "badPhrase";
-                    } else if($scope.isScanning === "badPhrase"){
+                    } else if ($scope.isScanning === "badPhrase") {
                         $scope.feedback(1);
-                    }else {
+                    } else {
                         if ($scope.currentScanBlock == 1) {
                             if ($scope.isScanning === "prediction") {
                                 $scope.isScanning = "sentence";
@@ -792,7 +799,7 @@ angular.module('controllers', [])
                                     $scope.InitScan();
                                 }
                             } else if ($scope.isScanning === "deletelast") {
-                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive  == 1) {
+                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive == 1) {
                                     $scope.isScanning = "deleteall";
                                 } else {
                                     $scope.InitScan();
@@ -886,13 +893,14 @@ angular.module('controllers', [])
                     }
                     if ($scope.isScanningCancel === true) {
                         $scope.InitScan();
-                    } else if($scope.isScanning === "goodPhrase"){
+                    } else if ($scope.isScanning === "goodPhrase") {
                         $scope.feedback(1);
-                    } else if($scope.isScanning === "badPhrase"){
-                        $scope.feedback(-1);
-                    }else {
+                    } else if ($scope.isScanning === "badPhrase") {
+                        $scope.feedback(0);
+                    } else {
                         if ($scope.currentScanBlock === 1) {
-                            if($scope.timerScan == 1)$scope.isScanningCancel = true;
+                            if ($scope.timerScan == 1)
+                                $scope.isScanningCancel = true;
                             $scope.currentScanBlock = 2;
                             if ($scope.isScanning === "prediction") {
                                 $scope.arrayScannedCells = $scope.recommenderArray;
@@ -914,6 +922,7 @@ angular.module('controllers', [])
                             $scope.currentScanBlock = 3;
                             if ($scope.isScanning === "prediction") {
                                 $scope.addToSentence($scope.arrayScannedCells[$scope.indexScannedCells].pictoid);
+                                $scope.InitScan();
                             } else if ($scope.isScanning === "read") {
                                 $scope.generate();
                                 //$scope.InitScan();
@@ -927,7 +936,8 @@ angular.module('controllers', [])
                                 if ($scope.cfgScanningCustomRowCol != 0) {
                                     $scope.selectScannedCell();
                                 } else {
-                                     if($scope.timerScan == 1) $scope.isScanningCancel = true;
+                                    if ($scope.timerScan == 1)
+                                        $scope.isScanningCancel = true;
                                     var url = $scope.baseurl + "Board/getScannedCells";
                                     var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
                                     $http.post(url, postdata).success(function (response)
@@ -984,7 +994,6 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
-                $scope.getPrimaryUserBoard();
                 $scope.userViewHeight = 100;
                 $scope.searchFolderHeight = 0;
 
@@ -1045,6 +1054,13 @@ angular.module('controllers', [])
                  $scope.grid2 = 8;
                  $scope.grid3 = 2;*/
                 $scope.getPred();
+                if ($rootScope.editPanelInfo != null) {
+                    $scope.showBoard($rootScope.editPanelInfo.idBoard);
+                    $scope.edit();
+                    $rootScope.editPanelInfo = null;
+                } else {
+                    $scope.getPrimaryUserBoard();
+                }
             };
 
             $scope.getPrimaryUserBoard = function () {
@@ -1340,75 +1356,83 @@ angular.module('controllers', [])
                     }
                 }
             };
-            
+
             /*
              * If this option is true on confing, it will automatic click when mouse is over the div and the timeout ends.
              */
-            
-            $scope.TimeoutOverClick = function (type,object)
+
+            $scope.TimeoutOverClick = function (type, object)
             {
                 //This timeout.cancel avoid possible multiple calls.
                 $timeout.cancel($scope.OverAutoClick);
-                if(type === 0)
+                if (type === 0)
                 {
                     //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.clickOnCell(object); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
-                }
-                else if(type === 1)
+                    $scope.OverAutoClick = $timeout(function () {
+                        $scope.clickOnCell(object);
+                    }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                } else if (type === 1)
                 {
                     //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.addToSentence(object); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
-                }
-                else if(type === 2)
+                    $scope.OverAutoClick = $timeout(function () {
+                        $scope.addToSentence(object);
+                    }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                } else if (type === 2)
                 {
-                    if(object === 'generate')
+                    if (object === 'generate')
                     {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.generate(); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
-                    }
-                    else if(object === 'deleteLast')
+                        //MODIF: No se perque tarda mes del temps que s'ha assignat
+                        $scope.OverAutoClick = $timeout(function () {
+                            $scope.generate();
+                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    } else if (object === 'deleteLast')
                     {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.deleteLast(); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
-                    }
-                    else if(object === 'deleteAll')
+                        //MODIF: No se perque tarda mes del temps que s'ha assignat
+                        $scope.OverAutoClick = $timeout(function () {
+                            $scope.deleteLast();
+                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    } else if (object === 'deleteAll')
                     {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.deleteAll(); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                        //MODIF: No se perque tarda mes del temps que s'ha assignat
+                        $scope.OverAutoClick = $timeout(function () {
+                            $scope.deleteAll();
+                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
                     }
-                }
-                else if(type === 3)
+                } else if (type === 3)
                 {
-                    if(object === 'Good')
+                    if (object === 'Good')
                     {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.feedback(1); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
-                    }
-                    else if(object === 'Bad')
+                        //MODIF: No se perque tarda mes del temps que s'ha assignat
+                        $scope.OverAutoClick = $timeout(function () {
+                            $scope.feedback(1);
+                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    } else if (object === 'Bad')
                     {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.feedback(-1); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                        //MODIF: No se perque tarda mes del temps que s'ha assignat
+                        $scope.OverAutoClick = $timeout(function () {
+                            $scope.feedback(0);
+                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
                     }
                 }
             };
-            
+
             $scope.CancelTimeoutOverClick = function ()
             {
                 $timeout.cancel($scope.OverAutoClick);
             };
-            
+
             /*
              * Add the selected pictogram to the sentence
              */
             $scope.addToSentence = function (id) {
-                if($scope.TimeMultiClic === 0)
+                if ($scope.TimeMultiClic === 0)
                 {
-                    
-                    if($scope.cfgTimeMultiClic === 1)
+
+                    if ($scope.cfgTimeMultiClic === 1)
                     {
                         $scope.TimeMultiClic = 1;
                     }
-                    
+
                     var url = $scope.baseurl + "Board/addWord";
                     var postdata = {id: id};
 
@@ -1421,10 +1445,13 @@ angular.module('controllers', [])
 
                     $scope.autoReturn();
                 }
-                if($scope.cfgTimeMultiClic === 1)
+                if ($scope.cfgTimeMultiClic === 1)
                 {
                     $scope.cfgTimeMultiClic = 2;
-                    $scope.TimeoutMultiClic = $timeout(function(){$scope.cfgTimeMultiClic = 1;$scope.TimeMultiClic = 0;}, 2000);
+                    $scope.TimeoutMultiClic = $timeout(function () {
+                        $scope.cfgTimeMultiClic = 1;
+                        $scope.TimeMultiClic = 0;
+                    }, 2000);
                 }
             };
             $scope.autoReturn = function () {
@@ -1513,7 +1540,7 @@ angular.module('controllers', [])
                     $scope.playSentenceAudio();
                     $scope.puntuar();
 
-                    
+
                 });
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
@@ -1521,25 +1548,33 @@ angular.module('controllers', [])
 
 
             };
-            
+
             $scope.puntuar = function () {
-
-                $scope.puntuando = true;
-                if ($scope.inScan){
-                    $scope.isScanning = "goodPhrase";
+                if (!$scope.inEdit) {
+                    $scope.puntuando = true;
+                    if ($scope.inScan) {
+                        $scope.isScanning = "goodPhrase";
+                    }
                 }
-
 
             };
             $scope.feedback = function (point) {
 
-                if(point === 1){
-                    alert("one point for Spain");
-                }else{
-                    alert("Gracias por puntuar bien esta frase");
-                }
+                var url = $scope.baseurl + "Board/score";
+                var postdata = {score: point};
+                $http.post(url, postdata).success(function (response)
+                {
+                    console.log(response);
+                    //$scope.dataTemp = response.data;
+                    $scope.info = response.info;
+                    //$scope.data = response.data;
+                    $scope.playSentenceAudio();
+                    $scope.puntuar();
+
+
+                });
                 $scope.puntuando = false;
-                if($scope.inScan){
+                if ($scope.inScan) {
                     $scope.InitScan();
                 }
 
@@ -1967,9 +2002,15 @@ angular.module('controllers', [])
         .controller('menuCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope, AuthService, $location) {
             $scope.userConfig = function () {
                 $location.path('/userConfig');
-            }
+            };
+
+            $scope.panelMenu = function () {
+                alert("hola");
+                $location.path('/panelGroups');
+            };
+
             $scope.editMenu = function () {
-                $rootScope.$emit("EditCallFromMenu", {});
+                $scope.$emit("EditCallFromMenu", {});
             };
             // Función salir del login
             $scope.logOut = function () {
@@ -1988,12 +2029,85 @@ angular.module('controllers', [])
 
 
             $scope.home = function () {
-                $rootScope.$emit("IniciCallFromMenu", {});
+                $scope.$emit("IniciCallFromMenu", {});
 
             };
 
             $scope.IniciScan = function () {
-                $rootScope.$emit("ScanCallFromMenu", {});
+                $scope.$emit("ScanCallFromMenu", {});
+            };
+        })
+
+
+        .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog) {
+            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+            $scope.range = function ($repeatnum)
+            {
+                var n = [];
+                for (i = 0; i < $repeatnum; i++)
+                {
+                    n.push(i);
+                }
+                return n;
+            };
+
+            if (!$rootScope.isLogged) {
+                $location.path('/login');
+            }
+            // Pedimos los textos para cargar la pagina
+            txtContent("panelgroup").then(function (results) {
+                $scope.content = results.data;
+            });
+
+            $scope.initPanelGroup = function () {
+                var URL = $scope.baseurl + "PanelGroup/getUserPanels";
+
+                $http.post(URL).
+                        success(function (response)
+                        {
+                            $scope.panels = response.panels;
+                        });
+            };
+            $scope.initPanelGroup();
+            $scope.newPanellGroup = function () {
+                alert("No esta implementado aun!!!");
+            };
+
+            $scope.editPanel = function (idGB) {
+                var postdata = {ID_GB: idGB};
+                var URL = $scope.baseurl + "PanelGroup/getPanelToEdit";
+
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.id = response.id;
+                            // Put the panel to edit info, and load the edit panel
+                            $rootScope.editPanelInfo = {idBoard: $scope.id};
+                            $location.path('/');
+                        });
+            };
+            //meter texto en base de datos. "copiar" el normal
+            $scope.CreateBoard = function (ID_GB) {
+                $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: ID_GB};
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogCreateBoard'
+                }).then(function () {
+
+                    URL = $scope.baseurl + "Board/newBoard";
+
+
+                    $http.post(URL, $scope.CreateBoardData).success(function (response)
+                    {
+                        //MODIF: llamar a location/
+//                        $scope.showBoard(response.idBoard);
+//                        $scope.edit();
+
+                    });
+
+                }, function (value) {
+                });
             };
         })
 

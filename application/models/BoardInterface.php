@@ -59,6 +59,7 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+
     /*
      * Change the name of one board from ID of the board
      */
@@ -86,9 +87,9 @@ class BoardInterface extends CI_Model {
         $this->db->join('Cell', 'R_BoardCell.ID_RCell = Cell.ID_Cell');
         //Este tiene que ser left, si pictograms.picto id = null significa que esta vacia
         $this->db->join('Pictograms', 'Cell.ID_CPicto = Pictograms.pictoid', 'left');
-        $this->db->join('PictogramsLanguage', 'Pictograms.pictoid = PictogramsLanguage.pictoid AND PictogramsLanguage.languageid = "'.$idlang.'"', 'left');
+        $this->db->join('PictogramsLanguage', 'Pictograms.pictoid = PictogramsLanguage.pictoid AND PictogramsLanguage.languageid = "' . $idlang . '"', 'left');
         $this->db->join('Function', 'Cell.ID_CFunction = Function.ID_Function', 'left');
-        
+
         $query = $this->db->get('R_BoardCell');
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -203,9 +204,9 @@ class BoardInterface extends CI_Model {
 
         $data = array(
             'ID_Cell' => 'NULL'
-            /*MODIF: Probar despues del lunes por si acaso falla que no nos pille en la presentacion
-            ,
-            'color' => 'fff'*/
+                /* MODIF: Probar despues del lunes por si acaso falla que no nos pille en la presentacion
+                  ,
+                  'color' => 'fff' */
         );
 
         $this->db->insert('Cell', $data);
@@ -248,12 +249,12 @@ class BoardInterface extends CI_Model {
         $output = array();
 
         $this->db->where('ID_Cell', $cell);
-        $this->db->update('Cell', array('ID_CPicto' => $idpicto,'cellType' => 'picto'));
+        $this->db->update('Cell', array('ID_CPicto' => $idpicto, 'cellType' => 'picto'));
 
 
         return $output;
     }
-    
+
     /*
      * Remove the data of one pictogram ($cell) from the board ($idpicto)    
      */
@@ -277,7 +278,7 @@ class BoardInterface extends CI_Model {
 
         $this->db->where('ID_Cell', $cell);
         $this->db->update('Cell', $data);
-        
+
         $data = array(
             'isMenu' => 0,
             'customScanBlock1' => 1,
@@ -384,7 +385,7 @@ class BoardInterface extends CI_Model {
     function getFunctions() {
 
         $language = $this->session->userdata('ulangabbr');
-        $this->db->select('ID_Function, functName'.$language.' AS name');
+        $this->db->select('ID_Function, functName' . $language . ' AS name');
         $query = $this->db->get('Function');
 
         if ($query->num_rows() > 0) {
@@ -428,7 +429,7 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * Return primarygroupboard from a board group
      */
@@ -447,7 +448,7 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * Return primaryboard from a board group
      */
@@ -611,22 +612,22 @@ class BoardInterface extends CI_Model {
     /*
      * Change the value of autoreturn from board
      */
-    
+
     function changeAutoReturn($id, $value) {
         $this->db->where('ID_Board', $id);
         $this->db->update('Boards', array(
             'autoReturn' => $value,
         ));
     }
-    
+
     /*
      * Get autoreturn value
      */
-    
+
     function getAutoReturn($id) {
         $this->db->where('ID_Board', $id);
         $this->db->get('Boards');
-        
+
         if ($query->num_rows() > 0) {
             $output = $query->result();
         } else
@@ -634,20 +635,18 @@ class BoardInterface extends CI_Model {
 
         return $output[0];
     }
-    
-    
+
     function changeAutoReadSentence($id, $value) {
         $this->db->where('ID_Board', $id);
         $this->db->update('Boards', array(
             'autoReadSentence' => $value,
         ));
     }
-    
-    
+
     function getAutoReadSentence($id) {
         $this->db->where('ID_Board', $id);
         $this->db->get('Boards');
-        
+
         if ($query->num_rows() > 0) {
             $output = $query->result();
         } else
@@ -655,8 +654,8 @@ class BoardInterface extends CI_Model {
 
         return $output[0];
     }
-    
-    function createBoard($IDGboard, $name, $width, $height){
+
+    function createBoard($IDGboard, $name, $width, $height) {
         $data = array(
             'ID_GBBoard' => $IDGboard,
             'Bname' => $name,
@@ -667,17 +666,16 @@ class BoardInterface extends CI_Model {
         $this->db->insert('Boards', $data);
 
         $id = $this->db->insert_id();
-        
+
         return $id;
     }
-    
-    function removeBoard($IDboard){
+
+    function removeBoard($IDboard) {
         $this->db->where('ID_Board', $IDboard);
         $this->db->delete('Boards');
-  
     }
-    
-    function removeBoardLinks($IDboard){
+
+    function removeBoardLinks($IDboard) {
         $output = array();
         $data = array(
             'imgCell' => NULL,
@@ -697,10 +695,10 @@ class BoardInterface extends CI_Model {
         $this->db->where('boardLink', $IDboard);
         $this->db->update('Cell', $data);
     }
-    
-    function getMaxScanBlock1($IDboard){
+
+    function getMaxScanBlock1($IDboard) {
         $output = array();
-        
+
         $this->db->order_by('customScanBlock1', 'desc');
         $this->db->where('ID_RBoard', $IDboard);
         $query = $this->db->get('R_BoardCell');
@@ -712,10 +710,10 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
-    function getMaxScanBlock2($IDboard, $scanGroup){
+
+    function getMaxScanBlock2($IDboard, $scanGroup) {
         $output = array();
-        
+
         $this->db->order_by('customScanBlock2', 'desc');
         $this->db->where('customScanBlock1', $scanGroup);
         $this->db->where('ID_RBoard', $IDboard);
@@ -728,10 +726,10 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
-    function getScannedCells($IDboard, $csb1, $csb2){
+
+    function getScannedCells($IDboard, $csb1, $csb2) {
         $output = array();
-        
+
         $this->db->order_by('posInBoard', 'asc');
         $this->db->where('customScanBlock2', $csb2);
         $this->db->where('customScanBlock1', $csb1);
@@ -745,9 +743,10 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    function getAudioSentence($md5){
+
+    function getAudioSentence($md5) {
         $output = array();
-        
+
         $this->db->where('mp3TSMd5Encoded', $md5);
         $query = $this->db->get('mp3');
 
@@ -758,4 +757,22 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+
+    function getIdLastSentence($idusu) {
+        $this->db->where('ID_SHUser', $idusu);
+        $this->db->order_by('ID_SHistoric', 'desc');
+        $query = $this->db->get('S_Historic');
+        if ($query->num_rows() > 0) {
+            $aux = $query->result();
+            return $aux[0]->ID_SHistoric;
+        }
+        else return null;
+    }
+    
+    function score($id, $score) {
+        $data = array('userScore'=>$score);
+        $this->db->where('ID_SHistoric', $id);
+        $this->db->update('S_Historic', $data);
+    }
+
 }
