@@ -1351,75 +1351,83 @@ angular.module('controllers', [])
                     }
                 }
             };
-            
+
             /*
              * If this option is true on confing, it will automatic click when mouse is over the div and the timeout ends.
              */
-            
-            $scope.TimeoutOverClick = function (type,object)
+
+            $scope.TimeoutOverClick = function (type, object)
             {
                 //This timeout.cancel avoid possible multiple calls.
                 $timeout.cancel($scope.OverAutoClick);
-                if(type === 0)
+                if (type === 0)
                 {
                     //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.clickOnCell(object); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
-                }
-                else if(type === 1)
+                    $scope.OverAutoClick = $timeout(function () {
+                        $scope.clickOnCell(object);
+                    }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                } else if (type === 1)
                 {
                     //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.addToSentence(object); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
-                }
-                else if(type === 2)
+                    $scope.OverAutoClick = $timeout(function () {
+                        $scope.addToSentence(object);
+                    }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                } else if (type === 2)
                 {
-                    if(object === 'generate')
+                    if (object === 'generate')
                     {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.generate(); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
-                    }
-                    else if(object === 'deleteLast')
+                        //MODIF: No se perque tarda mes del temps que s'ha assignat
+                        $scope.OverAutoClick = $timeout(function () {
+                            $scope.generate();
+                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    } else if (object === 'deleteLast')
                     {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.deleteLast(); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
-                    }
-                    else if(object === 'deleteAll')
+                        //MODIF: No se perque tarda mes del temps que s'ha assignat
+                        $scope.OverAutoClick = $timeout(function () {
+                            $scope.deleteLast();
+                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    } else if (object === 'deleteAll')
                     {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.deleteAll(); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                        //MODIF: No se perque tarda mes del temps que s'ha assignat
+                        $scope.OverAutoClick = $timeout(function () {
+                            $scope.deleteAll();
+                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
                     }
-                }
-                else if(type === 3)
+                } else if (type === 3)
                 {
-                    if(object === 'Good')
+                    if (object === 'Good')
                     {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.feedback(1); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
-                    }
-                    else if(object === 'Bad')
+                        //MODIF: No se perque tarda mes del temps que s'ha assignat
+                        $scope.OverAutoClick = $timeout(function () {
+                            $scope.feedback(1);
+                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    } else if (object === 'Bad')
                     {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
-                    $scope.OverAutoClick = $timeout(function(){ $scope.feedback(-1); }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                        //MODIF: No se perque tarda mes del temps que s'ha assignat
+                        $scope.OverAutoClick = $timeout(function () {
+                            $scope.feedback(0);
+                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
                     }
                 }
             };
-            
+
             $scope.CancelTimeoutOverClick = function ()
             {
                 $timeout.cancel($scope.OverAutoClick);
             };
-            
+
             /*
              * Add the selected pictogram to the sentence
              */
             $scope.addToSentence = function (id) {
-                if($scope.TimeMultiClic === 0)
+                if ($scope.TimeMultiClic === 0)
                 {
-                    
-                    if($scope.cfgTimeMultiClic === 1)
+
+                    if ($scope.cfgTimeMultiClic === 1)
                     {
                         $scope.TimeMultiClic = 1;
                     }
-                    
+
                     var url = $scope.baseurl + "Board/addWord";
                     var postdata = {id: id};
 
@@ -1432,10 +1440,13 @@ angular.module('controllers', [])
 
                     $scope.autoReturn();
                 }
-                if($scope.cfgTimeMultiClic === 1)
+                if ($scope.cfgTimeMultiClic === 1)
                 {
                     $scope.cfgTimeMultiClic = 2;
-                    $scope.TimeoutMultiClic = $timeout(function(){$scope.cfgTimeMultiClic = 1;$scope.TimeMultiClic = 0;}, 2000);
+                    $scope.TimeoutMultiClic = $timeout(function () {
+                        $scope.cfgTimeMultiClic = 1;
+                        $scope.TimeMultiClic = 0;
+                    }, 2000);
                 }
             };
             $scope.autoReturn = function () {
@@ -2071,28 +2082,23 @@ angular.module('controllers', [])
                         });
             };
             //meter texto en base de datos. "copiar" el normal
-            $scope.CreateBoard = function () {
-                $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
+            $scope.CreateBoard = function (ID_GB) {
+                $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: ID_GB};
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
                     scope: $scope,
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
-                    var postdata = {id: $scope.idboard};
-                    var URL = $scope.baseurl + "Board/getIDGroupBoards"
 
-                    $http.post(URL, postdata).success(function (response)
+                    URL = $scope.baseurl + "Board/newBoard";
+
+
+                    $http.post(URL, $scope.CreateBoardData).success(function (response)
                     {
-                        $scope.CreateBoardData.idGroupBoard = response.idGroupBoard;
+                        //MODIF: llamar a location/
+//                        $scope.showBoard(response.idBoard);
+//                        $scope.edit();
 
-                        URL = $scope.baseurl + "Board/newBoard"
-
-
-                        $http.post(URL, $scope.CreateBoardData).success(function (response)
-                        {
-                            $scope.showBoard(response.idBoard)
-                            $scope.edit();
-                        });
                     });
 
                 }, function (value) {

@@ -12,8 +12,8 @@
                 </div>
             </div>
         </div>
-                
-        
+
+
 
         <div id="userview" class="col-xs-{{userViewWidth}}" style="height:{{userViewHeight}}%" >
             <div id="sentenceView" class="container-fluid Defmargin" ng-if="cfgSentenceBarUpDown === '0' && !inEdit" style="height:{{sentenceViewHeight}}%">
@@ -92,12 +92,13 @@
 
     </div>
     <!-- MODIF: Poner control si no scan-->
-    <div ng-if="puntuando" class="goodPhrase" ng-click="feedback(1)" ng-mouseenter="cfgTimeOver?TimeoutOverClick(3,'Good'):null" ng-mouseleave="cfgTimeOver?CancelTimeoutOverClick():null" >
-        <div ng-if="isScanning === 'goodPhrase'" class="scaneo">
+    <div ng-if="puntuando" class="scoreContent row">
+        <div class="col-xs-6" style="height:100%">
+            <img src="/img/srcWeb/feliz_1.png" class="goodPhrase" ng-click="feedback(1)" ng-mouseenter="cfgTimeOver?TimeoutOverClick(3,'Good'):null" ng-mouseleave="cfgTimeOver?CancelTimeoutOverClick():null" ng-class="{'scaneo': isScanning == 'goodPhrase'}"/>
         </div>
-    </div>
-    <div ng-if="puntuando" class="badPhrase" ng-click="feedback(-1)" >
-        <div ng-if="isScanning === 'badPhrase'" class="scaneo">
+
+       <div class="col-xs-6" style="height:100%">
+            <img src="/img/srcWeb/triste_1.png" class="goodPhrase" ng-click="feedback(0)" ng-mouseenter="cfgTimeOver?TimeoutOverClick(3,'Bad'):null" ng-mouseleave="cfgTimeOver?CancelTimeoutOverClick():null" ng-class="{'scaneo': isScanning == 'badPhrase'}"/>
         </div>
     </div>
 </div>
