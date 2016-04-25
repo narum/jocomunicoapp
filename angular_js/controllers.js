@@ -1339,10 +1339,9 @@ angular.module('controllers', [])
             $scope.clickOnCell = function (cell) {
                 if (!$scope.inEdit) {
 
-                    if (cell.textInCell !== null){
+                    if (cell.textInCell !== null) {
                         $scope.playPictoAudio(cell.textInCell);
-                    }
-                    else if (cell.pictotext !== null){
+                    } else if (cell.pictotext !== null) {
                         $scope.playPictoAudio(cell.pictotext);
                     }
                     if (cell.ID_CPicto !== null) {
@@ -2070,7 +2069,24 @@ angular.module('controllers', [])
             };
             $scope.initPanelGroup();
             $scope.newPanellGroup = function () {
-                alert("No esta implementado aun!!!");
+                $scope.CreateBoardData = {GBName: '', defH: 0, defW: 0, imgGB: ""};
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmCreateGroupBoard.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogCreateBoard'
+                }).then(function () {
+
+                    var URL = $scope.baseurl + "PanelGroup/newGroupPanel";
+
+
+                    $http.post(URL, $scope.CreateBoardData).success(function (response)
+                    {
+                        $rootScope.editPanelInfo = {idBoard: response.idBoard};
+                        $location.path('/');
+                    });
+
+                }, function (value) {
+                });
             };
 
             $scope.editPanel = function (idGB) {
@@ -2086,18 +2102,15 @@ angular.module('controllers', [])
                             $location.path('/');
                         });
             };
-            
-            $scope.setPrincipal = function (idGB) {
+
+            $scope.setPrimary = function (idGB) {
                 var postdata = {ID_GB: idGB};
-                var URL = $scope.baseurl + "PanelGroup/getPanelToEdit";
+                var URL = $scope.baseurl + "PanelGroup/setPrimaryGroupBoard";
 
                 $http.post(URL, postdata).
                         success(function (response)
                         {
-                            $scope.id = response.id;
-                            // Put the panel to edit info, and load the edit panel
-                            $rootScope.editPanelInfo = {idBoard: $scope.id};
-                            $location.path('/');
+                            $scope.initPanelGroup();
                         });
             };
             //meter texto en base de datos. "copiar" el normal

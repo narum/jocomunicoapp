@@ -594,7 +594,7 @@ class BoardInterface extends CI_Model {
     }
 
     /*
-     * ADD MODIFIER TO A NOUN THAT WAS JUST ENTERED
+     * Set the board (id) primary in the group (idboard)
      */
 
     function changePrimaryBoard($id, $idboard) {

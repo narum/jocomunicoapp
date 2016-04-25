@@ -14,7 +14,7 @@ class PanelGroup extends REST_Controller {
         $this->load->model('panelInterface');
         $this->load->model('BoardInterface');
     }
-    
+
     public function index_get() {
         // CHECK COOKIES
         if (!$this->session->userdata('uname')) {
@@ -28,7 +28,6 @@ class PanelGroup extends REST_Controller {
             }
         }
     }
-    
 
     public function getUserPanels_post() {
         $idusu = $this->session->userdata('idusu');
@@ -40,12 +39,12 @@ class PanelGroup extends REST_Controller {
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     public function getPanelToEdit_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $ID_GBoard = $request->ID_GB;
-        
+
         $primaryBoard = $this->BoardInterface->getPrimaryBoard($ID_GBoard);
 
         $response = [
@@ -53,6 +52,32 @@ class PanelGroup extends REST_Controller {
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
+    }
+
+    public function setPrimaryGroupBoard_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $ID_GBoard = $request->ID_GB;
+        $idusu = $this->session->userdata('idusu');
+
+        $this->panelInterface->setPrimaryGroupBoard($ID_GBoard, $idusu);
+
+        $response = [
+            'id' => $primaryBoard[0]->ID_Board
+        ];
+
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+
+    public function newGroupPanel_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $GBName = $request->GBName;
+        $defW = $request->defW;
+        $defH = $request->defH;
+        $imgGB = $request->imgGB;
+        $idusu = $this->session->userdata('idusu');
+        $this->panelInterface->newGroupPanel($GBName, $idusu, $defW, $defH, $imgGB);
     }
 
 }

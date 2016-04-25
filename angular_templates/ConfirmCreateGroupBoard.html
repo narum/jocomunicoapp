@@ -1,0 +1,19 @@
+<div class="topBarDialog"><div class="editTitle">{{content.nwboardtitle}}</div><div class="cruz"></div></div>
+<div class="dialogContent row" style="height: 25%">
+        <input type="text" class="col-xs-offset-2 col-xs-8 dialogText"  name="CreateBoardName" ng-model="CreateBoardData.CreateBoardName" placeholder="{{content.newboardtext}}"/>
+</div>
+<div class="row" style="height: 25%">
+    
+    <select class="col-xs-offset-3 col-xs-2 dropdown-arrow"
+        ng-model="CreateBoardData.defH"
+        ng-options="h for h in range(20)">
+    </select>
+    <select class="col-xs-offset-2 col-xs-2 dropdown-arrow"
+        ng-model="CreateBoardData.defW"
+        ng-options="p for p in range(20)">
+    </select>
+</div>
+<div class="row" style="height: 25%">
+    <input class="dialogButton col-xs-offset-3 col-xs-2 dialogTitle" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
+    <input class="dialogButton col-xs-offset-2 col-xs-2 dialogTitle" type="button" value="{{content.cancel}}" ng-click="closeThisDialog();"/>
+</div>
