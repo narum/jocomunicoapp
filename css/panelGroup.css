@@ -27,9 +27,13 @@
     height: 33.333333%; 
     background: #92dbe1;
 }
-.primaryPanel{
+.noPrimaryPanel{
     height: 33.333333%; 
     background: #c0f5f9;
+}
+.primaryPanel{
+    height: 33.333333%; 
+    background: #f9d05a;
 }
 .nouPanel{
     border-bottom-right-radius: 10px;

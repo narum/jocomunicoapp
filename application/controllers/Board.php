@@ -45,7 +45,7 @@ class Board extends REST_Controller {
             'idusu' => $iu, // Id user
             'ulangabbr' => $lu, // ES, CA...
             'ulangid' => $luid // Id language
-                );
+        );
 
         $this->session->set_userdata($data);
     }
@@ -372,6 +372,7 @@ class Board extends REST_Controller {
     /*
      * Get the primary user board (the primary board in her/his primary group board)
      */
+
     public function getPrimaryUserBoard_post() {
 
         $board = $this->BoardInterface->getPrimaryGroupBoard();
@@ -382,7 +383,7 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     /*
      * Get the user boards in a list to create the dropdown menu
      */
@@ -439,7 +440,7 @@ class Board extends REST_Controller {
         }
         $idusu = $this->session->userdata('idusu');
         $data = $this->Lexicon->recuperarFrase($idusu);
-        
+
         $response = [
             'tense' => $tense,
             'tipusfrase' => $tipusfrase,
@@ -746,7 +747,7 @@ class Board extends REST_Controller {
             $response = [
                 'max' => $max[0]->customScanBlock2
             ];
-        }else{
+        } else {
             $response = [
                 'max' => "No group found"
             ];
@@ -768,21 +769,22 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+
     public function getAudioSentence_post() {
-        
+
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $sentence = $request->sentence;
         $voice = $request->voice;
 
-        
+
         $md5 = MD5(strval($voice) . $sentence);
         $array = $this->BoardInterface->getAudioSentence($md5);
         if ($array != null) {
             $response = [
                 'data' => $array[0]->mp3Path
             ];
-        }else{
+        } else {
             $response = [
                 //MODIF: NO ESTA EL MP3, DESCARREGAR MP3 VOCALWARE
                 'data' => MD5(strval($voice) . $sentence)
@@ -790,14 +792,28 @@ class Board extends REST_Controller {
         }
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     public function getPrediction_post() {
         // CARGA recommenderArray                 
-        $prediction = new Myprediction();  
-        $recommenderArray = $prediction->getPrediction(); 
-        
-        $response = [ 'recommenderArray' => $recommenderArray ];
+        $prediction = new Myprediction();
+        $recommenderArray = $prediction->getPrediction();
+
+        $response = [ 'recommenderArray' => $recommenderArray];
         $this->response($response, REST_Controller::HTTP_OK);
+    }
+
+    public function score_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $score = $request->score;
+        
+        $idusu = $this->session->userdata('idusu');
+        $id = $this->BoardInterface->getIdLastSentence($idusu);
+        if ($id === null){
+            $this->response(300);
+        }
+        $this->BoardInterface->score($id, $score);
+        $this->response(REST_Controller::HTTP_OK);
     }
 
 }

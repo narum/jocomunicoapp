@@ -323,28 +323,25 @@
     padding:10%
 }
 .goodPhrase{
-    width: 25% ;
-    height: 25%;
-    z-index: 24;
-    position: absolute;
-   
+    display: block;
+    max-width: 50%;
+    height: auto;
+    max-height: 50%;
+    width: auto;
     top: 50%;
-    left: 33%;
+    left: 50%;
     transform: translate(-50%,-50%);
-    background: url("/img/pictos/no_querer.png");
-    background-size: 100% 100%;
-    background-color: rgba(255,255,255,0.8);
+    position: relative;
+    z-index: 2;
 }
-.badPhrase{
-    width: 25% ;
-    height: 25%;
-    z-index: 24;
+.scoreContent{
+    height: 30%;
     position: absolute;
-
+    width: 60%;
     top: 50%;
-    left: 66%;
+    left: 50%;
     transform: translate(-50%,-50%);
-    background: url("/img/pictos/no_querer.png");
-    background-size: 100% 100%;
-    background-color: rgba(255,255,255,0.8);
+    background: url("/img/srcWeb/Patterns1-08.png");
+    z-index: 4;
+    border-radius: 15px;
 }

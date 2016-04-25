@@ -12,6 +12,7 @@ class PanelGroup extends REST_Controller {
 
         $this->load->library('session');
         $this->load->model('panelInterface');
+        $this->load->model('BoardInterface');
     }
     
     public function index_get() {
@@ -35,6 +36,20 @@ class PanelGroup extends REST_Controller {
 
         $response = [
             'panels' => $panels
+        ];
+
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    
+    public function getPanelToEdit_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $ID_GBoard = $request->ID_GB;
+        
+        $primaryBoard = $this->BoardInterface->getPrimaryBoard($ID_GBoard);
+
+        $response = [
+            'id' => $primaryBoard[0]->ID_Board
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);

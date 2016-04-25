@@ -570,23 +570,30 @@ angular.module('controllers', [])
                 $rootScope.content = results.data;
             });
             // Get event Edit call in the mune bar
-            $rootScope.$on("EditCallFromMenu", function () {
+            $scope.$on("EditCallFromMenu", function () {
                 $scope.edit();
             });
             // Get event Init call in the mune bar
-            $rootScope.$on("IniciCallFromMenu", function () {
+            $scope.$on("IniciCallFromMenu", function () {
                 //MODIF: Se tiene que hacer con configuracion de usuario
 
                 $scope.config(4);
             });
             //MODIF: Solo para hacer pruebas
-            $rootScope.$on("ScanCallFromMenu", function () {
+            $scope.$on("ScanCallFromMenu", function () {
                 $scope.InitScan();
+            });
+
+            $scope.$on("editCallFromPanell", function () {
+                alert("ueep");
             });
 
             //MODIF: Coger de BBDD escaneo por intervalo o no en el if
             $scope.InitScan = function ()
             {
+                if ($scope.inEdit) {
+                    return false;
+                }
                 var userConfig = JSON.parse(localStorage.getItem('testObject'));
                 // 0 custom, 1 rows, 2 columns
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
@@ -889,7 +896,7 @@ angular.module('controllers', [])
                     } else if ($scope.isScanning === "goodPhrase") {
                         $scope.feedback(1);
                     } else if ($scope.isScanning === "badPhrase") {
-                        $scope.feedback(-1);
+                        $scope.feedback(0);
                     } else {
                         if ($scope.currentScanBlock === 1) {
                             if ($scope.timerScan == 1)
@@ -915,6 +922,7 @@ angular.module('controllers', [])
                             $scope.currentScanBlock = 3;
                             if ($scope.isScanning === "prediction") {
                                 $scope.addToSentence($scope.arrayScannedCells[$scope.indexScannedCells].pictoid);
+                                $scope.InitScan();
                             } else if ($scope.isScanning === "read") {
                                 $scope.generate();
                                 //$scope.InitScan();
@@ -986,7 +994,6 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 
-                $scope.getPrimaryUserBoard();
                 $scope.userViewHeight = 100;
                 $scope.searchFolderHeight = 0;
 
@@ -1043,6 +1050,13 @@ angular.module('controllers', [])
                  $scope.grid2 = 8;
                  $scope.grid3 = 2;*/
                 $scope.getPred();
+                if ($rootScope.editPanelInfo != null) {
+                    $scope.showBoard($rootScope.editPanelInfo.idBoard);
+                    $scope.edit();
+                    $rootScope.editPanelInfo = null;
+                } else {
+                    $scope.getPrimaryUserBoard();
+                }
             };
 
             $scope.getPrimaryUserBoard = function () {
@@ -1444,21 +1458,29 @@ angular.module('controllers', [])
             };
 
             $scope.puntuar = function () {
-
-                $scope.puntuando = true;
-                if ($scope.inScan) {
-                    $scope.isScanning = "goodPhrase";
+                if (!$scope.inEdit) {
+                    $scope.puntuando = true;
+                    if ($scope.inScan) {
+                        $scope.isScanning = "goodPhrase";
+                    }
                 }
-
 
             };
             $scope.feedback = function (point) {
 
-                if (point === 1) {
-                    alert("one point for Spain");
-                } else {
-                    alert("Gracias por puntuar bien esta frase");
-                }
+                var url = $scope.baseurl + "Board/score";
+                var postdata = {score: point};
+                $http.post(url, postdata).success(function (response)
+                {
+                    console.log(response);
+                    //$scope.dataTemp = response.data;
+                    $scope.info = response.info;
+                    //$scope.data = response.data;
+                    $scope.playSentenceAudio();
+                    $scope.puntuar();
+
+
+                });
                 $scope.puntuando = false;
                 if ($scope.inScan) {
                     $scope.InitScan();
@@ -1872,9 +1894,15 @@ angular.module('controllers', [])
         .controller('menuCtrl', function ($scope, $http, ngDialog, txtContent, $rootScope, AuthService, $location) {
             $scope.userConfig = function () {
                 $location.path('/userConfig');
-            }
+            };
+
+            $scope.panelMenu = function () {
+                alert("hola");
+                $location.path('/panelGroups');
+            };
+
             $scope.editMenu = function () {
-                $rootScope.$emit("EditCallFromMenu", {});
+                $scope.$emit("EditCallFromMenu", {});
             };
             // Función salir del login
             $scope.logOut = function () {
@@ -1893,18 +1921,28 @@ angular.module('controllers', [])
 
 
             $scope.home = function () {
-                $rootScope.$emit("IniciCallFromMenu", {});
+                $scope.$emit("IniciCallFromMenu", {});
 
             };
 
             $scope.IniciScan = function () {
-                $rootScope.$emit("ScanCallFromMenu", {});
+                $scope.$emit("ScanCallFromMenu", {});
             };
         })
 
 
-        .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http) {
+        .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+            $scope.range = function ($repeatnum)
+            {
+                var n = [];
+                for (i = 0; i < $repeatnum; i++)
+                {
+                    n.push(i);
+                }
+                return n;
+            };
+
             if (!$rootScope.isLogged) {
                 $location.path('/login');
             }
@@ -1914,7 +1952,7 @@ angular.module('controllers', [])
             });
 
             $scope.initPanelGroup = function () {
-                var URL = $scope.baseurl + "panelGroup/getUserPanels";
+                var URL = $scope.baseurl + "PanelGroup/getUserPanels";
 
                 $http.post(URL).
                         success(function (response)
@@ -1923,6 +1961,51 @@ angular.module('controllers', [])
                         });
             };
             $scope.initPanelGroup();
+            $scope.newPanellGroup = function () {
+                alert("No esta implementado aun!!!");
+            };
+
+            $scope.editPanel = function (idGB) {
+                var postdata = {ID_GB: idGB};
+                var URL = $scope.baseurl + "PanelGroup/getPanelToEdit";
+
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.id = response.id;
+                            // Put the panel to edit info, and load the edit panel
+                            $rootScope.editPanelInfo = {idBoard: $scope.id};
+                            $location.path('/');
+                        });
+            };
+            //meter texto en base de datos. "copiar" el normal
+            $scope.CreateBoard = function () {
+                $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogCreateBoard'
+                }).then(function () {
+                    var postdata = {id: $scope.idboard};
+                    var URL = $scope.baseurl + "Board/getIDGroupBoards"
+
+                    $http.post(URL, postdata).success(function (response)
+                    {
+                        $scope.CreateBoardData.idGroupBoard = response.idGroupBoard;
+
+                        URL = $scope.baseurl + "Board/newBoard"
+
+
+                        $http.post(URL, $scope.CreateBoardData).success(function (response)
+                        {
+                            $scope.showBoard(response.idBoard)
+                            $scope.edit();
+                        });
+                    });
+
+                }, function (value) {
+                });
+            };
         })
 
 

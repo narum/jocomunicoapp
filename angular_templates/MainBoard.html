@@ -4,7 +4,7 @@
 <div id="main" style="background-image: url('/img/FonsRegistre.png');background-size:100% 100%">
     <div class="row" ng-controller="menuCtrl" ng-include="baseurl + '/angular_templates/MenuView.html'">                     
     </div>
-    <div class="fullheight row" ng-init="config(4)" style="padding: 5vh;" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
+    <div class="row" ng-init="config(4)" style="padding: 5vh; height: 94%" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
 
         <div  ng-if="(cfgPredOnOff === '1' && cfgPredBarVertHor === '0')" id="predView" ng-if="inPred" class="col-xs-{{predViewWidth}} fullheight">
             <div  class="row fullheight">
@@ -88,13 +88,14 @@
         <div ng-if="inEdit" class="col-sm-12" id="searchFolder" ng-include="baseurl + '/angular_templates/EditFolder.html'" style="height: {{searchFolderHeight}}%">
         </div>
         <!-- MODIF: Poner control si no scan-->
-        <div ng-if="puntuando" class="goodPhrase" ng-click="feedback(1)">
-            <div ng-if="isScanning === 'goodPhrase'" class="scaneo">
-            </div>
+
+    </div>
+    <div ng-if="puntuando" class="scoreContent row">
+        <div class="col-xs-6" style="height: 100%">
+            <img class="goodPhrase" ng-class=" {'scaneo': isScanning == 'goodPhrase'}"src="/img/srcWeb/feliz_1.png" ng-click="feedback(1)"/>
         </div>
-        <div ng-if="puntuando" class="badPhrase" ng-click="feedback( - 1)">
-            <div ng-if="isScanning === 'badPhrase'" class="scaneo">
-            </div>
+        <div class="col-xs-6" style="height: 100%">
+            <img class="goodPhrase" ng-class=" {'scaneo': isScanning == 'badPhrase'}" src="/img/srcWeb/triste_1.png" ng-click="feedback(0)"/>
         </div>
     </div>
 </div>

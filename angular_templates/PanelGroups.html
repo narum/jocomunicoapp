@@ -5,21 +5,24 @@
     <div class="row folderContainer">
         <div class="col-xs-4 imgRounded panelGroupContainer" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
             <div class="topBar"></div>
-            <div class="col-xs-12 addPanel">
+            <div class="col-xs-12 addPanel" ng-click="newPanellGroup()">
                 hola
             </div>
             <div class="col-xs-12 panelContainer" ng-repeat="panel in panels">
                 <div class="col-xs-8 panelTitle">
-                    hola
+                    {{panel.GBname}}
                 </div>
-                <div class="col-xs-4 editaPanel">
-                    hola
+                <div class="col-xs-4 editaPanel" ng-click="editPanel(panel.ID_GB)">
+                    edita
                 </div>
-                <div class="col-xs-4 primaryPanel">
-                    hola
+                <div ng-if="panel.primaryGroupBoard == 0" class="col-xs-4 noPrimaryPanel">
+                    Fes principal
                 </div>
-                <div class="col-xs-4 nouPanel">
-                    hola
+                <div ng-if="panel.primaryGroupBoard == 1" class="col-xs-4 primaryPanel" >
+                    Principal
+                </div>
+                <div class="col-xs-4 nouPanel" ng-click="CreateBoard()">
+                    nou
                 </div>
             </div>
         </div>
