@@ -1423,7 +1423,6 @@ angular.module('controllers', [])
                     var url = $scope.baseurl + "Board/addWord";
                     var postdata = {id: id};
 
-                        //MODIF: 19-04-2016: timeout pulsar molts cops conti 1 per X unitats de temps
 
                     $http.post(url, postdata).success(function (response)
                     {
@@ -1567,6 +1566,22 @@ angular.module('controllers', [])
             };
 
             $scope.playSentenceAudio = function ()
+            {
+                var postdata = {voice: 0, sentence: $scope.info.frasefinal};
+                var URL = $scope.baseurl + "Board/getAudioSentence";
+
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.dataAudio = response.data;
+
+                            alert($scope.dataAudio);
+                            $scope.sound = ngAudio.load($scope.baseurl + $scope.dataAudio);
+                            $scope.sound.play();
+
+                        });
+            };
+            $scope.playPictoAudio = function (id)
             {
                 var postdata = {voice: 0, sentence: $scope.info.frasefinal};
                 var URL = $scope.baseurl + "Board/getAudioSentence";
