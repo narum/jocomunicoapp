@@ -2081,6 +2081,20 @@ angular.module('controllers', [])
                             $location.path('/');
                         });
             };
+            
+            $scope.setPrincipal = function (idGB) {
+                var postdata = {ID_GB: idGB};
+                var URL = $scope.baseurl + "PanelGroup/getPanelToEdit";
+
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.id = response.id;
+                            // Put the panel to edit info, and load the edit panel
+                            $rootScope.editPanelInfo = {idBoard: $scope.id};
+                            $location.path('/');
+                        });
+            };
             //meter texto en base de datos. "copiar" el normal
             $scope.CreateBoard = function (ID_GB) {
                 $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: ID_GB};
@@ -2090,15 +2104,13 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
 
-                    URL = $scope.baseurl + "Board/newBoard";
+                    var URL = $scope.baseurl + "Board/newBoard";
 
 
                     $http.post(URL, $scope.CreateBoardData).success(function (response)
                     {
-                        //MODIF: llamar a location/
-//                        $scope.showBoard(response.idBoard);
-//                        $scope.edit();
-
+                        $rootScope.editPanelInfo = {idBoard: response.idBoard};
+                        $location.path('/');
                     });
 
                 }, function (value) {
