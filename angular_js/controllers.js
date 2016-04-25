@@ -1035,8 +1035,8 @@ angular.module('controllers', [])
                 $scope.cfgSentenceBarUpDown = userConfig.cfgSentenceBarUpDown;
                 $scope.pictoBarWidth = 12 - $scope.cfgMenuReadActive - $scope.cfgMenuDeleteLastActive - $scope.cfgMenuDeleteAllActive;
                 //MODIF: Añadir de base de datos la configuracion del time over
-                $scope.cfgTimeOver = 0;
-                $scope.cfgTimeMultiClic = 0;
+                $scope.cfgTimeOver = 0;//MODIF: obtener BBDD
+                $scope.cfgTimeMultiClic = 0;//MODIF: obtener BBDD
                 $scope.TimeMultiClic = 0;
                 /*$scope.grid1hide = false;
                  $scope.grid2hide = false;
@@ -1323,7 +1323,12 @@ angular.module('controllers', [])
             $scope.clickOnCell = function (cell) {
                 if (!$scope.inEdit) {
 
-
+                    if (cell.textInCell !== null){
+                        $scope.playPictoAudio(cell.textInCell);
+                    }
+                    else if (cell.pictotext !== null){
+                        $scope.playPictoAudio(cell.pictotext);
+                    }
                     if (cell.ID_CPicto !== null) {
                         $scope.addToSentence(cell.ID_CPicto);
                     }
@@ -1543,7 +1548,7 @@ angular.module('controllers', [])
 
             $scope.playSentenceAudio = function ()
             {
-                var postdata = {voice: 0, sentence: $scope.info.frasefinal};
+                var postdata = {voice: 0, sentence: $scope.info.frasefinal};//MODIF: canviar ek voice per cfg
                 var URL = $scope.baseurl + "Board/getAudioSentence";
 
                 $http.post(URL, postdata).
@@ -1557,9 +1562,9 @@ angular.module('controllers', [])
 
                         });
             };
-            $scope.playPictoAudio = function (id)
+            $scope.playPictoAudio = function (text)
             {
-                var postdata = {voice: 0, sentence: $scope.info.frasefinal};
+                var postdata = {voice: 0, sentence: text};//MODIF: canviar ek voice per cfg
                 var URL = $scope.baseurl + "Board/getAudioSentence";
 
                 $http.post(URL, postdata).
