@@ -594,7 +594,7 @@ angular.module('controllers', [])
                 if ($scope.inEdit) {
                     return false;
                 }
-                var userConfig = JSON.parse(localStorage.getItem('testObject'));
+                var userConfig = JSON.parse(localStorage.getItem('userData'));
                 // 0 custom, 1 rows, 2 columns
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
                 $scope.inScan = true;
@@ -675,7 +675,7 @@ angular.module('controllers', [])
             };
             $scope.playLongClick = function ()
             {
-                var userConfig = JSON.parse(localStorage.getItem('testObject'));
+                var userConfig = JSON.parse(localStorage.getItem('userData'));
                 if ($scope.inScan) {
                     if ($scope.longclick)
                     {
@@ -791,15 +791,15 @@ angular.module('controllers', [])
                                     $scope.InitScan();
                                 }
                             } else if ($scope.isScanning === "read") {
-                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteLastActive == 1) {
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive == 1) {
                                     $scope.isScanning = "deletelast";
-                                } else if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive == 1) {
+                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
                                     $scope.isScanning = "deleteall";
                                 } else {
                                     $scope.InitScan();
                                 }
                             } else if ($scope.isScanning === "deletelast") {
-                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive == 1) {
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
                                     $scope.isScanning = "deleteall";
                                 } else {
                                     $scope.InitScan();
@@ -906,11 +906,11 @@ angular.module('controllers', [])
                                 $scope.arrayScannedCells = $scope.recommenderArray;
                                 $scope.indexScannedCells = 0;
                             } else if ($scope.isScanning === "sentence") {
-                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuReadActive == 1) {
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuReadActive == 1) {
                                     $scope.isScanning = "read";
-                                } else if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteLastActive == 1) {
+                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive == 1) {
                                     $scope.isScanning = "deletelast";
-                                } else if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive == 1) {
+                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
                                     $scope.isScanning = "deleteall";
                                 } else {
                                     $scope.InitScan();
@@ -989,7 +989,7 @@ angular.module('controllers', [])
                 //-----------Iniciacion-----------
 
                 var url = $scope.baseurl + "Board/loadCFG";
-                var userConfig = JSON.parse(localStorage.getItem('testObject'));
+                var userConfig = JSON.parse(localStorage.getItem('userData'));
                 var postdata = {idusu: userConfig.ID_User, lusu: userConfig.languageabbr, lusuid: userConfig.cfgDefUser};
 
                 $http.post(url, postdata);
@@ -2005,7 +2005,6 @@ angular.module('controllers', [])
             };
 
             $scope.panelMenu = function () {
-                alert("hola");
                 $location.path('/panelGroups');
             };
 
@@ -2029,7 +2028,7 @@ angular.module('controllers', [])
 
 
             $scope.home = function () {
-                $scope.$emit("IniciCallFromMenu", {});
+                $location.path('/');
 
             };
 

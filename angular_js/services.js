@@ -22,7 +22,7 @@ angular.module('services', [])
 		"init": function() {
 			$rootScope.isLogged = false;
 			var token = window.localStorage.getItem('token'); //mirem si hi ha un token al LocalStorage de html5
-                        var userConfig = JSON.parse(localStorage.getItem('testObject'));
+                        var userConfig = JSON.parse(localStorage.getItem('userData'));
 			if(token)
 				this.login(token, userConfig);
 		},
@@ -31,7 +31,7 @@ angular.module('services', [])
 			window.localStorage.setItem('languageid', userConfig.cfgDefUser); // guardem el idlanguage al localStorage
 			window.localStorage.setItem('languageabbr', userConfig.languageabbr); // guardem el nomlanguage al localStorage
                         window.localStorage.setItem('userid', userConfig.ID_User);
-                        window.localStorage.setItem('testObject', JSON.stringify(userConfig));
+                        window.localStorage.setItem('userData', JSON.stringify(userConfig));
 			$http.defaults.headers.common['Authorization'] = 'Bearer '+token; // posem el token al header per a totes les peticions
 			$http.defaults.headers.common['X-Authorization'] = 'Bearer '+token; // posem el token al header per a totes les peticions
 			$rootScope.isLogged = true;

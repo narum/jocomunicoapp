@@ -77,7 +77,44 @@ class PanelGroup extends REST_Controller {
         $defH = $request->defH;
         $imgGB = $request->imgGB;
         $idusu = $this->session->userdata('idusu');
-        $this->panelInterface->newGroupPanel($GBName, $idusu, $defW, $defH, $imgGB);
+        $this->BoardInterface->initTrans();
+        $id = $this->panelInterface->newGroupPanel($GBName, $idusu, $defW, $defH, $imgGB);
+
+        $idBoard = $this->BoardInterface->createBoard($id, "default", $defW, $defH);
+        $this->addColumns(0, 0, $idBoard, $defW);
+        $this->addRows($defW, 0, $idBoard, $defH);
+        $this->BoardInterface->setPrimaryBoard($idBoard);
+        $this->BoardInterface->commitTrans();
+        $response = [
+            'idBoard' => $idBoard
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    //MODIF: Esta repetida, mirar que se puede hacer
+    public function addColumns($columns, $rows, $idBoard, $columnsToAdd) {
+        $currentPos = ($columns + $columnsToAdd) * $rows;
+        $oldCurrentPos = $columns * $rows;
+        for ($row = 0; $row < $rows; $row++) {
+            for ($i = $columns; $i < $columns + $columnsToAdd; $i++) {
+                $this->BoardInterface->newCell($currentPos, $idBoard);
+                $currentPos--;
+            }
+            for ($column = 0; $column < $columns; $column++) {
+                $this->BoardInterface->updatePosCell($oldCurrentPos, $currentPos, $idBoard);
+                $currentPos--;
+                $oldCurrentPos--;
+            }
+        }
+    }
+    //MODIF: Esta repetida, mirar que se puede hacer
+    public function addRows($columns, $rows, $idBoard, $rowsToAdd) {
+        $currentPos = $columns * $rows + 1;
+        for ($row = 0; $row < $rowsToAdd; $row++) {
+            for ($column = 0; $column < $columns; $column++) {
+                $this->BoardInterface->newCell($currentPos, $idBoard);
+                $currentPos++;
+            }
+        }
     }
 
 }

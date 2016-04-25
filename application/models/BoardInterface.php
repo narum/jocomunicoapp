@@ -466,6 +466,18 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
+    
+    /*
+     * Set this board the primry
+     */
+
+    function setPrimaryBoard($id) {     
+        $this->db->where('ID_Board', $id);
+        $this->db->update('Boards', array(
+            'primaryBoard' => '1',
+        ));
+
+    }
 
     /*
      * Return all user boards in the same group

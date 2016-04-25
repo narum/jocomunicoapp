@@ -651,7 +651,7 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-
+    //MODIF: hacer bien, esta copiado y pegado
     public function autoReadSentence_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
