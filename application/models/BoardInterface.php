@@ -684,6 +684,7 @@ class BoardInterface extends CI_Model {
     }
     function moveBoard($IDboard,$IDGboard, $name, $width, $height) {
         $data = array(
+            'ID_Board' => $IDboard,
             'ID_GBBoard' => $IDGboard,
             'Bname' => $name,
             'width' => $width,
@@ -692,7 +693,7 @@ class BoardInterface extends CI_Model {
 
         
         $this->db->where('ID_Board', $IDboard);
-        $this->db->update('mytable', $data);
+        $this->db->update('Boards', $data);
     }
 
     function removeBoard($IDboard) {

@@ -715,6 +715,25 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    public function moveBoard_post() {
+        $this->BoardInterface->initTrans();
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+        $IDGboard = $request->idGroupBoard;
+        $name = $request->CreateBoardName;
+        $width = $request->width;
+        $height = $request->height;
+        
+        $idBoard = $this->BoardInterface->createBoard($id, $IDGboard, $name, $width, $height);
+        $this->addColumns(0, 0, $idBoard, $width);
+        $this->addRows($width, 0, $idBoard, $height);
+        $this->BoardInterface->commitTrans();
+        $response = [
+            'idBoard' => $idBoard
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 
     public function getIDGroupBoards_post() {
         $this->BoardInterface->initTrans();
