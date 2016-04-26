@@ -30,10 +30,8 @@ class ImgUploader extends REST_Controller {
 
     public function upload_post() {
         //$target_dir = "/opt/lampp/htdocs/jocomunicoapp/img/";
-        var_dump($_FILES);
         $target_dir = "img/";
         //$target_file = basename($_FILES['file']['name']);
-        echo basename($_FILES['file']['name']);
         $target_file = $this->Rename_Img(basename($_FILES['file']['name']));
         if (file_exists($target_dir . $target_file)) {
             //MODIF: lanzar error 
@@ -67,7 +65,7 @@ class ImgUploader extends REST_Controller {
         $name = "idi" . $id . "-idu" . $idusu . "-" . $fecha->getTimestamp();
         $name = md5($name . $idusu);
         $name = $name . $ext;
-        return "asd";
+        return $name;
     }
 
     function Img_Resize($src_path, $target_dir, $dst_path) {

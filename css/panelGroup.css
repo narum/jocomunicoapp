@@ -16,7 +16,7 @@
     background-color: whitesmoke;
     height: 15%;
     width: 90%;
-    margin: 5% 5%;
+    margin: 1vh 2%;
     border-radius: 10px;
 }
 .panelTitle{
@@ -31,18 +31,15 @@
     background: #92dbe1;
     color: white;
     font-weight: bold;
-    padding-top: 0.5vh;
 }
 .noPrimaryPanel{
     height: 33.333333%; 
     background: #c0f5f9;
-    padding-top: 0.5vh;
 }
 .primaryPanel{
     height: 33.333333%; 
     background: #f9d05a;
     font-weight: bold;
-    padding-top: 0.5vh;
 }
 .nouPanel{
     border-bottom-right-radius: 10px;
@@ -50,12 +47,33 @@
     background: #92dbe1;
     color: white;
     font-weight: bold;
-    padding-top: 0.5vh;
 }
 .addPanel{
     background-color: red; /*MODIF: png con esa forma*/
     height: 15%;
     width: 90%;
-    margin: 5% 5%;
     border-radius: 10px;
+    margin: 1vh 2%;
+}
+
+.scrollMenuPanels{
+    height: 80%;
+    margin-top: 5vh;
+    overflow-y: scroll;
+}
+/*Scroll properties*/
+#scrollBarPanels::-webkit-scrollbar{
+    width:15px;
+    background-color:none;
+} 
+#scrollBarPanels::-webkit-scrollbar-thumb{
+    /*background:-webkit-linear-gradient(0, #92dbe1Turquesa 40%, #78b3b8Turquesa Oscuro 100%);*/
+    background-color: #92dbe1;/*Turquesa*/
+    border-radius:10px;
+}
+#scrollBarPanels::-webkit-scrollbar-thumb:hover{
+    background:#78b3b8; /*Turquesa Oscuro*/
+}
+#scrollBarPanels::-webkit-scrollbar-thumb:active{
+    background-color:#92dbe1;/*Turquesa*/
 }
