@@ -20,30 +20,33 @@
     border-radius: 10px;
 }
 .panelTitle{
-    height: 100%;
+    padding: 0px;
+    border: none !important;
+    background-color: whitesmoke;
+    box-shadow:none !important;    
     font-size: 25px;
-    transform: translate(0%, 25%);
+    transform: translate(0%, 50%);
     position: relative;
 }
 .editaPanel{
     border-top-right-radius: 10px;
-    height: 33.333333%; 
+    height: 33%; 
     background: #92dbe1;
     color: white;
     font-weight: bold;
 }
 .noPrimaryPanel{
-    height: 33.333333%; 
+    height: 34%; 
     background: #c0f5f9;
 }
 .primaryPanel{
-    height: 33.333333%; 
+    height: 34%; 
     background: #f9d05a;
     font-weight: bold;
 }
 .nouPanel{
     border-bottom-right-radius: 10px;
-    height: 33.333333%; 
+    height: 33%; 
     background: #92dbe1;
     color: white;
     font-weight: bold;

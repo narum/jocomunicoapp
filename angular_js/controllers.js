@@ -2151,6 +2151,17 @@ angular.module('controllers', [])
                 }, function (value) {
                 });
             };
+            
+            $scope.changeGroupBoardName = function (nameboard, idgb)
+            {
+                var postdata = {Name: nameboard, ID: idgb};
+                var URL = $scope.baseurl + "PanelGroup/modifyGroupBoardName";
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            
+                        });
+            };
         })
 
 

@@ -10,8 +10,8 @@
                     hola
                 </div>
                 <div class="col-xs-12 panelContainer" ng-repeat="panel in panels">
-                    <div class="col-xs-8 panelTitle text-center">
-                        {{panel.GBname}}
+                    <div class="col-xs-8 text-center fullheight">
+                        <input type="text" class="form-control text-center panelTitle"  name="NameBoard" ng-model="panel.GBname" ng-value="panel.GBname" ng-change="changeGroupBoardName(panel.GBname, panel.ID_GB)"/>
                     </div>
                     <div class="col-xs-4 editaPanel text-center" ng-click="editPanel(panel.ID_GB)">
                         edita

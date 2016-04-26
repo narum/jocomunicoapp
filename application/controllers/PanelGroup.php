@@ -116,5 +116,22 @@ class PanelGroup extends REST_Controller {
             }
         }
     }
+    
+    public function modifyGroupBoardName_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $ID_GB = $request->ID;
+        $name = $request->Name;
+        $idusu = $this->session->userdata('idusu');
+
+        $this->panelInterface->changeGroupName($ID_GB, $name, $idusu);
+
+        $response = [
+            'id' => $primaryBoard[0]->ID_Board
+        ];
+
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+
 
 }
