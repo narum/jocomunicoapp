@@ -669,6 +669,32 @@ class BoardInterface extends CI_Model {
 
         return $id;
     }
+    function copyBoard($IDGboard, $name, $width, $height) {
+        $data = array(
+            'ID_GBBoard' => $IDGboard,
+            'Bname' => $name,
+            'width' => $width,
+            'height' => $height
+        );
+
+        $this->db->insert('Boards', $data);
+
+        $id = $this->db->insert_id();
+
+        return $id;
+    }
+    function moveBoard($IDboard) {
+        $data = array(
+            'ID_GBBoard' => $IDGboard,
+            'Bname' => $name,
+            'width' => $width,
+            'height' => $height
+        );
+
+        
+        $this->db->where('ID_Board', $IDboard);
+        $this->db->update('mytable', $data);
+    }
 
     function removeBoard($IDboard) {
         $this->db->where('ID_Board', $IDboard);
