@@ -58,6 +58,9 @@ class PanelInterface extends CI_Model {
         );
         
         $this->db->insert('GroupBoards', $data);
+        
+        $id = $this->db->insert_id();
 
+        return $id;
     }
 }
