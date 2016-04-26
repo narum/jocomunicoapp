@@ -1183,6 +1183,7 @@ angular.module('controllers', [])
                 $scope.editViewWidth = 3;
                 $scope.userViewHeight = 80;
                 $scope.searchFolderHeight = 20;
+                
                 if (window.innerWidth < 1050) {
                     $scope.userViewWidth = 8;
                     $scope.editViewWidth = 4;
@@ -1199,6 +1200,7 @@ angular.module('controllers', [])
                     $scope.altura = $scope.range(20)[response.row].valueOf();
                     $scope.amplada = $scope.range(20)[response.col].valueOf();
                     $scope.autoreturn = (response.autoReturn === '1' ? true : false);
+                    $scope.autoread = (response.autoRead === '1' ? true : false);
                     
                 });
             };
@@ -1209,15 +1211,28 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata).success(function (response)
                 {
+                    $scope.selectBoard = {ID_Board: $scope.idboard.toString()};
                     $scope.allBoards = response.boards;
                     $scope.primaryBoard = {ID_Board: response.primaryBoard.ID_Board};
                 });
+                
             };
 
             $scope.changeAutoReturn = function (autoreturn)
             {
                 var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
                 var URL = $scope.baseurl + "Board/changeAutoReturn";
+                $http.post(URL, postdata).
+                        success(function ()
+                        {
+
+                        });
+            };
+            
+            $scope.changeAutoReadSentence = function (autoread)
+            {
+                var postdata = {id: $scope.idboard, value: autoread.valueOf()};
+                var URL = $scope.baseurl + "Board/changeAutoRead";
                 $http.post(URL, postdata).
                         success(function ()
                         {
@@ -2044,7 +2059,11 @@ angular.module('controllers', [])
 
 
             $scope.home = function () {
-                $location.path('/');
+                if ($location.path() == '/') {
+                    $scope.config(4);
+                } else {
+                    $location.path('/');
+                }
 
             };
 
@@ -2075,7 +2094,7 @@ angular.module('controllers', [])
             });
 
             $scope.initPanelGroup = function () {
-                var URL = $scope.baseurl + "PanelGroup/getUserPanels";
+                var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
 
                 $http.post(URL).
                         success(function (response)

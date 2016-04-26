@@ -86,6 +86,7 @@ class Board extends REST_Controller {
         $name = $output[0]->Bname;
         $primaryBoard = $output[0]->primaryBoard;
         $autoReturn = $output[0]->autoReturn;
+        $autoRead = $output[0]->autoReadSentence;
 
 
         $response = [
@@ -94,6 +95,7 @@ class Board extends REST_Controller {
             'name' => $name,
             'primaryBoard' => $primaryBoard,
             'autoReturn' => $autoReturn,
+            'autoRead' => $autoRead
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
@@ -518,7 +520,7 @@ class Board extends REST_Controller {
     }
 
     /*
-     * 
+     * Get all prerecorded user sentences 
      */
 
     public function searchSentence_post() {
@@ -621,7 +623,7 @@ class Board extends REST_Controller {
         $this->BoardInterface->changeAutoReturn($id, $value);
     }
 
-    public function changeAutoReadSentence_post() {
+    public function changeAutoRead_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $value = ($request->value == true ? '1' : '0');
@@ -651,7 +653,7 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    //MODIF: hacer bien, esta copiado y pegado
+    
     public function autoReadSentence_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);

@@ -46,10 +46,16 @@
             </div>
             <div class='col-xs-offset-1 col-xs-12 textTrash'>
                 <!-- cuando pongamos laimagen darle 5px de marging left-->
-                ((!)){{content.automaticreturn}}<input ng-model="autoreturn" type="checkbox" ng-click="changeAutoReturn(autoreturn)"/>
+                <div class="col-xs-1" style="height: 100%">
+                    <img class="imgInfo" src="{{baseurl}}/img/icons/information.png"/>
+                </div>
+                {{content.automaticreturn}}<input ng-model="autoreturn" type="checkbox" ng-click="changeAutoReturn(autoreturn)"/>
             </div>
             <div class='col-xs-offset-1 col-xs-12 textTrash'>
-                ((!)){{content.automaticreturn}}<input ng-model="AutoReadSentence" type="checkbox" ng-click="changeAutoReadSentence(AutoReadSentence)"/>
+                <div class="col-xs-1" style="height: 100%">
+                    <img class="imgInfo" src="{{baseurl}}/img/icons/information.png"/>
+                </div>
+                {{content.automaticread}}<input ng-model="autoread" type="checkbox" ng-click="changeAutoReadSentence(autoread)"/>
             </div>
         </div>
     </div>

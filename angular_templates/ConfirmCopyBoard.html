@@ -5,8 +5,8 @@
 <div class="row" style="height: 25%">
     <!--MODIF: Implementar sistema de carpetas-->
     <select class="col-xs-offset-3 col-xs-2 dropdown-arrow"
-        ng-model="$parent.idGroupBoard"
-        ng-options="panel.GBname for panel in panels track by panel.ID_GB">
+        ng-model="CopyBoardData.parseInt(idGroupBoard)"
+        ng-options="panel.GBname for panel in panels track by panel.parseInt(ID_GB)">
     </select>
 </div>
 <div class="row" style="height: 25%">
