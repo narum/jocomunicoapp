@@ -678,12 +678,11 @@ class BoardInterface extends CI_Model {
         );
 
         $this->db->insert('Boards', $data);
-
         $id = $this->db->insert_id();
 
         return $id;
     }
-    function moveBoard($IDboard) {
+    function moveBoard($IDboard,$IDGboard, $name, $width, $height) {
         $data = array(
             'ID_GBBoard' => $IDGboard,
             'Bname' => $name,
