@@ -5,24 +5,26 @@
     <div class="row folderContainer">
         <div class="col-xs-4 imgRounded panelGroupContainer" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
             <div class="topBar"></div>
-            <div class="col-xs-12 addPanel" ng-click="newPanellGroup()">
-                hola
-            </div>
-            <div class="col-xs-12 panelContainer" ng-repeat="panel in panels">
-                <div class="col-xs-8 panelTitle text-center">
-                    {{panel.GBname}}
+            <div class="col-xs-10 col-xs-offset-1 scrollMenuPanels" id="scrollBarPanels">
+                <div class="col-xs-12 addPanel" ng-click="newPanellGroup()">
+                    hola
                 </div>
-                <div class="col-xs-4 editaPanel text-center" ng-click="editPanel(panel.ID_GB)">
-                    edita
-                </div>
-                <div ng-if="panel.primaryGroupBoard == 0" class="col-xs-4 noPrimaryPanel text-center" ng-click="setPrimary(panel.ID_GB)">
-                    Fes principal
-                </div>
-                <div ng-if="panel.primaryGroupBoard == 1" class="col-xs-4 primaryPanel text-center">
-                    Principal
-                </div>
-                <div class="col-xs-4 nouPanel text-center" ng-click="CreateBoard(panel.ID_GB)">
-                    nou
+                <div class="col-xs-12 panelContainer" ng-repeat="panel in panels">
+                    <div class="col-xs-8 panelTitle text-center">
+                        {{panel.GBname}}
+                    </div>
+                    <div class="col-xs-4 editaPanel text-center" ng-click="editPanel(panel.ID_GB)">
+                        edita
+                    </div>
+                    <div ng-if="panel.primaryGroupBoard == 0" class="col-xs-4 noPrimaryPanel text-center" ng-click="setPrimary(panel.ID_GB)">
+                        Fes principal
+                    </div>
+                    <div ng-if="panel.primaryGroupBoard == 1" class="col-xs-4 primaryPanel text-center">
+                        Principal
+                    </div>
+                    <div class="col-xs-4 nouPanel text-center" ng-click="CreateBoard(panel.ID_GB)">
+                        nou
+                    </div>
                 </div>
             </div>
         </div>
