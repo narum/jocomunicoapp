@@ -7,14 +7,14 @@
             <div class="topBar"></div>
             <div class="col-xs-10 col-xs-offset-1 scrollMenuPanels" id="scrollBarPanels">
                 <div class="col-xs-12 addPanel" ng-click="newPanellGroup()">
-                    hola
+                    <img src="{{baseurl}}/img/srcWeb/afegir.png" width="100%" height="100%"/>
                 </div>
                 <div class="col-xs-12 panelContainer" ng-repeat="panel in panels">
                     <div class="col-xs-8 text-center fullheight">
                         <input type="text" class="form-control text-center panelTitle"  name="NameBoard" ng-model="panel.GBname" ng-value="panel.GBname" ng-change="changeGroupBoardName(panel.GBname, panel.ID_GB)"/>
                     </div>
                     <div class="col-xs-4 editaPanel text-center" ng-click="editPanel(panel.ID_GB)">
-                        edita
+                        edita <img src="{{baseurl}}/img/icons/edit_blanc.png" width="15%" height="50%"/>
                     </div>
                     <div ng-if="panel.primaryGroupBoard == 0" class="col-xs-4 noPrimaryPanel text-center" ng-click="setPrimary(panel.ID_GB)">
                         Fes principal

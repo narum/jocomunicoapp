@@ -36,9 +36,32 @@
     background-color: #fddfad;
     height: 24%;
 }
+.contentNull{ 
+    background: url('/img/srcWeb/Patterns1-01.png');
+    height: 24%;
+}
 .content4{ 
     height: 30%;
 
+}
+.backgroundImgEdit{
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    background: white;
+    position: absolute;
+}
+.ImgEdit{
+    display: block;
+    max-width: 50%;
+    height: auto;
+    max-height: 50%;
+    width: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 10px;
+    position: relative;
 }
 .saveEdit{
     margin-left: 8%;

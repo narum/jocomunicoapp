@@ -993,7 +993,7 @@ angular.module('controllers', [])
                 var postdata = {idusu: userConfig.ID_User, lusu: userConfig.languageabbr, lusuid: userConfig.cfgDefUser};
 
                 $http.post(url, postdata);
-                //MODIF: mirar la board predeterminada 
+
                 $scope.userViewHeight = 100;
                 $scope.searchFolderHeight = 0;
 
@@ -1822,7 +1822,11 @@ angular.module('controllers', [])
             {
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
-
+                $scope.removeFile = function () {
+                    $scope.myFile = null;
+                    
+                };
+                
                 $scope.uploadFile = function () {
                     var file = $scope.myFile;
                     console.log('file is ');
