@@ -21,24 +21,36 @@
 }
 .panelTitle{
     height: 100%;
+    font-size: 25px;
+    transform: translate(0%, 25%);
+    position: relative;
 }
 .editaPanel{
     border-top-right-radius: 10px;
     height: 33.333333%; 
     background: #92dbe1;
+    color: white;
+    font-weight: bold;
+    padding-top: 0.5vh;
 }
 .noPrimaryPanel{
     height: 33.333333%; 
     background: #c0f5f9;
+    padding-top: 0.5vh;
 }
 .primaryPanel{
     height: 33.333333%; 
     background: #f9d05a;
+    font-weight: bold;
+    padding-top: 0.5vh;
 }
 .nouPanel{
     border-bottom-right-radius: 10px;
     height: 33.333333%; 
     background: #92dbe1;
+    color: white;
+    font-weight: bold;
+    padding-top: 0.5vh;
 }
 .addPanel{
     background-color: red; /*MODIF: png con esa forma*/

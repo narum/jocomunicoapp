@@ -1199,6 +1199,8 @@ angular.module('controllers', [])
                     $scope.altura = $scope.range(20)[response.row].valueOf();
                     $scope.amplada = $scope.range(20)[response.col].valueOf();
                     $scope.autoreturn = (response.autoReturn === '1' ? true : false);
+                    $scope.autoread = (response.autoRead === '1' ? true : false);
+                    
                 });
             };
             // Gets all the boards in the group and select the primary
@@ -1217,6 +1219,17 @@ angular.module('controllers', [])
             {
                 var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
                 var URL = $scope.baseurl + "Board/changeAutoReturn";
+                $http.post(URL, postdata).
+                        success(function ()
+                        {
+
+                        });
+            };
+            
+            $scope.changeAutoReadSentence = function (autoread)
+            {
+                var postdata = {id: $scope.idboard, value: autoread.valueOf()};
+                var URL = $scope.baseurl + "Board/changeAutoRead";
                 $http.post(URL, postdata).
                         success(function ()
                         {
@@ -2028,7 +2041,11 @@ angular.module('controllers', [])
 
 
             $scope.home = function () {
-                $location.path('/');
+                if ($location.path() == '/') {
+                    $scope.config(4);
+                } else {
+                    $location.path('/');
+                }
 
             };
 
@@ -2059,7 +2076,7 @@ angular.module('controllers', [])
             });
 
             $scope.initPanelGroup = function () {
-                var URL = $scope.baseurl + "PanelGroup/getUserPanels";
+                var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
 
                 $http.post(URL).
                         success(function (response)

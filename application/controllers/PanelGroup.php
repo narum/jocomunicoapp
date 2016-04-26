@@ -29,7 +29,7 @@ class PanelGroup extends REST_Controller {
         }
     }
 
-    public function getUserPanels_post() {
+    public function getUserPanelGroups_post() {
         $idusu = $this->session->userdata('idusu');
         $panels = $this->panelInterface->getUserPanels($idusu);
 
