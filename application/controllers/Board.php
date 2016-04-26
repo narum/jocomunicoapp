@@ -749,7 +749,7 @@ class Board extends REST_Controller {
         $width = $request->width;
         $height = $request->height;
         
-        $idBoard = $this->BoardInterface->moveBoard($IDGboard, $name, $width, $height);
+        $idBoard = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height);
         
         /*
          * This commented part can update the size of the board if it is implemented.

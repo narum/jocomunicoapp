@@ -1199,6 +1199,7 @@ angular.module('controllers', [])
                     $scope.altura = $scope.range(20)[response.row].valueOf();
                     $scope.amplada = $scope.range(20)[response.col].valueOf();
                     $scope.autoreturn = (response.autoReturn === '1' ? true : false);
+                    
                 });
             };
             // Gets all the boards in the group and select the primary
@@ -1764,7 +1765,7 @@ angular.module('controllers', [])
                     alert(postdata.id);
                     $http.post(URL, postdata).success(function (response)
                     {
-                        $scope.showBoard(response.idboard)
+                        $scope.showBoard(response.idboard);
                         $scope.edit();
                     });
                 }, function (value) {
@@ -1775,13 +1776,28 @@ angular.module('controllers', [])
 
             $scope.copyBoard = function () {
                 //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia
-                $scope.CopyBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
+                
+                var postdata = {id: $scope.idboard};
+                var URL = $scope.baseurl + "Board/getIDGroupBoards";
+
+                    $http.post(URL, postdata).success(function (response)
+                    {
+                        $scope.idGroupBoard = response.idGroupBoard;
+                    });
+                var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
+
+                $http.post(URL).
+                        success(function (response)
+                        {
+                            $scope.panels = response.panels;
+                        });
+                $scope.CopyBoardData = {CreateBoardName: $scope.nameboard, idGroupBoard: $scope.idGroupBoard,id: $scope.idboard, panels: $scope.panels, height: $scope.altura, width: $scope.amplada};
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmCopyBoard.html',
                     scope: $scope,
                     className: 'ngdialog-theme-default dialogCopyBoard'
                 }).then(function () {
-
+                    
                 }, function (value) {
                 });
             };
