@@ -182,6 +182,7 @@ CREATE TABLE R_S_TempPictograms (
 	isfem ENUM('0', '1') DEFAULT '0',
 	coordinated ENUM('0', '1') DEFAULT '0',
 	ID_RSTPUser INT,
+	imgtemp VARCHAR(300) NULL,
 	INDEX RSTPSentence (ID_RSTPSentence),
 	FOREIGN KEY (ID_RSTPSentence) REFERENCES S_Temp (ID_STemp) ON DELETE CASCADE,
 	INDEX PictoID (pictoid),

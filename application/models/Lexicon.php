@@ -595,9 +595,10 @@ class Lexicon extends CI_Model {
      * INSERTS A PICTOGRAM TO THE DB. AVOIDS ENTERING TWO EQUAL CONSECUTIVE PICTOGRAMS
      * @param type $idusu
      * @param type $idparaula
-     * @param type $taula Aquest paràmetre ha quedat obsolet amb la nova BBDD.
+     * @param type $imgtemp Es fa servir amb la nova interfície, per si l'usuari ha modificat 
+     * la img per defecte del pictograma.
      */
-    function afegirParaula($idusu, $idparaula, $taula)
+    function afegirParaula($idusu, $idparaula, $imgtemp)
     {
         $paraula = array();
         $pictoid = -1;
@@ -617,6 +618,7 @@ class Lexicon extends CI_Model {
             $data = array(
                 'pictoid' => $idparaula,
                 'ID_RSTPUser' => $idusu,
+                'imgtemp' => $imgtemp,
             );
             $this->db->insert('R_S_TempPictograms', $data);
         }
