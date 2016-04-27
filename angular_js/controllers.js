@@ -1183,7 +1183,7 @@ angular.module('controllers', [])
                 $scope.editViewWidth = 3;
                 $scope.userViewHeight = 80;
                 $scope.searchFolderHeight = 20;
-                
+
                 if (window.innerWidth < 1050) {
                     $scope.userViewWidth = 8;
                     $scope.editViewWidth = 4;
@@ -1201,7 +1201,7 @@ angular.module('controllers', [])
                     $scope.amplada = $scope.range(20)[response.col].valueOf();
                     $scope.autoreturn = (response.autoReturn === '1' ? true : false);
                     $scope.autoread = (response.autoRead === '1' ? true : false);
-                    
+
                 });
             };
             // Gets all the boards in the group and select the primary
@@ -1215,7 +1215,7 @@ angular.module('controllers', [])
                     $scope.allBoards = response.boards;
                     $scope.primaryBoard = {ID_Board: response.primaryBoard.ID_Board};
                 });
-                
+
             };
 
             $scope.changeAutoReturn = function (autoreturn)
@@ -1228,7 +1228,7 @@ angular.module('controllers', [])
 
                         });
             };
-            
+
             $scope.changeAutoReadSentence = function (autoread)
             {
                 var postdata = {id: $scope.idboard, value: autoread.valueOf()};
@@ -1791,30 +1791,43 @@ angular.module('controllers', [])
 
             $scope.copyBoard = function () {
                 //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia
-                
+
                 var postdata = {id: $scope.idboard};
                 var URL = $scope.baseurl + "Board/getIDGroupBoards";
 
-                    $http.post(URL, postdata).success(function (response)
-                    {
-                        $scope.idGroupBoard = response.idGroupBoard;
-                    });
-                var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
+                $http.post(URL, postdata).success(function (response)
+                {
+                    $scope.idGroupBoard = response.idGroupBoard;
+                    var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
 
-                $http.post(URL).
-                        success(function (response)
-                        {
-                            $scope.panels = response.panels;
-                        });
-                $scope.CopyBoardData = {CreateBoardName: $scope.nameboard, idGroupBoard: $scope.idGroupBoard,id: $scope.idboard, panels: $scope.panels, height: $scope.altura, width: $scope.amplada};
-                ngDialog.openConfirm({
-                    template: $scope.baseurl + '/angular_templates/ConfirmCopyBoard.html',
-                    scope: $scope,
-                    className: 'ngdialog-theme-default dialogCopyBoard'
-                }).then(function () {
-                    
-                }, function (value) {
+                    $http.post(URL).
+                            success(function (response)
+                            {
+                                $scope.panels = response.panels;
+                                $scope.CopyBoardData = {CreateBoardName: $scope.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.altura, width: $scope.amplada, autoreturn: $scope.autoreturn, autoread: $scope.autoread};
+                                ngDialog.openConfirm({
+                                    template: $scope.baseurl + '/angular_templates/ConfirmCopyBoard.html',
+                                    scope: $scope,
+                                    className: 'ngdialog-theme-default dialogCopyBoard'
+                                }).then(function () {
+
+                                    alert($scope.CopyBoardData.CreateBoardName + $scope.CopyBoardData.idGroupBoard.ID_GB);
+                                    URL = $scope.baseurl + "Board/copyBoard";
+                                    $scope.CopyBoardData.idGroupBoard = parseInt($scope.CopyBoardData.idGroupBoard.ID_GB);
+
+                                    $http.post(URL, $scope.CopyBoardData).success(function (response)
+                                    {
+                                        $scope.showBoard(response.idBoard);
+                                        $scope.edit();
+                                    });
+
+
+                                }, function (value) {
+                                });
+                            });
+
                 });
+
             };
             $scope.moveBoard = function () {
                 //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia

@@ -681,12 +681,14 @@ class BoardInterface extends CI_Model {
 
         return $id;
     }
-    function copyBoard($IDGboard, $name, $width, $height) {
+    function copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence) {
         $data = array(
             'ID_GBBoard' => $IDGboard,
             'Bname' => $name,
             'width' => $width,
-            'height' => $height
+            'height' => $height,
+            'autoReturn' => $autoReturn, 
+            'autoReadSentence' => $autoReadSentence
         );
 
         $this->db->insert('Boards', $data);

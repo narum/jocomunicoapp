@@ -750,14 +750,16 @@ class Board extends REST_Controller {
         $name = $request->CreateBoardName;
         $width = $request->width;
         $height = $request->height;
+        $autoReturn = $request->autoreturn;
+        $autoReadSentence = $request->autoread;
         
-        $idBoard = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height);
+        $idBoard = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height,$autoReturn, $autoReadSentence);
         
         /*
          * This commented part can update the size of the board if it is implemented.
          * 
-        $this->addColumns($width, $height, $idBoard, $NEW_width);
-        $this->addRows($width, $height, $idBoard, $NEW_height);
+        $this->addColumns(0, 0, $idBoard, $NEW_width);
+        $this->addRows($width, 0, $idBoard, $NEW_height);
         */
         
         $this->BoardInterface->commitTrans();
