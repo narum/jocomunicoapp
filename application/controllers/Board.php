@@ -16,6 +16,7 @@ class Board extends REST_Controller {
         $this->load->library('Myslot');
         $this->load->library('Mypattern');
         $this->load->library('Myexpander');
+        $this->load->library('Myprediction');
         $this->load->library('session');
     }
 
@@ -41,9 +42,10 @@ class Board extends REST_Controller {
         $luid = $request->lusuid;
 
         $data = array(
-            'idusu' => $iu,
-            'ulangabbr' => $lu,
-            'ulangid' => $luid);
+            'idusu' => $iu, // Id user
+            'ulangabbr' => $lu, // ES, CA...
+            'ulangid' => $luid // Id language
+                );
 
         $this->session->set_userdata($data);
     }
@@ -435,11 +437,15 @@ class Board extends REST_Controller {
                 $control = $value;
                 break;
         }
+        $idusu = $this->session->userdata('idusu');
+        $data = $this->Lexicon->recuperarFrase($idusu);
+        
         $response = [
             'tense' => $tense,
             'tipusfrase' => $tipusfrase,
             'negativa' => $negativa,
-            'control' => $control
+            'control' => $control,
+            'data' => $data
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
@@ -782,6 +788,15 @@ class Board extends REST_Controller {
                 'data' => MD5(strval($voice) . $sentence)
             ];
         }
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    
+    public function getPrediction_post() {
+        // CARGA recommenderArray                 
+        $prediction = new Myprediction();  
+        $recommenderArray = $prediction->getPrediction(); 
+        
+        $response = [ 'recommenderArray' => $recommenderArray ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
 

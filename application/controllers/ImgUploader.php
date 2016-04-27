@@ -9,6 +9,8 @@ class ImgUploader extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
+
+        $this->load->model('ImgUploader_model');
     }
 
     //MODIF: mirar que hacer aqui...
@@ -28,40 +30,70 @@ class ImgUploader extends REST_Controller {
 
     public function upload_post() {
         //$target_dir = "/opt/lampp/htdocs/jocomunicoapp/img/";
+        var_dump($_FILES);
         $target_dir = "img/";
-        $target_file = basename($_FILES['file']['name']);
+        //$target_file = basename($_FILES['file']['name']);
+        echo basename($_FILES['file']['name']);
+        $target_file = $this->Rename_Img(basename($_FILES['file']['name']));
+        if (file_exists($target_dir . $target_file)) {
+            //MODIF: lanzar error 
+            $errorText = 'Ya existe una imagen con ese nombre.';
+            $response = [
+                'errorText' => $errorText
+            ];
+            $this->response($response, 300);
+        }
         //MODIF: poner tamaño a 100 kb y tamaño 150 minimo
         if ($_FILES['file']['size'] > 100000) {
-            $this->Img_Resize($_FILES['file']['tmp_name'], $target_dir, $target_file);
+            $success = $this->Img_Resize($_FILES['file']['tmp_name'], $target_dir, $target_file);
         } else {
-            move_uploaded_file($_FILES['file']['tmp_name'], $target_dir . $target_file);
+            $success = move_uploaded_file($_FILES['file']['tmp_name'], $target_dir . $target_file);
         }
+        if (!$success) {
+            echo "Error";
+        }
+        $this->response(REST_Controller::HTTP_OK);
+    }
+
+    function Rename_Img($string) {
+        $idusu = $this->session->userdata('idusu');
+        $id = $this->ImgUploader_model->getCountIdImgUsu($idusu);
+        $fecha = new DateTime();
+        //MODIF: Pasar superuser no user
+        $name = $string;
+        $namelen = strlen($name);
+        $pointpos = strrpos($name, '.');
+        $ext = substr($name, $pointpos, $namelen);
+        $name = "idi" . $id . "-idu" . $idusu . "-" . $fecha->getTimestamp();
+        $name = md5($name . $idusu);
+        $name = $name . $ext;
+        return "asd";
     }
 
     function Img_Resize($src_path, $target_dir, $dst_path) {
+        $success = true;
 
         $x = getimagesize($src_path);
-        
+
         $width = $x['0'];
         $height = $x['1'];
         $type = $x['mime'];
-        
+
         $rs_width = $width / 2; //resize to half of the original width.
         $rs_height = $height / 2; //resize to half of the original height.
-        
         // The grater value between height and width have to be, at least, 150
-        if($rs_height < 150 || $rs_width  < 150){
-            if ($rs_height > $rs_width && $rs_height < 150 ){
+        if ($rs_height < 150 || $rs_width < 150) {
+            if ($rs_height > $rs_width && $rs_height < 150) {
                 $ratio = 150 / $rs_height;
-            }else if($rs_height < $rs_width && $rs_width < 150 ){
+            } else if ($rs_height < $rs_width && $rs_width < 150) {
                 $ratio = 150 / $rs_width;
-            }else{
+            } else {
                 $ratio = 1;
             }
             $rs_height = $rs_height * $ratio;
             $rs_width = $rs_width * $ratio;
-        } 
-        
+        }
+
         switch ($type) {
             case "image/gif":
                 $img = imagecreatefromgif($src_path);
@@ -102,32 +134,33 @@ class ImgUploader extends REST_Controller {
                 break;
         }
         //Copy the img
-        imagecopyresampled($img_base, $img, 0, 0, 0, 0, $rs_width, $rs_height, $width, $height);
+        $success = $success && imagecopyresampled($img_base, $img, 0, 0, 0, 0, $rs_width, $rs_height, $width, $height);
         // Create the image with the correct extension
         switch ($type) {
             case "image/gif":
-                imagegif($img_base, $target_dir.$dst_path);
+                $success = $success && imagegif($img_base, $target_dir . $dst_path);
                 break;
             case "image/jpeg":
-                imagejpeg($img_base, $target_dir.$dst_path);
+                $success = $success && imagejpeg($img_base, $target_dir . $dst_path);
                 break;
             case "image/png":
-                imagepng($img_base, $target_dir.$dst_path);
+                $success = $success && imagepng($img_base, $target_dir . $dst_path);
                 break;
         }
         // If we have to resize the img again
         // MODIF: Se puede quedar en bucle?? yo diria que no pero puede ser mirar que se puede hacer.
-        if (filesize($target_dir.$dst_path) > 100000) {
+        if (filesize($target_dir . $dst_path) > 100000) {
             // The new source img will be the last output img
-            $newsrc_path = $target_dir.$dst_path;
+            $newsrc_path = $target_dir . $dst_path;
             // And the new output will be r(esized) + name
-            $newdst_path = "r".$dst_path;
-            $this->Img_Resize($newsrc_path, $target_dir, $newdst_path);
+            $newdst_path = "r" . $dst_path;
+            $success = $success && $this->Img_Resize($newsrc_path, $target_dir, $newdst_path);
             // Remove the last output
             unlink($newsrc_path);
             // Rename de new output
-            rename($target_dir.$newdst_path, $newsrc_path);
+            rename($target_dir . $newdst_path, $newsrc_path);
         }
+        return $success;
     }
 
 }
