@@ -267,9 +267,10 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
+        $imgtemp = $request->imgtemp;
 
         $idusu = $this->session->userdata('idusu');
-        $this->Lexicon->afegirParaula($idusu, $id, null);
+        $this->Lexicon->afegirParaula($idusu, $id, $imgtemp);
 
         $data = $this->Lexicon->recuperarFrase($idusu);
 

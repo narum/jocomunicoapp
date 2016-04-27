@@ -921,7 +921,7 @@ angular.module('controllers', [])
                         } else if ($scope.currentScanBlock === 2) {
                             $scope.currentScanBlock = 3;
                             if ($scope.isScanning === "prediction") {
-                                $scope.addToSentence($scope.arrayScannedCells[$scope.indexScannedCells].pictoid);
+                                $scope.addToSentence($scope.arrayScannedCells[$scope.indexScannedCells].pictoid, $scope.arrayScannedCells[$scope.indexScannedCells].imgCell);
                                 $scope.InitScan();
                             } else if ($scope.isScanning === "read") {
                                 $scope.generate();
@@ -1361,7 +1361,7 @@ angular.module('controllers', [])
                         $scope.playPictoAudio(cell.pictotext);
                     }
                     if (cell.ID_CPicto !== null) {
-                        $scope.addToSentence(cell.ID_CPicto);
+                        $scope.addToSentence(cell.ID_CPicto, cell.imgCell);
                     }
                     if (cell.ID_CFunction !== null) {
                         $scope.clickOnFunction(cell.ID_CFunction);
@@ -1439,7 +1439,7 @@ angular.module('controllers', [])
             /*
              * Add the selected pictogram to the sentence
              */
-            $scope.addToSentence = function (id) {
+            $scope.addToSentence = function (id, img) {
                 if ($scope.TimeMultiClic === 0)
                 {
 
@@ -1449,7 +1449,7 @@ angular.module('controllers', [])
                     }
 
                     var url = $scope.baseurl + "Board/addWord";
-                    var postdata = {id: id};
+                    var postdata = {id: id, imgtemp: img};
 
 
                     $http.post(url, postdata).success(function (response)
