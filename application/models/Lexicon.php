@@ -596,7 +596,7 @@ class Lexicon extends CI_Model {
      * @param type $idusu
      * @param type $idparaula
      * @param type $imgtemp Es fa servir amb la nova interfície, per si l'usuari ha modificat 
-     * la img per defecte del pictograma.
+     * la img per defecte del pictograma es guarda aquesta imatge.
      */
     function afegirParaula($idusu, $idparaula, $imgtemp)
     {
