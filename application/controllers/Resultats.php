@@ -53,8 +53,8 @@ class Resultats extends CI_Controller {
                                         
                     switch ($language) {
                         case "CA":
-                            if ($isfem) $concatveus = "-r 190 -v Laia ";
-                            else $concatveus = "-r 190 -v Laia ";
+                            if ($isfem) $concatveus = "-r 160 -v Laia ";
+                            else $concatveus = "-r 160 -v Laia ";
                             break;
                             
                         case "ES":
@@ -73,11 +73,71 @@ class Resultats extends CI_Controller {
                             break;
                     }
                     
-                    // $concatoutput = "-o mp3/filename.m4a ";
+                    $concatoutput = "-o mp3/filename.m4a --data-format=aach ";
                     
-                    $cmd='say '.$concatveus.'"'.$info['frasefinal'].'" > /dev/null 2>&1 &';
-                    // $cmd='say '.$concatveus.$concatoutput.'"'.$info['frasefinal'].'" > /dev/null 2>&1 &';
+                    // $cmd='say '.$concatveus.'"'.$info['frasefinal'].'" > /dev/null 2>&1 &';
+                    $cmd='say '.$concatveus.$concatoutput.'"'.$info['frasefinal'].'" > /dev/null 2>&1 &';
                     shell_exec($cmd);
+                    break;
+                    
+                case "Windows":
+                    
+                    // Recollim els objectes de les llibreries Speech de Microsoft que necessitem
+                    $msVoice = new COM('Speech.SpVoice');
+                    
+                    // es pot concatenar amb les veus SAPI
+                    // $msSAPIVoice = new COM('SAPI.SpVoice');
+                    
+                    $msFileStream = new COM('Speech.SpFileStream');
+                    $msAudioFormat = new COM('Speech.SpAudioFormat');
+                    
+                    // Path al fitxer on guardarem les veus
+                    $wavfile = 'C:\xampp\htdocs\mp3\prova7.mp3';
+                    
+                    $numvoices = $msVoice->GetVoices()->Count;
+                    $arrayVoices = array();
+                    $arrayVoicesDescr = array();
+
+                    // agafem les veus, la descripció la farem servir per buscar els idiomes
+                    // de cada una d'elles, idealment són les que s'haurien de llistar
+                    // a la interfície de l'usuari
+                    for ($i=0; $i<$numvoices; $i++) {
+                        $arrayVoices[$i] = $msVoice->GetVoices()->Item($i);
+                        $arrayVoicesDescr[$i] = $msVoice->GetVoices()->Item($i)->GetDescription;
+                    }
+                    // DEBUG
+                    // print_r($arrayVoicesDescr);
+                    
+                    // hem de triar la veu que vol l'usuari
+                    $msVoice->Voice = $arrayVoices[1];
+                    
+                    // passem la frase d'utf-8 a format de Windows perquè llegeixi bé
+                    // tots els caràcters
+                    $fraseconvertida = iconv("utf-8", "Windows-1252", $info['frasefinal']);
+                    // $msVoice->SetOutputToWaveFile(@"C:\xampp\htdocs\mp3\Color.wav");
+                    
+                    // guardarem el fitxer amb la menor qualitat possible, format 4
+                    $msAudioFormat->Type = 4;
+                    $msFileStream->Format = $msAudioFormat;
+                                        
+                    // obrim el fitxer on escriurem l'àudio en format CreateWrite
+                    $msFileStream->Open($wavfile, 3, 0);
+                    $msVoice->AudioOutputStream = $msFileStream;
+                    
+                    try {
+                        // es diu la frase de manera asíncrona
+                        $msVoice->Speak($fraseconvertida, 1);
+                        // esperem a que acabi, ja que si no talla la frase
+                        $msVoice->WaitUntilDone(-1);
+                        
+                        // tanquem el fitxer i alliberem la memòria dels objectes
+                        $msFileStream->Close();
+                        $msAudioFormat = null;
+                        $msFileStream = null;
+                        $msVoice = null;
+                        
+                    } catch (Exception $e) {}
+                   
                     break;
 
                 default:
@@ -179,14 +239,14 @@ class Resultats extends CI_Controller {
             $os_platform    =   "Unknown OS Platform";
 
             $os_array       =   array(
-                                    '/windows nt 10/i'     =>  'Windows 10',
-                                    '/windows nt 6.3/i'     =>  'Windows 8.1',
-                                    '/windows nt 6.2/i'     =>  'Windows 8',
-                                    '/windows nt 6.1/i'     =>  'Windows 7',
-                                    '/windows nt 6.0/i'     =>  'Windows Vista',
-                                    '/windows nt 5.2/i'     =>  'Windows Server 2003/XP x64',
-                                    '/windows nt 5.1/i'     =>  'Windows XP',
-                                    '/windows xp/i'         =>  'Windows XP',
+                                    '/windows nt 10/i'     =>  'Windows',
+                                    '/windows nt 6.3/i'     =>  'Windows',
+                                    '/windows nt 6.2/i'     =>  'Windows',
+                                    '/windows nt 6.1/i'     =>  'Windows',
+                                    '/windows nt 6.0/i'     =>  'Windows',
+                                    '/windows nt 5.2/i'     =>  'Windows',
+                                    '/windows nt 5.1/i'     =>  'Windows',
+                                    '/windows xp/i'         =>  'Windows',
                                     '/windows nt 5.0/i'     =>  'Windows 2000',
                                     '/windows me/i'         =>  'Windows ME',
                                     '/win98/i'              =>  'Windows 98',
