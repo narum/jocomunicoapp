@@ -466,17 +466,16 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     /*
      * Set this board the primry
      */
 
-    function setPrimaryBoard($id) {     
+    function setPrimaryBoard($id) {
         $this->db->where('ID_Board', $id);
         $this->db->update('Boards', array(
             'primaryBoard' => '1',
         ));
-
     }
 
     /*
@@ -681,13 +680,14 @@ class BoardInterface extends CI_Model {
 
         return $id;
     }
+
     function copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence) {
         $data = array(
             'ID_GBBoard' => $IDGboard,
             'Bname' => $name,
             'width' => $width,
             'height' => $height,
-            'autoReturn' => $autoReturn, 
+            'autoReturn' => $autoReturn,
             'autoReadSentence' => $autoReadSentence
         );
 
@@ -696,7 +696,48 @@ class BoardInterface extends CI_Model {
 
         return $id;
     }
-    function moveBoard($IDboard,$IDGboard, $name, $width, $height) {
+
+    function copyBoardTables($idSrc, $idDst) {
+
+        $this->db->or_where('ID_RBoard', $idSrc);
+        $this->db->join('cell', 'r_boardcell.ID_RCell = cell.ID_Cell', 'left');
+        $query = $this->db->get('cell');
+        echo "TACHAM";
+        foreach ($query->result() as $row) {
+            $data = array(
+                'isFixedInGroupBoards' => $row->isFixedInGroupBoards,
+                'imgCell' => $row->imgCell,
+                'ID_CPicto' => $row->ID_CPicto,
+                'ID_CSentence' => $row->D_CSentence,
+                'sentenceFolder' => $row->sentenceFolder,
+                'boardLink' => $row->boardLink,
+                'color' => $row->color,
+                'ID_CFunction' => $row->ID_CFunction,
+                'textInCell' => $row->textInCell,
+                'textInCellTextOnOff' => $row->textInCellTextOnOff,
+                'cellType' => $row->cellType,
+                'activeCell' => $row->activeCell
+            );
+            $this->db->insert('cell', $data);
+            $id = $this->db->insert_id();
+            echo $id;
+            $data2 = array(
+                'ID_RBoard' => $idDst,
+                'ID_RCell' => $id,
+                'posInBoard' => $row->posInBoard,
+                'isMenu' => $row->isMenu,
+                'customScanBlock1' => $row->customScanBlock1,
+                'customScanBlockText1' => $row->customScanBlockText1,
+                'customScanBlock2' => $row->customScanBlock2,
+                'customScanBlockText2' => $row->customScanBlockText2
+            );
+            $this->db->insert('r_boardcell', $data2);
+        }
+
+        return $id;
+    }
+
+    function moveBoard($IDboard, $IDGboard, $name, $width, $height) {
         $data = array(
             'ID_Board' => $IDboard,
             'ID_GBBoard' => $IDGboard,
@@ -705,7 +746,7 @@ class BoardInterface extends CI_Model {
             'height' => $height
         );
 
-        
+
         $this->db->where('ID_Board', $IDboard);
         $this->db->update('Boards', $data);
     }
@@ -805,12 +846,12 @@ class BoardInterface extends CI_Model {
         if ($query->num_rows() > 0) {
             $aux = $query->result();
             return $aux[0]->ID_SHistoric;
-        }
-        else return null;
+        } else
+            return null;
     }
-    
+
     function score($id, $score) {
-        $data = array('userScore'=>$score);
+        $data = array('userScore' => $score);
         $this->db->where('ID_SHistoric', $id);
         $this->db->update('S_Historic', $data);
     }

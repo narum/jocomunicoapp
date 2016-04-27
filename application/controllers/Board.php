@@ -746,6 +746,7 @@ class Board extends REST_Controller {
         $this->BoardInterface->initTrans();
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
+        $idSrc = $request->idsource;
         $IDGboard = $request->idGroupBoard;
         $name = $request->CreateBoardName;
         $width = $request->width;
@@ -753,8 +754,8 @@ class Board extends REST_Controller {
         $autoReturn = $request->autoreturn;
         $autoReadSentence = $request->autoread;
         
-        $idBoard = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height,$autoReturn, $autoReadSentence);
-        
+        $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height,$autoReturn, $autoReadSentence);
+        $idBoard = $this->BoardInterface->copyBoardTables($idSrc, $idDst);
         /*
          * This commented part can update the size of the board if it is implemented.
          * 
