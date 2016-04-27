@@ -425,7 +425,8 @@ class Board extends REST_Controller {
 
         switch ($type) {
             case "modif":
-                $this->BoardInterface->afegirModifNom($value);
+                $idusu = $this->session->userdata('idusu');
+                $this->Lexicon->afegirModifNom($idusu, $value);
                 break;
             case "tense":
                 $tense = $value;
@@ -599,8 +600,9 @@ class Board extends REST_Controller {
         $textInScanBlockText2 = $request->textInScanBlockText2;
         $cellType = $request->cellType;
         $color = $request->color;
+        $imgCell = $request->imgCell;
 
-        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType, $color);
+        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType, $color, $imgCell);
         $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
     }
 

@@ -990,7 +990,7 @@ angular.module('controllers', [])
 
                 var url = $scope.baseurl + "Board/loadCFG";
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
-                var postdata = {idusu: userConfig.ID_User, lusu: userConfig.languageabbr, lusuid: userConfig.cfgDefUser};
+                var postdata = {idusu: userConfig.ID_User, lusu: userConfig.languageabbr, lusuid: userConfig.cfgDefUser};//ID_ULlanguage
 
                 $http.post(url, postdata);
 
@@ -1200,7 +1200,7 @@ angular.module('controllers', [])
                     $scope.amplada = $scope.range(20)[response.col].valueOf();
                     $scope.autoreturn = (response.autoReturn === '1' ? true : false);
                     $scope.autoread = (response.autoRead === '1' ? true : false);
-                    
+
                 });
             };
             // Gets all the boards in the group and select the primary
@@ -1225,7 +1225,7 @@ angular.module('controllers', [])
 
                         });
             };
-            
+
             $scope.changeAutoReadSentence = function (autoread)
             {
                 var postdata = {id: $scope.idboard, value: autoread.valueOf()};
@@ -1824,9 +1824,10 @@ angular.module('controllers', [])
                 var idCell = response.info.ID_RCell;
                 $scope.removeFile = function () {
                     $scope.myFile = null;
-                    
+                    document.getElementById('file-input').value = '';
+
                 };
-                
+
                 $scope.uploadFile = function () {
                     var file = $scope.myFile;
                     console.log('file is ');
@@ -1837,11 +1838,13 @@ angular.module('controllers', [])
                     $http.post(uploadUrl, fd, {
                         headers: {'Content-Type': undefined}
                     })
-                            .success(function () {
+                            .success(function (response) {
+                                $scope.myFile = null;
+                                $scope.uploadedFile = response.nombre;
+                                $scope.savedata();
                             })
                             .catch(function (response) {
                                 var a = response.errorText;
-                                alert(response);
                             });
                 };
 
@@ -1969,8 +1972,15 @@ angular.module('controllers', [])
                 }
                 // When confirm is clicked, save all the provisionally data asigned to the cell
                 $scope.aceptar = function () {
+                    if ($scope.myFile != null) {
+                        $scope.uploadFile();
+                    } else {
+                        $scope.savedata();
+                    }
+                };
+                $scope.savedata = function () {
                     var url = $scope.baseurl + "Board/editCell";
-                    var postdata = {id: idCell, idPicto: $scope.idPictoEdit, idSentence: $scope.sentenceSelectedId, idSFolder: $scope.sFolderSelectedId, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1", numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1, numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2, cellType: $scope.cellType, color: $scope.colorSelected};
+                    var postdata = {id: idCell, idPicto: $scope.idPictoEdit, idSentence: $scope.sentenceSelectedId, idSFolder: $scope.sFolderSelectedId, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1", numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1, numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2, cellType: $scope.cellType, color: $scope.colorSelected, imgCell: ''};
                     // Check another time null values and config the data that will be save in the data base
                     if (!$scope.checkboxFuncType || ($scope.cellType === 'link')) {
                         postdata.idFunct = null;
@@ -2004,7 +2014,9 @@ angular.module('controllers', [])
                     if ($scope.cellType !== 'sfolder') {
                         postdata.idSFolder = null;
                     }
-
+                    if ($scope.uploadedFile != null) {
+                        postdata.imgCell = $scope.uploadedFile;
+                    }
 
                     $http.post(url, postdata).success(function ()
                     {
@@ -2060,6 +2072,13 @@ angular.module('controllers', [])
 
 
         .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog) {
+            $scope.$on('scrollbar.show', function () {
+                console.log('Scrollbar show');
+            });
+
+            $scope.$on('scrollbar.hide', function () {
+                console.log('Scrollbar hide');
+            });
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             $scope.range = function ($repeatnum)
             {
@@ -2155,7 +2174,7 @@ angular.module('controllers', [])
                 }, function (value) {
                 });
             };
-            
+
             $scope.changeGroupBoardName = function (nameboard, idgb)
             {
                 var postdata = {Name: nameboard, ID: idgb};
@@ -2163,9 +2182,14 @@ angular.module('controllers', [])
                 $http.post(URL, postdata).
                         success(function (response)
                         {
-                            
+
                         });
             };
+            $scope.$on('scrollbarPanel', function (ngRepeatFinishedEvent) {
+                alert("asd");
+                $scope.$broadcast('rebuild:me');
+            });
+
         })
 
 
@@ -2227,4 +2251,17 @@ angular.module('controllers', [])
                         });
                     }
                 };
-            }]);
+            }
+        ])
+        .directive('onFinishLoop', function ($timeout) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attr) {
+                    if (scope.$last === true) {
+                        $timeout(function () {
+                            scope.$emit(attr.onFinishLoop);
+                        });
+                    }
+                }
+            }
+        });

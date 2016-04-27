@@ -61,7 +61,31 @@
     left: 50%;
     transform: translate(-50%,-50%);
     border-radius: 10px;
-    position: relative;
+    position: absolute;
+}
+.buttonAddPhoto{
+    display: block;
+    max-width: 25%;
+    height: auto;
+    max-height: 25%;
+    width: auto;
+    top: 70%;
+    left: 70%;
+    transform: translate(-50%,-50%);
+    border-radius: 10px;
+    position: absolute;
+}
+.buttonRemovePhoto{
+    display: block;
+    max-width: 25%;
+    height: auto;
+    max-height: 25%;
+    width: auto;
+    top: 20%;
+    left: 70%;
+    transform: translate(-50%,-50%);
+    border-radius: 10px;
+    position: absolute;
 }
 .saveEdit{
     margin-left: 8%;
@@ -314,19 +338,19 @@
     top: 50%; 
 }
 .arrow-left {
-	content: " ";
-  display: block;
-  width: 0;
-  height: 0;
-  border-top: 17px solid transparent;
-  border-bottom: 17px solid transparent;
-  border-right: 10px solid whitesmoke;
-  position: absolute;
-  top: 50%;
-  margin-top: 17px;
-  margin-right: 1px;
-  right: 100%;
-  z-index: 3;
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 17px solid transparent;
+    border-bottom: 17px solid transparent;
+    border-right: 10px solid whitesmoke;
+    position: absolute;
+    top: 50%;
+    margin-top: 17px;
+    margin-right: 1px;
+    right: 100%;
+    z-index: 3;
 }
 .boxEditTrash{
     height: 85%;
@@ -351,17 +375,17 @@
     border-bottom-left-radius: 5px;
 }
 .backgroundFolderWhite{
-   background:  url('/img/folder.png') no-repeat;
-   background-size: 100% 100%;
-   padding: 10%;
-   height: 75%;
+    background:  url('/img/folder.png') no-repeat;
+    background-size: 100% 100%;
+    padding: 10%;
+    height: 75%;
 }
 .backgroundFolderBlue{
-   background:  url('/img/folderblue.png') no-repeat;
-   background-size: 100% 100%;
-   padding: 10px;
-   height: 100%;
-   width: 25%;
+    background:  url('/img/folderblue.png') no-repeat;
+    background-size: 100% 100%;
+    padding: 10px;
+    height: 100%;
+    width: 25%;
 }
 .folderContent{
     margin: 2vh 3%;

@@ -225,12 +225,13 @@
         <div class="col-xs-12 content4" >
             <div class="col-xs-7 fullheight" >
                 <div class="backgroundImgEdit"></div>
+                <img class="imgRounded imgEdit" width="100%" height="100%" src="{{baseurl}}img/pictos/{{imgPictoEdit}}"/>
                 <label for="file-input" class="fullheight fullwidth">
-                    <img class="imgRounded imgEdit" width="100%" height="100%" src="{{baseurl}}img/pictos/{{imgPictoEdit}}"/>
+                    <img class="imgRounded buttonAddPhoto" width="100%" height="100%" src="{{baseurl}}img/icons/add_photo.png"/>
                 </label>
                 <input type="file" id="file-input" file-model="myFile"/>
+                <img class="imgRounded buttonRemovePhoto" width="100%" height="100%" src="{{baseurl}}img/icons/remove_photo.png" ng-click="removeFile()"/>
                 <button ng-click="uploadFile()">upload me</button>
-                <button ng-click="removeFile()">remove me</button>
 
             </div>
             <div class="col-xs-4 saveEdit" >
