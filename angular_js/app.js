@@ -7,6 +7,7 @@ angular.module('app', [
 	'ui.bootstrap',
         'ngDialog',
         'ngAudio',
+        'ngAnimate',
         
 	//Modules
 	'controllers',

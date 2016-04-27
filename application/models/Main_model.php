@@ -46,6 +46,29 @@ class Main_model extends CI_Model {
 
         return $result;
     }
+    // Comprobación de un campo de una celda de una tabla
+    public function checkSingleData($table, $columnId, $id, $column, $data){
+
+        $this->db->select($column); // Seleccionar les columnes
+        $this->db->from($table);// Seleccionem la taula
+        $this->db->where($columnId, $id);// filtrem per columnes
+        $this->db->where($column, $data);// filtrem per columnes
+        $query = $this->db->get();// Fem la query i la guardem a la variable query
+        $array = $query->result_array();
+
+        if ($query->num_rows() == 0)
+        {
+            $result = "false";
+        }else if($array[0][$column]==$data){
+            $result = "true";
+        }else{
+            $result = "false";
+        }
+        $response = [
+                "data" => $result
+            ];
+        return $response;
+    }
     
     // Get data from table $table where content in column $column are like $data
     public function getData($table, $column, $data){
@@ -130,5 +153,35 @@ class Main_model extends CI_Model {
                 "userExist" => $userExist
             ];
         return $response;
+    }
+    //Get user configuratión
+    public function getConfig($ID_SU)
+    {
+        // Get user data and user config data
+        $this->db->from('SuperUser');
+        $this->db->join('Languages', 'SuperUser.cfgDefUser = Languages.ID_Language', 'right');
+        $this->db->join('User', 'SuperUser.ID_SU = User.ID_USU AND SuperUser.cfgDefUser = User.ID_ULanguage');
+        $this->db->where('ID_SU', $ID_SU);
+        $query1 = $this->db->get()->result_array();
+        $userConfig = $query1[0];
+
+        $this->db->from('User');
+        $this->db->join('Languages', 'User.ID_ULanguage = Languages.ID_Language', 'right');
+        $this->db->where('ID_USU', $ID_SU);
+        $query2 = $this->db->get()->result_array();
+
+        $this->db->from('User');
+        $this->db->join('Languages', 'User.cfgExpansionLanguage = Languages.ID_Language', 'right');
+        $this->db->where('ID_USU', $ID_SU);
+        $query3 = $this->db->get()->result_array();
+
+        // Guardamos los datos como objeto
+        $Array = [
+            'userConfig' => $userConfig,
+            'usersInterficieLanguages' => $query2,
+            'userExpanlanguages' => $query3
+        ];
+
+        return $Array;
     }
 }

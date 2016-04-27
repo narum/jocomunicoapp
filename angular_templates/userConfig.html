@@ -1,88 +1,492 @@
 <link rel="stylesheet" type="text/css" href="css/userConfig.css">
 <link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <div id="main" style="background-image: url('/img/FonsRegistre.png');background-size:100% 100%">
     <div id="header" class="container-fluid text-center row">
         <div id="menuText" class="col-xs-offset-2 col-xs-10">
-            <div class="col-xs-2" ng-click="editMenu();">
-                Edita panell
+            <div class="col-xs-2">
+                <button type="button" class="btn-Black" ng-click="editMenu();">Edita panell</button>
             </div>
             <div class="col-xs-1">
-                Grups
+                <button type="button" class="btn-Black" ng-click="editMenu();">Grups</button>
             </div>
-            <div class="col-xs-3" ng-click="userConfig();">
-                Configuracio d'usuari
+            <div class="col-xs-3">
+                <button type="button" class="btn-Black" ng-click="userConfig();">Configuracio d'usuari</button>
             </div>
-            <div class="col-xs-offset-1 col-xs-1" ng-click="home();">
-                Inici
+            <div class="col-xs-offset-1 col-xs-1">
+                <button type="button" class="icon-home btn-Black" ng-click="home();"><i class="textButons">&nbsp;Inici</i></button>
             </div>
-            <div class="col-xs-1"  ng-click="logOut();">
-                Log out
+            <div class="col-xs-1">
+                <button type="button" class="btn-Black" ng-click="logOut();">Log out</button>
             </div>
-            <div class="col-xs-1"  ng-click="IniciScan();">
-                Scan
+            <div class="col-xs-1">
+                <button type="button" class="btn-Black" ng-click="IniciScan();">Scan</button>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-2 col-xs-offset-5 loadingGif" ng-show="!viewActived"><img class="img-responsive" src="/img/srcWeb/Login/loading.gif"/></div>
         <div class="col-xs-8 col-xs-offset-2 scrollMenuUserConfig" id="scrollBar" ng-show="viewActived">
-            <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-12.png')">
-                <div class="col-xs-12">
-                    <div id="header" class="row">
-                        <div class="col-xs-10 headerTitle">{{content.titleBar1}}</div>
-                        <div class="col-xs-2 editButton">
-                            <button
-                                type="button"
-                                class="icon-globe btn-idioma"
-                                ng-click="changeContentLanguage()"> &nbsp;{{languageNameNext}}
-                            </button>
+            <form name="userDataForm">
+                <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-12.png')">
+                    <div class="col-xs-12">
+                        <div id="header" class="row">
+                            <div class="col-xs-9 headerTitle">{{content.titleBar1}}</div>
+                            <div class="col-xs-3">
+                                <button
+                                    type="reset"
+                                    class="icon-pencil pull-right editButton"
+                                    ng-disabled="loadingEdit"
+                                    ng-class="{editButtonActive: canEdit}"
+                                    ng-click="canEdit = !canEdit; deleteForm();"><i class="textButons">&nbsp; {{content.edit}}</i>
+                                </button>
+                                <img class="loadingGifSmBar pull-right" ng-show="loadingEdit" src="/img/icons/whiteLoading.gif"/>
+                            </div>
+                        </div>
+                        <div class="backgroundUserDataBox">
+                            <div class="row">
+                                <div id="DadesUsuariLeft" class="col-xs-6">
+                                    <div class="row verticalMarginTop">
+                                        <div class="col-xs-4">{{content.userName}}</div>
+                                        <div class="col-xs-8 verticalMarginBottom">
+                                            <input
+                                                class="inputDadesUsuari"
+                                                type="text"
+                                                ng-disabled="!canEdit"
+                                                ng-readonly="true"
+                                                uib-popover="{{content.popOverCantEdit}}"
+                                                popover-trigger="focus"
+                                                placeholder="{{userData.SUname}}"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4">{{content.name}}</div>
+                                        <div class="col-xs-8">
+                                            <input
+                                                type="text"
+                                                ng_model="userDataForm.realName"
+                                                ng-disabled="!canEdit"
+                                                placeholder="{{userData.realname}}"
+                                                ng-class="{
+                                                        inputDadesUsuari: !canEdit,
+                                                        inputDadesUsuariEditable: canEdit}"/>
+                                        </div>
+                                    </div>
+        <!--collapsed contnet-->
+                                    <div class="row">
+                                        <div class="col-xs-12" uib-collapse="!canEdit">
+                                            <div class="row verticalMarginTop">
+                                                <a class="configLink" type="button" data-toggle="modal" data-target="#PassModal">{{content.changePass}}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+        <!--END collapsed contnet-->
+        <!-- Modal -->
+                                            <div class="modal fade" id="PassModal" role="dialog">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="marginModalTop" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-12.png')">
+                                                        <div id="header" class="row">
+                                                            <div class="col-xs-10 headerTitle">{{content.changePassTitle}}</div>
+                                                        </div>
+                                                        <div class="row backgroundUserDataBox">
+                                                            <div id="DadesUsuariLeft" class="col-xs-7">
+                                                                <div class="row verticalMarginTop">{{content.oldPass}}
+                                                                    <img class="loadingGifSm pull-right" ng-show="loadingOldPass" src="/img/icons/Loading_icon.gif"/>
+                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="oldPassState=='false'" ng-src="/img/icons/infoRed.PNG" popover-placement="bottom-left" popover-trigger="focus"
+                                                                        ng-app=""uib-popover="{{content.popOldPass}}">
+                                                                </div>
+                                                            </div>
+                                                            <div id="DadesUsuariRight" class="col-xs-5">
+                                                                <div class="row verticalMarginTop">
+                                                                    <input
+                                                                        class="inputDadesUsuari"
+                                                                        type="password"
+                                                                        ng-disabled="(oldPassState=='true')"
+                                                                        ng-model="oldPass"
+                                                                        ng-change="checkOldPass();"
+                                                                        placeholder="{{content.oldPassPlaceholder}}"
+                                                                        ng-class="{
+                                                                            inputDadesUsuariError: oldPassState=='false',
+                                                                            inputDadesUsuariWarning: oldPassDirty,
+                                                                            inputDadesUsuariSucces: oldPassState=='true'}"/>
+                                                                </div>
+                                                            </div>
+                                                            <!--<div class="row" uib-collapse="!(oldPassState=='true')"><div class="col-xs-12"><hr/></div></div>-->
+                                                            <div class="row">
+                                                                <div id="DadesUsuariLeft" class="col-xs-7"  uib-collapse="!(oldPassState=='true')">
+                                                                    <div class="row">{{content.newPass1}}
+                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassLengthOk=='false'" ng-src="/img/icons/infoRed.PNG" popover-placement="top-left" popover-trigger="focus"
+                                                                        ng-app=""uib-popover="{{content.popNewPassMinLength}}">
+                                                                    </div>
+                                                                    <div class="row verticalMarginTop">{{content.newPass2}}
+                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassState=='false'" ng-src="/img/icons/infoRed.PNG" popover-placement="top-left" popover-trigger="focus"
+                                                                        ng-app=""uib-popover="{{content.popNewPassEqual}}">
+                                                                    </div>
+                                                                </div>
+                                                                <div id="DadesUsuariRight" class="col-xs-5"  uib-collapse="!(oldPassState=='true')">
+                                                                    <div class="row">
+                                                                        <input
+                                                                            class="inputDadesUsuari"
+                                                                            type="password"
+                                                                            ng-disabled="(newPassState=='true')"
+                                                                            ng-model="newPass1"
+                                                                            ng-change="minPassLength();"
+                                                                            placeholder="{{content.newPassPlaceholder}}"
+                                                                            ng-class="{
+                                                                                inputDadesUsuariError: newPassLengthOk=='false',
+                                                                                inputDadesUsuariSucces: newPassLengthOk=='true'}"/>
+                                                                    </div>
+                                                                    <div class="row verticalMarginTop">
+                                                                        <input
+                                                                            class="inputDadesUsuari"
+                                                                            type="password"
+                                                                            ng-disabled="!(newPassLengthOk=='true')"
+                                                                            ng-model="newPass2"
+                                                                            ng-change="comparePass();"
+                                                                            placeholder="{{content.newPassPlaceholder}}"
+                                                                            ng-class="{
+                                                                                inputDadesUsuariError: newPassState=='false',
+                                                                                inputDadesUsuariSucces: newPassState=='true'}"/>
+                                                                    </div>
+                                                                    <div class="row verticalMarginTop">
+                                                                        <button type="reset" class="btn-turquoise" data-dismiss="modal" ng-click="deleteFormPass();">{{content.cancel}}</button>
+                                                                        <button type="submit" class="btn-turquoise pull-right" data-dismiss="modal" ng-disabled="!(newPassState=='true')" ng-click="saveNewPass();">{{content.save}}</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row verticalMarginTop"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+        <!--END Modal -->
+                                </div>
+                                <div id="DadesUsuariRight" class="col-xs-6">
+                                    <div class="row verticalMarginTop">
+                                        <div class="col-xs-3">{{content.email}}</div>
+                                        <div class="col-xs-9 verticalMarginBottom">
+                                            <input
+                                                class="inputDadesUsuari"
+                                                type="text"
+                                                ng-disabled="!canEdit"
+                                                ng-readonly="true"
+                                                uib-popover="{{content.popOverCantEdit}}"
+                                                popover-trigger="focus"
+                                                placeholder="{{userData.email}}"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-3">{{content.lastName}}</div>
+                                        <div class="col-xs-9">
+                                            <input
+                                                type="text"
+                                                ng_model="userDataForm.surNames"
+                                                ng-disabled="!canEdit"
+                                                placeholder="{{userData.surnames}}"
+                                                ng-class="{
+                                                        inputDadesUsuari: !canEdit,
+                                                        inputDadesUsuariEditable: canEdit}"/>
+                                        </div>
+                                    </div>
+        <!--collapsed contnet-->
+                                    <div class="row">
+                                        <div class="col-xs-12" uib-collapse="!canEdit">
+                                            <div class="row verticalMarginTop">
+                                                <div class="verticalMarginTop "></div>
+                                                <button
+                                                    type="submit"
+                                                    class="btn-turquoise pull-right"
+                                                    ng-click="canEdit = !canEdit; saveUserData();">{{content.save}}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+        <!--END collapsed contnet-->
+                                </div>
+                            </div>
+    <!--                        <div class="row">
+                                <hr/>
+                                <div id="DadesUsuariLeft" class="col-xs-6">
+                                    <div class="row">
+                                        <div class="col-xs-8" ng-class="{textNegreta: canEdit}">Idioma de l'interficie:</div>
+                                        <div class="col-xs-4 FonsTurquesa verticalMarginBottom">Català</div>
+                                    </div>
+        collapsed contnet
+                                    <div class="row" uib-collapse="!canEdit">
+                                        <div class="col-xs-5 textPetit">Selecciona l'idioma:</div>
+                                        <div class="col-xs-7">
+                                            <div class="btn-group pull-right verticalMarginBottom" role="group" >
+                                                <button type="button" class="btn btn-group-turquoise" ng-repeat="language in interfaceLanguages">{{language.name}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row verticalMarginBottom" uib-collapse="!canEdit">
+                                        <button
+                                            type="button"
+                                            class="btn-turquoise pull-left"
+                                            ng-click="passRecovery();">Afegeix un idioma
+                                        </button>
+                                    </div>
+        END collapsed contnet
+                                </div>
+                                <div id="DadesUsuariRight" class="col-xs-6">
+                                    <div class="row">
+                                        <div class="col-xs-8" ng-class="{textNegreta: canEdit}">Idioma d'expansió:</div>
+                                        <div class="col-xs-4 FonsTurquesa verticalMarginBottom">Castellà</div>
+                                    </div>
+        collapsed contnet
+                                    <div class="row" uib-collapse="!canEdit">
+                                        <div class="col-xs-5 textPetit">Selecciona l'idioma:</div>
+                                        <div class="col-xs-7">
+                                            <div class="btn-group pull-right verticalMarginBottom" role="group" >
+                                                <button type="button" class="btn btn-group-turquoise" ng-repeat="language in interfaceLanguages">{{language.name}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row verticalMarginBottom" uib-collapse="!canEdit">
+                                        <button
+                                            type="button"
+                                            class="btn-turquoise pull-left"
+                                            ng-click="passRecovery();">Afegeix un idioma
+                                        </button>
+                                    </div>
+        END collapsed contnet
+                                </div>
+                            </div>-->
                         </div>
                     </div>
-                    <div class="row backgroundUserDataBox">
-                        <div id="DadesUsuariLeft" class="col-xs-6">
-                            <div class="row">
-                                <div class="col-xs-4">Nom d'usuari:</div>
-                                <div class="col-xs-8">
-                                    <input
-                                        class="inputDadesUsuari"
-                                        type="text"
-                                        ng-disabled="false"
-                                        ng-readonly="true"
-                                        uib-popover="Aquest camp no es pot modificar!"
-                                        popover-trigger="focus"
-                                        placeholder="Vierc5"/>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-4">Nom:</div>
-                                <div class="col-xs-8">
-                                    <input class="inputDadesUsuari" type="text" placeholder="Luis Eduardo"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="DadesUsuariRight" class="col-xs-6">
-                            <div class="row">
-                                <div class="col-xs-3">E-mail:</div>
-                                <div class="col-xs-9">
-                                    <input class="inputDadesUsuari" type="text" placeholder="luiseduardo@yahooo.com"/>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-3">Cognoms:</div>
-                                <div class="col-xs-9">
-                                    <input class="inputDadesUsuari" type="text" placeholder="Rodriguez Martinez"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div><br/>
+                </div><br/>
+            </form>
             <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-08.png')">
                 <div class="col-xs-12">
-                    <div id="header" class="row"></div>
-                    A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>
-                    A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>A<br/>
-                    
+                    <div id="header" class="row"><div class="col-xs-10 headerTitle">{{content.titleBar2}}</div></div>
+                    <div class="marginBoxCentral">
+                        <div class="row menuBar">
+                            <div class="row headerBar">
+                                <div class="col-xs-6">
+                                    <div class="col-xs-2 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-10 buttonBar" ng-click="contentBar1=!contentBar1">{{content.interfaceLanguage}}</div>
+                                </div>
+                                <div class="col-xs-2 FonsTaronja">{{lang}}</div>
+                                <div class="col-xs-2 col-xs-offset-2">
+                                    <input type="checkbox" id="switch2" class="switch" ng-model="SW2" ng-show="false"/>
+                                    <label for="switch2">&nbsp;</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="col-xs-12" uib-collapse="!contentBar1">
+                            <div class="row contentBar">
+                                <div class="col-xs-3">Selecciona l'idioma:</div>
+                                <div class="col-xs-5">
+                                    <div class="btn-group pull-right" role="group" >
+                                        <button type="button" class="btn btn-group-turquoise" ng-repeat="language in interfaceLanguages" ng-click="interfaceLanguage(language.id);" >{{language.name}}</button>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <button
+                                        type="button"
+                                        class="btn-turquoise pull-right"
+                                        ng-click="passRecovery();">Afegeix un idioma
+                                    </button>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                            
+                        <div class="row menuBar">
+                            <div class="row headerBar">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-1 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-11 buttonBar" ng-click="contentBar2=!contentBar2">Sistema d'expanssió {{SW2}}</div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div>
+                                        <input type="checkbox" id="switch2" class="switch" ng-model="SW2"/>
+                                        <label for="switch2">&nbsp;</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row contentBar" uib-collapse="!contentBar2">
+                                loaldkfjkansfkjnaslfkfnapjdda
+                            </div>
+                        </div>
+                            
+                        <div class="row menuBar">
+                            <div class="row headerBar">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-1 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-11 buttonBar" ng-click="contentBar3=!contentBar3">Idioma d'expanssió</div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div>
+                                        <input type="checkbox" id="switch3" class="switch" ng-checked="true"/>
+                                        <label for="switch3">&nbsp;</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row contentBar" uib-collapse="!contentBar3">
+                                loaldkfjkansfkjnaslfkfnapjdda
+                            </div>
+                        </div>
+                            
+                        <div class="row menuBar">
+                            <div class="row headerBar">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-1 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-11 buttonBar" ng-click="contentBar4=!contentBar4">Sistema de predicció</div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div>
+                                        <input type="checkbox" id="switch4" class="switch" ng-checked="false"/>
+                                        <label for="switch4">&nbsp;</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row contentBar" uib-collapse="!contentBar4">
+                                loaldkfjkansfkjnaslfkfnapjdda
+                            </div>
+                        </div>
+                            
+                        <div class="row menuBar">
+                            <div class="row headerBar">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-1 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-11 buttonBar" ng-click="contentBar5=!contentBar5">Menú</div>
+                                </div>
+                                <div class="col-xs-4">
+                                    
+                                </div>
+                            </div>
+                            <div class="row contentBar" uib-collapse="!contentBar5">
+                                loaldkfjkansfkjnaslfkfnapjdda
+                            </div>
+                        </div>
+                            
+                        <div class="row menuBar">
+                            <div class="row headerBar">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-1 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-11 buttonBar" ng-click="contentBar6=!contentBar6">Situació de la barra de lectura</div>
+                                </div>
+                                <div class="col-xs-4">
+                                  
+                                </div>
+                            </div>
+                            <div class="row contentBar" uib-collapse="!contentBar6">
+                                loaldkfjkansfkjnaslfkfnapjdda
+                            </div>
+                        </div>
+                            
+                        <div class="row menuBar">
+                            <div class="row headerBar">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-1 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-11 buttonBar" ng-click="contentBar7=!contentBar7">Sistema d'escaneig</div>
+                                </div>
+                                <div class="col-xs-4">
+                                    
+                                </div>
+                            </div>
+                            <div class="row contentBar" uib-collapse="!contentBar7">
+                                loaldkfjkansfkjnaslfkfnapjdda
+                            </div>
+                        </div>
+                        
+                        <div class="row menuBar">
+                            <div class="row headerBar">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-1 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-11 buttonBar" ng-click="contentBar8=!contentBar8">Fons negre sobre blanc</div>
+                                </div>
+                                <div class="col-xs-4">
+                                   
+                                </div>
+                            </div>
+                            <div class="row contentBar" uib-collapse="!contentBar8">
+                                loaldkfjkansfkjnaslfkfnapjdda
+                            </div>
+                        </div>
+                        
+                        <div class="row menuBar">
+                            <div class="row headerBar">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-1 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-11 buttonBar" ng-click="contentBar9=!contentBar9">Configuració del hardware</div>
+                                </div>
+                                <div class="col-xs-4">
+                                    
+                                </div>
+                            </div>
+                            <div class="row contentBar" uib-collapse="!contentBar9">
+                                loaldkfjkansfkjnaslfkfnapjdda
+                            </div>
+                        </div>
+                        
+                        <div class="row menuBar">
+                            <div class="row headerBar">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-1 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-11 buttonBar" ng-click="contentBar10=!contentBar10">La teva veu</div>
+                                </div>
+                                <div class="col-xs-4">
+                                    
+                                </div>
+                            </div>
+                            <div class="row contentBar" uib-collapse="!contentBar10">
+                                loaldkfjkansfkjnaslfkfnapjdda
+                            </div>
+                        </div>
+                        
+                        <div class="row menuBar">
+                            <div class="row headerBar">
+                                <div class="col-xs-8">
+                                    <div class="col-xs-1 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-11 buttonBar" ng-click="contentBar11=!contentBar11">Feedback voice</div>
+                                </div>
+                                <div class="col-xs-4">
+                                    
+                                </div>
+                            </div>
+                            <div class="row contentBar" uib-collapse="!contentBar11">
+                                loaldkfjkansfkjnaslfkfnapjdda
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
         </div>

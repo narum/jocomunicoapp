@@ -10,7 +10,7 @@ class Main extends REST_Controller {
         $this->load->model('main_model');
     }
         
-    public function index_get()
+    public function content_get()
     {
         //parametros que nos llegan del get
         $section = $this->query("section");
@@ -36,9 +36,52 @@ class Main extends REST_Controller {
             $response = [
                 "data" => $keyValue
             ];
-            
+
             //respuesta
             $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+        }
+    }
+    
+    public function getConfig_get()
+    {
+        $ID_SU = $this->query('IdSu');
+        $response = $this->main_model->getConfig($ID_SU);
+        //respuesta
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
+    
+    public function saveSUserNames_post()
+    {
+        $ID_SU = $this->query('IdSu');
+        $data = json_decode($this->query("data"), true); // convertimos el string json del post en array.
+
+        $response = $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
+        //respuesta
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
+    public function checkPassword_post()
+    {
+        $ID_SU = $this->query('IdSu');
+        $password = md5($this->query('pass'));
+        $response = $this->main_model->checkSingleData('SuperUser', 'ID_SU', $ID_SU, 'pswd', $password);
+        //respuesta
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
+    public function savePassword_post()
+    {
+        $ID_SU = $this->query('IdSu');
+        $oldPass = md5($this->query('oldPass'));
+        $newPass = md5($this->query('newPass'));
+        //Check old password
+        $passOk = $this->main_model->checkSingleData('SuperUser', 'ID_SU', $ID_SU, 'pswd', $oldPass);
+        if($passOk['data']=='true'){
+            $pass = ['pswd'=> $newPass];
+            //Save new password
+            $response = $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $pass);
+
+            $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+        }else{
+            $this->response("Passwords does not match", 400);
         }
     }
 }

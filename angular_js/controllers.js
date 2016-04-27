@@ -483,17 +483,126 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-.controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, txtContent, $location) {
-    $scope.viewActived=false;
+.controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, $q, txtContent, $location) {
     // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
     if (!$rootScope.isLogged) {
         $location.path('/login');
     }
+    // Declaración de variables
+    $scope.viewActived=false;
+    $scope.canEdit = false;
+    $scope.loadingEdit=false;
+    $scope.loadingOldPass=false;
+    var count1=0;
+    var count2=0;
     // Pedimos los textos para cargar la pagina
     txtContent("userConfig").then(function(results){
         $scope.content = results.data;
         $scope.viewActived=true;
     });
+    //Pedimos la configuración del usuario a la base de datos
+    $scope.getConfig = function(){
+        Resources.main.get({'IdSu':$rootScope.userid}, {'funct': "getConfig"}).$promise
+        .then(function (results) {
+            window.localStorage.removeItem('userData');
+            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+            $scope.userData = results.userConfig;
+            
+            console.log(results.userConfig);
+            console.log(results.usersInterficieLanguages);
+            console.log(results.userExpanlanguages);
+//            angular.forEach(results.users, function (value) {
+//                console.log(value.ID_ULanguage);
+//            });
+            
+            //Para cuando cambiamos el nombre o los apellidos.
+            delete $scope.userDataForm.realName;
+            delete $scope.userDataForm.surNames;
+            $scope.loadingEdit=false;
+        });
+    };
+    $scope.getConfig();
+
+    //Cambiar datos de usuario
+    $scope.saveUserData = function(){
+        if (($scope.userDataForm.realName==undefined||$scope.userDataForm.realName=='')&&($scope.userDataForm.surNames==undefined||$scope.userDataForm.surNames=='')){
+            //Campos vacios
+            return;
+        }
+        $scope.loadingEdit=true;
+        if (($scope.userDataForm.realName==undefined)||($scope.userDataForm.realName=='')){
+            $data = '{"surnames":"' + $scope.userDataForm.surNames + '"}';
+        }else if (($scope.userDataForm.surNames==undefined)||($scope.userDataForm.surNames=='')){
+            $data = '{"realname":"' + $scope.userDataForm.realName + '"}';
+        }else{
+            $data = '{"realname":"' + $scope.userDataForm.realName + '","surnames":"' + $scope.userDataForm.surNames + '"}';
+        }
+            Resources.main.save({'IdSu':$rootScope.userid, 'data':$data}, {'funct': "saveSUserNames"}).$promise
+                .then(function () {
+                    $scope.getConfig();
+                });
+    }
+    $scope.deleteForm = function(){
+        delete $scope.userDataForm.realName;
+        delete $scope.userDataForm.surNames;
+        $scope.deleteFormPass();
+    }
+    $scope.deleteFormPass = function(){
+        delete $scope.oldPass;
+        delete $scope.newPass1;
+        delete $scope.newPass2;
+        $scope.oldPassState='';
+        $scope.newPassLengthOk='';
+        $scope.newPassState='';
+    }
+    //Cambiar Contraseña
+    $scope.checkOldPass = function(){
+        count1++;
+        $scope.oldPassState='';
+        $scope.loadingOldPass=true;
+        $scope.oldPassDirty=true;
+        Resources.main.save({'IdSu':$rootScope.userid, 'pass':$scope.oldPass}, {'funct': "checkPassword"}).$promise
+            .then(function (results) {
+                count2++;
+                if(count1==count2){
+                    $scope.oldPassState=results.data;
+                    $scope.oldPassDirty=false;
+                    $scope.loadingOldPass=false;
+                }
+            });
+    }
+    //Check new password length
+    $scope.minPassLength = function(){
+        if ($scope.newPass1.length<4){
+            $scope.newPassLengthOk='false';
+        }else{
+            $scope.newPassLengthOk='true';
+        }
+    }
+    //Check if new passwords are equal.
+    $scope.comparePass = function(){
+        if($scope.newPass1 === $scope.newPass2){
+            $scope.newPassState='true';
+        }else{
+            $scope.newPassState='false';
+        }
+    }
+    //Save New password
+    $scope.saveNewPass = function(){
+        Resources.main.save({'IdSu':$rootScope.userid, 'oldPass':$scope.oldPass, 'newPass':$scope.newPass2}, {'funct': "savePassword"}).$promise
+            .then(function (results) {
+                $scope.deleteFormPass();
+            });
+    }
+
+    $scope.interfaceLanguages = [
+        {name: "Catala", id: "1"},
+        {name: "Castellano", id: "2"},
+        {name: "English", id: "3"}
+    ];
+    $scope.interfaceLanguage = function(idLanguage){
+        $scope.lang=idLanguage;
+    };
 
 })
 // Controlador del buscador de pictogramas
