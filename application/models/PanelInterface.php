@@ -63,4 +63,17 @@ class PanelInterface extends CI_Model {
 
         return $id;
     }
+    
+    /*
+     * Change the group board Name
+     */
+    
+    function changeGroupName($ID_GB, $name, $idusu) {
+        $this->db->where('ID_GBUser', $idusu);
+        $this->db->where('ID_GB', $ID_GB);
+        $this->db->update('GroupBoards', array(
+            'GBname' => $name,
+        ));
+    }
+    
 }
