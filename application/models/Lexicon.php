@@ -32,6 +32,7 @@ class Lexicon extends CI_Model {
             $ulanguage = $output[0]->cfgDefUser;
             $isfem = $output[0]->cfgIsFem;
             $autoerase = $output[0]->cfgAutoEraseSentenceBar;
+            $expansiononoff = $output[0]->cfgExpansionOnOff;
             
             // By default
             $uexplanguage = $ulanguage;
@@ -55,6 +56,7 @@ class Lexicon extends CI_Model {
             $this->session->set_userdata('uinterfacelangauge', $ulanguage);
             $this->session->set_userdata('isfem', $isfem);
             $this->session->set_userdata('cfgAutoEraseSentenceBar', $autoerase);
+            $this->session->set_userdata('cfgExpansionOnOff', $expansiononoff);
             
             $output2 = array();
             $this->db->where('ID_Language', $uexplanguage);

@@ -35,7 +35,11 @@ class Myexpander {
         $this->info['printparsepattern'] = "No pattern found.";
         $this->info['errorcode'] = false;
         $frasefinalnotexpanded = "";
-
+        
+        // agafem si el sistema d'expansió està o no activat
+        $expansionOff = false;
+        if ($CI->session->userdata('cfgExpansionOnOff') == '0') $expansionOff = true;
+        
         // GET SENTENCE
         $idusu = $CI->session->userdata('idusu');
         $this->paraulescopia = $CI->Lexicon->getLastSentence($idusu); // array amb les paraules
@@ -97,8 +101,9 @@ class Myexpander {
             $frasefinalnotexpanded .= $word->text." ";
         }
         
-        // si ha trobat un pictograma que no es pot expandir que surti del sistema d'expansió
-        if ($this->readwithoutexpansion) {
+        // si ha trobat un pictograma que no es pot expandir
+        // o el sistema d'expansió estava desactivat que surti del sistema d'expansió
+        if ($this->readwithoutexpansion || $expansionOff) {
             $this->info['frasefinal'] = $frasefinalnotexpanded;
             return;
         }
