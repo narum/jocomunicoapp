@@ -47,7 +47,6 @@ angular.module('controllers', [])
                 // Petición del login
                 loginResource.save(body).$promise  // POST (en angular 'save') del user y pass
                         .then(function (result) {				// respuesta ok!
-                            console.log(result.data.userConfig);
                             var token = result.data.token;
                             var userConfig = result.data.userConfig;
                             if (userConfig.UserValidated == '1') {
@@ -298,7 +297,7 @@ angular.module('controllers', [])
                     delete formData.confirmPassword;
                     delete formData.languageSelected;
                     //Ponemos como idioma por defecto el primero de la lista que ha seleccionado el usuario
-                    formData.cfgDefUser = $scope.languageList[0].ID_Language;
+                    var defLanguage = $scope.languageList[0].ID_Language;
                     //Ciframos el password en md5
                     $pass = formData.pswd;
                     formData.pswd = md5.createHash($pass);
@@ -312,7 +311,7 @@ angular.module('controllers', [])
                                 angular.forEach($scope.languageList, function (value) {
                                     var deferred = $q.defer();//PROMESAS
                                     //enviamos los usuarios con cada idioma.
-                                    Resources.register.save({'SUname': formData.SUname, 'ID_ULanguage': value.ID_Language}, {'funct': "saveUserData"}).$promise
+                                    Resources.register.save({'SUname': formData.SUname, 'ID_ULanguage': value.ID_Language, 'defLanguage': defLanguage}, {'funct': "saveUserData"}).$promise
                                             .then(function (results) {
                                                 deferred.resolve(results);//PROMESAS
                                                 $id_su = results.ID_SU;
@@ -493,32 +492,48 @@ angular.module('controllers', [])
     $scope.canEdit = false;
     $scope.loadingEdit=false;
     $scope.loadingOldPass=false;
+    $scope.interfaceLanguageBarEnable=true;
+    $scope.expansionLanguageEnable=true;
+    $scope.interfaceLanguages=[];
+    $scope.expansionLanguages=[];
     var count1=0;
     var count2=0;
-    // Pedimos los textos para cargar la pagina
-    txtContent("userConfig").then(function(results){
-        $scope.content = results.data;
-        $scope.viewActived=true;
-    });
     //Pedimos la configuración del usuario a la base de datos
     $scope.getConfig = function(){
-        Resources.main.get({'IdSu':$rootScope.userid}, {'funct': "getConfig"}).$promise
+        Resources.main.get({'IdSu':$rootScope.sUserId}, {'funct': "getConfig"}).$promise
         .then(function (results) {
             window.localStorage.removeItem('userData');
             window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
             $scope.userData = results.userConfig;
+            $scope.interfaceLanguage = results.languages[results.userConfig.ID_ULanguage-1].languageName;
+            $scope.expansionLanguage = results.languages[results.userConfig.cfgExpansionLanguage-1].languageName;
             
-            console.log(results.userConfig);
-            console.log(results.usersInterficieLanguages);
-            console.log(results.userExpanlanguages);
-//            angular.forEach(results.users, function (value) {
-//                console.log(value.ID_ULanguage);
-//            });
+            $scope.userData.cfgExpansionOnOff = ($scope.userData.cfgExpansionOnOff === "1");
             
-            //Para cuando cambiamos el nombre o los apellidos.
+            var count=results.users[0].ID_ULanguage;
+            var numberOfInterfaceLanguages=0;
+            angular.forEach(results.users, function (value) {
+                if (value.ID_ULanguage == count ){
+                    $scope.interfaceLanguages.push({name: results.languages[value.ID_ULanguage-1].languageName, user: value.ID_User});
+                    count++;
+                    numberOfInterfaceLanguages++;
+                }
+                $scope.expansionLanguages.push({idInterfaceLanguage: numberOfInterfaceLanguages,name: results.languages[value.cfgExpansionLanguage-1].languageName, user: value.ID_User});
+               
+            });
+            
+            //Delete name and surnames input text box
             delete $scope.userDataForm.realName;
             delete $scope.userDataForm.surNames;
             $scope.loadingEdit=false;
+            //Enable bar after change Language
+            $scope.interfaceLanguageBarEnable=true;
+            $scope.expansionLanguageEnable=true;
+            // Pedimos los textos para cargar la pagina
+            txtContent("userConfig").then(function(results){
+                $scope.content = results.data;
+                $scope.viewActived=true;
+            });
         });
     };
     $scope.getConfig();
@@ -537,7 +552,7 @@ angular.module('controllers', [])
         }else{
             $data = '{"realname":"' + $scope.userDataForm.realName + '","surnames":"' + $scope.userDataForm.surNames + '"}';
         }
-            Resources.main.save({'IdSu':$rootScope.userid, 'data':$data}, {'funct': "saveSUserNames"}).$promise
+            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':$data}, {'funct': "saveSUserNames"}).$promise
                 .then(function () {
                     $scope.getConfig();
                 });
@@ -561,7 +576,7 @@ angular.module('controllers', [])
         $scope.oldPassState='';
         $scope.loadingOldPass=true;
         $scope.oldPassDirty=true;
-        Resources.main.save({'IdSu':$rootScope.userid, 'pass':$scope.oldPass}, {'funct': "checkPassword"}).$promise
+        Resources.main.save({'IdSu':$rootScope.sUserId, 'pass':$scope.oldPass}, {'funct': "checkPassword"}).$promise
             .then(function (results) {
                 count2++;
                 if(count1==count2){
@@ -589,22 +604,37 @@ angular.module('controllers', [])
     }
     //Save New password
     $scope.saveNewPass = function(){
-        Resources.main.save({'IdSu':$rootScope.userid, 'oldPass':$scope.oldPass, 'newPass':$scope.newPass2}, {'funct': "savePassword"}).$promise
-            .then(function (results) {
+        Resources.main.save({'IdSu':$rootScope.sUserId, 'oldPass':$scope.oldPass, 'newPass':$scope.newPass2}, {'funct': "savePassword"}).$promise
+            .then(function () {
                 $scope.deleteFormPass();
             });
     }
-
-    $scope.interfaceLanguages = [
-        {name: "Catala", id: "1"},
-        {name: "Castellano", id: "2"},
-        {name: "English", id: "3"}
-    ];
-    $scope.interfaceLanguage = function(idLanguage){
-        $scope.lang=idLanguage;
+    //Change Language (user)
+    $scope.changeLanguage = function(idUser){
+        $scope.contentBar1=false;
+        $scope.contentBar2=false;
+        $scope.interfaceLanguageBarEnable=false;
+        $scope.expansionLanguageEnable=false;
+        Resources.main.save({'IdSu':$rootScope.sUserId, 'idU':idUser}, {'funct': "changeDefUser"}).$promise
+            .then(function () {
+                delete $scope.interfaceLanguages;
+                $scope.interfaceLanguages=[];
+                delete $scope.expansionLanguages;
+                $scope.expansionLanguages=[];
+                $scope.getConfig();
+            });
     };
+    
+    $scope.changeOnOff = function(bool, data){
+        if (bool){
+            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':data, 'value':'1'}, {'funct': "changeCfgBool"}).$promise
+        }else{
+            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':data, 'value':'0'}, {'funct': "changeCfgBool"}).$promise
+        }
+    }
 
-        })
+ })
+ 
 // Controlador del buscador de pictogramas
 
         .controller('MainCtrl', function ($rootScope, $scope, $location, Resources, AuthService, txtContent) {
@@ -696,7 +726,7 @@ angular.module('controllers', [])
             //MODIF: Coger de BBDD escaneo por intervalo o no en el if
             $scope.InitScan = function ()
             {
-                var userConfig = JSON.parse(localStorage.getItem('testObject'));
+                var userConfig = JSON.parse(localStorage.getItem('userData'));
                 // 0 custom, 1 rows, 2 columns
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
                 $scope.inScan = true;
@@ -777,7 +807,7 @@ angular.module('controllers', [])
             };
             $scope.playLongClick = function ()
             {
-                var userConfig = JSON.parse(localStorage.getItem('testObject'));
+                var userConfig = JSON.parse(localStorage.getItem('userData'));
                 if ($scope.inScan) {
                     if ($scope.longclick)
                     {
@@ -893,15 +923,15 @@ angular.module('controllers', [])
                                     $scope.InitScan();
                                 }
                             } else if ($scope.isScanning === "read") {
-                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteLastActive == 1) {
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive == 1) {
                                     $scope.isScanning = "deletelast";
-                                } else if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive == 1) {
+                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
                                     $scope.isScanning = "deleteall";
                                 } else {
                                     $scope.InitScan();
                                 }
                             } else if ($scope.isScanning === "deletelast") {
-                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive  == 1) {
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive  == 1) {
                                     $scope.isScanning = "deleteall";
                                 } else {
                                     $scope.InitScan();
@@ -1007,11 +1037,11 @@ angular.module('controllers', [])
                                 $scope.arrayScannedCells = $scope.recommenderArray;
                                 $scope.indexScannedCells = 0;
                             } else if ($scope.isScanning === "sentence") {
-                                if (JSON.parse(localStorage.getItem('testObject')).cfgMenuReadActive == 1) {
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuReadActive == 1) {
                                     $scope.isScanning = "read";
-                                } else if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteLastActive == 1) {
+                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive == 1) {
                                     $scope.isScanning = "deletelast";
-                                } else if (JSON.parse(localStorage.getItem('testObject')).cfgMenuDeleteAllActive == 1) {
+                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
                                     $scope.isScanning = "deleteall";
                                 } else {
                                     $scope.InitScan();
@@ -1088,8 +1118,8 @@ angular.module('controllers', [])
                 //-----------Iniciacion-----------
 
                 var url = $scope.baseurl + "Board/loadCFG";
-                var userConfig = JSON.parse(localStorage.getItem('testObject'));
-                var postdata = {idusu: userConfig.ID_User, lusu: userConfig.languageabbr, lusuid: userConfig.cfgDefUser};
+                var userConfig = JSON.parse(localStorage.getItem('userData'));
+                var postdata = {idusu: userConfig.ID_User, lusu: userConfig.languageabbr, lusuid: userConfig.ID_ULanguage};
 
                 $http.post(url, postdata);
                 //MODIF: mirar la board predeterminada 

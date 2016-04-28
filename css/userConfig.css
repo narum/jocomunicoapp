@@ -308,6 +308,9 @@ input.switch:checked ~ label:after
     background-color: white;
     padding: 1vh;
 }
+.disabledBar{
+    background-color: #e2e2e2;
+}
 .infoIconBox{
     text-align: center;
     padding-top: 0.6vh;
@@ -329,7 +332,9 @@ input.switch:checked ~ label:after
 .FonsTaronja{
     text-align: center;
     background-color: #fddfad;
-    color:gray;
+}
+.disabledText{
+    color: gray;
 }
 .loadingGifSmBar{
     height: 4vh;

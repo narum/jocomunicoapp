@@ -126,8 +126,16 @@ class Register extends REST_Controller {
     {
         $SUname = $this->query("SUname");
         $ID_ULanguage = $this->query("ID_ULanguage");
+        $defLanguage = $this->query("defLanguage");
 
         $response=$this->main_model->saveUser($SUname,$ID_ULanguage);
+
+        if($ID_ULanguage==$defLanguage){
+            $defUser = ['cfgDefUser'=> $response["ID_U"]];
+            //Save new password
+            $this->main_model->changeData('SuperUser', 'ID_SU', $response["ID_SU"], $defUser);
+            $response = $defUser;
+        }
 
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
 

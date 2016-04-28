@@ -262,7 +262,7 @@
                     <div id="header" class="row"><div class="col-xs-10 headerTitle">{{content.titleBar2}}</div></div>
                     <div class="marginBoxCentral">
                         <div class="row menuBar">
-                            <div class="row headerBar">
+                            <div class="row headerBar" ng-class="{disabledBar: !interfaceLanguageBarEnable}">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
                                         <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
@@ -270,10 +270,9 @@
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar1=!contentBar1">{{content.interfaceLanguage}}</div>
                                 </div>
-                                <div class="col-xs-2 FonsTaronja">{{lang}}</div>
-                                <div class="col-xs-2 col-xs-offset-2">
-                                    <input type="checkbox" id="switch2" class="switch" ng-model="SW2" ng-show="false"/>
-                                    <label for="switch2">&nbsp;</label>
+                                <div class="col-xs-2 FonsTaronja" ng-class="{disabledText: !interfaceLanguageBarEnable}">{{interfaceLanguage}}</div>
+                                <div class="col-xs-4">
+                                    <img class="loadingGifSm pull-right" ng-show="!interfaceLanguageBarEnable" src="/img/icons/Loading_icon.gif"/>
                                 </div>
                             </div>
                             <div class="row">
@@ -282,7 +281,46 @@
                                 <div class="col-xs-3">Selecciona l'idioma:</div>
                                 <div class="col-xs-5">
                                     <div class="btn-group pull-right" role="group" >
-                                        <button type="button" class="btn btn-group-turquoise" ng-repeat="language in interfaceLanguages" ng-click="interfaceLanguage(language.id);" >{{language.name}}</button>
+                                        <button type="button" class="btn btn-group-turquoise" ng-repeat="language in interfaceLanguages"
+                                                ng-click="changeLanguage(language.user);" >{{language.name}}</button>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <button
+                                        type="button"
+                                        class="btn-turquoise pull-right"
+                                        ng-click="passRecovery();">Afegeix un idioma
+                                    </button>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row menuBar">
+                            <div class="row headerBar" ng-class="{disabledBar: !expansionLanguageEnable||!userData.cfgExpansionOnOff}">
+                                <div class="col-xs-6">
+                                    <div class="col-xs-2 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
+                                    </div>
+                                    <div class="col-xs-10 buttonBar" ng-click="contentBar2=!contentBar2">{{content.interfaceLanguage}}</div>
+                                </div>
+                                <div class="col-xs-2 FonsTaronja" ng-class="{disabledText: !expansionLanguageEnable||!userData.cfgExpansionOnOff}">{{expansionLanguage}}</div>
+                                <div class="col-xs-2 col-xs-offset-2">
+                                    <input type="checkbox" id="switch1" class="switch" ng-model="userData.cfgExpansionOnOff" ng-click="changeOnOff(userData.cfgExpansionOnOff, 'ExpansionOnOff')" ng-show="false"/>
+                                    <label for="switch1">&nbsp;</label>
+                                    <img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="col-xs-12" uib-collapse="!contentBar2 || !userData.cfgExpansionOnOff">
+                            <div class="row contentBar">
+                                <div class="col-xs-3">Selecciona l'idioma:</div>
+                                <div class="col-xs-5">
+                                    <div class="btn-group pull-right" role="group" >
+                                        <button type="button" class="btn btn-group-turquoise" ng-repeat="language in expansionLanguages" ng-if="language.idInterfaceLanguage==userData.ID_ULanguage"
+                                                ng-click="changeLanguage(language.user);" >{{language.name}}</button>
                                     </div>
                                 </div>
                                 <div class="col-xs-4">
@@ -297,27 +335,9 @@
                             </div>
                         </div>
                             
-                        <div class="row menuBar">
-                            <div class="row headerBar">
-                                <div class="col-xs-8">
-                                    <div class="col-xs-1 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
-                                               uib-popover="En aquest apartat pots configurar l'idioma de la interficie de l'aplicació">
-                                    </div>
-                                    <div class="col-xs-11 buttonBar" ng-click="contentBar2=!contentBar2">Sistema d'expanssió {{SW2}}</div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div>
-                                        <input type="checkbox" id="switch2" class="switch" ng-model="SW2"/>
-                                        <label for="switch2">&nbsp;</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row contentBar" uib-collapse="!contentBar2">
-                                loaldkfjkansfkjnaslfkfnapjdda
-                            </div>
-                        </div>
-                            
+                        
+                        
+                                                    
                         <div class="row menuBar">
                             <div class="row headerBar">
                                 <div class="col-xs-8">

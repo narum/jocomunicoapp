@@ -113,10 +113,17 @@ class Main_model extends CI_Model {
 
         $saved = $this->db->insert('User', $data);
         
+        $this->db->select('ID_User'); // Seleccionar les columnes
+        $this->db->from('User');// Seleccionem la taula
+        $this->db->where('ID_USU', $id[0]);// filtrem per columnes
+        $ID_User = $this->db->get()->result_array();
 
-        //Retornamos el ID_USU
+        $idU = array_column($ID_User, 'ID_User');
+
+        //Retornamos el ID_SUser y el ID_User
         $dataSaved = [
             "ID_SU" => $id[0],
+            "ID_U" => $idU[0],
             "saved" => $saved,
         ];
 
@@ -159,27 +166,31 @@ class Main_model extends CI_Model {
     {
         // Get user data and user config data
         $this->db->from('SuperUser');
-        $this->db->join('Languages', 'SuperUser.cfgDefUser = Languages.ID_Language', 'right');
-        $this->db->join('User', 'SuperUser.ID_SU = User.ID_USU AND SuperUser.cfgDefUser = User.ID_ULanguage');
-        $this->db->where('ID_SU', $ID_SU);
+        $this->db->join('User', 'SuperUser.cfgDefUser = User.ID_User');
+        $this->db->join('Languages', 'SuperUser.cfgDefUser = User.ID_User AND User.ID_ULanguage = Languages.ID_Language', 'right');
+        $this->db->where('ID_USU', $ID_SU);
         $query1 = $this->db->get()->result_array();
         $userConfig = $query1[0];
 
+        //Get Users
+        $this->db->select('ID_User, ID_ULanguage, cfgExpansionLanguage');
         $this->db->from('User');
-        $this->db->join('Languages', 'User.ID_ULanguage = Languages.ID_Language', 'right');
         $this->db->where('ID_USU', $ID_SU);
+        $this->db->order_by('User.ID_ULanguage', 'asc');
         $query2 = $this->db->get()->result_array();
 
-        $this->db->from('User');
-        $this->db->join('Languages', 'User.cfgExpansionLanguage = Languages.ID_Language', 'right');
-        $this->db->where('ID_USU', $ID_SU);
+        //Get Languages
+        $this->db->select('ID_Language, languageName');
+        $this->db->from('Languages');
+        $this->db->order_by('Languages.ID_Language', 'asc');
         $query3 = $this->db->get()->result_array();
 
+        
         // Guardamos los datos como objeto
         $Array = [
             'userConfig' => $userConfig,
-            'usersInterficieLanguages' => $query2,
-            'userExpanlanguages' => $query3
+            'users' => $query2,
+            'languages' => $query3,
         ];
 
         return $Array;
