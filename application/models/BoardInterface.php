@@ -703,7 +703,6 @@ class BoardInterface extends CI_Model {
         $this->db->where('ID_RBoard', $idSrc);
         $this->db->join('r_boardcell', 'r_boardcell.ID_RCell = cell.ID_Cell', 'left');
         $query = $this->db->get('cell');
-        echo "num: ".$query->num_rows();
         foreach ($query->result() as $row) {
             $data = array(
                 'isFixedInGroupBoards' => $row->isFixedInGroupBoards,
@@ -733,23 +732,9 @@ class BoardInterface extends CI_Model {
             );
             $this->db->insert('r_boardcell', $data2);
         }
-        echo "SALTO!";
         return $id;
     }
 
-    function moveBoard($IDboard, $IDGboard, $name, $width, $height) {
-        $data = array(
-            'ID_Board' => $IDboard,
-            'ID_GBBoard' => $IDGboard,
-            'Bname' => $name,
-            'width' => $width,
-            'height' => $height
-        );
-
-
-        $this->db->where('ID_Board', $IDboard);
-        $this->db->update('Boards', $data);
-    }
 
     function removeBoard($IDboard) {
         $this->db->where('ID_Board', $IDboard);

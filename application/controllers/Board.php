@@ -720,31 +720,7 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    public function moveBoard_post() {
-        $this->BoardInterface->initTrans();
-        $postdata = file_get_contents("php://input");
-        $request = json_decode($postdata);
-        $id = $request->id;
-        $IDGboard = $request->idGroupBoard;
-        $name = $request->CreateBoardName;
-        $width = $request->width;
-        $height = $request->height;
-        
-        $idBoard = $this->BoardInterface->moveBoard($id, $IDGboard, $name, $width, $height);
-        
-        /*
-         * This commented part can update the size of the board if it is implemented.
-         * 
-        $this->addColumns($width, $height, $idBoard, $NEW_width);
-        $this->addRows($width, $height, $idBoard, $NEW_height);
-        */
-        
-        $this->BoardInterface->commitTrans();
-        $response = [
-            'idBoard' => $idBoard
-        ];
-        $this->response($response, REST_Controller::HTTP_OK);
-    }
+    
     public function copyBoard_post() {
         $this->BoardInterface->initTrans();
         $postdata = file_get_contents("php://input");
