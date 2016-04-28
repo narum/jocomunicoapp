@@ -273,18 +273,37 @@ class Board extends REST_Controller {
         $this->Lexicon->afegirParaula($idusu, $id, $imgtemp);
 
         $data = $this->Lexicon->recuperarFrase($idusu);
-
+        
+        $newdata = $this->inserty($data);
+        
         $response = [
-            'data' => $data
+            'data' => $newdata
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
 
     /*
+     * Insert a especial picto (concatenation picto) in the array.
+     */
+
+    public function inserty($data){
+        $newdata = array();
+        $j = 0;
+        for ($i=0; $i<count($data); $i++) {
+            $newdata[$j] = $data[$i];
+            if($data[$i]->coord){
+                $j++;
+                $newdata[$j] = (object) array('imgtemp' => null);
+            }
+            $j++;
+        }
+        return $newdata;
+    }
+    
+    /*
      * Remove the last word (pictogram) added in the S_Temp database table.
      * Then, get the entire sentence from this table.
      */
-
     public function deleteLastWord_post() {
 
         $idusu = $this->session->userdata('idusu');
@@ -294,8 +313,10 @@ class Board extends REST_Controller {
 
         $data = $this->Lexicon->recuperarFrase($idusu);
 
+        $newdata = $this->inserty($data); 
+        
         $response = [
-            'data' => $data
+            'data' => $newdata
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
@@ -310,9 +331,11 @@ class Board extends REST_Controller {
         $this->BoardInterface->removeSentence($idusu);
 
         $data = $this->Lexicon->recuperarFrase($idusu);
+        
+        $newdata = $this->inserty($data); 
 
         $response = [
-            'data' => $data
+            'data' => $newdata
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
@@ -444,13 +467,15 @@ class Board extends REST_Controller {
         }
         $idusu = $this->session->userdata('idusu');
         $data = $this->Lexicon->recuperarFrase($idusu);
+        
+        $newdata = $this->inserty($data); 
 
         $response = [
             'tense' => $tense,
             'tipusfrase' => $tipusfrase,
             'negativa' => $negativa,
             'control' => $control,
-            'data' => $data
+            'data' => $newdata
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }

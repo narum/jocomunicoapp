@@ -2,7 +2,7 @@
 <div class="row fullheight imgRounded" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
     <div ng-if='inScan && isScanning == "prediction" && currentScanBlock == 1 && isScanningCancel === false' class="scaneo" ng-style="{'margin': '0px'}"></div>
 
-    <div class="col-xs-12 containerPredCell" ng-repeat="picto in recommenderArray| limitTo: cfgPredBarNumPred" style="height: {{100 / 7}}%" >
+    <div class="col-xs-12 containerPredCell" ng-repeat="picto in recommenderArray| limitTo: cfgPredBarNumPred" style="height: {{100 / 10}}%" >
 
         <!--         If there is an custom image this line mades it draggable and dropable.
                      Only if we are in edit mode-->

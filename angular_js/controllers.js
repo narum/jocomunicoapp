@@ -599,6 +599,7 @@ angular.module('controllers', [])
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
                 $scope.inScan = true;
                 $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
+                //MODIF: usar cfgOneClicko algo asi
                 $scope.longclick = false;
                 function myTimer() {
                     $scope.NextBlockScan();
@@ -1844,19 +1845,47 @@ angular.module('controllers', [])
         })
 
         // Edit controller 
-        .controller('Edit', function ($scope, $http, ngDialog) {
+        .controller('Edit', function ($scope, $http, ngDialog, $timeout) {
             // Get the cell clicked (the cell in the cicked position in the current board
             var url = $scope.baseurl + "Board/getCell";
             var postdata = {pos: $scope.idEditCell, idboard: $scope.idboard};
 
             $http.post(url, postdata).success(function (response)
             {
+                $scope.previewImg = null;
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
                 $scope.removeFile = function () {
-                    $scope.myFile = null;
-                    document.getElementById('file-input').value = '';
+                    $scope.MoveBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
+                    ngDialog.openConfirm({
+                        template: $scope.baseurl + '/angular_templates/ConfirmRemoveImg.html',
+                        scope: $scope,
+                        className: 'ngdialog-theme-default dialogMoveBoard'
+                    }).then(function () {
+                        if ($scope.previewImg != null) {
+                            $scope.previewImg = null;
+                        } else {
+                            $scope.myFile = null;
+                            //MODIF: alert para asegurar que quiere borrarla?
+                            $scope.uploadedFile = null;
+                            document.getElementById('file-input').value = null;
+                        }
+                    }, function (value) {
+                    });
 
+
+                };
+
+                $scope.getPreviewImg = function (files) {
+                    $scope.myFile = document.getElementById(files).files[0];
+                    var r = new FileReader();
+                    r.onloadend = function (e) {
+                        $timeout(function () {
+                            $scope.previewImg = e.target.result;
+                        });
+
+                    };
+                    r.readAsDataURL($scope.myFile);
                 };
 
                 $scope.uploadFile = function () {
@@ -1871,6 +1900,7 @@ angular.module('controllers', [])
                     })
                             .success(function (response) {
                                 $scope.myFile = null;
+                                $scope.previewImg = null;
                                 $scope.uploadedFile = response.nombre;
                                 $scope.savedata();
                             })
@@ -1970,14 +2000,15 @@ angular.module('controllers', [])
                 //Initialize the dropdwon menus and all the variables that will be shown to the user
                 $scope.getFunctions();
                 $scope.getBoards();
-                $scope.colorSelected = response.info.color;
-                $scope.cellType = response.info.cellType;
+                $scope.colorSelected = $scope.Editinfo.color;
+                $scope.cellType = $scope.Editinfo.cellType;
                 $scope.numScanBlockText1 = $scope.range(20)[$scope.Editinfo.customScanBlock1];
                 $scope.textInScanBlockText1 = $scope.Editinfo.customScanBlockText1;
                 $scope.numScanBlockText2 = $scope.range(20)[$scope.Editinfo.customScanBlock2];
                 $scope.textInScanBlockText2 = $scope.Editinfo.customScanBlockText2;
-                $scope.idPictoEdit = response.info.ID_CPicto;
+                $scope.idPictoEdit = $scope.Editinfo.ID_CPicto;
                 $scope.imgPictoEdit = $scope.Editinfo.imgPicto;
+                $scope.uploadedFile = $scope.Editinfo.imgCell;
                 // Check the values in order to active checkbox and this stuff
                 if ($scope.Editinfo.textInCell !== null) {
                     $scope.checkboxTextInCell = true;
@@ -2045,9 +2076,8 @@ angular.module('controllers', [])
                     if ($scope.cellType !== 'sfolder') {
                         postdata.idSFolder = null;
                     }
-                    if ($scope.uploadedFile != null) {
-                        postdata.imgCell = $scope.uploadedFile;
-                    }
+                    postdata.imgCell = $scope.uploadedFile;
+
 
                     $http.post(url, postdata).success(function ()
                     {
@@ -2268,22 +2298,32 @@ angular.module('controllers', [])
                 };
             }
         ])
-        .directive('fileModel', ['$parse', function ($parse) {
-                return {
-                    restrict: 'A',
-                    link: function (scope, element, attrs) {
-                        var model = $parse(attrs.fileModel);
-                        var modelSetter = model.assign;
-
-                        element.bind('change', function () {
-                            scope.$apply(function () {
-                                modelSetter(scope, element[0].files[0]);
-                            });
-                        });
-                    }
-                };
-            }
-        ])
+//        .directive('fileModel', ['$parse', function ($parse) {
+//                return {
+//                    restrict: 'AEC',
+//                    scope: {previewImg:'='},
+//                    replace: true,
+//                    link: function (scope, element, attrs) {
+//                        var model = $parse(attrs.fileModel);
+//                        var modelSetter = model.assign;
+//
+//                        element.bind('change', function () {
+//                            scope.$apply(function () {
+//                                modelSetter(scope, element[0].files[0]);
+//                                var fr = new FileReader;
+//                                fr.onloadend = function () {
+//                                    scope.previewImg = fr.result;
+//                                    alert(scope.previewImg);
+//                                };
+//                                fr.readAsDataURL(element[0].files[0]);
+//                                scope.$apply();
+//
+//                            });
+//                        });
+//                    }
+//                };
+//            }
+//        ])
         .directive('onFinishLoop', function ($timeout) {
             return {
                 restrict: 'A',

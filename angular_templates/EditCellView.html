@@ -1,4 +1,4 @@
-<div class="topBar"><div class="editTitle">EditPanell</div><div class="cruz"></div></div>
+<div class="topBar"><div class="editTitle">{{previewImg}}</div><div class="cruz"></div></div>
 <div class="row fullheight dialogContent">
     <div class="col-xs-7 fullheight">
         <div class="row">
@@ -225,13 +225,15 @@
         <div class="col-xs-12 content4" >
             <div class="col-xs-7 fullheight" >
                 <div class="backgroundImgEdit"></div>
-                <img class="imgRounded imgEdit" width="100%" height="100%" src="{{baseurl}}img/pictos/{{imgPictoEdit}}"/>
+                <div class="borderImgEdit"></div>
+                <img ng-if="previewImg != null" class="imgRounded imgEdit" width="100%" height="100%" data-ng-src="{{previewImg}}"/>
+                <img ng-if="previewImg == null && uploadedFile !== null" class="imgRounded imgEdit" width="100%" height="100%" src="{{baseurl}}{{uploadedFile}}"/>
+                <img ng-if="previewImg == null && uploadedFile === null && imgPictoEdit !== null" class="imgRounded imgEdit" width="100%" height="100%" src="{{baseurl}}img/pictos/{{imgPictoEdit}}"/>
                 <label for="file-input" class="fullheight fullwidth">
                     <img class="imgRounded buttonAddPhoto" width="100%" height="100%" src="{{baseurl}}img/icons/add_photo.png"/>
                 </label>
-                <input type="file" id="file-input" file-model="myFile"/>
+                <input type="file" id="file-input" onchange="angular.element(this).scope().getPreviewImg('file-input')"/>
                 <img class="imgRounded buttonRemovePhoto" width="100%" height="100%" src="{{baseurl}}img/icons/remove_photo.png" ng-click="removeFile()"/>
-                <button ng-click="uploadFile()">upload me</button>
 
             </div>
             <div class="col-xs-4 saveEdit" >
