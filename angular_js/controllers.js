@@ -1804,6 +1804,7 @@ angular.module('controllers', [])
                             success(function (response)
                             {
                                 $scope.panels = response.panels;
+                                alert($scope.idboard);
                                 $scope.CopyBoardData = {CreateBoardName: $scope.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.altura, width: $scope.amplada, autoreturn: $scope.autoreturn, autoread: $scope.autoread};
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCopyBoard.html',

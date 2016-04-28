@@ -691,7 +691,7 @@ class BoardInterface extends CI_Model {
             'autoReturn' => $autoReturn,
             'autoReadSentence' => $autoReadSentence
         );
-
+        
         $this->db->insert('Boards', $data);
         $id = $this->db->insert_id();
 
@@ -700,10 +700,10 @@ class BoardInterface extends CI_Model {
 
     function copyBoardTables($idSrc, $idDst) {
 
-        $this->db->or_where('ID_RBoard', $idSrc);
-        $this->db->join('cell', 'r_boardcell.ID_RCell = cell.ID_Cell', 'left');
+        $this->db->where('ID_RBoard', $idSrc);
+        $this->db->join('r_boardcell', 'r_boardcell.ID_RCell = cell.ID_Cell', 'left');
         $query = $this->db->get('cell');
-        echo "TACHAM";
+        echo "num: ".$query->num_rows();
         foreach ($query->result() as $row) {
             $data = array(
                 'isFixedInGroupBoards' => $row->isFixedInGroupBoards,
@@ -721,7 +721,6 @@ class BoardInterface extends CI_Model {
             );
             $this->db->insert('cell', $data);
             $id = $this->db->insert_id();
-            echo $id;
             $data2 = array(
                 'ID_RBoard' => $idDst,
                 'ID_RCell' => $id,
@@ -734,7 +733,7 @@ class BoardInterface extends CI_Model {
             );
             $this->db->insert('r_boardcell', $data2);
         }
-
+        echo "SALTO!";
         return $id;
     }
 

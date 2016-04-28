@@ -749,7 +749,8 @@ class Board extends REST_Controller {
         $this->BoardInterface->initTrans();
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
-        $idSrc = $request->idsource;
+        $idSrc = $request->id;
+        echo $idSrc;
         $IDGboard = $request->idGroupBoard;
         $name = $request->CreateBoardName;
         $width = $request->width;
