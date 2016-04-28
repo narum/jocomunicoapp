@@ -50,7 +50,11 @@ class ImgUploader extends REST_Controller {
         if (!$success) {
             echo "Error";
         }
-        $this->response(REST_Controller::HTTP_OK);
+        $response = [
+            'nombre' => $target_dir . $target_file
+        ];
+
+        $this->response($response, REST_Controller::HTTP_OK);
     }
 
     function Rename_Img($string) {

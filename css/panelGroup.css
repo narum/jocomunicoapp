@@ -6,7 +6,7 @@
 }
 .panelGroupContainer{
     margin-left: 14vw;
-    height: 100%;
+    height: 70%;
 }
 .historicContainer{
     margin-left: 1vw;
@@ -14,8 +14,8 @@
 }
 .panelContainer{
     background-color: whitesmoke;
-    height: 15%;
-    width: 90%;
+    height: 25%;
+    width: 86%;
     margin: 1vh 2%;
     border-radius: 10px;
 }
@@ -52,31 +52,13 @@
     font-weight: bold;
 }
 .addPanel{
-    background-color: red; /*MODIF: png con esa forma*/
-    height: 15%;
-    width: 90%;
-    border-radius: 10px;
+    height: 25%;
+    width: 86%;
     margin: 1vh 2%;
 }
 
 .scrollMenuPanels{
     height: 80%;
     margin-top: 5vh;
-    overflow-y: scroll;
-}
-/*Scroll properties*/
-#scrollBarPanels::-webkit-scrollbar{
-    width:15px;
-    background-color:none;
-} 
-#scrollBarPanels::-webkit-scrollbar-thumb{
-    /*background:-webkit-linear-gradient(0, #92dbe1Turquesa 40%, #78b3b8Turquesa Oscuro 100%);*/
-    background-color: #92dbe1;/*Turquesa*/
-    border-radius:10px;
-}
-#scrollBarPanels::-webkit-scrollbar-thumb:hover{
-    background:#78b3b8; /*Turquesa Oscuro*/
-}
-#scrollBarPanels::-webkit-scrollbar-thumb:active{
-    background-color:#92dbe1;/*Turquesa*/
+    overflow: hidden;
 }

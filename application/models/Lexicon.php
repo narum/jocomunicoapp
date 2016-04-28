@@ -546,11 +546,12 @@ class Lexicon extends CI_Model {
      * @param type $idparaula
      * @param type $taula Aquest paràmetre ha quedat obsolet amb la nova BBDD.
      */
-    function afegirParaula($idusu, $idparaula, $taula)
+    function afegirParaula($idusu, $idparaula, $imgtemp)
     {
         $data = array(
             'pictoid' => $idparaula,
             'ID_RSTPUser' => $idusu,
+            'imgtemp' => $imgtemp
         );
         $this->db->insert('R_S_TempPictograms', $data);
     }

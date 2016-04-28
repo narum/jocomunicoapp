@@ -140,7 +140,7 @@ class BoardInterface extends CI_Model {
      * Change the values of a cell from cell database table
      */
 
-    function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto, $idSentence, $idSFolder, $cellType, $color) {
+    function updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunc, $idboard, $idpicto, $idSentence, $idSFolder, $cellType, $color, $imgCell) {
         $output = array();
 
         $data = array(
@@ -153,7 +153,8 @@ class BoardInterface extends CI_Model {
             'ID_CSentence' => $idSentence,
             'sentenceFolder' => $idSFolder,
             'cellType' => $cellType,
-            'color' => $color
+            'color' => $color,
+            'imgCell' => $imgCell
         );
         $this->db->where('ID_Cell', $id);
         $this->db->update('Cell', $data);

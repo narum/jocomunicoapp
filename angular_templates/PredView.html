@@ -3,7 +3,6 @@
     <div ng-if='inScan && isScanning == "prediction" && currentScanBlock == 1 && isScanningCancel === false' class="scaneo" ng-style="{'margin': '0px'}"></div>
 
     <div class="col-xs-12 containerPredCell" ng-repeat="picto in recommenderArray| limitTo: cfgPredBarNumPred" style="height: {{100 / 7}}%" >
-        <!--MODIF: depende de como me lo pse jose. Estaría bien tener la posicion, lo solucionaria todo-->
 
         <!--         If there is an custom image this line mades it draggable and dropable.
                      Only if we are in edit mode-->

@@ -46,7 +46,7 @@
                              Only if we are in edit mode-->
                         <div ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell">
                             <div ng-style="picto.pictotext !== null || picto.textInCell !== null  ? {'height':'70%'}:{'height':'100%'}">
-                                <img class="imgResponsive" src="{{baseurl}}img{{picto.imgCell}}"/>
+                                <img class="imgResponsive" src="{{baseurl}}{{picto.imgCell}}"/>
                             </div>
 
                         </div>

@@ -18,6 +18,9 @@
 .fullheight{
     height:100%;
 }
+.fullwidth{
+    width: 100%;
+}
 
 #main{
     height:100vh;

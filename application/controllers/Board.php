@@ -267,9 +267,10 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
+        $imgtemp = $request->imgtemp;
 
         $idusu = $this->session->userdata('idusu');
-        $this->Lexicon->afegirParaula($idusu, $id, null);
+        $this->Lexicon->afegirParaula($idusu, $id, $imgtemp);
 
         $data = $this->Lexicon->recuperarFrase($idusu);
 
@@ -425,7 +426,8 @@ class Board extends REST_Controller {
 
         switch ($type) {
             case "modif":
-                $this->BoardInterface->afegirModifNom($value);
+                $idusu = $this->session->userdata('idusu');
+                $this->Lexicon->afegirModifNom($idusu, $value);
                 break;
             case "tense":
                 $tense = $value;
@@ -599,8 +601,9 @@ class Board extends REST_Controller {
         $textInScanBlockText2 = $request->textInScanBlockText2;
         $cellType = $request->cellType;
         $color = $request->color;
+        $imgCell = $request->imgCell;
 
-        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType, $color);
+        $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType, $color, $imgCell);
         $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
     }
 
