@@ -890,6 +890,7 @@ class Lexicon extends CI_Model {
                     'isplural' => $row->isplural,
                     'isfem' => $row->isfem,
                     'coordinated' => $row->coordinated,
+                    'imgtemp' => $row->imgtemp,
                 );
                 $this->db->insert('R_S_HistoricPictograms', $data2);
             }
@@ -971,6 +972,7 @@ class Lexicon extends CI_Model {
                     'isplural' => $row->isplural,
                     'isfem' => $row->isfem,
                     'coordinated' => $row->coordinated,
+                    'imgtemp' => $row->imgtemp,
                 );
                 $this->db->insert('R_S_HistoricPictograms', $data2);
             }

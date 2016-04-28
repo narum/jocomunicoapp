@@ -73,9 +73,9 @@ CREATE TABLE User (
 	ID_USU INT,
 	ID_ULanguage INT,
 	ID_UOrg INT,
-	cfgOutputVoice VARCHAR(150),
+	cfgOutputVoice VARCHAR(300),
 	cfgFeedbackVoiceOnOff ENUM('0', '1') DEFAULT '0',
-	cfgFeedbackVoice VARCHAR(150),	
+	cfgFeedbackVoice VARCHAR(300),	
 	cfgExpansionLanguage INT DEFAULT '1',
 	INDEX USuperUser (ID_USU),
 	FOREIGN KEY (ID_USU) REFERENCES SuperUser (ID_SU) ON DELETE SET NULL,
@@ -143,7 +143,8 @@ CREATE TABLE Function (
 	functNameCA VARCHAR(100),
 	functNameES VARCHAR(100),
 	functDescrCA TEXT NULL,
-	functDescrES TEXT NULL
+	functDescrES TEXT NULL,
+	imgFunct VARCHAR(300) NULL
 ) ENGINE=INNODB;
 
 
@@ -222,6 +223,7 @@ CREATE TABLE R_S_HistoricPictograms (
 	isfem ENUM('0', '1') DEFAULT '0',
 	coordinated ENUM('0', '1') DEFAULT '0',
 	ID_RSHPUser INT,
+	imgtemp VARCHAR(300) NULL,
 	INDEX RSHPSentence (ID_RSHPSentence),
 	FOREIGN KEY (ID_RSHPSentence) REFERENCES S_Historic (ID_SHistoric) ON DELETE CASCADE,
 	INDEX PictoID (pictoid),
@@ -283,6 +285,7 @@ CREATE TABLE R_S_SentencePictograms (
 	isfem ENUM('0', '1') DEFAULT '0',
 	coordinated ENUM('0', '1') DEFAULT '0',
 	ID_RSSPUser INT,
+	imgtemp VARCHAR(300) NULL,
 	INDEX RSSPSentence (ID_RSSPUser),
 	FOREIGN KEY (ID_RSSPUser) REFERENCES S_Sentence (ID_SSentence) ON DELETE CASCADE,
 	INDEX PictoID (pictoid),

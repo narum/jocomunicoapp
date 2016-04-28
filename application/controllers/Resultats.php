@@ -53,8 +53,8 @@ class Resultats extends CI_Controller {
                                         
                     switch ($language) {
                         case "CA":
-                            if ($isfem) $concatveus = "-r 160 -v Laia ";
-                            else $concatveus = "-r 160 -v Laia ";
+                            if ($isfem) $concatveus = "-r 160 -v 'Laia Infovox iVox HQ' ";
+                            else $concatveus = "-r 160 -v 'Laia Infovox iVox HQ' ";
                             break;
                             
                         case "ES":
@@ -72,6 +72,15 @@ class Resultats extends CI_Controller {
                             else $concatveus = "-r 180 -v Jorge ";
                             break;
                     }
+                    
+                    // Llistat de veus
+                    $cmdresponse = shell_exec("say --voice=?");
+                    
+                    // Partim pels espais d'abans de la definició de l'idioma de format xX_xX
+                    // fins al salt de línia
+                    $veus = preg_split( '/[\s]+..[_-][a-zA-Z]+[\s]+#[^\r\n]*(\r\n|\r|\n)/', $cmdresponse);
+                    // eliminem l'últim element que és buit
+                    array_pop($veus);
                     
                     $concatoutput = "-o mp3/filename.m4a --data-format=aach ";
                     
@@ -276,10 +285,12 @@ class Resultats extends CI_Controller {
         
         function is_connected()
         {
-            $connected = @fsockopen("www.example.com", 80); //website, port  (try 80 or 443)
-            if ($connected){
+            $connected1 = @fsockopen("www.example.com", 80); //website, port  (try 80 or 443)
+            $connected2 = @fsockopen("www.google.com", 80); //website, port  (try 80 or 443)
+            if ($connected1 || $connected2){
                 $is_conn = true; //action when connected
-                fclose($connected);
+                fclose($connected1);
+                fclose($connected2);
             }else{
                 $is_conn = false; //action in connection failure
             }

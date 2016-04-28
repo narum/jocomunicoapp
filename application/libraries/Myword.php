@@ -14,6 +14,7 @@ class Myword {
                             // Ex: Per noms (lloc, event)...
     var $text; // Paraula en text
     var $img; // Enllaç al pictograma
+    var $imgtemp; // Enllaç per si han canviat la imatge del pictograma a la interfície
     var $supportsExpansion; // Si la paraula pot ser utilitzada dins el sistema d'expansió
     var $defaultverb = 0; // Pels noms i pels adjectius, el verb per defecte si no hi ha més paraules a la frase
     var $subjdef = false; // Pels adjectius, el subjecte per defecte si no hi ha més paraules a la frase
@@ -54,6 +55,7 @@ class Myword {
         else $this->identry = $paraula->ID_RSHPSentence;
         $this->tipus = $paraula->pictoType;
         $this->img = $paraula->imgPicto;
+        $this->imgtemp = $paraula->imgtemp;
         $this->supportsExpansion = $paraula->supportsExpansion;
         
         if ($paraula->isplural == '1') $this->plural = true;
