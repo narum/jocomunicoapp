@@ -1460,6 +1460,7 @@ angular.module('controllers', [])
                     });
 
                     $scope.autoReturn();
+                    $scope.autoRead();
                 }
                 if ($scope.cfgTimeMultiClic === 1)
                 {
@@ -1482,6 +1483,19 @@ angular.module('controllers', [])
                     }
                 });
             };
+            $scope.autoRead = function () {
+                var url = $scope.baseurl + "Board/autoReadSentence";
+                var postdata = {id: $scope.idboard};
+
+                $http.post(url, postdata).success(function (response)
+                {
+                    alert("comprueba");
+                    if (response.read == '1') {
+                        alert("generar");
+                        $scope.generate();
+                    }
+                });
+            };
             /*
              * If you click in a function (not a pictogram) this controller carry you
              * to the specific function
@@ -1492,7 +1506,6 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata).success(function (response)
                 {
-                    //MODIF: Falta añadir picto especial
                     $scope.dataTemp = response.data;
                     $scope.tense = response.tense;
                     $scope.tipusfrase = response.tipusfrase;
@@ -1510,6 +1523,7 @@ angular.module('controllers', [])
                         });
                     }
                     $scope.autoReturn();
+                    $scope.autoRead();
                 });
             };
             /*
@@ -1580,13 +1594,6 @@ angular.module('controllers', [])
                 var postdata = {score: point};
                 $http.post(url, postdata).success(function (response)
                 {
-                    console.log(response);
-                    //$scope.dataTemp = response.data;
-                    $scope.info = response.info;
-                    //$scope.data = response.data;
-                    $scope.playSentenceAudio();
-                    $scope.puntuar();
-
 
                 });
                 $scope.puntuando = false;

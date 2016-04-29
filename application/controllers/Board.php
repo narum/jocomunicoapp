@@ -682,6 +682,8 @@ class Board extends REST_Controller {
         $this->response($response, REST_Controller::HTTP_OK);
     }
     
+    
+    
     public function autoReadSentence_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -690,15 +692,8 @@ class Board extends REST_Controller {
 
         $board = $this->BoardInterface->getBoardStruct($id);
 
-        $idPrimaryBoard = null;
-
-        if ($board[0]->autoReadSentence === "1") {
-            $primaryBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
-            $idPrimaryBoard = $primaryBoard[0]->ID_Board;
-        }
-
         $response = [
-            'idPrimaryBoard' => $idPrimaryBoard
+            'read' => $board[0]->autoReadSentence
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
