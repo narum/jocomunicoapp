@@ -746,8 +746,13 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $idSrc = $request->id;
-        echo $idSrc;
+        $srcGroupBoard = $request->srcGroupBoard;
         $IDGboard = $request->idGroupBoard;
+        $sameGroupBoard = 0;
+        if ($srcGroupBoard == $IDGboard ){
+            $sameGroupBoard = 1;
+        }
+        echo $sameGroupBoard." : VALIDATION! -> ".$srcGroupBoard." = ".$IDGboard;
         $name = $request->CreateBoardName;
         $width = $request->width;
         $height = $request->height;
@@ -755,7 +760,7 @@ class Board extends REST_Controller {
         $autoReadSentence = $request->autoread;
         
         $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height,$autoReturn, $autoReadSentence);
-        $idBoard = $this->BoardInterface->copyBoardTables($idSrc, $idDst);
+        $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
         /*
          * This commented part can update the size of the board if it is implemented.
          * 
@@ -765,7 +770,7 @@ class Board extends REST_Controller {
         
         $this->BoardInterface->commitTrans();
         $response = [
-            'idBoard' => $idBoard
+            'idBoard' => $idDst
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }

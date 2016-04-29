@@ -1812,7 +1812,7 @@ angular.module('controllers', [])
                             success(function (response)
                             {
                                 $scope.panels = response.panels;
-                                $scope.CopyBoardData = {CreateBoardName: $scope.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.altura, width: $scope.amplada, autoreturn: $scope.autoreturn, autoread: $scope.autoread};
+                                $scope.CopyBoardData = {CreateBoardName: $scope.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.altura, width: $scope.amplada, autoreturn: $scope.autoreturn, autoread: $scope.autoread, srcGroupBoard: $scope.idGroupBoard.toString()};
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCopyBoard.html',
                                     scope: $scope,
@@ -1820,7 +1820,7 @@ angular.module('controllers', [])
                                 }).then(function () {
 
                                     URL = $scope.baseurl + "Board/copyBoard";
-                                    $scope.CopyBoardData.idGroupBoard = parseInt($scope.CopyBoardData.idGroupBoard.ID_GB);
+                                    $scope.CopyBoardData.idGroupBoard = parseInt($scope.CopyBoardData.idGroupBoard.ID_GB.toString());
 
                                     $http.post(URL, $scope.CopyBoardData).success(function (response)
                                     {
