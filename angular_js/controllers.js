@@ -1819,7 +1819,6 @@ angular.module('controllers', [])
                                     className: 'ngdialog-theme-default dialogCopyBoard'
                                 }).then(function () {
 
-                                    alert($scope.CopyBoardData.CreateBoardName + $scope.CopyBoardData.idGroupBoard.ID_GB);
                                     URL = $scope.baseurl + "Board/copyBoard";
                                     $scope.CopyBoardData.idGroupBoard = parseInt($scope.CopyBoardData.idGroupBoard.ID_GB);
 
@@ -1836,18 +1835,6 @@ angular.module('controllers', [])
 
                 });
 
-            };
-            $scope.moveBoard = function () {
-                //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia
-                $scope.MoveBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
-                ngDialog.openConfirm({
-                    template: $scope.baseurl + '/angular_templates/ConfirmMoveBoard.html',
-                    scope: $scope,
-                    className: 'ngdialog-theme-default dialogMoveBoard'
-                }).then(function () {
-
-                }, function (value) {
-                });
             };
         })
 
