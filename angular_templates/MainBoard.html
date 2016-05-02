@@ -23,6 +23,7 @@
 
             <div class="container-fluid Defmargin" style="height:{{boardHeight}}%">
                 <div class="row fullheight imgRounded Defpadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
+                    <div ng-bind="picto"></div>
                     <div ng-if="inScan && isScanningCancel === true" class="returnScan"></div>
                     <div class="col-xs-12 containerCell" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}" ng-click="!inScan?clickOnCell(picto):null" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
                         <svg ng-if="picto.boardLink != null" class="sfolder" version="1.1" id="Capa_1" preserveAspectRatio="none" viewBox="0 0 1020 1020" enable-background="new 0 0 1020 1020" xml:space="preserve">
@@ -39,20 +40,29 @@
                         MODIF: Añadir variable if inScan-->
 
                         <div ng-if="isScanned(picto);" class="scaneo"></div>
-                        <div ng-if="picto.textInCell === null" class="textCell">{{picto.pictotext}}</div>
+
                         <div ng-if="picto.textInCell !== null" class="textCell">{{picto.textInCell}}</div>
+                        <div ng-if="picto.textInCell === null && picto.pictotext !== null" class="textCell">{{picto.pictotext}}</div>
+                        <div ng-if="picto.textInCell === null && picto.pictotext === null" class="textCell">{{picto.textFunction}}</div>
+
+
                         <img ng-if="picto.ID_CFunction !== null" src="{{baseurl}}img/srcWeb/functions.png" class="function"/>
-                        <!-- If there is an custom image this line mades it draggable and dropable.
-                             Only if we are in edit mode-->
+
                         <div ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell">
+                            <!--MODIF: deberia ser con texto on/off???-->
                             <div ng-style="picto.pictotext !== null || picto.textInCell !== null  ? {'height':'70%'}:{'height':'100%'}">
                                 <img class="imgResponsive" src="{{baseurl}}{{picto.imgCell}}"/>
                             </div>
 
                         </div>
-                        <!-- If there is an image this line mades it draggable and dropable.
-                             Only if we are in edit mode-->
+
                         <div ng-if="picto.imgPicto && !picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell">  
+                            <div ng-style="picto.pictotext !== null || picto.textInCell !== null ? {'height':'70%'}:{'height':'100%'}">
+                                <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
+                            </div>
+                        </div>
+
+                        <div ng-if="picto.imgFunct && !picto.imgPicto && !picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell">  
                             <div ng-style="picto.pictotext !== null || picto.textInCell !== null ? {'height':'70%'}:{'height':'100%'}">
                                 <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
                             </div>
@@ -85,7 +95,6 @@
                 </div>
             </div>
         </div>
-
         <div ng-if="inEdit" class="col-sm-12" id="searchFolder" ng-include="baseurl + '/angular_templates/EditFolder.html'" style="height: {{searchFolderHeight}}%">
         </div>
         <!-- MODIF: Poner control si no scan-->
@@ -97,7 +106,7 @@
             <img src="/img/srcWeb/feliz_1.png" class="goodPhrase" ng-click="feedback(1)" ng-mouseenter="cfgTimeOver?TimeoutOverClick(3,'Good'):null" ng-mouseleave="cfgTimeOver?CancelTimeoutOverClick():null" ng-class="{'scaneo': isScanning == 'goodPhrase'}"/>
         </div>
 
-       <div class="col-xs-6" style="height:100%">
+        <div class="col-xs-6" style="height:100%">
             <img src="/img/srcWeb/triste_1.png" class="goodPhrase" ng-click="feedback(0)" ng-mouseenter="cfgTimeOver?TimeoutOverClick(3,'Bad'):null" ng-mouseleave="cfgTimeOver?CancelTimeoutOverClick():null" ng-class="{'scaneo': isScanning == 'badPhrase'}"/>
         </div>
     </div>

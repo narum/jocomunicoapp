@@ -81,7 +81,8 @@ class BoardInterface extends CI_Model {
         $output = array();
 
         $idlang = $this->session->userdata('ulangid');
-
+        $lang = $this->session->userdata('ulangabbr');
+        
         $this->db->where('R_BoardCell.ID_RBoard', $id);
         $this->db->order_by('R_BoardCell.posInBoard', 'asc');
         $this->db->join('Cell', 'R_BoardCell.ID_RCell = Cell.ID_Cell');
@@ -89,8 +90,10 @@ class BoardInterface extends CI_Model {
         $this->db->join('Pictograms', 'Cell.ID_CPicto = Pictograms.pictoid', 'left');
         $this->db->join('PictogramsLanguage', 'Pictograms.pictoid = PictogramsLanguage.pictoid AND PictogramsLanguage.languageid = "' . $idlang . '"', 'left');
         $this->db->join('Function', 'Cell.ID_CFunction = Function.ID_Function', 'left');
-
+        $this->db->select('*, functName'.$lang.' as textFunction');
         $query = $this->db->get('R_BoardCell');
+        
+        
         if ($query->num_rows() > 0) {
             $output = $query->result();
         } else
@@ -105,12 +108,15 @@ class BoardInterface extends CI_Model {
 
     function getCell($pos, $idboard) {
         $output = array();
+        
+        $idlang = $this->session->userdata('ulangid');
 
         $this->db->where('R_BoardCell.ID_RBoard', $idboard);
         $this->db->where('R_BoardCell.posInBoard', $pos);
         $this->db->join('Cell', 'R_BoardCell.ID_RCell = Cell.ID_Cell');
         //Este tiene que ser left, si pictograms.picto id = null significa que esta vacia
         $this->db->join('Pictograms', 'Cell.ID_CPicto = Pictograms.pictoid', 'left');
+        $this->db->join('PictogramsLanguage', 'Pictograms.pictoid = PictogramsLanguage.pictoid AND PictogramsLanguage.languageid = "' . $idlang . '"', 'left');
 
         $query = $this->db->get('R_BoardCell');
         if ($query->num_rows() > 0) {
@@ -691,7 +697,7 @@ class BoardInterface extends CI_Model {
             'autoReturn' => $autoReturn,
             'autoReadSentence' => $autoReadSentence
         );
-        
+
         $this->db->insert('Boards', $data);
         $id = $this->db->insert_id();
 
@@ -734,7 +740,6 @@ class BoardInterface extends CI_Model {
         }
         return $id;
     }
-
 
     function removeBoard($IDboard) {
         $this->db->where('ID_Board', $IDboard);
@@ -839,6 +844,12 @@ class BoardInterface extends CI_Model {
         $data = array('userScore' => $score);
         $this->db->where('ID_SHistoric', $id);
         $this->db->update('S_Historic', $data);
+    }
+    
+    function modifyColorCell($id, $color){
+        $data = array('color' => $color);
+        $this->db->where('ID_Cell', $id);
+        $this->db->update('Cell', $data);
     }
 
 }

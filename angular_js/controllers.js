@@ -584,10 +584,6 @@ angular.module('controllers', [])
                 $scope.InitScan();
             });
 
-            $scope.$on("editCallFromPanell", function () {
-                alert("ueep");
-            });
-
             //MODIF: Coger de BBDD escaneo por intervalo o no en el if
             $scope.InitScan = function ()
             {
@@ -1174,6 +1170,8 @@ angular.module('controllers', [])
              */
             $scope.edit = function ()
             {
+                $scope.colorPaintingSelected = "#fff";
+                $scope.painting = false;
                 $scope.getPrimaryBoard();
                 $scope.inEdit = true;
                 $scope.inScan = false;
@@ -1354,7 +1352,7 @@ angular.module('controllers', [])
              * Add the selected pictogram to the sentence
              */
             $scope.clickOnCell = function (cell) {
-                if (!$scope.inEdit) {
+                if (!$scope.inEdit && cell.activeCell == 1) {
 
                     if (cell.textInCell !== null) {
                         $scope.playPictoAudio(cell.textInCell);
@@ -1370,6 +1368,16 @@ angular.module('controllers', [])
                     if (cell.boardLink !== null) {
                         $scope.showBoard(cell.boardLink);
                     }
+                } else if ($scope.inEdit && $scope.painting) {
+                    var postdata = {id: cell.ID_RCell, color: $scope.colorPaintingSelected};
+                    var url = $scope.baseurl + "Board/modifyColorCell";
+                    $http.post(url, postdata).then(function ()
+                    {
+                        //To update the field in the ng-repeat we have to change the object itself (not only the property)
+                        var obj = $scope.data[cell.posInBoard - 1];
+                        obj.color = $scope.colorPaintingSelected;
+                        $scope.data[cell.posInBoard - 1] = angular.copy(obj);
+                    });
                 }
             };
 
@@ -1489,9 +1497,7 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata).success(function (response)
                 {
-                    alert("comprueba");
                     if (response.read == '1') {
-                        alert("generar");
                         $scope.generate();
                     }
                 });
@@ -1614,7 +1620,6 @@ angular.module('controllers', [])
                         {
                             $scope.dataAudio = response.data;
 
-                            alert($scope.dataAudio);
                             $scope.sound = ngAudio.load($scope.baseurl + $scope.dataAudio);
                             $scope.sound.play();
 
@@ -1785,7 +1790,6 @@ angular.module('controllers', [])
                 }).then(function () {
                     var postdata = {id: $scope.idboard};
                     var URL = $scope.baseurl + "Board/removeBoard";
-                    alert(postdata.id);
                     $http.post(URL, postdata).success(function (response)
                     {
                         $scope.showBoard(response.idboard);
@@ -1836,6 +1840,17 @@ angular.module('controllers', [])
                 });
 
             };
+            $scope.changePaintingColor = function (color) {
+                $scope.colorPaintingSelected = color;
+
+            };
+            $scope.startPainting = function () {
+                $scope.painting = true;
+
+            };
+            $scope.stopPainting = function () {
+                $scope.painting = false;
+            };
         })
 
         // Edit controller 
@@ -1843,12 +1858,34 @@ angular.module('controllers', [])
             // Get the cell clicked (the cell in the cicked position in the current board
             var url = $scope.baseurl + "Board/getCell";
             var postdata = {pos: $scope.idEditCell, idboard: $scope.idboard};
-
+            /*
+             * Upload file is (maybe) difficult to understand. There are two img in the data base:
+             *       imgPicto: default picto image
+             *       imgCell: image which the user upload or select. This will be preval over the imgPicto
+             *       
+             *      To upload the img we need:
+             *          uploadedFile: the path to the uploaded file (imgCell)
+             *          myFile: the file input (in "angular conversion")
+             *          previewImg: contains the data to display the preview
+             *          pictoSelected: contains the selected picto
+             *          
+             *       In order to take a preview of the img to upload we will need: 
+             *          previewImgProvisional: contains provisionally the data to display the preview
+             *          picImgProvisional: the provisionally picto img
+             *       Only one will have a real value
+             *       MODIF: remove myFileProvisional y ver si funciona
+             * 
+             */
             $http.post(url, postdata).success(function (response)
             {
                 $scope.previewImg = null;
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
+
+                /*
+                 * Remove the currentimg. If there are no imgCell nothings happens. If there are imgCell
+                 * removes it. If there are imgCell and a provisional img removes it, but not the imgCell
+                 */
                 $scope.removeFile = function () {
                     $scope.MoveBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
                     ngDialog.openConfirm({
@@ -1858,9 +1895,10 @@ angular.module('controllers', [])
                     }).then(function () {
                         if ($scope.previewImg != null) {
                             $scope.previewImg = null;
+                        } else if ($scope.pictoSelected != null) {
+                            $scope.pictoSelected = null;
                         } else {
                             $scope.myFile = null;
-                            //MODIF: alert para asegurar que quiere borrarla?
                             $scope.uploadedFile = null;
                             document.getElementById('file-input').value = null;
                         }
@@ -1869,19 +1907,69 @@ angular.module('controllers', [])
 
 
                 };
+                //get all the photos attached to the pictos
+                $scope.searchFoto = function (name)
+                {
+                    var URL = $scope.baseurl + "SearchWord/getDBAll";
+                    var postdata = {id: name};
+                    //Request via post to controller search data from database
+                    $http.post(URL, postdata).
+                            success(function (response)
+                            {
+                                $scope.allImg = response.data;
+                            });
+                };
+                //Open a new dialog when the user will select the img to the cell
+                $scope.selectImgToUpload = function () {
+                    $scope.selectedImg = null;
+                    $scope.selectedImgType = 0;
+                    ngDialog.openConfirm({
+                        template: $scope.baseurl + '/angular_templates/ConfirmSelectImg.html',
+                        scope: $scope,
+                        className: 'ngdialog-theme-default dialogImgSelect',
+                        showClose: false
+                    }).then(function () {
+                        $scope.myFile = $scope.myFileProvisional;
+                        $scope.previewImg = $scope.previewImgProvisional;
+                        if ($scope.picImgProvisional == null) {
+                            $scope.pictoSelected = null;
+                        } else {
+                            // Add the url to the picto img string
+                            $scope.pictoSelected = "img/pictos/" + $scope.picImgProvisional;
+                        }
 
-                $scope.getPreviewImg = function (files) {
-                    $scope.myFile = document.getElementById(files).files[0];
+                    }, function (value) {
+                    });
+                };
+                // When the user upload an image, this function return the data to display the preview
+                $scope.getPreviewImg = function () {
+                    var type = document.getElementById('file-input').files[0].type;
+                    if (!(type == "image/gif" || type == "image/jpeg" || type == "image/png")) {
+                        alert("Extension incorrecta");
+                        return false;
+                    }
+                    $scope.myFileProvisional = document.getElementById('file-input').files[0];
                     var r = new FileReader();
                     r.onloadend = function (e) {
                         $timeout(function () {
-                            $scope.previewImg = e.target.result;
+                            $scope.previewImgProvisional = e.target.result;
                         });
 
                     };
-                    r.readAsDataURL($scope.myFile);
+                    r.readAsDataURL($scope.myFileProvisional);
+                    // Like I said, only upload image or picto image will have a real value
+                    $scope.picImgProvisional = null;
                 };
+                // Change the selected image to a picto img
+                $scope.selectProvisionalPicto = function (img) {
+                    $scope.picImgProvisional = img;
+                    // Like I said, only upload image or picto image will have a real value
+                    $scope.myFileProvisional = null;
+                    $scope.previewImgProvisional = null;
+                    document.getElementById('file-input').value = null;
 
+                };
+                // Upload and resize the image and the, call savedata()
                 $scope.uploadFile = function () {
                     var file = $scope.myFile;
                     console.log('file is ');
@@ -1898,8 +1986,8 @@ angular.module('controllers', [])
                                 $scope.uploadedFile = response.nombre;
                                 $scope.savedata();
                             })
-                            .catch(function (response) {
-                                var a = response.errorText;
+                            .error(function (response) {
+                                alert(response.errorText);
                             });
                 };
 
@@ -1990,6 +2078,11 @@ angular.module('controllers', [])
                 $scope.selectPicto = function (id, img) {
                     $scope.idPictoEdit = id;
                     $scope.imgPictoEdit = img;
+                    //Remove the uploaded/preview/selected image
+                    $scope.previewImg = null;
+                    $scope.pictoSelected = null;
+                    $scope.myFile = null;
+                    $scope.uploadedFile = null;
                 };
                 //Initialize the dropdwon menus and all the variables that will be shown to the user
                 $scope.getFunctions();
@@ -2026,7 +2119,7 @@ angular.module('controllers', [])
                 if (response.info.cellType === 'sfolder') {
                     $scope.getSFolder(response.info.sentenceFolder);
                 }
-                // When confirm is clicked, save all the provisionally data asigned to the cell
+                // When confirm is clicked, call uploadFile if there image to upload or savedata otherwise
                 $scope.aceptar = function () {
                     if ($scope.myFile != null) {
                         $scope.uploadFile();
@@ -2034,6 +2127,7 @@ angular.module('controllers', [])
                         $scope.savedata();
                     }
                 };
+                // Save all the provisionally data asigned to the cell
                 $scope.savedata = function () {
                     var url = $scope.baseurl + "Board/editCell";
                     var postdata = {id: idCell, idPicto: $scope.idPictoEdit, idSentence: $scope.sentenceSelectedId, idSFolder: $scope.sFolderSelectedId, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1", numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1, numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2, cellType: $scope.cellType, color: $scope.colorSelected, imgCell: ''};
@@ -2070,7 +2164,16 @@ angular.module('controllers', [])
                     if ($scope.cellType !== 'sfolder') {
                         postdata.idSFolder = null;
                     }
-                    postdata.imgCell = $scope.uploadedFile;
+                    //If the user has selected a picto image save in imgCell
+                    if ($scope.pictoSelected != null) {
+                        postdata.imgCell = $scope.pictoSelected;
+                    }// Else, save in it uploadedFile (this could be a new uploaded img or the previous one) 
+                    else if ($scope.uploadedFile != null) {
+                        postdata.imgCell = $scope.uploadedFile;
+                    } else {
+                        postdata.imgCell = null;
+                    }
+
 
 
                     $http.post(url, postdata).success(function ()
@@ -2241,7 +2344,6 @@ angular.module('controllers', [])
                         });
             };
             $scope.$on('scrollbarPanel', function (ngRepeatFinishedEvent) {
-                alert("asd");
                 $scope.$broadcast('rebuild:me');
             });
 

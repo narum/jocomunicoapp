@@ -877,4 +877,14 @@ class Board extends REST_Controller {
         $this->response(REST_Controller::HTTP_OK);
     }
 
+     public function modifyColorCell_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->id;
+        $color = $request->color;
+        
+        $this->BoardInterface->modifyColorCell($id, $color);
+
+    }
+    
 }

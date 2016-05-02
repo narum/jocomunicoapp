@@ -29,10 +29,15 @@ class ImgUploader extends REST_Controller {
     }
 
     public function upload_post() {
-        //$target_dir = "/opt/lampp/htdocs/jocomunicoapp/img/";
-        $target_dir = "img/";
-        //$target_file = basename($_FILES['file']['name']);
+        $target_dir = "img/users/";
         $target_file = $this->Rename_Img(basename($_FILES['file']['name']));
+        if (!($_FILES['file']['type'] == "image/gif" || $_FILES['file']['type'] == "image/jpeg" || $_FILES['file']['type'] == "image/png")) {
+            $errorText = 'extension no valida.';
+            $response = [
+                'errorText' => $errorText
+            ];
+            $this->response($response, 300);
+        }
         if (file_exists($target_dir . $target_file)) {
             //MODIF: lanzar error 
             $errorText = 'Ya existe una imagen con ese nombre.';
