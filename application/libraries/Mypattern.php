@@ -4274,28 +4274,28 @@ class Mypattern {
         $patterns[8] = '/[[:space:]][e][t][[:space:]](?=[(aeiouAEIOUhH)])/u';
         
         //verb acabat en vocal + pronoms de receiver/theme a darrere
-        $patterns[9] = '/(?<=[aeiou]@VERBUM)[[:space:]]me[[:space:]]/u';
-        $patterns[10] = '/(?<=[aeiou]@VERBUM)[[:space:]]te[[:space:]]/u';
+        $patterns[9] = '/(?<=[aeio]@VERBUM)[[:space:]]me[[:space:]]/u';
+        $patterns[10] = '/(?<=[aeio]@VERBUM)[[:space:]]te[[:space:]]/u';
         $patterns[11] = '/(?<=[aeiou]@VERBUM)[[:space:]]li[[:space:]]/u';
-        $patterns[12] = '/(?<=[aeiou]@VERBUM)[[:space:]]nos[[:space:]]/u';
+        $patterns[12] = '/(?<=[aeio]@VERBUM)[[:space:]]nos[[:space:]]/u';
         $patterns[13] = '/(?<=[aeiou]@VERBUM)[[:space:]]vos[[:space:]]/u';
-        $patterns[14] = '/(?<=[aeiou]@VERBUM)[[:space:]]los[[:space:]]/u';
-        $patterns[38] = '/(?<=[aeiou]@VERBUM)[[:space:]]lo[[:space:]]/u';
+        $patterns[14] = '/(?<=[aeio]@VERBUM)[[:space:]]los[[:space:]]/u';
+        $patterns[38] = '/(?<=[aeio]@VERBUM)[[:space:]]lo[[:space:]]/u';
         $patterns[39] = '/(?<=[aeiou]@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
         $patterns[42] = '/(?<=[aeiou]@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
         $patterns[48] = '/(?<=[aeiou]@VERBUM)[[:space:]]ho[[:space:]]/u';
         
         // verb acabat en vocal+r + pronoms de receiver a darrere
-        $patterns[15] = '/(?<=[aeiou]r@VERBUM)[[:space:]]me[[:space:]]/u';
-        $patterns[16] = '/(?<=[aeiou]r@VERBUM)[[:space:]]te[[:space:]]/u';
-        $patterns[17] = '/(?<=[aeiou]r@VERBUM)[[:space:]]li[[:space:]]/u';
-        $patterns[18] = '/(?<=[aeiou]r@VERBUM)[[:space:]]nos[[:space:]]/u';
-        $patterns[19] = '/(?<=[aeiou]r@VERBUM)[[:space:]]vos[[:space:]]/u';
-        $patterns[20] = '/(?<=[aeiou]r@VERBUM)[[:space:]]los[[:space:]]/u';
-        $patterns[40] = '/(?<=[aeiou]r@VERBUM)[[:space:]]lo[[:space:]]/u';
-        $patterns[41] = '/(?<=[aeiou]r@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
-        $patterns[43] = '/(?<=[aeiou]r@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
-        $patterns[49] = '/(?<=[aeiou]r@VERBUM)[[:space:]]ho[[:space:]]/u';
+        $patterns[15] = '/(?<=@VERBUM)[[:space:]]me[[:space:]]/u';
+        $patterns[16] = '/(?<=@VERBUM)[[:space:]]te[[:space:]]/u';
+        $patterns[17] = '/(?<=@VERBUM)[[:space:]]li[[:space:]]/u';
+        $patterns[18] = '/(?<=@VERBUM)[[:space:]]nos[[:space:]]/u';
+        $patterns[19] = '/(?<=@VERBUM)[[:space:]]vos[[:space:]]/u';
+        $patterns[20] = '/(?<=@VERBUM)[[:space:]]los[[:space:]]/u';
+        $patterns[40] = '/(?<=@VERBUM)[[:space:]]lo[[:space:]]/u';
+        $patterns[41] = '/(?<=@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
+        $patterns[43] = '/(?<=@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
+        $patterns[49] = '/(?<=@VERBUM)[[:space:]]ho[[:space:]]/u';
         
         // verb+pronom feble de receiver ja enganxat, seguit de "ho"
         $patterns[21] = "/(?<=@VERBUM)'m[[:space:]]ho[[:space:]]/u";
@@ -4976,6 +4976,7 @@ class Mypattern {
         $patterns[5] = '/(?<=@VERBUM)[[:space:]]se[[:space:]]/u';
         $patterns[6] = '/(?<=@VERBUM)[[:space:]]nos[[:space:]]/u';
         $patterns[7] = '/(?<=@VERBUM)[[:space:]]os[[:space:]]/u';
+        $patterns[30] = '/(?<=@VERBUM)[[:space:]]le[[:space:]]/u';
         
         // verb+pronom feble de receiver ja enganxat, seguit de "lo"
         $patterns[8] = "/(?<=@VERBUM)me[[:space:]]lo[[:space:]]/u";
@@ -5016,6 +5017,7 @@ class Mypattern {
         $replacements[5] = "se ";
         $replacements[6] = "nos ";
         $replacements[7] = "os ";
+        $replacements[30] = "le ";
         
         $replacements[8] = "melo ";
         $replacements[9] = "telo ";

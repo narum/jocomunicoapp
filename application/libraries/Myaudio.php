@@ -4,11 +4,16 @@ class Myaudio {
             
     function __construct() {}
     
+    /*
+     * RETURNS true if connected or false otherwise
+     */
     public function isOnline() 
     {
+        // pings example.com and google.com
         $is_conn = null;
         $connected1 = @fsockopen("www.example.com", 80); //website, port  (try 80 or 443)
         $connected2 = @fsockopen("www.google.com", 80); //website, port  (try 80 or 443)
+        // if either is successful
         if ($connected1 || $connected2){
             $is_conn = true; //action when connected
             fclose($connected1);
@@ -19,11 +24,18 @@ class Myaudio {
         return $is_conn;
     }
     
+    /*
+     * RETURNS 'local' if the App is running locally or 'server' if it's running from the server
+     */
     public function AppLocalOrServer()
     {
-        return !preg_match('/localhost/i', $subject);
+        if (preg_match('/localhost/i', $subject)) return "local";
+        else return "server";
     }
     
+    /*
+     * Gets the OS from which the app is running
+     */
     public function getOS() { 
         
         $server_data = $_SERVER['HTTP_USER_AGENT'];
