@@ -25,9 +25,9 @@ Els macarrons són molt bons.
 Necessitaré el medicament a la tarda.
 Necessitaré el medicament a la tarda.
 Necessitaré el medicament a la tarda.
-Dóna'm una forquilla, si us plau.
-Dóna'm una forquilla, si us plau.
-Dóna'm una forquilla, si us plau.
+Dóna'm una forquilla si us plau.
+Dóna'm una forquilla si us plau.
+Dóna'm una forquilla si us plau.
 El monitor no és a l'escola.
 El monitor no és a l'escola.
 El monitor no és a l'escola.
@@ -58,9 +58,9 @@ Tinc fred.
 Vols que nosaltres anem a casa?
 Vols que nosaltres anem a casa?
 Vols que nosaltres anem a casa?
-Espera'm al bar, si us plau.
-Espera'm al bar, si us plau.
-Espera'm al bar, si us plau.
+Espera'm al bar si us plau.
+Espera'm al bar si us plau.
+Espera'm al bar si us plau.
 Vaig a la biblioteca.
 Vaig a la biblioteca.
 Vaig a la biblioteca.
@@ -81,21 +81,21 @@ El bitxo molt raro s'ha amagat darrera la porta.
 és un pal.
 No vinguis.
 No vinguis.
-No vinguis, si us plau.
+No vinguis si us plau.
 Tinc molta por.
 Tinc molta por.
 Tinc molta por.
-Vine, si us plau.
-Vine, si us plau.
-Vine, si us plau.
+Vine si us plau.
+Vine si us plau.
+Vine si us plau.
 Quan vindreu a casa vosaltres?
 Quan vindreu a casa vosaltres?
 Quan vindreu a casa vosaltres?
 Demà nosaltres vindrem.
 Demà nosaltres vindrem.
 Demà nosaltres vindrem.
-Menjo un gelat de xocolata.
-Menjo un gelat de xocolata.
+Menjo gelat de xocolata.
+Menjo gelat de xocolata.
 Menjo un gelat de xocolata.
 Llegir uns llibres de por m'agrada.
 Llegir uns llibres de por m'agrada.
@@ -105,7 +105,7 @@ Nosaltres anirem al restaurant.
 Nosaltres anirem al restaurant.
 Avui no agafis l'abric.
 Avui no agafis l'abric.
-Avui no agafis l'abric, si us plau.
+Avui no agafis l'abric si us plau.
 Nosaltres ens banyarem a la platja a l'estiu.
 Nosaltres ens banyarem a la platja a l'estiu.
 Nosaltres ens banyarem a la platja a l'estiu.
@@ -136,9 +136,9 @@ Vull classificar-me a les olimpíades.
 El vestit és nou.
 El vestit és nou.
 El vestit és nou.
-Vull un iogurt, si us plau.
-Un iogurt, si us plau.
-Un iogurt, si us plau.
+Vull un iogurt si us plau.
+Un iogurt si us plau.
+Un iogurt si us plau.
 Ell parla molt?
 Ell parla molt?
 Ell parla molt?
@@ -157,9 +157,9 @@ Hola!
 El sol és taronja i vermell a la tarda.
 El sol és taronja i vermell a la tarda.
 El sol és taronja i vermell a la tarda.
-Vull un got d'aigua, si us plau.
-Un got d'aigua, si us plau.
-Un got d'aigua, si us plau.
+Vull un got per aigua si us plau.
+Un got d'aigua si us plau.
+Un got d'aigua si us plau.
 Estic bé.
 Estic bé.
 Estic bé.
@@ -169,15 +169,15 @@ Felicitats!
 Vosaltres teniu uns tomàquets?
 Vosaltres teniu uns tomàquets?
 Vosaltres teniu uns tomàquets?
-Ajuda'm a baixar de les escales, si us plau.
-Ajuda'm a baixar de les escales, si us plau.
-Ajuda'm a baixar de les escales, si us plau.
+Ajuda'm a baixar de les escales si us plau.
+Ajuda'm a baixar de les escales si us plau.
+Ajuda'm a baixar de les escales si us plau.
 Nosaltres vam estar molt contents.
 Nosaltres vam estar molt contents.
 Nosaltres vam estar molt contents.
-Espera't un minut, si us plau.
-Espera un minut, si us plau.
-Espera un minut, si us plau.
+Espera't un minut si us plau.
+Espera un minut si us plau.
+Espera un minut si us plau.
 No vull que et barallis.
 No vull que et barallis.
 No vull que et barallis.
@@ -185,11 +185,11 @@ El tren anava molt lent.
 El tren anava molt lent.
 El tren anava molt lent.
 Això serà una sorpresa.
-Això serà una sorpresa.
-Això serà una sorpresa.
-Tinc mal de peu.
-Tinc mal de peu.
-Tinc mal de peu.
+Això serà sorpresa.
+Això serà sorpresa.
+Tinc mal al peu.
+Tinc mal al peu.
+Tinc mal al peu.
 Són les cinc.
 Les cinc.
 Són les cinc.
@@ -226,9 +226,9 @@ No.
 No ho sé.
 No ho sé.
 No ho sé.
-Canvia una cadira de color marró, si us plau.
-Canvia una cadira de color marró, si us plau.
-Canvia una cadira de color marró, si us plau.
+Canvia una cadira de color marró si us plau.
+Canvia una cadira de color marró si us plau.
+Canvia una cadira de color marró si us plau.
 Ja està.
 Ja està.
 Ja està.
@@ -241,15 +241,15 @@ Mala sort.
 Demà espero que vinguis.
 Demà esperaré que vinguis.
 Demà espero que vinguis.
-Amaga't, si us plau.
-Amaga't, si us plau.
-Amaga't, si us plau.
+Amaga't si us plau.
+Amaga't si us plau.
+Amaga't si us plau.
 Ells celebren el seu aniversari al parc.
 Ells celebren el seu aniversari al parc.
 Ells celebren el seu aniversari al parc.
-Compra això a la farmàcia, si us plau.
-Compra això a la farmàcia, si us plau.
-Compra això a la farmàcia, si us plau.
+Compra això a la farmàcia si us plau.
+Compra això a la farmàcia si us plau.
+Compra això a la farmàcia si us plau.
 Nosaltres vam beure cafè al casament.
 Nosaltres vam beure cafè al casament.
 Nosaltres vam beure cafè al casament.
@@ -265,9 +265,9 @@ Horrible.
 Bon any.
 Bon any.
 Bon any.
-Puc jugar a pilota, si us plau?
-Puc jugar a pilota, si us plau?
-Puc jugar a pilota, si us plau?
+Puc jugar a pilota si us plau?
+Puc jugar a pilota si us plau?
+Puc jugar a pilota si us plau?
 La meva amiga està trista.
 La meva amiga està trista.
 La meva amiga està trista.
@@ -280,9 +280,9 @@ Cent euros.
 La meva germana descansa sobre el llit.
 La meva germana descansa sobre el llit.
 La meva germana descansa sobre el llit.
-Explica'm un conte, si us plau.
-Explica'm un conte, si us plau.
-Explica'm un conte, si us plau.
+Explica'm un conte si us plau.
+Explica'm un conte si us plau.
+Explica'm un conte si us plau.
 Després nosaltres mirarem una pel·lícula al cine.
 Després nosaltres mirarem una pel·lícula al cine.
 Després nosaltres mirarem una pel·lícula al cine.

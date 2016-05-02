@@ -236,7 +236,7 @@ class Mymatching {
     // sobre un slot d'un tipus 1 de nom, com de bé hi fa fit un nom de tipus 2
     var $nounsFit = array(
         //           0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4
-        0 => array  (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1), // perquè un match noun a qualsevol no és tan bon match
+        0 => array  (0,0,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0), // perquè un match noun a qualsevol no és tan bon match
         1 => array  (5,0,0,0,0,0,1,5,5,5,5,5,5,5,1,5,2,5,5,5,5,5,5,1,5),
         2 => array  (5,1,0,0,1,2,5,2,5,5,5,5,5,5,2,5,5,5,5,5,5,5,5,1,5),
         3 => array  (5,2,1,0,2,2,2,2,5,5,5,5,5,5,2,5,5,5,5,5,5,5,5,5,5),
