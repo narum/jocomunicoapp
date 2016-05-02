@@ -3795,8 +3795,9 @@ class Mypattern {
                 }
                 // si no s'ha fet servir el subjecte per defecte
                 else {
-                    // esborrem el tu o el jo
-                    if ($slotaux->paraulafinal->text == "jo" || $slotaux->paraulafinal->text == "tu") {
+                    // esborrem el tu o el jo (si no tenen cap element coordinat)
+                    if (($slotaux->paraulafinal->text == "jo" || $slotaux->paraulafinal->text == "tu") 
+                            && !$slotaux->paraulafinal->coord) {
                         $slotaux->slotstring = array();
                     }
                     // esborrem el subjecte del verb secundari, si és el mateix que el del principal
@@ -4559,8 +4560,9 @@ class Mypattern {
                 // si no s'ha fet servir el subjecte per defecte
                 else {
                     if ($CI->session->userdata('explangcannotexpand') != '1') {
-                        // esborrem el tú o el yo
-                        if ($slotaux->paraulafinal->text == "yo" || $slotaux->paraulafinal->text == "tú") {
+                        // esborrem el tú o el yo, si no tenen elements coordinats
+                        if (($slotaux->paraulafinal->text == "yo" || $slotaux->paraulafinal->text == "tú")
+                                && !$slotaux->paraulafinal->coord) {
                             $slotaux->slotstring = array();
                         }
                         // esborrem el subjecte del verb secundari, si és el mateix que el del principal
