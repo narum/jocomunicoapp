@@ -795,6 +795,12 @@ class Myslot {
                     
                     $this->slotstring[] = $elementaux;
                     
+                    // variables auxiliars que ens ajudaran a concordar l'adjectiu amb 
+                    // l'últim nom coordinat, si el nucli no té cap element coordinat, 
+                    // tenen els valors per concordar amb el nucli
+                    $masccoord = $masc;
+                    $pluralcoord = $plural;
+                    
                     // si té element coordinat
                     if (count($nucli->paraulacoord) > 0) {
                         
@@ -852,9 +858,9 @@ class Myslot {
                         }
                         // tant si tenia quantificador com si no, posem l'adjectiu
                         $adjectiu = $this->cmpAdjs[$this->CAdjassignedkey]->paraulafinal;
-                        if ($masc && !$plural) $elementaux[0] = $adjectiu->propietats->masc;
-                        else if ($masc && $plural) $elementaux[0] = $adjectiu->propietats->mascpl;
-                        else if (!$masc && !$plural) $elementaux[0] = $adjectiu->propietats->fem;
+                        if ($masccoord && !$pluralcoord) $elementaux[0] = $adjectiu->propietats->masc;
+                        else if ($masccoord && $pluralcoord) $elementaux[0] = $adjectiu->propietats->mascpl;
+                        else if (!$masccoord && !$pluralcoord) $elementaux[0] = $adjectiu->propietats->fem;
                         else $elementaux[0] = $adjectiu->propietats->fempl;
                         $elementaux[1] = $adjectiu;
                         
@@ -872,9 +878,9 @@ class Myslot {
                                 $this->slotstring[] = $elementaux;
 
                                 // afegim la paraula coordinada amb la mateixa concordància
-                                if ($masc && !$plural) $elementaux[0] = $paraulacoord->propietats->masc;
-                                else if ($masc && $plural) $elementaux[0] = $paraulacoord->propietats->mascpl;
-                                else if (!$masc && !$plural) $elementaux[0] = $paraulacoord->propietats->fem;
+                                if ($masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->masc;
+                                else if ($masccoord && $pluralcoord) $elementaux[0] = $paraulacoord->propietats->mascpl;
+                                else if (!$masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->fem;
                                 else $elementaux[0] = $paraulacoord->propietats->fempl;
                                 $elementaux[1] = $paraulacoord;
 
@@ -923,6 +929,9 @@ class Myslot {
                         
                         $this->slotstring[] = $elementaux;
                         
+                        $masccmpcoord = $masccmp;
+                        $pluralcmpcoord = $pluralcmp;
+                        
                         // si té element coordinat
                         if (count($nouncmp->paraulacoord) > 0) {
                         
@@ -936,19 +945,19 @@ class Myslot {
                                 $this->slotstring[] = $elementaux;
 
                                 // afegim la paraula coordinada amb la seva concordància
-                                $masccmp = true;
-                                $pluralcmp = false;
+                                $masccmpcoord = true;
+                                $pluralcmpcoord = false;
                                 // si el nom és femení
-                                if ($paraulacoord->propietats->mf == "fem") $masccmp = false;
+                                if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
                                 // si el nom és plural
-                                if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
+                                if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
                                 // si té modificadors de femení i l'accepta
-                                if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
+                                if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
                                 // si té modificador de plural
-                                if ($paraulacoord->plural) $pluralcmp = true;
+                                if ($paraulacoord->plural) $pluralcmpcoord = true;
 
-                                if ($pluralcmp) $elementaux[0] = $paraulacoord->propietats->plural;
-                                else if ($masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
+                                else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
                                 else {
                                     if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
                                     else $elementaux[0] = $paraulacoord->propietats->femeni;
@@ -956,8 +965,8 @@ class Myslot {
                                 $elementaux[1] = $paraulacoord;
                                 // com que el nucli és un nom, afegim la informació extra
                                 $elementaux[2] = true;
-                                $elementaux[3] = $masccmp;
-                                $elementaux[4] = $pluralcmp;
+                                $elementaux[3] = $masccmpcoord;
+                                $elementaux[4] = $pluralcmpcoord;
                                 $elementaux[5] = false;
                                 $elementaux[6] = true;
                                 $elementaux[7] = $haspossessive;
@@ -1022,9 +1031,9 @@ class Myslot {
                             }
                             // tant si tenia quantificador com si no, posem l'adjectiu
                             $adjectiu = $adjectiuslot->paraulafinal;
-                            if ($masc && !$plural) $elementaux[0] = $adjectiu->propietats->masc;
-                            else if ($masc && $plural) $elementaux[0] = $adjectiu->propietats->mascpl;
-                            else if (!$masc && !$plural) $elementaux[0] = $adjectiu->propietats->fem;
+                            if ($masccoord && !$pluralcoord) $elementaux[0] = $adjectiu->propietats->masc;
+                            else if ($masccoord && $pluralcoord) $elementaux[0] = $adjectiu->propietats->mascpl;
+                            else if (!$masccoord && !$pluralcoord) $elementaux[0] = $adjectiu->propietats->fem;
                             else $elementaux[0] = $adjectiu->propietats->fempl;
                             $elementaux[1] = $adjectiu;
 
@@ -1043,9 +1052,9 @@ class Myslot {
                                     $this->slotstring[] = $elementaux;
 
                                     // afegim la paraula coordinada amb la mateixa concordància
-                                    if ($masc && !$plural) $elementaux[0] = $paraulacoord->propietats->masc;
-                                    else if ($masc && $plural) $elementaux[0] = $paraulacoord->propietats->mascpl;
-                                    else if (!$masc && !$plural) $elementaux[0] = $paraulacoord->propietats->fem;
+                                    if ($masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->masc;
+                                    else if ($masccoord && $pluralcoord) $elementaux[0] = $paraulacoord->propietats->mascpl;
+                                    else if (!$masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->fem;
                                     else $elementaux[0] = $paraulacoord->propietats->fempl;
                                     $elementaux[1] = $paraulacoord;
 
@@ -1175,6 +1184,9 @@ class Myslot {
                             
                             $this->slotstring[] = $elementaux;
                             
+                            $masccmpcoord = $masccmp;
+                            $pluralcmpcoord = $pluralcmp;
+                            
                             // si té element coordinat
                             if (count($nouncmp->paraulacoord) > 0) {
 
@@ -1188,19 +1200,19 @@ class Myslot {
                                     $this->slotstring[] = $elementaux;
 
                                     // afegim la paraula coordinada amb la seva concordància
-                                    $masccmp = true;
-                                    $pluralcmp = false;
+                                    $masccmpcoord = true;
+                                    $pluralcmpcoord = false;
                                     // si el nom és femení
-                                    if ($paraulacoord->propietats->mf == "fem") $masccmp = false;
+                                    if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
                                     // si el nom és plural
-                                    if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
+                                    if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
                                     // si té modificadors de femení i l'accepta
-                                    if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
+                                    if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
                                     // si té modificador de plural
-                                    if ($paraulacoord->plural) $pluralcmp = true;
+                                    if ($paraulacoord->plural) $pluralcmpcoord = true;
 
-                                    if ($pluralcmp) $elementaux[0] = $paraulacoord->propietats->plural;
-                                    else if ($masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                    if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
+                                    else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
                                     else {
                                         if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
                                         else $elementaux[0] = $paraulacoord->propietats->femeni;
@@ -1208,8 +1220,8 @@ class Myslot {
                                     $elementaux[1] = $paraulacoord;
                                     // com que el nucli és un nom, afegim la informació extra
                                     $elementaux[2] = true;
-                                    $elementaux[3] = $masccmp;
-                                    $elementaux[4] = $pluralcmp;
+                                    $elementaux[3] = $masccmpcoord;
+                                    $elementaux[4] = $pluralcmpcoord;
                                     $elementaux[5] = false;
                                     $elementaux[6] = true;
                                     $elementaux[7] = $haspossessive;
@@ -1231,9 +1243,9 @@ class Myslot {
                             }
                             // tant si tenia quantificador com si no, posem l'adjectiu que concorda amb el complement
                             $adjectiu = $adjectiuslot->paraulafinal;
-                            if ($masccmp && !$pluralcmp) $elementaux[0] = $adjectiu->propietats->masc;
-                            else if ($masccmp && $pluralcmp) $elementaux[0] = $adjectiu->propietats->mascpl;
-                            else if (!$masccmp && !$pluralcmp) $elementaux[0] = $adjectiu->propietats->fem;
+                            if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $adjectiu->propietats->masc;
+                            else if ($masccmpcoord && $pluralcmpcoord) $elementaux[0] = $adjectiu->propietats->mascpl;
+                            else if (!$masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $adjectiu->propietats->fem;
                             else $elementaux[0] = $adjectiu->propietats->fempl;
                             $elementaux[1] = $adjectiu;
 
@@ -1252,9 +1264,9 @@ class Myslot {
                                     $this->slotstring[] = $elementaux;
 
                                     // afegim la paraula coordinada amb la mateixa concordància
-                                    if ($masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->masc;
-                                    else if ($masccmp && $pluralcmp) $elementaux[0] = $paraulacoord->propietats->mascpl;
-                                    else if (!$masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->fem;
+                                    if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->masc;
+                                    else if ($masccmpcoord && $pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->mascpl;
+                                    else if (!$masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->fem;
                                     else $elementaux[0] = $paraulacoord->propietats->fempl;
                                     $elementaux[1] = $paraulacoord;
 
@@ -1774,6 +1786,12 @@ class Myslot {
                     
                     $this->slotstring[] = $elementaux;
                     
+                    // variables auxiliars que ens ajudaran a concordar l'adjectiu amb 
+                    // l'últim nom coordinat, si el nucli no té cap element coordinat, 
+                    // tenen els valors per concordar amb el nucli
+                    $masccoord = $masc;
+                    $pluralcoord = $plural;
+                    
                     // si té element coordinat
                     if (count($nucli->paraulacoord) > 0) {
                         
@@ -1837,9 +1855,9 @@ class Myslot {
                         }
                         // tant si tenia quantificador com si no, posem l'adjectiu
                         $adjectiu = $this->cmpAdjs[$this->CAdjassignedkey]->paraulafinal;
-                        if ($masc && !$plural) $elementaux[0] = $adjectiu->propietats->masc;
-                        else if ($masc && $plural) $elementaux[0] = $adjectiu->propietats->mascpl;
-                        else if (!$masc && !$plural) $elementaux[0] = $adjectiu->propietats->fem;
+                        if ($masccoord && !$pluralcoord) $elementaux[0] = $adjectiu->propietats->masc;
+                        else if ($masccoord && $pluralcoord) $elementaux[0] = $adjectiu->propietats->mascpl;
+                        else if (!$masccoord && !$pluralcoord) $elementaux[0] = $adjectiu->propietats->fem;
                         else $elementaux[0] = $adjectiu->propietats->fempl;
                         $elementaux[1] = $adjectiu;
                         
@@ -1858,9 +1876,9 @@ class Myslot {
                                 $this->slotstring[] = $elementaux;
 
                                 // afegim la paraula coordinada amb la mateixa concordància
-                                if ($masc && !$plural) $elementaux[0] = $paraulacoord->propietats->masc;
-                                else if ($masc && $plural) $elementaux[0] = $paraulacoord->propietats->mascpl;
-                                else if (!$masc && !$plural) $elementaux[0] = $paraulacoord->propietats->fem;
+                                if ($masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->masc;
+                                else if ($masccoord && $pluralcoord) $elementaux[0] = $paraulacoord->propietats->mascpl;
+                                else if (!$masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->fem;
                                 else $elementaux[0] = $paraulacoord->propietats->fempl;
                                 $elementaux[1] = $paraulacoord;
 
@@ -1909,6 +1927,9 @@ class Myslot {
                         
                         $this->slotstring[] = $elementaux;
                         
+                        $masccmpcoord = $masccmp;
+                        $pluralcmpcoord = $pluralcmp;
+                        
                         // si té element coordinat
                         if (count($nouncmp->paraulacoord) > 0) {
                         
@@ -1922,19 +1943,19 @@ class Myslot {
                                 $this->slotstring[] = $elementaux;
 
                                 // afegim la paraula coordinada amb la seva concordància
-                                $masccmp = true;
-                                $pluralcmp = false;
+                                $masccmpcoord = true;
+                                $pluralcmpcoord = false;
                                 // si el nom és femení
-                                if ($paraulacoord->propietats->mf == "fem") $masccmp = false;
+                                if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
                                 // si el nom és plural
-                                if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
+                                if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
                                 // si té modificadors de femení i l'accepta
-                                if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
+                                if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
                                 // si té modificador de plural
-                                if ($paraulacoord->plural) $pluralcmp = true;
+                                if ($paraulacoord->plural) $pluralcmpcoord = true;
 
-                                if ($pluralcmp) $elementaux[0] = $paraulacoord->propietats->plural;
-                                else if ($masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
+                                else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
                                 else {
                                     if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
                                     else $elementaux[0] = $paraulacoord->propietats->femeni;
@@ -1942,8 +1963,8 @@ class Myslot {
                                 $elementaux[1] = $paraulacoord;
                                 // com que el nucli és un nom, afegim la informació extra
                                 $elementaux[2] = true;
-                                $elementaux[3] = $masccmp;
-                                $elementaux[4] = $pluralcmp;
+                                $elementaux[3] = $masccmpcoord;
+                                $elementaux[4] = $pluralcmpcoord;
                                 $elementaux[5] = false;
                                 $elementaux[6] = true;
                                 $elementaux[7] = $haspossessive;
@@ -2013,9 +2034,9 @@ class Myslot {
                             }
                             // tant si tenia quantificador com si no, posem l'adjectiu
                             $adjectiu = $adjectiuslot->paraulafinal;
-                            if ($masc && !$plural) $elementaux[0] = $adjectiu->propietats->masc;
-                            else if ($masc && $plural) $elementaux[0] = $adjectiu->propietats->mascpl;
-                            else if (!$masc && !$plural) $elementaux[0] = $adjectiu->propietats->fem;
+                            if ($masccoord && !$pluralcoord) $elementaux[0] = $adjectiu->propietats->masc;
+                            else if ($masccoord && $pluralcoord) $elementaux[0] = $adjectiu->propietats->mascpl;
+                            else if (!$masccoord && !$pluralcoord) $elementaux[0] = $adjectiu->propietats->fem;
                             else $elementaux[0] = $adjectiu->propietats->fempl;
                             $elementaux[1] = $adjectiu;
 
@@ -2034,9 +2055,9 @@ class Myslot {
                                     $this->slotstring[] = $elementaux;
 
                                     // afegim la paraula coordinada amb la mateixa concordància
-                                    if ($masc && !$plural) $elementaux[0] = $paraulacoord->propietats->masc;
-                                    else if ($masc && $plural) $elementaux[0] = $paraulacoord->propietats->mascpl;
-                                    else if (!$masc && !$plural) $elementaux[0] = $paraulacoord->propietats->fem;
+                                    if ($masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->masc;
+                                    else if ($masccoord && $pluralcoord) $elementaux[0] = $paraulacoord->propietats->mascpl;
+                                    else if (!$masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->fem;
                                     else $elementaux[0] = $paraulacoord->propietats->fempl;
                                     $elementaux[1] = $paraulacoord;
 
@@ -2165,6 +2186,9 @@ class Myslot {
                             
                             $this->slotstring[] = $elementaux;
                             
+                            $masccmpcoord = $masccmp;
+                            $pluralcmpcoord = $pluralcmp;
+                            
                             // si té element coordinat
                             if (count($nouncmp->paraulacoord) > 0) {
 
@@ -2178,19 +2202,19 @@ class Myslot {
                                     $this->slotstring[] = $elementaux;
 
                                     // afegim la paraula coordinada amb la seva concordància
-                                    $masccmp = true;
-                                    $pluralcmp = false;
+                                    $masccmpcoord = true;
+                                    $pluralcmpcoord = false;
                                     // si el nom és femení
-                                    if ($paraulacoord->propietats->mf == "fem") $masccmp = false;
+                                    if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
                                     // si el nom és plural
-                                    if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
+                                    if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
                                     // si té modificadors de femení i l'accepta
-                                    if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
+                                    if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
                                     // si té modificador de plural
-                                    if ($paraulacoord->plural) $pluralcmp = true;
+                                    if ($paraulacoord->plural) $pluralcmpcoord = true;
 
-                                    if ($pluralcmp) $elementaux[0] = $paraulacoord->propietats->plural;
-                                    else if ($masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                    if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
+                                    else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
                                     else {
                                         if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
                                         else $elementaux[0] = $paraulacoord->propietats->femeni;
@@ -2198,8 +2222,8 @@ class Myslot {
                                     $elementaux[1] = $paraulacoord;
                                     // com que el nucli és un nom, afegim la informació extra
                                     $elementaux[2] = true;
-                                    $elementaux[3] = $masccmp;
-                                    $elementaux[4] = $pluralcmp;
+                                    $elementaux[3] = $masccmpcoord;
+                                    $elementaux[4] = $pluralcmpcoord;
                                     $elementaux[5] = false;
                                     $elementaux[6] = true;
                                     $elementaux[7] = $haspossessive;
@@ -2227,9 +2251,9 @@ class Myslot {
                             }
                             // tant si tenia quantificador com si no, posem l'adjectiu que concorda amb el complement
                             $adjectiu = $adjectiuslot->paraulafinal;
-                            if ($masccmp && !$pluralcmp) $elementaux[0] = $adjectiu->propietats->masc;
-                            else if ($masccmp && $pluralcmp) $elementaux[0] = $adjectiu->propietats->mascpl;
-                            else if (!$masccmp && !$pluralcmp) $elementaux[0] = $adjectiu->propietats->fem;
+                            if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $adjectiu->propietats->masc;
+                            else if ($masccmpcoord && $pluralcmpcoord) $elementaux[0] = $adjectiu->propietats->mascpl;
+                            else if (!$masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $adjectiu->propietats->fem;
                             else $elementaux[0] = $adjectiu->propietats->fempl;
                             $elementaux[1] = $adjectiu;
 
@@ -2248,9 +2272,9 @@ class Myslot {
                                     $this->slotstring[] = $elementaux;
 
                                     // afegim la paraula coordinada amb la mateixa concordància
-                                    if ($masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->masc;
-                                    else if ($masccmp && $pluralcmp) $elementaux[0] = $paraulacoord->propietats->mascpl;
-                                    else if (!$masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->fem;
+                                    if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->masc;
+                                    else if ($masccmpcoord && $pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->mascpl;
+                                    else if (!$masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->fem;
                                     else $elementaux[0] = $paraulacoord->propietats->fempl;
                                     $elementaux[1] = $paraulacoord;
 
