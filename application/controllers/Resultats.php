@@ -285,6 +285,7 @@ class Resultats extends CI_Controller {
         
         function is_connected()
         {
+            $is_conn = null;
             $connected1 = @fsockopen("www.example.com", 80); //website, port  (try 80 or 443)
             $connected2 = @fsockopen("www.google.com", 80); //website, port  (try 80 or 443)
             if ($connected1 || $connected2){
