@@ -40,7 +40,7 @@ class Myword {
     var $fem;
     var $coord;
     
-    var $paraulacoord = null; // si n'hi ha, paraula coordinada amb aquesta
+    var $paraulacoord = array(); // si n'hi ha, paraules coordinades amb aquesta
     
     function __construct() {}
     

@@ -1490,7 +1490,7 @@ class Mypattern {
                 // echo $slot->category.": ".$slot->puntsfinal." (".$slot->paraulafinal->text.')<br />';
                 // punts de coordinacions
                 $wordaux = $slot->paraulafinal;
-                if ($wordaux->paraulacoord != null) $this->puntuaciofinal += 7;
+                if (count($wordaux->paraulacoord) > 0) $this->puntuaciofinal += 7;
                 
                 if ($slot->NCassigned) {
                     $slotcomp = $slot->complements[$slot->NCassignedkey];
@@ -1508,7 +1508,7 @@ class Mypattern {
                     // echo $slot->CAdvassignedkey.": ".$slotcomp->puntsfinal.'<br />';
                     // punts de coordinacions
                     $wordaux = $slotcomp->paraulafinal;
-                    if ($wordaux->paraulacoord != null) $this->puntuaciofinal += 7;
+                    if (count($wordaux->paraulacoord) > 0) $this->puntuaciofinal += 7;
                 }
                 if ($slot->CAdjassigned) {
                     $slotcomp = $slot->cmpAdjs[$slot->CAdjassignedkey];
@@ -1517,7 +1517,7 @@ class Mypattern {
                     // echo $slot->CAdjassignedkey.": ".$slotcomp->puntsfinal.'<br />';
                     // punts de coordinacions
                     $wordaux = $slotcomp->paraulafinal;
-                    if ($wordaux->paraulacoord != null) $this->puntuaciofinal += 7;
+                    if (count($wordaux->paraulacoord) > 0) $this->puntuaciofinal += 7;
                 }
                 if ($slot->CModassigned) {
                     // un slot pot tenir varis modificadors assignats
@@ -1526,7 +1526,7 @@ class Mypattern {
                         $this->puntuaciofinal += $slotcomp->puntsfinal;
                         // punts de coordinacions
                         $wordaux = $slotcomp->paraulafinal;
-                        if ($wordaux->paraulacoord != null) $this->puntuaciofinal += 7;
+                        if (count($wordaux->paraulacoord) > 0) $this->puntuaciofinal += 7;
                     }
                 }
                 
@@ -1595,28 +1595,43 @@ class Mypattern {
                 $string .= "Slot: ".$keyslot." = ".$slot->paraulafinal->text;
                 // tractem les coordinacions
                 $wordaux = $slot->paraulafinal;
-                if ($wordaux->paraulacoord != null) $string .= " (i ".$wordaux->paraulacoord->text.")";
+                if (count($wordaux->paraulacoord) > 0) {
+                    for ($k=0; $k<count($wordaux->paraulacoord); $k++) {
+                        $string .= " (i ".$wordaux->paraulacoord[$k]->text.")";
+                    }
+                }
                 
                 if ($slot->NCassigned) {
                     $slotcomp = $slot->complements[$slot->NCassignedkey];
                     $string .= " --> NC = ".$slotcomp->paraulafinal->text;
                     // tractem les coordinacions
                     $wordaux = $slotcomp->paraulafinal;
-                    if ($wordaux->paraulacoord != null) $string .= " (i ".$wordaux->paraulacoord->text.")";
+                    if (count($wordaux->paraulacoord) > 0) {
+                        for ($k=0; $k<count($wordaux->paraulacoord); $k++) {
+                            $string .= " (i ".$wordaux->paraulacoord[$k]->text.")";
+                        }
+                    }
                 }
                 if ($slot->CAdvassigned) {
                     $slotcomp = $slot->cmpAdvs[$slot->CAdvassignedkey];
                     $string .= " --> ADV = ".$slotcomp->paraulafinal->text;
                     // tractem les coordinacions
                     $wordaux = $slotcomp->paraulafinal;
-                    if ($wordaux->paraulacoord != null) $string .= " (i ".$wordaux->paraulacoord->text.")";
-                }
+                    if (count($wordaux->paraulacoord) > 0) {
+                        for ($k=0; $k<count($wordaux->paraulacoord); $k++) {
+                            $string .= " (i ".$wordaux->paraulacoord[$k]->text.")";
+                        }
+                    }                }
                 if ($slot->CAdjassigned) {
                     $slotcomp = $slot->cmpAdjs[$slot->CAdjassignedkey];
                     $string .= " --> ADJ = ".$slotcomp->paraulafinal->text;
                     // tractem les coordinacions
                     $wordaux = $slotcomp->paraulafinal;
-                    if ($wordaux->paraulacoord != null) $string .= " (i ".$wordaux->paraulacoord->text.")";
+                    if (count($wordaux->paraulacoord) > 0) {
+                        for ($k=0; $k<count($wordaux->paraulacoord); $k++) {
+                            $string .= " (i ".$wordaux->paraulacoord[$k]->text.")";
+                        }
+                    }
                 }
                 if ($slot->CModassigned) {
                     // un slot pot tenir varis modificadors assignats
@@ -1625,7 +1640,11 @@ class Mypattern {
                         $string .= " --> MOD = ".$slotcomp->paraulafinal->text;
                         // tractem les coordinacions
                         $wordaux = $slotcomp->paraulafinal;
-                        if ($wordaux->paraulacoord != null) $string .= " (i ".$wordaux->paraulacoord->text.")";
+                        if (count($wordaux->paraulacoord) > 0) {
+                            for ($k=0; $k<count($wordaux->paraulacoord); $k++) {
+                                $string .= " (i ".$wordaux->paraulacoord[$k]->text.")";
+                            }
+                        }
                     }
                 }
                 $string .= "<br /><br />";
@@ -2613,7 +2632,7 @@ class Mypattern {
                     $this->perssubj1 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj1->tipus == "name" && $subj1->paraulacoord != null) $this->plsubj1 = true;
+                if ($subj1->tipus == "name" && count($subj1->paraulacoord) > 0) $this->plsubj1 = true;
             }
             else if($slotsubj1->paraulafinal->tipus == "questpart") {
                 $this->perssubj1 = 3;
@@ -2716,7 +2735,7 @@ class Mypattern {
                     $this->perssubj2 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj2->paraulacoord != null) $this->plsubj2 = true;
+                if (count($subj2->paraulacoord) > 0) $this->plsubj2 = true;
             }
             
             // sempre hi ha subj1 a no ser que a un pseudoimpersonal el subj sigui un subverb
@@ -2880,7 +2899,7 @@ class Mypattern {
                     $this->perssubj1 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj1->tipus == "name" && $subj1->paraulacoord != null) $this->plsubj1 = true;
+                if ($subj1->tipus == "name" && count($subj1->paraulacoord) > 0) $this->plsubj1 = true;
             }
             else if($slotsubj1->paraulafinal->tipus == "questpart") {
                 $this->perssubj1 = 3;
@@ -2983,7 +3002,7 @@ class Mypattern {
                     $this->perssubj2 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj2->paraulacoord != null) $this->plsubj2 = true;
+                if (count($subj2->paraulacoord) > 0) $this->plsubj2 = true;
             }
             
             // sempre hi ha subj1 a no ser que a un pseudoimpersonal el subj sigui un subverb

@@ -1116,13 +1116,18 @@ class Lexicon extends CI_Model {
                 }
                 
                 if ($word != null) {
+                    
+                    // DEBUG
+                    // if ($paraulaprevia != null) echo $paraulaprevia->text." - ".$word->text."<br />";
                                         
                     if ($itrobada) {
                         $ibona = ($paraulaprevia->tipus == $word->tipus);
-                        $itrobada = false;
+                        // mirem si la paraula actual també té una coordinació
+                        if ($word->coord) $itrobada = true;
+                        else $itrobada = false;
                         if ($ibona) {
                             $ibona = false;
-                            $paraulaprevia->paraulacoord = unserialize(serialize($word));
+                            $paraulaprevia->paraulacoord[] = unserialize(serialize($word));
                         }
                         else {
                             $ordre += 1; // perquè si ibona, al principi no s'havia incrementat
@@ -1130,7 +1135,7 @@ class Lexicon extends CI_Model {
                             $output[$ordre] = $word;
                         }
                     }
-                    // no acceptem tenir dues coordinacions seguides
+                    // si no hi ha cap "i" posem la paraula a la llista de paraules
                     else {
                         $output[$ordre] = $word;
                         
