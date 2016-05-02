@@ -105,4 +105,18 @@ class Main extends REST_Controller {
         //respuesta
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
+  
+    public function addUser_post()
+    {
+        // convertimos el string json del post en array.
+        $data = [
+            'ID_USU'=>$this->query('IdSu'),
+            'ID_ULanguage'=>$this->query('ID_ULanguage'),
+            'cfgExpansionLanguage'=>$this->query('cfgExpansionLanguage')
+            ];
+
+        $response = $this->main_model->saveData('User', $data);
+        //respuesta
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
 }

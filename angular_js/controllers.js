@@ -488,27 +488,51 @@ angular.module('controllers', [])
         $location.path('/login');
     }
     // Declaración de variables
-    $scope.viewActived=false;
     $scope.canEdit = false;
+    $scope.viewActived=false;
     $scope.loadingEdit=false;
     $scope.loadingOldPass=false;
     $scope.interfaceLanguageBarEnable=true;
     $scope.expansionLanguageEnable=true;
-    $scope.interfaceLanguages=[];
-    $scope.expansionLanguages=[];
     var count1=0;
     var count2=0;
     //Pedimos la configuración del usuario a la base de datos
     $scope.getConfig = function(){
+        $scope.interfaceLanguages=[];
+        $scope.expansionLanguages=[];
+        $scope.numPictosBarPred=['2','3','4','5','6','7','8','9','10'];
         Resources.main.get({'IdSu':$rootScope.sUserId}, {'funct': "getConfig"}).$promise
         .then(function (results) {
             window.localStorage.removeItem('userData');
             window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+            $rootScope.interfaceLanguageId = results.userConfig.ID_ULanguage;
+            $rootScope.expanLanguageId = results.userConfig.cfgExpansionLanguage;
             $scope.userData = results.userConfig;
             $scope.interfaceLanguage = results.languages[results.userConfig.ID_ULanguage-1].languageName;
             $scope.expansionLanguage = results.languages[results.userConfig.cfgExpansionLanguage-1].languageName;
-            
+            $scope.languages = results.languages;
+
+            //Necessary for preselected ng-options (select) works
+            $scope.userData.cfgPredBarNumPred=$scope.numPictosBarPred[results.userConfig.cfgPredBarNumPred-2];
+
+            //Parse string to integer
+            $scope.userData.cfgTimeLapseSelect=parseInt(results.userConfig.cfgTimeLapseSelect, 10);
+            $scope.userData.cfgTimeNoRepeatedClick=parseInt(results.userConfig.cfgTimeNoRepeatedClick, 10);
+            $scope.userData.cfgTimeClick=parseInt(results.userConfig.cfgTimeClick, 10);
+
+            //change string (0,1) to boolean (true,false)
             $scope.userData.cfgExpansionOnOff = ($scope.userData.cfgExpansionOnOff === "1");
+            $scope.userData.cfgPredOnOff = ($scope.userData.cfgPredOnOff === "1");
+            $scope.userData.cfgMenuReadActive = ($scope.userData.cfgMenuReadActive === "1");
+            $scope.userData.cfgMenuDeleteLastActive = ($scope.userData.cfgMenuDeleteLastActive === "1");
+            $scope.userData.cfgMenuDeleteAllActive = ($scope.userData.cfgMenuDeleteAllActive === "1");
+            $scope.userData.cfgAutoEraseSentenceBar = ($scope.userData.cfgAutoEraseSentenceBar === "1");
+            $scope.userData.cfgTimeLapseSelectOnOff = ($scope.userData.cfgTimeLapseSelectOnOff === "1");
+            $scope.userData.cfgTimeNoRepeatedClickOnOff = ($scope.userData.cfgTimeNoRepeatedClickOnOff === "1");
+            $scope.userData.cfgScanningOnOff = ($scope.userData.cfgScanningOnOff === "1");
+            $scope.userData.cfgScanningAutoOnOff = ($scope.userData.cfgScanningAutoOnOff === "1");
+            $scope.userData.cfgScanningCancelScanOnOff = ($scope.userData.cfgScanningCancelScanOnOff === "1");
+            $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
             
             var count=results.users[0].ID_ULanguage;
             var numberOfInterfaceLanguages=0;
@@ -519,20 +543,20 @@ angular.module('controllers', [])
                     numberOfInterfaceLanguages++;
                 }
                 $scope.expansionLanguages.push({idInterfaceLanguage: numberOfInterfaceLanguages,name: results.languages[value.cfgExpansionLanguage-1].languageName, user: value.ID_User});
-               
+                
             });
             
             //Delete name and surnames input text box
             delete $scope.userDataForm.realName;
             delete $scope.userDataForm.surNames;
             $scope.loadingEdit=false;
-            //Enable bar after change Language
-            $scope.interfaceLanguageBarEnable=true;
-            $scope.expansionLanguageEnable=true;
             // Pedimos los textos para cargar la pagina
             txtContent("userConfig").then(function(results){
                 $scope.content = results.data;
                 $scope.viewActived=true;
+                //Enable bar after change Language
+                $scope.interfaceLanguageBarEnable=true;
+                $scope.expansionLanguageEnable=true;
             });
         });
     };
@@ -631,6 +655,50 @@ angular.module('controllers', [])
         }else{
             Resources.main.save({'IdSu':$rootScope.sUserId, 'data':data, 'value':'0'}, {'funct': "changeCfgBool"}).$promise
         }
+    }
+    
+    $scope.changeRadioEstate = function(value, data){
+            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':data, 'value':value}, {'funct': "changeCfgBool"}).$promise
+    }
+    $scope.checkNumberTime = function(value, data){
+            if (angular.isNumber(value)){
+                $scope.changeRadioEstate(value, data);
+            }
+    }
+    
+    $scope.addLanguage = function(idLanguage){
+        if(idLanguage=='submit'&&$scope.addLanguageTo=='interface'){
+            $scope.languageEnable=false;
+            $scope.contentBar1=false;
+            $scope.contentBar2=false;
+            $scope.interfaceLanguageBarEnable=false;
+            $scope.expansionLanguageEnable=false;
+            Resources.main.save({'IdSu':$rootScope.sUserId, 'ID_ULanguage':$scope.addlanguageId, 'cfgExpansionLanguage':$scope.addlanguageId}, {'funct': "addUser"}).$promise
+            .then(function () {
+                delete $scope.interfaceLanguages;
+                $scope.interfaceLanguages=[];
+                delete $scope.expansionLanguages;
+                $scope.expansionLanguages=[];
+                $scope.getConfig();
+            });
+        }else if(idLanguage=='submit'&&$scope.addLanguageTo=='expansion'){
+            $scope.languageEnable=false;
+            $scope.contentBar1=false;
+            $scope.contentBar2=false;
+            $scope.interfaceLanguageBarEnable=false;
+            $scope.expansionLanguageEnable=false;
+            Resources.main.save({'IdSu':$rootScope.sUserId, 'ID_ULanguage':$rootScope.interfaceLanguageId, 'cfgExpansionLanguage':$scope.addlanguageId}, {'funct': "addUser"}).$promise
+            .then(function () {
+                delete $scope.interfaceLanguages;
+                $scope.interfaceLanguages=[];
+                delete $scope.expansionLanguages;
+                $scope.expansionLanguages=[];
+                $scope.getConfig();
+            });
+        }else{
+            $scope.addlanguageId=idLanguage;
+        }
+        $scope.languageEnable=true;
     }
 
  })
