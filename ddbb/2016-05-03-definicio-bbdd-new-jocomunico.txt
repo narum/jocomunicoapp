@@ -18,7 +18,12 @@ CREATE TABLE Languages (
 CREATE TABLE Voices (
 	ID_Voice INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	IDLang_L INT,
-	voiceName VARCHAR(200),
+	voiceType ENUM('online', 'offline') DEFAULT 'online',
+	voiceName VARCHAR(100),
+	vocalwareIdLang INT NULL,
+	vocalwareLangAbbr VARCHAR(10) NULL,
+	vocalwareVoiceId INT NULL,
+	vocalwareDescr VARCHAR(20) NULL,
 	mascfem ENUM('masc', 'fem') DEFAULT 'masc',
 	INDEX IDLang (IDLang_L),
 	FOREIGN KEY (IDLang_L) REFERENCES Languages (ID_Language) ON DELETE SET NULL
@@ -74,6 +79,7 @@ CREATE TABLE User (
 	ID_ULanguage INT,
 	ID_UOrg INT,
 	cfgExpansionVoiceOnline VARCHAR(300),
+	cfgExpansionVoiceOnlineType ENUM('online', 'offline') DEFAULT 'online',
 	cfgExpansionVoiceOffline VARCHAR(300),
 	cfgInterfaceVoiceOnOff ENUM('0', '1') DEFAULT '0',
 	cfgInterfaceVoiceOnline VARCHAR(300),

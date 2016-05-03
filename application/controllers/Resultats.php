@@ -23,6 +23,7 @@ class Resultats extends CI_Controller {
             $this->load->library('Myslot');
             $this->load->library('Mypattern');
             $this->load->library('Myexpander');
+            $this->load->library('Myaudio');
             // $this->load->library('Mymatching');
             // $this->load->library('Mypatterngroup');
         }
@@ -33,6 +34,11 @@ class Resultats extends CI_Controller {
             $expander->expand();
             $info = $expander->info;
             
+//            $audio = new Myaudio();
+//            $aux = $audio->listExpansionVoices(true);
+//            $interfaceVoices = $aux[0];
+//            print_r($interfaceVoices);
+            
             // si el sistema operatiu és un Mac
             $server_data = $_SERVER['HTTP_USER_AGENT'];
             $user_agent = $this->getOS($server_data);
@@ -41,7 +47,7 @@ class Resultats extends CI_Controller {
             $isfem = $this->session->userdata('isfem');
             
             $isconnected = $this->is_connected();
-            
+                        
             // DEBUG
             // if ($isconnected) echo "GREAT!!";
             // else echo "OOOHHH!";
