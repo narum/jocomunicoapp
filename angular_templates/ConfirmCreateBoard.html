@@ -3,13 +3,15 @@
         <input type="text" class="col-xs-offset-2 col-xs-8 dialogText"  name="CreateBoardName" ng-model="CreateBoardData.CreateBoardName" placeholder="{{content.newboardtext}}"/>
 </div>
 <div class="row" style="height: 25%">
+    
     <select class="col-xs-offset-3 col-xs-2 dropdown-arrow"
         ng-model="CreateBoardData.height"
-        ng-options="h for h in range(20)">
+        ng-options="h for h in range(20)"
+        >
     </select>
     <select class="col-xs-offset-2 col-xs-2 dropdown-arrow"
         ng-model="CreateBoardData.width"
-        ng-options="p for p in range(20)">
+        ng-options="w for w in range(20)">
     </select>
 </div>
 <div class="row" style="height: 25%">

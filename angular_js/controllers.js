@@ -1010,7 +1010,7 @@ angular.module('controllers', [])
             $scope.range = function ($repeatnum)
             {
                 var n = [];
-                for (i = 1; i <= $repeatnum; i++)
+                for (i = 0; i <= $repeatnum; i++)
                 {
                     n.push(i);
                 }
@@ -1648,30 +1648,38 @@ angular.module('controllers', [])
              *  
              ***************************************************/
             $scope.CreateBoard = function () {
-                $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
-                ngDialog.openConfirm({
-                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
-                    scope: $scope,
-                    className: 'ngdialog-theme-default dialogCreateBoard'
-                }).then(function () {
-                    var postdata = {id: $scope.idboard};
-                    var URL = $scope.baseurl + "Board/getIDGroupBoards"
+                var postdata = {id: $scope.idboard};
+                var URL = $scope.baseurl + "Board/getIDGroupBoards";
 
-                    $http.post(URL, postdata).success(function (response)
-                    {
-                        $scope.CreateBoardData.idGroupBoard = response.idGroupBoard;
+                $http.post(URL, postdata).success(function (response)
+                {
+                    $scope.idGroupBoard = response.idGroupBoard;
+                    var URL = $scope.baseurl + "PanelGroup/getPanelGroupInfo";
+                    alert($scope.idGroupBoard);
+                    var postdata = {idGroupBoard: $scope.idGroupBoard};
+                    $http.post(URL, postdata).
+                            success(function (response)
+                            {
+                                $scope.CreateBoardData = {CreateBoardName: '', height:  response.defWidth.toString(), width: response.defHeight.toString(), idGroupBoard: response.ID_GB};
+                                alert("INFO: "+$scope.CreateBoardData.height +" : "+ $scope.CreateBoardData.width +" : "+ $scope.CreateBoardData.idGroupBoard);
+                                ngDialog.openConfirm({
+                                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
+                                    scope: $scope,
+                                    className: 'ngdialog-theme-default dialogCreateBoard'
+                                }).then(function () {
 
-                        URL = $scope.baseurl + "Board/newBoard"
+                                    URL = $scope.baseurl + "Board/newBoard";
 
 
-                        $http.post(URL, $scope.CreateBoardData).success(function (response)
-                        {
-                            $scope.showBoard(response.idBoard)
-                            $scope.edit();
-                        });
-                    });
+                                    $http.post(URL, $scope.CreateBoardData).success(function (response)
+                                    {
+                                        $scope.showBoard(response.idBoard);
+                                        $scope.edit();
+                                    });
 
-                }, function (value) {
+                                }, function (value) {
+                                });
+                            });
                 });
 
             };
