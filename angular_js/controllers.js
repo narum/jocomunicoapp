@@ -1778,6 +1778,7 @@ angular.module('controllers', [])
 
             };
             $scope.RemoveBoard = function () {
+                $scope.RemoveBoardData = {BoardName: $scope.nameboard}
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmRemoveBoard.html',
                     scope: $scope,
