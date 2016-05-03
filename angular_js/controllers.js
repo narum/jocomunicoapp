@@ -1704,7 +1704,6 @@ angular.module('controllers', [])
 
 
             $scope.copyBoard = function () {
-                //MODIF: Se tiene que cojer los datos de la board i enviarlos por la siguiente linia
 
                 var postdata = {id: $scope.idboard};
                 var URL = $scope.baseurl + "Board/getIDGroupBoards";

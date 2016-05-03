@@ -40,10 +40,8 @@ class Board extends REST_Controller {
         $iu = $request->idusu;
         $lu = $request->lusu;
         $luid = $request->lusuid;
-
+        //MODIF: mirar que id de lenguage es 
         $data = array(
-            'idusu' => $iu, // Id user
-            'ulangabbr' => $lu, // ES, CA...
             'ulangid' => $luid // Id language
         );
 
