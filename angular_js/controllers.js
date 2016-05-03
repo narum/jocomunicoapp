@@ -612,7 +612,9 @@ angular.module('controllers', [])
                 $scope.currentScanBlock1 = 1;
                 $scope.currentScanBlock2 = 1;
                 $scope.isScanningCancel = false;
-                if ($scope.cfgPredOnOff === '1') {
+                if ($scope.cfgScanStartClick == '1' && $scope.isScanning != "nowait") {
+                    $scope.isScanning = "waiting";
+                } else if ($scope.cfgPredOnOff === '1') {
                     $scope.isScanning = "prediction";
                 } else if (userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive > 1) {
                     $scope.isScanning = "sentence";
@@ -749,6 +751,7 @@ angular.module('controllers', [])
                         }
                         // There is no group selected
                         if ($scope.maxScanBlock2 === "No group found") {
+                            $scope.isScanning = "nowait";
                             $scope.InitScan();
                         }
                     });
@@ -765,7 +768,9 @@ angular.module('controllers', [])
                         $scope.feedback(1);
                     } else {
                         if ($scope.currentScanBlock == 1) {
-                            if ($scope.isScanning === "prediction") {
+                            if ($scope.isScanning === "waiting") {
+                                $scope.isScanning = "prediction";
+                            } else if ($scope.isScanning === "prediction") {
                                 $scope.isScanning = "sentence";
                             } else if ($scope.isScanning === "sentence") {
                                 $scope.isScanning = "board";
@@ -773,6 +778,7 @@ angular.module('controllers', [])
                             } else if ($scope.isScanning === "board") {
                                 $scope.currentScanBlock1 = $scope.currentScanBlock1 + 1;
                                 if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
+                                    $scope.isScanning = "nowait";
                                     $scope.InitScan();
                                 }
                             }
@@ -781,6 +787,7 @@ angular.module('controllers', [])
                                 $scope.indexScannedCells = $scope.indexScannedCells + 1;
                                 // MODIF: no puede ser mas grande que esta ni tmpoco que el da la cfg
                                 if ($scope.indexScannedCells >= $scope.arrayScannedCells.length) {
+                                    $scope.isScanning = "nowait";
                                     $scope.InitScan();
                                 }
                             } else if ($scope.isScanning === "read") {
@@ -789,15 +796,18 @@ angular.module('controllers', [])
                                 } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
                                     $scope.isScanning = "deleteall";
                                 } else {
+                                    $scope.isScanning = "nowait";
                                     $scope.InitScan();
                                 }
                             } else if ($scope.isScanning === "deletelast") {
                                 if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
                                     $scope.isScanning = "deleteall";
                                 } else {
+                                    $scope.isScanning = "nowait";
                                     $scope.InitScan();
                                 }
                             } else if ($scope.isScanning === "deleteall") {
+                                $scope.isScanning = "nowait";
                                 $scope.InitScan();
                             } else if ($scope.isScanning === "board") {
                                 if ($scope.cfgScanningCustomRowCol == 0) {
@@ -807,11 +817,13 @@ angular.module('controllers', [])
                                             $scope.currentScanBlock2 = null;
                                         }
                                     } else {
+                                        $scope.isScanning = "nowait";
                                         $scope.InitScan();
                                     }
                                 } else {
                                     $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
                                     if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
+                                        $scope.isScanning = "nowait";
                                         $scope.InitScan();
                                     }
                                 }
@@ -820,6 +832,7 @@ angular.module('controllers', [])
                         else if ($scope.currentScanBlock === 3) {
                             $scope.indexScannedCells = $scope.indexScannedCells + 1;
                             if ($scope.indexScannedCells > $scope.arrayScannedCells.length) {
+                                $scope.isScanning = "nowait";
                                 $scope.InitScan();
                             }
                         }
@@ -841,10 +854,15 @@ angular.module('controllers', [])
                         $scope.feedback(0);
                     } else {
                         if ($scope.currentScanBlock === 1) {
-                            if ($scope.timerScan == 1)
+                            if ($scope.timerScan == 1) {
                                 $scope.isScanningCancel = true;
+                            }
                             $scope.currentScanBlock = 2;
-                            if ($scope.isScanning === "prediction") {
+                            if ($scope.isScanning === "waiting") {
+                                //this is the only case when currentScanBlock is not increased
+                                $scope.currentScanBlock = 1;
+                                $scope.isScanning = "prediction";
+                            } else if ($scope.isScanning === "prediction") {
                                 $scope.arrayScannedCells = $scope.recommenderArray;
                                 $scope.indexScannedCells = 0;
                             } else if ($scope.isScanning === "sentence") {
@@ -948,12 +966,12 @@ angular.module('controllers', [])
                 $scope.inScan = false;
 
                 //-----------Iniciacion-----------
-                
+
                 // Prediction bar configuration
                 $scope.cfgPredOnOff = userConfig.cfgPredOnOff;
                 $scope.cfgPredBarVertHor = userConfig.cfgPredBarVertHor;
                 $scope.cfgPredBarNumPred = userConfig.cfgPredBarNumPred;
-                
+
                 $scope.sentenceViewHeight = 16;
                 $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
@@ -975,13 +993,14 @@ angular.module('controllers', [])
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
                 $scope.longclick = userConfig.cfgUsageMouseOneCTwoC;
                 $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
-                
+
                 $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff;
                 $scope.cfgTimeOver = userConfig.cfgTimeLapseSelect;
                 $scope.cfgTimeNoRepeatedClickOnOff = userConfig.cfgTimeNoRepeatedClickOnOff;
                 $scope.cfgTimeNoRepeatedClick = userConfig.cfgTimeNoRepeatedClick;
                 $scope.TimeMultiClic = 0;
-                
+                $scope.cfgScanStartClick = 1;
+
                 $scope.getPred();
                 if ($rootScope.editPanelInfo != null) {
                     $scope.showBoard($rootScope.editPanelInfo.idBoard);
@@ -989,7 +1008,7 @@ angular.module('controllers', [])
                     $rootScope.editPanelInfo = null;
                 } else {
                     $scope.getPrimaryUserBoard();
-                    if (userConfig.cfgScanningOnOff == 1){
+                    if (userConfig.cfgScanningOnOff == 1) {
                         $scope.InitScan();
                     }
                 }
@@ -1005,7 +1024,7 @@ angular.module('controllers', [])
                 });
             };
             /*
-             * Return: array fron 0 to repeatnum
+             * Return: array from 0 to repeatnum
              */
             $scope.range = function ($repeatnum)
             {
@@ -1016,7 +1035,7 @@ angular.module('controllers', [])
                 }
                 return n;
             };
-            
+
             /*
              * Show board and the pictograms
              */
@@ -1274,7 +1293,7 @@ angular.module('controllers', [])
 
             $scope.TimeoutOverClick = function (type, object)
             {
-                if($scope.inScan){
+                if ($scope.inScan) {
                     return false;
                 }
                 //This timeout.cancel avoid possible multiple calls.
@@ -1284,13 +1303,13 @@ angular.module('controllers', [])
                     //MODIF: No se perque tarda mes del temps que s'ha assignat
                     $scope.OverAutoClick = $timeout(function () {
                         $scope.clickOnCell(object);
-                    }, $scope.cfgTimeOver); 
+                    }, $scope.cfgTimeOver);
                 } else if (type === 1)
                 {
                     //MODIF: No se perque tarda mes del temps que s'ha assignat
                     $scope.OverAutoClick = $timeout(function () {
                         $scope.addToSentence(object);
-                    }, $scope.cfgTimeOver); 
+                    }, $scope.cfgTimeOver);
                 } else if (type === 2)
                 {
                     if (object === 'generate')
@@ -1298,19 +1317,19 @@ angular.module('controllers', [])
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.generate();
-                        }, $scope.cfgTimeOver); 
+                        }, $scope.cfgTimeOver);
                     } else if (object === 'deleteLast')
                     {
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.deleteLast();
-                        }, $scope.cfgTimeOver); 
+                        }, $scope.cfgTimeOver);
                     } else if (object === 'deleteAll')
                     {
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.deleteAll();
-                        }, $scope.cfgTimeOver); 
+                        }, $scope.cfgTimeOver);
                     }
                 } else if (type === 3)
                 {
@@ -1319,20 +1338,20 @@ angular.module('controllers', [])
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.feedback(1);
-                        }, $scope.cfgTimeOver); 
+                        }, $scope.cfgTimeOver);
                     } else if (object === 'Bad')
                     {
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.feedback(0);
-                        }, $scope.cfgTimeOver); 
+                        }, $scope.cfgTimeOver);
                     }
                 }
             };
 
             $scope.CancelTimeoutOverClick = function ()
             {
-                if($scope.inScan){
+                if ($scope.inScan) {
                     return false;
                 }
                 $timeout.cancel($scope.OverAutoClick);
@@ -1660,8 +1679,8 @@ angular.module('controllers', [])
                     $http.post(URL, postdata).
                             success(function (response)
                             {
-                                $scope.CreateBoardData = {CreateBoardName: '', height:  response.defWidth.toString(), width: response.defHeight.toString(), idGroupBoard: response.ID_GB};
-                                alert("INFO: "+$scope.CreateBoardData.height +" : "+ $scope.CreateBoardData.width +" : "+ $scope.CreateBoardData.idGroupBoard);
+                                $scope.CreateBoardData = {CreateBoardName: '', height: response.defWidth.toString(), width: response.defHeight.toString(), idGroupBoard: response.ID_GB};
+                                alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
                                     scope: $scope,
@@ -2139,7 +2158,7 @@ angular.module('controllers', [])
             $scope.$on('scrollbar.hide', function () {
                 console.log('Scrollbar hide');
             });
-            
+
             $scope.range = function ($repeatnum)
             {
                 var n = [];
