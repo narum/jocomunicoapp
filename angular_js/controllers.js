@@ -577,7 +577,7 @@ angular.module('controllers', [])
             $scope.$on("IniciCallFromMenu", function () {
                 //MODIF: Se tiene que hacer con configuracion de usuario
 
-                $scope.config(4);
+                $scope.config();
             });
             //MODIF: Solo para hacer pruebas
             $scope.$on("ScanCallFromMenu", function () {
@@ -591,12 +591,8 @@ angular.module('controllers', [])
                     return false;
                 }
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
-                // 0 custom, 1 rows, 2 columns
-                $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
                 $scope.inScan = true;
-                $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
                 //MODIF: usar cfgOneClicko algo asi
-                $scope.longclick = false;
                 function myTimer() {
                     $scope.NextBlockScan();
                 }
@@ -783,8 +779,8 @@ angular.module('controllers', [])
                         } else if ($scope.currentScanBlock == 2) {
                             if ($scope.isScanning === "prediction") {
                                 $scope.indexScannedCells = $scope.indexScannedCells + 1;
-                                // MODIF: cambiar a la cfg de usuario
-                                if ($scope.indexScannedCells > $scope.arrayScannedCells.length) {
+                                // MODIF: no puede ser mas grande que esta ni tmpoco que el da la cfg
+                                if ($scope.indexScannedCells >= $scope.arrayScannedCells.length) {
                                     $scope.InitScan();
                                 }
                             } else if ($scope.isScanning === "read") {
@@ -828,57 +824,6 @@ angular.module('controllers', [])
                             }
                         }
                     }
-
-
-
-
-
-
-
-//                    // If we are in the first scan level passes to the next (cyclic)
-//                    if ($scope.currentScanBlock === 1) {
-//                        $scope.currentScanBlock1 = $scope.currentScanBlock1 + 1;
-//                        if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
-//                            $scope.currentScanBlock1 = -1;
-//                        }
-//                    }// If we are in the second scan level passes to the next (cyclic) but...
-//                    else if ($scope.currentScanBlock === 2 && $scope.cfgScanningCustomRowCol == 0) {
-//                        // CurrentScanBlock will be null when we are over all the cell that have no scan block
-//                        if ($scope.currentScanBlock2 !== null) {
-//                            // If we are not over the mentioned scanblock pass to the next
-//                            $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-//                            // If we pass the last scan block...
-//                            if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-//                                // We are scannig the prediction bar or the sentece bar so start again
-//                                if ($scope.currentScanBlock1 == 0 || $scope.currentScanBlock1 == -1) {
-//                                    $scope.InitScan();
-//                                    //We have to go to the cells that have no scan block
-//                                } else {
-//                                    $scope.currentScanBlock2 = null;
-//                                }
-//
-//
-//                            }
-//                            // If we are over this strange block, int scan again
-//                        } else {
-//                            $scope.InitScan();
-//                        }
-//
-//                    } // If we are not in custom scan there are no null group so pass to the next(cyclic) 
-//                    else if ($scope.currentScanBlock === 2 && ($scope.cfgScanningCustomRowCol == 1 || $scope.cfgScanningCustomRowCol == 2)) {
-//                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-//                        // All cells were scanned. Start again
-//                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-//                            $scope.InitScan();
-//                            return;
-//                        }
-//                    }// If we are in the third scan pass one by one over the array (cyclic)
-//                    else if ($scope.currentScanBlock === 3) {
-//                        $scope.indexScannedCells = $scope.indexScannedCells + 1;
-//                        if ($scope.indexScannedCells >= $scope.arrayScannedCells.length) {
-//                            $scope.InitScan();
-//                        }
-//                    }
                 }
             };
             //Pass to the next scan level (subgroup)
@@ -981,7 +926,7 @@ angular.module('controllers', [])
 
 
             // Get the user config and show the board
-            $scope.config = function (boardconf)
+            $scope.config = function ()
             {
                 //-----------Iniciacion-----------
 
@@ -1003,29 +948,16 @@ angular.module('controllers', [])
                 $scope.inScan = false;
 
                 //-----------Iniciacion-----------
-                // Remove 
-                if (boardconf === 1)
-                {
-                    $scope.showall();
-                }
-                if (boardconf === 2)
-                {
-                    $scope.showright();
-                }
-                if (boardconf === 3)
-                {
-                    $scope.showleft();
-                }
-                if (boardconf === 4)
-                {
-                    $scope.showmid();
-                }
-                $scope.showup();
-                // Remove ^
+                
                 // Prediction bar configuration
                 $scope.cfgPredOnOff = userConfig.cfgPredOnOff;
                 $scope.cfgPredBarVertHor = userConfig.cfgPredBarVertHor;
                 $scope.cfgPredBarNumPred = userConfig.cfgPredBarNumPred;
+                
+                $scope.sentenceViewHeight = 16;
+                $scope.userViewWidth = 12;
+                $scope.searchFolderHeight = 0;
+                $scope.boardHeight = 78;
                 if ($scope.cfgPredOnOff === '1' && $scope.cfgPredBarVertHor === '0') { // Prediction on and vertical
                     $scope.predViewWidth = 1;
                     $scope.userViewWidth = 11;
@@ -1040,16 +972,16 @@ angular.module('controllers', [])
                 $scope.cfgMenuDeleteAllActive = userConfig.cfgMenuDeleteAllActive;
                 $scope.cfgSentenceBarUpDown = userConfig.cfgSentenceBarUpDown;
                 $scope.pictoBarWidth = 12 - $scope.cfgMenuReadActive - $scope.cfgMenuDeleteLastActive - $scope.cfgMenuDeleteAllActive;
-                //MODIF: Añadir de base de datos la configuracion del time over
-                $scope.cfgTimeOver = 0;//MODIF: obtener BBDD
-                $scope.cfgTimeMultiClic = 0;//MODIF: obtener BBDD
+                $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
+                $scope.longclick = userConfig.cfgUsageMouseOneCTwoC;
+                $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
+                
+                $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff;
+                $scope.cfgTimeOver = userConfig.cfgTimeLapseSelect;
+                $scope.cfgTimeNoRepeatedClickOnOff = userConfig.cfgTimeNoRepeatedClickOnOff;
+                $scope.cfgTimeNoRepeatedClick = userConfig.cfgTimeNoRepeatedClick;
                 $scope.TimeMultiClic = 0;
-                /*$scope.grid1hide = false;
-                 $scope.grid2hide = false;
-                 $scope.grid3hide = false;
-                 $scope.grid1 = 2;
-                 $scope.grid2 = 8;
-                 $scope.grid3 = 2;*/
+                
                 $scope.getPred();
                 if ($rootScope.editPanelInfo != null) {
                     $scope.showBoard($rootScope.editPanelInfo.idBoard);
@@ -1057,6 +989,9 @@ angular.module('controllers', [])
                     $rootScope.editPanelInfo = null;
                 } else {
                     $scope.getPrimaryUserBoard();
+                    if (userConfig.cfgScanningOnOff == 1){
+                        $scope.InitScan();
+                    }
                 }
             };
 
@@ -1081,55 +1016,7 @@ angular.module('controllers', [])
                 }
                 return n;
             };
-            /*
-             * Change mainboard views (history, prediction...)
-             */
-            $scope.showall = function ()
-            {
-
-            };
-            $scope.showright = function ()
-            {
-
-            };
-            $scope.showleft = function ()
-            {
-
-            };
-            $scope.showmid = function ()
-            {
-
-            };
-
-            $scope.showupdown = function ()
-            {
-
-                $scope.sentenceViewHeight = 20;
-                $scope.userViewWidth = 12;
-                $scope.searchFolderHeight = 0;
-                $scope.boardHeight = 60;
-            };
-            $scope.showdown = function ()
-            {
-                $scope.sentenceViewHeight = 0;
-                $scope.userViewWidth = 12;
-                $scope.searchFolderHeight = 0;
-                $scope.boardHeight = 80;
-            };
-            $scope.showup = function ()
-            {
-                $scope.sentenceViewHeight = 16;
-                $scope.userViewWidth = 12;
-                $scope.searchFolderHeight = 0;
-                $scope.boardHeight = 78;
-            };
-            $scope.showmiddle = function ()
-            {
-                $scope.sentenceViewHeight = 0;
-                $scope.userViewWidth = 12;
-                $scope.searchFolderHeight = 0;
-                $scope.boardHeight = 100;
-            };
+            
             /*
              * Show board and the pictograms
              */
@@ -1387,6 +1274,9 @@ angular.module('controllers', [])
 
             $scope.TimeoutOverClick = function (type, object)
             {
+                if($scope.inScan){
+                    return false;
+                }
                 //This timeout.cancel avoid possible multiple calls.
                 $timeout.cancel($scope.OverAutoClick);
                 if (type === 0)
@@ -1394,13 +1284,13 @@ angular.module('controllers', [])
                     //MODIF: No se perque tarda mes del temps que s'ha assignat
                     $scope.OverAutoClick = $timeout(function () {
                         $scope.clickOnCell(object);
-                    }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    }, $scope.cfgTimeOver); 
                 } else if (type === 1)
                 {
                     //MODIF: No se perque tarda mes del temps que s'ha assignat
                     $scope.OverAutoClick = $timeout(function () {
                         $scope.addToSentence(object);
-                    }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                    }, $scope.cfgTimeOver); 
                 } else if (type === 2)
                 {
                     if (object === 'generate')
@@ -1408,19 +1298,19 @@ angular.module('controllers', [])
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.generate();
-                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                        }, $scope.cfgTimeOver); 
                     } else if (object === 'deleteLast')
                     {
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.deleteLast();
-                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                        }, $scope.cfgTimeOver); 
                     } else if (object === 'deleteAll')
                     {
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.deleteAll();
-                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                        }, $scope.cfgTimeOver); 
                     }
                 } else if (type === 3)
                 {
@@ -1429,19 +1319,22 @@ angular.module('controllers', [])
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.feedback(1);
-                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                        }, $scope.cfgTimeOver); 
                     } else if (object === 'Bad')
                     {
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.feedback(0);
-                        }, 1000); // MODIF: canviar el segons per conf de user userConfig.cfgTimeOverAutoClick
+                        }, $scope.cfgTimeOver); 
                     }
                 }
             };
 
             $scope.CancelTimeoutOverClick = function ()
             {
+                if($scope.inScan){
+                    return false;
+                }
                 $timeout.cancel($scope.OverAutoClick);
             };
 
@@ -1452,7 +1345,7 @@ angular.module('controllers', [])
                 if ($scope.TimeMultiClic === 0)
                 {
 
-                    if ($scope.cfgTimeMultiClic === 1)
+                    if ($scope.cfgTimeNoRepeatedClickOnOff === 1)
                     {
                         $scope.TimeMultiClic = 1;
                     }
@@ -1470,13 +1363,13 @@ angular.module('controllers', [])
                     $scope.autoReturn();
                     $scope.autoRead();
                 }
-                if ($scope.cfgTimeMultiClic === 1)
+                if ($scope.cfgTimeNoRepeatedClickOnOff === 1)
                 {
-                    $scope.cfgTimeMultiClic = 2;
+                    $scope.cfgTimeNoRepeatedClickOnOff = 2;
                     $scope.TimeoutMultiClic = $timeout(function () {
-                        $scope.cfgTimeMultiClic = 1;
+                        $scope.cfgTimeNoRepeatedClickOnOff = 1;
                         $scope.TimeMultiClic = 0;
-                    }, 2000);
+                    }, $scope.cfgTimeNoRepeatedClick);
                 }
             };
             $scope.autoReturn = function () {
@@ -2217,7 +2110,7 @@ angular.module('controllers', [])
 
             $scope.home = function () {
                 if ($location.path() == '/') {
-                    $scope.config(4);
+                    $scope.config();
                 } else {
                     $location.path('/');
                 }
@@ -2238,7 +2131,7 @@ angular.module('controllers', [])
             $scope.$on('scrollbar.hide', function () {
                 console.log('Scrollbar hide');
             });
-            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+            
             $scope.range = function ($repeatnum)
             {
                 var n = [];
@@ -2248,7 +2141,7 @@ angular.module('controllers', [])
                 }
                 return n;
             };
-
+            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
             }
@@ -2367,60 +2260,6 @@ angular.module('controllers', [])
             };
         })
 
-//Add a directive to link bootstrap switch with angular
-        .directive('bootstrapSwitch', [
-            function () {
-                return {
-                    restrict: 'A',
-                    require: '?ngModel',
-                    link: function (scope, element, attrs, ngModel) {
-                        element.bootstrapSwitch();
-
-                        element.on('switchChange.bootstrapSwitch', function (event, state) {
-                            if (ngModel) {
-                                scope.$apply(function () {
-                                    ngModel.$setViewValue(state);
-                                });
-                            }
-                        });
-
-                        scope.$watch(attrs.ngModel, function (newValue, oldValue) {
-                            if (newValue) {
-                                element.bootstrapSwitch('state', true, true);
-                            } else {
-                                element.bootstrapSwitch('state', false, true);
-                            }
-                        });
-                    }
-                };
-            }
-        ])
-//        .directive('fileModel', ['$parse', function ($parse) {
-//                return {
-//                    restrict: 'AEC',
-//                    scope: {previewImg:'='},
-//                    replace: true,
-//                    link: function (scope, element, attrs) {
-//                        var model = $parse(attrs.fileModel);
-//                        var modelSetter = model.assign;
-//
-//                        element.bind('change', function () {
-//                            scope.$apply(function () {
-//                                modelSetter(scope, element[0].files[0]);
-//                                var fr = new FileReader;
-//                                fr.onloadend = function () {
-//                                    scope.previewImg = fr.result;
-//                                    alert(scope.previewImg);
-//                                };
-//                                fr.readAsDataURL(element[0].files[0]);
-//                                scope.$apply();
-//
-//                            });
-//                        });
-//                    }
-//                };
-//            }
-//        ])
         .directive('onFinishLoop', function ($timeout) {
             return {
                 restrict: 'A',
