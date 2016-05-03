@@ -28,7 +28,25 @@ class PanelGroup extends REST_Controller {
             }
         }
     }
+    public function getPanelGroupInfo_post()
+    {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $ID_GBoard = $request->idGroupBoard;
 
+        $primaryBoard = $this->BoardInterface->getInfoGroupBoard($ID_GBoard);
+
+        $response = [
+            'ID_GB' => $primaryBoard[0]->ID_GB, 
+            'ID_GBUser' => $primaryBoard[0]->ID_GBUser, 
+            'GBname' => $primaryBoard[0]->GBname, 
+            'primaryGroupBoard' => $primaryBoard[0]->primaryGroupBoard, 
+            'defWidth' => $primaryBoard[0]->defWidth, 
+            'defHeight' => $primaryBoard[0]->defHeight, 
+            'imgGB' => $primaryBoard[0]->imgGB
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
     public function getUserPanelGroups_post() {
         $idusu = $this->session->userdata('idusu');
         $panels = $this->panelInterface->getUserPanels($idusu);

@@ -450,6 +450,20 @@ class BoardInterface extends CI_Model {
         return $output;
     }
 
+    function getInfoGroupBoard($idgroup) {
+
+        $this->db->where('ID_GB', $idgroup);
+        $query = $this->db->get('groupboards');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    
     /*
      * Return primaryboard from a board group
      */
