@@ -704,12 +704,18 @@ class BoardInterface extends CI_Model {
         return $id;
     }
 
-    function copyBoardTables($idSrc, $idDst) {
+    function copyBoardTables($idSrc, $idDst, $sameGroupBoard) {
 
         $this->db->where('ID_RBoard', $idSrc);
         $this->db->join('r_boardcell', 'r_boardcell.ID_RCell = cell.ID_Cell', 'left');
         $query = $this->db->get('cell');
+        if($sameGroupBoard === 1){    
+            $row->boardLink = "NULL";
+        }
         foreach ($query->result() as $row) {
+            if($sameGroupBoard === 0){    
+                $row->boardLink = "NULL";
+            }
             $data = array(
                 'isFixedInGroupBoards' => $row->isFixedInGroupBoards,
                 'imgCell' => $row->imgCell,
@@ -749,18 +755,18 @@ class BoardInterface extends CI_Model {
     function removeBoardLinks($IDboard) {
         $output = array();
         $data = array(
-            'imgCell' => NULL,
+            /*'imgCell' => NULL,
             'activeCell' => 1,
             'textInCellTextOnOff' => 1,
             'textInCell' => NULL,
             'isFixedInGroupBoards' => NULL,
-            'ID_CFunction' => NULL,
-            'boardLink' => NULL,
-            'ID_CPicto' => NULL,
+            'ID_CFunction' => NULL,*/
+            'boardLink' => NULL
+            /*'ID_CPicto' => NULL,
             'ID_CSentence' => NULL,
             'sentenceFolder' => NULL,
             'cellType' => NULL,
-            'color' => 'fff'
+            'color' => 'fff'*/
         );
 
         $this->db->where('boardLink', $IDboard);
