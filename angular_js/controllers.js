@@ -1079,7 +1079,7 @@ angular.module('controllers', [])
             $scope.range = function ($repeatnum)
             {
                 var n = [];
-                for (i = 0; i < $repeatnum; i++)
+                for (i = 1; i <= $repeatnum; i++)
                 {
                     n.push(i);
                 }
