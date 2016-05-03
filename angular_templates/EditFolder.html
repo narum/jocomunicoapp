@@ -1,5 +1,19 @@
 
-<div  class="row fullheight imgRounded " style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
+<div  class="col-xs-2 fullheight">
+    <select class="boxEdit dropdown-arrow color" style="background-color: #{{colorPaintingSelected}};" ng-model="colorPaintingSelected" ng-change="changePaintingColor(colorPaintingSelected)">
+        <option ng-repeat="color in ['ffffff', 'ffd751', 'ff5927', '41c426', 'f73b5e', '67b5cb']"
+                style="background-color: #{{color}};"
+                ng-value="color">        </option>
+    </select>
+    <div class="imgRounded FolderButton" ng-click="startPainting()">
+        start
+    </div>
+    <div class="imgRounded FolderButton" ng-click="stopPainting()">
+        stop
+    </div>
+
+</div>
+<div  class="col-xs-10 fullheight imgRounded " style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
     <div class="topBar"></div>
     <div id="paddingFolder">
         <div  class="col-xs-2">
@@ -7,7 +21,7 @@
                 {{$parent.content.cpboard}}
             </div>
         </div>
-        
+
         <div  class="col-xs-2">
             <div class=" imgRounded FolderButton" ng-click="CreateBoard()">
                 {{$parent.content.nwboard}}
