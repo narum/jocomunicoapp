@@ -948,12 +948,12 @@ angular.module('controllers', [])
                 $scope.inScan = false;
 
                 //-----------Iniciacion-----------
-                
+
                 // Prediction bar configuration
                 $scope.cfgPredOnOff = userConfig.cfgPredOnOff;
                 $scope.cfgPredBarVertHor = userConfig.cfgPredBarVertHor;
                 $scope.cfgPredBarNumPred = userConfig.cfgPredBarNumPred;
-                
+
                 $scope.sentenceViewHeight = 16;
                 $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
@@ -975,13 +975,14 @@ angular.module('controllers', [])
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
                 $scope.longclick = userConfig.cfgUsageMouseOneCTwoC;
                 $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
-                
+                $scope.StatusEnableEditViewTrash = true;
+
                 $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff;
                 $scope.cfgTimeOver = userConfig.cfgTimeLapseSelect;
                 $scope.cfgTimeNoRepeatedClickOnOff = userConfig.cfgTimeNoRepeatedClickOnOff;
                 $scope.cfgTimeNoRepeatedClick = userConfig.cfgTimeNoRepeatedClick;
                 $scope.TimeMultiClic = 0;
-                
+
                 $scope.getPred();
                 if ($rootScope.editPanelInfo != null) {
                     $scope.showBoard($rootScope.editPanelInfo.idBoard);
@@ -989,7 +990,7 @@ angular.module('controllers', [])
                     $rootScope.editPanelInfo = null;
                 } else {
                     $scope.getPrimaryUserBoard();
-                    if (userConfig.cfgScanningOnOff == 1){
+                    if (userConfig.cfgScanningOnOff == 1) {
                         $scope.InitScan();
                     }
                 }
@@ -1016,7 +1017,7 @@ angular.module('controllers', [])
                 }
                 return n;
             };
-            
+
             /*
              * Show board and the pictograms
              */
@@ -1274,7 +1275,7 @@ angular.module('controllers', [])
 
             $scope.TimeoutOverClick = function (type, object)
             {
-                if($scope.inScan){
+                if ($scope.inScan) {
                     return false;
                 }
                 //This timeout.cancel avoid possible multiple calls.
@@ -1284,13 +1285,13 @@ angular.module('controllers', [])
                     //MODIF: No se perque tarda mes del temps que s'ha assignat
                     $scope.OverAutoClick = $timeout(function () {
                         $scope.clickOnCell(object);
-                    }, $scope.cfgTimeOver); 
+                    }, $scope.cfgTimeOver);
                 } else if (type === 1)
                 {
                     //MODIF: No se perque tarda mes del temps que s'ha assignat
                     $scope.OverAutoClick = $timeout(function () {
                         $scope.addToSentence(object);
-                    }, $scope.cfgTimeOver); 
+                    }, $scope.cfgTimeOver);
                 } else if (type === 2)
                 {
                     if (object === 'generate')
@@ -1298,19 +1299,19 @@ angular.module('controllers', [])
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.generate();
-                        }, $scope.cfgTimeOver); 
+                        }, $scope.cfgTimeOver);
                     } else if (object === 'deleteLast')
                     {
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.deleteLast();
-                        }, $scope.cfgTimeOver); 
+                        }, $scope.cfgTimeOver);
                     } else if (object === 'deleteAll')
                     {
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.deleteAll();
-                        }, $scope.cfgTimeOver); 
+                        }, $scope.cfgTimeOver);
                     }
                 } else if (type === 3)
                 {
@@ -1319,20 +1320,20 @@ angular.module('controllers', [])
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.feedback(1);
-                        }, $scope.cfgTimeOver); 
+                        }, $scope.cfgTimeOver);
                     } else if (object === 'Bad')
                     {
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.feedback(0);
-                        }, $scope.cfgTimeOver); 
+                        }, $scope.cfgTimeOver);
                     }
                 }
             };
 
             $scope.CancelTimeoutOverClick = function ()
             {
-                if($scope.inScan){
+                if ($scope.inScan) {
                     return false;
                 }
                 $timeout.cancel($scope.OverAutoClick);
@@ -1394,6 +1395,16 @@ angular.module('controllers', [])
                         $scope.generate();
                     }
                 });
+            };
+            $scope.EnableEditViewTrash = function () {
+                if ($scope.StatusEnableEditViewTrash == true)
+                {
+                    $scope.StatusEnableEditViewTrash = false;
+                }
+                else
+                {
+                    $scope.StatusEnableEditViewTrash = true;
+                }
             };
             /*
              * If you click in a function (not a pictogram) this controller carry you
@@ -1660,8 +1671,8 @@ angular.module('controllers', [])
                     $http.post(URL, postdata).
                             success(function (response)
                             {
-                                $scope.CreateBoardData = {CreateBoardName: '', height:  response.defWidth.toString(), width: response.defHeight.toString(), idGroupBoard: response.ID_GB};
-                                alert("INFO: "+$scope.CreateBoardData.height +" : "+ $scope.CreateBoardData.width +" : "+ $scope.CreateBoardData.idGroupBoard);
+                                $scope.CreateBoardData = {CreateBoardName: '', height: response.defWidth.toString(), width: response.defHeight.toString(), idGroupBoard: response.ID_GB};
+                                alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
                                     scope: $scope,
@@ -2138,7 +2149,7 @@ angular.module('controllers', [])
             $scope.$on('scrollbar.hide', function () {
                 console.log('Scrollbar hide');
             });
-            
+
             $scope.range = function ($repeatnum)
             {
                 var n = [];
