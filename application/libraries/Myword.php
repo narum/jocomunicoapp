@@ -14,6 +14,7 @@ class Myword {
                             // Ex: Per noms (lloc, event)...
     var $text; // Paraula en text
     var $img; // Enllaç al pictograma
+    var $imgtemp; // Enllaç per si han canviat la imatge del pictograma a la interfície
     var $supportsExpansion; // Si la paraula pot ser utilitzada dins el sistema d'expansió
     var $defaultverb = 0; // Pels noms i pels adjectius, el verb per defecte si no hi ha més paraules a la frase
     var $subjdef = false; // Pels adjectius, el subjecte per defecte si no hi ha més paraules a la frase
@@ -22,6 +23,7 @@ class Myword {
     var $patterns = array(); // Només pels verbs
     
     var $inputorder; // Número a l'entrada, de 0 a n-1
+    // només s'utilitzaran si l'idioma té estructura SVO (Subject-Verb-Object)
     var $beforeverb = false; // Si apareix abans o després del 1er verb
     var $beforeverb2 = false; // Si apareix entre dos verbs: només quan hi ha dos verbs, quan n'hi ha un sempre està a true
     
@@ -38,7 +40,7 @@ class Myword {
     var $fem;
     var $coord;
     
-    var $paraulacoord = null; // si n'hi ha, paraula coordinada amb aquesta
+    var $paraulacoord = array(); // si n'hi ha, paraules coordinades amb aquesta
     
     function __construct() {}
     
@@ -53,6 +55,7 @@ class Myword {
         else $this->identry = $paraula->ID_RSHPSentence;
         $this->tipus = $paraula->pictoType;
         $this->img = $paraula->imgPicto;
+        $this->imgtemp = $paraula->imgtemp;
         $this->supportsExpansion = $paraula->supportsExpansion;
         
         if ($paraula->isplural == '1') $this->plural = true;

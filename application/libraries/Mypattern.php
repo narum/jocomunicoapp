@@ -19,7 +19,7 @@ class Mypattern {
     var $subverb = false; // Tindrà el nom de l'slot que accepta el subverb
     var $allowstime = false; // diu si el pattern accepta expressions de temps
     var $timeexpr = array(); // Array amb les expressions de temps
-    var $exprsarray = array(); // array amb les expressions introduïdes que omplen el pattern
+    var $exprsarray = array(); // array amb les expressions introduïdes que omplen el pattern [0] text [1] front
     var $needexpr = false; // indica si una expressió és obligatòria al pattern
     
     var $exemple;
@@ -307,7 +307,12 @@ class Mypattern {
         
         // Slot EXPRESSIONS
         if ($patternbbdd->expressio == '1') $this->needexpr = true;
-        else if ($patternbbdd->expressio != "") $this->exprsarray[] = $patternbbdd->expressio;
+        else if ($patternbbdd->expressio != "") {
+            $aux = array();
+            $aux[0] = $patternbbdd->expressio;
+            $aux[1] = '0';
+            $this->exprsarray[] = $aux;
+        }
         $this->hasslot["Expression"] = true;
                                 
     }
@@ -496,7 +501,7 @@ class Mypattern {
         }
                 
         // QUAN JA TENIM POSADES TOTES LES PARAULES, RESOLEM ELS SLOTS ENCARA NO RESOLTS
-        // HI HAURÂ SLOTS AMB JA NOMËS UNA PARAULA O ALTRES SLOTS AMB VÀRIES PARAULES
+        // HI HAURÂ SLOTS AMB JA NOMÉS UNA PARAULA O ALTRES SLOTS AMB VÀRIES PARAULES
         
         $mand2level = array();
         $mand1level = array();
@@ -530,6 +535,13 @@ class Mypattern {
         // $this->disambiguateSlots($subjectes, "NC");
         // Finalment els optatius
         // $this->disambiguateSlots($opts, "NC");
+        
+        $CI = &get_instance();
+        $langnouncorder = $CI->session->userdata('uinterfacelangncorder');
+        
+        $langtype = $CI->session->userdata('uinterfacelangtype');
+        $svo = true;
+        if ($langtype != 'svo') $svo = false;
                 
         // un cop desambiguats tots els slots, veiem si alguna paraula aniria millor com a NC
         // en comptes de com a opt.
@@ -538,10 +550,10 @@ class Mypattern {
             // Només si l'slot és full i no té un altre complement assignat, que aleshores no el podem eliminar
             if ($slotopt->full && !$slotopt->NCassigned) {
                 
-                // si no era un perfect fill o si els dos noms anaven contigus abans del verb
+                // si no era un perfect fill o si els dos noms anaven contigus abans del verb (en cas de SVO)
                 // i la frase no era pseudoimpersonal o de pregunta que tenen els valors de subverb invertits
                 if ($slotopt->puntsfinal > 0  || 
-                        ($slotopt->paraulafinal->beforeverb && !$this->pseudoimpersonal && !$this->partpreguntabona)) {
+                        ($svo && $slotopt->paraulafinal->beforeverb && !$this->pseudoimpersonal && !$this->partpreguntabona)) {
                     
                     $wordfill = $slotopt->paraulafinal;
                                                             
@@ -575,9 +587,10 @@ class Mypattern {
                                 else $keyparent = $auxstring[0];
 
                                 // mirem si és d'un slot que està ple i que la paraula que l'omple sigui la que complia la condició
-                                // de ser l'anterior a la paraula que fa de complement
-                                if ($this->slotarray[$keyparent]->full && ($this->slotarray[$keyparent]->paraulafinal->inputorder 
-                                                                            - $wordfill->inputorder == -1)) {
+                                // de ser l'anterior a la paraula que fa de complement (si langnouncorder == 1) o posterior (si langnouncorder == 0)
+                                if ($this->slotarray[$keyparent]->full && 
+                                        (($langnouncorder == '1' && ($this->slotarray[$keyparent]->paraulafinal->inputorder - $wordfill->inputorder == -1))
+                                        || ($langnouncorder == '0' && ($this->slotarray[$keyparent]->paraulafinal->inputorder - $wordfill->inputorder == 1)))) {
 
                                     // fem el canvi: dessassignem slotopt
                                     $slotopt->full = false;
@@ -600,6 +613,41 @@ class Mypattern {
             }
         } // Fi de per cada slot optatiu mirar si la paraula que el fit fa millor de NC
         
+        // Si han quedat noms sense slot, mirar si poden fer de NC
+        for ($i=0; $i<$numNouns; $i++) {
+            $word = $arrayNouns[$i];
+            
+            if ($word->slotfinal == null) {
+            
+                $slotstemps = $word->slotstemps;
+                
+                foreach ($slotstemps as $num => $keyslot) {
+                    if (strpos($keyslot, " NC")) {
+                        
+                        $str = explode(" NC", $keyslot);
+                        
+                        // si l'slot on podia fer de complement existeix, té un nucli i 
+                        // no té ja un complement assignat
+                        if (isset($this->slotarray[$str[0]]) && $this->slotarray[$str[0]]->full
+                                && !$this->slotarray[$str[0]]->NCassigned) {
+                            
+                            // comprovem que el nucli estés a la distància de NC
+                            if ((($langnouncorder == '1' && $this->slotarray[$str[0]]->paraulafinal->inputorder == $word->inputorder - 1))
+                                    || (($langnouncorder == '0' && $this->slotarray[$str[0]]->paraulafinal->inputorder == $word->inputorder + 1))) {
+                            
+                                $word->used = true;
+                                // indiquem que ara l'slot superior té un NC assignat
+                                $this->slotarray[$str[0]]->NCassigned = true;
+                                $this->slotarray[$str[0]]->NCassignedkey = $keyslot;
+
+                                // un cop trobem el que compleix les condicions, ja no seguim amb el foreach
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        } // fi si han quedat noms sense slot
     }
     
     public function solveAdverbs($arrayadverbs)
@@ -644,119 +692,100 @@ class Mypattern {
         // QUAN JA TENIM POSADES TOTES ELS ADVERBIS, RESOLEM ELS SLOTS ENCARA NO RESOLTS
         // HI HAURÂ SLOTS AMB JA NOMËS UNA PARAULA O ALTRES SLOTS AMB VÀRIES PARAULES
         
-        $mand2level = array();
-        $mand1level = array();
-        $subjectes = array();
-        $opts = array();
-        $slotsDeLloc = array();
-        
-        // Ordenem els slots en differents arrays Mandatory 2on nivell, Mandatory 1er nivell, subjecte, opts
-        foreach ($this->slotarray as $keyslot => $slot) {
-            
-            // separem els slots de lloc perquè són els únics on els ADV poden fer de complement
-            if ($slot->type == "lloc") $slotsDeLloc[$keyslot] = $slot;
-            
-            if ($slot->level == 2) {
-                if ($slot->category == 'Subject') $subjectes[$keyslot] = $slot;
-                else if ($slot->grade == '1') $mand2level[$keyslot] = $slot;
-                else $opts[] = $slot;
-            }
-            else {
-                if ($slot->category == 'Subject') $subjectes[$keyslot] = $slot;
-                else if ($slot->grade == '1') $mand1level[$keyslot] = $slot;
-                else $opts[$keyslot] = $slot;
-            }
-        }
-        
         $this->calculateVirtualOrder();
         $this->disambiguateSlotsNew("ADV");
-        
-        // Primer els obligatoris de 2on nivell
-        // $this->disambiguateSlots($mand2level, "ADV");
-        // Després els obligatoris del 1er nivell
-        // $this->disambiguateSlots($mand1level, "ADV");
-        // Després els de subjecte
-        // $this->disambiguateSlots($subjectes, "ADV");
-        // Finalment els optatius
-        // $this->disambiguateSlots($opts, "ADV");
                 
         // un cop desambiguats tots els slots, veiem si alguna paraula aniria millor com a NC ADV
         // en comptes de com a opt.
-        // Per cada slot de lloc mirem té advs que puguin fer de complement (ex: darrere, sota...)
-        foreach ($slotsDeLloc as $keyslotopt => $slotopt) {
-            // Només si l'slot és full i no té un altre complement assignat, que aleshores no el podem eliminar
-            if ($slotopt->full && !$slotopt->CAdvassigned) {
-                                
-                $indexmillor = -1;
-                $bestdistance = 1000;
-                $orderwordfillslot = $slotopt->paraulafinal->inputorder;
+        for ($i=0; $i<$numAdverbs; $i++) {
+            
+            $indexmillor = -1;
+            $bestdistance = 1000;
+            $bestpoints = 1000;
+           
+            $word = $arrayadverbs[$i];
+            // si la paraula està en un slot (no de temps), mirem si aquest slot és opt i el comparem amb els
+            // slots als que l'adv pot fer de complement, si no, compararem només els slots als 
+            // que pot fer de complement entre ells
+            if ($word->used && !$word->isClass("temps")) {
+                $keyslotaux = $word->slotfinal;
                 
-                // busquem quin dels advs que podien fer de complement és el millor
-                // tots són perfect fill, sinó no haurien entrat, així que decideix la distància amb la paraula
-                // que complementen
-                // de totes maneres, només poden ser advs que no facin fill a cap slot obligatori
-                // és a dir, fan fill a un slot optatiu o no fan fill a cap slot
-                foreach ($slotopt->cmpAdvs as $keyslotaux => $slotaux) {
-                    
-                    // $slotaux = $slotopt->cmpAdvs[$i];
-                    
-                    $wordprov = $slotaux->paraulafinal; 
-                                        
-                    if ($wordprov->slotfinal == null || 
-                            !isset($this->slotarray[$wordprov->slotfinal]) || $this->slotarray[$wordprov->slotfinal]->grade == "opt") {
-                        
-                        // si la paraula no ha estat ja assignada a un altre complement
-                        if (!$slotaux->paraulafinal->assignadaAComplement) {
-                            
-                            $distance = $orderwordfillslot - $slotaux->paraulafinal->inputorder;
-                    
-                            if (abs($distance) < abs($bestdistance)) {
-                                $bestdistance = $distance;
-                                $indexmillor = $keyslotaux;
-                            }
-                            else if (abs($distance) == abs($bestdistance)) {
-                                // en cas d'empat ens quedem amb la positiva, que vol dir un adverbi de lloc que vagi abans del nom
-                                // al que complementa
-                                if ($distance > $bestdistance) {
-                                    $bestdistance = $distance;
-                                    $indexmillor = $keyslotaux;
-                                }
-                            }
-                        }
-                    }                        
-                }
-                
-                // si hem trobat el millor slot fem la substitució
-                if ($indexmillor != -1) {
-                    
-                    $wordaux = $slotopt->cmpAdvs[$indexmillor]->paraulafinal;
-                    // si l'adverbi que hem seleccionat feia fill a un altre slot (optatiu, com hem comprovat abans)
-                    // que no fos ja de complement
-                    if ($wordaux->slotfinal != null && !strpos($wordaux->slotfinal, "ADV")) {
-                        
-                        $keyslotfinal = $wordaux->slotfinal;
-                        $this->slotarray[$keyslotfinal]->full = false;
-                        $this->slotarray[$keyslotfinal]->paraulafinal = null;
-                        $this->slotarray[$keyslotfinal]->puntsfinal = 7;
-                        $this->slotarray[$keyslotfinal]->indexclassfinalword = 0;
-                    }
-                    
-                    $wordaux->slotfinal = $indexmillor;
-                    if (!$wordaux->used) $usedAdverbs[] = $wordaux;
-                    $wordaux->used = true;
-                    $wordaux->assignadaAComplement = true;
-                    
-                    $this->slotarray[$keyslotopt]->CAdvassigned = true;
-                    $this->slotarray[$keyslotopt]->CAdvassignedkey = $indexmillor;
-
-                    // no cal que l'esborrem de les altres cues de complements xq només acceptàvem paraules que no estessin
-                    // ja assignades a un altre complement
-                   
+                $slotaux = $this->slotarray[$keyslotaux];
+                if ($slotaux->grade == "opt") {
+                    $bestdistance = 0;
+                    $bestpoints = $slotaux->puntsfinal;
                 }
             }
             
-        } // Fi de per cada slot optatiu mirar si la paraula que el fit fa millor de NC
-        
+            for ($j=0; $j<count($word->slotstemps); $j++) {
+                $aux = explode(" ADV", $word->slotstemps[$j]);
+                
+                // comprovem que l'slot sigui del tipus ADV que complementa a nom, ja que
+                // els altres opts als que pugui fer fit, com ara els de manner, també hi seran
+                if (count($aux) > 1) {
+                
+                    $keyslotnoun = $aux[0];
+                    $slotnoun = $this->slotarray[$keyslotnoun];
+
+                    // si no té ja un adverbi assignat
+                    if (!$slotnoun->CAdvassigned) {
+
+                        $slotadv = $slotnoun->cmpAdvs[$word->slotstemps[$j]];
+                        $distance = $slotnoun->paraulafinal->inputorder - $word->inputorder;
+                        $points = $slotadv->puntsfinal + abs($distance);
+
+                        if ($points < $bestpoints) {
+                            $bestdistance = $distance;
+                            $bestpoints = $points;
+                            $indexmillor = $word->slotstemps[$j];
+                        }
+                        else if ($points == $bestpoints) {
+                            // en cas d'empat ens quedem amb la que tenia distància positiva, 
+                            // que vol dir un adverbi de lloc que vagi abans del nom al que complementa
+                            if ($distance > $bestdistance) {
+                                $bestdistance = $distance;
+                                $bestpoints = $points;
+                                $indexmillor = $word->slotstemps[$j];
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // si hem trobat un slot millor fem la substitució
+            if ($indexmillor != -1) {
+                
+                // si l'adverbi que hem seleccionat feia fill a un altre slot (optatiu, com hem comprovat abans)
+                // que no fos ja de complement el desassignem a l'slot que feia fill
+                if ($word->slotfinal != null && !strpos($word->slotfinal, "ADV")) {
+
+                    $keyslotfinal = $word->slotfinal;
+                    $this->slotarray[$keyslotfinal]->full = false;
+                    $this->slotarray[$keyslotfinal]->paraulafinal = null;
+                    $this->slotarray[$keyslotfinal]->puntsfinal = 7;
+                    $this->slotarray[$keyslotfinal]->indexclassfinalword = 0;
+                }
+                
+                $word->slotfinal = $indexmillor;
+                if (!$word->used) $usedAdverbs[] = $word;
+                $word->used = true;
+                $word->assignadaAComplement = true;
+                
+                $aux2 = explode(" ADV", $indexmillor);
+                $keyslotnoun = $aux2[0];                
+                
+                $this->slotarray[$keyslotnoun]->CAdvassigned = true;
+                $this->slotarray[$keyslotnoun]->CAdvassignedkey = $indexmillor;
+                // treiem la preposició que anava davant de l'slot, si n'hi havia
+                $this->slotarray[$keyslotnoun]->prep = null;
+
+                // no cal que l'esborrem de les altres cues de complements xq només acceptàvem paraules que no estessin
+                // ja assignades a un altre complement
+                
+            }
+            
+        } // fi for per cada adverbi
+                
     }
     
     
@@ -986,7 +1015,7 @@ class Mypattern {
         
         $this->calculateVirtualOrder();
         $this->disambiguateSlotsNew("MOD");
-                
+                        
         // un cop desambiguats tots els slots, veiem a quin slot fan millor de complements
         // els modifs que no estan omplint ja un slot obligatori
         // PER CADA MODIF
@@ -1093,17 +1122,22 @@ class Mypattern {
             $aux = array();
             $aux[0] = $keyslot;
             $aux[1] = $slot->slotCalcPuntsGuanyats();
+            $aux[2] = $slot->grade;
+            $aux[3] = $slot->level;
             
             if (!$slot->full && count($slot->paraulestemp) > 0) $this->virtualslotsort[] = $aux;
         }
                 
         $this->mySort($this->virtualslotsort);
         
+        // DEBUG:
+        // print_r($this->virtualslotsort);
+        // echo "<br /><br />";
+        
     }
     
     function mySort($virtualslotorder)
     {
-        
         $auxorder = array();
         
         for ($i=0; $i<count($virtualslotorder); $i++) {
@@ -1131,16 +1165,28 @@ class Mypattern {
                     }
                     else if ($infoaux[1] == $infoactual[1]) {
                         
-                        // en cas d'empat el receiver té prioritat sobre el qualsevol slot, excepte el Theme, si no és pseudoimpersonal
-                        if (strpos($infoaux[0], "Receiver") === 0 && !(strpos($infoactual[0], "Theme") === 0) && !$this->pseudoimpersonal) {
+                        // DEBUG:
+                        // echo "Infoaux: "; print_r($infoaux); echo "/ Infoactual: "; print_r($infoactual);
+                        
+                        
+                        // en cas d'empat, si és són del mateix grade i del mateix nivell o el Receiver té més grade, 
+                        // el receiver té prioritat sobre el qualsevol slot, excepte el Theme, si no és pseudoimpersonal
+                        if (strpos($infoaux[0], "Receiver") === 0 && !($infoaux[3] == 2 && (strpos($infoactual[0], "Subject 1") === 0))
+                                && !($infoaux[2] == "opt" && $infoactual[2] == '1') 
+                                && !(strpos($infoactual[0], "Theme") === 0) && !$this->pseudoimpersonal) {
                             $indexinsert = $j;
                             $found = true;
                         }
                         // els slots secundaris tenen preferència sobre els de primer nivell
                         // menys si és el subjecte
-                        else if (strpos($infoaux[0], "2") != 0 && !(strpos($infoaux[0], "Subject") === 0)) {
+                        else if (strpos($infoaux[0], "2") != 0 && !(strpos($infoactual[0], "Subject") === 0) && !$this->pseudoimpersonal) {
                             $indexinsert = $j;
                             $found = true;
+                        }
+                        // si és pseudoimpersonal el Receiver 1 té més importància que els slots de segon nivell
+                        else if ($this->pseudoimpersonal && strpos($infoaux[0], "Receiver") === 0 && strpos($infoactual[0], "2") != 0) {
+                            $indexinsert = $j;
+                            $found = true;    
                         }
                     }
                 }
@@ -1311,6 +1357,16 @@ class Mypattern {
     
     function disambiguateSlotsNew($stringCMP)
     {
+        $CI = &get_instance();
+        
+        // agafem el tipus d'idioma, ja que per desambiguar si l'idioma és svo
+        // les paraules que vagin abans del verb tindran punts extra per fer de subjecte
+        // i les que vagin darrere per fer dels altres slots
+        $langtype = $CI->session->userdata('uinterfacelangtype');
+        
+        $svo = true;
+        if ($langtype != 'svo') $svo = false;
+        
         $numslots = count($this->virtualslotsort);
         
         $slotsleft = true;
@@ -1319,7 +1375,8 @@ class Mypattern {
         while ($slotsleft) {
             
             // DEBUG
-            // print_r($this->virtualslotsort); echo '<br /><br />';
+            // echo "Pattern id ".$this->id.": ";
+            // print_r($this->virtualslotsort); echo '<br />';
                                             
             $infoslot = $this->virtualslotsort[0];
             $keyslot = $infoslot[0];
@@ -1327,7 +1384,7 @@ class Mypattern {
             
             $indexselect = -1;
             $penalty = 1000;
-            
+                        
             if (!$slot->full && count($slot->paraulestemp) > 0) {
                 
                 // per cada paraula que podia anar a l'slot busquem la que fa millor fit
@@ -1341,20 +1398,31 @@ class Mypattern {
                         }
                         // si dues paraules estan empatades i omplen igual de bé l'slot
                         else if ($slot->paraulestemp[$i][1] == $penalty) {
-                            if ($slot->category != "Subjecte") { // si l'slot no és de categoria subjecte
-                                if (!$slot->paraulestemp[$i][0]->beforeverb && $slot->paraulestemp[$indexselect][0]->beforeverb) {
-                                    $penalty = $slot->paraulestemp[$i][1];
-                                    $indexselect = $i;
+                            // si l'idioma té estructura SVO
+                            if ($svo) {
+                                if ($slot->category != "Subjecte") { // si l'slot no és de categoria subjecte
+                                    if (!$slot->paraulestemp[$i][0]->beforeverb && $slot->paraulestemp[$indexselect][0]->beforeverb) {
+                                        $penalty = $slot->paraulestemp[$i][1];
+                                        $indexselect = $i;
+                                    }
+                                    // potser no cal xq les paraules han estat introduïdes en ordre als slots
+                                    else if ($slot->paraulestemp[$i][0]->inputorder < $slot->paraulestemp[$indexselect][0]->inputorder) {
+                                        $penalty = $slot->paraulestemp[$i][1];
+                                        $indexselect = $i;
+                                    }
                                 }
-                                // potser no cal xq les paraules han estat introduïdes en ordre als slots
-                                else if ($slot->paraulestemp[$i][0]->inputorder < $slot->paraulestemp[$indexselect][0]->inputorder) {
-                                    $penalty = $slot->paraulestemp[$i][1];
-                                    $indexselect = $i;
+                                else { // si és de categoria subjecte
+                                    // només fem el canvi si la nova és before verb i l'altre no
+                                    if ($slot->paraulestemp[$i][0]->beforeverb && !$slot->paraulestemp[$indexselect][0]->beforeverb) {
+                                        $penalty = $slot->paraulestemp[$i][1];
+                                        $indexselect = $i;
+                                    }
                                 }
                             }
-                            else { // si és de categoria subjecte
-                                // només fem el canvi si la nova és before verb i l'altre no
-                                if ($slot->paraulestemp[$i][0]->beforeverb && !$slot->paraulestemp[$indexselect][0]->beforeverb) {
+                            // si no té estructura SVO
+                            else {
+                                // es quedarà amb la primera paraula que podia fer fit a l'slot
+                                if ($slot->paraulestemp[$i][0]->inputorder < $slot->paraulestemp[$indexselect][0]->inputorder) {
                                     $penalty = $slot->paraulestemp[$i][1];
                                     $indexselect = $i;
                                 }
@@ -1364,18 +1432,18 @@ class Mypattern {
                 }
                 
                 if ($indexselect == -1 ) $indexselect = 0;
-                
+                                
                 // Ja tenim la paraula seleccionada
                 $wordaux = $slot->paraulestemp[$indexselect][0];
                 $this->forceFillSlot($keyslot, $wordaux, $slot->paraulestemp[$indexselect][1], $slot->paraulestemp[$indexselect][2]);
-                
+                                
                 // esborrem la paraula del llistat de paraulestemp de l'slot
                 array_splice($slot->paraulestemp, $indexselect, 1);
-                
+                                                
                 // esborrem l'slot del llistat d'slots temps de la paraula
                 $indexslotaux = $wordaux->searchSlotIndex($keyslot);
                 if ($indexslotaux != -1) array_splice($wordaux->slotstemps, $indexslotaux, 1);
-                
+                                
                 // per la resta d'slots que quedin esborrem la paraula del llistat de paraulestemp
                 for ($i=0; $i<count($wordaux->slotstemps); $i++) {
                     $keyaux = $wordaux->slotstemps[$i];
@@ -1383,7 +1451,7 @@ class Mypattern {
                     if (!strpos($keyaux, $stringCMP)) {
                         $slotaux = $this->slotarray[$keyaux];
                         $indexinslot = $slotaux->searchIndexWordInSlot($wordaux);
-
+                        
                         // esborrem la paraula seleccionada
                         if ($indexinslot != -1) array_splice($slotaux->paraulestemp, $indexinslot, 1);
                     }
@@ -1409,6 +1477,9 @@ class Mypattern {
     
     public function calcPuntsFinalPattern()
     {
+        // ens diu si una paraula introduïda no s'ha utilitzat al patró
+        $paraulanoposada = false;
+                
         foreach ($this->slotarray as $slot) {
                         
             if ($slot->full) {
@@ -1416,10 +1487,10 @@ class Mypattern {
                 if ($slot->grade == '1' && $slot->puntsfinal == 0) $this->puntuaciofinal += 1;
                 else $this->puntuaciofinal -= $slot->puntsfinal;
                 
-                // echo $slot->category.": ".$slot->puntsfinal.'<br />';
+                // echo $slot->category.": ".$slot->puntsfinal." (".$slot->paraulafinal->text.')<br />';
                 // punts de coordinacions
                 $wordaux = $slot->paraulafinal;
-                if ($wordaux->paraulacoord != null) $this->puntuaciofinal += 7;
+                if (count($wordaux->paraulacoord) > 0) $this->puntuaciofinal += 7;
                 
                 if ($slot->NCassigned) {
                     $slotcomp = $slot->complements[$slot->NCassignedkey];
@@ -1437,7 +1508,7 @@ class Mypattern {
                     // echo $slot->CAdvassignedkey.": ".$slotcomp->puntsfinal.'<br />';
                     // punts de coordinacions
                     $wordaux = $slotcomp->paraulafinal;
-                    if ($wordaux->paraulacoord != null) $this->puntuaciofinal += 7;
+                    if (count($wordaux->paraulacoord) > 0) $this->puntuaciofinal += 7;
                 }
                 if ($slot->CAdjassigned) {
                     $slotcomp = $slot->cmpAdjs[$slot->CAdjassignedkey];
@@ -1446,7 +1517,7 @@ class Mypattern {
                     // echo $slot->CAdjassignedkey.": ".$slotcomp->puntsfinal.'<br />';
                     // punts de coordinacions
                     $wordaux = $slotcomp->paraulafinal;
-                    if ($wordaux->paraulacoord != null) $this->puntuaciofinal += 7;
+                    if (count($wordaux->paraulacoord) > 0) $this->puntuaciofinal += 7;
                 }
                 if ($slot->CModassigned) {
                     // un slot pot tenir varis modificadors assignats
@@ -1455,7 +1526,7 @@ class Mypattern {
                         $this->puntuaciofinal += $slotcomp->puntsfinal;
                         // punts de coordinacions
                         $wordaux = $slotcomp->paraulafinal;
-                        if ($wordaux->paraulacoord != null) $this->puntuaciofinal += 7;
+                        if (count($wordaux->paraulacoord) > 0) $this->puntuaciofinal += 7;
                     }
                 }
                 
@@ -1483,19 +1554,29 @@ class Mypattern {
                     // echo $slot->category.": -".$slot->puntsfinal.'<br />';
                 }
                 // que resti un punt pels slots anteriors no plens
-                else if ($slot->category == "Manner" || $slot->category == "Time" 
-                        || $slot->category == "LocAt" || $slot->category == "Company" || $slot->category == "Tool") {
+                else if ($slot->category == "Company" || $slot->category == "Tool") {
                     $this->puntuaciofinal -= 1;
                 }
             }
         } // Fi per cada slot
                 
-        // restem els punts de les paraules no fetes servir
+        // restem els punts de les paraules no fetes servir (les expressions no conten i
+        // les preguntes tampoc (aquestes ja es tracten prèviament si no hi ha lloc per la
+        // partícula de la pregunta)
         for ($i=0; $i<count($this->paraules); $i++) {
-            if ($this->paraules[$i]->used == false) $this->puntuaciofinal -= 25;
+            if ($this->paraules[$i]->used == false && $this->paraules[$i]->tipus != "expression"
+                    && $this->paraules[$i]->tipus != "questpart") {
+                $this->puntuaciofinal -= 25;
+                $paraulanoposada = true;
+            }
         }
         
-        return $this->puntuaciofinal;
+        // retorna un array on [0] = puntuaciofinal i [1] = si no ha pogut posar alguna paraula
+        $aux = array();
+        $aux[0] = $this->puntuaciofinal;
+        $aux[1] = $paraulanoposada;
+                
+        return $aux;
     }
 
 
@@ -1514,28 +1595,43 @@ class Mypattern {
                 $string .= "Slot: ".$keyslot." = ".$slot->paraulafinal->text;
                 // tractem les coordinacions
                 $wordaux = $slot->paraulafinal;
-                if ($wordaux->paraulacoord != null) $string .= " (i ".$wordaux->paraulacoord->text.")";
+                if (count($wordaux->paraulacoord) > 0) {
+                    for ($k=0; $k<count($wordaux->paraulacoord); $k++) {
+                        $string .= " (i ".$wordaux->paraulacoord[$k]->text.")";
+                    }
+                }
                 
                 if ($slot->NCassigned) {
                     $slotcomp = $slot->complements[$slot->NCassignedkey];
                     $string .= " --> NC = ".$slotcomp->paraulafinal->text;
                     // tractem les coordinacions
                     $wordaux = $slotcomp->paraulafinal;
-                    if ($wordaux->paraulacoord != null) $string .= " (i ".$wordaux->paraulacoord->text.")";
+                    if (count($wordaux->paraulacoord) > 0) {
+                        for ($k=0; $k<count($wordaux->paraulacoord); $k++) {
+                            $string .= " (i ".$wordaux->paraulacoord[$k]->text.")";
+                        }
+                    }
                 }
                 if ($slot->CAdvassigned) {
                     $slotcomp = $slot->cmpAdvs[$slot->CAdvassignedkey];
                     $string .= " --> ADV = ".$slotcomp->paraulafinal->text;
                     // tractem les coordinacions
                     $wordaux = $slotcomp->paraulafinal;
-                    if ($wordaux->paraulacoord != null) $string .= " (i ".$wordaux->paraulacoord->text.")";
-                }
+                    if (count($wordaux->paraulacoord) > 0) {
+                        for ($k=0; $k<count($wordaux->paraulacoord); $k++) {
+                            $string .= " (i ".$wordaux->paraulacoord[$k]->text.")";
+                        }
+                    }                }
                 if ($slot->CAdjassigned) {
                     $slotcomp = $slot->cmpAdjs[$slot->CAdjassignedkey];
                     $string .= " --> ADJ = ".$slotcomp->paraulafinal->text;
                     // tractem les coordinacions
                     $wordaux = $slotcomp->paraulafinal;
-                    if ($wordaux->paraulacoord != null) $string .= " (i ".$wordaux->paraulacoord->text.")";
+                    if (count($wordaux->paraulacoord) > 0) {
+                        for ($k=0; $k<count($wordaux->paraulacoord); $k++) {
+                            $string .= " (i ".$wordaux->paraulacoord[$k]->text.")";
+                        }
+                    }
                 }
                 if ($slot->CModassigned) {
                     // un slot pot tenir varis modificadors assignats
@@ -1544,7 +1640,11 @@ class Mypattern {
                         $string .= " --> MOD = ".$slotcomp->paraulafinal->text;
                         // tractem les coordinacions
                         $wordaux = $slotcomp->paraulafinal;
-                        if ($wordaux->paraulacoord != null) $string .= " (i ".$wordaux->paraulacoord->text.")";
+                        if (count($wordaux->paraulacoord) > 0) {
+                            for ($k=0; $k<count($wordaux->paraulacoord); $k++) {
+                                $string .= " (i ".$wordaux->paraulacoord[$k]->text.")";
+                            }
+                        }
                     }
                 }
                 $string .= "<br /><br />";
@@ -1566,7 +1666,7 @@ class Mypattern {
         if ($numexpr > 0) {
             $string .= "Slot: Expressions = ";
             for ($i=0; $i<$numexpr; $i++) {
-                $string .= $this->exprsarray[$i]."; ";
+                $string .= $this->exprsarray[$i][0]."; ";
             }
             $string .= '<br /><br />';
         }
@@ -1703,10 +1803,10 @@ class Mypattern {
             $keymodifaux = $slotmainverb->CModassignedkey[$i];
             $slotmodifaux = $slotmainverb->cmpMod[$keymodifaux];
             
-            // si no és del grup que va darrere el subjecte el posem al principi de la frase (ex: si, perquè)
+            // si no és del grup que va darrere el subjecte el posem al principi de la frase (ex: si, perquè, però)
             if (!$matching->isModAfterSubj($slotmodifaux->paraulafinal->text)) {
                 
-                $this->frasefinal = $slotmodifaux->paraulafinal->text." ".$this->frasefinal;
+                $this->frasefinal = " ".$slotmodifaux->paraulafinal->text." ".$this->frasefinal;
             }
             // marquem si la frase és negativa pel modificador no
             else if ($slotmodifaux->paraulafinal->text == "no") $this->frasenegativa = true;
@@ -1866,7 +1966,10 @@ class Mypattern {
             array_unshift($this->ordrefrase, "Desire");
             
             // afegir si us plau: de moment NO
-            // $this->exprsarray[] = "si us plau";
+            // $aux = array();
+            // $aux[0] = "si us plau";
+            // $aux[1] = '0';
+            // $this->exprsarray[] = $aux;
         }
         
         
@@ -1889,7 +1992,10 @@ class Mypattern {
             $this->slotarray["Permission"] = $slotpoder;
             array_unshift($this->ordrefrase, "Permission");
             // afegir si us plau
-            $this->exprsarray[] = "si us plau";
+            $aux = array();
+            $aux[0] = "si us plau";
+            $aux[1] = '0';
+            $this->exprsarray[] = $aux;
         }
         
         
@@ -1985,6 +2091,15 @@ class Mypattern {
                 // l'insertem al final de la frase
                 $this->ordrefrase[] = $temp;  
             }
+        }
+        
+        // IMPERATIVE
+        if ($propietatsfrase['tipusfrase'] == "ordre" && !$propietatsfrase['negativa']) {
+            // afegir si us plau
+            $aux = array();
+            $aux[0] = "si us plau";
+            $aux[1] = '0';
+            $this->exprsarray[] = $aux;
         }
            
         // DEBUG
@@ -2093,10 +2208,10 @@ class Mypattern {
             $keymodifaux = $slotmainverb->CModassignedkey[$i];
             $slotmodifaux = $slotmainverb->cmpMod[$keymodifaux];
             
-            // si no és del grup que va darrere el subjecte el posem al principi de la frase (ex: si, perquè)
+            // si no és del grup que va darrere el subjecte el posem al principi de la frase (ex: si, perquè, pero)
             if (!$matching->isModAfterSubjES($slotmodifaux->paraulafinal->text)) {
                 
-                $this->frasefinal = $slotmodifaux->paraulafinal->text." ".$this->frasefinal;
+                $this->frasefinal = " ".$slotmodifaux->paraulafinal->text." ".$this->frasefinal;
             }
             /**
              * INFO LANGUAGE DEPENDENT!!
@@ -2259,7 +2374,10 @@ class Mypattern {
             array_unshift($this->ordrefrase, "Desire");
             
             // afegir por favor: de moment NO
-            // $this->exprsarray[] = "por favor";
+            // $aux = array();
+            // $aux[0] = "por favor";
+            // $aux[1] = '0';
+            // $this->exprsarray[] = $aux;
         }
         
         
@@ -2282,7 +2400,10 @@ class Mypattern {
             $this->slotarray["Permission"] = $slotpoder;
             array_unshift($this->ordrefrase, "Permission");
             // afegir por favor
-            $this->exprsarray[] = "por favor";
+            $aux = array();
+            $aux[0] = "por favor";
+            $aux[1] = '0';
+            $this->exprsarray[] = $aux;
         }
         
         
@@ -2379,7 +2500,16 @@ class Mypattern {
                 $this->ordrefrase[] = $temp; 
             }
         }
-           
+        
+        // IMPERATIVE
+        if ($propietatsfrase['tipusfrase'] == "ordre"  && !$propietatsfrase['negativa']) {
+            // afegir por favor
+            $aux = array();
+            $aux[0] = "por favor";
+            $aux[1] = '0';
+            $this->exprsarray[] = $aux;
+        }
+                   
         // DEBUG
         // echo $this->printOrdreFrase()."<br /><br />";
     }
@@ -2402,9 +2532,9 @@ class Mypattern {
         }
         
         // agafem les dades del primer subjecte
-        if (isset($this->slotarray[$keysubj1])) {
+        if (isset($this->slotarray[$keysubj1]) && $this->slotarray[$keysubj1]->full) {
             $slotsubj1 = $this->slotarray[$keysubj1];
-                                    
+                                                
             // si hi ha el subjecte per defecte
             if ($slotsubj1->defvalueused) {
                 $subj1 = $slotsubj1->defvalue;
@@ -2502,7 +2632,7 @@ class Mypattern {
                     $this->perssubj1 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj1->tipus == "name" && $subj1->paraulacoord != null) $this->plsubj1 = true;
+                if ($subj1->tipus == "name" && count($subj1->paraulacoord) > 0) $this->plsubj1 = true;
             }
             else if($slotsubj1->paraulafinal->tipus == "questpart") {
                 $this->perssubj1 = 3;
@@ -2605,7 +2735,7 @@ class Mypattern {
                     $this->perssubj2 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj2->paraulacoord != null) $this->plsubj2 = true;
+                if (count($subj2->paraulacoord) > 0) $this->plsubj2 = true;
             }
             
             // sempre hi ha subj1 a no ser que a un pseudoimpersonal el subj sigui un subverb
@@ -2669,7 +2799,7 @@ class Mypattern {
         }
         
         // agafem les dades del primer subjecte
-        if (isset($this->slotarray[$keysubj1])) {
+        if (isset($this->slotarray[$keysubj1]) && $this->slotarray[$keysubj1]->full) {
             
             $slotsubj1 = $this->slotarray[$keysubj1];
             
@@ -2769,7 +2899,7 @@ class Mypattern {
                     $this->perssubj1 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj1->tipus == "name" && $subj1->paraulacoord != null) $this->plsubj1 = true;
+                if ($subj1->tipus == "name" && count($subj1->paraulacoord) > 0) $this->plsubj1 = true;
             }
             else if($slotsubj1->paraulafinal->tipus == "questpart") {
                 $this->perssubj1 = 3;
@@ -2872,7 +3002,7 @@ class Mypattern {
                     $this->perssubj2 = 3;
                 }
                 // si la paraula en té una altra de coordinada, passarà a plural
-                if ($subj2->paraulacoord != null) $this->plsubj2 = true;
+                if (count($subj2->paraulacoord) > 0) $this->plsubj2 = true;
             }
             
             // sempre hi ha subj1 a no ser que a un pseudoimpersonal el subj sigui un subverb
@@ -3224,6 +3354,7 @@ class Mypattern {
                 
                 if ($persona == 1 && $numero == "sing") {
                     $verbconjugat = $CI->Lexicon->conjugarES($mainverbslot->paraulafinal->id, 'infinitiu', $persona, $numero, $this->pronominal);
+                    $mainverbslot->isInfinitive = true;
                 }
                 else {
                     $verbconjugat = $CI->Lexicon->conjugarES($mainverbslot->paraulafinal->id, 'prsubj', $persona, $numero, $this->pronominal);
@@ -3240,7 +3371,6 @@ class Mypattern {
                 $auxtupla[1] = $mainverbslot->paraulafinal;
 
                 $mainverbslot->slotstring[] = $auxtupla; // omplim l'slotstring
-                $mainverbslot->isInfinitive = true;
                 
                 if ($secondaryverbslot != null) {
                     
@@ -3489,6 +3619,7 @@ class Mypattern {
                 
                 if ($persona == 1 && $numero == "sing") {
                     $verbconjugat = $CI->Lexicon->conjugarES($mainverbslot->paraulafinal->id, 'infinitiu', $persona, $numero, $this->pronominal);
+                    $mainverbslot->isInfinitive = true;
                 }
                 else {
                     $verbconjugat = $CI->Lexicon->conjugarES($mainverbslot->paraulafinal->id, 'prsubj', $persona, $numero, $this->pronominal);
@@ -3505,7 +3636,6 @@ class Mypattern {
                 $auxtupla[1] = $mainverbslot->paraulafinal;
 
                 $mainverbslot->slotstring[] = $auxtupla; // omplim l'slotstring
-                $mainverbslot->isInfinitive = true;
                 
                 if ($secondaryverbslot != null) {
                     
@@ -3665,8 +3795,9 @@ class Mypattern {
                 }
                 // si no s'ha fet servir el subjecte per defecte
                 else {
-                    // esborrem el tu o el jo
-                    if ($slotaux->paraulafinal->text == "jo" || $slotaux->paraulafinal->text == "tu") {
+                    // esborrem el tu o el jo (si no tenen cap element coordinat)
+                    if (($slotaux->paraulafinal->text == "jo" || $slotaux->paraulafinal->text == "tu") 
+                            && !$slotaux->paraulafinal->coord) {
                         $slotaux->slotstring = array();
                     }
                     // esborrem el subjecte del verb secundari, si és el mateix que el del principal
@@ -3907,7 +4038,8 @@ class Mypattern {
                     if (($slotaux->level == 1 && $mainverbinf) 
                             || ($slotaux->level == 1 && $ordre && !$this->frasenegativa)) {
                         // si són pronoms personals, posem la forma correcta pels themes de darrere el verb
-                        if ($matching->isPronomPers($parauladerivada)) {
+                        // menys si és un patró verbless, on la frase només tindrà el pronom
+                        if ($matching->isPronomPers($parauladerivada) && !$this->verbless) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsAfterTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -3918,7 +4050,8 @@ class Mypattern {
                     }
                     else if ($slotaux->level == 1) {
                         // si són pronoms personals, posem la forma correcta pels themes d'abans del verb
-                        if ($matching->isPronomPers($parauladerivada)) {
+                        // menys si és un patró verbless, on la frase només tindrà el pronom
+                        if ($matching->isPronomPers($parauladerivada) && !$this->verbless) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsFrontTheme[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4141,28 +4274,28 @@ class Mypattern {
         $patterns[8] = '/[[:space:]][e][t][[:space:]](?=[(aeiouAEIOUhH)])/u';
         
         //verb acabat en vocal + pronoms de receiver/theme a darrere
-        $patterns[9] = '/(?<=[aeiou]@VERBUM)[[:space:]]me[[:space:]]/u';
-        $patterns[10] = '/(?<=[aeiou]@VERBUM)[[:space:]]te[[:space:]]/u';
+        $patterns[9] = '/(?<=[aeio]@VERBUM)[[:space:]]me[[:space:]]/u';
+        $patterns[10] = '/(?<=[aeio]@VERBUM)[[:space:]]te[[:space:]]/u';
         $patterns[11] = '/(?<=[aeiou]@VERBUM)[[:space:]]li[[:space:]]/u';
-        $patterns[12] = '/(?<=[aeiou]@VERBUM)[[:space:]]nos[[:space:]]/u';
+        $patterns[12] = '/(?<=[aeio]@VERBUM)[[:space:]]nos[[:space:]]/u';
         $patterns[13] = '/(?<=[aeiou]@VERBUM)[[:space:]]vos[[:space:]]/u';
-        $patterns[14] = '/(?<=[aeiou]@VERBUM)[[:space:]]los[[:space:]]/u';
-        $patterns[38] = '/(?<=[aeiou]@VERBUM)[[:space:]]lo[[:space:]]/u';
+        $patterns[14] = '/(?<=[aeio]@VERBUM)[[:space:]]los[[:space:]]/u';
+        $patterns[38] = '/(?<=[aeio]@VERBUM)[[:space:]]lo[[:space:]]/u';
         $patterns[39] = '/(?<=[aeiou]@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
         $patterns[42] = '/(?<=[aeiou]@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
         $patterns[48] = '/(?<=[aeiou]@VERBUM)[[:space:]]ho[[:space:]]/u';
         
         // verb acabat en vocal+r + pronoms de receiver a darrere
-        $patterns[15] = '/(?<=[aeiou]r@VERBUM)[[:space:]]me[[:space:]]/u';
-        $patterns[16] = '/(?<=[aeiou]r@VERBUM)[[:space:]]te[[:space:]]/u';
-        $patterns[17] = '/(?<=[aeiou]r@VERBUM)[[:space:]]li[[:space:]]/u';
-        $patterns[18] = '/(?<=[aeiou]r@VERBUM)[[:space:]]nos[[:space:]]/u';
-        $patterns[19] = '/(?<=[aeiou]r@VERBUM)[[:space:]]vos[[:space:]]/u';
-        $patterns[20] = '/(?<=[aeiou]r@VERBUM)[[:space:]]los[[:space:]]/u';
-        $patterns[40] = '/(?<=[aeiou]r@VERBUM)[[:space:]]lo[[:space:]]/u';
-        $patterns[41] = '/(?<=[aeiou]r@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
-        $patterns[43] = '/(?<=[aeiou]r@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
-        $patterns[49] = '/(?<=[aeiou]r@VERBUM)[[:space:]]ho[[:space:]]/u';
+        $patterns[15] = '/(?<=@VERBUM)[[:space:]]me[[:space:]]/u';
+        $patterns[16] = '/(?<=@VERBUM)[[:space:]]te[[:space:]]/u';
+        $patterns[17] = '/(?<=@VERBUM)[[:space:]]li[[:space:]]/u';
+        $patterns[18] = '/(?<=@VERBUM)[[:space:]]nos[[:space:]]/u';
+        $patterns[19] = '/(?<=@VERBUM)[[:space:]]vos[[:space:]]/u';
+        $patterns[20] = '/(?<=@VERBUM)[[:space:]]los[[:space:]]/u';
+        $patterns[40] = '/(?<=@VERBUM)[[:space:]]lo[[:space:]]/u';
+        $patterns[41] = '/(?<=@VERBUM)[[:space:]]@PRFEBLEla[[:space:]]/u';
+        $patterns[43] = '/(?<=@VERBUM)[[:space:]]@PRFEBLEles[[:space:]]/u';
+        $patterns[49] = '/(?<=@VERBUM)[[:space:]]ho[[:space:]]/u';
         
         // verb+pronom feble de receiver ja enganxat, seguit de "ho"
         $patterns[21] = "/(?<=@VERBUM)'m[[:space:]]ho[[:space:]]/u";
@@ -4278,24 +4411,39 @@ class Mypattern {
             }
         }
         
-        // afegim les expressions a darrere de la frase, si la frase no era buida,
-        // afegim una coma abans
+        // afegim les expressions a davant o a darrere de la frase, si la frase no era buida,
+        // afegim una coma abans -> CANVIAT, ja no afegim la coma
         
         $numexprs = count($this->exprsarray);
+        $capitalafterexpr = false;
         
-        if ($numexprs > 0 && $this->frasefinal != " ") {
+        /* if ($numexprs > 0 && $this->frasefinal != " ") {
             $frasebruta .= ", ";
             $frasebruta = preg_replace("/[[:space:]],/u", ",", $frasebruta);
-        }
+        } */
         for ($i=0; $i<$numexprs; $i++) {
-            // l'hola sempre va a davant            
-            if ($this->exprsarray[$i] == "hola") {
+            // l'hola sempre va a davant i les que tenen 1 a la propietat front           
+            if ($this->exprsarray[$i][1] == '1') {
                 $fraseaux = $frasebruta;
-                $frasebruta = " ".$this->exprsarray[$i];
+                $frasebruta = " ".$this->exprsarray[$i][0];
+                $llargexpr = strlen($this->exprsarray[$i][0]);
+                $lastcharexpr = $this->exprsarray[$i][0][$llargexpr-1];
+                // passem a majúscula la frase, si l'expressió de davant acaba en ".", "?", "!".
+                if ($lastcharexpr != "?" || $lastcharexpr != "." || $lastcharexpr == "!") {
+                    $fraseaux = preg_replace("/[[:space:]]$/u", "", $fraseaux);
+                    if (isset($fraseaux[0])) {
+                        if ($fraseaux[0] == " ") $fraseaux[1] = strtoupper($fraseaux[1]); 
+                        else $fraseaux[0] = strtoupper($fraseaux[0]); 
+                    }
+                }
+                
                 // si la frase no era buida, afegim una coma
-                if ($this->frasefinal != " ") $frasebruta = $frasebruta.", ".$fraseaux;
+                if (($this->frasefinal != " " || $numexprs > 1) && $lastcharexpr != "?"
+                        && $lastcharexpr != ".") $frasebruta = $frasebruta.", ";
+                
+                $frasebruta .= $fraseaux;
             }
-            else $frasebruta .= $this->exprsarray[$i]." ";
+            else $frasebruta .= $this->exprsarray[$i][0]." ";
         }
         
         // POSAR ELS PUNTS O EXCLAMACIONS O INTERROGANTS
@@ -4370,22 +4518,60 @@ class Mypattern {
             else if ($slotaux->category == "Desire") $indexdesire = $i;
             else if ($slotaux->category == "Permission") $indexpermission = $i;
             else if ($slotaux->category == "Subject") {
+                
+                // si l'idioma d'expansió no podia expandir i s'ha fet servir el castellà per defecte
+                // que no elimini els subjectes perquè així per la posterior traducció hi haurà menys
+                // ambigüitats
                 if ($slotaux->defvalueused) {
-                    // esborrem el tú o yo, 3a persona impersonal o usted quan hi són per defecte
-                    if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2' 
-                            || $slotaux->defvalue == '3' || $slotaux->defvalue == '7') $slotaux->slotstring = array();
+                    if ($CI->session->userdata('explangcannotexpand') == '1') {
+                        switch ($slotaux->defvalue) {
+                            case '1':
+                                $slotaux->slotstring = array();
+                                $elementaux[0] = "yo";
+                                $elementaux[1] = null;
+                                $slotaux->slotstring[] = $elementaux;
+                                break;
+                            case '2':
+                                $slotaux->slotstring = array();
+                                $elementaux[0] = "tú";
+                                $elementaux[1] = null;
+                                $slotaux->slotstring[] = $elementaux;
+                                break;
+                            case '3':
+                                $slotaux->slotstring = array();
+                                break;
+                            case '7':
+                                $slotaux->slotstring = array();
+                                $elementaux[0] = "usted";
+                                $elementaux[1] = null;
+                                $slotaux->slotstring[] = $elementaux;
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else {
+                        // esborrem el tú o yo, 3a persona impersonal o usted quan hi són per defecte
+                        if ($slotaux->defvalue == '1' || $slotaux->defvalue == '2' 
+                                || $slotaux->defvalue == '3' || $slotaux->defvalue == '7') $slotaux->slotstring = array();
+                    }
                 }
                 // si no s'ha fet servir el subjecte per defecte
                 else {
-                    // esborrem el tú o el yo
-                    if ($slotaux->paraulafinal->text == "yo" || $slotaux->paraulafinal->text == "tú") {
-                        $slotaux->slotstring = array();
-                    }
-                    // esborrem el subjecte del verb secundari, si és el mateix que el del principal
-                    if ($slotaux->level == 2 && $this->subjsiguals) {
-                        $slotaux->slotstring = array();
+                    if ($CI->session->userdata('explangcannotexpand') != '1') {
+                        // esborrem el tú o el yo, si no tenen elements coordinats
+                        if (($slotaux->paraulafinal->text == "yo" || $slotaux->paraulafinal->text == "tú")
+                                && !$slotaux->paraulafinal->coord) {
+                            $slotaux->slotstring = array();
+                        }
+                        // esborrem el subjecte del verb secundari, si és el mateix que el del principal
+                        if ($slotaux->level == 2 && $this->subjsiguals) {
+                            $slotaux->slotstring = array();
+                        }
                     }
                 }
+                
             }
         }
         
@@ -4400,7 +4586,7 @@ class Mypattern {
         // si és una ordre els pronoms aniran darrere el verb i tindran una altra forma
         $ordre = ($tipusfrase == "ordre");
         $elementaux = array();
-        
+                
         
         // TRANSFORMAR ELS PRONOMS A FEBLES DEL RECEIVER O DEL THEME
         for ($i=0; $i<$numslots; $i++) {
@@ -4554,7 +4740,8 @@ class Mypattern {
                     if (($slotaux->level == 1 && $mainverbinf) 
                             || ($slotaux->level == 1 && $ordre && !$this->frasenegativa)) {
                         // si són pronoms personals, posem la forma correcta pels receivers de darrere el verb
-                        if ($matching->isPronomPersES($parauladerivada)) {
+                        // menys si és un patró verbless, on la frase només tindrà el pronom
+                        if ($matching->isPronomPersES($parauladerivada) && !$this->verbless) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4565,7 +4752,8 @@ class Mypattern {
                     }
                     else if ($slotaux->level == 1) {
                         // si són pronoms personals, posem la forma correcta pels receivers d'abans del verb
-                        if ($matching->isPronomPersES($parauladerivada)) {
+                        // menys si és un patró verbless, on la frase només tindrà el pronom
+                        if ($matching->isPronomPersES($parauladerivada) && !$this->verbless) {
                             $slotaux->slotstring = array();
                             $elementaux[0] = $matching->pronomsPersonalsThemeES[$parauladerivada];                          
                             $elementaux[1] = null;
@@ -4601,7 +4789,7 @@ class Mypattern {
             
         } // Fi for transformar pronoms
                 
-                
+                        
         // ORDRE DELS PRONOMS
         // amb tota la info recollida, movem els pronoms de lloc si cal
         // pel main verb si és infinitiu (els d'ordre ja són a darrere)
@@ -4788,6 +4976,7 @@ class Mypattern {
         $patterns[5] = '/(?<=@VERBUM)[[:space:]]se[[:space:]]/u';
         $patterns[6] = '/(?<=@VERBUM)[[:space:]]nos[[:space:]]/u';
         $patterns[7] = '/(?<=@VERBUM)[[:space:]]os[[:space:]]/u';
+        $patterns[30] = '/(?<=@VERBUM)[[:space:]]le[[:space:]]/u';
         
         // verb+pronom feble de receiver ja enganxat, seguit de "lo"
         $patterns[8] = "/(?<=@VERBUM)me[[:space:]]lo[[:space:]]/u";
@@ -4828,6 +5017,7 @@ class Mypattern {
         $replacements[5] = "se ";
         $replacements[6] = "nos ";
         $replacements[7] = "os ";
+        $replacements[30] = "le ";
         
         $replacements[8] = "melo ";
         $replacements[9] = "telo ";
@@ -4867,24 +5057,39 @@ class Mypattern {
             }
         }
         
-        // afegim les expressions a darrere de la frase, si la frase no era buida,
-        // afegim una coma abans
+        // afegim les expressions a davant o a darrere de la frase, si la frase no era buida,
+        // afegim una coma abans -> CANVIAT, ja no afegim la coma
         
         $numexprs = count($this->exprsarray);
+        $capitalafterexpr = false;
         
-        if ($numexprs > 0 && $this->frasefinal != " ") {
+        /* if ($numexprs > 0 && $this->frasefinal != " ") {
             $frasebruta .= ", ";
             $frasebruta = preg_replace("/[[:space:]],/u", ",", $frasebruta);
-        }
+        } */
         for ($i=0; $i<$numexprs; $i++) {
-            // l'hola sempre va a davant            
-            if ($this->exprsarray[$i] == "hola") {
+            // l'hola sempre va a davant i les que tenen 1 a la propietat front           
+            if ($this->exprsarray[$i][1] == '1') {
                 $fraseaux = $frasebruta;
-                $frasebruta = " ".$this->exprsarray[$i];
+                $frasebruta = " ".$this->exprsarray[$i][0];
+                $llargexpr = strlen($this->exprsarray[$i][0]);
+                $lastcharexpr = $this->exprsarray[$i][0][$llargexpr-1];
+                // passem a majúscula la frase, si l'expressió de davant acaba en ".", "?", "!".
+                if ($lastcharexpr != "?" || $lastcharexpr != "." || $lastcharexpr == "!") {
+                    $fraseaux = preg_replace("/[[:space:]]$/u", "", $fraseaux);
+                    if (isset($fraseaux[0])) {
+                        if ($fraseaux[0] == " ") $fraseaux[1] = strtoupper($fraseaux[1]); 
+                        else $fraseaux[0] = strtoupper($fraseaux[0]); 
+                    }
+                }
+                
                 // si la frase no era buida, afegim una coma
-                if ($this->frasefinal != " ") $frasebruta = $frasebruta.", ".$fraseaux;
+                if (($this->frasefinal != " " || $numexprs > 1) && $lastcharexpr != "?"
+                        && $lastcharexpr != ".") $frasebruta = $frasebruta.", ";
+                
+                $frasebruta .= $fraseaux;
             }
-            else $frasebruta .= $this->exprsarray[$i]." ";
+            else $frasebruta .= $this->exprsarray[$i][0]." ";
         }
         
         // POSAR ELS PUNTS O EXCLAMACIONS O INTERROGANTS

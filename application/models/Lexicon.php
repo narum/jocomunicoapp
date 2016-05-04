@@ -31,22 +31,78 @@ class Lexicon extends CI_Model {
             $idusu = $output[0]->ID_SU;
             $ulanguage = $output[0]->cfgDefUser;
             $isfem = $output[0]->cfgIsFem;
+            $autoerase = $output[0]->cfgAutoEraseSentenceBar;
+            $expansiononoff = $output[0]->cfgExpansionOnOff;
+            $idsubuser = 0;
+            
+            // By default
+            $uexplanguage = $ulanguage;
+            
+            // We get the language for the expansion system 
+            // just in case the user has changed it
+            $output3 = array();
+            $this->db->where('ID_USU', $idusu);
+            $this->db->where('ID_ULanguage', $ulanguage);
+            
+            $query3 = $this->db->get('User');
+            
+            if ($query3->num_rows() > 0) {
+                $output3 = $query3->result();
+                $uexplanguage = $output3[0]->cfgExpansionLanguage;
+                $idsubuser = $output3[0]->ID_User;
+            }
+            
             $this->session->set_userdata('idusu', $idusu);
+            $this->session->set_userdata('idsubuser', $idsubuser);
             $this->session->set_userdata('uname', $usuari);
-            $this->session->set_userdata('ulanguage', $ulanguage);
+            $this->session->set_userdata('ulanguage', $uexplanguage);
+            $this->session->set_userdata('uinterfacelangauge', $ulanguage);
             $this->session->set_userdata('isfem', $isfem);
+            $this->session->set_userdata('cfgAutoEraseSentenceBar', $autoerase);
+            $this->session->set_userdata('cfgExpansionOnOff', $expansiononoff);
             
             $output2 = array();
-            $this->db->where('ID_Language', $ulanguage);  
+            $this->db->where('ID_Language', $uexplanguage);
             $query2 = $this->db->get('Languages');
             
             if ($query2->num_rows() > 0) {
                 $output2 = $query2->result();
                 $ulangabbr = $output2[0]->languageabbr;
-                $this->session->set_userdata('ulangabbr', $ulangabbr);
+                $this->session->set_userdata('ulangoriginalabbr', $ulangabbr);
+                
+                if ($output2[0]->canExpand == '1') {
+                    $this->session->set_userdata('ulangabbr', $ulangabbr);
+                    $this->session->set_userdata('explangcannotexpand', '0');
+                }
+                // If the expansion language cannot expand, the Spanish expander will be used by default
+                else {
+                    $this->session->set_userdata('ulangabbr', 'ES');
+                    $this->session->set_userdata('explangcannotexpand', '1');
+                }
+            }
+            
+            $output4 = array();
+            $this->db->where('ID_Language', $ulanguage);  
+            $query4 = $this->db->get('Languages');
+            
+            if ($query4->num_rows() > 0) {
+                $output4 = $query4->result();
+                
+                // We get the info on the interface language, it will be used by the parser
+                $uinterfacelangtype = $output4[0]->type;
+                $this->session->set_userdata('uinterfacelangtype', $uinterfacelangtype);
+                $uinterfacelangnadjorder = $output4[0]->nounAdjOrder;
+                $this->session->set_userdata('uinterfacelangnadjorder', $uinterfacelangnadjorder);
+                $uinterfacelangncorder = $output4[0]->nounComplementOrder;
+                $this->session->set_userdata('uinterfacelangncorder', $uinterfacelangncorder);
+                $ulangabbr = $output4[0]->languageabbr;
+                $this->session->set_userdata('uinterfacelangabbr', $ulangabbr);
             }
             else {
-                $this->session->set_userdata('ulangabbr', 'CA');
+                $this->session->set_userdata('uinterfacelangabbr', 'ES');
+                $this->session->set_userdata('uinterfacelangtype', 'svo');
+                $this->session->set_userdata('uinterfacelangnadjorder', '0');
+                $this->session->set_userdata('uinterfacelangncorder', '1');
             }
             
             return true;
@@ -541,18 +597,36 @@ class Lexicon extends CI_Model {
     }
     
     /**
-     *
+     * INSERTS A PICTOGRAM TO THE DB. AVOIDS ENTERING TWO EQUAL CONSECUTIVE PICTOGRAMS
      * @param type $idusu
      * @param type $idparaula
-     * @param type $taula Aquest paràmetre ha quedat obsolet amb la nova BBDD.
+     * @param type $imgtemp Es fa servir amb la nova interfície, per si l'usuari ha modificat 
+     * la img per defecte del pictograma es guarda aquesta imatge.
      */
-    function afegirParaula($idusu, $idparaula, $taula)
+    function afegirParaula($idusu, $idparaula, $imgtemp)
     {
-        $data = array(
-            'pictoid' => $idparaula,
-            'ID_RSTPUser' => $idusu,
-        );
-        $this->db->insert('R_S_TempPictograms', $data);
+        $paraula = array();
+        $pictoid = -1;
+        
+        // gets the last inserted pictogram
+        $this->db->where('ID_RSTPUser', $idusu);
+        $this->db->order_by('ID_RSTPSentencePicto', 'desc');
+        $query = $this->db->get('R_S_TempPictograms', 1, 0);
+        
+        if ($query->num_rows() > 0) {
+            $paraula = $query->result();
+            $pictoid = $paraula[0]->pictoid;
+        }
+        
+        // if it's not equal to the last inserted pictogram
+        if ($idparaula != $pictoid) {
+            $data = array(
+                'pictoid' => $idparaula,
+                'ID_RSTPUser' => $idusu,
+                'imgtemp' => $imgtemp,
+            );
+            $this->db->insert('R_S_TempPictograms', $data);
+        }
     }
     /*
      * GET THE WORDS ALREADY ENTERED IN THE USER INTERFACE
@@ -807,6 +881,7 @@ class Lexicon extends CI_Model {
             'intendedSentence' => $this->input->post('fraseobj', true),
             'sentenceFinished' => '1',
             'inputWords' => $inputwords,
+            'inputIds' => $inputids,
         );
         $this->db->insert('S_Historic', $data);
         $identry = $this->db->insert_id();
@@ -820,13 +895,16 @@ class Lexicon extends CI_Model {
                     'isplural' => $row->isplural,
                     'isfem' => $row->isfem,
                     'coordinated' => $row->coordinated,
+                    'imgtemp' => $row->imgtemp,
                 );
                 $this->db->insert('R_S_HistoricPictograms', $data2);
             }
         }
         // Eliminar les paraules de la taula provisional
-        $this->db->where('ID_RSTPUser', $idusu);
-        $this->db->delete('R_S_TempPictograms');
+        if ($this->session->userdata('cfgAutoEraseSentenceBar') == '1') {
+            $this->db->where('ID_RSTPUser', $idusu);
+            $this->db->delete('R_S_TempPictograms');
+        }
     }
     
     /*
@@ -844,10 +922,17 @@ class Lexicon extends CI_Model {
         // a Elements Seleccionats, just abans de prémer Generar
         $paraulesFrase = $this->recuperarFrase($idusu);
         $inputwords = "";
+        $inputids = "";
         for ($i=0; $i<count($paraulesFrase); $i++) {
             if ($paraulesFrase[$i] != null) {
                 $word = $paraulesFrase[$i];
                 $inputwords .= $word->text;
+                
+                $inputids .= "{".$word->id."}";
+                if ($word->plural) $inputids .= " / \$pl";
+                if ($word->fem) $inputids .= " / \$fem";
+                if ($word->coord) $inputids .= " / \$i";
+                
                 if($word->plural || $word->fem || $word->coord) {
                     $inputwords .= '(';
                     if ($word->plural) $inputwords .= 'pl';
@@ -858,8 +943,17 @@ class Lexicon extends CI_Model {
                     $inputwords .= ')';
                 } 
                 if ($i < (count($paraulesFrase))) $inputwords .= " / ";
+                if ($i < (count($paraulesFrase) - 1)) $inputids .= " / ";
             }
         }
+        
+        $inputids .= " / #".$tipusfrase;
+        $inputids .= " / @".$tempsverbal;
+        if ($negativa) $inputids .= " / %no";
+        $inputids .= " /";
+        
+        $inputwords .="<br /><br />".$inputids;
+        
         $data = array(
             'ID_SHUser' => $idusu,
             'sentenceType' => $tipusfrase,
@@ -869,6 +963,7 @@ class Lexicon extends CI_Model {
             'intendedSentence' => "",
             'sentenceFinished' => '1',
             'inputWords' => $inputwords,
+            'inputIds' => $inputids,
         );
         $this->db->insert('S_Historic', $data);
         $identry = $this->db->insert_id();
@@ -882,6 +977,7 @@ class Lexicon extends CI_Model {
                     'isplural' => $row->isplural,
                     'isfem' => $row->isfem,
                     'coordinated' => $row->coordinated,
+                    'imgtemp' => $row->imgtemp,
                 );
                 $this->db->insert('R_S_HistoricPictograms', $data2);
             }
@@ -1023,13 +1119,18 @@ class Lexicon extends CI_Model {
                 }
                 
                 if ($word != null) {
+                    
+                    // DEBUG
+                    // if ($paraulaprevia != null) echo $paraulaprevia->text." - ".$word->text."<br />";
                                         
                     if ($itrobada) {
                         $ibona = ($paraulaprevia->tipus == $word->tipus);
-                        $itrobada = false;
+                        // mirem si la paraula actual també té una coordinació
+                        if ($word->coord) $itrobada = true;
+                        else $itrobada = false;
                         if ($ibona) {
                             $ibona = false;
-                            $paraulaprevia->paraulacoord = unserialize(serialize($word));
+                            $paraulaprevia->paraulacoord[] = unserialize(serialize($word));
                         }
                         else {
                             $ordre += 1; // perquè si ibona, al principi no s'havia incrementat
@@ -1037,7 +1138,7 @@ class Lexicon extends CI_Model {
                             $output[$ordre] = $word;
                         }
                     }
-                    // no acceptem tenir dues coordinacions seguides
+                    // si no hi ha cap "i" posem la paraula a la llista de paraules
                     else {
                         $output[$ordre] = $word;
                         

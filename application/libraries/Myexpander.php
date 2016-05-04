@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+// use Stichoza\GoogleTranslate\TranslateClient;
 
 class Myexpander {
     
@@ -34,7 +35,11 @@ class Myexpander {
         $this->info['printparsepattern'] = "No pattern found.";
         $this->info['errorcode'] = false;
         $frasefinalnotexpanded = "";
-
+        
+        // agafem si el sistema d'expansió està o no activat
+        $expansionOff = false;
+        if ($CI->session->userdata('cfgExpansionOnOff') == '0') $expansionOff = true;
+        
         // GET SENTENCE
         $idusu = $CI->session->userdata('idusu');
         $this->paraulescopia = $CI->Lexicon->getLastSentence($idusu); // array amb les paraules
@@ -96,8 +101,9 @@ class Myexpander {
             $frasefinalnotexpanded .= $word->text." ";
         }
         
-        // si ha trobat un pictograma que no es pot expandir que surti del sistema d'expansió
-        if ($this->readwithoutexpansion) {
+        // si ha trobat un pictograma que no es pot expandir
+        // o el sistema d'expansió estava desactivat que surti del sistema d'expansió
+        if ($this->readwithoutexpansion || $expansionOff) {
             $this->info['frasefinal'] = $frasefinalnotexpanded;
             return;
         }
@@ -152,9 +158,15 @@ class Myexpander {
 
                // Posem les expressions a la tira d'expressions
                for ($j=0; $j<count($arrayExpressions); $j++) {
-                   $auxpattern->exprsarray[] = $arrayExpressions[$j]->text;
+                   $aux = array();
+                   $aux[0] = $arrayExpressions[$j]->text;
+                   $aux[1] = $arrayExpressions[$j]->propietats->front;
+                   $auxpattern->exprsarray[] = $aux;
                }
 
+               // si la frase era de pregunta, ho guardem a les cookies
+               if ($propietatsfrase['tipusfrase'] == "pregunta") $CI->session->set_userdata('preguntapattern', true);
+               
                // Si hi ha una partícula de pregunta
                $numpreguntes = count($partPregunta);
                if ($numpreguntes > 1) {
@@ -184,6 +196,7 @@ class Myexpander {
                    else {
                        // només que hi hagi un patró on encaixi la partícula de pregunta, ja va bé
                        $preguntabona = true;
+                       $CI->session->set_userdata('preguntapattern', true);
                        $this->errormessagetemp = null;
                        $this->errorcodetemp = null;
                        $this->errortemp = false;
@@ -191,9 +204,9 @@ class Myexpander {
                    }
                } // Fi tractament de pregunta
 
-
                // Si el verb és pseudoimpersonal o si hi ha una pregunta, invertim les preferències
                // d'aparèxier abans i després del verb, ja que ara el subjecte va darrere del verb
+               // Les variables beforeverb només s'utilitzaran al codi si l'idioma té estructura SVO (Subject-Verb-Object)
                if ($auxpattern->pseudoimpersonal || $partpreguntaposada) {
                    for ($j=0; $j<count($paraules); $j++) {
                        $auxword = &$paraules[$j];
@@ -223,7 +236,16 @@ class Myexpander {
                // Els modificadors
                $auxpattern->solveModifs($arrayModifs);
 
-               $puntspattern = $auxpattern->calcPuntsFinalPattern();
+               $auxreturn = $auxpattern->calcPuntsFinalPattern();
+               $puntspattern = $auxreturn[0];
+               $notusedpicto = $auxreturn[1];
+               
+               // si no ha pogut posar una paraula, activem un error temporal del patró
+               if ($notusedpicto) {
+                   $this->errormessagetemp = "Warning. No s'ha trobat lloc per una de les paraules.";
+                   $this->errorcodetemp = 7;
+                   $this->errortemp = true;
+               }
 
                $this->puntsallpatterns[] = $puntspattern;
 
@@ -231,10 +253,17 @@ class Myexpander {
                $this->errorcode[] = $this->errorcodetemp;
                $this->error[] = $this->errortemp;
                $this->preguntaposada[] = $partpreguntaposada;
+               
+               // reiniciem els errors pel següent patró
+               $this->errormessagetemp = null;
+               $this->errorcodetemp = null;
+               $this->errortemp = false;
+               
+               $CI->session->set_userdata('preguntapattern', false);
                // DEBUG
                // echo $auxpattern->printPattern();
 
-            }
+            } // fi per cada pattern
 
             // escollim el pattern amb més puntuació com a resultat
             $bestpatternindex = 0;
@@ -271,9 +300,26 @@ class Myexpander {
                 $frasefinal = $this->generateSentenceES($bestpattern, $propietatsfrase, $this->preguntaposada[$bestpatternindex]);
             }
 
+            // si el millor patró té un codi d'error 7 (paraula no utilitzada), aleshores llegim sense expansió
+            if ($this->errorcode[$bestpatternindex] == 7) $this->readwithoutexpansion = true;
+            
             // si hi ha hagut algun error o s'ha desactivat el sistema d'expansió, aleshores es llegeix sense expandir la frase
             if ($this->readwithoutexpansion) $this->info['frasefinal'] = $frasefinalnotexpanded;
             else $this->info['frasefinal'] = $frasefinal;
+            
+            // si l'idioma d'expansió no podia expandir i fa servir el castellà per defecte, traduïm la frase
+            // amb el Google Translate
+//            if ($CI->session->userdata('explangcannotexpand') == '1') {
+//                
+//                try {
+//                    $tr = new TranslateClient($CI->session->userdata('ulangabbr'), $CI->session->userdata('ulangoriginalabbr'));
+//                    $this->info['frasefinal'] = $tr->translate($this->info['frasefinal']);
+//                } catch (Exception $exc) {
+//                    $this->errormessage[$bestpatternindex] = "Error. Connection error. The sentence cannot be translated.";
+//                    $this->error[$bestpatternindex] = true;
+//                    $this->errorcode[$bestpatternindex] = 8;
+//                }
+//            }
 
             // Guardar parse tree i frase final a la base de dades
             $CI->Lexicon->guardarParseIFraseResultat($propietatsfrase['identry'], $printparsepattern, $frasefinal);
@@ -319,7 +365,7 @@ class Myexpander {
                 // si hi ha un adjectiu i no hi ha noms, ni altres paraules excepte modificadors
                 // agafem el verb per defecte del primer adjectiu introduït
                 if ($thereisadj && $countnouns == 0 && !$othertypes) {
-                    $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, true); 
+                    $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, ($adjdefverb != 0)); 
                 }
                 // si hi ha algun nom i no hi ha altres paraules excepte modificadors i/o adjectius
                 // agafem el verb per defecte del primer nom introduït
@@ -327,7 +373,7 @@ class Myexpander {
                 // defecte de l'adjectiu
                 else if ($countnouns > 0 && !$othertypes) {
                     if ($noundefverb != 0) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($noundefverb, false);
-                    else if ($thereisadj) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, true);
+                    else if ($thereisadj) $arrayVerbs[] = $CI->Lexicon->getPatternsVerb($adjdefverb, ($adjdefverb != 0));
                     else $arrayVerbs[] = $CI->Lexicon->getPatternsVerb(0, false); // Verbless
                 }
                 else {
@@ -472,18 +518,35 @@ class Myexpander {
         $pattern = new Mypattern();
         $pattern = $patternfinal;
         
+        if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
+        // si el temps per defecte és l'imperatiu, però hi ha modificadors de frase o de tense
+        // sobreescrivim els valors
+        if ($pattern->defaulttense == "imperatiu") {
+            if ($propietatsfrase['tense'] != "defecte") {
+                $pattern->defaulttense = $propietatsfrase['tense'];
+                $pattern->tipusfrase = $propietatsfrase['tipusfrase'];
+            }
+            else if ($propietatsfrase['tipusfrase'] != "defecte" && 
+                    !($propietatsfrase['tipusfrase'] == "exclamacio" || $propietatsfrase['tipusfrase'] == "resposta")) {
+                $pattern->defaulttense = "present";
+                $pattern->tipusfrase = $propietatsfrase['tipusfrase'];
+            }
+        }
+        // Si el tipus de frase triat era per defecte, ara el tipus de frase és el per defecte del patró
+        if ($propietatsfrase['tipusfrase'] == "defecte") $propietatsfrase['tipusfrase'] = $pattern->tipusfrase;
+        
         // Indiquem que si el temps per defecte és l'imperatiu, que la frase és una ordre
         // a no ser que estigui activat el modificador de desig o permís que tenen preferència o
         // que hi hagi una partícula de pregunta.
-        if ($propietatsfrase['tense'] == "defecte" && $pattern->defaulttense == "imperatiu"
-                && (!$propietatsfrase['tipusfrase'] == "desig" || !$propietatsfrase['tipusfrase'] == "permis"
-                || !$partpreguntaposada)) {
-            $propietatsfrase['tipusfrase'] = "ordre";
-        }
-        else if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
-        
-        // Si el tipus de frase triat era per defecte, ara el tipus de frase és el per defecte del patró
-        if ($propietatsfrase['tipusfrase'] == "defecte") $propietatsfrase['tipusfrase'] = $pattern->tipusfrase;
+//        if ($propietatsfrase['tense'] == "defecte" && $pattern->defaulttense == "imperatiu"
+//                && (!$propietatsfrase['tipusfrase'] == "desig" || !$propietatsfrase['tipusfrase'] == "permis"
+//                || !$partpreguntaposada)) {
+//            $propietatsfrase['tipusfrase'] = "ordre";
+//        }
+//        else if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
+//        
+//        // Si el tipus de frase triat era per defecte, ara el tipus de frase és el per defecte del patró
+//        if ($propietatsfrase['tipusfrase'] == "defecte") $propietatsfrase['tipusfrase'] = $pattern->tipusfrase;
 
         // 1. Ordenem els slots segons el tipus de frase
         $pattern->ordenarSlotsFrase($propietatsfrase);
@@ -518,18 +581,35 @@ class Myexpander {
         $pattern = new Mypattern();
         $pattern = $patternfinal;
 
-        // Indiquem que si el temps per defecte és l'imperatiu, que la frase és una ordre
-        // a no ser que estigui activat el modificador de desig o permís que tenen preferència o
-        // que hi hagi una partícula de pregunta.
-        if ($propietatsfrase['tense'] == "defecte" && $pattern->defaulttense == "imperatiu"
-                && (!$propietatsfrase['tipusfrase'] == "desig" || !$propietatsfrase['tipusfrase'] == "permis"
-                || !$partpreguntaposada)) {
-            $propietatsfrase['tipusfrase'] = "ordre";
+        if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
+        // si el temps per defecte és l'imperatiu, però hi ha modificadors de frase o de tense
+        // sobreescrivim els valors
+        if ($pattern->defaulttense == "imperatiu") {
+            if ($propietatsfrase['tense'] != "defecte") {
+                $pattern->defaulttense = $propietatsfrase['tense'];
+                $pattern->tipusfrase = $propietatsfrase['tipusfrase'];
+            }
+            else if ($propietatsfrase['tipusfrase'] != "defecte" && 
+                    !($propietatsfrase['tipusfrase'] == "exclamacio" || $propietatsfrase['tipusfrase'] == "resposta")) {
+                $pattern->defaulttense = "present";
+                $pattern->tipusfrase = $propietatsfrase['tipusfrase'];
+            }
         }
-        else if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
-        
         // Si el tipus de frase triat era per defecte, ara el tipus de frase és el per defecte del patró
         if ($propietatsfrase['tipusfrase'] == "defecte") $propietatsfrase['tipusfrase'] = $pattern->tipusfrase;
+        
+//        // Indiquem que si el temps per defecte és l'imperatiu, que la frase és una ordre
+//        // a no ser que estigui activat el modificador de desig o permís que tenen preferència o
+//        // que hi hagi una partícula de pregunta.
+//        if ($propietatsfrase['tense'] == "defecte" && $pattern->defaulttense == "imperatiu"
+//                && (!$propietatsfrase['tipusfrase'] == "desig" || !$propietatsfrase['tipusfrase'] == "permis"
+//                || !$partpreguntaposada)) {
+//            $propietatsfrase['tipusfrase'] = "ordre";
+//        }
+//        else if ($partpreguntaposada) $propietatsfrase['tipusfrase'] = "pregunta";
+//        
+//        // Si el tipus de frase triat era per defecte, ara el tipus de frase és el per defecte del patró
+//        if ($propietatsfrase['tipusfrase'] == "defecte") $propietatsfrase['tipusfrase'] = $pattern->tipusfrase;
 
         // 1. Ordenem els slots segons el tipus de frase
         $pattern->ordenarSlotsFraseES($propietatsfrase);
