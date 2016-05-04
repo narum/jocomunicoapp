@@ -955,8 +955,10 @@ angular.module('controllers', [])
                     $scope.InitScan();
                 });
             };
-
-
+            //We have to react to the ng-click events?
+            $scope.isClickEnable = function(){
+                return(!($scope.inEdit || $scope.inScan || $scope.cfgTimeOverOnOff));
+            };
             // Get the user config and show the board
             $scope.config = function ()
             {
@@ -1008,7 +1010,7 @@ angular.module('controllers', [])
                 $scope.longclick = userConfig.cfgUsageMouseOneCTwoC;
                 $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
 
-                $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff;
+                $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff == 1 ? true : false;
                 $scope.cfgTimeOver = userConfig.cfgTimeLapseSelect;
                 alert($scope.cfgTimeOverOnOff);
                 $scope.cfgTimeNoRepeatedClickOnOff = userConfig.cfgTimeNoRepeatedClickOnOff;
@@ -1275,7 +1277,7 @@ angular.module('controllers', [])
              * Add the selected pictogram to the sentence
              */
             $scope.clickOnCell = function (cell) {
-                if (!$scope.inEdit && cell.activeCell == 1) {
+                if (cell.activeCell == 1) {
 
                     if (cell.textInCell !== null) {
                         $scope.playPictoAudio(cell.textInCell);
