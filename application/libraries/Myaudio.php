@@ -354,7 +354,7 @@ class Myaudio {
                     if ($this->isOnline()) {
                         $voice = $userinfo->cfgInterfaceVoiceOnline;
                         // if it uses the default online voices for the interface
-                        if (preg_match($voice, "DEFAULT (")) {
+                        if (preg_match("/DEFAULT \(/i", $voice)) {
                             $type = "online";
                         }
                         else $type = "offline";
@@ -457,11 +457,11 @@ class Myaudio {
             // default voice ES masc (Jorge)
             $vocalwareLID = 2;
             $vocalwareVID = 6;
-            
+                        
             // if it's a default interface voice
-            if (preg_match($voice, "DEFAULT (")) {
+            if (preg_match("/DEFAULT \(/i", $voice)) {
                 $isfem = true;
-                if (preg_match($voice, "DEFAULT (masc)")) $isfem = false;
+                if (preg_match("/DEFAULT \(masc\)/i", $voice)) $isfem = false;
                 
                 // get default values for the interface voice in each language
                 switch ($language) {
@@ -608,9 +608,9 @@ class Myaudio {
         $result = curl_exec($curl);
 
         curl_close($curl);
-
-        // if no error occurred
-        if ($result && !strpos($result, "Error: ")) {
+                
+        // if no error occurred (we assume there's an error if the mp3 data is less than 1000 characters)
+        if ($result && !strpos($result, "Error: ") && (strlen($result) > 1000)) {
 
             try {
                 $filenamewrite = "mp3/".$filename.".mp3";
@@ -630,7 +630,7 @@ class Myaudio {
         // if there was an error
         else {
             $error = true;
-            $errormessage = "Error. An error occurred while contacting the online voice service.";
+            $errormessage = "Error. An error occurred while contacting the online voice service. Try again.";
             $errorcode = 109;
         }
         
@@ -661,7 +661,7 @@ class Myaudio {
         
             if ($rate > 0) $concatveus .= "-r ".$rate." ";
 
-            $concatveus .= "'".$voice."' ";
+            $concatveus .= "-v '".$voice."' ";
             $concatveus .= "-o mp3/".$filename.".m4a --data-format=aach ";
 
             $cmd="say ".$concatveus."'".$text."' > /dev/null 2>&1 &";

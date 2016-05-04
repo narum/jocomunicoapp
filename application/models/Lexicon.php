@@ -33,6 +33,7 @@ class Lexicon extends CI_Model {
             $isfem = $output[0]->cfgIsFem;
             $autoerase = $output[0]->cfgAutoEraseSentenceBar;
             $expansiononoff = $output[0]->cfgExpansionOnOff;
+            $idsubuser = 0;
             
             // By default
             $uexplanguage = $ulanguage;
@@ -48,9 +49,11 @@ class Lexicon extends CI_Model {
             if ($query3->num_rows() > 0) {
                 $output3 = $query3->result();
                 $uexplanguage = $output3[0]->cfgExpansionLanguage;
+                $idsubuser = $output3[0]->ID_User;
             }
             
             $this->session->set_userdata('idusu', $idusu);
+            $this->session->set_userdata('idsubuser', $idsubuser);
             $this->session->set_userdata('uname', $usuari);
             $this->session->set_userdata('ulanguage', $uexplanguage);
             $this->session->set_userdata('uinterfacelangauge', $ulanguage);
