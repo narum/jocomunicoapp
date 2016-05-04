@@ -1047,7 +1047,7 @@ angular.module('controllers', [])
             $scope.range = function ($repeatnum)
             {
                 var n = [];
-                for (i = 0; i <= $repeatnum; i++)
+                for (i = 1; i <= $repeatnum; i++)
                 {
                     n.push(i);
                 }
@@ -1120,8 +1120,8 @@ angular.module('controllers', [])
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.nameboard = response.name;
-                    $scope.altura = $scope.range(20)[response.row].valueOf();
-                    $scope.amplada = $scope.range(20)[response.col].valueOf();
+                    $scope.altura = $scope.range(20)[response.row-1].valueOf();
+                    $scope.amplada = $scope.range(20)[response.col-1].valueOf();
                     $scope.autoreturn = (response.autoReturn === '1' ? true : false);
                     $scope.autoread = (response.autoRead === '1' ? true : false);
 
@@ -1713,7 +1713,10 @@ angular.module('controllers', [])
                     $http.post(URL, postdata).
                             success(function (response)
                             {
-                                $scope.CreateBoardData = {CreateBoardName: '', height: response.defWidth.toString(), width: response.defHeight.toString(), idGroupBoard: response.ID_GB};
+                                
+                                $scope.CreateBoardData = {CreateBoardName: '', height: response.defHeight.toString(), width: response.defWidth.toString(), idGroupBoard: response.ID_GB};
+                                $scope.CreateBoardData.height = $scope.range(20)[response.defHeight-1].valueOf();
+                                $scope.CreateBoardData.width = $scope.range(20)[response.defWidth-1].valueOf();
                                 alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
