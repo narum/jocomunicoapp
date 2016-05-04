@@ -8,6 +8,7 @@ angular.module('app', [
         'ngDialog',
         'ngAudio',
         'ngScrollbar',
+        'ngAnimate',
         
 	//Modules
 	'controllers',

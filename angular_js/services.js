@@ -10,7 +10,7 @@ angular.module('services', [])
 		"histo": $resource(baseUri + "histo"),
 		"login": $resource(baseUri + "login"),
 		"register": $resource(baseUri + "register/:funct",{funct:"@funct"}), //Acceder a funciones dentro de Register.php
-		"main": $resource(baseUri + "main")
+		"main": $resource(baseUri + "main/:funct",{funct:"@funct"})
 	};
 })
 
@@ -28,23 +28,17 @@ angular.module('services', [])
 		},
 		"login": function(token, userConfig) {
 			window.localStorage.setItem('token', token); // guardem el token al localStorage
-			window.localStorage.setItem('languageid', userConfig.cfgDefUser); // guardem el idlanguage al localStorage
-			window.localStorage.setItem('languageabbr', userConfig.languageabbr); // guardem el nomlanguage al localStorage
-                        window.localStorage.setItem('userid', userConfig.ID_User);
                         window.localStorage.setItem('userData', JSON.stringify(userConfig));
 			$http.defaults.headers.common['Authorization'] = 'Bearer '+token; // posem el token al header per a totes les peticions
 			$http.defaults.headers.common['X-Authorization'] = 'Bearer '+token; // posem el token al header per a totes les peticions
 			$rootScope.isLogged = true;
-			$rootScope.languageid = userConfig.cfgDefUser;
-			$rootScope.languageabbr = userConfig.languageabbr;
-                        $rootScope.userid = userConfig.ID_User;
+			$rootScope.interfaceLanguageId = userConfig.ID_ULanguage;
+			$rootScope.expanLanguageId = userConfig.cfgExpansionLanguage;
+                        $rootScope.sUserId = userConfig.ID_SU;
 		},
 		"logout": function() {
 			window.localStorage.removeItem('token');
-			window.localStorage.removeItem('languageid');
-			window.localStorage.removeItem('languageabbr');
-                        window.localStorage.removeItem('userid');
-                        window.localStorage.removeItem('userConfig');
+                        window.localStorage.removeItem('userData');
 			delete $http.defaults.headers.common['Authorization'];
 			delete $http.defaults.headers.common['X-Authorization'];
 			$rootScope.isLogged = false;
@@ -56,8 +50,8 @@ angular.module('services', [])
 //Función que retorna el contenido de texto de la vista al pasarle los parametros section y language
 .factory('txtContent',  function(Resources, $http, $rootScope){
 	return function name(section){
-		var languageid = $rootScope.languageid;
-		return Resources.main.get({'section':section, 'idLanguage':languageid}).$promise;
+		var languageid = $rootScope.interfaceLanguageId;
+		return Resources.main.get({'section':section, 'idLanguage':languageid}, {'funct': "content"}).$promise;
 	}
 })
 

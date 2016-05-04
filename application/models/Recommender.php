@@ -181,7 +181,7 @@ class Recommender extends CI_Model {
         $this->db->join('pictogramslanguage', 'p_statsuserpicto.pictoid = pictogramslanguage.pictoid', 'left'); 
         $this->db->join('pictograms', 'p_statsuserpicto.pictoid = pictograms.pictoid', 'left'); 
         $this->db->where('p_statsuserpicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
-        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulangid'));                             
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('uinterfacelangauge'));                             
         $this->db->limit(5);
         $this->db->order_by('countx1', 'desc');        
         $query = $this->db->get();     
@@ -216,7 +216,7 @@ class Recommender extends CI_Model {
 //        $this->db->join('nameclassca', 'p_statsuserpictox2.picto2id = nameclassca.nameid', 'left'); 
 //        $this->db->join('pictogramslanguage', 'p_statsuserpictox2.picto2id = pictogramslanguage.pictoid', 'left'); 
 //        $this->db->where('p_statsuserpictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
-//        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulangid'));                             
+//        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('uinterfacelangauge'));                             
 //        $this->db->where('p_statsuserpictox2.picto1id', $inputid1);  
 //        $this->db->where_in('nameclassca.class', $fits1);
 //        $this->db->limit(5);
@@ -241,7 +241,7 @@ class Recommender extends CI_Model {
         $this->db->join('pictogramslanguage', 'p_statsuserpictox2.picto2id = pictogramslanguage.pictoid', 'left'); 
         $this->db->join('pictograms', 'p_statsuserpictox2.picto2id = pictograms.pictoid', 'left'); 
         $this->db->where('p_statsuserpictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
-        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulangid'));                                                   
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('uinterfacelangauge'));                                                   
         $this->db->where('p_statsuserpictox2.picto1id', $inputid1);  
         $this->db->limit(5);
         $this->db->order_by('countx2', 'desc');        
@@ -274,7 +274,7 @@ class Recommender extends CI_Model {
 //        $this->db->join('nameclassca', 'p_statsuserpictox3.picto3id = nameclassca.nameid', 'left'); 
 //        $this->db->join('pictogramslanguage', 'p_statsuserpictox3.picto3id = pictogramslanguage.pictoid', 'left'); 
 //        $this->db->where('p_statsuserpictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
-//        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulangid'));                             
+//        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('uinterfacelangauge'));                             
 //        $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
 //        $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
 //        $this->db->where_in('nameclassca.class', $fits);
@@ -301,7 +301,7 @@ class Recommender extends CI_Model {
         $this->db->join('pictogramslanguage', 'p_statsuserpictox3.picto3id = pictogramslanguage.pictoid', 'left'); 
         $this->db->join('pictograms', 'p_statsuserpictox3.picto3id = pictograms.pictoid', 'left');
         $this->db->where('p_statsuserpictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
-        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulangid'));                                              
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('uinterfacelangauge'));                                              
         $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
         $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
         $this->db->limit(5);

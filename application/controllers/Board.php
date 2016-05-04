@@ -37,15 +37,13 @@ class Board extends REST_Controller {
     public function loadCFG_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
-        $iu = $request->idusu;
-        $lu = $request->lusu;
         $luid = $request->lusuid;
         //MODIF: mirar que id de lenguage es 
         $data = array(
-            'ulangid' => $luid // Id language
+            'uinterfacelangauge' => $luid // Id language
         );
 
-        $this->session->set_userdata($data);
+        
     }
 
     /*

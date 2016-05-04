@@ -80,7 +80,7 @@ class BoardInterface extends CI_Model {
     function getCellsBoard($id) {
         $output = array();
 
-        $idlang = $this->session->userdata('ulangid');
+        $idlang = $this->session->userdata('uinterfacelangauge');
         $lang = $this->session->userdata('ulangabbr');
         
         $this->db->where('R_BoardCell.ID_RBoard', $id);
@@ -109,7 +109,7 @@ class BoardInterface extends CI_Model {
     function getCell($pos, $idboard) {
         $output = array();
         
-        $idlang = $this->session->userdata('ulangid');
+        $idlang = $this->session->userdata('uinterfacelangauge');
 
         $this->db->where('R_BoardCell.ID_RBoard', $idboard);
         $this->db->where('R_BoardCell.posInBoard', $pos);

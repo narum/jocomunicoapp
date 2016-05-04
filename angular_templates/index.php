@@ -29,6 +29,7 @@
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular.audio.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>/libraries/ng-scrollbar.js"></script>
 
+        <script type="text/javascript" src="<?= base_url(); ?>libraries/bootstrap.min.js"></script>
 
         <script type="text/javascript" src="<?= base_url(); ?>angular_js/app.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>angular_js/controllers.js"></script>
