@@ -331,6 +331,7 @@ class Myaudio {
         $interfacelanguage = $userinfo->ID_ULanguage;
         $interfacegender = $userinfo->cfgInterfaceVoiceMascFem;
         $expansionlanguage = $userinfo->cfgExpansionLanguage;
+        $rate = $userinfo->cfgVoiceOfflineRate;
         
         $md5 = "";
         
@@ -370,7 +371,7 @@ class Myaudio {
                     $type = "online";
                 }
                 
-                $auxresponse = $this->synthesizeAudio($md5, $text, $voice, $type, $interfacelanguage);
+                $auxresponse = $this->synthesizeAudio($md5, $text, $voice, $type, $interfacelanguage, $rate);
                 $filename = $auxresponse[0];
                 $output[1] = $auxresponse[1];
                 $output[2] = $auxresponse[2];
@@ -411,7 +412,7 @@ class Myaudio {
             // if it's already in the database
             if ($isindb) $filename = $isindb;
             else {
-                $auxresponse = $this->synthesizeAudio($md5, $text, $voice, $type, $expansionlanguage);
+                $auxresponse = $this->synthesizeAudio($md5, $text, $voice, $type, $expansionlanguage, $rate);
                 $filename = $auxresponse[0];
                 $output[1] = $auxresponse[1];
                 $output[2] = $auxresponse[2];
@@ -433,11 +434,12 @@ class Myaudio {
      * for DEFAULT online interface voices)
      * @param string $type online or offline
      * @param int $language id of the language of the string to synthetize
+     * @param type $rate rate of speech speed of offline voices
      * @return array $output[0] Name of the generated audio file with the extension
      * NOTE: calling function should check for returned errors in $output[1],
      * errormessage in $output[2] errorcode in $output[3]
      */
-    function synthesizeAudio($md5, $text, $voice, $type, $language)
+    function synthesizeAudio($md5, $text, $voice, $type, $language, $rate)
     {      
         $CI = &get_instance();
         $CI->load->model('Audio_model');
@@ -521,7 +523,7 @@ class Myaudio {
                 case "Mac OS X":
                     $extension = "m4a";
                     
-                    $auxresponse = $this->synthesizeMacOSX($voice, $text, $md5);
+                    $auxresponse = $this->synthesizeMacOSX($voice, $text, $md5, $rate);
                     // if there was an error
                     if ($auxresponse[0]) {
                         $error = true;
@@ -643,12 +645,40 @@ class Myaudio {
      * @param type $voice
      * @param type $text
      * @param type $filename (without extension)
+     * @param type $rate rate of speech speed of offline Mac OS X voices
      * @return array $output calling function should check for returned errors in $output[0],
      * errormessage in $output[1] errorcode in $output[2]
      */
-    function synthesizeMacOSX($voice, $text, $filename)
-    {
+    function synthesizeMacOSX($voice, $text, $filename, $rate)
+    {        
+        $error = false;
+        $errormessage = null;
+        $errorcode = 0;
+        $output = array();
         
+        try {
+            $concatveus = "";
+        
+            if ($rate > 0) $concatveus .= "-r ".$rate." ";
+
+            $concatveus .= "'".$voice."' ";
+            $concatveus .= "-o mp3/".$filename.".m4a --data-format=aach ";
+
+            $cmd="say ".$concatveus."'".$text."' > /dev/null 2>&1 &";
+            shell_exec($cmd);
+
+        } catch (Exception $ex) {
+            $error = true;
+            $errormessage = "Error. Unable to access your selected Mac OS X voice due to unkown circumstances. "
+                    . "Try changing your voices in your user configuration settings. "
+                    . "Otherwise, your OS X may not be compatible with the 'say' command.";
+            $errorcode = 110;
+        }
+        
+        $output[0] = $error;
+        $output[1] = $errormessage;
+        $output[2] = $errorcode;
+        return $output;
     }
     
     /**
@@ -661,7 +691,113 @@ class Myaudio {
      */
     function synthesizeWindows($voice, $text, $filename)
     {
+        $error = false;
+        $errormessage = null;
+        $errorcode = 0;
+        $output = array();
         
+        $chosenVoice = null;
+        
+        // error de Microsoft Speech Platform
+        $errorMSP = false;
+        $errorMSPtmp = null;
+
+        try {
+            // Recollim els objectes de les llibreries Speech de Microsoft que necessitem
+            $msVoice = new COM('Speech.SpVoice');
+
+            $numvoices = $msVoice->GetVoices()->Count;
+
+            // per cada veu miram si la descripció coincideix amb el nom de la veu
+            // seleccionada per l'usuari
+            for ($i=0; $i<$numvoices; $i++) {
+                if ($voice == $msVoice->GetVoices()->Item($i)->GetDescription) {
+                    $chosenVoice = $msVoice->GetVoices()->Item($i);
+                }
+            }
+            
+        } catch (Exception $ex) {
+            $errorMSP = true;
+            $errorMSPtmp = "Error. Unable to access Microsoft Speech Platform.";
+        }
+
+        // error de SAPI
+        $errorSAPI = false;
+        $errorSAPItmp = null;
+
+        try {
+            // Recollim els objectes de les llibreries SAPI que necessitem
+            $msSAPIVoice = new COM('SAPI.SpVoice');
+
+            $numvoicesSAPI = $msSAPIVoice->GetVoices()->Count;
+
+            // per cada veu miram si la descripció coincideix amb el nom de la veu
+            // seleccionada per l'usuari
+            for ($i=0; $i<$numvoicesSAPI; $i++) {
+                if ($voice == $msSAPIVoice->GetVoices()->Item($i)->GetDescription) {
+                    $chosenVoice = $msSAPIVoice->GetVoices()->Item($i);
+                }
+            }
+            
+        } catch (Exception $ex) {
+            $errorSAPI = true;
+            $errorSAPItmp = "Error. Unable to access SAPI voices.";
+        }
+
+        if ($errorMSP && $errorSAPI) {
+            $error = true;
+            $errormessage = "Error. Unable to access your selected Windows voice due to unkown circumstances. "
+                    . "Try changing your voices in your user configuration settings. "
+                    . "Otherwise, your Windows may not be compatible with MSP or SAPI.";
+            $errorcode = 111;
+        }
+        // si no hi ha hagut cap error, procedim a generar l'audio
+        else {
+
+            try {
+                $msFileStream = new COM('Speech.SpFileStream');
+                $msAudioFormat = new COM('Speech.SpAudioFormat');
+
+                // Path al fitxer on guardarem les veus
+                $wavfile = "C:\xampp\htdocs\mp3\\".$filename.".mp3";
+
+                // hem de triar la veu que vol l'usuari (trobada anteriorment)
+                $msVoice->Voice = $chosenVoice;
+
+                // passem la frase d'utf-8 a format de Windows perquè llegeixi bé
+                // tots els caràcters
+                $fraseconvertida = iconv("utf-8", "Windows-1252", $text);
+
+                // guardarem el fitxer amb la menor qualitat possible, format 4
+                $msAudioFormat->Type = 4;
+                $msFileStream->Format = $msAudioFormat;
+
+                // obrim el fitxer on escriurem l'àudio en format CreateWrite
+                $msFileStream->Open($wavfile, 3, 0);
+                $msVoice->AudioOutputStream = $msFileStream;
+            
+                // es diu la frase de manera asíncrona
+                $msVoice->Speak($fraseconvertida, 1);
+                // esperem a que acabi, ja que si no talla la frase
+                $msVoice->WaitUntilDone(-1);
+
+                // tanquem el fitxer i alliberem la memòria dels objectes
+                $msFileStream->Close();
+                $msAudioFormat = null;
+                $msFileStream = null;
+                $msVoice = null;
+
+            } catch (Exception $e) {
+                $error = true;
+                $errormessage = "Error. An error occurred while writing your Windows audio file.";
+                $errorcode = 112;
+            }
+        }
+        
+        $output[0] = $error;
+        $output[1] = $errormessage;
+        $output[2] = $errorcode;
+        return $output;
     }
     
 }
