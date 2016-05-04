@@ -1240,6 +1240,7 @@ angular.module('controllers', [])
              * Add the selected pictogram to the sentence
              */
             $scope.clickOnCell = function (cell) {
+                
                 if (!$scope.inEdit && cell.activeCell == 1) {
 
                     if (cell.textInCell !== null) {
