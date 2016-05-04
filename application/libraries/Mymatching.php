@@ -236,7 +236,7 @@ class Mymatching {
     // sobre un slot d'un tipus 1 de nom, com de bé hi fa fit un nom de tipus 2
     var $nounsFit = array(
         //           0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4
-        0 => array  (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1), // perquè un match noun a qualsevol no és tan bon match
+        0 => array  (0,0,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0), // perquè un match noun a qualsevol no és tan bon match
         1 => array  (5,0,0,0,0,0,1,5,5,5,5,5,5,5,1,5,2,5,5,5,5,5,5,1,5),
         2 => array  (5,1,0,0,1,2,5,2,5,5,5,5,5,5,2,5,5,5,5,5,5,5,5,1,5),
         3 => array  (5,2,1,0,2,2,2,2,5,5,5,5,5,5,2,5,5,5,5,5,5,5,5,5,5),
@@ -249,7 +249,7 @@ class Mymatching {
         10 => array (5,5,5,5,5,5,5,5,2,1,0,1,1,1,2,2,2,2,2,2,2,2,2,5,5),
         11 => array (5,5,5,5,5,5,5,5,2,1,1,0,1,1,2,2,2,2,2,2,2,2,2,5,5),
         12 => array (5,5,5,5,5,5,5,5,2,1,1,1,0,1,2,2,2,2,2,2,2,2,2,5,5),
-        13 => array (5,5,5,5,5,5,5,5,2,1,1,1,1,0,2,2,2,2,2,2,2,2,2,5,5),
+        13 => array (5,5,5,5,5,5,5,5,3,3,3,3,3,0,3,3,3,3,5,5,5,5,5,5,3),
         14 => array (5,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,5,5),
         15 => array (5,5,3,5,5,5,0,0,2,2,2,1,1,1,5,0,1,1,5,5,5,5,1,0,5),
         16 => array (5,5,1,5,1,1,5,5,2,1,2,2,1,1,2,2,0,1,2,2,2,2,2,5,5),
@@ -258,7 +258,7 @@ class Mymatching {
         19 => array (5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,1,0,1,1,5,5,5),
         20 => array (5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,1,1,0,1,5,5,5),
         21 => array (5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,1,1,1,0,5,5,5),
-        22 => array (5,5,5,5,5,5,0,5,1,1,5,2,5,5,5,2,2,5,5,5,5,5,0,5,2),
+        22 => array (5,5,5,5,5,5,0,5,1,1,5,2,5,3,5,2,2,5,5,5,5,5,0,5,2),
         23 => array (5,1,1,1,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,0,5),
         24 => array (5,5,5,5,5,5,5,5,2,2,5,5,5,5,5,5,1,5,5,5,5,5,2,5,0),
         //           0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4
@@ -269,15 +269,21 @@ class Mymatching {
         "manera" => 1,
         "lloc" => 2,
         "temps" => 3,
-        "quant" => 4,
+        "quant" => 4
     );
     
+    // la fila de lloc, és com de bé complementa a un nom dels tipus de dalt
     var $advQuantFit = array(
         0 => array(0,0,0,0,1),
         1 => array(5,0,5,5,1),
         2 => array(5,5,0,5,5),
         3 => array(5,5,5,0,5),
         4 => array(5,1,5,5,0),
+    );
+    
+    var $advLocNC = array(
+        //         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4
+        0 => array(2,2,2,2,2,2,0,5,2,2,5,0,2,2,4,0,2,2,5,5,5,5,2,2,2),
     );
             
     var $adjNounFitKeys = array(
@@ -360,6 +366,9 @@ class Mymatching {
         "demà" => true,
         "després" => true,
         "abans" => true,
+        "mai" => true,
+        "sempre" => true,
+        "encara" => true,
     );
     
     // Modificadors de frase que van darrere els adverbis de temps i no a l'inici de la frase
@@ -468,6 +477,9 @@ class Mymatching {
         "mañana" => true,
         "después" => true,
         "antes" => true,
+        "nunca" => true,
+        "siempre" => true,
+        "todavía" => true,
     );
     
     // Modificadors de frase que van darrere els adverbis de temps i no a l'inici de la frase
