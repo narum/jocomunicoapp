@@ -80,7 +80,7 @@ class Myaudio {
     
     /*
      * Returns an array with [0] name of voices found locally [1] true if there was an error
-     * [2] error message
+     * [2] error message [3] error code
      */
     public function getLocalVoices()
     {
@@ -88,6 +88,7 @@ class Myaudio {
         
         $voices = array();
         $error = false;
+        $errorcode = 0;
         $errormessage = null;
         
         switch ($user_agent) {
@@ -108,12 +109,14 @@ class Myaudio {
                     $error = true;
                     $errormessage = "Error. Unable to access your Mac OS X voices. Try activating your system"
                             . "voices. Otherwise, your OS X may not be compatible with the 'say' command.";
+                    $errorcode = 101;
                 }
                 
                 if (!$error && count($voices) < 1) {
                     $error = true;
                     $errormessage = "Error. No installed voices found. Activate your system"
                             . "voices or install external voices for Mac OS X (i.e. Acapela voices).";
+                    $errorcode = 102;
                 }
 
                 break;
@@ -176,25 +179,29 @@ class Myaudio {
                     $errormessage = "Error. Unable to access your Windows voices. "
                             . "Install Microsoft Speech Platform (MSP) or SAPI voices. Otherwise, "
                             . "your Windows may not be compatible with MSP or SAPI.";
+                    $errorcode = 103;
                 }
                 else if (count($voices) < 1) {
                     $error = true;
                     $errormessage = "Error. No installed voices found. "
                             . "Install Microsoft Speech Platform or SAPI voices.";
+                    $errorcode = 104;
                 }
 
                 break;
                 
             default:
                 $error = true;
-                $errormessage = "Error. Your OS is not compatible with the offline version of this app. ";
+                $errormessage = "Error. Your OS is not compatible with the offline version of this app.";
+                $errorcode = 105;
                 break;
         }
         
         $output = array(
             0 => $voices,
             1 => $error,
-            2 => $errormessage
+            2 => $errormessage,
+            3 => $errorcode
         );
         
         return $output;
@@ -206,13 +213,14 @@ class Myaudio {
      * @return array $output Description: $output[0] an array of the available voices for the interface,
      * for each voice we have voiceName and voiceType
      * NOTE: calling function should check for returned errors in $output[1],
-     * errormessage in $output[2]
+     * errormessage in $output[2] errorcode in $output[3]
      */
     public function listInterfaceVoices($online) 
     {
         $output = array();
         $output[1] = false;
         $output[2] = null;
+        $output[3] = 0;
         $arrayVoices = array();
         
         if ($online) {
@@ -234,6 +242,7 @@ class Myaudio {
             $localvoices = $auxresponse[0];
             $output[1] = $auxresponse[1];
             $output[2] = $auxresponse[2];
+            $output[3] = $auxresponse[3];
             
             for ($i=0; $i<count($localvoices); $i++) {
                 $aux = array();
@@ -253,7 +262,7 @@ class Myaudio {
      * @return array $output Description: $output[0] an array of the available voices for the interface,
      * for each voice we have voiceName and voiceType
      * NOTE: calling function should check for returned errors in $output[1],
-     * errormessage in $output[2]
+     * errormessage in $output[2] errorcode in $output[3]
      */
     public function listExpansionVoices($online)
     {
@@ -263,6 +272,7 @@ class Myaudio {
         $output = array();
         $output[1] = false;
         $output[2] = null;
+        $output[3] = 0;
         $arrayVoices = array();
         
         if ($online) {
@@ -275,6 +285,7 @@ class Myaudio {
             $localvoices = $auxresponse[0];
             $output[1] = $auxresponse[1];
             $output[2] = $auxresponse[2];
+            $output[3] = $auxresponse[3];
             
             for ($i=0; $i<count($localvoices); $i++) {
                 $aux = array();
@@ -296,19 +307,360 @@ class Myaudio {
      * @param bool $interface TRUE if it's a string for the Interface,
      * FALSE if it's a string that comes from Expansion (MD5 and voices are 
      * treated differently for each of them)
-     * @return string Name of the generated audio file
+     * @return array $output[0] Name of the generated audio file
+     * NOTE: calling function should check for returned errors in $output[1],
+     * errormessage in $output[2] errorcode in $output[3]
      */
     public function generateAudio($idusu, $text, $interface) 
     {
         $CI = &get_instance();
         $CI->load->model('Audio_model');
         
+        $output = array();
+        $output[1] = false; // error
+        $output[2] = null; // error message
+        $output[3] = 0; // error code
+        
+        // the name of the fetched (from the database) or the generated audio file
+        // it will be in output[0]
+        $filename = null;
+        
+        // all the info related to the voices and the languages from the user
+        $applocal = $this->AppLocalOrServer();
         $userinfo = $CI->Audio_model->getUserInfo($idusu);
+        $interfacelanguage = $userinfo->ID_ULanguage;
+        $interfacegender = $userinfo->cfgInterfaceVoiceMascFem;
+        $expansionlanguage = $userinfo->cfgExpansionLanguage;
         
         $md5 = "";
         
+        if ($interface) {
+            // Encoded file name: #INTERFACE@IdInterfaceLanguage#(masc|fem)$string
+            $key = "#INTERFACE@".$interfacelanguage."#".$interfacegender."$".$text;
+            $md5 = md5($key);
+            
+            $isindb = $CI->Audio_model->isAudioInDatabase($md5);
+            
+            // if it's already in the database
+            if ($isindb) $filename = $isindb;
+            else {
+                $voice = "";
+                $type = "";
+                
+                // if the app is run locally
+                if ($applocal == "local") {
+                    // if it has internet connection
+                    if ($this->isOnline()) {
+                        $voice = $userinfo->cfgInterfaceVoiceOnline;
+                        // if it uses the default online voices for the interface
+                        if (preg_match($voice, "DEFAULT (")) {
+                            $type = "online";
+                        }
+                        else $type = "offline";
+                    }
+                    // no internet connection
+                    else {
+                        $voice = $userinfo->cfgInterfaceVoiceOffline;
+                        $type = "offline";                    
+                    }
+                }
+                // if the app is run from the server
+                else {
+                    $voice = $userinfo->cfgExpansionVoiceOnline;
+                    $type = "online";
+                }
+                
+                $auxresponse = $this->synthesizeAudio($md5, $text, $voice, $type, $interfacelanguage);
+                $filename = $auxresponse[0];
+                $output[1] = $auxresponse[1];
+                $output[2] = $auxresponse[2];
+                $output[3] = $auxresponse[3];
+            }
+        }
+        // string from the expansion system
+        else {
+            // Encoded file name: #EXPANSION@(VoiceName|VoiceIdForOnlineVoices)#VoiceType$string
+            $key = "#EXPANSION@";
+            $voice = "";
+            $type = "";
+            
+            // if the app is run locally
+            if ($applocal == "local") {
+                // if it has internet connection
+                if ($this->isOnline()) {
+                    $voice = $userinfo->cfgExpansionVoiceOnline;
+                    $type = $userinfo->cfgExpansionVoiceOnlineType;
+                }
+                // no internet connection
+                else {
+                    $voice = $userinfo->cfgExpansionVoiceOffline;
+                    $type = "offline";                    
+                }
+            }
+            // if the app is run from the server
+            else {
+                $voice = $userinfo->cfgExpansionVoiceOnline;
+                $type = "online";
+            }
+            
+            $key .= $voice."#".$type."$".$text;
+            $md5 = md5($key);
+
+            $isindb = $CI->Audio_model->isAudioInDatabase($md5);
+
+            // if it's already in the database
+            if ($isindb) $filename = $isindb;
+            else {
+                $auxresponse = $this->synthesizeAudio($md5, $text, $voice, $type, $expansionlanguage);
+                $filename = $auxresponse[0];
+                $output[1] = $auxresponse[1];
+                $output[2] = $auxresponse[2];
+                $output[3] = $auxresponse[3];
+            }
+        }
         
+        $output[0] = $filename;
         
+        return $output;        
+    }
+    
+    /**
+     * 
+     * It generates the audio and saves to the database and into an audio file
+     * @param string $md5 filename without the extension
+     * @param string $text string to synthesize
+     * @param string $voice voice name for offline voices or id for online voices (except 
+     * for DEFAULT online interface voices)
+     * @param string $type online or offline
+     * @param int $language id of the language of the string to synthetize
+     * @return array $output[0] Name of the generated audio file with the extension
+     * NOTE: calling function should check for returned errors in $output[1],
+     * errormessage in $output[2] errorcode in $output[3]
+     */
+    function synthesizeAudio($md5, $text, $voice, $type, $language)
+    {      
+        $CI = &get_instance();
+        $CI->load->model('Audio_model');
+        
+        $output = array();
+        $error = false;
+        $errormessage = null;
+        $errorcode = 0;
+        $filename = null;
+        $extension = "mp3";
+        
+        // if it's an online voice
+        if ($type == "online") {
+            
+            // default voice ES masc (Jorge)
+            $vocalwareLID = 2;
+            $vocalwareVID = 6;
+            
+            // if it's a default interface voice
+            if (preg_match($voice, "DEFAULT (")) {
+                $isfem = true;
+                if (preg_match($voice, "DEFAULT (masc)")) $isfem = false;
+                
+                // get default values for the interface voice in each language
+                switch ($language) {
+                    
+                    // CA
+                    case 1:
+                        $vocalwareLID = 5;
+                        if ($isfem) $vocalwareVID = 1;
+                        else $vocalwareVID = 2;
+                        break;
+                    
+                    // ES
+                    case 2:
+                        $vocalwareLID = 2;
+                        if ($isfem) $vocalwareVID = 1;
+                        else $vocalwareVID = 6;
+                        break;
+                    
+                    // EN
+                    case 3:
+                        $vocalwareLID = 1;
+                        if ($isfem) $vocalwareVID = 1;
+                        else $vocalwareVID = 2;
+                        break;
+                    
+                    default:
+                        $error = true;
+                        $errormessage = "Error. Default voice not found for this language.";
+                        $errorcode = 106;
+                        break;
+                }                
+            }
+            // the voice is the id of the voice in the database
+            else {
+                // we get the info of the voice from the database
+                $auxrow = $CI->Audio_model->getOnlineVoices((int) $voice);
+                $voiceinfo = $auxrow[0];
+                
+                $vocalwareLID = $voiceinfo->vocalwareIdLang;
+                $vocalwareVID = $voiceinfo->vocalwareVoiceId;
+            }
+            
+            if (!$error) {
+                $auxresponse = $this->synthesizeOnline($vocalwareLID, $vocalwareVID, $text, $md5);
+                // if there was an error
+                if ($auxresponse[0]) {
+                    $error = true;
+                    $errormessage = $auxresponse[1];
+                    $errorcode = $auxresponse[2];
+                }
+            }
+            
+        }
+        // si la veu és offline
+        else {
+            $user_agent = $this->getOS();
+            
+            switch ($user_agent) {
+                case "Mac OS X":
+                    $extension = "m4a";
+                    
+                    $auxresponse = $this->synthesizeMacOSX($voice, $text, $md5);
+                    // if there was an error
+                    if ($auxresponse[0]) {
+                        $error = true;
+                        $errormessage = $auxresponse[1];
+                        $errorcode = $auxresponse[2];
+                    }
+
+                    break;
+                
+                case "Windows":
+                    
+                    $auxresponse = $this->synthesizeWindows($voice, $text, $md5);
+                    // if there was an error
+                    if ($auxresponse[0]) {
+                        $error = true;
+                        $errormessage = $auxresponse[1];
+                        $errorcode = $auxresponse[2];
+                    }
+                    
+                    break;
+
+                default:
+                    $error = true;
+                    $errormessage = "Error. Your OS is not compatible with offline voices. "
+                            . "Change your voices in your user configuration settings.";
+                    $errorcode = 107;
+                    break;
+            }
+        }
+        
+        if (!$error) {
+            $filename = $md5.".".$extension;
+            $CI->Audio_model->saveAudioFileToDatabase($text, $md5, $filename);
+        }
+        
+        $output[0] = $filename;
+        $output[1] = $error;
+        $output[2] = $errormessage;
+        $output[3] = $errorcode;
+        
+        return $output;
+    }
+    
+    /**
+     * Requests and saves audio file from online voice service
+     * @param type $vocalwareLID
+     * @param type $vocalwareVID
+     * @param type $text
+     * @param type $filename (without extension)
+     * @return array $output calling function should check for returned errors in $output[0],
+     * errormessage in $output[1] errorcode in $output[2]
+     */
+    function synthesizeOnline($vocalwareLID, $vocalwareVID, $text, $filename)
+    {
+        $error = false;
+        $errormessage = null;
+        $errorcode = 0;
+        $output = array();
+        
+        $curl = curl_init();
+
+        $url = "http://www.vocalware.com/tts/gen.php";
+        $secret_phrase = "5a823f715692c02de9e215fef94c5dc2";
+
+        $data = array(
+            'EID' => '2',
+            'LID' => $vocalwareLID,
+            'VID' => $vocalwareVID,
+            'TXT' => $text,
+            'EXT' => 'mp3',
+            'ACC' => '5795433',
+            'API' => '2490514'                    
+        );
+
+        $data['CS'] = md5($data['EID'].$data['LID'].$data['VID'].$data['TXT'].$data['EXT'].$data['ACC'].$data['API'].$secret_phrase);
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+        $result = curl_exec($curl);
+
+        curl_close($curl);
+
+        // if no error occurred
+        if ($result && !strpos($result, "Error: ")) {
+
+            try {
+                $filenamewrite = "mp3/".$filename.".mp3";
+                $fitxertxtwrite = fopen($filenamewrite,"w+b");
+
+                if (flock($fitxertxtwrite, LOCK_EX)) {
+                    fwrite($fitxertxtwrite, $result);
+                    flock($fitxertxtwrite, LOCK_UN);
+                    fclose($fitxertxtwrite);
+                }
+            } catch (Exception $ex) {
+                $error = true;
+                $errormessage = "Error. An error occurred while writing the audio file.";
+                $errorcode = 108;
+            }
+        }
+        // if there was an error
+        else {
+            $error = true;
+            $errormessage = "Error. An error occurred while contacting the online voice service.";
+            $errorcode = 109;
+        }
+        
+        $output[0] = $error;
+        $output[1] = $errormessage;
+        $output[2] = $errorcode;
+        return $output;
+    }
+    
+    /**
+     * Requests and saves audio file from online voice service
+     * @param type $voice
+     * @param type $text
+     * @param type $filename (without extension)
+     * @return array $output calling function should check for returned errors in $output[0],
+     * errormessage in $output[1] errorcode in $output[2]
+     */
+    function synthesizeMacOSX($voice, $text, $filename)
+    {
+        
+    }
+    
+    /**
+     * Requests and saves audio file from online voice service
+     * @param type $voice
+     * @param type $text
+     * @param type $filename (without extension)
+     * @return array $output calling function should check for returned errors in $output[0],
+     * errormessage in $output[1] errorcode in $output[2]
+     */
+    function synthesizeWindows($voice, $text, $filename)
+    {
         
     }
     

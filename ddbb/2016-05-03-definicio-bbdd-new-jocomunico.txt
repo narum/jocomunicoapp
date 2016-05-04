@@ -82,6 +82,7 @@ CREATE TABLE User (
 	cfgExpansionVoiceOnlineType ENUM('online', 'offline') DEFAULT 'online',
 	cfgExpansionVoiceOffline VARCHAR(300),
 	cfgInterfaceVoiceOnOff ENUM('0', '1') DEFAULT '0',
+	cfgInterfaceVoiceMascFem ENUM('masc', 'fem') DEFAULT 'fem',
 	cfgInterfaceVoiceOnline VARCHAR(300),
 	cfgInterfaceVoiceOffline VARCHAR(300),	
 	cfgExpansionLanguage INT DEFAULT '1',

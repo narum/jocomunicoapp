@@ -9,4 +9,4 @@ Llistat d’errors sistema d’expansió:
 6. “Error. S’ha trobat un pictograma que no es pot expandir.”;
 7. "Warning. No s'ha trobat lloc per una de les paraules.”
 8. "Error. Connection error. The sentence cannot be translated.";
-9 - ... Errors accés a veus del sistema en local.
+101 - ... Errors accés a veus del sistema en local.
