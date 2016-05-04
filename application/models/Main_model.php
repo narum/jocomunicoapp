@@ -192,6 +192,29 @@ class Main_model extends CI_Model {
             'users' => $query2,
             'languages' => $query3,
         ];
+        
+        // Save user config data in the COOKIES
+        $this->session->set_userdata('idusu', $userConfig["ID_User"]);
+        $this->session->set_userdata('uname', $userConfig["SUname"]);
+        $this->session->set_userdata('ulanguage', $userConfig["cfgExpansionLanguage"]);
+        $this->session->set_userdata('uinterfacelangauge', $userConfig["ID_ULanguage"]);
+        $this->session->set_userdata('uinterfacelangtype', $userConfig["type"]);
+        $this->session->set_userdata('uinterfacelangnadjorder', $userConfig["nounAdjOrder"]);
+        $this->session->set_userdata('uinterfacelangncorder', $userConfig["nounComplementOrder"]);
+        $this->session->set_userdata('uinterfacelangabbr', $userConfig["languageabbr"]);
+        $this->session->set_userdata('autoEraseSentenceBar', $userConfig["cfgAutoEraseSentenceBar"]);
+        $this->session->set_userdata('isfem', $userConfig["cfgIsFem"]);
+
+        // Save Expansion language in the COOKIES
+        $this->db->select('canExpand');
+        $this->db->where('ID_Language', $userConfig["cfgExpansionLanguage"]);
+        $canExpand = $this->db->get('Languages');
+
+        if ($canExpand == '1'){
+            $this->session->set_userdata('ulangabbr', $userConfig["languageabbr"]);
+        }else{
+            $this->session->set_userdata('ulangabbr', 'ES');
+        }
 
         return $Array;
     }

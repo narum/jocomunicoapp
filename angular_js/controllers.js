@@ -494,6 +494,7 @@ angular.module('controllers', [])
     $scope.loadingOldPass=false;
     $scope.interfaceLanguageBarEnable=true;
     $scope.expansionLanguageEnable=true;
+    $scope.userDataForm=[];
     var count1=0;
     var count2=0;
     //Pedimos la configuración del usuario a la base de datos
@@ -519,6 +520,7 @@ angular.module('controllers', [])
             $scope.userData.cfgTimeLapseSelect=parseInt(results.userConfig.cfgTimeLapseSelect, 10);
             $scope.userData.cfgTimeNoRepeatedClick=parseInt(results.userConfig.cfgTimeNoRepeatedClick, 10);
             $scope.userData.cfgTimeClick=parseInt(results.userConfig.cfgTimeClick, 10);
+            $scope.userData.cfgTimeScanning=parseInt(results.userConfig.cfgTimeScanning, 10);
 
             //change string (0,1) to boolean (true,false)
             $scope.userData.cfgExpansionOnOff = ($scope.userData.cfgExpansionOnOff === "1");
@@ -533,6 +535,7 @@ angular.module('controllers', [])
             $scope.userData.cfgScanningAutoOnOff = ($scope.userData.cfgScanningAutoOnOff === "1");
             $scope.userData.cfgScanningCancelScanOnOff = ($scope.userData.cfgScanningCancelScanOnOff === "1");
             $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
+            $scope.userData.cfgHistOnOff = ($scope.userData.cfgHistOnOff === "1");
             
             var count=results.users[0].ID_ULanguage;
             var numberOfInterfaceLanguages=0;
@@ -700,7 +703,11 @@ angular.module('controllers', [])
         }
         $scope.languageEnable=true;
     }
-
+    
+    $scope.exit = function(){
+        $scope.getConfig();
+        $location.path('/');
+    }
  })
  
 // Controlador del buscador de pictogramas

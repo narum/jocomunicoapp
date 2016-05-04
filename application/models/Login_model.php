@@ -70,7 +70,7 @@ class Login_model extends CI_Model {
         $this->session->set_userdata('autoEraseSentenceBar', $userConfig["cfgAutoEraseSentenceBar"]);
         $this->session->set_userdata('isfem', $userConfig["cfgIsFem"]);
 
-        // Expansion language
+        // Save Expansion language in the COOKIES
         $this->db->select('canExpand');
         $this->db->where('ID_Language', $userConfig["cfgExpansionLanguage"]);
         $canExpand = $this->db->get('Languages');

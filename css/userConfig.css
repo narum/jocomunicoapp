@@ -204,6 +204,14 @@ input[type="text"] {
     background-color: #97dee4;
     color:gray;
 }
+.FonsTurquesaClar{
+    text-align: center;
+    background-color: #cff5f8;
+    margin-bottom: 0.9vh;
+}
+.FonsTurquesaClar:hover{
+    box-shadow: 0 0 10px #404040;
+}
 .btn-group-turquoise{
     height: 5vh;
     font-size: 2.5vh;
@@ -460,4 +468,14 @@ input[type=number]::-webkit-outer-spin-button {
 }
 input[type=number] {
     -moz-appearance: textfield;
+}
+.labelTurquesa{
+    font-weight: normal;
+    color: black;
+    cursor: pointer;
+    width: 100%;
+}
+.FonsTurquesaSucces{
+   border: 0.5vh solid #aeff00;
+   margin-bottom: 0px;
 }
