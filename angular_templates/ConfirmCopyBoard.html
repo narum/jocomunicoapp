@@ -1,10 +1,10 @@
-<div class="topBarDialog"><div class="editTitle">Crea Panells</div><div class="cruz"></div></div>
+<div class="topBarDialog"><div class="editTitle">Copiar Panells</div><div class="cruz"></div></div>
 <div class="dialogContent row" style="height: 25%">
         <input type="text" class="col-xs-offset-2 col-xs-8 dialogText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName" placeholder="{{content.tipnameboard}}"/>
 </div>
 <div class="row" style="height: 25%">
-    <!--MODIF: Implementar sistema de carpetas-->
-    <select class="col-xs-offset-3 col-xs-2 dropdown-arrow"
+    <!--MODIF: FALTA AFEGIR CONTENT-->
+    <select class="col-xs-offset-3 col-xs-6 dropdown-arrow"
         ng-model="CopyBoardData.idGroupBoard"
         ng-options="panel.GBname for panel in panels track by panel.ID_GB">
     </select>
