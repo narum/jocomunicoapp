@@ -877,7 +877,7 @@ angular.module('controllers', [])
                     if (!$scope.longclick)
                     {
                         $scope.selectBlockScan();
-                    } else if ($scope.timerScan == 0) {
+                    } else if (!$scope.longclick && $scope.timerScan == 0) {
                         $scope.nextBlockScan();
                     }
                 }
@@ -902,7 +902,7 @@ angular.module('controllers', [])
                         if ($scope.scanLongClickController)
                         {
                             $timeout.cancel($scope.scanLongClickTime);
-                            $scope.nextBlockScan();
+                            //$scope.nextBlockScan();
 
 
                         } else
@@ -919,7 +919,7 @@ angular.module('controllers', [])
                     if (!$scope.longclick)
                     {
                         $scope.nextBlockScan();
-                    } else if ($scope.timerScan == 0) {
+                    } else if (!$scope.longclick && $scope.timerScan == 0) {
                         $scope.nextBlockScan();
                     }
                 }
@@ -1221,7 +1221,7 @@ angular.module('controllers', [])
                 $scope.cfgSentenceBarUpDown = userConfig.cfgSentenceBarUpDown;
                 $scope.pictoBarWidth = 12 - $scope.cfgMenuReadActive - $scope.cfgMenuDeleteLastActive - $scope.cfgMenuDeleteAllActive;
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
-                $scope.longclick = userConfig.cfgUsageMouseOneCTwoC;
+                $scope.longclick = userConfig.cfgUsageMouseOneCTwoC == 1 ? true : false;
                 $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
                 $scope.StatusEnableEditViewTrash = true;
                 $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff == 1 ? true : false;
@@ -1231,7 +1231,8 @@ angular.module('controllers', [])
                 $scope.cfgTimeNoRepeatedClick = userConfig.cfgTimeNoRepeatedClick;
                 $scope.TimeMultiClic = 0;
                 $scope.cfgScanStartClick = userConfig.cfgScanStartClick;
-
+                $scope.cfgTextInCell = userConfig.cfgTextInCell == 1 ? true : false;
+                
                 $scope.getPred();
                 //If there are some request to edit from another controller, the edit panel it's loaded
                 if ($rootScope.editPanelInfo != null) {

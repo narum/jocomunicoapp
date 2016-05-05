@@ -39,29 +39,29 @@
 
                         <div ng-if="isScanned(picto);" class="scaneo"></div>
 
-                        <div ng-if="picto.textInCell !== null" class="textCell">{{picto.textInCell}}</div>
-                        <div ng-if="picto.textInCell === null && picto.pictotext !== null" class="textCell">{{picto.pictotext}}</div>
-                        <div ng-if="picto.textInCell === null && picto.pictotext === null" class="textCell">{{picto.textFunction}}</div>
+                        <div ng-if="cfgTextInCell && picto.textInCell !== null" class="textCell">{{picto.textInCell}}</div>
+                        <div ng-if="cfgTextInCell && picto.textInCell === null && picto.pictotext !== null" class="textCell">{{picto.pictotext}}</div>
+                        <div ng-if="cfgTextInCell && picto.textInCell === null && picto.pictotext === null" class="textCell">{{picto.textFunction}}</div>
 
 
                         <img ng-if="picto.ID_CFunction !== null" src="{{baseurl}}img/srcWeb/functions.png" class="function"/>
 
                         <div ng-if="picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell">
                             <!--MODIF: deberia ser con texto on/off???-->
-                            <div ng-style="picto.pictotext !== null || picto.textInCell !== null  ? {'height':'70%'}:{'height':'100%'}">
+                            <div ng-style="cfgTextInCell ? {'height':'70%'}:{'height':'100%'}">
                                 <img class="imgResponsive" src="{{baseurl}}{{picto.imgCell}}"/>
                             </div>
 
                         </div>
 
                         <div ng-if="picto.imgPicto && !picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell">  
-                            <div ng-style="picto.pictotext !== null || picto.textInCell !== null ? {'height':'70%'}:{'height':'100%'}">
+                            <div ng-style="cfgTextInCell ? {'height':'70%'}:{'height':'100%'}">
                                 <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
                             </div>
                         </div>
 
                         <div ng-if="picto.imgFunct && !picto.imgPicto && !picto.imgCell && (picto.activeCell == 1 || (picto.activeCell == 0 && inEdit))" class="contentCell">  
-                            <div ng-style="picto.pictotext !== null || picto.textInCell !== null ? {'height':'70%'}:{'height':'100%'}">
+                            <div ng-style="cfgTextInCell ? {'height':'70%'}:{'height':'100%'}">
                                 <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
                             </div>
                         </div>

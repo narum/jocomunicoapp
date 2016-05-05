@@ -98,7 +98,7 @@
                                                             <div id="DadesUsuariLeft" class="col-xs-7">
                                                                 <div class="row verticalMarginTop">{{content.oldPass}}
                                                                     <img class="loadingGifSm pull-right" ng-show="loadingOldPass" src="/img/icons/Loading_icon.gif"/>
-                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="oldPassState=='false'" ng-src="/img/icons/infoRed.PNG" popover-placement="bottom-left" popover-trigger="focus"
+                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="oldPassState=='false'" ng-src="/img/icons/infoRed.png" popover-placement="bottom-left" popover-trigger="focus"
                                                                         ng-app=""uib-popover="{{content.popOldPass}}">
                                                                 </div>
                                                             </div>
@@ -121,11 +121,11 @@
                                                             <div class="row">
                                                                 <div id="DadesUsuariLeft" class="col-xs-7"  uib-collapse="!(oldPassState=='true')">
                                                                     <div class="row">{{content.newPass1}}
-                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassLengthOk=='false'" ng-src="/img/icons/infoRed.PNG" popover-placement="top-left" popover-trigger="focus"
+                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassLengthOk=='false'" ng-src="/img/icons/infoRed.png" popover-placement="top-left" popover-trigger="focus"
                                                                         ng-app=""uib-popover="{{content.popNewPassMinLength}}">
                                                                     </div>
                                                                     <div class="row verticalMarginTop">{{content.newPass2}}
-                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassState=='false'" ng-src="/img/icons/infoRed.PNG" popover-placement="top-left" popover-trigger="focus"
+                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassState=='false'" ng-src="/img/icons/infoRed.png" popover-placement="top-left" popover-trigger="focus"
                                                                         ng-app=""uib-popover="{{content.popNewPassEqual}}">
                                                                     </div>
                                                                 </div>
@@ -235,7 +235,7 @@
                             <div class="row headerBar" ng-class="{disabledBar: !interfaceLanguageBarEnable}">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popInterfaceInfo}}">
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar1=!contentBar1">{{content.interfaceLanguage}}</div>
@@ -306,7 +306,7 @@
                             <div class="row headerBar" ng-class="{disabledBar: !expansionLanguageEnable||!userData.cfgExpansionOnOff}">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popExpansionInfo}}">
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar2=!contentBar2">{{content.expansionLanguage}}</div>
@@ -349,7 +349,7 @@
                             <div class="row headerBar">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popMenuInfo}}">
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar3=!contentBar3">{{content.menuBar}}</div>
@@ -363,21 +363,21 @@
                             <div class="row contentBar">
                                 <div class="row">
                                     <div class="col-xs-2">
-                                        <input type="radio" id="radioMenu1" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="0" ng-click="changeRadioEstate(userData.cfgMenuUpDown, 'MenuUpDown')" ng-show="false">
-                                            <label for="radioMenu1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/menuUp.PNG"/></label>
+                                        <input type="radio" id="radioMenu1" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="0" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
+                                            <label for="radioMenu1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/menuUp.png"/></label>
                                     </div>
                                     <div class="col-xs-3">
-                                        <input type="radio" id="radioMenu2" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="1" ng-click="changeRadioEstate(userData.cfgMenuUpDown, 'MenuUpDown')" ng-show="false">
-                                            <label for="radioMenu2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/menuDown.PNG"/></label>
+                                        <input type="radio" id="radioMenu2" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="1" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
+                                            <label for="radioMenu2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/menuDown.png"/></label>
                                     </div>
                                     <div class="col-xs-7">
                                         <input type="checkbox" id="checkMenu1" class="imageSwitch" ng-model="userData.cfgMenuReadActive" ng-click="changeOnOff(userData.cfgMenuReadActive, 'MenuReadActive')" ng-show="false">
-                                            <label for="checkMenu1"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/menuButton1.PNG"/></label>
+                                            <label for="checkMenu1"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/menuButton1.png"/></label>
                                         <img class="img-config" src="/img/srcWeb/UserConfig/sentenceBar.png"/>
                                         <input type="checkbox" id="checkMenu2" class="imageSwitch" ng-model="userData.cfgMenuDeleteLastActive" ng-click="changeOnOff(userData.cfgMenuDeleteLastActive, 'MenuDeleteLastActive')" ng-show="false">
-                                            <label for="checkMenu2"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/menuButton2.PNG"/></label>
+                                            <label for="checkMenu2"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/menuButton2.png"/></label>
                                         <input type="checkbox" id="checkMenu3" class="imageSwitch" ng-model="userData.cfgMenuDeleteAllActive" ng-click="changeOnOff(userData.cfgMenuDeleteAllActive, 'MenuDeleteAllActive')" ng-show="false">
-                                            <label for="checkMenu3"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/menuButton3.PNG"/></label>
+                                            <label for="checkMenu3"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/menuButton3.png"/></label>
                                     </div>
                                 </div>
                                 <div class="row verticalMarginTop">
@@ -396,7 +396,7 @@
                             <div class="row headerBar">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popSentenceBarInfo}}">
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar4=!contentBar4">{{content.sentenceBar}}</div>
@@ -415,11 +415,11 @@
                             <div class="row contentBar">
                                 <div class="col-xs-2">
                                     <input type="radio" id="radioSentence1" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="0" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
-                                        <label for="radioSentence1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/sentenceUp.PNG"/></label>
+                                        <label for="radioSentence1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/sentenceUp.png"/></label>
                                 </div>
                                 <div class="col-xs-4">
                                     <input type="radio" id="radioSentence2" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="1" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
-                                        <label for="radioSentence2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/sentenceDown.PNG"/></label>
+                                        <label for="radioSentence2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/sentenceDown.png"/></label>
                                 </div>
                                 <div class="col-xs-5">
                                     <input type="checkbox" id="checkSentence1" class="imageSwitch" ng-model="userData.cfgAutoEraseSentenceBar" ng-click="changeOnOff(userData.cfgAutoEraseSentenceBar, 'AutoEraseSentenceBar')" ng-show="false">
@@ -434,7 +434,7 @@
                             <div class="row headerBar">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popInterfaceInfo}}">
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar5=!contentBar5">{{content.interface}}</div>
@@ -454,11 +454,11 @@
                                 <div class="col-xs-3"></div>
                                 <div class="col-xs-4">
                                     <input type="radio" id="radioTextInCell1" class="imageRadio" ng-model="userData.cfgTextInCell" value="0" ng-click="changeRadioEstate(userData.cfgTextInCell, 'TextInCell')" ng-show="false">
-                                        <label for="radioTextInCell1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/textInCellOff.PNG"/></label>
+                                        <label for="radioTextInCell1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/textInCellOff.png"/></label>
                                 </div>
                                 <div class="col-xs-4">
                                     <input type="radio" id="radioTextInCell2" class="imageRadio" ng-model="userData.cfgTextInCell" value="1" ng-click="changeRadioEstate(userData.cfgTextInCell, 'TextInCell')" ng-show="false">
-                                        <label for="radioTextInCell2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/textInCellOn.PNG"/></label>
+                                        <label for="radioTextInCell2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/textInCellOn.png"/></label>
                                 </div>
                             </div>
                             </div>
@@ -469,7 +469,7 @@
                             <div class="row headerBar" ng-class="{disabledBar:!userData.cfgPredOnOff}">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popPredictionInfo}}">
                                     </div>
                                     <div class="col-xs-10">{{content.predictionSistem}}</div>
@@ -504,7 +504,7 @@
                             <div class="row headerBar">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popHardwareConfig}}">
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar7=!contentBar7">{{content.hardwareTitleBar}}</div>
@@ -521,17 +521,17 @@
                                     <div class="col-xs-2">
                                         <input type="radio" id="radioHardwareUsage1" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="0" 
                                                ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=0;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
-                                            <label for="radioHardwareUsage1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageMouse.PNG"/></label>
+                                            <label for="radioHardwareUsage1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageMouse.png"/></label>
                                     </div>
                                     <div class="col-xs-2">
                                         <input type="radio" id="radioHardwareUsage2" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="1" 
                                                ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=1;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
-                                            <label for="radioHardwareUsage2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageOneC.PNG"/></label>
+                                            <label for="radioHardwareUsage2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageOneC.png"/></label>
                                     </div>
                                     <div class="col-xs-2">
                                         <input type="radio" id="radioHardwareUsage3" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="2" 
                                                ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=1;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
-                                            <label for="radioHardwareUsage3"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageTwoC.PNG"/></label>
+                                            <label for="radioHardwareUsage3"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageTwoC.png"/></label>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="row">
@@ -598,7 +598,7 @@
                             <div class="row headerBar" ng-class="{disabledBar:!userData.cfgScanningOnOff}">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popScanSistem}}">
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar8=!contentBar8">{{content.scanSistemTitleBar}}</div>
@@ -614,15 +614,15 @@
                                 <div class="row">
                                     <div class="col-xs-2">
                                         <input type="radio" id="radioScan1" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="0" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
-                                            <label for="radioScan1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningCustom.PNG"/></label>
+                                            <label for="radioScan1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningCustom.png"/></label>
                                     </div>
                                     <div class="col-xs-2">
                                         <input type="radio" id="radioScan2" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="1" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
-                                            <label for="radioScan2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningRow.PNG"/></label>
+                                            <label for="radioScan2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningRow.png"/></label>
                                     </div>
                                     <div class="col-xs-2">
                                         <input type="radio" id="radioScan3" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="2" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
-                                            <label for="radioScan3"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningCol.PNG"/></label>
+                                            <label for="radioScan3"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningCol.png"/></label>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="row">
@@ -669,7 +669,7 @@
                             <div class="row headerBar" ng-class="{disabledBar:!userData.cfgHistOnOff}">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popHist}}">
                                     </div>
                                     <div class="col-xs-10">{{content.histTitleBar}}</div>
@@ -689,7 +689,7 @@
                             <div class="row headerBar">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popYourVoice}}">
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar10=!contentBar10">{{content.yourVoiceTitleBar}}</div>
@@ -712,7 +712,7 @@
                             <div class="row headerBar">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.PNG" popover-placement="top-left" popover-trigger="focus"
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popFeedbackVoice}}">
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar11=!contentBar11">{{content.feedbackVoiceTitleBar}}</div>
