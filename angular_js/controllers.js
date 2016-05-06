@@ -711,72 +711,8 @@ angular.module('controllers', [])
         });
     }
  })
- 
-// Controlador del buscador de pictogramas
 
-        .controller('MainCtrl', function ($rootScope, $scope, $location, Resources, AuthService, txtContent) {
-
-            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
-            if (!$rootScope.isLogged) {
-                $location.path('/login');
-            }
-
-            // Pedimos los textos para cargar la pagina
-            txtContent("pictoSearch").then(function (results) {
-                $rootScope.content = results.data;
-            });
-
-            // Variables
-            var namesResource = Resources.nom;
-            var historyResource = Resources.histo;
-
-            $scope.imatges = [];
-            $scope.typeaheadOptions = {
-                "debounce": {
-                    "default": 500,
-                    "blur": 250
-                }
-            };
-
-            // Función buscar nombres y pictogramas
-            $scope.buscar = function (val) {
-                if (!val || val == "") {
-                    return;
-                }
-                $scope.lastSearch = val;
-                return namesResource.get({'startswith': val, 'language': $scope.languageabbr}).$promise
-                        .then(function (results) {
-                            return results.data;
-                        });
-            };
-
-            // Función seleccionar pictograma
-            $scope.onSelect = function (item, model, label, evt) {
-                $scope.img = item;
-                $scope.asyncNom = $scope.lastSearch;
-                console.log(item, model);					//borrar
-            };
-
-            // Función historial de pictogramas
-            $scope.afegir = function () {
-                historyResource.get({'pictoid': $scope.img.nameid}).$promise
-                        .then(function (results) {
-                            $scope.hist = results.data;
-                        });
-
-                $scope.imatges.push({url: $scope.img.imgPicto, done: false});
-            };
-
-
-            // Función salir del login
-            $scope.sortir = function () {
-                AuthService.logout();
-                $location.path('/login');
-            }
-
-        })
-
-        .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval, $timeout) {
+        .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -808,6 +744,7 @@ angular.module('controllers', [])
                 }
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
                 $scope.inScan = true;
+                $scope.getMaxScanBlock1();
                 //MODIF: usar cfgOneClicko algo asi
                 function myTimer() {
                     $scope.NextBlockScan();
@@ -837,7 +774,7 @@ angular.module('controllers', [])
                 } else {
                     $scope.isScanning = "board";
                 }
-                $scope.getMaxScanBlock1();
+
 
             };
             // picto is -1 pred, 0 sentemce, others mainboard.
@@ -879,7 +816,7 @@ angular.module('controllers', [])
                     if (!$scope.longclick)
                     {
                         $scope.selectBlockScan();
-                    } else if ($scope.timerScan == 0) {
+                    } else if (!$scope.longclick) {
                         $scope.nextBlockScan();
                     }
                 }
@@ -904,7 +841,7 @@ angular.module('controllers', [])
                         if ($scope.scanLongClickController)
                         {
                             $timeout.cancel($scope.scanLongClickTime);
-                            $scope.nextBlockScan();
+                            //$scope.nextBlockScan();
 
 
                         } else
@@ -918,10 +855,8 @@ angular.module('controllers', [])
             $scope.scanRightClick = function ()
             {
                 if ($scope.inScan) {
-                    if (!$scope.longclick)
+                    if (!$scope.longclick && !$scope.timerScan)
                     {
-                        $scope.nextBlockScan();
-                    } else if ($scope.timerScan == 0) {
                         $scope.nextBlockScan();
                     }
                 }
@@ -1171,9 +1106,9 @@ angular.module('controllers', [])
                     $scope.InitScan();
                 });
             };
-            //We have to react to the ng-click events?
-            $scope.isClickEnable = function(){
-                return(!($scope.inEdit || $scope.inScan || $scope.cfgTimeOverOnOff));
+            //We have to react to the ng-click events? In edit mode we have to react to some event, in a diferent way
+            $scope.isClickEnable = function () {
+                return(!($scope.inScan || $scope.cfgTimeOverOnOff));
             };
             // Get the user config and show the board
             $scope.config = function ()
@@ -1182,8 +1117,8 @@ angular.module('controllers', [])
 
                 var url = $scope.baseurl + "Board/loadCFG";
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
-                var postdata = {lusuid: userConfig.ID_ULanguage};//ID_ULlanguage
-
+                var postdata = {lusuid: userConfig.ID_ULanguage};
+                //MODIF: borrar
                 $http.post(url, postdata);
 
                 $scope.userViewHeight = 100;
@@ -1223,16 +1158,16 @@ angular.module('controllers', [])
                 $scope.cfgSentenceBarUpDown = userConfig.cfgSentenceBarUpDown;
                 $scope.pictoBarWidth = 12 - $scope.cfgMenuReadActive - $scope.cfgMenuDeleteLastActive - $scope.cfgMenuDeleteAllActive;
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
-                $scope.longclick = userConfig.cfgUsageMouseOneCTwoC;
+                $scope.longclick = userConfig.cfgUsageMouseOneCTwoC == 1 ? true : false;
                 $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
                 $scope.StatusEnableEditViewTrash = true;
                 $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff == 1 ? true : false;
                 $scope.cfgTimeOver = userConfig.cfgTimeLapseSelect;
-                alert($scope.cfgTimeOverOnOff);
                 $scope.cfgTimeNoRepeatedClickOnOff = userConfig.cfgTimeNoRepeatedClickOnOff;
                 $scope.cfgTimeNoRepeatedClick = userConfig.cfgTimeNoRepeatedClick;
                 $scope.TimeMultiClic = 0;
                 $scope.cfgScanStartClick = userConfig.cfgScanStartClick;
+                $scope.cfgTextInCell = userConfig.cfgTextInCell == 1 ? true : false;
 
                 $scope.getPred();
                 //If there are some request to edit from another controller, the edit panel it's loaded
@@ -1241,18 +1176,21 @@ angular.module('controllers', [])
                     $scope.edit();
                     $rootScope.editPanelInfo = null;
                 } else {
-                    $scope.getPrimaryUserBoard();
-                    //If user have scanning active by default, start scanning
-                    if (userConfig.cfgScanningOnOff == 1) {
-                        $scope.InitScan();
-                    }
+                    $scope.getPrimaryUserBoard().then(function (response)
+                    {
+                        //If user have scanning active by default, start scanning
+                        if (userConfig.cfgScanningOnOff == 1) {
+                            $scope.InitScan();
+                        }
+                    });
+
                 }
             };
             //Get priamry user board (primary board in the priamry group) and show it
             $scope.getPrimaryUserBoard = function () {
                 var url = $scope.baseurl + "Board/getPrimaryUserBoard";
 
-                $http.post(url).success(function (response)
+                return $http.post(url).success(function (response)
                 {
                     $scope.idboard = response.idboard;
                     $scope.showBoard('0');
@@ -1337,8 +1275,8 @@ angular.module('controllers', [])
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.nameboard = response.name;
-                    $scope.altura = $scope.range(20)[response.row-1].valueOf();
-                    $scope.amplada = $scope.range(20)[response.col-1].valueOf();
+                    $scope.altura = $scope.range(20)[response.row - 1].valueOf();
+                    $scope.amplada = $scope.range(20)[response.col - 1].valueOf();
                     $scope.autoreturn = (response.autoReturn === '1' ? true : false);
                     $scope.autoread = (response.autoRead === '1' ? true : false);
 
@@ -1493,7 +1431,8 @@ angular.module('controllers', [])
              * Add the selected pictogram to the sentence
              */
             $scope.clickOnCell = function (cell) {
-                if (cell.activeCell == 1) {
+
+                if (!$scope.inEdit && cell.activeCell == 1) {
 
                     if (cell.textInCell !== null) {
                         $scope.playPictoAudio(cell.textInCell);
@@ -1656,8 +1595,7 @@ angular.module('controllers', [])
                 if ($scope.StatusEnableEditViewTrash == true)
                 {
                     $scope.StatusEnableEditViewTrash = false;
-                }
-                else
+                } else
                 {
                     $scope.StatusEnableEditViewTrash = true;
                 }
@@ -1929,10 +1867,10 @@ angular.module('controllers', [])
                     $http.post(URL, postdata).
                             success(function (response)
                             {
-                                
+
                                 $scope.CreateBoardData = {CreateBoardName: '', height: response.defHeight.toString(), width: response.defWidth.toString(), idGroupBoard: response.ID_GB};
-                                $scope.CreateBoardData.height = $scope.range(20)[response.defHeight-1].valueOf();
-                                $scope.CreateBoardData.width = $scope.range(20)[response.defWidth-1].valueOf();
+                                $scope.CreateBoardData.height = $scope.range(20)[response.defHeight - 1].valueOf();
+                                $scope.CreateBoardData.width = $scope.range(20)[response.defWidth - 1].valueOf();
                                 alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
