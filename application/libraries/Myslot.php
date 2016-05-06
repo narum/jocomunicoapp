@@ -403,9 +403,7 @@ class Myslot {
         }
         
         if ($potferdecmp) {
-            
-            echo "<br /><br />GARUM!!";
-            
+                        
             $numcomplements = count($this->cmpMod);
 
             $newslot = new Myslot();
@@ -446,7 +444,6 @@ class Myslot {
 
             $this->cmpMod[$keyslot." MOD ".$numcomplements] = $newslot;
             
-            print_r($newslot);
             $output = 1; 
         }
 
