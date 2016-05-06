@@ -482,234 +482,239 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-.controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, $q, txtContent, $location) {
-    // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
-    if (!$rootScope.isLogged) {
-        $location.path('/login');
-    }
-    // Declaración de variables
-    $scope.canEdit = false;
-    $scope.viewActived=false;
-    $scope.loadingEdit=false;
-    $scope.loadingOldPass=false;
-    $scope.interfaceLanguageBarEnable=true;
-    $scope.expansionLanguageEnable=true;
-    $scope.userDataForm=[];
-    var count1=0;
-    var count2=0;
-    //Pedimos la configuración del usuario a la base de datos
-    $scope.getConfig = function(){
-        $scope.interfaceLanguages=[];
-        $scope.expansionLanguages=[];
-        $scope.numPictosBarPred=['2','3','4','5','6','7','8','9','10'];
-        Resources.main.get({'IdSu':$rootScope.sUserId}, {'funct': "getConfig"}).$promise
-        .then(function (results) {
-            window.localStorage.removeItem('userData');
-            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
-            $rootScope.interfaceLanguageId = results.userConfig.ID_ULanguage;
-            $rootScope.expanLanguageId = results.userConfig.cfgExpansionLanguage;
-            $scope.userData = results.userConfig;
-            $scope.interfaceLanguage = results.languages[results.userConfig.ID_ULanguage-1].languageName;
-            $scope.expansionLanguage = results.languages[results.userConfig.cfgExpansionLanguage-1].languageName;
-            $scope.languages = results.languages;
-
-            //Necessary for preselected ng-options (select) works
-            $scope.userData.cfgPredBarNumPred=$scope.numPictosBarPred[results.userConfig.cfgPredBarNumPred-2];
-
-            //Parse string to integer
-            $scope.userData.cfgTimeLapseSelect=parseInt(results.userConfig.cfgTimeLapseSelect, 10);
-            $scope.userData.cfgTimeNoRepeatedClick=parseInt(results.userConfig.cfgTimeNoRepeatedClick, 10);
-            $scope.userData.cfgTimeClick=parseInt(results.userConfig.cfgTimeClick, 10);
-            $scope.userData.cfgTimeScanning=parseInt(results.userConfig.cfgTimeScanning, 10);
-
-            //change string (0,1) to boolean (true,false)
-            $scope.userData.cfgExpansionOnOff = ($scope.userData.cfgExpansionOnOff === "1");
-            $scope.userData.cfgPredOnOff = ($scope.userData.cfgPredOnOff === "1");
-            $scope.userData.cfgMenuReadActive = ($scope.userData.cfgMenuReadActive === "1");
-            $scope.userData.cfgMenuDeleteLastActive = ($scope.userData.cfgMenuDeleteLastActive === "1");
-            $scope.userData.cfgMenuDeleteAllActive = ($scope.userData.cfgMenuDeleteAllActive === "1");
-            $scope.userData.cfgAutoEraseSentenceBar = ($scope.userData.cfgAutoEraseSentenceBar === "1");
-            $scope.userData.cfgTimeLapseSelectOnOff = ($scope.userData.cfgTimeLapseSelectOnOff === "1");
-            $scope.userData.cfgTimeNoRepeatedClickOnOff = ($scope.userData.cfgTimeNoRepeatedClickOnOff === "1");
-            $scope.userData.cfgScanningOnOff = ($scope.userData.cfgScanningOnOff === "1");
-            $scope.userData.cfgScanningAutoOnOff = ($scope.userData.cfgScanningAutoOnOff === "1");
-            $scope.userData.cfgScanningCancelScanOnOff = ($scope.userData.cfgScanningCancelScanOnOff === "1");
-            $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
-            $scope.userData.cfgHistOnOff = ($scope.userData.cfgHistOnOff === "1");
-            
-            var count=results.users[0].ID_ULanguage;
-            var numberOfInterfaceLanguages=0;
-            angular.forEach(results.users, function (value) {
-                if (value.ID_ULanguage == count ){
-                    $scope.interfaceLanguages.push({name: results.languages[value.ID_ULanguage-1].languageName, user: value.ID_User});
-                    count++;
-                    numberOfInterfaceLanguages++;
-                }
-                $scope.expansionLanguages.push({idInterfaceLanguage: numberOfInterfaceLanguages,name: results.languages[value.cfgExpansionLanguage-1].languageName, user: value.ID_User});
-                
-            });
-            
-            //Delete name and surnames input text box
-            delete $scope.userDataForm.realName;
-            delete $scope.userDataForm.surNames;
-            $scope.loadingEdit=false;
-            // Pedimos los textos para cargar la pagina
-            txtContent("userConfig").then(function(results){
-                $scope.content = results.data;
-                $scope.viewActived=true;
-                //Enable bar after change Language
-                $scope.interfaceLanguageBarEnable=true;
-                $scope.expansionLanguageEnable=true;
-            });
-        });
-    };
-    $scope.getConfig();
-
-    //Cambiar datos de usuario
-    $scope.saveUserData = function(){
-        if (($scope.userDataForm.realName==undefined||$scope.userDataForm.realName=='')&&($scope.userDataForm.surNames==undefined||$scope.userDataForm.surNames=='')){
-            //Campos vacios
-            return;
-        }
-        $scope.loadingEdit=true;
-        if (($scope.userDataForm.realName==undefined)||($scope.userDataForm.realName=='')){
-            $data = '{"surnames":"' + $scope.userDataForm.surNames + '"}';
-        }else if (($scope.userDataForm.surNames==undefined)||($scope.userDataForm.surNames=='')){
-            $data = '{"realname":"' + $scope.userDataForm.realName + '"}';
-        }else{
-            $data = '{"realname":"' + $scope.userDataForm.realName + '","surnames":"' + $scope.userDataForm.surNames + '"}';
-        }
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':$data}, {'funct': "saveSUserNames"}).$promise
-                .then(function () {
-                    $scope.getConfig();
-                });
-    }
-    $scope.deleteForm = function(){
-        delete $scope.userDataForm.realName;
-        delete $scope.userDataForm.surNames;
-        $scope.deleteFormPass();
-    }
-    $scope.deleteFormPass = function(){
-        delete $scope.oldPass;
-        delete $scope.newPass1;
-        delete $scope.newPass2;
-        $scope.oldPassState='';
-        $scope.newPassLengthOk='';
-        $scope.newPassState='';
-    }
-    //Cambiar Contraseña
-    $scope.checkOldPass = function(){
-        count1++;
-        $scope.oldPassState='';
-        $scope.loadingOldPass=true;
-        $scope.oldPassDirty=true;
-        Resources.main.save({'IdSu':$rootScope.sUserId, 'pass':$scope.oldPass}, {'funct': "checkPassword"}).$promise
-            .then(function (results) {
-                count2++;
-                if(count1==count2){
-                    $scope.oldPassState=results.data;
-                    $scope.oldPassDirty=false;
-                    $scope.loadingOldPass=false;
-                }
-            });
-    }
-    //Check new password length
-    $scope.minPassLength = function(){
-        if ($scope.newPass1.length<4){
-            $scope.newPassLengthOk='false';
-        }else{
-            $scope.newPassLengthOk='true';
-        }
-    }
-    //Check if new passwords are equal.
-    $scope.comparePass = function(){
-        if($scope.newPass1 === $scope.newPass2){
-            $scope.newPassState='true';
-        }else{
-            $scope.newPassState='false';
-        }
-    }
-    //Save New password
-    $scope.saveNewPass = function(){
-        Resources.main.save({'IdSu':$rootScope.sUserId, 'oldPass':$scope.oldPass, 'newPass':$scope.newPass2}, {'funct': "savePassword"}).$promise
-            .then(function () {
-                $scope.deleteFormPass();
-            });
-    }
-    //Change Language (user)
-    $scope.changeLanguage = function(idUser){
-        $scope.contentBar1=false;
-        $scope.contentBar2=false;
-        $scope.interfaceLanguageBarEnable=false;
-        $scope.expansionLanguageEnable=false;
-        Resources.main.save({'IdSu':$rootScope.sUserId, 'idU':idUser}, {'funct': "changeDefUser"}).$promise
-            .then(function () {
-                delete $scope.interfaceLanguages;
-                $scope.interfaceLanguages=[];
-                delete $scope.expansionLanguages;
-                $scope.expansionLanguages=[];
-                $scope.getConfig();
-            });
-    };
-    
-    $scope.changeOnOff = function(bool, data){
-        if (bool){
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':data, 'value':'1'}, {'funct': "changeCfgBool"}).$promise
-        }else{
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':data, 'value':'0'}, {'funct': "changeCfgBool"}).$promise
-        }
-    }
-    
-    $scope.changeRadioEstate = function(value, data){
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':data, 'value':value}, {'funct': "changeCfgBool"}).$promise
-    }
-    $scope.checkNumberTime = function(value, data){
-            if (angular.isNumber(value)){
-                $scope.changeRadioEstate(value, data);
+        .controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, $q, txtContent, $location, $timeout) {
+            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+            if (!$rootScope.isLogged) {
+                $location.path('/login');
             }
-    }
-    
-    $scope.addLanguage = function(idLanguage){
-        if(idLanguage=='submit'&&$scope.addLanguageTo=='interface'){
-            $scope.languageEnable=false;
-            $scope.contentBar1=false;
-            $scope.contentBar2=false;
-            $scope.interfaceLanguageBarEnable=false;
-            $scope.expansionLanguageEnable=false;
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'ID_ULanguage':$scope.addlanguageId, 'cfgExpansionLanguage':$scope.addlanguageId}, {'funct': "addUser"}).$promise
-            .then(function () {
-                delete $scope.interfaceLanguages;
-                $scope.interfaceLanguages=[];
-                delete $scope.expansionLanguages;
-                $scope.expansionLanguages=[];
+            // Declaración de variables
+            $scope.canEdit = false;
+            $scope.viewActived = false;
+            $scope.loadingEdit = false;
+            $scope.loadingOldPass = false;
+            $scope.interfaceLanguageBarEnable = true;
+            $scope.expansionLanguageEnable = true;
+            $scope.userDataForm = [];
+            var count1 = 0;
+            var count2 = 0;
+            //Pedimos la configuración del usuario a la base de datos
+            $scope.getConfig = function () {
+                $scope.interfaceLanguages = [];
+                $scope.expansionLanguages = [];
+                $scope.numPictosBarPred = ['2', '3', '4', '5', '6', '7', '8', '9', '10'];
+                Resources.main.get({'IdSu': $rootScope.sUserId}, {'funct': "getConfig"}).$promise
+                        .then(function (results) {
+                            window.localStorage.removeItem('userData');
+                            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+                            $rootScope.interfaceLanguageId = results.userConfig.ID_ULanguage;
+                            $rootScope.expanLanguageId = results.userConfig.cfgExpansionLanguage;
+                            $scope.userData = results.userConfig;
+                            $scope.interfaceLanguage = results.languages[results.userConfig.ID_ULanguage - 1].languageName;
+                            $scope.expansionLanguage = results.languages[results.userConfig.cfgExpansionLanguage - 1].languageName;
+                            $scope.languages = results.languages;
+
+                            //Necessary for preselected ng-options (select) works
+                            $scope.userData.cfgPredBarNumPred = $scope.numPictosBarPred[results.userConfig.cfgPredBarNumPred - 2];
+
+                            //Parse string to integer
+                            $scope.userData.cfgTimeLapseSelect = parseInt(results.userConfig.cfgTimeLapseSelect, 10);
+                            $scope.userData.cfgTimeNoRepeatedClick = parseInt(results.userConfig.cfgTimeNoRepeatedClick, 10);
+                            $scope.userData.cfgTimeClick = parseInt(results.userConfig.cfgTimeClick, 10);
+                            $scope.userData.cfgTimeScanning = parseInt(results.userConfig.cfgTimeScanning, 10);
+
+                            //change string (0,1) to boolean (true,false)
+                            $scope.userData.cfgExpansionOnOff = ($scope.userData.cfgExpansionOnOff === "1");
+                            $scope.userData.cfgPredOnOff = ($scope.userData.cfgPredOnOff === "1");
+                            $scope.userData.cfgMenuReadActive = ($scope.userData.cfgMenuReadActive === "1");
+                            $scope.userData.cfgMenuDeleteLastActive = ($scope.userData.cfgMenuDeleteLastActive === "1");
+                            $scope.userData.cfgMenuDeleteAllActive = ($scope.userData.cfgMenuDeleteAllActive === "1");
+                            $scope.userData.cfgAutoEraseSentenceBar = ($scope.userData.cfgAutoEraseSentenceBar === "1");
+                            $scope.userData.cfgTimeLapseSelectOnOff = ($scope.userData.cfgTimeLapseSelectOnOff === "1");
+                            $scope.userData.cfgTimeNoRepeatedClickOnOff = ($scope.userData.cfgTimeNoRepeatedClickOnOff === "1");
+                            $scope.userData.cfgScanningOnOff = ($scope.userData.cfgScanningOnOff === "1");
+                            $scope.userData.cfgScanningAutoOnOff = ($scope.userData.cfgScanningAutoOnOff === "1");
+                            $scope.userData.cfgScanningCancelScanOnOff = ($scope.userData.cfgScanningCancelScanOnOff === "1");
+                            $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
+                            $scope.userData.cfgHistOnOff = ($scope.userData.cfgHistOnOff === "1");
+
+                            var count = results.users[0].ID_ULanguage;
+                            var numberOfInterfaceLanguages = 0;
+                            angular.forEach(results.users, function (value) {
+                                if (value.ID_ULanguage == count) {
+                                    $scope.interfaceLanguages.push({name: results.languages[value.ID_ULanguage - 1].languageName, user: value.ID_User});
+                                    count++;
+                                    numberOfInterfaceLanguages++;
+                                }
+                                $scope.expansionLanguages.push({idInterfaceLanguage: numberOfInterfaceLanguages, name: results.languages[value.cfgExpansionLanguage - 1].languageName, user: value.ID_User});
+
+                            });
+
+                            //Delete name and surnames input text box
+                            delete $scope.userDataForm.realName;
+                            delete $scope.userDataForm.surNames;
+                            $scope.loadingEdit = false;
+                            // Pedimos los textos para cargar la pagina
+                            txtContent("userConfig").then(function (results) {
+                                $scope.content = results.data;
+                                $scope.viewActived = true;
+                                $scope.$broadcast("rebuild:me");
+                                //Enable bar after change Language
+                                $scope.interfaceLanguageBarEnable = true;
+                                $scope.expansionLanguageEnable = true;
+                            });
+                        });
+
+            };
+            $scope.getConfig();
+            $scope.rebuild = function () {
+                $scope.$broadcast("rebuild:me");
+            };
+            //Cambiar datos de usuario
+            $scope.saveUserData = function () {
+                if (($scope.userDataForm.realName == undefined || $scope.userDataForm.realName == '') && ($scope.userDataForm.surNames == undefined || $scope.userDataForm.surNames == '')) {
+                    //Campos vacios
+                    return;
+                }
+                $scope.loadingEdit = true;
+                if (($scope.userDataForm.realName == undefined) || ($scope.userDataForm.realName == '')) {
+                    $data = '{"surnames":"' + $scope.userDataForm.surNames + '"}';
+                } else if (($scope.userDataForm.surNames == undefined) || ($scope.userDataForm.surNames == '')) {
+                    $data = '{"realname":"' + $scope.userDataForm.realName + '"}';
+                } else {
+                    $data = '{"realname":"' + $scope.userDataForm.realName + '","surnames":"' + $scope.userDataForm.surNames + '"}';
+                }
+                Resources.main.save({'IdSu': $rootScope.sUserId, 'data': $data}, {'funct': "saveSUserNames"}).$promise
+                        .then(function () {
+                            $scope.getConfig();
+                        });
+            }
+            $scope.deleteForm = function () {
+                delete $scope.userDataForm.realName;
+                delete $scope.userDataForm.surNames;
+                $scope.deleteFormPass();
+            }
+            $scope.deleteFormPass = function () {
+                delete $scope.oldPass;
+                delete $scope.newPass1;
+                delete $scope.newPass2;
+                $scope.oldPassState = '';
+                $scope.newPassLengthOk = '';
+                $scope.newPassState = '';
+            }
+            //Cambiar Contraseña
+            $scope.checkOldPass = function () {
+                count1++;
+                $scope.oldPassState = '';
+                $scope.loadingOldPass = true;
+                $scope.oldPassDirty = true;
+                Resources.main.save({'IdSu': $rootScope.sUserId, 'pass': $scope.oldPass}, {'funct': "checkPassword"}).$promise
+                        .then(function (results) {
+                            count2++;
+                            if (count1 == count2) {
+                                $scope.oldPassState = results.data;
+                                $scope.oldPassDirty = false;
+                                $scope.loadingOldPass = false;
+                            }
+                        });
+            }
+            //Check new password length
+            $scope.minPassLength = function () {
+                if ($scope.newPass1.length < 4) {
+                    $scope.newPassLengthOk = 'false';
+                } else {
+                    $scope.newPassLengthOk = 'true';
+                }
+            }
+            //Check if new passwords are equal.
+            $scope.comparePass = function () {
+                if ($scope.newPass1 === $scope.newPass2) {
+                    $scope.newPassState = 'true';
+                } else {
+                    $scope.newPassState = 'false';
+                }
+            }
+            //Save New password
+            $scope.saveNewPass = function () {
+                Resources.main.save({'IdSu': $rootScope.sUserId, 'oldPass': $scope.oldPass, 'newPass': $scope.newPass2}, {'funct': "savePassword"}).$promise
+                        .then(function () {
+                            $scope.deleteFormPass();
+                        });
+            }
+            //Change Language (user)
+            $scope.changeLanguage = function (idUser) {
+                $scope.contentBar1 = false;
+                $scope.contentBar2 = false;
+                $scope.interfaceLanguageBarEnable = false;
+                $scope.expansionLanguageEnable = false;
+                Resources.main.save({'IdSu': $rootScope.sUserId, 'idU': idUser}, {'funct': "changeDefUser"}).$promise
+                        .then(function () {
+                            delete $scope.interfaceLanguages;
+                            $scope.interfaceLanguages = [];
+                            delete $scope.expansionLanguages;
+                            $scope.expansionLanguages = [];
+                            $scope.getConfig();
+                        });
+            };
+
+            $scope.changeOnOff = function (bool, data) {
+                if (bool) {
+                    Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': '1'}, {'funct': "changeCfgBool"}).$promise
+                } else {
+                    Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': '0'}, {'funct': "changeCfgBool"}).$promise
+                }
+            }
+
+            $scope.changeRadioEstate = function (value, data) {
+                Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': value}, {'funct': "changeCfgBool"}).$promise
+            }
+            $scope.checkNumberTime = function (value, data) {
+                if (angular.isNumber(value)) {
+                    $scope.changeRadioEstate(value, data);
+                }
+            }
+
+            $scope.addLanguage = function (idLanguage) {
+                if (idLanguage == 'submit' && $scope.addLanguageTo == 'interface') {
+                    $scope.languageEnable = false;
+                    $scope.contentBar1 = false;
+                    $scope.contentBar2 = false;
+                    $scope.interfaceLanguageBarEnable = false;
+                    $scope.expansionLanguageEnable = false;
+                    Resources.main.save({'IdSu': $rootScope.sUserId, 'ID_ULanguage': $scope.addlanguageId, 'cfgExpansionLanguage': $scope.addlanguageId}, {'funct': "addUser"}).$promise
+                            .then(function () {
+                                delete $scope.interfaceLanguages;
+                                $scope.interfaceLanguages = [];
+                                delete $scope.expansionLanguages;
+                                $scope.expansionLanguages = [];
+                                $scope.getConfig();
+                            });
+                } else if (idLanguage == 'submit' && $scope.addLanguageTo == 'expansion') {
+                    $scope.languageEnable = false;
+                    $scope.contentBar1 = false;
+                    $scope.contentBar2 = false;
+                    $scope.interfaceLanguageBarEnable = false;
+                    $scope.expansionLanguageEnable = false;
+                    Resources.main.save({'IdSu': $rootScope.sUserId, 'ID_ULanguage': $rootScope.interfaceLanguageId, 'cfgExpansionLanguage': $scope.addlanguageId}, {'funct': "addUser"}).$promise
+                            .then(function () {
+                                delete $scope.interfaceLanguages;
+                                $scope.interfaceLanguages = [];
+                                delete $scope.expansionLanguages;
+                                $scope.expansionLanguages = [];
+                                $scope.getConfig();
+                            });
+                } else {
+                    $scope.addlanguageId = idLanguage;
+                }
+                $scope.languageEnable = true;
+            }
+
+            $scope.exit = function () {
                 $scope.getConfig();
-            });
-        }else if(idLanguage=='submit'&&$scope.addLanguageTo=='expansion'){
-            $scope.languageEnable=false;
-            $scope.contentBar1=false;
-            $scope.contentBar2=false;
-            $scope.interfaceLanguageBarEnable=false;
-            $scope.expansionLanguageEnable=false;
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'ID_ULanguage':$rootScope.interfaceLanguageId, 'cfgExpansionLanguage':$scope.addlanguageId}, {'funct': "addUser"}).$promise
-            .then(function () {
-                delete $scope.interfaceLanguages;
-                $scope.interfaceLanguages=[];
-                delete $scope.expansionLanguages;
-                $scope.expansionLanguages=[];
-                $scope.getConfig();
-            });
-        }else{
-            $scope.addlanguageId=idLanguage;
+                $location.path('/');
+            }
         }
-        $scope.languageEnable=true;
-    }
-    
-    $scope.exit = function(){
-        $scope.getConfig();
-        $location.path('/');
-    }
- })
- 
+        )
+
 // Controlador del buscador de pictogramas
 
         .controller('MainCtrl', function ($rootScope, $scope, $location, Resources, AuthService, txtContent) {
@@ -774,7 +779,7 @@ angular.module('controllers', [])
 
         })
 
-        .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval, $timeout) {
+        .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -806,6 +811,7 @@ angular.module('controllers', [])
                 }
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
                 $scope.inScan = true;
+                $scope.getMaxScanBlock1();
                 //MODIF: usar cfgOneClicko algo asi
                 function myTimer() {
                     $scope.NextBlockScan();
@@ -835,7 +841,7 @@ angular.module('controllers', [])
                 } else {
                     $scope.isScanning = "board";
                 }
-                $scope.getMaxScanBlock1();
+
 
             };
             // picto is -1 pred, 0 sentemce, others mainboard.
@@ -877,7 +883,7 @@ angular.module('controllers', [])
                     if (!$scope.longclick)
                     {
                         $scope.selectBlockScan();
-                    } else if (!$scope.longclick && $scope.timerScan == 0) {
+                    } else if (!$scope.longclick) {
                         $scope.nextBlockScan();
                     }
                 }
@@ -916,10 +922,8 @@ angular.module('controllers', [])
             $scope.scanRightClick = function ()
             {
                 if ($scope.inScan) {
-                    if (!$scope.longclick)
+                    if (!$scope.longclick && !$scope.timerScan)
                     {
-                        $scope.nextBlockScan();
-                    } else if (!$scope.longclick && $scope.timerScan == 0) {
                         $scope.nextBlockScan();
                     }
                 }
@@ -1169,9 +1173,9 @@ angular.module('controllers', [])
                     $scope.InitScan();
                 });
             };
-            //We have to react to the ng-click events?
-            $scope.isClickEnable = function(){
-                return(!($scope.inEdit || $scope.inScan || $scope.cfgTimeOverOnOff));
+            //We have to react to the ng-click events? In edit mode we have to react to some event, in a diferent way
+            $scope.isClickEnable = function () {
+                return(!($scope.inScan || $scope.cfgTimeOverOnOff));
             };
             // Get the user config and show the board
             $scope.config = function ()
@@ -1180,8 +1184,8 @@ angular.module('controllers', [])
 
                 var url = $scope.baseurl + "Board/loadCFG";
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
-                var postdata = {lusuid: userConfig.ID_ULanguage};//ID_ULlanguage
-
+                var postdata = {lusuid: userConfig.ID_ULanguage};
+                //MODIF: borrar
                 $http.post(url, postdata);
 
                 $scope.userViewHeight = 100;
@@ -1226,13 +1230,12 @@ angular.module('controllers', [])
                 $scope.StatusEnableEditViewTrash = true;
                 $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff == 1 ? true : false;
                 $scope.cfgTimeOver = userConfig.cfgTimeLapseSelect;
-                alert($scope.cfgTimeOverOnOff);
                 $scope.cfgTimeNoRepeatedClickOnOff = userConfig.cfgTimeNoRepeatedClickOnOff;
                 $scope.cfgTimeNoRepeatedClick = userConfig.cfgTimeNoRepeatedClick;
                 $scope.TimeMultiClic = 0;
                 $scope.cfgScanStartClick = userConfig.cfgScanStartClick;
                 $scope.cfgTextInCell = userConfig.cfgTextInCell == 1 ? true : false;
-                
+
                 $scope.getPred();
                 //If there are some request to edit from another controller, the edit panel it's loaded
                 if ($rootScope.editPanelInfo != null) {
@@ -1240,18 +1243,21 @@ angular.module('controllers', [])
                     $scope.edit();
                     $rootScope.editPanelInfo = null;
                 } else {
-                    $scope.getPrimaryUserBoard();
-                    //If user have scanning active by default, start scanning
-                    if (userConfig.cfgScanningOnOff == 1) {
-                        $scope.InitScan();
-                    }
+                    $scope.getPrimaryUserBoard().then(function (response)
+                    {
+                        //If user have scanning active by default, start scanning
+                        if (userConfig.cfgScanningOnOff == 1) {
+                            $scope.InitScan();
+                        }
+                    });
+
                 }
             };
             //Get priamry user board (primary board in the priamry group) and show it
             $scope.getPrimaryUserBoard = function () {
                 var url = $scope.baseurl + "Board/getPrimaryUserBoard";
 
-                $http.post(url).success(function (response)
+                return $http.post(url).success(function (response)
                 {
                     $scope.idboard = response.idboard;
                     $scope.showBoard('0');
@@ -1336,8 +1342,8 @@ angular.module('controllers', [])
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.nameboard = response.name;
-                    $scope.altura = $scope.range(20)[response.row-1].valueOf();
-                    $scope.amplada = $scope.range(20)[response.col-1].valueOf();
+                    $scope.altura = $scope.range(20)[response.row - 1].valueOf();
+                    $scope.amplada = $scope.range(20)[response.col - 1].valueOf();
                     $scope.autoreturn = (response.autoReturn === '1' ? true : false);
                     $scope.autoread = (response.autoRead === '1' ? true : false);
 
@@ -1492,7 +1498,8 @@ angular.module('controllers', [])
              * Add the selected pictogram to the sentence
              */
             $scope.clickOnCell = function (cell) {
-                if (cell.activeCell == 1) {
+
+                if (!$scope.inEdit && cell.activeCell == 1) {
 
                     if (cell.textInCell !== null) {
                         $scope.playPictoAudio(cell.textInCell);
@@ -1655,8 +1662,7 @@ angular.module('controllers', [])
                 if ($scope.StatusEnableEditViewTrash == true)
                 {
                     $scope.StatusEnableEditViewTrash = false;
-                }
-                else
+                } else
                 {
                     $scope.StatusEnableEditViewTrash = true;
                 }
@@ -1928,10 +1934,10 @@ angular.module('controllers', [])
                     $http.post(URL, postdata).
                             success(function (response)
                             {
-                                
+
                                 $scope.CreateBoardData = {CreateBoardName: '', height: response.defHeight.toString(), width: response.defWidth.toString(), idGroupBoard: response.ID_GB};
-                                $scope.CreateBoardData.height = $scope.range(20)[response.defHeight-1].valueOf();
-                                $scope.CreateBoardData.width = $scope.range(20)[response.defWidth-1].valueOf();
+                                $scope.CreateBoardData.height = $scope.range(20)[response.defHeight - 1].valueOf();
+                                $scope.CreateBoardData.width = $scope.range(20)[response.defWidth - 1].valueOf();
                                 alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
