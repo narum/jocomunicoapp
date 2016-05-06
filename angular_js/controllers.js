@@ -482,7 +482,7 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-.controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, $q, txtContent, $location) {
+.controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, $q, txtContent, $location, $timeout) {
     // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
     if (!$rootScope.isLogged) {
         $location.path('/login');
@@ -706,7 +706,9 @@ angular.module('controllers', [])
     
     $scope.exit = function(){
         $scope.getConfig();
-        $location.path('/');
+        $timeout(function(){
+            $location.path('/');
+        });
     }
  })
  

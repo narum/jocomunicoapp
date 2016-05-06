@@ -28655,7 +28655,7 @@ var scriptDirective = ['$templateCache', function($templateCache) {
   };
 }];
 
-var noopNgModelController = { $setViewValue: noop, $render: noop };
+var noopngModelController = { $setViewValue: noop, $render: noop };
 
 function chromeHack(optionElement) {
   // Workaround for https://code.google.com/p/chromium/issues/detail?id=381459
@@ -28681,7 +28681,7 @@ var SelectController =
       optionsMap = new HashMap();
 
   // If the ngModel doesn't get provided then provide a dummy noop version to prevent errors
-  self.ngModelCtrl = noopNgModelController;
+  self.ngModelCtrl = noopngModelController;
 
   // The "unknown" option is one that is prepended to the list if the viewValue
   // does not match any of the options. When it is rendered the value of the unknown
