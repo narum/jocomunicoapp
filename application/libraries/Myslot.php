@@ -386,13 +386,13 @@ class Myslot {
             }
         }
         
-        // els quant poden fer de complement d'advs, noms (si no són pronoms), adjs i modifs
-        // els altres modificadors (possessius) de paraula i els números només van amb noms
+        // els quant i similar poden fer de complement d'advs, noms (si no són pronoms), adjs i modifs
+        // els altres modificadors (possessius o determinants) de paraula i els números només van amb noms
         $potferdecmp = false;
         
         if ($this->full) {
             $tipusparaulafinal = $this->paraulafinal->tipus;
-            if ($word->classes[0] == "quant") {
+            if ($word->classes[0] == "quant" || $word->classes[0] == "similar") {
                 if (($tipusparaulafinal == "name" 
                     || $tipusparaulafinal == "adv" || $tipusparaulafinal == "adj" 
                         || $tipusparaulafinal == "modifier") && !$this->paraulafinal->isClass("pronoun"))
@@ -403,6 +403,8 @@ class Myslot {
         }
         
         if ($potferdecmp) {
+            
+            echo "<br /><br />GARUM!!";
             
             $numcomplements = count($this->cmpMod);
 
@@ -425,6 +427,8 @@ class Myslot {
             }
             else if ($distance == 1) {
                 $newslot->puntsfinal += 1; // Si el modficador va just abans de la paraula és la millor opció
+                if ($word->isClass("quant") || $word->isClass("det") || 
+                        $word->isClass("similar")) $newslot->puntsfinal += 1; // i si és un quant, det o similar li sumem un punt extra
             }
             
             $aux[1] = $newslot->puntsfinal; // els punts d'aquest slot: és per desambiguar si un modif pot complementar a dues paraules, per escollir la millor
@@ -441,6 +445,8 @@ class Myslot {
             $newslot->indexclassfinalword = 0;
 
             $this->cmpMod[$keyslot." MOD ".$numcomplements] = $newslot;
+            
+            print_r($newslot);
             $output = 1; 
         }
 
