@@ -49,7 +49,7 @@ CREATE TABLE SuperUser (
 	cfgScanningOnOff ENUM('0', '1') DEFAULT '0',
 	cfgScanningCustomRowCol ENUM('0', '1', '2') DEFAULT '1',
 	cfgScanningAutoOnOff ENUM('0', '1') DEFAULT '0',
-	cfgScanningCancelScanOnOff ENUM('0', '1') DEFAULT '1',
+	cfgCancelScanOnOff ENUM('0', '1') DEFAULT '1',
 	cfgTimeScanning INT DEFAULT '1000',
 	cfgScanStartClick ENUM('0', '1') DEFAULT '0',
 	cfgMenuReadActive ENUM('0', '1') DEFAULT '1',
@@ -62,7 +62,7 @@ CREATE TABLE SuperUser (
 	cfgTimeLapseSelectOnOff ENUM('0', '1') DEFAULT '0',
 	cfgTimeLapseSelect INT DEFAULT '1500',
 	cfgTimeNoRepeatedClickOnOff ENUM('0', '1') DEFAULT '0',
-	cfgTimeNoRepeatedClick INT DEFAULT ‘300',
+	cfgTimeNoRepeatedClick INT DEFAULT '300',
 	UserValidated ENUM('0', '1') DEFAULT '0'
 ) ENGINE=INNODB;
 
@@ -831,7 +831,7 @@ CREATE TABLE ExpressionsES (
 	exprid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	exprtext VARCHAR(100),
 	negatiu ENUM('0', '1'),
-	negatiu ENUM('0', '1'),
+	front ENUM('0', '1'),
 	INDEX ExprId (exprid),
 	FOREIGN KEY (exprid) REFERENCES Pictograms (pictoid) ON DELETE CASCADE
 ) ENGINE=INNODB;

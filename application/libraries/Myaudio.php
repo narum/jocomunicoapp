@@ -759,8 +759,8 @@ class Myaudio {
                 $msAudioFormat = new COM('Speech.SpAudioFormat');
 
                 // Path al fitxer on guardarem les veus
-                $wavfile = "C:\xampp\htdocs\mp3\\".$filename.".mp3";
-
+                $wavfile = "C:\\xampp\htdocs\mp3\\".$filename.".mp3";
+                
                 // hem de triar la veu que vol l'usuari (trobada anteriorment)
                 $msVoice->Voice = $chosenVoice;
 
@@ -775,7 +775,7 @@ class Myaudio {
                 // obrim el fitxer on escriurem l'àudio en format CreateWrite
                 $msFileStream->Open($wavfile, 3, 0);
                 $msVoice->AudioOutputStream = $msFileStream;
-            
+                            
                 // es diu la frase de manera asíncrona
                 $msVoice->Speak($fraseconvertida, 1);
                 // esperem a que acabi, ja que si no talla la frase
