@@ -492,6 +492,7 @@ angular.module('controllers', [])
     $scope.viewActived=false;
     $scope.loadingEdit=false;
     $scope.loadingOldPass=false;
+    $scope.local=false;
     $scope.interfaceLanguageBarEnable=true;
     $scope.expansionLanguageEnable=true;
     $scope.userDataForm=[];
@@ -502,7 +503,7 @@ angular.module('controllers', [])
         $scope.interfaceLanguages=[];
         $scope.expansionLanguages=[];
         $scope.numPictosBarPred=['2','3','4','5','6','7','8','9','10'];
-        Resources.main.get({'IdSu':$rootScope.sUserId}, {'funct': "getConfig"}).$promise
+        return Resources.main.get({'IdSu':$rootScope.sUserId}, {'funct': "getConfig"}).$promise
         .then(function (results) {
             window.localStorage.removeItem('userData');
             window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
@@ -521,6 +522,7 @@ angular.module('controllers', [])
             $scope.userData.cfgTimeNoRepeatedClick=parseInt(results.userConfig.cfgTimeNoRepeatedClick, 10);
             $scope.userData.cfgTimeClick=parseInt(results.userConfig.cfgTimeClick, 10);
             $scope.userData.cfgTimeScanning=parseInt(results.userConfig.cfgTimeScanning, 10);
+            $scope.userData.cfgVoiceOfflineRate=parseInt(results.userConfig.cfgVoiceOfflineRate, 10);
 
             //change string (0,1) to boolean (true,false)
             $scope.userData.cfgExpansionOnOff = ($scope.userData.cfgExpansionOnOff === "1");
@@ -536,7 +538,9 @@ angular.module('controllers', [])
             $scope.userData.cfgScanningCancelScanOnOff = ($scope.userData.cfgScanningCancelScanOnOff === "1");
             $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
             $scope.userData.cfgHistOnOff = ($scope.userData.cfgHistOnOff === "1");
-            
+            $scope.userData.cfgInterfaceVoiceOnOff = ($scope.userData.cfgInterfaceVoiceOnOff === "1");
+            $scope.userData.cfgInterfaceVoiceMascFem = ($scope.userData.cfgInterfaceVoiceMascFem === "masc");
+
             var count=results.users[0].ID_ULanguage;
             var numberOfInterfaceLanguages=0;
             angular.forEach(results.users, function (value) {
@@ -546,9 +550,9 @@ angular.module('controllers', [])
                     numberOfInterfaceLanguages++;
                 }
                 $scope.expansionLanguages.push({idInterfaceLanguage: numberOfInterfaceLanguages,name: results.languages[value.cfgExpansionLanguage-1].languageName, user: value.ID_User});
-                
+
             });
-            
+
             //Delete name and surnames input text box
             delete $scope.userDataForm.realName;
             delete $scope.userDataForm.surNames;
@@ -663,6 +667,26 @@ angular.module('controllers', [])
     $scope.changeRadioEstate = function(value, data){
             Resources.main.save({'IdSu':$rootScope.sUserId, 'data':data, 'value':value}, {'funct': "changeCfgBool"}).$promise
     }
+    $scope.changeCfgVoices = function(value, data){
+            Resources.main.save({'IdU':$rootScope.userId, 'data':data, 'value':value}, {'funct': "changeCfgVoices"}).$promise
+    }
+    
+    $scope.changeMascFem = function(bool, data){
+        if (bool){
+            Resources.main.save({'IdU':$rootScope.userId, 'data':data, 'value':'masc'}, {'funct': "changeCfgVoices"}).$promise
+        }else{
+            Resources.main.save({'IdU':$rootScope.userId, 'data':data, 'value':'fem'}, {'funct': "changeCfgVoices"}).$promise
+        }
+    }
+    
+    $scope.changeOnOffUser = function(bool, data){
+        if (bool){
+            Resources.main.save({'IdU':$rootScope.userId, 'data':data, 'value':'1'}, {'funct': "changeCfgVoices"}).$promise
+        }else{
+            Resources.main.save({'IdU':$rootScope.userId, 'data':data, 'value':'0'}, {'funct': "changeCfgVoices"}).$promise
+        }
+    }
+    
     $scope.checkNumberTime = function(value, data){
             if (angular.isNumber(value)){
                 $scope.changeRadioEstate(value, data);
@@ -702,14 +726,52 @@ angular.module('controllers', [])
             $scope.addlanguageId=idLanguage;
         }
         $scope.languageEnable=true;
+    };
+    
+    //Audio Configuration (Myaudio library access)
+    $scope.getAudioLists = function(){
+        Resources.main.get({'funct': "AppLocalOrServer"}).$promise
+        .then(function (results) {    
+            $scope.interfaceVoicesList=results.interfaceVoices[0];
+            $scope.expansionVoicesList=results.expansionVoices[0];
+            if (results.appRunning=='local'){
+                $scope.local=true;
+                $scope.interfaceVoicesListOffline=results.interfaceVoicesOffline[0];
+                $scope.expansionVoicesOffline=results.expansionVoicesOffline[0];
+            }
+        });
+    }
+    $scope.getAudioLists();
+    
+    $scope.expansionVoiceChange = function(data){
+        angular.forEach($scope.expansionVoicesList, function (value) {
+            if(value.voiceName===data){
+                if(value.voiceType==='offline'){
+                    $scope.changeCfgVoices(value.voiceName, 'ExpansionVoiceOnline');
+                    $scope.changeCfgVoices('offline', 'ExpansionVoiceOnlineType');
+                }else if(value.voiceType==='online'){
+                    $scope.changeCfgVoices(value.ID_Voice, 'ExpansionVoiceOnline');
+                    $scope.changeCfgVoices('online', 'ExpansionVoiceOnlineType');
+                }
+            }
+        });
+    }
+    
+    $scope.mascFemVoice = function(data){
+        if(data===$scope.interfaceVoicesList[0].voiceName){
+            $scope.changeMascFem(false,'InterfaceVoiceMascFem');
+        }else if(data===$scope.interfaceVoicesList[1].voiceName){
+            $scope.changeMascFem(true,'InterfaceVoiceMascFem');
+        }
     }
     
     $scope.exit = function(){
-        $scope.getConfig();
-        $timeout(function(){
+        $scope.viewActived=false;
+        $scope.getConfig()
+        .then(function(){
             $location.path('/');
         });
-    }
+    };
  })
 
         .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {

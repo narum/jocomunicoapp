@@ -480,7 +480,7 @@
                                             ng-options="f for f in numPictosBarPred"
                                             ng-model="userData.cfgPredBarNumPred"
                                             ng-disabled="!userData.cfgPredOnOff"
-                                            ng-click="changeRadioEstate(userData.cfgPredBarNumPred, 'PredBarNumPred')">
+                                            ng-change="changeRadioEstate(userData.cfgPredBarNumPred, 'PredBarNumPred')">
                                     </select>
                                 </div>
                                 <div class="col-xs-1">&nbsp;</div>
@@ -544,7 +544,6 @@
                                                     ng-disabled="!(userData.cfgUsageMouseOneCTwoC=='1')"
                                                     ng-model="userData.cfgTimeClick"
                                                     ng-change="checkNumberTime(userData.cfgTimeClick, 'TimeClick')"
-                                                    value="{{userData.cfgTimeClick}}"
                                                     /> ms
                                                 </div>
                                             </div>
@@ -559,7 +558,6 @@
                                                     ng-disabled="!userData.cfgTimeLapseSelectOnOff"
                                                     ng-model="userData.cfgTimeLapseSelect"
                                                     ng-change="checkNumberTime(userData.cfgTimeLapseSelect, 'TimeLapseSelect')"
-                                                    value="{{userData.cfgTimeLapseSelect}}"
                                                     /> ms
                                                 </div>
                                             </div>
@@ -578,7 +576,6 @@
                                                     ng-disabled="!userData.cfgTimeNoRepeatedClickOnOff"
                                                     ng-model="userData.cfgTimeNoRepeatedClick"
                                                     ng-change="checkNumberTime(userData.cfgTimeNoRepeatedClick, 'TimeNoRepeatedClick')"
-                                                    value="{{userData.cfgTimeNoRepeatedClick}}"
                                                     /> ms
                                                 </div>
                                             </div>
@@ -635,7 +632,6 @@
                                                     ng-disabled="!userData.cfgScanningAutoOnOff"
                                                     ng-model="userData.cfgTimeScanning"
                                                     ng-change="checkNumberTime(userData.cfgTimeScanning, 'TimeScanning')"
-                                                    value="{{userData.cfgTimeScanning}}"
                                                     /> ms
                                                 </div>
                                             </div>
@@ -684,6 +680,59 @@
                                 </div>
                             </div>
                         </div>
+<!--Feedback Voice-->                            
+                        <div class="row menuBar">
+                            <div class="row headerBar" ng-class="{disabledBar:!userData.cfgInterfaceVoiceOnOff}">
+                                <div class="col-xs-6">
+                                    <div class="col-xs-2 infoIconBox">
+                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
+                                               uib-popover="{{content.popFeedbackVoice}}">
+                                    </div>
+                                    <div class="col-xs-10 buttonBar" ng-click="contentBar10=!contentBar10">{{content.feedbackVoiceTitleBar}}</div>
+                                </div>
+                                <div class="col-xs-4 buttonBar" ng-click="contentBar10=!contentBar10">&nbsp;</div>
+                                <div class="col-xs-1">
+                                    <input type="checkbox" id="switch12" class="switch" ng-model="userData.cfgInterfaceVoiceOnOff" ng-click="changeOnOffUser(userData.cfgInterfaceVoiceOnOff, 'InterfaceVoiceOnOff')" ng-show="false"/>
+                                    <label for="switch12">&nbsp;</label>
+                                </div>
+                                <div class="col-xs-1 buttonBar" ng-click="contentBar10=!contentBar10">&nbsp;
+                                    <!--<img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>-->
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="col-xs-12" uib-collapse="!contentBar10 || !userData.cfgInterfaceVoiceOnOff">
+                            <div class="row contentBar Voices">
+                                <div class="row">
+                                    <div class="col-xs-2"></div>
+                                    <div class="col-xs-1"><input type="image" class="img-audioButton" ng-src="/img/srcWeb/UserConfig/audioPlay.png" ng-click=""></div>
+                                    <div class="col-xs-5">
+                                        <select class="boxEdit dropdown-arrow"
+                                                ng-options="voice.voiceName as voice.voiceName for voice in interfaceVoicesList"
+                                                ng-model="userData.cfgInterfaceVoiceOnline"
+                                                ng-change="changeCfgVoices(userData.cfgInterfaceVoiceOnline, 'InterfaceVoiceOnline');mascFemVoice(userData.cfgInterfaceVoiceOnline)">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-4">
+                                        <select class="boxEdit dropdown-arrow"
+                                                ng-options="voice.voiceName as voice.voiceName for voice in interfaceVoicesListOffline"
+                                                ng-model="userData.cfgInterfaceVoiceOffline"
+                                                ng-show="local"
+                                                ng-change="changeCfgVoices(userData.cfgInterfaceVoiceOffline, 'InterfaceVoiceOffline')">
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-2">
+                                        <input type="checkbox" id="switch11" class="switch" ng-model="userData.cfgInterfaceVoiceMascFem" ng-click="changeMascFem(userData.cfgInterfaceVoiceMascFem, 'InterfaceVoiceMascFem')" ng-show="false"/>
+                                        <label for="switch11" ng-show="local">&nbsp;</label>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
 <!--Your Voice-->                            
                         <div class="row menuBar">
                             <div class="row headerBar">
@@ -692,30 +741,7 @@
                                         <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popYourVoice}}">
                                     </div>
-                                    <div class="col-xs-10 buttonBar" ng-click="contentBar10=!contentBar10">{{content.yourVoiceTitleBar}}</div>
-                                </div>
-                                <div class="col-xs-5 buttonBar" ng-click="contentBar10=!contentBar10">&nbsp;</div>
-                                <div class="col-xs-1 buttonBar" ng-click="contentBar10=!contentBar10">&nbsp;
-                                    <!--<img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>-->
-                                </div>
-                            </div>
-                            <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar10">
-                            <div class="row contentBar">
-                                tururu
-                            </div>
-                            </div>
-                            </div>
-                        </div>
-<!--Feedback Voice-->                            
-                        <div class="row menuBar">
-                            <div class="row headerBar">
-                                <div class="col-xs-6">
-                                    <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
-                                               uib-popover="{{content.popFeedbackVoice}}">
-                                    </div>
-                                    <div class="col-xs-10 buttonBar" ng-click="contentBar11=!contentBar11">{{content.feedbackVoiceTitleBar}}</div>
+                                    <div class="col-xs-10 buttonBar" ng-click="contentBar11=!contentBar11">{{content.yourVoiceTitleBar}}</div>
                                 </div>
                                 <div class="col-xs-5 buttonBar" ng-click="contentBar11=!contentBar11">&nbsp;</div>
                                 <div class="col-xs-1 buttonBar" ng-click="contentBar11=!contentBar11">&nbsp;
@@ -724,8 +750,38 @@
                             </div>
                             <div class="row">
                             <div class="col-xs-12" uib-collapse="!contentBar11">
-                            <div class="row contentBar">
-                                tururu
+                            <div class="row contentBar Voices">
+                                <div class="row">
+                                    <div class="col-xs-1"><input type="image" class="img-audioButton" ng-src="/img/srcWeb/UserConfig/audioPlay.png" ng-click=""></div>
+                                    <div class="col-xs-4">
+                                        <select class="boxEdit dropdown-arrow"
+                                                ng-options="voice.voiceName as voice.voiceName for voice in expansionVoicesList"
+                                                ng-model="userData.cfgExpansionVoiceOnline"
+                                                ng-change="expansionVoiceChange(userData.cfgExpansionVoiceOnline)">
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-4">
+                                        <select class="boxEdit dropdown-arrow"
+                                                ng-options="voice.voiceName as voice.voiceName for voice in expansionVoicesOffline"
+                                                ng-model="userData.cfgExpansionVoiceOffline"
+                                                ng-show="local"
+                                                ng-change="changeCfgVoices(userData.cfgExpansionVoiceOffline, 'ExpansionVoiceOffline')">
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-2">
+                                        <div class="backgroundGreyTime">
+                                            <input
+                                            class="inputTimeConfig"
+                                            type="number"
+                                            ng-show="local"
+                                            ng-model="userData.cfgVoiceOfflineRate"
+                                            ng-change="changeCfgVoices(userData.cfgVoiceOfflineRate, 'VoiceOfflineRate')"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             </div>
                             </div>

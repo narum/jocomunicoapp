@@ -479,3 +479,32 @@ input[type=number] {
    border: 0.5vh solid #aeff00;
    margin-bottom: 0px;
 }
+.voices .boxEdit{
+    background-color: white;
+    margin-left: 0;
+    font-size: 2vh;
+}
+.voices .dropdown-arrow{
+    width: 100%;
+}
+.voices input.switch:empty ~ label:before,
+.voices input.switch:empty ~ label:after
+{
+    content: 'Masc Fem';
+    width: 10vh;
+    background-color: #faa258;
+}
+.voices input.switch:empty ~ label:after
+{
+    content:'===';
+    width: 2.6em;
+    background-color: #666666;
+}
+.voices input.switch:checked ~ label:after
+{
+    margin-left: 3em;
+}
+.img-audioButton{
+    height: 5vh;
+    width: auto;
+}

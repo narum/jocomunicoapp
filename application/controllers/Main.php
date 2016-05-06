@@ -8,6 +8,7 @@ class Main extends REST_Controller {
     {
         parent::__construct();
         $this->load->model('main_model');
+        $this->load->library('Myaudio');
     }
         
     public function content_get()
@@ -105,6 +106,16 @@ class Main extends REST_Controller {
         //respuesta
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
+    
+    public function changeCfgVoices_post()
+    {
+        $ID_U = $this->query('IdU');
+        $data = ['cfg'.$this->query('data') => $this->query('value')]; // convertimos el string json del post en array.
+
+        $response = $this->main_model->changeData('User', 'ID_User', $ID_U, $data);
+        //respuesta
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
   
     public function addUser_post()
     {
@@ -117,6 +128,33 @@ class Main extends REST_Controller {
 
         $response = $this->main_model->saveData('User', $data);
         //respuesta
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
+    
+    //Myaudio library Access
+    public function AppLocalOrServer_get(){
+        $audio = new Myaudio();
+        
+        $interfaceVoices = $audio->listInterfaceVoices(true);
+        $expansionVoices = $audio->listExpansionVoices(true);
+        
+        $appRunning = $audio->AppLocalOrServer();
+        if ($appRunning == 'local'){
+            $interfaceVoicesOffline = $audio->listInterfaceVoices(false);
+            $expansionVoicesOffline = $audio->listExpansionVoices(false);
+        }else{
+            $interfaceVoicesOffline = 'App on server';
+            $expansionVoicesOffline = 'App on server';
+        }
+        
+        $response = [
+            'interfaceVoices'=>$interfaceVoices,
+            'interfaceVoicesOffline'=>$interfaceVoicesOffline,
+            'expansionVoices'=>$expansionVoices,
+            'expansionVoicesOffline'=>$expansionVoicesOffline,
+            'appRunning'=>$appRunning
+            ];
+        
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
 }
