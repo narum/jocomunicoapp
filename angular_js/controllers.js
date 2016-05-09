@@ -1306,8 +1306,8 @@ angular.module('controllers', [])
                 {
                     $scope.recommenderArray = response.recommenderArray;
                 }).error(function (error) {
-                    alert(error);
-                    alert("error on predictor update building");
+                    //alert(error);
+                    //alert("error on predictor update building");
                 });
             };
 
@@ -1802,7 +1802,7 @@ angular.module('controllers', [])
                         {
                             $scope.dataAudio = response.data;
 
-                            alert($scope.dataAudio);
+                            //alert($scope.dataAudio);
                             $scope.sound = ngAudio.load($scope.baseurl + $scope.dataAudio);
                             $scope.sound.play();
 
@@ -1929,7 +1929,7 @@ angular.module('controllers', [])
                 {
                     $scope.idGroupBoard = response.idGroupBoard;
                     var URL = $scope.baseurl + "PanelGroup/getPanelGroupInfo";
-                    alert($scope.idGroupBoard);
+                    //alert($scope.idGroupBoard);
                     var postdata = {idGroupBoard: $scope.idGroupBoard};
                     $http.post(URL, postdata).
                             success(function (response)
@@ -1938,7 +1938,7 @@ angular.module('controllers', [])
                                 $scope.CreateBoardData = {CreateBoardName: '', height: response.defHeight.toString(), width: response.defWidth.toString(), idGroupBoard: response.ID_GB};
                                 $scope.CreateBoardData.height = $scope.range(20)[response.defHeight - 1].valueOf();
                                 $scope.CreateBoardData.width = $scope.range(20)[response.defWidth - 1].valueOf();
-                                alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
+                                //alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
                                     scope: $scope,
@@ -2123,7 +2123,7 @@ angular.module('controllers', [])
                 $scope.getPreviewImg = function () {
                     var type = document.getElementById('file-input').files[0].type;
                     if (!(type == "image/gif" || type == "image/jpeg" || type == "image/png")) {
-                        alert("Extension incorrecta");
+                        //alert("Extension incorrecta");
                         return false;
                     }
                     $scope.myFileProvisional = document.getElementById('file-input').files[0];
@@ -2165,7 +2165,7 @@ angular.module('controllers', [])
                                 $scope.savedata();
                             })
                             .error(function (response) {
-                                alert(response.errorText);
+                                //alert(response.errorText);
                             });
                 };
 
