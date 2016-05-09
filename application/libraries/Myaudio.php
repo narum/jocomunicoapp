@@ -732,13 +732,13 @@ class Myaudio {
             // Recollim els objectes de les llibreries SAPI que necessitem
             $msVoice = new COM('SAPI.SpVoice');
 
-            $numvoicesSAPI = $msSAPIVoice->GetVoices()->Count;
+            $numvoicesSAPI = $msVoice->GetVoices()->Count;
 
             // per cada veu miram si la descripció coincideix amb el nom de la veu
             // seleccionada per l'usuari
             for ($i=0; $i<$numvoicesSAPI; $i++) {
-                if ($voice == $msSAPIVoice->GetVoices()->Item($i)->GetDescription) {
-                    $chosenVoice = $msSAPIVoice->GetVoices()->Item($i);
+                if ($voice == $msVoice->GetVoices()->Item($i)->GetDescription) {
+                    $chosenVoice = $msVoice->GetVoices()->Item($i);
                     $isSAPIVoice = true;
                 }
             }
@@ -759,10 +759,11 @@ class Myaudio {
         else {
 
             try {
+
                 $msFileStream = null;
                 $msAudioFormat = null;
                 
-                if ($isSAPIVoice) {
+                if (!$isSAPIVoice) {
                     $msFileStream = new COM('Speech.SpFileStream');
                     $msAudioFormat = new COM('Speech.SpAudioFormat');
                 }
@@ -773,6 +774,7 @@ class Myaudio {
 
                 // Path al fitxer on guardarem les veus
                 $wavfile = "C:\\xampp\htdocs\mp3\\".$filename.".mp3";
+                echo $wavfile;
                 
                 // hem de triar la veu que vol l'usuari (trobada anteriorment)
                 $msVoice->Voice = $chosenVoice;
