@@ -533,7 +533,7 @@ angular.module('controllers', [])
                             $scope.userData.cfgTimeNoRepeatedClickOnOff = ($scope.userData.cfgTimeNoRepeatedClickOnOff === "1");
                             $scope.userData.cfgScanningOnOff = ($scope.userData.cfgScanningOnOff === "1");
                             $scope.userData.cfgScanningAutoOnOff = ($scope.userData.cfgScanningAutoOnOff === "1");
-                            $scope.userData.cfgScanningCancelScanOnOff = ($scope.userData.cfgScanningCancelScanOnOff === "1");
+                            $scope.userData.cfgCancelScanOnOff = ($scope.userData.cfgCancelScanOnOff === "1");
                             $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
                             $scope.userData.cfgHistOnOff = ($scope.userData.cfgHistOnOff === "1");
 
@@ -1073,7 +1073,7 @@ angular.module('controllers', [])
                         $scope.feedback(0);
                     } else {
                         if ($scope.currentScanBlock === 1) {
-                            if ($scope.timerScan == 1) {
+                            if ($scope.timerScan == 1 && $scope.cfgCancelScanOnOff) {
                                 $scope.isScanningCancel = true;
                             }
                             $scope.currentScanBlock = 2;
@@ -1083,7 +1083,7 @@ angular.module('controllers', [])
                                 //Get the next block to scan
                                 if ($scope.cfgPredOnOff === '1') {
                                     $scope.isScanning = "prediction";
-                                } else if (userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive > 1) {
+                                } else if ($scope.cfgMenuDeleteLastActive + $scope.cfgMenuDeleteAllActive + $scope.cfgMenuReadActive > 1) {
                                     $scope.isScanning = "sentence";
                                 } else {
                                     $scope.isScanning = "board";
@@ -1125,7 +1125,7 @@ angular.module('controllers', [])
                                     $scope.selectScannedCell();
                                 }//Except if we are in custom scan, in which can exist another block
                                 else {
-                                    if ($scope.timerScan == 1)
+                                    if ($scope.timerScan == 1 && $scope.cfgCancelScanOnOff)
                                         $scope.isScanningCancel = true;
                                     var url = $scope.baseurl + "Board/getScannedCells";
                                     var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
@@ -1172,6 +1172,9 @@ angular.module('controllers', [])
                     $scope.clickOnCell(response.info);
                     $scope.InitScan();
                 });
+            };
+            $scope.isPictoActive = function (picto) {
+                return (picto.activeCell == 1 || (picto.activeCell == 0 && $scope.inEdit));
             };
             //We have to react to the ng-click events? In edit mode we have to react to some event, in a diferent way
             $scope.isClickEnable = function () {
@@ -1225,7 +1228,7 @@ angular.module('controllers', [])
                 $scope.cfgSentenceBarUpDown = userConfig.cfgSentenceBarUpDown;
                 $scope.pictoBarWidth = 12 - $scope.cfgMenuReadActive - $scope.cfgMenuDeleteLastActive - $scope.cfgMenuDeleteAllActive;
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
-                $scope.longclick = userConfig.cfgUsageMouseOneCTwoC == 1 ? true : false;
+                $scope.longclick = userConfig.cfgScanningAutoOnOff == 0 ? true : false;
                 $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
                 $scope.StatusEnableEditViewTrash = true;
                 $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff == 1 ? true : false;
@@ -1234,7 +1237,23 @@ angular.module('controllers', [])
                 $scope.cfgTimeNoRepeatedClick = userConfig.cfgTimeNoRepeatedClick;
                 $scope.TimeMultiClic = 0;
                 $scope.cfgScanStartClick = userConfig.cfgScanStartClick;
+                $scope.cfgCancelScanOnOff = cfgCancelScanOnOff == 1 ? true : false;
                 $scope.cfgTextInCell = userConfig.cfgTextInCell == 1 ? true : false;
+                if (userConfig.cfgUsageMouseOneCTwoC == 0){
+                    $scope.longclick = false;
+                    $scope.timerScan = false;
+                    $scope.cfgScanStartClick = false;
+                } else if (userConfig.cfgUsageMouseOneCTwoC == 1){
+                    $scope.cfgTimeOverOnOff = false;
+                    $scope.cfgTimeNoRepeatedClickOnOff = false;
+                } else if (userConfig.cfgUsageMouseOneCTwoC == 2){
+                    $scope.longclick = false;
+                    $scope.timerScan = false;
+                    $scope.cfgTimeOverOnOff = false;
+                    $scope.cfgTimeNoRepeatedClickOnOff = false;
+                    $scope.cfgScanStartClick = false;
+                    $scope.cfgCancelScanOnOff = false;
+                }
 
                 $scope.getPred();
                 //If there are some request to edit from another controller, the edit panel it's loaded
