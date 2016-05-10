@@ -4,9 +4,9 @@
     <div class="row" ng-controller="menuCtrl" ng-include="baseurl + '/angular_templates/MenuView.html'">   
     </div>
     <div class="row folderContainer">
-        <div class="col-xs-4 imgRounded panelGroupContainer" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
+        <div class="col-xs-5 imgRounded panelGroupContainer" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
             <div class="topBar"></div>
-            <div class="col-xs-10 col-xs-offset-1 scrollMenuPanels" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:me" is-bar-shown="true">
+            <div class="col-xs-offset-1 scrollMenuPanels" ng-class="isScroll?'col-xs-10':'col-xs-11'" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:me" is-bar-shown="isScroll">
                 <div class="col-xs-12 addPanel" ng-click="newPanellGroup()">
                     <img src="{{baseurl}}/img/srcWeb/afegir.png" width="100%" height="100%"/>
                 </div>
@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-4 imgRounded historicContainer" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-09.png)">
+        <div class="col-xs-5 imgRounded historicContainer" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-09.png)">
 
         </div>
     </div>

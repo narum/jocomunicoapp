@@ -270,8 +270,8 @@ class BoardInterface extends CI_Model {
         $output = array();
         $data = array(
             'imgCell' => NULL,
-            'activeCell' => 1,
-            'textInCellTextOnOff' => 1,
+            'activeCell' => '1',
+            'textInCellTextOnOff' => '1',
             'textInCell' => NULL,
             'isFixedInGroupBoards' => NULL,
             'ID_CFunction' => NULL,

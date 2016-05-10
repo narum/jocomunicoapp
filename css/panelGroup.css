@@ -5,7 +5,7 @@
     height: 94%;
 }
 .panelGroupContainer{
-    margin-left: 14vw;
+    margin-left: 5vw;
     height: 70%;
 }
 .historicContainer{
@@ -27,6 +27,9 @@
     font-size: 25px;
     transform: translate(0%, 50%);
     position: relative;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .editaPanel{
     border-top-right-radius: 10px;
