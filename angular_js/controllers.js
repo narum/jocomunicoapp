@@ -1184,9 +1184,10 @@ angular.module('controllers', [])
             $scope.config = function ()
             {
                 //-----------Iniciacion-----------
-
-                var url = $scope.baseurl + "Board/loadCFG";
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
+                
+                var url = $scope.baseurl + "Board/loadCFG";
+                
                 var postdata = {lusuid: userConfig.ID_ULanguage};
                 //MODIF: borrar
                 $http.post(url, postdata);
@@ -1221,6 +1222,7 @@ angular.module('controllers', [])
                         $scope.userViewWidth = 10;
                     }
                 }
+                alert("id:"+ userConfig.ID_SU);
                 // Sentece bar configuration
                 $scope.cfgMenuReadActive = userConfig.cfgMenuReadActive;
                 $scope.cfgMenuDeleteLastActive = userConfig.cfgMenuDeleteLastActive;
@@ -1237,7 +1239,7 @@ angular.module('controllers', [])
                 $scope.cfgTimeNoRepeatedClick = userConfig.cfgTimeNoRepeatedClick;
                 $scope.TimeMultiClic = 0;
                 $scope.cfgScanStartClick = userConfig.cfgScanStartClick;
-                $scope.cfgCancelScanOnOff = cfgCancelScanOnOff == 1 ? true : false;
+                $scope.cfgCancelScanOnOff = userConfig.cfgCancelScanOnOff == 1 ? true : false;
                 $scope.cfgTextInCell = userConfig.cfgTextInCell == 1 ? true : false;
                 if (userConfig.cfgUsageMouseOneCTwoC == 0){
                     $scope.longclick = false;
@@ -1254,7 +1256,7 @@ angular.module('controllers', [])
                     $scope.cfgScanStartClick = false;
                     $scope.cfgCancelScanOnOff = false;
                 }
-
+                
                 $scope.getPred();
                 //If there are some request to edit from another controller, the edit panel it's loaded
                 if ($rootScope.editPanelInfo != null) {
@@ -1932,7 +1934,7 @@ angular.module('controllers', [])
                     });
 
                 }
-                ;
+                
             };
 
             /***************************************************

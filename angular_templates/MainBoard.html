@@ -62,7 +62,7 @@
 
                         <div ng-if="picto.imgFunct && !picto.imgPicto && !picto.imgCell && isPictoActive(picto)" class="contentCell">  
                             <div ng-style="cfgTextInCell ? {'height':'70%'}:{'height':'100%'}">
-                                <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
+                                <img src="{{baseurl}}img{{picto.imgFunct}}" class="imgResponsive"/>
                             </div>
                         </div>
 
