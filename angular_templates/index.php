@@ -1,6 +1,7 @@
 <html ng-app="app">
     <head>
         <title>JoComunico</title>
+        <link rel="icon" type="image/ico" href="img/icons/favicon.png">
         <base href="/"></base>
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>libraries/bootstrap.min.css">

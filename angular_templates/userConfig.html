@@ -25,7 +25,8 @@
     </div>
     <div class="row">
         <div class="col-xs-2 col-xs-offset-5 loadingGif" ng-show="!viewActived"><img class="img-responsive" src="/img/srcWeb/Login/loading.gif"/></div>
-        <div class="col-xs-8 col-xs-offset-2 scrollMenuUserConfig" id="scrollBar" ng-show="viewActived">
+        <div class="col-xs-9 col-xs-offset-2 scrollMenuUserConfig" ng-scrollbar rebuild-on="rebuild:me" rebuild-on-resize  ng-show="viewActived">
+            <div class="col-xs-11" >
             <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-12.png')">
                 <div class="col-xs-12">
                     <form name="userDataForm">
@@ -74,7 +75,7 @@
                                     </div>
         <!--collapsed contnet-->
                                     <div class="row">
-                                        <div class="col-xs-12" uib-collapse="!canEdit">
+                                        <div class="col-xs-12" uib-collapse="!canEdit" collapsed="rebuild()" expanded="rebuild()">
                                             <div class="row">
                                                 <div class="col-xs-8 col-xs-offset-4 verticalMarginTop FonsTurquesaClar" ng-class="{FonsTurquesaSucces: userData.cfgIsFem=='0'}">
                                                     <input type="radio" id="radioUserConfig1" class="" ng-model="userData.cfgIsFem" value="0" ng-click="changeRadioEstate(userData.cfgIsFem, 'IsFem')" ng-show="false">
@@ -119,7 +120,7 @@
                                                             </div>
                                                             <!--<div class="row" uib-collapse="!(oldPassState=='true')"><div class="col-xs-12"><hr/></div></div>-->
                                                             <div class="row">
-                                                                <div id="DadesUsuariLeft" class="col-xs-7"  uib-collapse="!(oldPassState=='true')">
+                                                                <div id="DadesUsuariLeft" class="col-xs-7"  uib-collapse="!(oldPassState=='true')" collapsed="rebuild()" expanded="rebuild()">
                                                                     <div class="row">{{content.newPass1}}
                                                                     <input type="image" class="loadingGifSm pull-right" ng-show="newPassLengthOk=='false'" ng-src="/img/icons/infoRed.png" popover-placement="top-left" popover-trigger="focus"
                                                                         ng-app=""uib-popover="{{content.popNewPassMinLength}}">
@@ -129,7 +130,7 @@
                                                                         ng-app=""uib-popover="{{content.popNewPassEqual}}">
                                                                     </div>
                                                                 </div>
-                                                                <div id="DadesUsuariRight" class="col-xs-5"  uib-collapse="!(oldPassState=='true')">
+                                                                <div id="DadesUsuariRight" class="col-xs-5"  uib-collapse="!(oldPassState=='true')" collapsed="rebuild()" expanded="rebuild()">
                                                                     <div class="row">
                                                                         <input
                                                                             class="inputDadesUsuari"
@@ -197,7 +198,7 @@
                                     </div>
         <!--collapsed contnet-->
                                     <div class="row">
-                                        <div class="col-xs-12" uib-collapse="!canEdit">
+                                        <div class="col-xs-12" uib-collapse="!canEdit" collapsed="rebuild()" expanded="rebuild()">
                                             <div class="row">
                                                 <div class="col-xs-9 col-xs-offset-3 verticalMarginTop FonsTurquesaClar" ng-class="{FonsTurquesaSucces: userData.cfgIsFem=='1'}">
                                                     <input type="radio" id="radioUserConfig2" class="" ng-model="userData.cfgIsFem" value="1" ng-click="changeRadioEstate(userData.cfgIsFem, 'IsFem')" ng-show="false">
@@ -226,6 +227,7 @@
                     </form>
                 </div>
             </div><br/>
+            
             <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-08.png')">
                 <div class="col-xs-12">
                     <div id="header" class="row"><div class="col-xs-10 headerTitle">{{content.titleBar2}}</div></div>
@@ -246,7 +248,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar1">
+                            <div class="col-xs-12" uib-collapse="!contentBar1" collapsed="rebuild()" expanded="rebuild()">
                             <div class="row contentBar">
                                 <div class="col-xs-3">Selecciona l'idioma:</div>
                                 <div class="col-xs-5">
@@ -322,7 +324,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar2 || !userData.cfgExpansionOnOff">
+                            <div class="col-xs-12" uib-collapse="!contentBar2 || !userData.cfgExpansionOnOff" collapsed="rebuild()" expanded="rebuild()">
                             <div class="row contentBar">
                                 <div class="col-xs-3">Selecciona l'idioma:</div>
                                 <div class="col-xs-5">
@@ -359,7 +361,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar3">
+                            <div class="col-xs-12" uib-collapse="!contentBar3" collapsed="rebuild()" expanded="rebuild()">
                             <div class="row contentBar">
                                 <div class="row">
                                     <div class="col-xs-2">
@@ -449,7 +451,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar5">
+                            <div class="col-xs-12" uib-collapse="!contentBar5" collapsed="rebuild()" expanded="rebuild()">
                             <div class="row contentBar">
                                 <div class="col-xs-3"></div>
                                 <div class="col-xs-4">
@@ -515,7 +517,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar7">
+                            <div class="col-xs-12" uib-collapse="!contentBar7" collapsed="rebuild()" expanded="rebuild()">
                             <div class="row contentBar">
                                 <div class="row">
                                     <div class="col-xs-2">
@@ -592,7 +594,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar8 || !userData.cfgScanningOnOff">
+                            <div class="col-xs-12" uib-collapse="!contentBar8 || !userData.cfgScanningOnOff" collapsed="rebuild()" expanded="rebuild()">
                             <div class="row contentBar">
                                 <div class="row">
                                     <div class="col-xs-2">
@@ -704,7 +706,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar10 || !userData.cfgInterfaceVoiceOnOff">
+                            <div class="col-xs-12" uib-collapse="!contentBar10 || !userData.cfgInterfaceVoiceOnOff" collapsed="rebuild()" expanded="rebuild()">
                             <div class="row contentBar Voices">
                                 <div class="row verticalMarginBottom">
                                     <div class="col-xs-3 verticalMarginVoice" ng-show="!local"></div>
@@ -753,7 +755,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar11">
+                            <div class="col-xs-12" uib-collapse="!contentBar11" collapsed="rebuild()" expanded="rebuild()">
                             <div class="row contentBar Voices">
                                 <div class="row verticalMarginBottom">
                                     <div class="col-xs-3 verticalMarginVoice" ng-show="!local"></div>
@@ -803,6 +805,7 @@
 
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     </div>
