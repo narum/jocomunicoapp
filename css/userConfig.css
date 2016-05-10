@@ -1,32 +1,11 @@
 .scrollMenuUserConfig{
     height: 80vh;
     margin-top: 7vh;
-    overflow-y: scroll;
+    overflow: hidden;
 }
-/*Scroll properties*/
-#scrollBar::-webkit-scrollbar{
-width:15px;
-background-color:none;
-} 
-#scrollBar::-webkit-scrollbar-thumb{
-/*background:-webkit-linear-gradient(0, #92dbe1Turquesa 40%, #78b3b8Turquesa Oscuro 100%);*/
-background-color: #92dbe1;/*Turquesa*/
-border-radius:10px;
-}
-#scrollBar::-webkit-scrollbar-thumb:hover{
-background:#78b3b8; /*Turquesa Oscuro*/
-}
-#scrollBar::-webkit-scrollbar-thumb:active{
-background-color:#92dbe1;/*Turquesa*/
-}
-/*#scrollBar::-webkit-scrollbar-track{
-border:1px gray solid;
-border-radius:10px;
--webkit-box-shadow:0 0 6px gray inset;
-}*/
+
 /*box User config*/
 #boxUserConfig{
-    margin-left:1vh;
     margin-right:1vh;
     border-radius: 15px;
 }
@@ -251,73 +230,6 @@ input[type="text"] {
     min-width: 20vw;
     max-width: 60vw;
 }
-
-/*this can be preferable to display:none which often disables it on mobile devices*/
-input.switch:empty
-{
-	margin-left: -999px;
-}
-input.switch:empty ~ label
-{
-    font-size: 1.9vh;
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    
-	position: relative;
-	float: left;
-	line-height: 3vh;
-	text-indent: 0.4em;
-	margin: 0 0;
-        margin-top:0.7vh;
-	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-input.switch:empty ~ label:before,
-input.switch:empty ~ label:after
-{
-	position: absolute;
-	display: block;
-	top: 0;
-	bottom: 0;
-	left: 0;
-        color: #4a4a4a;
-	content: 'ON OFF';
-	width: 7.8vh;
-	background-color: #cccccc;
-	border-radius: 0.2em;
-	/*box-shadow: inset 0 0.2em 0 rgba(0,0,0,0.3);*/
-	-webkit-transition: all 100ms ease-in;
-	transition: all 100ms ease-in;
-}
-input.switch:empty ~ label:after
-{
-    color: #717171;
-    content:'==';
-	width: 2.1em;
-	top: 0em;
-	bottom: 0em;
-	margin-left: 0em;
-        background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
-        background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-        background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-        background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-        background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-        background-color: #666666;
-	border-radius: 0.15em;
-	box-shadow: inset 0 -0.2em 0 rgba(0,0,0,0.2);
-}
-input.switch:checked ~ label:before
-{
-	background-color: #faa258;
-}
-
-input.switch:checked ~ label:after
-{
-	margin-left: 2em;
-}
 .menuBar{
     margin-bottom: 1vh;
 }
@@ -327,17 +239,6 @@ input.switch:checked ~ label:after
 }
 .disabledBar{
     background-color: #e2e2e2;
-}
-.infoIconBox{
-    text-align: center;
-    padding-top: 0.6vh;
-}
-.infoIconBox input:focus{
-    box-shadow: none;
-}
-.img-icon{
-    height: 3vh;
-    width: auto;
 }
 .buttonBar{
     cursor: pointer;
@@ -427,11 +328,6 @@ input.imageSwitch[type=checkbox]:empty + label:hover{
     font-size: 2.3vh;
     background-color: #fddfad;
     cursor: pointer;
-}
-.dropdown-arrow{
-    height: 3vh;
-    width: 7vh;
-    background-size: 3vh 3vh;
 }
 /*Input time propertis*/
 .inputTimeConfig{

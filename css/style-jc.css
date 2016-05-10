@@ -80,7 +80,7 @@
 }
 
 #searchView{
-    height:50%;
+    height:48%;
     margin-right: 2%;
 }
 #searchFolder{
@@ -88,7 +88,7 @@
 }
 
 #trashView{
-    height:42%;
+    height:45%;
     margin-bottom: 2vh;
     margin-top: 0.5vh;
     margin-right: 3%;
@@ -353,4 +353,8 @@
     background: url("/img/srcWeb/Patterns1-08.png");
     z-index: 4;
     border-radius: 15px;
+}
+.phraseText{
+    bottom:0; 
+    position:absolute;
 }

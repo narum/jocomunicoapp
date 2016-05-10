@@ -1116,7 +1116,7 @@ angular.module('controllers', [])
                         $scope.feedback(0);
                     } else {
                         if ($scope.currentScanBlock === 1) {
-                            if ($scope.timerScan == 1) {
+                            if ($scope.timerScan == 1 && $scope.cfgCancelScanOnOff) {
                                 $scope.isScanningCancel = true;
                             }
                             $scope.currentScanBlock = 2;
@@ -1126,7 +1126,7 @@ angular.module('controllers', [])
                                 //Get the next block to scan
                                 if ($scope.cfgPredOnOff === '1') {
                                     $scope.isScanning = "prediction";
-                                } else if (userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive > 1) {
+                                } else if ($scope.cfgMenuDeleteLastActive + $scope.cfgMenuDeleteAllActive + $scope.cfgMenuReadActive > 1) {
                                     $scope.isScanning = "sentence";
                                 } else {
                                     $scope.isScanning = "board";
@@ -1168,7 +1168,7 @@ angular.module('controllers', [])
                                     $scope.selectScannedCell();
                                 }//Except if we are in custom scan, in which can exist another block
                                 else {
-                                    if ($scope.timerScan == 1)
+                                    if ($scope.timerScan == 1 && $scope.cfgCancelScanOnOff)
                                         $scope.isScanningCancel = true;
                                     var url = $scope.baseurl + "Board/getScannedCells";
                                     var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
@@ -1216,6 +1216,9 @@ angular.module('controllers', [])
                     $scope.InitScan();
                 });
             };
+            $scope.isPictoActive = function (picto) {
+                return (picto.activeCell == 1 || (picto.activeCell == 0 && $scope.inEdit));
+            };
             //We have to react to the ng-click events? In edit mode we have to react to some event, in a diferent way
             $scope.isClickEnable = function () {
                 return(!($scope.inScan || $scope.cfgTimeOverOnOff));
@@ -1224,9 +1227,10 @@ angular.module('controllers', [])
             $scope.config = function ()
             {
                 //-----------Iniciacion-----------
-
-                var url = $scope.baseurl + "Board/loadCFG";
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
+                
+                var url = $scope.baseurl + "Board/loadCFG";
+                
                 var postdata = {lusuid: userConfig.ID_ULanguage};
                 //MODIF: borrar
                 $http.post(url, postdata);
@@ -1261,6 +1265,7 @@ angular.module('controllers', [])
                         $scope.userViewWidth = 10;
                     }
                 }
+                alert("id:"+ userConfig.ID_SU);
                 // Sentece bar configuration
                 $scope.cfgMenuReadActive = userConfig.cfgMenuReadActive;
                 $scope.cfgMenuDeleteLastActive = userConfig.cfgMenuDeleteLastActive;
@@ -1268,7 +1273,7 @@ angular.module('controllers', [])
                 $scope.cfgSentenceBarUpDown = userConfig.cfgSentenceBarUpDown;
                 $scope.pictoBarWidth = 12 - $scope.cfgMenuReadActive - $scope.cfgMenuDeleteLastActive - $scope.cfgMenuDeleteAllActive;
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
-                $scope.longclick = userConfig.cfgUsageMouseOneCTwoC == 1 ? true : false;
+                $scope.longclick = userConfig.cfgScanningAutoOnOff == 0 ? true : false;
                 $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
                 $scope.StatusEnableEditViewTrash = true;
                 $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff == 1 ? true : false;
@@ -1277,8 +1282,24 @@ angular.module('controllers', [])
                 $scope.cfgTimeNoRepeatedClick = userConfig.cfgTimeNoRepeatedClick;
                 $scope.TimeMultiClic = 0;
                 $scope.cfgScanStartClick = userConfig.cfgScanStartClick;
+                $scope.cfgCancelScanOnOff = userConfig.cfgCancelScanOnOff == 1 ? true : false;
                 $scope.cfgTextInCell = userConfig.cfgTextInCell == 1 ? true : false;
-
+                if (userConfig.cfgUsageMouseOneCTwoC == 0){
+                    $scope.longclick = false;
+                    $scope.timerScan = false;
+                    $scope.cfgScanStartClick = false;
+                } else if (userConfig.cfgUsageMouseOneCTwoC == 1){
+                    $scope.cfgTimeOverOnOff = false;
+                    $scope.cfgTimeNoRepeatedClickOnOff = false;
+                } else if (userConfig.cfgUsageMouseOneCTwoC == 2){
+                    $scope.longclick = false;
+                    $scope.timerScan = false;
+                    $scope.cfgTimeOverOnOff = false;
+                    $scope.cfgTimeNoRepeatedClickOnOff = false;
+                    $scope.cfgScanStartClick = false;
+                    $scope.cfgCancelScanOnOff = false;
+                }
+                
                 $scope.getPred();
                 //If there are some request to edit from another controller, the edit panel it's loaded
                 if ($rootScope.editPanelInfo != null) {
@@ -1349,8 +1370,8 @@ angular.module('controllers', [])
                 {
                     $scope.recommenderArray = response.recommenderArray;
                 }).error(function (error) {
-                    alert(error);
-                    alert("error on predictor update building");
+                    //alert(error);
+                    //alert("error on predictor update building");
                 });
             };
 
@@ -1845,7 +1866,7 @@ angular.module('controllers', [])
                         {
                             $scope.dataAudio = response.data;
 
-                            alert($scope.dataAudio);
+                            //alert($scope.dataAudio);
                             $scope.sound = ngAudio.load($scope.baseurl + $scope.dataAudio);
                             $scope.sound.play();
 
@@ -1956,7 +1977,7 @@ angular.module('controllers', [])
                     });
 
                 }
-                ;
+                
             };
 
             /***************************************************
@@ -1972,7 +1993,7 @@ angular.module('controllers', [])
                 {
                     $scope.idGroupBoard = response.idGroupBoard;
                     var URL = $scope.baseurl + "PanelGroup/getPanelGroupInfo";
-                    alert($scope.idGroupBoard);
+                    //alert($scope.idGroupBoard);
                     var postdata = {idGroupBoard: $scope.idGroupBoard};
                     $http.post(URL, postdata).
                             success(function (response)
@@ -1981,7 +2002,7 @@ angular.module('controllers', [])
                                 $scope.CreateBoardData = {CreateBoardName: '', height: response.defHeight.toString(), width: response.defWidth.toString(), idGroupBoard: response.ID_GB};
                                 $scope.CreateBoardData.height = $scope.range(20)[response.defHeight - 1].valueOf();
                                 $scope.CreateBoardData.width = $scope.range(20)[response.defWidth - 1].valueOf();
-                                alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
+                                //alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
                                     scope: $scope,
@@ -2166,7 +2187,7 @@ angular.module('controllers', [])
                 $scope.getPreviewImg = function () {
                     var type = document.getElementById('file-input').files[0].type;
                     if (!(type == "image/gif" || type == "image/jpeg" || type == "image/png")) {
-                        alert("Extension incorrecta");
+                        //alert("Extension incorrecta");
                         return false;
                     }
                     $scope.myFileProvisional = document.getElementById('file-input').files[0];
@@ -2208,7 +2229,7 @@ angular.module('controllers', [])
                                 $scope.savedata();
                             })
                             .error(function (response) {
-                                alert(response.errorText);
+                                //alert(response.errorText);
                             });
                 };
 

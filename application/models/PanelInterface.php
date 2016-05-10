@@ -16,6 +16,7 @@ class PanelInterface extends CI_Model {
     function getUserPanels($idusu) {
         $output = array();
 
+        $this->db->order_by('primaryGroupBoard DESC, ID_GB DESC'); 
         $this->db->where('ID_GBUser', $idusu);
         $query = $this->db->get('GroupBoards');
 
