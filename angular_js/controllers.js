@@ -482,7 +482,7 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-.controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, $q, txtContent, $location, $timeout) {
+.controller('UserConfCtrl', function ($scope, $rootScope, Resources, ngAudio, AuthService, $q, txtContent, $location, $timeout) {
     // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
     if (!$rootScope.isLogged) {
         $location.path('/login');
@@ -535,7 +535,7 @@ angular.module('controllers', [])
             $scope.userData.cfgTimeNoRepeatedClickOnOff = ($scope.userData.cfgTimeNoRepeatedClickOnOff === "1");
             $scope.userData.cfgScanningOnOff = ($scope.userData.cfgScanningOnOff === "1");
             $scope.userData.cfgScanningAutoOnOff = ($scope.userData.cfgScanningAutoOnOff === "1");
-            $scope.userData.cfgScanningCancelScanOnOff = ($scope.userData.cfgScanningCancelScanOnOff === "1");
+            $scope.userData.cfgCancelScanOnOff = ($scope.userData.cfgCancelScanOnOff === "1");
             $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
             $scope.userData.cfgHistOnOff = ($scope.userData.cfgHistOnOff === "1");
             $scope.userData.cfgInterfaceVoiceOnOff = ($scope.userData.cfgInterfaceVoiceOnOff === "1");
@@ -567,7 +567,6 @@ angular.module('controllers', [])
             });
         });
     };
-    $scope.getConfig();
 
     //Cambiar datos de usuario
     $scope.saveUserData = function(){
@@ -691,7 +690,7 @@ angular.module('controllers', [])
             if (angular.isNumber(value)){
                 $scope.changeRadioEstate(value, data);
             }
-    }
+    };
     
     $scope.addLanguage = function(idLanguage){
         if(idLanguage=='submit'&&$scope.addLanguageTo=='interface'){
@@ -730,18 +729,56 @@ angular.module('controllers', [])
     
     //Audio Configuration (Myaudio library access)
     $scope.getAudioLists = function(){
-        Resources.main.get({'funct': "AppLocalOrServer"}).$promise
-        .then(function (results) {    
+        Resources.main.get({'funct': "getVoices"}).$promise
+        .then(function (results) {
             $scope.interfaceVoicesList=results.interfaceVoices[0];
             $scope.expansionVoicesList=results.expansionVoices[0];
+            $scope.interfaceVoicesList[0].voiceCompleteName = results.interfaceVoices[0][0].voiceName + ' - [online]';
+            $scope.interfaceVoicesList[1].voiceCompleteName = results.interfaceVoices[0][1].voiceName + ' - [online]';
+            var count1=0;
+            var count2=0;
+            angular.forEach($scope.interfaceVoicesList, function (value) {
+                if(count1>=2){
+                    $scope.interfaceVoicesList[count1].voiceCompleteName = value.voiceName + ' - [offline]';
+                }
+                count1++
+            });
+            angular.forEach($scope.expansionVoicesList, function (value) {
+                if (value.voiceType=='online'){
+                    var name = value.voiceName;
+                    var language = value.vocalwareLangAbbr;
+                    var country = value.vocalwareDescr;
+                    var type = value.voiceType;
+                    $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' (' + country + ') - ' + '[' + type + ']';
+                }else{
+                    $scope.expansionVoicesList[count2].voiceCompleteName = value.voiceName + ' - [offline]';
+                }
+                if(value.ID_Voice == $scope.userData.cfgExpansionVoiceOnline){
+                    $scope.userData.cfgExpansionVoiceOnline=value.voiceName;
+                }
+                count2++;
+            });
             if (results.appRunning=='local'){
                 $scope.local=true;
                 $scope.interfaceVoicesListOffline=results.interfaceVoicesOffline[0];
                 $scope.expansionVoicesOffline=results.expansionVoicesOffline[0];
+                var count3=0;
+                var count4=0;
+                angular.forEach($scope.interfaceVoicesListOffline, function (value) {
+                    $scope.interfaceVoicesListOffline[count3].voiceCompleteName = value.voiceName + ' - [offline]';
+                    count3++
+                });
+                angular.forEach($scope.expansionVoicesOffline, function (value) {
+                    $scope.expansionVoicesOffline[count4].voiceCompleteName = value.voiceName + ' - [offline]';
+                    count4++
+                });
             }
         });
-    }
-    $scope.getAudioLists();
+    };
+    $scope.getConfig()
+        .then(function(){
+            $scope.getAudioLists();
+        });
     
     $scope.expansionVoiceChange = function(data){
         angular.forEach($scope.expansionVoicesList, function (value) {
@@ -755,7 +792,7 @@ angular.module('controllers', [])
                 }
             }
         });
-    }
+    };
     
     $scope.mascFemVoice = function(data){
         if(data===$scope.interfaceVoicesList[0].voiceName){
@@ -763,7 +800,18 @@ angular.module('controllers', [])
         }else if(data===$scope.interfaceVoicesList[1].voiceName){
             $scope.changeMascFem(true,'InterfaceVoiceMascFem');
         }
-    }
+    };
+    
+    $scope.generateAudio = function(){
+//        Resources.main.save({'IdU':$rootScope.userId, 'text':'Aquesta es la veu seleccionada', 'interface':'false'}, {'funct': "generateAudio"}).$promise
+//        .then(function (results) {
+//        console.log(results);
+        $scope.sound = ngAudio.load("mp3/"+ "45c71c3398bc9fea91ad50b66c844a7c.mp3");
+//        $scope.sound = ngAudio.load("mp3/"+results[0]);
+        $scope.sound.play();
+//        $scope.sound = ngAudio.load($scope.baseurl + );
+//        });
+    };
     
     $scope.exit = function(){
         $scope.viewActived=false;

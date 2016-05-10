@@ -476,16 +476,18 @@ input[type=number] {
     width: 100%;
 }
 .FonsTurquesaSucces{
-   border: 0.5vh solid #aeff00;
+   border: 0.5vh solid #ff9000;
    margin-bottom: 0px;
 }
 .voices .boxEdit{
+    height: 4vh;
     background-color: white;
-    margin-left: 0;
-    font-size: 2vh;
+    margin: 0;
+    font-size: 2.4vh;
 }
 .voices .dropdown-arrow{
     width: 100%;
+    background-size: 4vh 4vh;
 }
 .voices input.switch:empty ~ label:before,
 .voices input.switch:empty ~ label:after
@@ -505,6 +507,9 @@ input[type=number] {
     margin-left: 3em;
 }
 .img-audioButton{
-    height: 5vh;
+    height: 6vh;
     width: auto;
+}
+.verticalMarginVoice{
+    margin-top: 1vh;
 }

@@ -132,7 +132,7 @@ class Main extends REST_Controller {
     }
     
     //Myaudio library Access
-    public function AppLocalOrServer_get(){
+    public function getVoices_get(){
         $audio = new Myaudio();
         
         $interfaceVoices = $audio->listInterfaceVoices(true);
@@ -154,6 +154,20 @@ class Main extends REST_Controller {
             'expansionVoicesOffline'=>$expansionVoicesOffline,
             'appRunning'=>$appRunning
             ];
+        
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
+    
+    //Generate audio
+    public function generateAudio_post(){
+        
+        $idusu = $this->query('IdU');
+        $text = $this->query('text');
+        $interface = $this->query('interface');
+        
+        $audio = new Myaudio();
+        
+        $response = $audio->generateAudio($idusu, $text, false);
         
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
