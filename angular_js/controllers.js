@@ -482,345 +482,349 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-.controller('UserConfCtrl', function ($scope, $rootScope, Resources, ngAudio, AuthService, $q, txtContent, $location, $timeout) {
-    // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
-    if (!$rootScope.isLogged) {
-        $location.path('/login');
-    }
-    // Declaración de variables
-    $scope.canEdit = false;
-    $scope.viewActived=false;
-    $scope.loadingEdit=false;
-    $scope.loadingOldPass=false;
-    $scope.local=false;
-    $scope.interfaceLanguageBarEnable=true;
-    $scope.expansionLanguageEnable=true;
-    $scope.userDataForm=[];
-    var count1=0;
-    var count2=0;
-    //Pedimos la configuración del usuario a la base de datos
-    $scope.getConfig = function(){
-        $scope.interfaceLanguages=[];
-        $scope.expansionLanguages=[];
-        $scope.numPictosBarPred=['2','3','4','5','6','7','8','9','10'];
-        return Resources.main.get({'IdSu':$rootScope.sUserId}, {'funct': "getConfig"}).$promise
-        .then(function (results) {
-            window.localStorage.removeItem('userData');
-            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
-            $rootScope.interfaceLanguageId = results.userConfig.ID_ULanguage;
-            $rootScope.expanLanguageId = results.userConfig.cfgExpansionLanguage;
-            $scope.userData = results.userConfig;
-            $scope.interfaceLanguage = results.languages[results.userConfig.ID_ULanguage-1].languageName;
-            $scope.expansionLanguage = results.languages[results.userConfig.cfgExpansionLanguage-1].languageName;
-            $scope.languages = results.languages;
+        .controller('UserConfCtrl', function ($scope, $rootScope, Resources, ngAudio, AuthService, $q, txtContent, $location, $timeout) {
+            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+            if (!$rootScope.isLogged) {
+                $location.path('/login');
+            }
+            // Declaración de variables
+            $scope.canEdit = false;
+            $scope.viewActived = false;
+            $scope.loadingEdit = false;
+            $scope.loadingOldPass = false;
+            $scope.local = false;
+            $scope.interfaceLanguageBarEnable = true;
+            $scope.expansionLanguageEnable = true;
+            $scope.userDataForm = [];
+            var count1 = 0;
+            var count2 = 0;
+            //Pedimos la configuración del usuario a la base de datos
+            $scope.getConfig = function () {
+                $scope.interfaceLanguages = [];
+                $scope.expansionLanguages = [];
+                $scope.numPictosBarPred = ['2', '3', '4', '5', '6', '7', '8', '9', '10'];
+                return Resources.main.get({'IdSu': $rootScope.sUserId}, {'funct': "getConfig"}).$promise
+                        .then(function (results) {
+                            window.localStorage.removeItem('userData');
+                            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+                            $rootScope.interfaceLanguageId = results.userConfig.ID_ULanguage;
+                            $rootScope.expanLanguageId = results.userConfig.cfgExpansionLanguage;
+                            $scope.userData = results.userConfig;
+                            $scope.interfaceLanguage = results.languages[results.userConfig.ID_ULanguage - 1].languageName;
+                            $scope.expansionLanguage = results.languages[results.userConfig.cfgExpansionLanguage - 1].languageName;
+                            $scope.languages = results.languages;
 
-            //Necessary for preselected ng-options (select) works
-            $scope.userData.cfgPredBarNumPred=$scope.numPictosBarPred[results.userConfig.cfgPredBarNumPred-2];
+                            //Necessary for preselected ng-options (select) works
+                            $scope.userData.cfgPredBarNumPred = $scope.numPictosBarPred[results.userConfig.cfgPredBarNumPred - 2];
 
-            //Parse string to integer
-            $scope.userData.cfgTimeLapseSelect=parseInt(results.userConfig.cfgTimeLapseSelect, 10);
-            $scope.userData.cfgTimeNoRepeatedClick=parseInt(results.userConfig.cfgTimeNoRepeatedClick, 10);
-            $scope.userData.cfgTimeClick=parseInt(results.userConfig.cfgTimeClick, 10);
-            $scope.userData.cfgTimeScanning=parseInt(results.userConfig.cfgTimeScanning, 10);
-            $scope.userData.cfgVoiceOfflineRate=parseInt(results.userConfig.cfgVoiceOfflineRate, 10);
+                            //Parse string to integer
+                            $scope.userData.cfgTimeLapseSelect = parseInt(results.userConfig.cfgTimeLapseSelect, 10);
+                            $scope.userData.cfgTimeNoRepeatedClick = parseInt(results.userConfig.cfgTimeNoRepeatedClick, 10);
+                            $scope.userData.cfgTimeClick = parseInt(results.userConfig.cfgTimeClick, 10);
+                            $scope.userData.cfgTimeScanning = parseInt(results.userConfig.cfgTimeScanning, 10);
+                            $scope.userData.cfgVoiceOfflineRate = parseInt(results.userConfig.cfgVoiceOfflineRate, 10);
 
-            //change string (0,1) to boolean (true,false)
-            $scope.userData.cfgExpansionOnOff = ($scope.userData.cfgExpansionOnOff === "1");
-            $scope.userData.cfgPredOnOff = ($scope.userData.cfgPredOnOff === "1");
-            $scope.userData.cfgMenuReadActive = ($scope.userData.cfgMenuReadActive === "1");
-            $scope.userData.cfgMenuDeleteLastActive = ($scope.userData.cfgMenuDeleteLastActive === "1");
-            $scope.userData.cfgMenuDeleteAllActive = ($scope.userData.cfgMenuDeleteAllActive === "1");
-            $scope.userData.cfgAutoEraseSentenceBar = ($scope.userData.cfgAutoEraseSentenceBar === "1");
-            $scope.userData.cfgTimeLapseSelectOnOff = ($scope.userData.cfgTimeLapseSelectOnOff === "1");
-            $scope.userData.cfgTimeNoRepeatedClickOnOff = ($scope.userData.cfgTimeNoRepeatedClickOnOff === "1");
-            $scope.userData.cfgScanningOnOff = ($scope.userData.cfgScanningOnOff === "1");
-            $scope.userData.cfgScanningAutoOnOff = ($scope.userData.cfgScanningAutoOnOff === "1");
-            $scope.userData.cfgCancelScanOnOff = ($scope.userData.cfgCancelScanOnOff === "1");
-            $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
-            $scope.userData.cfgHistOnOff = ($scope.userData.cfgHistOnOff === "1");
-            $scope.userData.cfgInterfaceVoiceOnOff = ($scope.userData.cfgInterfaceVoiceOnOff === "1");
-            $scope.userData.cfgInterfaceVoiceMascFem = ($scope.userData.cfgInterfaceVoiceMascFem === "masc");
+                            //change string (0,1) to boolean (true,false)
+                            $scope.userData.cfgExpansionOnOff = ($scope.userData.cfgExpansionOnOff === "1");
+                            $scope.userData.cfgPredOnOff = ($scope.userData.cfgPredOnOff === "1");
+                            $scope.userData.cfgMenuReadActive = ($scope.userData.cfgMenuReadActive === "1");
+                            $scope.userData.cfgMenuDeleteLastActive = ($scope.userData.cfgMenuDeleteLastActive === "1");
+                            $scope.userData.cfgMenuDeleteAllActive = ($scope.userData.cfgMenuDeleteAllActive === "1");
+                            $scope.userData.cfgAutoEraseSentenceBar = ($scope.userData.cfgAutoEraseSentenceBar === "1");
+                            $scope.userData.cfgTimeLapseSelectOnOff = ($scope.userData.cfgTimeLapseSelectOnOff === "1");
+                            $scope.userData.cfgTimeNoRepeatedClickOnOff = ($scope.userData.cfgTimeNoRepeatedClickOnOff === "1");
+                            $scope.userData.cfgScanningOnOff = ($scope.userData.cfgScanningOnOff === "1");
+                            $scope.userData.cfgScanningAutoOnOff = ($scope.userData.cfgScanningAutoOnOff === "1");
+                            $scope.userData.cfgCancelScanOnOff = ($scope.userData.cfgCancelScanOnOff === "1");
+                            $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
+                            $scope.userData.cfgHistOnOff = ($scope.userData.cfgHistOnOff === "1");
+                            $scope.userData.cfgInterfaceVoiceOnOff = ($scope.userData.cfgInterfaceVoiceOnOff === "1");
+                            $scope.userData.cfgInterfaceVoiceMascFem = ($scope.userData.cfgInterfaceVoiceMascFem === "masc");
 
-            var count=results.users[0].ID_ULanguage;
-            var numberOfInterfaceLanguages=0;
-            angular.forEach(results.users, function (value) {
-                if (value.ID_ULanguage == count ){
-                    $scope.interfaceLanguages.push({name: results.languages[value.ID_ULanguage-1].languageName, user: value.ID_User});
-                    count++;
-                    numberOfInterfaceLanguages++;
+                            var count = results.users[0].ID_ULanguage;
+                            var numberOfInterfaceLanguages = 0;
+                            angular.forEach(results.users, function (value) {
+                                if (value.ID_ULanguage == count) {
+                                    $scope.interfaceLanguages.push({name: results.languages[value.ID_ULanguage - 1].languageName, user: value.ID_User});
+                                    count++;
+                                    numberOfInterfaceLanguages++;
+                                }
+                                $scope.expansionLanguages.push({idInterfaceLanguage: numberOfInterfaceLanguages, name: results.languages[value.cfgExpansionLanguage - 1].languageName, user: value.ID_User});
+
+                            });
+
+                            //Delete name and surnames input text box
+                            delete $scope.userDataForm.realName;
+                            delete $scope.userDataForm.surNames;
+                            $scope.loadingEdit = false;
+                            // Pedimos los textos para cargar la pagina
+                            txtContent("userConfig").then(function (results) {
+                                $scope.content = results.data;
+                                $scope.viewActived = true;
+                                $scope.$broadcast("rebuild:me");
+                                //Enable bar after change Language
+                                $scope.interfaceLanguageBarEnable = true;
+                                $scope.expansionLanguageEnable = true;
+                            });
+                        });
+            };
+
+            $scope.rebuild = function () {
+                $scope.$broadcast("rebuild:me");
+            };
+            //Cambiar datos de usuario
+            $scope.saveUserData = function () {
+                if (($scope.userDataForm.realName == undefined || $scope.userDataForm.realName == '') && ($scope.userDataForm.surNames == undefined || $scope.userDataForm.surNames == '')) {
+                    //Campos vacios
+                    return;
                 }
-                $scope.expansionLanguages.push({idInterfaceLanguage: numberOfInterfaceLanguages,name: results.languages[value.cfgExpansionLanguage-1].languageName, user: value.ID_User});
-
-            });
-
-            //Delete name and surnames input text box
-            delete $scope.userDataForm.realName;
-            delete $scope.userDataForm.surNames;
-            $scope.loadingEdit=false;
-            // Pedimos los textos para cargar la pagina
-            txtContent("userConfig").then(function(results){
-                $scope.content = results.data;
-                $scope.viewActived=true;
-                //Enable bar after change Language
-                $scope.interfaceLanguageBarEnable=true;
-                $scope.expansionLanguageEnable=true;
-            });
-        });
-    };
-
-    //Cambiar datos de usuario
-    $scope.saveUserData = function(){
-        if (($scope.userDataForm.realName==undefined||$scope.userDataForm.realName=='')&&($scope.userDataForm.surNames==undefined||$scope.userDataForm.surNames=='')){
-            //Campos vacios
-            return;
-        }
-        $scope.loadingEdit=true;
-        if (($scope.userDataForm.realName==undefined)||($scope.userDataForm.realName=='')){
-            $data = '{"surnames":"' + $scope.userDataForm.surNames + '"}';
-        }else if (($scope.userDataForm.surNames==undefined)||($scope.userDataForm.surNames=='')){
-            $data = '{"realname":"' + $scope.userDataForm.realName + '"}';
-        }else{
-            $data = '{"realname":"' + $scope.userDataForm.realName + '","surnames":"' + $scope.userDataForm.surNames + '"}';
-        }
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':$data}, {'funct': "saveSUserNames"}).$promise
-                .then(function () {
-                    $scope.getConfig();
-                });
-    }
-    $scope.deleteForm = function(){
-        delete $scope.userDataForm.realName;
-        delete $scope.userDataForm.surNames;
-        $scope.deleteFormPass();
-    }
-    $scope.deleteFormPass = function(){
-        delete $scope.oldPass;
-        delete $scope.newPass1;
-        delete $scope.newPass2;
-        $scope.oldPassState='';
-        $scope.newPassLengthOk='';
-        $scope.newPassState='';
-    }
-    //Cambiar Contraseña
-    $scope.checkOldPass = function(){
-        count1++;
-        $scope.oldPassState='';
-        $scope.loadingOldPass=true;
-        $scope.oldPassDirty=true;
-        Resources.main.save({'IdSu':$rootScope.sUserId, 'pass':$scope.oldPass}, {'funct': "checkPassword"}).$promise
-            .then(function (results) {
-                count2++;
-                if(count1==count2){
-                    $scope.oldPassState=results.data;
-                    $scope.oldPassDirty=false;
-                    $scope.loadingOldPass=false;
+                $scope.loadingEdit = true;
+                if (($scope.userDataForm.realName == undefined) || ($scope.userDataForm.realName == '')) {
+                    $data = '{"surnames":"' + $scope.userDataForm.surNames + '"}';
+                } else if (($scope.userDataForm.surNames == undefined) || ($scope.userDataForm.surNames == '')) {
+                    $data = '{"realname":"' + $scope.userDataForm.realName + '"}';
+                } else {
+                    $data = '{"realname":"' + $scope.userDataForm.realName + '","surnames":"' + $scope.userDataForm.surNames + '"}';
                 }
-            });
-    }
-    //Check new password length
-    $scope.minPassLength = function(){
-        if ($scope.newPass1.length<4){
-            $scope.newPassLengthOk='false';
-        }else{
-            $scope.newPassLengthOk='true';
-        }
-    }
-    //Check if new passwords are equal.
-    $scope.comparePass = function(){
-        if($scope.newPass1 === $scope.newPass2){
-            $scope.newPassState='true';
-        }else{
-            $scope.newPassState='false';
-        }
-    }
-    //Save New password
-    $scope.saveNewPass = function(){
-        Resources.main.save({'IdSu':$rootScope.sUserId, 'oldPass':$scope.oldPass, 'newPass':$scope.newPass2}, {'funct': "savePassword"}).$promise
-            .then(function () {
+                Resources.main.save({'IdSu': $rootScope.sUserId, 'data': $data}, {'funct': "saveSUserNames"}).$promise
+                        .then(function () {
+                            $scope.getConfig();
+                        });
+            }
+            $scope.deleteForm = function () {
+                delete $scope.userDataForm.realName;
+                delete $scope.userDataForm.surNames;
                 $scope.deleteFormPass();
-            });
-    }
-    //Change Language (user)
-    $scope.changeLanguage = function(idUser){
-        $scope.contentBar1=false;
-        $scope.contentBar2=false;
-        $scope.interfaceLanguageBarEnable=false;
-        $scope.expansionLanguageEnable=false;
-        Resources.main.save({'IdSu':$rootScope.sUserId, 'idU':idUser}, {'funct': "changeDefUser"}).$promise
-            .then(function () {
-                delete $scope.interfaceLanguages;
-                $scope.interfaceLanguages=[];
-                delete $scope.expansionLanguages;
-                $scope.expansionLanguages=[];
-                $scope.getConfig();
-            });
-    };
-    
-    $scope.changeOnOff = function(bool, data){
-        if (bool){
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':data, 'value':'1'}, {'funct': "changeCfgBool"}).$promise
-        }else{
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':data, 'value':'0'}, {'funct': "changeCfgBool"}).$promise
-        }
-    }
-    
-    $scope.changeRadioEstate = function(value, data){
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'data':data, 'value':value}, {'funct': "changeCfgBool"}).$promise
-    }
-    $scope.changeCfgVoices = function(value, data){
-            Resources.main.save({'IdU':$rootScope.userId, 'data':data, 'value':value}, {'funct': "changeCfgVoices"}).$promise
-    }
-    
-    $scope.changeMascFem = function(bool, data){
-        if (bool){
-            Resources.main.save({'IdU':$rootScope.userId, 'data':data, 'value':'masc'}, {'funct': "changeCfgVoices"}).$promise
-        }else{
-            Resources.main.save({'IdU':$rootScope.userId, 'data':data, 'value':'fem'}, {'funct': "changeCfgVoices"}).$promise
-        }
-    }
-    
-    $scope.changeOnOffUser = function(bool, data){
-        if (bool){
-            Resources.main.save({'IdU':$rootScope.userId, 'data':data, 'value':'1'}, {'funct': "changeCfgVoices"}).$promise
-        }else{
-            Resources.main.save({'IdU':$rootScope.userId, 'data':data, 'value':'0'}, {'funct': "changeCfgVoices"}).$promise
-        }
-    }
-    
-    $scope.checkNumberTime = function(value, data){
-            if (angular.isNumber(value)){
-                $scope.changeRadioEstate(value, data);
             }
-    };
-    
-    $scope.addLanguage = function(idLanguage){
-        if(idLanguage=='submit'&&$scope.addLanguageTo=='interface'){
-            $scope.languageEnable=false;
-            $scope.contentBar1=false;
-            $scope.contentBar2=false;
-            $scope.interfaceLanguageBarEnable=false;
-            $scope.expansionLanguageEnable=false;
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'ID_ULanguage':$scope.addlanguageId, 'cfgExpansionLanguage':$scope.addlanguageId}, {'funct': "addUser"}).$promise
-            .then(function () {
-                delete $scope.interfaceLanguages;
-                $scope.interfaceLanguages=[];
-                delete $scope.expansionLanguages;
-                $scope.expansionLanguages=[];
-                $scope.getConfig();
-            });
-        }else if(idLanguage=='submit'&&$scope.addLanguageTo=='expansion'){
-            $scope.languageEnable=false;
-            $scope.contentBar1=false;
-            $scope.contentBar2=false;
-            $scope.interfaceLanguageBarEnable=false;
-            $scope.expansionLanguageEnable=false;
-            Resources.main.save({'IdSu':$rootScope.sUserId, 'ID_ULanguage':$rootScope.interfaceLanguageId, 'cfgExpansionLanguage':$scope.addlanguageId}, {'funct': "addUser"}).$promise
-            .then(function () {
-                delete $scope.interfaceLanguages;
-                $scope.interfaceLanguages=[];
-                delete $scope.expansionLanguages;
-                $scope.expansionLanguages=[];
-                $scope.getConfig();
-            });
-        }else{
-            $scope.addlanguageId=idLanguage;
-        }
-        $scope.languageEnable=true;
-    };
-    
-    //Audio Configuration (Myaudio library access)
-    $scope.getAudioLists = function(){
-        Resources.main.get({'funct': "getVoices"}).$promise
-        .then(function (results) {
-            $scope.interfaceVoicesList=results.interfaceVoices[0];
-            $scope.expansionVoicesList=results.expansionVoices[0];
-            $scope.interfaceVoicesList[0].voiceCompleteName = results.interfaceVoices[0][0].voiceName + ' - [online]';
-            $scope.interfaceVoicesList[1].voiceCompleteName = results.interfaceVoices[0][1].voiceName + ' - [online]';
-            var count1=0;
-            var count2=0;
-            angular.forEach($scope.interfaceVoicesList, function (value) {
-                if(count1>=2){
-                    $scope.interfaceVoicesList[count1].voiceCompleteName = value.voiceName + ' - [offline]';
+            $scope.deleteFormPass = function () {
+                delete $scope.oldPass;
+                delete $scope.newPass1;
+                delete $scope.newPass2;
+                $scope.oldPassState = '';
+                $scope.newPassLengthOk = '';
+                $scope.newPassState = '';
+            }
+            //Cambiar Contraseña
+            $scope.checkOldPass = function () {
+                count1++;
+                $scope.oldPassState = '';
+                $scope.loadingOldPass = true;
+                $scope.oldPassDirty = true;
+                Resources.main.save({'IdSu': $rootScope.sUserId, 'pass': $scope.oldPass}, {'funct': "checkPassword"}).$promise
+                        .then(function (results) {
+                            count2++;
+                            if (count1 == count2) {
+                                $scope.oldPassState = results.data;
+                                $scope.oldPassDirty = false;
+                                $scope.loadingOldPass = false;
+                            }
+                        });
+            }
+            //Check new password length
+            $scope.minPassLength = function () {
+                if ($scope.newPass1.length < 4) {
+                    $scope.newPassLengthOk = 'false';
+                } else {
+                    $scope.newPassLengthOk = 'true';
                 }
-                count1++
-            });
-            angular.forEach($scope.expansionVoicesList, function (value) {
-                if (value.voiceType=='online'){
-                    var name = value.voiceName;
-                    var language = value.vocalwareLangAbbr;
-                    var country = value.vocalwareDescr;
-                    var type = value.voiceType;
-                    $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' (' + country + ') - ' + '[' + type + ']';
-                }else{
-                    $scope.expansionVoicesList[count2].voiceCompleteName = value.voiceName + ' - [offline]';
+            }
+            //Check if new passwords are equal.
+            $scope.comparePass = function () {
+                if ($scope.newPass1 === $scope.newPass2) {
+                    $scope.newPassState = 'true';
+                } else {
+                    $scope.newPassState = 'false';
                 }
-                if(value.ID_Voice == $scope.userData.cfgExpansionVoiceOnline){
-                    $scope.userData.cfgExpansionVoiceOnline=value.voiceName;
+            }
+            //Save New password
+            $scope.saveNewPass = function () {
+                Resources.main.save({'IdSu': $rootScope.sUserId, 'oldPass': $scope.oldPass, 'newPass': $scope.newPass2}, {'funct': "savePassword"}).$promise
+                        .then(function () {
+                            $scope.deleteFormPass();
+                        });
+            }
+            //Change Language (user)
+            $scope.changeLanguage = function (idUser) {
+                $scope.contentBar1 = false;
+                $scope.contentBar2 = false;
+                $scope.interfaceLanguageBarEnable = false;
+                $scope.expansionLanguageEnable = false;
+                Resources.main.save({'IdSu': $rootScope.sUserId, 'idU': idUser}, {'funct': "changeDefUser"}).$promise
+                        .then(function () {
+                            delete $scope.interfaceLanguages;
+                            $scope.interfaceLanguages = [];
+                            delete $scope.expansionLanguages;
+                            $scope.expansionLanguages = [];
+                            $scope.getConfig();
+                        });
+            };
+
+            $scope.changeOnOff = function (bool, data) {
+                if (bool) {
+                    Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': '1'}, {'funct': "changeCfgBool"}).$promise
+                } else {
+                    Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': '0'}, {'funct': "changeCfgBool"}).$promise
                 }
-                count2++;
-            });
-            if (results.appRunning=='local'){
-                $scope.local=true;
-                $scope.interfaceVoicesListOffline=results.interfaceVoicesOffline[0];
-                $scope.expansionVoicesOffline=results.expansionVoicesOffline[0];
-                var count3=0;
-                var count4=0;
-                angular.forEach($scope.interfaceVoicesListOffline, function (value) {
-                    $scope.interfaceVoicesListOffline[count3].voiceCompleteName = value.voiceName + ' - [offline]';
-                    count3++
+            }
+
+            $scope.changeRadioEstate = function (value, data) {
+                Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': value}, {'funct': "changeCfgBool"}).$promise
+            }
+            $scope.changeCfgVoices = function (value, data) {
+                Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': value}, {'funct': "changeCfgVoices"}).$promise
+            }
+
+            $scope.changeMascFem = function (bool, data) {
+                if (bool) {
+                    Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': 'masc'}, {'funct': "changeCfgVoices"}).$promise
+                } else {
+                    Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': 'fem'}, {'funct': "changeCfgVoices"}).$promise
+                }
+            }
+
+            $scope.changeOnOffUser = function (bool, data) {
+                if (bool) {
+                    Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': '1'}, {'funct': "changeCfgVoices"}).$promise
+                } else {
+                    Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': '0'}, {'funct': "changeCfgVoices"}).$promise
+                }
+            }
+
+            $scope.checkNumberTime = function (value, data) {
+                if (angular.isNumber(value)) {
+                    $scope.changeRadioEstate(value, data);
+                }
+            };
+
+            $scope.addLanguage = function (idLanguage) {
+                if (idLanguage == 'submit' && $scope.addLanguageTo == 'interface') {
+                    $scope.languageEnable = false;
+                    $scope.contentBar1 = false;
+                    $scope.contentBar2 = false;
+                    $scope.interfaceLanguageBarEnable = false;
+                    $scope.expansionLanguageEnable = false;
+                    Resources.main.save({'IdSu': $rootScope.sUserId, 'ID_ULanguage': $scope.addlanguageId, 'cfgExpansionLanguage': $scope.addlanguageId}, {'funct': "addUser"}).$promise
+                            .then(function () {
+                                delete $scope.interfaceLanguages;
+                                $scope.interfaceLanguages = [];
+                                delete $scope.expansionLanguages;
+                                $scope.expansionLanguages = [];
+                                $scope.getConfig();
+                            });
+                } else if (idLanguage == 'submit' && $scope.addLanguageTo == 'expansion') {
+                    $scope.languageEnable = false;
+                    $scope.contentBar1 = false;
+                    $scope.contentBar2 = false;
+                    $scope.interfaceLanguageBarEnable = false;
+                    $scope.expansionLanguageEnable = false;
+                    Resources.main.save({'IdSu': $rootScope.sUserId, 'ID_ULanguage': $rootScope.interfaceLanguageId, 'cfgExpansionLanguage': $scope.addlanguageId}, {'funct': "addUser"}).$promise
+                            .then(function () {
+                                delete $scope.interfaceLanguages;
+                                $scope.interfaceLanguages = [];
+                                delete $scope.expansionLanguages;
+                                $scope.expansionLanguages = [];
+                                $scope.getConfig();
+                            });
+                } else {
+                    $scope.addlanguageId = idLanguage;
+                }
+                $scope.languageEnable = true;
+            };
+
+            //Audio Configuration (Myaudio library access)
+            $scope.getAudioLists = function () {
+                Resources.main.get({'funct': "getVoices"}).$promise
+                        .then(function (results) {
+                            $scope.interfaceVoicesList = results.interfaceVoices[0];
+                            $scope.expansionVoicesList = results.expansionVoices[0];
+                            $scope.interfaceVoicesList[0].voiceCompleteName = results.interfaceVoices[0][0].voiceName + ' - [online]';
+                            $scope.interfaceVoicesList[1].voiceCompleteName = results.interfaceVoices[0][1].voiceName + ' - [online]';
+                            var count1 = 0;
+                            var count2 = 0;
+                            angular.forEach($scope.interfaceVoicesList, function (value) {
+                                if (count1 >= 2) {
+                                    $scope.interfaceVoicesList[count1].voiceCompleteName = value.voiceName + ' - [offline]';
+                                }
+                                count1++
+                            });
+                            angular.forEach($scope.expansionVoicesList, function (value) {
+                                if (value.voiceType == 'online') {
+                                    var name = value.voiceName;
+                                    var language = value.vocalwareLangAbbr;
+                                    var country = value.vocalwareDescr;
+                                    var type = value.voiceType;
+                                    $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' (' + country + ') - ' + '[' + type + ']';
+                                } else {
+                                    $scope.expansionVoicesList[count2].voiceCompleteName = value.voiceName + ' - [offline]';
+                                }
+                                if (value.ID_Voice == $scope.userData.cfgExpansionVoiceOnline) {
+                                    $scope.userData.cfgExpansionVoiceOnline = value.voiceName;
+                                }
+                                count2++;
+                            });
+                            if (results.appRunning == 'local') {
+                                $scope.local = true;
+                                $scope.interfaceVoicesListOffline = results.interfaceVoicesOffline[0];
+                                $scope.expansionVoicesOffline = results.expansionVoicesOffline[0];
+                                var count3 = 0;
+                                var count4 = 0;
+                                angular.forEach($scope.interfaceVoicesListOffline, function (value) {
+                                    $scope.interfaceVoicesListOffline[count3].voiceCompleteName = value.voiceName + ' - [offline]';
+                                    count3++
+                                });
+                                angular.forEach($scope.expansionVoicesOffline, function (value) {
+                                    $scope.expansionVoicesOffline[count4].voiceCompleteName = value.voiceName + ' - [offline]';
+                                    count4++
+                                });
+                            }
+                        });
+            };
+            $scope.getConfig()
+                    .then(function () {
+                        $scope.getAudioLists();
+                    });
+
+            $scope.expansionVoiceChange = function (data) {
+                angular.forEach($scope.expansionVoicesList, function (value) {
+                    if (value.voiceName === data) {
+                        if (value.voiceType === 'offline') {
+                            $scope.changeCfgVoices(value.voiceName, 'ExpansionVoiceOnline');
+                            $scope.changeCfgVoices('offline', 'ExpansionVoiceOnlineType');
+                        } else if (value.voiceType === 'online') {
+                            $scope.changeCfgVoices(value.ID_Voice, 'ExpansionVoiceOnline');
+                            $scope.changeCfgVoices('online', 'ExpansionVoiceOnlineType');
+                        }
+                    }
                 });
-                angular.forEach($scope.expansionVoicesOffline, function (value) {
-                    $scope.expansionVoicesOffline[count4].voiceCompleteName = value.voiceName + ' - [offline]';
-                    count4++
-                });
-            }
-        });
-    };
-    $scope.getConfig()
-        .then(function(){
-            $scope.getAudioLists();
-        });
-    
-    $scope.expansionVoiceChange = function(data){
-        angular.forEach($scope.expansionVoicesList, function (value) {
-            if(value.voiceName===data){
-                if(value.voiceType==='offline'){
-                    $scope.changeCfgVoices(value.voiceName, 'ExpansionVoiceOnline');
-                    $scope.changeCfgVoices('offline', 'ExpansionVoiceOnlineType');
-                }else if(value.voiceType==='online'){
-                    $scope.changeCfgVoices(value.ID_Voice, 'ExpansionVoiceOnline');
-                    $scope.changeCfgVoices('online', 'ExpansionVoiceOnlineType');
+            };
+
+            $scope.mascFemVoice = function (data) {
+                if (data === $scope.interfaceVoicesList[0].voiceName) {
+                    $scope.changeMascFem(false, 'InterfaceVoiceMascFem');
+                } else if (data === $scope.interfaceVoicesList[1].voiceName) {
+                    $scope.changeMascFem(true, 'InterfaceVoiceMascFem');
                 }
-            }
-        });
-    };
-    
-    $scope.mascFemVoice = function(data){
-        if(data===$scope.interfaceVoicesList[0].voiceName){
-            $scope.changeMascFem(false,'InterfaceVoiceMascFem');
-        }else if(data===$scope.interfaceVoicesList[1].voiceName){
-            $scope.changeMascFem(true,'InterfaceVoiceMascFem');
-        }
-    };
-    
-    $scope.generateAudio = function(){
+            };
+
+            $scope.generateAudio = function () {
 //        Resources.main.save({'IdU':$rootScope.userId, 'text':'Aquesta es la veu seleccionada', 'interface':'false'}, {'funct': "generateAudio"}).$promise
 //        .then(function (results) {
 //        console.log(results);
-        $scope.sound = ngAudio.load("mp3/"+ "45c71c3398bc9fea91ad50b66c844a7c.mp3");
+                $scope.sound = ngAudio.load("mp3/" + "45c71c3398bc9fea91ad50b66c844a7c.mp3");
 //        $scope.sound = ngAudio.load("mp3/"+results[0]);
-        $scope.sound.play();
+                $scope.sound.play();
 //        $scope.sound = ngAudio.load($scope.baseurl + );
 //        });
-    };
-    
-    $scope.exit = function(){
-        $scope.viewActived=false;
-        $scope.getConfig()
-        .then(function(){
-            $location.path('/');
-        });
-    };
- })
+            };
+
+            $scope.exit = function () {
+                $scope.viewActived = false;
+                $scope.getConfig()
+                        .then(function () {
+                            $location.path('/');
+                        });
+            };
+        })
 
         .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
@@ -1228,9 +1232,9 @@ angular.module('controllers', [])
             {
                 //-----------Iniciacion-----------
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
-                
+
                 var url = $scope.baseurl + "Board/loadCFG";
-                
+
                 var postdata = {lusuid: userConfig.ID_ULanguage};
                 //MODIF: borrar
                 $http.post(url, postdata);
@@ -1265,7 +1269,6 @@ angular.module('controllers', [])
                         $scope.userViewWidth = 10;
                     }
                 }
-                alert("id:"+ userConfig.ID_SU);
                 // Sentece bar configuration
                 $scope.cfgMenuReadActive = userConfig.cfgMenuReadActive;
                 $scope.cfgMenuDeleteLastActive = userConfig.cfgMenuDeleteLastActive;
@@ -1284,14 +1287,14 @@ angular.module('controllers', [])
                 $scope.cfgScanStartClick = userConfig.cfgScanStartClick;
                 $scope.cfgCancelScanOnOff = userConfig.cfgCancelScanOnOff == 1 ? true : false;
                 $scope.cfgTextInCell = userConfig.cfgTextInCell == 1 ? true : false;
-                if (userConfig.cfgUsageMouseOneCTwoC == 0){
+                if (userConfig.cfgUsageMouseOneCTwoC == 0) {
                     $scope.longclick = false;
                     $scope.timerScan = false;
                     $scope.cfgScanStartClick = false;
-                } else if (userConfig.cfgUsageMouseOneCTwoC == 1){
+                } else if (userConfig.cfgUsageMouseOneCTwoC == 1) {
                     $scope.cfgTimeOverOnOff = false;
                     $scope.cfgTimeNoRepeatedClickOnOff = false;
-                } else if (userConfig.cfgUsageMouseOneCTwoC == 2){
+                } else if (userConfig.cfgUsageMouseOneCTwoC == 2) {
                     $scope.longclick = false;
                     $scope.timerScan = false;
                     $scope.cfgTimeOverOnOff = false;
@@ -1299,7 +1302,7 @@ angular.module('controllers', [])
                     $scope.cfgScanStartClick = false;
                     $scope.cfgCancelScanOnOff = false;
                 }
-                
+
                 $scope.getPred();
                 //If there are some request to edit from another controller, the edit panel it's loaded
                 if ($rootScope.editPanelInfo != null) {
@@ -1977,7 +1980,7 @@ angular.module('controllers', [])
                     });
 
                 }
-                
+
             };
 
             /***************************************************
