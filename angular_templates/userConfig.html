@@ -1,6 +1,5 @@
 <link rel="stylesheet" type="text/css" href="css/userConfig.css">
 <link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
-<link rel="stylesheet" type="text/css" href="libraries/scrollbarCfgUser.css">
 <div id="main" style="background-image: url('/img/FonsRegistre.png');background-size:100% 100%">
     <div id="header" class="container-fluid text-center row">
         <div id="menuText" class="col-xs-offset-2 col-xs-10">
@@ -26,371 +25,201 @@
     </div>
     <div class="row">
         <div class="col-xs-2 col-xs-offset-5 loadingGif" ng-show="!viewActived"><img class="img-responsive" src="/img/srcWeb/Login/loading.gif"/></div>
-        <div class="col-xs-9 col-xs-offset-2 scrollMenuUserConfig" ng-scrollbar rebuild-on="rebuild:me" rebuild-on-resize  ng-show="viewActived">
-            <div class="col-xs-11" >
-                <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-12.png')">
-                    <div class="col-xs-12">
-                        <form name="userDataForm">
-                            <div id="header" class="row">
-                                <div class="col-xs-9 headerTitle">{{content.titleBar1}}</div>
-                                <div class="col-xs-3">
-                                    <button
-                                        type="reset"
-                                        class="icon-pencil pull-right editButton"
-                                        ng-disabled="loadingEdit"
-                                        ng-class="{editButtonActive: canEdit}"
-                                        ng-click="canEdit = !canEdit; deleteForm();"><i class="textButons">&nbsp; {{content.edit}}</i>
-                                    </button>
-                                    <img class="loadingGifSmBar pull-right" ng-show="loadingEdit" src="/img/icons/whiteLoading.gif"/>
-                                </div>
+        <div class="col-xs-8 col-xs-offset-2 scrollMenuUserConfig" id="scrollBar" ng-show="viewActived">
+            <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-12.png')">
+                <div class="col-xs-12">
+                    <form name="userDataForm">
+                        <div id="header" class="row">
+                            <div class="col-xs-9 headerTitle">{{content.titleBar1}}</div>
+                            <div class="col-xs-3">
+                                <button
+                                    type="reset"
+                                    class="icon-pencil pull-right editButton"
+                                    ng-disabled="loadingEdit"
+                                    ng-class="{editButtonActive: canEdit}"
+                                    ng-click="canEdit = !canEdit; deleteForm();"><i class="textButons">&nbsp; {{content.edit}}</i>
+                                </button>
+                                <img class="loadingGifSmBar pull-right" ng-show="loadingEdit" src="/img/icons/whiteLoading.gif"/>
                             </div>
-                            <div class="backgroundUserDataBox">
-                                <div class="row">
-                                    <div id="DadesUsuariLeft" class="col-xs-6">
-                                        <div class="row verticalMarginTop">
-                                            <div class="col-xs-4">{{content.userName}}</div>
-                                            <div class="col-xs-8 verticalMarginBottom">
-                                                <input
-                                                    class="inputDadesUsuari"
-                                                    type="text"
-                                                    ng-disabled="!canEdit"
-                                                    ng-readonly="true"
-                                                    uib-popover="{{content.popOverCantEdit}}"
-                                                    popover-trigger="focus"
-                                                    placeholder="{{userData.SUname}}"/>
-                                            </div>
+                        </div>
+                        <div class="backgroundUserDataBox">
+                            <div class="row">
+                                <div id="DadesUsuariLeft" class="col-xs-6">
+                                    <div class="row verticalMarginTop">
+                                        <div class="col-xs-4">{{content.userName}}</div>
+                                        <div class="col-xs-8 verticalMarginBottom">
+                                            <input
+                                                class="inputDadesUsuari"
+                                                type="text"
+                                                ng-disabled="!canEdit"
+                                                ng-readonly="true"
+                                                uib-popover="{{content.popOverCantEdit}}"
+                                                popover-trigger="focus"
+                                                placeholder="{{userData.SUname}}"/>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-xs-4">{{content.name}}</div>
-                                            <div class="col-xs-8">
-                                                <input
-                                                    type="text"
-                                                    ng_model="userDataForm.realName"
-                                                    value="{{userData.realname}}"
-                                                    ng-disabled="!canEdit"
-                                                    placeholder="{{userData.realname}}"
-                                                    ng-class="{
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4">{{content.name}}</div>
+                                        <div class="col-xs-8">
+                                            <input
+                                                type="text"
+                                                ng_model="userDataForm.realName"
+                                                value="{{userData.realname}}"
+                                                ng-disabled="!canEdit"
+                                                placeholder="{{userData.realname}}"
+                                                ng-class="{
                                                         inputDadesUsuari: !canEdit,
                                                         inputDadesUsuariEditable: canEdit}"/>
-                                            </div>
                                         </div>
-                                        <!--collapsed contnet-->
-                                        <div class="row">
-                                            <div class="col-xs-12" uib-collapse="!canEdit" collapsed="rebuild()" expanded="rebuild()">
-                                                <div class="row">
-                                                    <div class="col-xs-8 col-xs-offset-4 verticalMarginTop FonsTurquesaClar" ng-class="{FonsTurquesaSucces: userData.cfgIsFem == '0'}">
-                                                        <input type="radio" id="radioUserConfig1" class="" ng-model="userData.cfgIsFem" value="0" ng-click="changeRadioEstate(userData.cfgIsFem, 'IsFem')" ng-show="false">
+                                    </div>
+        <!--collapsed contnet-->
+                                    <div class="row">
+                                        <div class="col-xs-12" uib-collapse="!canEdit">
+                                            <div class="row">
+                                                <div class="col-xs-8 col-xs-offset-4 verticalMarginTop FonsTurquesaClar" ng-class="{FonsTurquesaSucces: userData.cfgIsFem=='0'}">
+                                                    <input type="radio" id="radioUserConfig1" class="" ng-model="userData.cfgIsFem" value="0" ng-click="changeRadioEstate(userData.cfgIsFem, 'IsFem')" ng-show="false">
                                                         <label for="radioUserConfig1" class="labelTurquesa">{{content.isMasc}}</label>
-                                                    </div>
-                                                </div>
-                                                <div class="row verticalMarginTop">
-                                                    <a class="configLink" type="button" data-toggle="modal" data-target="#PassModal">{{content.changePass}}</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--END collapsed contnet-->
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="PassModal" role="dialog">
-                                            <div class="modal-dialog modal-lg">
-                                                <div class="marginModalTop" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-12.png')">
-                                                    <div id="header" class="row">
-                                                        <div class="col-xs-10 headerTitle">{{content.changePassTitle}}</div>
-                                                    </div>
-                                                    <div class="row backgroundUserDataBox">
-                                                        <div id="DadesUsuariLeft" class="col-xs-7">
-                                                            <div class="row verticalMarginTop">{{content.oldPass}}
-                                                                <img class="loadingGifSm pull-right" ng-show="loadingOldPass" src="/img/icons/Loading_icon.gif"/>
-                                                                <input type="image" class="loadingGifSm pull-right" ng-show="oldPassState == 'false'" ng-src="/img/icons/infoRed.png" popover-placement="bottom-left" popover-trigger="focus"
-                                                                       ng-app=""uib-popover="{{content.popOldPass}}">
-                                                            </div>
-                                                        </div>
-                                                        <div id="DadesUsuariRight" class="col-xs-5">
-                                                            <div class="row verticalMarginTop">
-                                                                <input
-                                                                    class="inputDadesUsuari"
-                                                                    type="password"
-                                                                    ng-disabled="(oldPassState == 'true')"
-                                                                    ng-model="oldPass"
-                                                                    ng-change="checkOldPass();"
-                                                                    placeholder="{{content.oldPassPlaceholder}}"
-                                                                    ng-class="{
-                                                                            inputDadesUsuariError: oldPassState=='false',
-                                                                            inputDadesUsuariWarning: oldPassDirty,
-                                                                            inputDadesUsuariSucces: oldPassState=='true'}"/>
-                                                            </div>
-                                                        </div>
-                                                        <!--<div class="row" uib-collapse="!(oldPassState=='true')"><div class="col-xs-12"><hr/></div></div>-->
-                                                        <div class="row">
-                                                            <div id="DadesUsuariLeft" class="col-xs-7"  uib-collapse="!(oldPassState=='true')" collapsed="rebuild()" expanded="rebuild()">
-                                                                <div class="row">{{content.newPass1}}
-                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassLengthOk == 'false'" ng-src="/img/icons/infoRed.png" popover-placement="top-left" popover-trigger="focus"
-                                                                           ng-app=""uib-popover="{{content.popNewPassMinLength}}">
-                                                                </div>
-                                                                <div class="row verticalMarginTop">{{content.newPass2}}
-                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassState == 'false'" ng-src="/img/icons/infoRed.png" popover-placement="top-left" popover-trigger="focus"
-                                                                           ng-app=""uib-popover="{{content.popNewPassEqual}}">
-                                                                </div>
-                                                            </div>
-                                                            <div id="DadesUsuariRight" class="col-xs-5"  uib-collapse="!(oldPassState=='true')" collapsed="rebuild()" expanded="rebuild()">
-                                                                <div class="row">
-                                                                    <input
-                                                                        class="inputDadesUsuari"
-                                                                        type="password"
-                                                                        ng-disabled="(newPassState == 'true')"
-                                                                        ng-model="newPass1"
-                                                                        ng-change="minPassLength();"
-                                                                        placeholder="{{content.newPassPlaceholder}}"
-                                                                        ng-class="{
-                                                                                inputDadesUsuariError: newPassLengthOk=='false',
-                                                                                inputDadesUsuariSucces: newPassLengthOk=='true'}"/>
-                                                                </div>
-                                                                <div class="row verticalMarginTop">
-                                                                    <input
-                                                                        class="inputDadesUsuari"
-                                                                        type="password"
-                                                                        ng-disabled="!(newPassLengthOk == 'true')"
-                                                                        ng-model="newPass2"
-                                                                        ng-change="comparePass();"
-                                                                        placeholder="{{content.newPassPlaceholder}}"
-                                                                        ng-class="{
-                                                                                inputDadesUsuariError: newPassState=='false',
-                                                                                inputDadesUsuariSucces: newPassState=='true'}"/>
-                                                                </div>
-                                                                <div class="row verticalMarginTop">
-                                                                    <button type="reset" class="btn-turquoise" data-dismiss="modal" ng-click="deleteFormPass();">{{content.cancel}}</button>
-                                                                    <button type="submit" class="btn-turquoise pull-right" data-dismiss="modal" ng-disabled="!(newPassState == 'true')" ng-click="saveNewPass();">{{content.save}}</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row verticalMarginTop"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--END Modal -->
-                                    </div>
-                                    <div id="DadesUsuariRight" class="col-xs-6">
-                                        <div class="row verticalMarginTop">
-                                            <div class="col-xs-3">{{content.email}}</div>
-                                            <div class="col-xs-9 verticalMarginBottom">
-                                                <input
-                                                    class="inputDadesUsuari"
-                                                    type="text"
-                                                    ng-disabled="!canEdit"
-                                                    ng-readonly="true"
-                                                    uib-popover="{{content.popOverCantEdit}}"
-                                                    popover-trigger="focus"
-                                                    placeholder="{{userData.email}}"/>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xs-3">{{content.lastName}}</div>
-                                            <div class="col-xs-9">
-                                                <input
-                                                    type="text"
-                                                    ng_model="userDataForm.surNames"
-                                                    value="{{userData.surnames}}"
-                                                    ng-disabled="!canEdit"
-                                                    placeholder="{{userData.surnames}}"
-                                                    ng-class="{
-                                                        inputDadesUsuari: !canEdit,
-                                                        inputDadesUsuariEditable: canEdit}"/>
-                                            </div>
-                                        </div>
-                                        <!--collapsed contnet-->
-                                        <div class="row">
-                                            <div class="col-xs-12" uib-collapse="!canEdit" collapsed="rebuild()" expanded="rebuild()">
-                                                <div class="row">
-                                                    <div class="col-xs-9 col-xs-offset-3 verticalMarginTop FonsTurquesaClar" ng-class="{FonsTurquesaSucces: userData.cfgIsFem == '1'}">
-                                                        <input type="radio" id="radioUserConfig2" class="" ng-model="userData.cfgIsFem" value="1" ng-click="changeRadioEstate(userData.cfgIsFem, 'IsFem')" ng-show="false">
-                                                        <label for="radioUserConfig2" class="labelTurquesa">{{content.isFem}}</label>
-                                                    </div>
-                                                </div>
-                                                <div class="row verticalMarginTop">
-                                                    <div class="col-xs-3"></div>
-                                                    <div class="col-xs-5 verticalMarginTop">
-                                                        <button type="reset" class="btn-turquoise" ng-click="canEdit = !canEdit; deleteForm();">{{content.cancel}}</button>
-                                                    </div>
-                                                    <div class="col-xs-4 verticalMarginTop">
-                                                        <button
-                                                            type="submit"
-                                                            class="btn-turquoise pull-right"
-                                                            ng-click="canEdit = !canEdit; saveUserData();">{{content.save}}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--END collapsed contnet-->
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div><br/>
-                <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-08.png')">
-                    <div class="col-xs-12">
-                        <div id="header" class="row"><div class="col-xs-10 headerTitle">{{content.titleBar2}}</div></div>
-                        <div class="marginBoxCentral">
-                            <!--InterfaceLanguage-->                        
-                            <div class="row menuBar">
-                                <div class="row headerBar" ng-class="{disabledBar: !interfaceLanguageBarEnable}">
-                                    <div class="col-xs-6">
-                                        <div class="col-xs-2 infoIconBox">
-                                            <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
-                                                   uib-popover="{{content.popInterfaceInfo}}">
-                                        </div>
-                                        <div class="col-xs-10 buttonBar" ng-click="contentBar1 = !contentBar1">{{content.interfaceLanguage}}</div>
-                                    </div>
-                                    <div class="col-xs-2 FonsTaronja" ng-class="{disabledText: !interfaceLanguageBarEnable}">{{interfaceLanguage}}</div>
-                                    <div class="col-xs-4 buttonBar" ng-click="contentBar1 = !contentBar1">&nbsp;
-                                        <img class="loadingGifSm pull-right" ng-show="!interfaceLanguageBarEnable" src="/img/icons/Loading_icon.gif"/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12" uib-collapse="!contentBar1" collapsed="rebuild()" expanded="rebuild()">
-                                        <div class="row contentBar">
-                                            <div class="col-xs-3">Selecciona l'idioma:</div>
-                                            <div class="col-xs-5">
-                                                <div class="btn-group pull-right" role="group" >
-                                                    <button type="button" class="btn btn-group-turquoise" ng-repeat="language in interfaceLanguages"
-                                                            ng-click="changeLanguage(language.user);" >{{language.name}}</button>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-4">
-                                                <button
-                                                    type="button"
-                                                    class="btn-turquoise pull-right"
-                                                    data-toggle="modal"
-                                                    data-target="#LanguageModal"
-                                                    ng-click="addLanguageTo = 'interface';">Afegeix un idioma
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--LanguagesModal-->                        
-                            <div class="modal fade" id="LanguageModal" role="dialog">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="marginModalTop" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-08.png')">
-                                        <div id="header" class="row">
-                                            <div class="col-xs-10 headerTitle">Afegir idioma</div>
-                                        </div>
-                                        <div class="row backgroundUserConfigBox">
-                                            <div class="row">
-                                                <div class="col-xs-12 fonsAlert"><img class="img-Alert" src="/img/icons/Icon_Alert.png"/>Alerta!!!!</div>
-                                            </div>
-                                            <div class="row dadesUsuariCentre">
-                                                Si afageixes un idioma s'hauran de crear nous panells tal tal tal tal tal tal tal
-                                            </div>
-                                            <div class='row dadesUsuariCentre'>
-                                                <div class="col-xs-2">
-                                                    <button type="reset" class="btn-turquoise" data-dismiss="modal" ng-click="languageEnable = false">{{content.cancel}}</button>
-                                                </div>
-                                                <div class="col-xs-8">
-                                                    <div class="btn-group center" role="group" >
-                                                        <button type="button" class="btn btn-group-turquoise" ng-repeat="language in languages"
-                                                                ng-click="addLanguage(language.ID_Language);">{{language.languageName}}</button>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-2">
-                                                    <button type="submit" class="btn-turquoise pull-right" data-dismiss="modal" ng-disabled="!languageEnable" ng-click="addLanguage('submit');">{{content.save}}</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row verticalMarginTop"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--ExpansionLanguage-->                        
-                            <div class="row menuBar">
-                                <div class="row headerBar" ng-class="{disabledBar: !expansionLanguageEnable || !userData.cfgExpansionOnOff}">
-                                    <div class="col-xs-6">
-                                        <div class="col-xs-2 infoIconBox">
-                                            <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
-                                                   uib-popover="{{content.popExpansionInfo}}">
-                                        </div>
-                                        <div class="col-xs-10 buttonBar" ng-click="contentBar2 = !contentBar2;">{{content.expansionLanguage}}</div>
-                                    </div>
-                                    <div class="col-xs-2 FonsTaronja" ng-class="{disabledText: !expansionLanguageEnable || !userData.cfgExpansionOnOff}">{{expansionLanguage}}</div>
-                                    <div class="col-xs-2 buttonBar" ng-click="contentBar2 = !contentBar2">&nbsp;</div>
-                                    <div class="col-xs-1">
-                                        <input type="checkbox" id="switch1" class="switch" ng-model="userData.cfgExpansionOnOff" ng-click="changeOnOff(userData.cfgExpansionOnOff, 'ExpansionOnOff')" ng-show="false"/>
-                                        <label for="switch1">&nbsp;</label>
-                                    </div>
-                                    <div class="col-xs-1 buttonBar" ng-click="contentBar2 = !contentBar2">&nbsp;
-                                        <img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable && userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12" uib-collapse="!contentBar2 || !userData.cfgExpansionOnOff" collapsed="rebuild()" expanded="rebuild()">
-                                        <div class="row contentBar">
-                                            <div class="col-xs-3">Selecciona l'idioma:</div>
-                                            <div class="col-xs-5">
-                                                <div class="btn-group pull-right" role="group" >
-                                                    <button type="button" class="btn btn-group-turquoise" ng-repeat="language in expansionLanguages" ng-if="language.idInterfaceLanguage == userData.ID_ULanguage"
-                                                            ng-click="changeLanguage(language.user);" >{{language.name}}</button>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-4">
-                                                <button
-                                                    type="button"
-                                                    class="btn-turquoise pull-right"
-                                                    data-toggle="modal"
-                                                    data-target="#LanguageModal"
-                                                    ng-click="addLanguageTo = 'expansion'">Afegeix un idioma
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Menu-->                        
-                            <div class="row menuBar">
-                                <div class="row headerBar">
-                                    <div class="col-xs-6">
-                                        <div class="col-xs-2 infoIconBox">
-                                            <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
-                                                   uib-popover="{{content.popMenuInfo}}">
-                                        </div>
-                                        <div class="col-xs-10 buttonBar" ng-click="contentBar3 = !contentBar3">{{content.menuBar}}</div>
-                                    </div>
-                                    <div class="col-xs-6 buttonBar" ng-click="contentBar3 = !contentBar3">&nbsp;
-                                        <!--<img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>-->
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12" uib-collapse="!contentBar3" collapsed="rebuild()" expanded="rebuild()">
-                                        <div class="row contentBar">
-                                            <div class="row">
-                                                <div class="col-xs-2">
-                                                    <input type="radio" id="radioMenu1" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="0" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
-                                                    <label for="radioMenu1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/menuUp.png"/></label>
-                                                </div>
-                                                <div class="col-xs-3">
-                                                    <input type="radio" id="radioMenu2" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="1" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
-                                                    <label for="radioMenu2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/menuDown.png"/></label>
-                                                </div>
-                                                <div class="col-xs-7">
-                                                    <input type="checkbox" id="checkMenu1" class="imageSwitch" ng-model="userData.cfgMenuReadActive" ng-click="changeOnOff(userData.cfgMenuReadActive, 'MenuReadActive')" ng-show="false">
-                                                    <label for="checkMenu1"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/menuButton1.png"/></label>
-                                                    <img class="img-config" src="/img/srcWeb/UserConfig/sentenceBar.png"/>
-                                                    <input type="checkbox" id="checkMenu2" class="imageSwitch" ng-model="userData.cfgMenuDeleteLastActive" ng-click="changeOnOff(userData.cfgMenuDeleteLastActive, 'MenuDeleteLastActive')" ng-show="false">
-                                                    <label for="checkMenu2"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/menuButton2.png"/></label>
-                                                    <input type="checkbox" id="checkMenu3" class="imageSwitch" ng-model="userData.cfgMenuDeleteAllActive" ng-click="changeOnOff(userData.cfgMenuDeleteAllActive, 'MenuDeleteAllActive')" ng-show="false">
-                                                    <label for="checkMenu3"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/menuButton3.png"/></label>
                                                 </div>
                                             </div>
                                             <div class="row verticalMarginTop">
-                                                <div class="col-xs-4">{{content.sentenceBar}}</div>
-                                                <div class="col-xs-6">
-                                                    <input type="checkbox" id="checkSentence1" class="imageSwitch" ng-model="userData.cfgAutoEraseSentenceBar" ng-click="changeOnOff(userData.cfgAutoEraseSentenceBar, 'AutoEraseSentenceBar')" ng-show="false">
-                                                    <label for="checkSentence1"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/sentenceBarAutoErase.gif"/></label>
+                                                <a class="configLink" type="button" data-toggle="modal" data-target="#PassModal">{{content.changePass}}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+        <!--END collapsed contnet-->
+        <!-- Modal -->
+                                            <div class="modal fade" id="PassModal" role="dialog">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="marginModalTop" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-12.png')">
+                                                        <div id="header" class="row">
+                                                            <div class="col-xs-10 headerTitle">{{content.changePassTitle}}</div>
+                                                        </div>
+                                                        <div class="row backgroundUserDataBox">
+                                                            <div id="DadesUsuariLeft" class="col-xs-7">
+                                                                <div class="row verticalMarginTop">{{content.oldPass}}
+                                                                    <img class="loadingGifSm pull-right" ng-show="loadingOldPass" src="/img/icons/Loading_icon.gif"/>
+                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="oldPassState=='false'" ng-src="/img/icons/infoRed.png" popover-placement="bottom-left" popover-trigger="focus"
+                                                                        ng-app=""uib-popover="{{content.popOldPass}}">
+                                                                </div>
+                                                            </div>
+                                                            <div id="DadesUsuariRight" class="col-xs-5">
+                                                                <div class="row verticalMarginTop">
+                                                                    <input
+                                                                        class="inputDadesUsuari"
+                                                                        type="password"
+                                                                        ng-disabled="(oldPassState=='true')"
+                                                                        ng-model="oldPass"
+                                                                        ng-change="checkOldPass();"
+                                                                        placeholder="{{content.oldPassPlaceholder}}"
+                                                                        ng-class="{
+                                                                            inputDadesUsuariError: oldPassState=='false',
+                                                                            inputDadesUsuariWarning: oldPassDirty,
+                                                                            inputDadesUsuariSucces: oldPassState=='true'}"/>
+                                                                </div>
+                                                            </div>
+                                                            <!--<div class="row" uib-collapse="!(oldPassState=='true')"><div class="col-xs-12"><hr/></div></div>-->
+                                                            <div class="row">
+                                                                <div id="DadesUsuariLeft" class="col-xs-7"  uib-collapse="!(oldPassState=='true')">
+                                                                    <div class="row">{{content.newPass1}}
+                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassLengthOk=='false'" ng-src="/img/icons/infoRed.png" popover-placement="top-left" popover-trigger="focus"
+                                                                        ng-app=""uib-popover="{{content.popNewPassMinLength}}">
+                                                                    </div>
+                                                                    <div class="row verticalMarginTop">{{content.newPass2}}
+                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassState=='false'" ng-src="/img/icons/infoRed.png" popover-placement="top-left" popover-trigger="focus"
+                                                                        ng-app=""uib-popover="{{content.popNewPassEqual}}">
+                                                                    </div>
+                                                                </div>
+                                                                <div id="DadesUsuariRight" class="col-xs-5"  uib-collapse="!(oldPassState=='true')">
+                                                                    <div class="row">
+                                                                        <input
+                                                                            class="inputDadesUsuari"
+                                                                            type="password"
+                                                                            ng-disabled="(newPassState=='true')"
+                                                                            ng-model="newPass1"
+                                                                            ng-change="minPassLength();"
+                                                                            placeholder="{{content.newPassPlaceholder}}"
+                                                                            ng-class="{
+                                                                                inputDadesUsuariError: newPassLengthOk=='false',
+                                                                                inputDadesUsuariSucces: newPassLengthOk=='true'}"/>
+                                                                    </div>
+                                                                    <div class="row verticalMarginTop">
+                                                                        <input
+                                                                            class="inputDadesUsuari"
+                                                                            type="password"
+                                                                            ng-disabled="!(newPassLengthOk=='true')"
+                                                                            ng-model="newPass2"
+                                                                            ng-change="comparePass();"
+                                                                            placeholder="{{content.newPassPlaceholder}}"
+                                                                            ng-class="{
+                                                                                inputDadesUsuariError: newPassState=='false',
+                                                                                inputDadesUsuariSucces: newPassState=='true'}"/>
+                                                                    </div>
+                                                                    <div class="row verticalMarginTop">
+                                                                        <button type="reset" class="btn-turquoise" data-dismiss="modal" ng-click="deleteFormPass();">{{content.cancel}}</button>
+                                                                        <button type="submit" class="btn-turquoise pull-right" data-dismiss="modal" ng-disabled="!(newPassState=='true')" ng-click="saveNewPass();">{{content.save}}</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row verticalMarginTop"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+        <!--END Modal -->
+                                </div>
+                                <div id="DadesUsuariRight" class="col-xs-6">
+                                    <div class="row verticalMarginTop">
+                                        <div class="col-xs-3">{{content.email}}</div>
+                                        <div class="col-xs-9 verticalMarginBottom">
+                                            <input
+                                                class="inputDadesUsuari"
+                                                type="text"
+                                                ng-disabled="!canEdit"
+                                                ng-readonly="true"
+                                                uib-popover="{{content.popOverCantEdit}}"
+                                                popover-trigger="focus"
+                                                placeholder="{{userData.email}}"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-3">{{content.lastName}}</div>
+                                        <div class="col-xs-9">
+                                            <input
+                                                type="text"
+                                                ng_model="userDataForm.surNames"
+                                                value="{{userData.surnames}}"
+                                                ng-disabled="!canEdit"
+                                                placeholder="{{userData.surnames}}"
+                                                ng-class="{
+                                                        inputDadesUsuari: !canEdit,
+                                                        inputDadesUsuariEditable: canEdit}"/>
+                                        </div>
+                                    </div>
+        <!--collapsed contnet-->
+                                    <div class="row">
+                                        <div class="col-xs-12" uib-collapse="!canEdit">
+                                            <div class="row">
+                                                <div class="col-xs-9 col-xs-offset-3 verticalMarginTop FonsTurquesaClar" ng-class="{FonsTurquesaSucces: userData.cfgIsFem=='1'}">
+                                                    <input type="radio" id="radioUserConfig2" class="" ng-model="userData.cfgIsFem" value="1" ng-click="changeRadioEstate(userData.cfgIsFem, 'IsFem')" ng-show="false">
+                                                        <label for="radioUserConfig2" class="labelTurquesa">{{content.isFem}}</label>
+                                                </div>
+                                            </div>
+                                            <div class="row verticalMarginTop">
+                                                <div class="col-xs-3"></div>
+                                                <div class="col-xs-5 verticalMarginTop">
+                                                    <button type="reset" class="btn-turquoise" ng-click="canEdit = !canEdit; deleteForm();">{{content.cancel}}</button>
+                                                </div>
+                                                <div class="col-xs-4 verticalMarginTop">
+                                                    <button
+                                                        type="submit"
+                                                        class="btn-turquoise pull-right"
+                                                        ng-click="canEdit = !canEdit; saveUserData();">{{content.save}}
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+        <!--END collapsed contnet-->
                                 </div>
                             </div>
                         </div>
@@ -450,191 +279,25 @@
                                                             <div class="row">
                                                                 <div class="col-xs-12 fonsAlert"><img class="img-Alert" src="/img/icons/Icon_Alert.png"/>Alerta!!!!</div>
                                                             </div>
-                                                            <div class="col-xs-4 buttonBar" ng-click="contentBar4=!contentBar4">&nbsp;</div>
-                                                            <div class="col-xs-1">
-                                                            <input type="checkbox" id="switch2" class="switch" ng-model="" ng-click="" ng-show="false"/>
-                                                                <label for="switch2">&nbsp;</label>
+                                                            <div class="row dadesUsuariCentre">
+                                                                Si afageixes un idioma s'hauran de crear nous panells tal tal tal tal tal tal tal
                                                             </div>
-                                                            <div class="col-xs-1 buttonBar" ng-click="contentBar4=!contentBar4">&nbsp;
-                                                                <img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                        <div class="col-xs-12" uib-collapse="!contentBar4">
-                                                        <div class="row contentBar">
-                                                            <div class="col-xs-2">
-                                                                <input type="radio" id="radioSentence1" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="0" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
-                                                                    <label for="radioSentence1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/sentenceUp.png"/></label>
-                                                            </div>
-                                                            <div class="col-xs-4">
-                                                                <input type="radio" id="radioSentence2" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="1" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
-                                                                    <label for="radioSentence2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/sentenceDown.png"/></label>
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <input type="checkbox" id="checkSentence1" class="imageSwitch" ng-model="userData.cfgAutoEraseSentenceBar" ng-click="changeOnOff(userData.cfgAutoEraseSentenceBar, 'AutoEraseSentenceBar')" ng-show="false">
-                                                                    <label for="checkSentence1"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/sentenceBarAutoErase.gif"/></label>
+                                                            <div class='row dadesUsuariCentre'>
+                                                                <div class="col-xs-2">
+                                                                    <button type="reset" class="btn-turquoise" data-dismiss="modal" ng-click="languageEnable=false">{{content.cancel}}</button>
+                                                                </div>
+                                                                <div class="col-xs-8">
+                                                                    <div class="btn-group center" role="group" >
+                                                                        <button type="button" class="btn btn-group-turquoise" ng-repeat="language in languages"
+                                                                                ng-click="addLanguage(language.ID_Language);">{{language.languageName}}</button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-xs-2">
+                                                                    <button type="submit" class="btn-turquoise pull-right" data-dismiss="modal" ng-disabled="!languageEnable" ng-click="addLanguage('submit');">{{content.save}}</button>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>-->
-                            <!--Configuración interficie-->                            
-                            <div class="row menuBar">
-                                <div class="row headerBar">
-                                    <div class="col-xs-6">
-                                        <div class="col-xs-2 infoIconBox">
-                                            <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
-                                                   uib-popover="{{content.popInterfaceInfo}}">
-                                        </div>
-                                        <div class="col-xs-10 buttonBar" ng-click="contentBar5 = !contentBar5">{{content.interface}}</div>
-                                    </div>
-                                    <div class="col-xs-4 buttonBar" ng-click="contentBar5 = !contentBar5">&nbsp;</div>
-                                    <div class="col-xs-1">
-                                        <!--<input type="checkbox" id="switch3" class="switch" ng-model="" ng-click="" ng-show="false"/>
-                                        <label for="switch3">&nbsp;</label>-->
-                                    </div>
-                                    <div class="col-xs-1 buttonBar" ng-click="contentBar5 = !contentBar5">&nbsp;
-                                        <!--<img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>-->
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12" uib-collapse="!contentBar5" collapsed="rebuild()" expanded="rebuild()">
-                                        <div class="row contentBar">
-                                            <div class="col-xs-3"></div>
-                                            <div class="col-xs-4">
-                                                <input type="radio" id="radioTextInCell1" class="imageRadio" ng-model="userData.cfgTextInCell" value="0" ng-click="changeRadioEstate(userData.cfgTextInCell, 'TextInCell')" ng-show="false">
-                                                <label for="radioTextInCell1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/textInCellOff.png"/></label>
-                                            </div>
-                                            <div class="col-xs-4">
-                                                <input type="radio" id="radioTextInCell2" class="imageRadio" ng-model="userData.cfgTextInCell" value="1" ng-click="changeRadioEstate(userData.cfgTextInCell, 'TextInCell')" ng-show="false">
-                                                <label for="radioTextInCell2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/textInCellOn.png"/></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Sistema Predicción-->                            
-                            <div class="row menuBar">
-                                <div class="row headerBar" ng-class="{disabledBar:!userData.cfgPredOnOff}">
-                                    <div class="col-xs-6">
-                                        <div class="col-xs-2 infoIconBox">
-                                            <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
-                                                   uib-popover="{{content.popPredictionInfo}}">
-                                        </div>
-                                        <div class="col-xs-10">{{content.predictionSistem}}</div>
-                                    </div>
-                                    <div class="col-xs-2 FonsTaronja" ng-class="{disabledText: !userData.cfgPredOnOff}">Pictogramas:</div>
-                                    <div class="col-xs-1" ng-class="{disabledText: !userData.cfgPredOnOff}">
-                                        <select class="boxEdit dropdown-arrow"
-                                                ng-options="f for f in numPictosBarPred"
-                                                ng-model="userData.cfgPredBarNumPred"
-                                                ng-disabled="!userData.cfgPredOnOff"
-                                                ng-click="changeRadioEstate(userData.cfgPredBarNumPred, 'PredBarNumPred')">
-                                        </select>
-                                    </div>
-                                    <div class="col-xs-1">&nbsp;</div>
-                                    <div class="col-xs-1">
-                                        <input type="checkbox" id="switch4" class="switch" ng-model="userData.cfgPredOnOff" ng-click="changeOnOff(userData.cfgPredOnOff, 'PredOnOff')" ng-show="false"/>
-                                        <label for="switch4">&nbsp;</label>
-                                    </div>
-                                    <div class="col-xs-1" ng-click="contentBar6 = !contentBar6">&nbsp;
-                                        <!--<img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>-->
-                                    </div>
-                                </div>
-                                <!--                            <div class="row">
-                                                            <div class="col-xs-12" uib-collapse="!contentBar6 || !userData.cfgPredOnOff">
-                                                            <div class="row contentBar">{{userData.cfgPredBarNumPred}}
-                                                            </div>
-                                                            </div>
-                                                            </div>-->
-                            </div>
-                            <!--Configuración harware-->                            
-                            <div class="row menuBar">
-                                <div class="row headerBar">
-                                    <div class="col-xs-6">
-                                        <div class="col-xs-2 infoIconBox">
-                                            <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
-                                                   uib-popover="{{content.popHardwareConfig}}">
-                                        </div>
-                                        <div class="col-xs-10 buttonBar" ng-click="contentBar7 = !contentBar7">{{content.hardwareTitleBar}}</div>
-                                    </div>
-                                    <div class="col-xs-5 buttonBar" ng-click="contentBar7 = !contentBar7">&nbsp;</div>
-                                    <div class="col-xs-1 buttonBar" ng-click="contentBar7 = !contentBar7">&nbsp;
-                                        <!--<img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>-->
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12" uib-collapse="!contentBar7" collapsed="rebuild()" expanded="rebuild()">
-                                        <div class="row contentBar">
-                                            <div class="row">
-                                                <div class="col-xs-2">
-                                                    <input type="radio" id="radioHardwareUsage1" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="0" 
-                                                           ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff = 0;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
-                                                    <label for="radioHardwareUsage1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageMouse.png"/></label>
-                                                </div>
-                                                <div class="col-xs-2">
-                                                    <input type="radio" id="radioHardwareUsage2" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="1" 
-                                                           ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff = 1;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
-                                                    <label for="radioHardwareUsage2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageOneC.png"/></label>
-                                                </div>
-                                                <div class="col-xs-2">
-                                                    <input type="radio" id="radioHardwareUsage3" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="2" 
-                                                           ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff = 1;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
-                                                    <label for="radioHardwareUsage3"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageTwoC.png"/></label>
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <div class="row">
-                                                        <div class="col-xs-6" ng-class="{disabledText: !(userData.cfgUsageMouseOneCTwoC == '1')}">Tiempo de click:</div>
-                                                        <div class="col-xs-4">
-                                                            <div class="backgroundGreyTime">
-                                                                <input
-                                                                    class="inputTimeConfig"
-                                                                    type="number"
-                                                                    ng-disabled="!(userData.cfgUsageMouseOneCTwoC == '1')"
-                                                                    ng-model="userData.cfgTimeClick"
-                                                                    ng-change="checkNumberTime(userData.cfgTimeClick, 'TimeClick')"
-                                                                    value="{{userData.cfgTimeClick}}"
-                                                                    /> ms
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-6" ng-class="{disabledText: !userData.cfgTimeLapseSelectOnOff}">Lapse time:</div>
-                                                        <div class="col-xs-4">
-                                                            <div class="backgroundGreyTime">
-                                                                <input
-                                                                    class="inputTimeConfig"
-                                                                    type="number"
-                                                                    ng-disabled="!userData.cfgTimeLapseSelectOnOff"
-                                                                    ng-model="userData.cfgTimeLapseSelect"
-                                                                    ng-change="checkNumberTime(userData.cfgTimeLapseSelect, 'TimeLapseSelect')"
-                                                                    value="{{userData.cfgTimeLapseSelect}}"
-                                                                    /> ms
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xs-2">
-                                                            <input type="checkbox" id="switch5" class="switch" ng-model="userData.cfgTimeLapseSelectOnOff" ng-click="changeOnOff(userData.cfgTimeLapseSelectOnOff, 'TimeLapseSelectOnOff')" ng-show="false"/>
-                                                            <label for="switch5">&nbsp;</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-6" ng-class="{disabledText: !userData.cfgTimeNoRepeatedClickOnOff}">No repeat time:</div>
-                                                        <div class="col-xs-4">
-                                                            <div class="backgroundGreyTime">
-                                                                <input
-                                                                    class="inputTimeConfig"
-                                                                    type="number"
-                                                                    ng-disabled="!userData.cfgTimeNoRepeatedClickOnOff"
-                                                                    ng-model="userData.cfgTimeNoRepeatedClick"
-                                                                    ng-change="checkNumberTime(userData.cfgTimeNoRepeatedClick, 'TimeNoRepeatedClick')"
-                                                                    value="{{userData.cfgTimeNoRepeatedClick}}"
-                                                                    /> ms
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xs-2">
-                                                            <input type="checkbox" id="switch6" class="switch" ng-model="userData.cfgTimeNoRepeatedClickOnOff" ng-click="changeOnOff(userData.cfgTimeNoRepeatedClickOnOff, 'TimeNoRepeatedClickOnOff')" ng-show="false"/>
-                                                            <label for="switch6">&nbsp;</label>
-                                                        </div>
+                                                    <div class="row verticalMarginTop"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -646,6 +309,16 @@
                                         <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popExpansionInfo}}">
                                     </div>
+                                    <div class="col-xs-10 buttonBar" ng-click="contentBar2=!contentBar2">{{content.expansionLanguage}}</div>
+                                </div>
+                                <div class="col-xs-2 FonsTaronja" ng-class="{disabledText: !expansionLanguageEnable||!userData.cfgExpansionOnOff}">{{expansionLanguage}}</div>
+                                <div class="col-xs-2 buttonBar" ng-click="contentBar2=!contentBar2">&nbsp;</div>
+                                <div class="col-xs-1">
+                                    <input type="checkbox" id="switch1" class="switch" ng-model="userData.cfgExpansionOnOff" ng-click="changeOnOff(userData.cfgExpansionOnOff, 'ExpansionOnOff')" ng-show="false"/>
+                                    <label for="switch1">&nbsp;</label>
+                                </div>
+                                <div class="col-xs-1 buttonBar" ng-click="contentBar2=!contentBar2">&nbsp;
+                                    <img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>
                                 </div>
                             </div>
                             <div class="row">
@@ -710,15 +383,8 @@
                                 <div class="row verticalMarginTop">
                                     <div class="col-xs-4">{{content.sentenceBar}}</div>
                                     <div class="col-xs-6">
-                                        <div class="col-xs-2 infoIconBox">
-                                            <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
-                                                   uib-popover="{{content.popScanSistem}}">
-                                        </div>
-                                        <div class="col-xs-10 buttonBar" ng-click="contentBar8 = !contentBar8">{{content.scanSistemTitleBar}}</div>
-                                    </div>
-                                    <div class="col-xs-5 buttonBar" ng-click="contentBar8 = !contentBar8">&nbsp;</div>
-                                    <div class="col-xs-1 buttonBar" ng-click="contentBar8 = !contentBar8">&nbsp;
-                                        <!--<img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>-->
+                                        <input type="checkbox" id="checkSentence1" class="imageSwitch" ng-model="userData.cfgAutoEraseSentenceBar" ng-click="changeOnOff(userData.cfgAutoEraseSentenceBar, 'AutoEraseSentenceBar')" ng-show="false">
+                                            <label for="checkSentence1"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/sentenceBarAutoErase.gif"/></label>
                                     </div>
                                 </div>
                             </div>
@@ -852,64 +518,21 @@
                             <div class="col-xs-12" uib-collapse="!contentBar7">
                             <div class="row contentBar">
                                 <div class="row">
-                                    <div class="col-xs-12" uib-collapse="!contentBar8 || !userData.cfgScanningOnOff" collapsed="rebuild()" expanded="rebuild()">
-                                        <div class="row contentBar">
-                                            <div class="row">
-                                                <div class="col-xs-2">
-                                                    <input type="radio" id="radioScan1" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="0" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
-                                                    <label for="radioScan1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningCustom.png"/></label>
-                                                </div>
-                                                <div class="col-xs-2">
-                                                    <input type="radio" id="radioScan2" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="1" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
-                                                    <label for="radioScan2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningRow.png"/></label>
-                                                </div>
-                                                <div class="col-xs-2">
-                                                    <input type="radio" id="radioScan3" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="2" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
-                                                    <label for="radioScan3"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningCol.png"/></label>
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <div class="row">
-                                                        <div class="col-xs-6" ng-class="{disabledText: !userData.cfgScanningAutoOnOff}">Escaneo automatico:</div>
-                                                        <div class="col-xs-4">
-                                                            <div class="backgroundGreyTime">
-                                                                <input
-                                                                    class="inputTimeConfig"
-                                                                    type="number"
-                                                                    ng-disabled="!userData.cfgScanningAutoOnOff"
-                                                                    ng-model="userData.cfgTimeScanning"
-                                                                    ng-change="checkNumberTime(userData.cfgTimeScanning, 'TimeScanning')"
-                                                                    value="{{userData.cfgTimeScanning}}"
-                                                                    /> ms
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xs-2">
-                                                            <input type="checkbox" id="switch7" class="switch" ng-model="userData.cfgScanningAutoOnOff" ng-click="changeOnOff(userData.cfgScanningAutoOnOff, 'ScanningAutoOnOff')" ng-show="false"/>
-                                                            <label for="switch7">&nbsp;</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-6" ng-show="userData.cfgScanningAutoOnOff">Cancelar Escaneo</div>
-                                                        <div class="col-xs-2">
-                                                            <input type="checkbox" id="switch8" class="switch" ng-model="userData.cfgCancelScanOnOff" ng-click="changeOnOff(userData.cfgCancelScanOnOff, 'ScanningCancelScanOnOff')" ng-show="false"/>
-                                                            <label for="switch8" ng-show="userData.cfgScanningAutoOnOff">&nbsp;</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-6" ng-show="userData.cfgScanningAutoOnOff">Start Click</div>
-                                                        <div class="col-xs-2">
-                                                            <input type="checkbox" id="switch9" class="switch" ng-model="userData.cfgScanStartClick" ng-click="changeOnOff(userData.cfgScanStartClick, 'ScanStartClick')" ng-show="false"/>
-                                                            <label for="switch9" ng-show="userData.cfgScanningAutoOnOff">&nbsp;</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="col-xs-2">
+                                        <input type="radio" id="radioHardwareUsage1" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="0" 
+                                               ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=0;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
+                                            <label for="radioHardwareUsage1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageMouse.png"/></label>
                                     </div>
-                                </div>
-                            </div>
-                            <!--Historial-->                            
-                            <div class="row menuBar">
-                                <div class="row headerBar" ng-class="{disabledBar:!userData.cfgHistOnOff}">
+                                    <div class="col-xs-2">
+                                        <input type="radio" id="radioHardwareUsage2" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="1" 
+                                               ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=1;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
+                                            <label for="radioHardwareUsage2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageOneC.png"/></label>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <input type="radio" id="radioHardwareUsage3" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="2" 
+                                               ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=1;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
+                                            <label for="radioHardwareUsage3"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgUsageTwoC.png"/></label>
+                                    </div>
                                     <div class="col-xs-6">
                                         <div class="row">
                                             <div class="col-xs-6" ng-class="{disabledText: !userData.cfgTimeLapseSelectOnOff||!(userData.cfgUsageMouseOneCTwoC=='0')}">Lapse time:</div>
@@ -961,22 +584,29 @@
                                         <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                                                uib-popover="{{content.popScanSistem}}">
                                     </div>
-                                    <div class="col-xs-5 buttonBar" ng-click="contentBar10 = !contentBar10">&nbsp;</div>
-                                    <div class="col-xs-1 buttonBar" ng-click="contentBar10 = !contentBar10">&nbsp;
-                                        <!--<img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>-->
-                                    </div>
+                                    <div class="col-xs-10 buttonBar" ng-click="contentBar8=!contentBar8">{{content.scanSistemTitleBar}}</div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-xs-12" uib-collapse="!contentBar10" collapsed="rebuild()" expanded="rebuild()">
-                                        <div class="row contentBar">
-                                            tururu
-                                        </div>
-                                    </div>
+                                <div class="col-xs-5 buttonBar" ng-click="contentBar8=!contentBar8">&nbsp;</div>
+                                <div class="col-xs-1 buttonBar" ng-click="contentBar8=!contentBar8">&nbsp;
+                                    <!--<img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>-->
                                 </div>
                             </div>
-                            <!--Feedback Voice-->                            
-                            <div class="row menuBar">
-                                <div class="row headerBar">
+                            <div class="row">
+                            <div class="col-xs-12" uib-collapse="!contentBar8 || !userData.cfgScanningOnOff">
+                            <div class="row contentBar">
+                                <div class="row">
+                                    <div class="col-xs-2">
+                                        <input type="radio" id="radioScan1" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="0" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
+                                            <label for="radioScan1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningCustom.png"/></label>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <input type="radio" id="radioScan2" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="1" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
+                                            <label for="radioScan2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningRow.png"/></label>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <input type="radio" id="radioScan3" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="2" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
+                                            <label for="radioScan3"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningCol.png"/></label>
+                                    </div>
                                     <div class="col-xs-6">
                                         <div class="row">
                                             <div class="col-xs-6" ng-class="{disabledText: !userData.cfgScanningAutoOnOff||userData.cfgUsageMouseOneCTwoC=='2'}">Escaneo automatico:</div>
@@ -1171,11 +801,9 @@
                         </div>
                         
 
-
-                        </div>
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 </div>
