@@ -49,24 +49,43 @@ class Login_model extends CI_Model {
             $secretKey, // The signing key
             'HS512'     // Algorithm used to sign the token, see https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
         );
-            
-        //Miramos el default language del Super User
-        $this->db->select('cfgDefLanguage, languageabbr'); // Seleccionar les columnes
-        $this->db->from('SuperUser');// Seleccionem la taula
-        $this->db->join('Languages', 'SuperUser.cfgDefLanguage = Languages.ID_Language', 'left');
-        $this->db->where('SUname', $user);// filtrem per columnes
-        $query2 = $this->db->get()->result_array();// Fem la query i la guardem a la variable query2
 
-        // Sacamos la variable language del array
-        $languageid = array_column($query2, 'cfgDefLanguage');
-        $languageabbr = array_column($query2, 'languageabbr');
+        // Get user data and user config data
+        $this->db->from('SuperUser');
+        $this->db->join('User', 'SuperUser.cfgDefUser = User.ID_User');
+        $this->db->join('Languages', 'SuperUser.cfgDefUser = User.ID_User AND User.ID_ULanguage = Languages.ID_Language', 'right');
+        $this->db->where('SUname', $user);
+        $query2 = $this->db->get()->result_array();
+        $userConfig = $query2[0];
+
+        // Save user config data in the COOKIES
+        $this->session->set_userdata('idusu', $userConfig["ID_User"]);
+        $this->session->set_userdata('uname', $userConfig["SUname"]);
+        $this->session->set_userdata('ulanguage', $userConfig["cfgExpansionLanguage"]);
+        //MODIF: Cuando lo juntemos con jose dará fallo. Jose tiene que cambiar "uinterfacelangauge" por este
+        $this->session->set_userdata('uinterfacelangauge', $userConfig["ID_ULanguage"]);
+        $this->session->set_userdata('uinterfacelangtype', $userConfig["type"]);
+        $this->session->set_userdata('uinterfacelangnadjorder', $userConfig["nounAdjOrder"]);
+        $this->session->set_userdata('uinterfacelangncorder', $userConfig["nounComplementOrder"]);
+        $this->session->set_userdata('uinterfacelangabbr', $userConfig["languageabbr"]);
+        $this->session->set_userdata('autoEraseSentenceBar', $userConfig["cfgAutoEraseSentenceBar"]);
+        $this->session->set_userdata('isfem', $userConfig["cfgIsFem"]);
+
+        // Save Expansion language in the COOKIES
+        $this->db->select('canExpand');
+        $this->db->where('ID_Language', $userConfig["cfgExpansionLanguage"]);
+        $canExpand = $this->db->get('Languages');
+
+        if ($canExpand == '1'){
+            $this->session->set_userdata('ulangabbr', $userConfig["languageabbr"]);
+        }else{
+            $this->session->set_userdata('ulangabbr', 'ES');
+        }
 
         // Guardamos los datos como objeto
         $unencodedArray = [
             'token' => $jwt,
-            'languageid' => $languageid,
-            'languageabbr' => $languageabbr,
-            'userID' => $output[0]->ID_User
+            'userConfig' => $userConfig
         ];
 
         return $unencodedArray;

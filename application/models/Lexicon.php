@@ -26,85 +26,44 @@ class Lexicon extends CI_Model {
         
         if ($query->num_rows() > 0) {
             
-            // If the user is found, it fills the COOKIES
-            $output = $query->result();
-            $idusu = $output[0]->ID_SU;
-            $ulanguage = $output[0]->cfgDefUser;
-            $isfem = $output[0]->cfgIsFem;
-            $autoerase = $output[0]->cfgAutoEraseSentenceBar;
-            $expansiononoff = $output[0]->cfgExpansionOnOff;
-            $idsubuser = 0;
-            
-            // By default
-            $uexplanguage = $ulanguage;
-            
-            // We get the language for the expansion system 
-            // just in case the user has changed it
-            $output3 = array();
-            $this->db->where('ID_USU', $idusu);
-            $this->db->where('ID_ULanguage', $ulanguage);
-            
-            $query3 = $this->db->get('User');
+            // Get user data and user config data
+            $this->db->from('SuperUser');
+            $this->db->join('User', 'SuperUser.cfgDefUser = User.ID_User');
+            $this->db->join('Languages', 'SuperUser.cfgDefUser = User.ID_User AND User.ID_ULanguage = Languages.ID_Language', 'right');
+            $this->db->where('SUname', $usuari);
+            $query2 = $this->db->get()->result_array();
+            $userConfig = $query2[0];
+
+            // Save user config data in the COOKIES
+            $this->session->set_userdata('idusu', $userConfig["ID_User"]);
+            $this->session->set_userdata('uname', $userConfig["SUname"]);
+            $this->session->set_userdata('ulanguage', $userConfig["cfgExpansionLanguage"]);
+            //MODIF: Cuando lo juntemos con jose dará fallo. Jose tiene que cambiar "uinterfacelangauge" por este
+            $this->session->set_userdata('uinterfacelangauge', $userConfig["ID_ULanguage"]);
+            $this->session->set_userdata('uinterfacelangtype', $userConfig["type"]);
+            $this->session->set_userdata('uinterfacelangnadjorder', $userConfig["nounAdjOrder"]);
+            $this->session->set_userdata('uinterfacelangncorder', $userConfig["nounComplementOrder"]);
+            $this->session->set_userdata('uinterfacelangabbr', $userConfig["languageabbr"]);
+            $this->session->set_userdata('autoEraseSentenceBar', $userConfig["cfgAutoEraseSentenceBar"]);
+            $this->session->set_userdata('isfem', $userConfig["cfgIsFem"]);
+            $this->session->set_userdata('cfgExpansionOnOff', $userConfig["cfgExpansionOnOff"]);
+
+            // Save Expansion language in the COOKIES
+            $this->db->select('canExpand');
+            $this->db->where('ID_Language', $userConfig["cfgExpansionLanguage"]);
+            $query3 = $this->db->get('Languages');
             
             if ($query3->num_rows() > 0) {
-                $output3 = $query3->result();
-                $uexplanguage = $output3[0]->cfgExpansionLanguage;
-                $idsubuser = $output3[0]->ID_User;
-            }
-            
-            $this->session->set_userdata('idusu', $idusu);
-            $this->session->set_userdata('idsubuser', $idsubuser);
-            $this->session->set_userdata('uname', $usuari);
-            $this->session->set_userdata('ulanguage', $uexplanguage);
-            $this->session->set_userdata('uinterfacelangauge', $ulanguage);
-            $this->session->set_userdata('isfem', $isfem);
-            $this->session->set_userdata('cfgAutoEraseSentenceBar', $autoerase);
-            $this->session->set_userdata('cfgExpansionOnOff', $expansiononoff);
-            
-            $output2 = array();
-            $this->db->where('ID_Language', $uexplanguage);
-            $query2 = $this->db->get('Languages');
-            
-            if ($query2->num_rows() > 0) {
-                $output2 = $query2->result();
-                $ulangabbr = $output2[0]->languageabbr;
-                $this->session->set_userdata('ulangoriginalabbr', $ulangabbr);
+                $aux = $query3->result();
+                $canExpand = $aux[0]->canExpand;
                 
-                if ($output2[0]->canExpand == '1') {
-                    $this->session->set_userdata('ulangabbr', $ulangabbr);
-                    $this->session->set_userdata('explangcannotexpand', '0');
-                }
-                // If the expansion language cannot expand, the Spanish expander will be used by default
-                else {
+                if ($canExpand == '1'){
+                    $this->session->set_userdata('ulangabbr', $userConfig["languageabbr"]);
+                }else{
                     $this->session->set_userdata('ulangabbr', 'ES');
-                    $this->session->set_userdata('explangcannotexpand', '1');
                 }
             }
-            
-            $output4 = array();
-            $this->db->where('ID_Language', $ulanguage);  
-            $query4 = $this->db->get('Languages');
-            
-            if ($query4->num_rows() > 0) {
-                $output4 = $query4->result();
-                
-                // We get the info on the interface language, it will be used by the parser
-                $uinterfacelangtype = $output4[0]->type;
-                $this->session->set_userdata('uinterfacelangtype', $uinterfacelangtype);
-                $uinterfacelangnadjorder = $output4[0]->nounAdjOrder;
-                $this->session->set_userdata('uinterfacelangnadjorder', $uinterfacelangnadjorder);
-                $uinterfacelangncorder = $output4[0]->nounComplementOrder;
-                $this->session->set_userdata('uinterfacelangncorder', $uinterfacelangncorder);
-                $ulangabbr = $output4[0]->languageabbr;
-                $this->session->set_userdata('uinterfacelangabbr', $ulangabbr);
-            }
-            else {
-                $this->session->set_userdata('uinterfacelangabbr', 'ES');
-                $this->session->set_userdata('uinterfacelangtype', 'svo');
-                $this->session->set_userdata('uinterfacelangnadjorder', '0');
-                $this->session->set_userdata('uinterfacelangncorder', '1');
-            }
-            
+                        
             return true;
         }
         else return false;
