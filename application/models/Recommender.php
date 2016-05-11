@@ -24,36 +24,290 @@ class Recommender extends CI_Model {
             $output = $query->result();
         }
         return $output; 
-    }   
- 
-    private function getTheme1OptFits($theme){      
+    }
+    
+    private function getTypesElem($pictoid){
         $output = array();
+        $output = null;
         
-        $matching = new Mymatching();
-        $key = $matching->nounsFitKeys[$theme[0]->themetipus];
+        $this->db->select('pictoType');
+        $this->db->from('pictograms');
+        $this->db->where('pictoid', $pictoid);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output; 
+    }
+    
+    private function getSubj() {     
+        $output = array();
+        $output = null;
+        
+        $subjList = array("jo", "yo", "tu");
+        
+        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
+        $this->db->from('pictogramslanguage');
+        $this->db->join('pictograms', 'pictogramslanguage.pictoid = pictograms.pictoid', 'left');                             
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));
+        $this->db->where_in('pictogramslanguage.pictotext', $subjList);
+        $this->db->limit(5); 
+        $query = $this->db->get();     
                 
-        for ($i = 0; $i <= 24; $i++) { // sizeof($matching->nounsFit)
-            if($matching->nounsFit[$key][$i] == 0){
-                $keyw = array_search($i, $matching->nounsFitKeys);
-                array_push($output, $keyw);
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }        
+        return $output;
+    }
+    
+    private function getfreqIdiomaType($pictoType) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
+        $this->db->from('pictogramslanguage');
+        $this->db->join('pictograms', 'pictogramslanguage.pictoid = pictograms.pictoid', 'left');                             
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));
+        $this->db->where('pictograms.pictoType', $pictoType);               
+        $this->db->limit(5);
+        $this->db->order_by('pictogramslanguage.pictofreq', 'desc');   
+        $query = $this->db->get();   
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;
+    } 
+    
+    private function getfreqIdioma() {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
+        $this->db->from('pictogramslanguage');
+        $this->db->join('pictograms', 'pictogramslanguage.pictoid = pictograms.pictoid', 'left');                             
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));
+        $this->db->limit(5);
+        $this->db->order_by('pictogramslanguage.pictofreq', 'desc');   
+        $query = $this->db->get();   
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;
+    }    
+
+    private function getfreqUsuariX2($inputid1) {                            
+        $output = array();
+        $output = null;
+        
+        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
+        $this->db->from('p_statsuserpictox2');              
+        $this->db->join('pictogramslanguage', 'p_statsuserpictox2.picto2id = pictogramslanguage.pictoid', 'left'); 
+        $this->db->join('pictograms', 'p_statsuserpictox2.picto2id = pictograms.pictoid', 'left'); 
+        $this->db->where('p_statsuserpictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                                                   
+        $this->db->where('p_statsuserpictox2.picto1id', $inputid1);  
+        $this->db->limit(5);
+        $this->db->order_by('countx2', 'desc');        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;   
+    }    
+    
+    private function getDbSearchX2($inputid1, $fits) {
+        $output = array();
+        $output = null;
+        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
+        $this->db->from('p_statsuserpictox2');       
+        $this->db->join('pictogramslanguage', 'p_statsuserpictox2.picto2id = pictogramslanguage.pictoid', 'left');
+        $this->db->join('pictograms', 'p_statsuserpictox2.picto2id = pictograms.pictoid', 'left'); 
+        $this->db->join('nameclass'.$this->session->userdata('ulangabbr'), 'p_statsuserpictox2.picto2id = nameclass'.$this->session->userdata('ulangabbr').'.nameid', 'left'); 
+        $this->db->where('p_statsuserpictox2.ID_PSUP2User', $this->session->userdata('idusu'));        
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                             
+        $this->db->where('p_statsuserpictox2.picto1id', $inputid1);  
+        $this->db->where_in('nameclass'.$this->session->userdata('ulangabbr').'.class', $fits);
+        $this->db->limit(5);
+        $this->db->order_by('countx2', 'desc');        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output; 
+    }
+    
+    private function getContext() {                            
+        $output = array();
+        $output = null;
+        
+        $date = array(date("Y-m-d"), date("Y-m-d", strtotime("yesterday")));     
+        
+        $this->db->select('r_s_historicpictograms.pictoid, COUNT(r_s_historicpictograms.pictoid) as repes, pictogramslanguage.pictotext, pictograms.imgPicto');
+        $this->db->from('r_s_historicpictograms');              
+        $this->db->join('s_historic', 'r_s_historicpictograms.ID_RSHPSentence = s_historic.ID_SHistoric', 'left'); 
+        $this->db->join('pictogramslanguage', 'r_s_historicpictograms.pictoid = pictogramslanguage.pictoid', 'left'); 
+        $this->db->join('pictograms', 'pictogramslanguage.pictoid = pictograms.pictoid', 'left'); 
+        $this->db->where('s_historic.ID_SHUser', $this->session->userdata('idusu'));               
+        //$this->db->where('s_historic.sentenceDate', '2016-04-20');               
+        $this->db->where_in('s_historic.sentenceDate', $date);
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                                                           
+        $this->db->limit(5);
+        $this->db->group_by('r_s_historicpictograms.pictoid, pictogramslanguage.pictotext, pictograms.imgPicto');
+        $this->db->order_by('repes', 'desc');        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;   
+    }  
+    
+    private function getContextType($pictoType) {                            
+        $output = array();
+        $output = null;
+        
+        $date = array(date("Y-m-d"), date("Y-m-d", strtotime("yesterday")));
+        
+        $this->db->select('r_s_historicpictograms.pictoid, COUNT(r_s_historicpictograms.pictoid) as repes, pictogramslanguage.pictotext, pictograms.imgPicto');
+        $this->db->from('r_s_historicpictograms');              
+        $this->db->join('s_historic', 'r_s_historicpictograms.ID_RSHPSentence = s_historic.ID_SHistoric', 'left'); 
+        $this->db->join('pictogramslanguage', 'r_s_historicpictograms.pictoid = pictogramslanguage.pictoid', 'left'); 
+        $this->db->join('pictograms', 'pictogramslanguage.pictoid = pictograms.pictoid', 'left'); 
+        $this->db->where('s_historic.ID_SHUser', $this->session->userdata('idusu'));               
+        //$this->db->where('s_historic.sentenceDate', '2016-04-20');               
+        $this->db->where_in('s_historic.sentenceDate', $date);
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                                                           
+        $this->db->where('pictograms.pictoType', $pictoType);               
+        $this->db->limit(5);
+        $this->db->group_by('r_s_historicpictograms.pictoid, pictogramslanguage.pictotext, pictograms.imgPicto');
+        $this->db->order_by('repes', 'desc');        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;   
+    }   
+   
+    private function getMMFits($tipus, $case){      
+        $output = array();
+        $output = null;
+        $caseTipus = $case."tipus";
+        // puede haber locfrom opt sin locfromtipus
+        if($tipus[0]->$caseTipus != null) {   
+            $matching = new Mymatching();
+            $key = $matching->nounsFitKeys[$tipus[0]->$caseTipus];        
+            $keyw = array_keys($matching->nounsFit[$key], 0);
+            for ($i = 0; $i < sizeof($keyw); $i++) {
+                $output[] = array_keys($matching->nounsFitKeys, $keyw[$i])[0];
             }
         }
         return $output;
     }
         
-    private function getTheme1Opt($picto1id, $theme1Opt) {
+    private function getCaseTipus($picto1id, $case, $b) {
         $output = array();
         $output = null;
-        $this->db->select('themetipus');
+        $this->db->select($case.'tipus');    
         $this->db->from('pattern'.$this->session->userdata('ulangabbr'));        
-        $this->db->where('verbid', $picto1id);    
-        $this->db->where('theme', $theme1Opt);    
+        $this->db->where('verbid', $picto1id);
+        $this->db->where($case, $b);     
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
             $output = $query->result();
-        }                
+        }
         return $output;                   
+    }
+    
+    private function getFits($inputid1, $case) {
+        $fits = null;
+        $tipus = $this->getCaseTipus($inputid1, $case, 1);        
+        $caseTipus = $case."tipus";
+        if ($tipus != null && $tipus[0]->$caseTipus != 'adj' && $tipus[0]->$caseTipus != 'adv' && $tipus[0]->$caseTipus != 'modif' && $tipus[0]->$caseTipus != 'verb') {
+            $fits = $this->getMMFits($tipus, $case);
+        }
+        else if ($tipus == null) {
+            $tipus = $this->getCaseTipus($inputid1, $case, 'opt');
+            if ($tipus != null && $tipus[0]->$caseTipus != 'adj' && $tipus[0]->$caseTipus != 'adv' && $tipus[0]->$caseTipus != 'modif' && $tipus[0]->$caseTipus != 'verb') {
+                $fits = $this->getMMFits($tipus, $case); 
+            }
+        }
+        else if ($tipus != null && $tipus[0]->$caseTipus == 'verb') {
+            
+        }
+        return $fits;
+    }    
+    
+    private function getfreqUsuariX1() {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
+        $this->db->from('p_statsuserpicto');
+        $this->db->join('pictogramslanguage', 'p_statsuserpicto.pictoid = pictogramslanguage.pictoid', 'left'); 
+        $this->db->join('pictograms', 'p_statsuserpicto.pictoid = pictograms.pictoid', 'left'); 
+        $this->db->where('p_statsuserpicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                             
+        $this->db->limit(5);
+        $this->db->order_by('countx1', 'desc');        
+        $query = $this->db->get();     
+                
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }        
+        return $output;
+    }
+    
+    private function getfreqUsuariX3($inputid1, $inputid2) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
+        $this->db->from('p_statsuserpictox3');       
+        $this->db->join('pictogramslanguage', 'p_statsuserpictox3.picto3id = pictogramslanguage.pictoid', 'left'); 
+        $this->db->join('pictograms', 'p_statsuserpictox3.picto3id = pictograms.pictoid', 'left');
+        $this->db->where('p_statsuserpictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                                              
+        $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
+        $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
+        $this->db->limit(5);
+        $this->db->order_by('countx3', 'desc');        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;   
+    }
+    
+    function getDbSearchX3($inputid1, $inputid2, $fits) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('pictograms.imgPicto, p_statsuserpictox3.picto3id as `pictoid`, pictogramslanguage.pictotext');
+        $this->db->from('p_statsuserpictox3');       
+        $this->db->join('nameclass'.$this->session->userdata('ulangabbr'), 'p_statsuserpictox3.picto3id = nameclass'.$this->session->userdata('ulangabbr').'.nameid', 'left'); 
+        $this->db->join('pictogramslanguage', 'p_statsuserpictox3.picto3id = pictogramslanguage.pictoid', 'left'); 
+        $this->db->join('pictograms', 'p_statsuserpictox3.picto3id = pictograms.pictoid', 'left'); 
+        $this->db->where('p_statsuserpictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                             
+        $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
+        $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
+        $this->db->where_in('nameclass'.$this->session->userdata('ulangabbr').'.class', $fits);
+        $this->db->limit(5);
+        $this->db->order_by('countx3', 'desc');                                            
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;   
     }
     
     /*
@@ -173,145 +427,100 @@ class Recommender extends CI_Model {
     }    
 
     function getRecommenderX1() {     
-        $output = array();
-        $output = null;
         
-        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
-        $this->db->from('p_statsuserpicto');
-        $this->db->join('pictogramslanguage', 'p_statsuserpicto.pictoid = pictogramslanguage.pictoid', 'left'); 
-        $this->db->join('pictograms', 'p_statsuserpicto.pictoid = pictograms.pictoid', 'left'); 
-        $this->db->where('p_statsuserpicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
-        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('uinterfacelangauge'));                             
-        $this->db->limit(5);
-        $this->db->order_by('countx1', 'desc');        
-        $query = $this->db->get();     
+        $freqIdioma = $this->getfreqIdioma();
+        //return $freqIdioma; // Algorisme V1 - Predictor freqüència I (de llenguatge)
+        
+        $freqUsuari = $this->getfreqUsuariX1();
+        return $freqUsuari; // Algorisme V2 - Predictor freqüència II (d'usuari)   
                 
-        if ($query->num_rows() > 0) {
-            $output = $query->result();
-        }        
-        return $output;
+        $subjs = $this->getSubj();
+        //return $subjs; // Algorisme V5 - Predictor inicial (cas 00 no hi ha res (fix jo i tu))
+        
+        $verbs = $this->getfreqIdiomaType('verb');
+        //return $verbs; // Algorisme V5 - Predictor inicial (verbs)                                                        
+        
+        $context = $this->getContext();
+        //return $context; // Algorisme V6 - Predictor de context (total)
+        
+        $contextTypeName = $this->getContextType('name');
+        //return $contextTypeName; // Algorisme V6 - Predictor de context (name)
+        
+        $contextTypeVerb = $this->getContextType('verb');
+        //return $contextTypeVerb; // Algorisme V6 - Predictor de context (verb)
+        
+        return null;
     }
         
-//    function getRecommenderX2() {   CON FITS
-//        $paraulesFrase = $this->getIdsElem();
-//        $inputid1 = $paraulesFrase[sizeof($paraulesFrase)-1]->pictoid;
-//        $theme1 = $this->getTheme1Opt($inputid1, 1);       
-//        $themeOpt = $this->getTheme1Opt($inputid1, opt);       
-//        
-//        $fits1 = null;
-//        if ($theme1 != null && $theme1[0]->themetipus != 'verb') {
-//            $fits1 = $this->getTheme1OptFits($theme1);
-//        }
-//        $fitsOpt = null;
-//        if ($themeOpt != null && $themeOpt[0]->themetipus != 'verb') {
-//            $fits1 = $this->getTheme1OptFits($themeOpt);
-//        }
-//        //else if ($theme[0]->themetipus == 'verb')
-//                         
-//        $output = array();
-//        $output = null;
-//        
-//        $this->db->select('p_statsuserpictox2.picto2id as `pictoid`, pictogramslanguage.pictotext');
-//        $this->db->from('p_statsuserpictox2');       
-//        $this->db->join('nameclassca', 'p_statsuserpictox2.picto2id = nameclassca.nameid', 'left'); 
-//        $this->db->join('pictogramslanguage', 'p_statsuserpictox2.picto2id = pictogramslanguage.pictoid', 'left'); 
-//        $this->db->where('p_statsuserpictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
-//        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('uinterfacelangauge'));                             
-//        $this->db->where('p_statsuserpictox2.picto1id', $inputid1);  
-//        $this->db->where_in('nameclassca.class', $fits1);
-//        $this->db->limit(5);
-//        $this->db->order_by('countx2', 'desc');        
-//        $query = $this->db->get();
-//        
-//        if ($query->num_rows() > 0) {
-//            $output = $query->result();
-//        }
-//        return $output;   
-//    }
-    
-    function getRecommenderX2() {   
+    function getRecommenderX2() {
         $paraulesFrase = $this->getIdsElem();
-        $inputid1 = $paraulesFrase[sizeof($paraulesFrase)-1]->pictoid;
-                         
-        $output = array();
-        $output = null;
+        $inputid1 = $paraulesFrase[sizeof($paraulesFrase)-1]->pictoid;        
+        $inputType = $this->getTypesElem($inputid1);
         
-        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
-        $this->db->from('p_statsuserpictox2');              
-        $this->db->join('pictogramslanguage', 'p_statsuserpictox2.picto2id = pictogramslanguage.pictoid', 'left'); 
-        $this->db->join('pictograms', 'p_statsuserpictox2.picto2id = pictograms.pictoid', 'left'); 
-        $this->db->where('p_statsuserpictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
-        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('uinterfacelangauge'));                                                   
-        $this->db->where('p_statsuserpictox2.picto1id', $inputid1);  
-        $this->db->limit(5);
-        $this->db->order_by('countx2', 'desc');        
-        $query = $this->db->get();
-        
-        if ($query->num_rows() > 0) {
-            $output = $query->result();
+        if ($inputType[0]->pictoType == 'verb') {            
+                        
+            $case = "theme";
+            $fits = $this->getFits($inputid1, $case);
+            $res = $this->getDbSearchX2($inputid1, $fits);
+            return $res; // Algorismes V3 i V4 - Predictor verbs I i II 
+            // (case: theme, manera, locto, locfrom)
+            // cuando $fits es false, getDbSearchX2() se comporta como getfreqUsuariX2()            
         }
-        return $output;   
-    }
-
-//    function getRecommenderX3($paraulesFrase) {   CON FITS
-//        $inputid1 = $paraulesFrase[0]->id;
-//        $inputid2 = $paraulesFrase[1]->id;
-//        
-//        $theme1Opt = 1; // = opt
-//        $theme = $this->getTheme1Opt($inputid2, $theme1Opt);       
-//        
-//        $fits = null;
-//        if ($theme != null && $theme[0]->themetipus != 'verb') {
-//            $fits = $this->getTheme1OptFits($theme);
-//        }
-//        //else if ($theme[0]->themetipus == 'verb')
-//                         
-//        $output = array();
-//        $output = null;
-//        
-//        $this->db->select('p_statsuserpictox3.picto3id as `pictoid`, pictogramslanguage.pictotext');
-//        $this->db->from('p_statsuserpictox3');       
-//        $this->db->join('nameclassca', 'p_statsuserpictox3.picto3id = nameclassca.nameid', 'left'); 
-//        $this->db->join('pictogramslanguage', 'p_statsuserpictox3.picto3id = pictogramslanguage.pictoid', 'left'); 
-//        $this->db->where('p_statsuserpictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
-//        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('uinterfacelangauge'));                             
-//        $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
-//        $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
-//        $this->db->where_in('nameclassca.class', $fits);
-//        $this->db->limit(5);
-//        $this->db->order_by('countx3', 'desc');        
-//        $query = $this->db->get();
-//        
-//        if ($query->num_rows() > 0) {
-//            $output = $query->result();
-//        }
-//        return $output;   
-//    }
-    
+        else if ($inputType[0]->pictoType != 'verb' && $inputType[0]->pictoType != 'name') {
+            
+            $subjs = $this->getSubj();
+            //return $subjs; // Algorisme V5 - Predictor inicial (cas 00 no hi ha res (fix jo i tu))   
+            
+            $contextTypeName = $this->getContextType('name');
+            //return $contextTypeName; // Algorisme V6 - Predictor de context (name)
+            
+            $verbs = $this->getfreqIdiomaType('verb');
+            //return $verbs; // Algorisme V5 - Predictor inicial (verbs) 
+            
+            $contextTypeVerb = $this->getContextType('verb');
+            //return $contextTypeVerb; // Algorisme V6 - Predictor de context (verb)                        
+        }
+                    
+        $freqIdioma = $this->getfreqIdioma();
+        //return $freqIdioma; // Algorisme V1 - Predictor freqüència I (de llenguatge)
+        
+        $freqUsuari = $this->getfreqUsuariX2($inputid1);
+        return $freqUsuari; // Algorisme V2 - Predictor freqüència II (d'usuari)        
+              
+        $context = $this->getContext();
+        //return $context; // Algorisme V6 - Predictor de context (total)
+                
+        return null;
+    }   
+   
     function getRecommenderX3() {   
         $paraulesFrase = $this->getIdsElem();        
         $inputid1 = $paraulesFrase[sizeof($paraulesFrase)-2]->pictoid;
         $inputid2 = $paraulesFrase[sizeof($paraulesFrase)-1]->pictoid;
-                         
-        $output = array();
-        $output = null;
         
-        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
-        $this->db->from('p_statsuserpictox3');       
-        $this->db->join('pictogramslanguage', 'p_statsuserpictox3.picto3id = pictogramslanguage.pictoid', 'left'); 
-        $this->db->join('pictograms', 'p_statsuserpictox3.picto3id = pictograms.pictoid', 'left');
-        $this->db->where('p_statsuserpictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
-        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('uinterfacelangauge'));                                              
-        $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
-        $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
-        $this->db->limit(5);
-        $this->db->order_by('countx3', 'desc');        
-        $query = $this->db->get();
+        //$verbs = $this->getfreqIdiomaType('verb');
+        //return $verbs; // Algorisme V5 - Predictor inicial (verbs)                
+                    
+        //$freqIdioma = $this->getfreqIdioma();
+        //return $freqIdioma; // Algorisme V1 - Predictor freqüència I (de llenguatge)
         
-        if ($query->num_rows() > 0) {
-            $output = $query->result();
-        }
-        return $output;   
+        $freqUsuari = $this->getfreqUsuariX3($inputid1, $inputid2);
+        return $freqUsuari; // Algorisme V2 - Predictor freqüència II (d'usuari)        
+                
+//        $case = "theme";
+//        $fits = $this->getFits($inputid1, $case);
+//        $res = $this->getDbSearchX3($inputid1, $inputid2, $fits);
+//        return $res; // Algorismes V3 i V4 - Predictor verbs I i II 
+        // (case: theme, manera, locto, locfrom)
+        // cuando $fits es false, getDbSearchX3() se comporta como getfreqUsuariX3()
+        
+        $context = $this->getContext();
+        //return $context; // Algorisme V6 - Predictor de context (total)
+        
+        $contextType = $this->getContextType('verb');
+        //return $contextType; // Algorisme V6 - Predictor de context (verb || name)
+        
+        return null;                                         
     }
     
     function getcountElem(){
