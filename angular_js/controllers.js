@@ -482,7 +482,7 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-        .controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, $q, txtContent, $location, $timeout) {
+        .controller('UserConfCtrl', function ($scope, $rootScope, Resources, ngAudio, AuthService, $q, txtContent, $location, $timeout) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -492,6 +492,7 @@ angular.module('controllers', [])
             $scope.viewActived = false;
             $scope.loadingEdit = false;
             $scope.loadingOldPass = false;
+            $scope.local = false;
             $scope.interfaceLanguageBarEnable = true;
             $scope.expansionLanguageEnable = true;
             $scope.userDataForm = [];
@@ -502,7 +503,7 @@ angular.module('controllers', [])
                 $scope.interfaceLanguages = [];
                 $scope.expansionLanguages = [];
                 $scope.numPictosBarPred = ['2', '3', '4', '5', '6', '7', '8', '9', '10'];
-                Resources.main.get({'IdSu': $rootScope.sUserId}, {'funct': "getConfig"}).$promise
+                return Resources.main.get({'IdSu': $rootScope.sUserId}, {'funct': "getConfig"}).$promise
                         .then(function (results) {
                             window.localStorage.removeItem('userData');
                             window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
@@ -521,6 +522,7 @@ angular.module('controllers', [])
                             $scope.userData.cfgTimeNoRepeatedClick = parseInt(results.userConfig.cfgTimeNoRepeatedClick, 10);
                             $scope.userData.cfgTimeClick = parseInt(results.userConfig.cfgTimeClick, 10);
                             $scope.userData.cfgTimeScanning = parseInt(results.userConfig.cfgTimeScanning, 10);
+                            $scope.userData.cfgVoiceOfflineRate = parseInt(results.userConfig.cfgVoiceOfflineRate, 10);
 
                             //change string (0,1) to boolean (true,false)
                             $scope.userData.cfgExpansionOnOff = ($scope.userData.cfgExpansionOnOff === "1");
@@ -536,6 +538,8 @@ angular.module('controllers', [])
                             $scope.userData.cfgCancelScanOnOff = ($scope.userData.cfgCancelScanOnOff === "1");
                             $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
                             $scope.userData.cfgHistOnOff = ($scope.userData.cfgHistOnOff === "1");
+                            $scope.userData.cfgInterfaceVoiceOnOff = ($scope.userData.cfgInterfaceVoiceOnOff === "1");
+                            $scope.userData.cfgInterfaceVoiceMascFem = ($scope.userData.cfgInterfaceVoiceMascFem === "masc");
 
                             var count = results.users[0].ID_ULanguage;
                             var numberOfInterfaceLanguages = 0;
@@ -563,9 +567,8 @@ angular.module('controllers', [])
                                 $scope.expansionLanguageEnable = true;
                             });
                         });
-
             };
-            $scope.getConfig();
+
             $scope.rebuild = function () {
                 $scope.$broadcast("rebuild:me");
             };
@@ -667,11 +670,31 @@ angular.module('controllers', [])
             $scope.changeRadioEstate = function (value, data) {
                 Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': value}, {'funct': "changeCfgBool"}).$promise
             }
+            $scope.changeCfgVoices = function (value, data) {
+                Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': value}, {'funct': "changeCfgVoices"}).$promise
+            }
+
+            $scope.changeMascFem = function (bool, data) {
+                if (bool) {
+                    Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': 'masc'}, {'funct': "changeCfgVoices"}).$promise
+                } else {
+                    Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': 'fem'}, {'funct': "changeCfgVoices"}).$promise
+                }
+            }
+
+            $scope.changeOnOffUser = function (bool, data) {
+                if (bool) {
+                    Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': '1'}, {'funct': "changeCfgVoices"}).$promise
+                } else {
+                    Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': '0'}, {'funct': "changeCfgVoices"}).$promise
+                }
+            }
+
             $scope.checkNumberTime = function (value, data) {
                 if (angular.isNumber(value)) {
                     $scope.changeRadioEstate(value, data);
                 }
-            }
+            };
 
             $scope.addLanguage = function (idLanguage) {
                 if (idLanguage == 'submit' && $scope.addLanguageTo == 'interface') {
@@ -706,77 +729,101 @@ angular.module('controllers', [])
                     $scope.addlanguageId = idLanguage;
                 }
                 $scope.languageEnable = true;
-            }
+            };
+
+            //Audio Configuration (Myaudio library access)
+            $scope.getAudioLists = function () {
+                Resources.main.get({'funct': "getVoices"}).$promise
+                        .then(function (results) {
+                            $scope.interfaceVoicesList = results.interfaceVoices[0];
+                            $scope.expansionVoicesList = results.expansionVoices[0];
+                            $scope.interfaceVoicesList[0].voiceCompleteName = results.interfaceVoices[0][0].voiceName + ' - [online]';
+                            $scope.interfaceVoicesList[1].voiceCompleteName = results.interfaceVoices[0][1].voiceName + ' - [online]';
+                            var count1 = 0;
+                            var count2 = 0;
+                            angular.forEach($scope.interfaceVoicesList, function (value) {
+                                if (count1 >= 2) {
+                                    $scope.interfaceVoicesList[count1].voiceCompleteName = value.voiceName + ' - [offline]';
+                                }
+                                count1++
+                            });
+                            angular.forEach($scope.expansionVoicesList, function (value) {
+                                if (value.voiceType == 'online') {
+                                    var name = value.voiceName;
+                                    var language = value.vocalwareLangAbbr;
+                                    var country = value.vocalwareDescr;
+                                    var type = value.voiceType;
+                                    $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' (' + country + ') - ' + '[' + type + ']';
+                                } else {
+                                    $scope.expansionVoicesList[count2].voiceCompleteName = value.voiceName + ' - [offline]';
+                                }
+                                if (value.ID_Voice == $scope.userData.cfgExpansionVoiceOnline) {
+                                    $scope.userData.cfgExpansionVoiceOnline = value.voiceName;
+                                }
+                                count2++;
+                            });
+                            if (results.appRunning == 'local') {
+                                $scope.local = true;
+                                $scope.interfaceVoicesListOffline = results.interfaceVoicesOffline[0];
+                                $scope.expansionVoicesOffline = results.expansionVoicesOffline[0];
+                                var count3 = 0;
+                                var count4 = 0;
+                                angular.forEach($scope.interfaceVoicesListOffline, function (value) {
+                                    $scope.interfaceVoicesListOffline[count3].voiceCompleteName = value.voiceName + ' - [offline]';
+                                    count3++
+                                });
+                                angular.forEach($scope.expansionVoicesOffline, function (value) {
+                                    $scope.expansionVoicesOffline[count4].voiceCompleteName = value.voiceName + ' - [offline]';
+                                    count4++
+                                });
+                            }
+                        });
+            };
+            $scope.getConfig()
+                    .then(function () {
+                        $scope.getAudioLists();
+                    });
+
+            $scope.expansionVoiceChange = function (data) {
+                angular.forEach($scope.expansionVoicesList, function (value) {
+                    if (value.voiceName === data) {
+                        if (value.voiceType === 'offline') {
+                            $scope.changeCfgVoices(value.voiceName, 'ExpansionVoiceOnline');
+                            $scope.changeCfgVoices('offline', 'ExpansionVoiceOnlineType');
+                        } else if (value.voiceType === 'online') {
+                            $scope.changeCfgVoices(value.ID_Voice, 'ExpansionVoiceOnline');
+                            $scope.changeCfgVoices('online', 'ExpansionVoiceOnlineType');
+                        }
+                    }
+                });
+            };
+
+            $scope.mascFemVoice = function (data) {
+                if (data === $scope.interfaceVoicesList[0].voiceName) {
+                    $scope.changeMascFem(false, 'InterfaceVoiceMascFem');
+                } else if (data === $scope.interfaceVoicesList[1].voiceName) {
+                    $scope.changeMascFem(true, 'InterfaceVoiceMascFem');
+                }
+            };
+
+            $scope.generateAudio = function () {
+//        Resources.main.save({'IdU':$rootScope.userId, 'text':'Aquesta es la veu seleccionada', 'interface':'false'}, {'funct': "generateAudio"}).$promise
+//        .then(function (results) {
+//        console.log(results);
+                $scope.sound = ngAudio.load("mp3/" + "45c71c3398bc9fea91ad50b66c844a7c.mp3");
+//        $scope.sound = ngAudio.load("mp3/"+results[0]);
+                $scope.sound.play();
+//        $scope.sound = ngAudio.load($scope.baseurl + );
+//        });
+            };
 
             $scope.exit = function () {
-                $scope.getConfig();
-                $location.path('/');
-            }
-        }
-        )
-
-// Controlador del buscador de pictogramas
-
-        .controller('MainCtrl', function ($rootScope, $scope, $location, Resources, AuthService, txtContent) {
-
-            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
-            if (!$rootScope.isLogged) {
-                $location.path('/login');
-            }
-
-            // Pedimos los textos para cargar la pagina
-            txtContent("pictoSearch").then(function (results) {
-                $rootScope.content = results.data;
-            });
-
-            // Variables
-            var namesResource = Resources.nom;
-            var historyResource = Resources.histo;
-
-            $scope.imatges = [];
-            $scope.typeaheadOptions = {
-                "debounce": {
-                    "default": 500,
-                    "blur": 250
-                }
-            };
-
-            // Función buscar nombres y pictogramas
-            $scope.buscar = function (val) {
-                if (!val || val == "") {
-                    return;
-                }
-                $scope.lastSearch = val;
-                return namesResource.get({'startswith': val, 'language': $scope.languageabbr}).$promise
-                        .then(function (results) {
-                            return results.data;
+                $scope.viewActived = false;
+                $scope.getConfig()
+                        .then(function () {
+                            $location.path('/');
                         });
             };
-
-            // Función seleccionar pictograma
-            $scope.onSelect = function (item, model, label, evt) {
-                $scope.img = item;
-                $scope.asyncNom = $scope.lastSearch;
-                console.log(item, model);					//borrar
-            };
-
-            // Función historial de pictogramas
-            $scope.afegir = function () {
-                historyResource.get({'pictoid': $scope.img.nameid}).$promise
-                        .then(function (results) {
-                            $scope.hist = results.data;
-                        });
-
-                $scope.imatges.push({url: $scope.img.imgPicto, done: false});
-            };
-
-
-            // Función salir del login
-            $scope.sortir = function () {
-                AuthService.logout();
-                $location.path('/login');
-            }
-
         })
 
         .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {
@@ -1185,9 +1232,9 @@ angular.module('controllers', [])
             {
                 //-----------Iniciacion-----------
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
-                
+
                 var url = $scope.baseurl + "Board/loadCFG";
-                
+
                 var postdata = {lusuid: userConfig.ID_ULanguage};
                 //MODIF: borrar
                 $http.post(url, postdata);
@@ -1222,7 +1269,6 @@ angular.module('controllers', [])
                         $scope.userViewWidth = 10;
                     }
                 }
-                alert("id:"+ userConfig.ID_SU);
                 // Sentece bar configuration
                 $scope.cfgMenuReadActive = userConfig.cfgMenuReadActive;
                 $scope.cfgMenuDeleteLastActive = userConfig.cfgMenuDeleteLastActive;
@@ -1241,14 +1287,14 @@ angular.module('controllers', [])
                 $scope.cfgScanStartClick = userConfig.cfgScanStartClick;
                 $scope.cfgCancelScanOnOff = userConfig.cfgCancelScanOnOff == 1 ? true : false;
                 $scope.cfgTextInCell = userConfig.cfgTextInCell == 1 ? true : false;
-                if (userConfig.cfgUsageMouseOneCTwoC == 0){
+                if (userConfig.cfgUsageMouseOneCTwoC == 0) {
                     $scope.longclick = false;
                     $scope.timerScan = false;
                     $scope.cfgScanStartClick = false;
-                } else if (userConfig.cfgUsageMouseOneCTwoC == 1){
+                } else if (userConfig.cfgUsageMouseOneCTwoC == 1) {
                     $scope.cfgTimeOverOnOff = false;
                     $scope.cfgTimeNoRepeatedClickOnOff = false;
-                } else if (userConfig.cfgUsageMouseOneCTwoC == 2){
+                } else if (userConfig.cfgUsageMouseOneCTwoC == 2) {
                     $scope.longclick = false;
                     $scope.timerScan = false;
                     $scope.cfgTimeOverOnOff = false;
@@ -1256,7 +1302,7 @@ angular.module('controllers', [])
                     $scope.cfgScanStartClick = false;
                     $scope.cfgCancelScanOnOff = false;
                 }
-                
+
                 $scope.getPred();
                 //If there are some request to edit from another controller, the edit panel it's loaded
                 if ($rootScope.editPanelInfo != null) {
@@ -1934,7 +1980,7 @@ angular.module('controllers', [])
                     });
 
                 }
-                
+
             };
 
             /***************************************************

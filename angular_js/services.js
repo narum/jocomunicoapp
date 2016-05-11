@@ -35,6 +35,7 @@ angular.module('services', [])
 			$rootScope.interfaceLanguageId = userConfig.ID_ULanguage;
 			$rootScope.expanLanguageId = userConfig.cfgExpansionLanguage;
                         $rootScope.sUserId = userConfig.ID_SU;
+                        $rootScope.userId = userConfig.ID_User;
 		},
 		"logout": function() {
 			window.localStorage.removeItem('token');

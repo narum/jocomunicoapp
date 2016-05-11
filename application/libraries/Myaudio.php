@@ -697,6 +697,8 @@ class Myaudio {
         $output = array();
         
         $chosenVoice = null;
+        $msVoice = null;
+        $isSAPIVoice = false; 
         
         // error de Microsoft Speech Platform
         $errorMSP = false;
@@ -713,6 +715,7 @@ class Myaudio {
             for ($i=0; $i<$numvoices; $i++) {
                 if ($voice == $msVoice->GetVoices()->Item($i)->GetDescription) {
                     $chosenVoice = $msVoice->GetVoices()->Item($i);
+                    $isSAPIVoice = false;
                 }
             }
             
@@ -727,15 +730,16 @@ class Myaudio {
 
         try {
             // Recollim els objectes de les llibreries SAPI que necessitem
-            $msSAPIVoice = new COM('SAPI.SpVoice');
+            $msVoice = new COM('SAPI.SpVoice');
 
-            $numvoicesSAPI = $msSAPIVoice->GetVoices()->Count;
+            $numvoicesSAPI = $msVoice->GetVoices()->Count;
 
             // per cada veu miram si la descripció coincideix amb el nom de la veu
             // seleccionada per l'usuari
             for ($i=0; $i<$numvoicesSAPI; $i++) {
-                if ($voice == $msSAPIVoice->GetVoices()->Item($i)->GetDescription) {
-                    $chosenVoice = $msSAPIVoice->GetVoices()->Item($i);
+                if ($voice == $msVoice->GetVoices()->Item($i)->GetDescription) {
+                    $chosenVoice = $msVoice->GetVoices()->Item($i);
+                    $isSAPIVoice = true;
                 }
             }
             
@@ -755,12 +759,23 @@ class Myaudio {
         else {
 
             try {
-                $msFileStream = new COM('Speech.SpFileStream');
-                $msAudioFormat = new COM('Speech.SpAudioFormat');
+
+                $msFileStream = null;
+                $msAudioFormat = null;
+                
+                if (!$isSAPIVoice) {
+                    $msFileStream = new COM('Speech.SpFileStream');
+                    $msAudioFormat = new COM('Speech.SpAudioFormat');
+                }
+                else {
+                    $msFileStream = new COM('SAPI.SpFileStream');
+                    $msAudioFormat = new COM('SAPI.SpAudioFormat');
+                }
 
                 // Path al fitxer on guardarem les veus
-                $wavfile = "C:\xampp\htdocs\mp3\\".$filename.".mp3";
-
+                $wavfile = "C:\\xampp\htdocs\mp3\\".$filename.".mp3";
+                echo $wavfile;
+                
                 // hem de triar la veu que vol l'usuari (trobada anteriorment)
                 $msVoice->Voice = $chosenVoice;
 
@@ -775,7 +790,7 @@ class Myaudio {
                 // obrim el fitxer on escriurem l'àudio en format CreateWrite
                 $msFileStream->Open($wavfile, 3, 0);
                 $msVoice->AudioOutputStream = $msFileStream;
-            
+                            
                 // es diu la frase de manera asíncrona
                 $msVoice->Speak($fraseconvertida, 1);
                 // esperem a que acabi, ja que si no talla la frase
