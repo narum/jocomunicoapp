@@ -53,7 +53,7 @@ class ImgUploader extends REST_Controller {
             $success = move_uploaded_file($_FILES['file']['tmp_name'], $target_dir . $target_file);
         }
         if (!$success) {
-            echo "Error";
+           
         }
         $response = [
             'nombre' => $target_dir . $target_file
