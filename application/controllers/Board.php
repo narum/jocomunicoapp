@@ -289,7 +289,7 @@ class Board extends REST_Controller {
             $newdata[$j] = $data[$i];
             if($data[$i]->coord){
                 $j++;
-                $newdata[$j] = (object) array('imgtemp' => null);
+                $newdata[$j] = (object) array('imgtemp' => "y.png");
             }
             $j++;
         }

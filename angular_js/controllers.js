@@ -1754,9 +1754,7 @@ angular.module('controllers', [])
 
                         $http.post(url, postdata).success(function (response)
                         {
-                            if (response.control === "generate") {
-                                $scope.dataTemp = response.data;
-                            }
+                            $scope.dataTemp = response.data;
                             $scope.info = response.info;
                         });
                     }
@@ -1787,6 +1785,7 @@ angular.module('controllers', [])
                 $http.post(url).success(function (response)
                 {
                     $scope.dataTemp = response.data;
+                    $scope.info = "";
                     $scope.getPred();
                 });
             };

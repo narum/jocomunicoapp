@@ -102,6 +102,11 @@
 .cellSearch{
     position: absolute;
     height: 100%;
+    background-color: white; 
+    width:90%; 
+    height:90% !important;
+    margin-bottom: 1%; 
+    margin-right: 0%;
 }
 
 .emptyImg{

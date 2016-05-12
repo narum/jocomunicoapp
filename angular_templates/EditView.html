@@ -7,41 +7,46 @@
         <form role="form" class="text-center" name="SearchForm">
             <div class="col-xs-12 form-group" style="height: 50%">
                 <label class="radio-inline">
-                <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Tots"/>
-                {{content.all}}
+                    <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Tots"/>
+                    {{content.all}}
                 </label>
                 <label class="radio-inline"><input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Noms"/>
-                {{content.names}}
+                    {{content.names}}
                 </label>
                 <label class="radio-inline">
-                <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Adj" />
-                {{content.adj}}
+                    <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Adj" />
+                    {{content.adj}}
                 </label>
-                
-                
-                
-                
-                
-            <br />
+
+
+
+
+
+                <br />
                 <label class="radio-inline">
-                <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Verb"/>
-                {{content.verbs}}
-                </label>
-                <label class="radio-inline">
-                <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Exp"/>
-                {{content.expressions}}
+                    <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Verb"/>
+                    {{content.verbs}}
                 </label>
                 <label class="radio-inline">
-                <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Altres"/>
-                {{content.others}}
+                    <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Exp"/>
+                    {{content.expressions}}
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Altres"/>
+                    {{content.others}}
                 </label>
             </div>
         </form>
     </div>
     <div class="col-xs-12" style="height: 65%">
         <div class="row fullheight" style="margin-left: 4%">
+            
+            <div bind-html-compile="dataword" class="" ng-repeat="picto in dataWord| limitTo: 6" style="height: 50%; width: 33%; margin-left: 0 !important; position: absolute; background-color: white;">
+                
+            </div>
+            
             <div bind-html-compile="dataword" class=' col-xs-4' ng-repeat="picto in dataWord| limitTo: 6" style="height: 50%; margin-left: 0 !important">
-                <img class="imgRounded cellSearch" style="background-color: white; width:90%; height:90% !important ;margin-bottom: 1%; margin-right: 0%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}" ng-if="true" ng-drag="true" ng-drag-data="{idpicto:'{{picto.id}}'}" data-allow-transform="true"/>
+                <img class="imgRounded cellSearch" src="{{baseurl}}img/pictos/{{picto.imgPicto}}" ng-if="true" ng-drag="true" ng-drag-data="{idpicto:'{{picto.id}}'}" data-allow-transform="true"/>
             </div>
         </div>
     </div>
