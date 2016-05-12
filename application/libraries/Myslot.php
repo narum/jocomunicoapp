@@ -518,6 +518,10 @@ class Myslot {
                 if ($this->level == 1 && $word->beforeverb) $punts += 1;
                 else if ($this->level == 2 && ($word->beforeverb || $word->beforeverb2)) $punts += 1;
             }
+            // els adjs que acompanyen a noms quan estan enganxats a ells (darrere en idiomes nadj i davant en idiomes
+            // adjn) tenen un punt extra per fer de complement, per compensar-ho els perfect fits d'adj a slots de
+            // tipus adj han de tenir un punt extra 
+            if ($penalty == 0 && $this->type == "adj") $punts -= 1;
         }
         else if ($this->grade == 'opt') $punts = $penalty;
         else $punts = 7; // serà un de NC, tot i que aquests ja es tracten abans i en prinicipi no
