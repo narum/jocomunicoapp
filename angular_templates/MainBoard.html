@@ -20,7 +20,7 @@
             </div>
 
             <div class="container-fluid Defmargin" style="height:{{boardHeight}}%">
-                <div class="row fullheight imgRounded Defpadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
+                <div class="row fullheight imgRounded Defpadding" style="background-image: url(img/srcWeb/Patterns1-08.png)">
                     <div ng-bind="picto"></div>
                     <div ng-if="inScan && isScanningCancel === true" class="returnScan"></div>
                     <div class="col-xs-12 containerCell" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}" ng-click="isClickEnable()?clickOnCell(picto):null" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(0,picto):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true">
