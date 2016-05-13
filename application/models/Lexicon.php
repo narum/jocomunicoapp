@@ -33,7 +33,7 @@ class Lexicon extends CI_Model {
             $this->db->where('SUname', $usuari);
             $query2 = $this->db->get()->result_array();
             $userConfig = $query2[0];
-
+            
             // Save user config data in the COOKIES
             $this->session->set_userdata('idusu', $userConfig["ID_User"]);
             $this->session->set_userdata('uname', $userConfig["SUname"]);
@@ -44,7 +44,7 @@ class Lexicon extends CI_Model {
             $this->session->set_userdata('uinterfacelangnadjorder', $userConfig["nounAdjOrder"]);
             $this->session->set_userdata('uinterfacelangncorder', $userConfig["nounComplementOrder"]);
             $this->session->set_userdata('uinterfacelangabbr', $userConfig["languageabbr"]);
-            $this->session->set_userdata('autoEraseSentenceBar', $userConfig["cfgAutoEraseSentenceBar"]);
+            $this->session->set_userdata('cfgAutoEraseSentenceBar', $userConfig["cfgAutoEraseSentenceBar"]);
             $this->session->set_userdata('isfem', $userConfig["cfgIsFem"]);
             $this->session->set_userdata('cfgExpansionOnOff', $userConfig["cfgExpansionOnOff"]);
 
