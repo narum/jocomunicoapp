@@ -251,7 +251,7 @@ class Board extends REST_Controller {
             }
         }
     }
-
+    
     /*
      * Add the clicked word (pictogram) in the S_Temp database table.
      * Then, get the entire sentence from this table.
@@ -262,6 +262,7 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
+        $read = $request->text;
         $imgtemp = $request->imgtemp;
 
         $idusu = $this->session->userdata('idusu');
@@ -271,8 +272,8 @@ class Board extends REST_Controller {
 
         $newdata = $this->inserty($data);
 
-        $numdata = count($newdata);
-        $read = $newdata[$numdata - 1]->text;
+        //$numdata = count($newdata);
+        //$read = $newdata[$numdata - 1]->text;
 
         // GENERAR AUDIO
         $audio = new Myaudio();
@@ -481,6 +482,7 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
+        $read = $request->text;
         $tense = $request->tense;
         $tipusfrase = $request->tipusfrase;
         $negativa = $request->negativa;
@@ -512,14 +514,27 @@ class Board extends REST_Controller {
         $data = $this->Lexicon->recuperarFrase($idusu);
 
         $newdata = $this->inserty($data);
+        
+        // GENERAR AUDIO
+        $audio = new Myaudio();
+        $aux = $audio->generateAudio($idusu, $read, true);
 
-        $response = [
+         $response = [
             'tense' => $tense,
             'tipusfrase' => $tipusfrase,
             'negativa' => $negativa,
             'control' => $control,
-            'data' => $newdata
+            'data' => $newdata,
+            'audio' => $aux[0],
+            'boolError' => $aux[1],
+            'textError' => $aux[2],
+            'codeError' => $aux[3],
         ];
+        
+        while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
+            usleep(100000);
+        }
+
         $this->response($response, REST_Controller::HTTP_OK);
     }
 

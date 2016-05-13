@@ -1156,7 +1156,7 @@ angular.module('controllers', [])
                             //In the level 3 we have select one cell (picto, function, or whatever)
                             $scope.currentScanBlock = 3;
                             if ($scope.isScanning === "prediction") {
-                                $scope.addToSentence($scope.arrayScannedCells[$scope.indexScannedCells].pictoid, $scope.arrayScannedCells[$scope.indexScannedCells].imgCell);
+                                $scope.addToSentence($scope.arrayScannedCells[$scope.indexScannedCells].pictoid, $scope.arrayScannedCells[$scope.indexScannedCells].imgCell, $scope.arrayScannedCells[$scope.indexScannedCells].pictotext);
                                 $scope.InitScan();
                             } else if ($scope.isScanning === "read") {
                                 $scope.generate();
@@ -1327,7 +1327,7 @@ angular.module('controllers', [])
                 {
                     $scope.dataTemp = response.data;
                 });
-                
+
             };
             //Get priamry user board (primary board in the priamry group) and show it
             $scope.getPrimaryUserBoard = function () {
@@ -1355,8 +1355,9 @@ angular.module('controllers', [])
             /*
              * Show board and the pictograms
              */
-            $scope.showBoard = function (id)
+            $scope.showBoard = function (id, text)
             {
+                //MODIF: leer texto panel
                 //If the id is 0, show the actual board. Else the current board is changed (and showed)
                 if (id === '0') {
                     id = $scope.idboard;
@@ -1577,20 +1578,37 @@ angular.module('controllers', [])
             $scope.clickOnCell = function (cell) {
 
                 if (!$scope.inEdit && cell.activeCell == 1) {
+                    var text = "";
+                    // Just read once.
+                    var readed = false;
 
-                    if (cell.textInCell !== null) {
-                        $scope.playPictoAudio(cell.textInCell);
-                    } else if (cell.pictotext !== null) {
-                        $scope.playPictoAudio(cell.pictotext);
-                    }
                     if (cell.ID_CPicto !== null) {
-                        $scope.addToSentence(cell.ID_CPicto, cell.imgCell);
-                    }
-                    if (cell.ID_CFunction !== null) {
-                        $scope.clickOnFunction(cell.ID_CFunction);
+                        if (cell.textInCell !== null) {
+                            text = cell.textInCell;
+                        } else {
+                            text = cell.pictotext;
+                        }
+                        $scope.addToSentence(cell.ID_CPicto, cell.imgCell, text);
+                        readed = true;
                     }
                     if (cell.boardLink !== null) {
-                        $scope.showBoard(cell.boardLink);
+                        if (readed === true){
+                            text = "";
+                        }else {
+                            text = cell.textInCell;
+                        } 
+                        $scope.showBoard(cell.boardLink, text);
+                        readed = true;
+                    }
+                    if (cell.ID_CFunction !== null) {
+                        if (readed === true){
+                            text = "";
+                        }else if (cell.textInCell !== null) {
+                            text = cell.textInCell;
+                        } else{
+                            text = cell.textFunction;
+                        }
+                        $scope.clickOnFunction(cell.ID_CFunction, text);
                     }
                 } else if ($scope.inEdit && $scope.painting) {
                     var postdata = {id: cell.ID_RCell, color: $scope.colorPaintingSelected};
@@ -1678,7 +1696,8 @@ angular.module('controllers', [])
             /*
              * Add the selected pictogram to the sentence
              */
-            $scope.addToSentence = function (id, img) {
+            $scope.addToSentence = function (id, img, text) {
+                img = null; //MODIF: necesitamos que jose nos pase la foto personalizada aparte de la original
                 if ($scope.TimeMultiClic === 0)
                 {
 
@@ -1688,7 +1707,7 @@ angular.module('controllers', [])
                     }
 
                     var url = $scope.baseurl + "Board/addWord";
-                    var postdata = {id: id, imgtemp: img};
+                    var postdata = {id: id, imgtemp: img, text: text};
 
 
                     $http.post(url, postdata).success(function (response)
@@ -1698,7 +1717,7 @@ angular.module('controllers', [])
 
                         $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
                         $scope.sound.play();
-                        
+
                         $scope.getPred();
                     });
 
@@ -1753,10 +1772,10 @@ angular.module('controllers', [])
              * If you click in a function (not a pictogram) this controller carry you
              * to the specific function
              */
-            $scope.clickOnFunction = function (id) {
+            $scope.clickOnFunction = function (id, text) {               
                 var url = $scope.baseurl + "Board/getFunction";
-                var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
-
+                var postdata = {id: id, text: text, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
+                
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.dataTemp = response.data;
@@ -1823,7 +1842,7 @@ angular.module('controllers', [])
 
                     $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
                     $scope.sound.play();
-                    
+
                     $scope.puntuar();
 
 
