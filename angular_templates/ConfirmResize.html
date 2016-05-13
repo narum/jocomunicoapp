@@ -5,6 +5,6 @@
     <p ng-if="FormData.HWType === 1">
         Eliminar {{FormData.Dnum}} columnes?
     </p>
-    <input type="button" value="confirm" ng-click="confirm(FormData); $scope.edit()"/>
-    <input type="button" value="close" ng-click="closeThisDialog(0); $scope.edit()"/>
+    <input type="button" value="{{content.confirm}}" ng-click="confirm(FormData); $scope.edit()"/>
+    <input type="button" value="{{content.cancel}}" ng-click="closeThisDialog(0); $scope.edit()"/>
 </div>
