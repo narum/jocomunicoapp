@@ -814,38 +814,48 @@ class Myslot {
                         for ($k=0; $k<count($nucli->paraulacoord); $k++) {
                             
                             $paraulacoord = $nucli->paraulacoord[$k];
+                            
+                            $paraulacoordisadj = false;
+                            if ($paraulacoord->tipus == "adj") $paraulacoordisadj = true;
 
                             // afegim la "i"
                             $elementaux[0] = "i";
                             $elementaux[1] = null;
                             $this->slotstring[] = $elementaux;
-
-                            // afegim la paraula coordinada, el plural es passa, però el femení
-                            // s'ha de mirar si la paraula ho era o no el tenia el modificador
-                            $masccoord = true;
-                            $pluralcoord = false;
-
-                            if ($paraulacoord->propietats->mf == "fem" || $paraulacoord->fem) $masccoord = false;
-                            // el plural només pot canviar si plural era false i la paraulacoord sempre és plural
-                            // que aleshores ha de passar a true o si volíem que la paraulacoord fos plural
-                            if ($paraulacoord->propietats->singpl == "pl" || $paraulacoord->plural) $pluralcoord = true;
-
-                            if ($pluralcoord) $elementaux[0] = $paraulacoord->propietats->plural;
-                            else if ($masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
-                            else {
-                                if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                else $elementaux[0] = $paraulacoord->propietats->femeni;
+                            
+                            if ($paraulacoordisadj) {
+                                $elementaux[0] = $paraulacoord->propietats->masc;
+                                $elementaux[1] = $paraulacoord;
+                                $this->slotstring[] = $elementaux;
                             }
-                            $elementaux[1] = $paraulacoord;
-                            // com que la paraula coordinada ha de ser un nom, afegim la info extra
-                            $elementaux[2] = true;
-                            $elementaux[3] = $masccoord;
-                            $elementaux[4] = $pluralcoord;
-                            $elementaux[5] = $hasnumorquant;
-                            $elementaux[6] = false;
-                            $elementaux[7] = $haspossessive;
+                            else {
+                                // afegim la paraula coordinada, el plural es passa, però el femení
+                                // s'ha de mirar si la paraula ho era o no el tenia el modificador
+                                $masccoord = true;
+                                $pluralcoord = false;
 
-                            $this->slotstring[] = $elementaux;
+                                if ($paraulacoord->propietats->mf == "fem" || $paraulacoord->fem) $masccoord = false;
+                                // el plural només pot canviar si plural era false i la paraulacoord sempre és plural
+                                // que aleshores ha de passar a true o si volíem que la paraulacoord fos plural
+                                if ($paraulacoord->propietats->singpl == "pl" || $paraulacoord->plural) $pluralcoord = true;
+
+                                if ($pluralcoord) $elementaux[0] = $paraulacoord->propietats->plural;
+                                else if ($masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                else {
+                                    if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                    else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                }
+                                $elementaux[1] = $paraulacoord;
+                                // com que la paraula coordinada ha de ser un nom, afegim la info extra
+                                $elementaux[2] = true;
+                                $elementaux[3] = $masccoord;
+                                $elementaux[4] = $pluralcoord;
+                                $elementaux[5] = $hasnumorquant;
+                                $elementaux[6] = false;
+                                $elementaux[7] = $haspossessive;
+
+                                $this->slotstring[] = $elementaux;
+                            }
                         }
                     }
                     
@@ -946,40 +956,49 @@ class Myslot {
 
                                 $paraulacoord = $nouncmp->paraulacoord[$k];
                                 
+                                $paraulacoordisadj = false;
+                                if ($paraulacoord->tipus == "adj") $paraulacoordisadj = true;
+
                                 // afegim la "i"
                                 $elementaux[0] = "i";
                                 $elementaux[1] = null;
                                 $this->slotstring[] = $elementaux;
 
-                                // afegim la paraula coordinada amb la seva concordància
-                                $masccmpcoord = true;
-                                $pluralcmpcoord = false;
-                                // si el nom és femení
-                                if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
-                                // si el nom és plural
-                                if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
-                                // si té modificadors de femení i l'accepta
-                                if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
-                                // si té modificador de plural
-                                if ($paraulacoord->plural) $pluralcmpcoord = true;
-
-                                if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
-                                else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                else {
-                                    if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                    else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                if ($paraulacoordisadj) {
+                                    $elementaux[0] = $paraulacoord->propietats->masc;
+                                    $elementaux[1] = $paraulacoord;
+                                    $this->slotstring[] = $elementaux;
                                 }
-                                $elementaux[1] = $paraulacoord;
-                                // com que el nucli és un nom, afegim la informació extra
-                                $elementaux[2] = true;
-                                $elementaux[3] = $masccmpcoord;
-                                $elementaux[4] = $pluralcmpcoord;
-                                $elementaux[5] = false;
-                                $elementaux[6] = true;
-                                $elementaux[7] = $haspossessive;
+                                else {
+                                    // afegim la paraula coordinada amb la seva concordància
+                                    $masccmpcoord = true;
+                                    $pluralcmpcoord = false;
+                                    // si el nom és femení
+                                    if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
+                                    // si el nom és plural
+                                    if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
+                                    // si té modificadors de femení i l'accepta
+                                    if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
+                                    // si té modificador de plural
+                                    if ($paraulacoord->plural) $pluralcmpcoord = true;
 
-                                $this->slotstring[] = $elementaux;
-                                
+                                    if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
+                                    else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                    else {
+                                        if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                        else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                    }
+                                    $elementaux[1] = $paraulacoord;
+                                    // com que el nucli és un nom, afegim la informació extra
+                                    $elementaux[2] = true;
+                                    $elementaux[3] = $masccmpcoord;
+                                    $elementaux[4] = $pluralcmpcoord;
+                                    $elementaux[5] = false;
+                                    $elementaux[6] = true;
+                                    $elementaux[7] = $haspossessive;
+
+                                    $this->slotstring[] = $elementaux;
+                                }
                             }
                         }
                     }
@@ -1114,39 +1133,49 @@ class Myslot {
 
                                     $paraulacoord = $nouncmp->paraulacoord[$k];
                                     
+                                    $paraulacoordisadj = false;
+                                    if ($paraulacoord->tipus == "adj") $paraulacoordisadj = true;
+
                                     // afegim la "i"
                                     $elementaux[0] = "i";
                                     $elementaux[1] = null;
                                     $this->slotstring[] = $elementaux;
 
-                                    // afegim la paraula coordinada amb la seva concordància
-                                    $masccmp = true;
-                                    $pluralcmp = false;
-                                    // si el nom és femení
-                                    if ($paraulacoord->propietats->mf == "fem") $masccmp = false;
-                                    // si el nom és plural
-                                    if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
-                                    // si té modificadors de femení i l'accepta
-                                    if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
-                                    // si té modificador de plural
-                                    if ($paraulacoord->plural) $pluralcmp = true;
-
-                                    if ($pluralcmp) $elementaux[0] = $paraulacoord->propietats->plural;
-                                    else if ($masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                    else {
-                                        if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                        else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                    if ($paraulacoordisadj) {
+                                        $elementaux[0] = $paraulacoord->propietats->masc;
+                                        $elementaux[1] = $paraulacoord;
+                                        $this->slotstring[] = $elementaux;
                                     }
-                                    $elementaux[1] = $paraulacoord;
-                                    // com que el nucli és un nom, afegim la informació extra
-                                    $elementaux[2] = true;
-                                    $elementaux[3] = $masccmp;
-                                    $elementaux[4] = $pluralcmp;
-                                    $elementaux[5] = false;
-                                    $elementaux[6] = true;
-                                    $elementaux[7] = $haspossessive;
+                                    else {
+                                        // afegim la paraula coordinada amb la seva concordància
+                                        $masccmp = true;
+                                        $pluralcmp = false;
+                                        // si el nom és femení
+                                        if ($paraulacoord->propietats->mf == "fem") $masccmp = false;
+                                        // si el nom és plural
+                                        if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
+                                        // si té modificadors de femení i l'accepta
+                                        if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
+                                        // si té modificador de plural
+                                        if ($paraulacoord->plural) $pluralcmp = true;
 
-                                    $this->slotstring[] = $elementaux;
+                                        if ($pluralcmp) $elementaux[0] = $paraulacoord->propietats->plural;
+                                        else if ($masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                        else {
+                                            if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                            else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                        }
+                                        $elementaux[1] = $paraulacoord;
+                                        // com que el nucli és un nom, afegim la informació extra
+                                        $elementaux[2] = true;
+                                        $elementaux[3] = $masccmp;
+                                        $elementaux[4] = $pluralcmp;
+                                        $elementaux[5] = false;
+                                        $elementaux[6] = true;
+                                        $elementaux[7] = $haspossessive;
+
+                                        $this->slotstring[] = $elementaux;
+                                    }
                                 }
                             }
                             
@@ -1201,39 +1230,49 @@ class Myslot {
 
                                     $paraulacoord = $nouncmp->paraulacoord[$k];
                                     
+                                    $paraulacoordisadj = false;
+                                    if ($paraulacoord->tipus == "adj") $paraulacoordisadj = true;
+
                                     // afegim la "i"
                                     $elementaux[0] = "i";
                                     $elementaux[1] = null;
                                     $this->slotstring[] = $elementaux;
 
-                                    // afegim la paraula coordinada amb la seva concordància
-                                    $masccmpcoord = true;
-                                    $pluralcmpcoord = false;
-                                    // si el nom és femení
-                                    if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
-                                    // si el nom és plural
-                                    if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
-                                    // si té modificadors de femení i l'accepta
-                                    if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
-                                    // si té modificador de plural
-                                    if ($paraulacoord->plural) $pluralcmpcoord = true;
-
-                                    if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
-                                    else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                    else {
-                                        if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                        else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                    if ($paraulacoordisadj) {
+                                        $elementaux[0] = $paraulacoord->propietats->masc;
+                                        $elementaux[1] = $paraulacoord;
+                                        $this->slotstring[] = $elementaux;
                                     }
-                                    $elementaux[1] = $paraulacoord;
-                                    // com que el nucli és un nom, afegim la informació extra
-                                    $elementaux[2] = true;
-                                    $elementaux[3] = $masccmpcoord;
-                                    $elementaux[4] = $pluralcmpcoord;
-                                    $elementaux[5] = false;
-                                    $elementaux[6] = true;
-                                    $elementaux[7] = $haspossessive;
+                                    else {
+                                        // afegim la paraula coordinada amb la seva concordància
+                                        $masccmpcoord = true;
+                                        $pluralcmpcoord = false;
+                                        // si el nom és femení
+                                        if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
+                                        // si el nom és plural
+                                        if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
+                                        // si té modificadors de femení i l'accepta
+                                        if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
+                                        // si té modificador de plural
+                                        if ($paraulacoord->plural) $pluralcmpcoord = true;
 
-                                    $this->slotstring[] = $elementaux;
+                                        if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
+                                        else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                        else {
+                                            if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                            else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                        }
+                                        $elementaux[1] = $paraulacoord;
+                                        // com que el nucli és un nom, afegim la informació extra
+                                        $elementaux[2] = true;
+                                        $elementaux[3] = $masccmpcoord;
+                                        $elementaux[4] = $pluralcmpcoord;
+                                        $elementaux[5] = false;
+                                        $elementaux[6] = true;
+                                        $elementaux[7] = $haspossessive;
+
+                                        $this->slotstring[] = $elementaux;
+                                    }                                    
                                 }
                             }
                             
@@ -1806,37 +1845,47 @@ class Myslot {
                             
                             $paraulacoord = $nucli->paraulacoord[$k];
 
+                            $paraulacoordisadj = false;
+                            if ($paraulacoord->tipus == "adj") $paraulacoordisadj = true;
+
                             // afegim la "y"
                             $elementaux[0] = "y";
                             $elementaux[1] = null;
                             $this->slotstring[] = $elementaux;
-
-                            // afegim la paraula coordinada, el plural es passa, però el femení
-                            // s'ha de mirar si la paraula ho era o no el tenia el modificador
-                            $masccoord = true;
-                            $pluralcoord = false;
-
-                            if ($paraulacoord->propietats->mf == "fem" || $paraulacoord->fem) $masccoord = false;
-                            // el plural només pot canviar si plural era false i la paraulacoord sempre és plural
-                            // que aleshores ha de passar a true o si volíem que la paraulacoord fos plural
-                            if ($paraulacoord->propietats->singpl == "pl" || $paraulacoord->plural) $pluralcoord = true;
-
-                            if ($pluralcoord) $elementaux[0] = $paraulacoord->propietats->plural;
-                            else if ($masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
-                            else {
-                                if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                else $elementaux[0] = $paraulacoord->propietats->femeni;
+                            
+                            if ($paraulacoordisadj) {
+                                $elementaux[0] = $paraulacoord->propietats->masc;
+                                $elementaux[1] = $paraulacoord;
+                                $this->slotstring[] = $elementaux;
                             }
-                            $elementaux[1] = $paraulacoord;
-                            // com que la paraula coordinada ha de ser un nom, afegim la info extra
-                            $elementaux[2] = true;
-                            $elementaux[3] = $masccoord;
-                            $elementaux[4] = $pluralcoord;
-                            $elementaux[5] = $hasnumorquant;
-                            $elementaux[6] = false;
-                            $elementaux[7] = $haspossessive;
+                            else {
+                                // afegim la paraula coordinada, el plural es passa, però el femení
+                                // s'ha de mirar si la paraula ho era o no el tenia el modificador
+                                $masccoord = true;
+                                $pluralcoord = false;
 
-                            $this->slotstring[] = $elementaux;
+                                if ($paraulacoord->propietats->mf == "fem" || $paraulacoord->fem) $masccoord = false;
+                                // el plural només pot canviar si plural era false i la paraulacoord sempre és plural
+                                // que aleshores ha de passar a true o si volíem que la paraulacoord fos plural
+                                if ($paraulacoord->propietats->singpl == "pl" || $paraulacoord->plural) $pluralcoord = true;
+
+                                if ($pluralcoord) $elementaux[0] = $paraulacoord->propietats->plural;
+                                else if ($masccoord && !$pluralcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                else {
+                                    if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                    else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                }
+                                $elementaux[1] = $paraulacoord;
+                                // com que la paraula coordinada ha de ser un nom, afegim la info extra
+                                $elementaux[2] = true;
+                                $elementaux[3] = $masccoord;
+                                $elementaux[4] = $pluralcoord;
+                                $elementaux[5] = $hasnumorquant;
+                                $elementaux[6] = false;
+                                $elementaux[7] = $haspossessive;
+
+                                $this->slotstring[] = $elementaux;
+                            }
                         }
                     }
                     
@@ -1944,39 +1993,49 @@ class Myslot {
 
                                 $paraulacoord = $nouncmp->paraulacoord[$k];
                                 
+                                $paraulacoordisadj = false;
+                                if ($paraulacoord->tipus == "adj") $paraulacoordisadj = true;
+
                                 // afegim la "y"
                                 $elementaux[0] = "y";
                                 $elementaux[1] = null;
                                 $this->slotstring[] = $elementaux;
 
-                                // afegim la paraula coordinada amb la seva concordància
-                                $masccmpcoord = true;
-                                $pluralcmpcoord = false;
-                                // si el nom és femení
-                                if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
-                                // si el nom és plural
-                                if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
-                                // si té modificadors de femení i l'accepta
-                                if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
-                                // si té modificador de plural
-                                if ($paraulacoord->plural) $pluralcmpcoord = true;
-
-                                if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
-                                else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                else {
-                                    if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                    else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                if ($paraulacoordisadj) {
+                                    $elementaux[0] = $paraulacoord->propietats->masc;
+                                    $elementaux[1] = $paraulacoord;
+                                    $this->slotstring[] = $elementaux;
                                 }
-                                $elementaux[1] = $paraulacoord;
-                                // com que el nucli és un nom, afegim la informació extra
-                                $elementaux[2] = true;
-                                $elementaux[3] = $masccmpcoord;
-                                $elementaux[4] = $pluralcmpcoord;
-                                $elementaux[5] = false;
-                                $elementaux[6] = true;
-                                $elementaux[7] = $haspossessive;
+                                else {
+                                   // afegim la paraula coordinada amb la seva concordància
+                                    $masccmpcoord = true;
+                                    $pluralcmpcoord = false;
+                                    // si el nom és femení
+                                    if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
+                                    // si el nom és plural
+                                    if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
+                                    // si té modificadors de femení i l'accepta
+                                    if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
+                                    // si té modificador de plural
+                                    if ($paraulacoord->plural) $pluralcmpcoord = true;
 
-                                $this->slotstring[] = $elementaux;
+                                    if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
+                                    else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                    else {
+                                        if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                        else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                    }
+                                    $elementaux[1] = $paraulacoord;
+                                    // com que el nucli és un nom, afegim la informació extra
+                                    $elementaux[2] = true;
+                                    $elementaux[3] = $masccmpcoord;
+                                    $elementaux[4] = $pluralcmpcoord;
+                                    $elementaux[5] = false;
+                                    $elementaux[6] = true;
+                                    $elementaux[7] = $haspossessive;
+
+                                    $this->slotstring[] = $elementaux; 
+                                }                                
                             }
                         }
                     }
@@ -2117,39 +2176,49 @@ class Myslot {
 
                                     $paraulacoord = $nouncmp->paraulacoord[$k];
                                     
+                                    $paraulacoordisadj = false;
+                                    if ($paraulacoord->tipus == "adj") $paraulacoordisadj = true;
+
                                     // afegim la "y"
                                     $elementaux[0] = "y";
                                     $elementaux[1] = null;
                                     $this->slotstring[] = $elementaux;
 
-                                    // afegim la paraula coordinada amb la seva concordància
-                                    $masccmp = true;
-                                    $pluralcmp = false;
-                                    // si el nom és femení
-                                    if ($paraulacoord->propietats->mf == "fem") $masccmp = false;
-                                    // si el nom és plural
-                                    if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
-                                    // si té modificadors de femení i l'accepta
-                                    if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
-                                    // si té modificador de plural
-                                    if ($paraulacoord->plural) $pluralcmp = true;
-
-                                    if ($pluralcmp) $elementaux[0] = $paraulacoord->propietats->plural;
-                                    else if ($masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                    else {
-                                        if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                        else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                    if ($paraulacoordisadj) {
+                                        $elementaux[0] = $paraulacoord->propietats->masc;
+                                        $elementaux[1] = $paraulacoord;
+                                        $this->slotstring[] = $elementaux;
                                     }
-                                    $elementaux[1] = $paraulacoord;
-                                    // com que el nucli és un nom, afegim la informació extra
-                                    $elementaux[2] = true;
-                                    $elementaux[3] = $masccmp;
-                                    $elementaux[4] = $pluralcmp;
-                                    $elementaux[5] = false;
-                                    $elementaux[6] = true;
-                                    $elementaux[7] = $haspossessive;
+                                    else {
+                                        // afegim la paraula coordinada amb la seva concordància
+                                        $masccmp = true;
+                                        $pluralcmp = false;
+                                        // si el nom és femení
+                                        if ($paraulacoord->propietats->mf == "fem") $masccmp = false;
+                                        // si el nom és plural
+                                        if ($paraulacoord->propietats->singpl == "pl") $pluralcmp = true;
+                                        // si té modificadors de femení i l'accepta
+                                        if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmp = false;
+                                        // si té modificador de plural
+                                        if ($paraulacoord->plural) $pluralcmp = true;
 
-                                    $this->slotstring[] = $elementaux;
+                                        if ($pluralcmp) $elementaux[0] = $paraulacoord->propietats->plural;
+                                        else if ($masccmp && !$pluralcmp) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                        else {
+                                            if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                            else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                        }
+                                        $elementaux[1] = $paraulacoord;
+                                        // com que el nucli és un nom, afegim la informació extra
+                                        $elementaux[2] = true;
+                                        $elementaux[3] = $masccmp;
+                                        $elementaux[4] = $pluralcmp;
+                                        $elementaux[5] = false;
+                                        $elementaux[6] = true;
+                                        $elementaux[7] = $haspossessive;
+
+                                        $this->slotstring[] = $elementaux;
+                                    }
                                 }
                             }
                         }
@@ -2203,39 +2272,49 @@ class Myslot {
 
                                     $paraulacoord = $nouncmp->paraulacoord[$k];
                                     
+                                    $paraulacoordisadj = false;
+                                    if ($paraulacoord->tipus == "adj") $paraulacoordisadj = true;
+
                                     // afegim la "y"
                                     $elementaux[0] = "y";
                                     $elementaux[1] = null;
                                     $this->slotstring[] = $elementaux;
 
-                                    // afegim la paraula coordinada amb la seva concordància
-                                    $masccmpcoord = true;
-                                    $pluralcmpcoord = false;
-                                    // si el nom és femení
-                                    if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
-                                    // si el nom és plural
-                                    if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
-                                    // si té modificadors de femení i l'accepta
-                                    if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
-                                    // si té modificador de plural
-                                    if ($paraulacoord->plural) $pluralcmpcoord = true;
-
-                                    if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
-                                    else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                    else {
-                                        if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
-                                        else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                    if ($paraulacoordisadj) {
+                                        $elementaux[0] = $paraulacoord->propietats->masc;
+                                        $elementaux[1] = $paraulacoord;
+                                        $this->slotstring[] = $elementaux;
                                     }
-                                    $elementaux[1] = $paraulacoord;
-                                    // com que el nucli és un nom, afegim la informació extra
-                                    $elementaux[2] = true;
-                                    $elementaux[3] = $masccmpcoord;
-                                    $elementaux[4] = $pluralcmpcoord;
-                                    $elementaux[5] = false;
-                                    $elementaux[6] = true;
-                                    $elementaux[7] = $haspossessive;
+                                    else {
+                                        // afegim la paraula coordinada amb la seva concordància
+                                        $masccmpcoord = true;
+                                        $pluralcmpcoord = false;
+                                        // si el nom és femení
+                                        if ($paraulacoord->propietats->mf == "fem") $masccmpcoord = false;
+                                        // si el nom és plural
+                                        if ($paraulacoord->propietats->singpl == "pl") $pluralcmpcoord = true;
+                                        // si té modificadors de femení i l'accepta
+                                        if ($paraulacoord->propietats->femeni != "" && $paraulacoord->fem) $masccmpcoord = false;
+                                        // si té modificador de plural
+                                        if ($paraulacoord->plural) $pluralcmpcoord = true;
 
-                                    $this->slotstring[] = $elementaux;
+                                        if ($pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->plural;
+                                        else if ($masccmpcoord && !$pluralcmpcoord) $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                        else {
+                                            if ($paraulacoord->propietats->mf == "fem") $elementaux[0] = $paraulacoord->propietats->nomtext;
+                                            else $elementaux[0] = $paraulacoord->propietats->femeni;
+                                        }
+                                        $elementaux[1] = $paraulacoord;
+                                        // com que el nucli és un nom, afegim la informació extra
+                                        $elementaux[2] = true;
+                                        $elementaux[3] = $masccmpcoord;
+                                        $elementaux[4] = $pluralcmpcoord;
+                                        $elementaux[5] = false;
+                                        $elementaux[6] = true;
+                                        $elementaux[7] = $haspossessive;
+
+                                        $this->slotstring[] = $elementaux;
+                                    }
                                 }
                             }
                             

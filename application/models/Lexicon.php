@@ -1083,7 +1083,14 @@ class Lexicon extends CI_Model {
                     // if ($paraulaprevia != null) echo $paraulaprevia->text." - ".$word->text."<br />";
                                         
                     if ($itrobada) {
-                        $ibona = ($paraulaprevia->tipus == $word->tipus);
+                        
+                        if ($paraulaprevia->tipus == $word->tipus) $ibona = true;
+                        // cas especial d'hores (name) i números (adjs)
+                        else if (($paraulaprevia->tipus == "name" && $paraulaprevia->isClass("hora")) &&
+                                ($word->tipus == "adj" && $word->isClass("numero"))) {
+                            $ibona = true;
+                        }
+                        else $ibona = false;
                         // mirem si la paraula actual també té una coordinació
                         if ($word->coord) $itrobada = true;
                         else $itrobada = false;

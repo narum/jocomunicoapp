@@ -38,6 +38,23 @@ class Resultats extends CI_Controller {
             // $audio = new Myaudio();
             // $aux = $audio->generateAudio($this->session->userdata('idsubuser'), $info['frasefinal'], true);
             
+            // si no hi ha cap error
+//            if (!$aux[1]) {
+//                $handle = fopen("mp3/".$aux[0], "r");
+//                if (is_resource($handle)) {
+//                    fclose($handle);
+//                }
+//                else {
+//                    $i = 0;
+//                    while (!is_resource($handle) && $i<10) {
+//                        $i++;
+//                        $handle = fopen("mp3/".$aux[0], "r");
+//                        usleep(100000);
+//                    }
+//                    fclose($handle);
+//                }
+//            }
+            
             // DEBUG
             // print_r($aux); echo "<br />";
             
