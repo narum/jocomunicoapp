@@ -10,7 +10,7 @@
             <div ng-if="inScan && isScanning == 'prediction' && currentScanBlock == 2 && picto.pictoid == arrayScannedCells[indexScannedCells].pictoid && isScanningCancel === false" class="scaneo"></div> 
             <div ng-if="cfgTextInCell && picto.pictotext" class="textCell" ng-style="{'height':'30 % '}">{{picto.pictotext}}</div>
             <div ng-style="cfgTextInCell ? {'height':'70%'}:{'height':'100%'}">
-                <img src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
+                <img ng-src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
             </div>
         </div>
     </div>

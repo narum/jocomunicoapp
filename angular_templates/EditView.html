@@ -40,13 +40,18 @@
     </div>
     <div class="col-xs-12" style="height: 65%">
         <div class="row fullheight" style="margin-left: 4%">
-            
-            <div bind-html-compile="dataword" class="" ng-repeat="picto in dataWord| limitTo: 6" style="height: 50%; width: 33%; margin-left: 0 !important; position: absolute; background-color: white;">
-                
-            </div>
-            
-            <div bind-html-compile="dataword" class=' col-xs-4' ng-repeat="picto in dataWord| limitTo: 6" style="height: 50%; margin-left: 0 !important">
-                <img class="imgRounded cellSearch" src="{{baseurl}}img/pictos/{{picto.imgPicto}}" ng-if="true" ng-drag="true" ng-drag-data="{idpicto:'{{picto.id}}'}" data-allow-transform="true"/>
+
+            <!--<div bind-html-compile="dataword" class="" ng-repeat="i in range(6)" style="height: 50%; width: 33%; position: absolute; left:{{(i%3)*33}}%; border-radius: 7px; border: none; margin-left: 4%;" ng-style="i > 3 ? {'top':'50%'}:{'top':'0%'}">
+                <img class="imgRounded cellSearch" style="background-color: white;"/>
+            </div>-->
+
+            <div bind-html-compile="dataword" class='col-xs-4' ng-repeat="picto in dataWord| limitTo: 6" style="height: 50%; margin-left: 0 !important">
+                <div class="cellSearch imgRounded"  ng-if="true" ng-drag="true" ng-drag-data="{idpicto:'{{picto.id}}'}" data-allow-transform="true">
+                    <div ng-if="cfgTextInCell && picto.text !== null" class="textCell">{{picto.text}}</div>
+                    <div ng-style="cfgTextInCell ? {'height': '70%'} : {'height': '100%'}">
+                        <img class="imgRounded imgResponsive" ng-src="{{baseurl}}img/pictos/{{picto.imgPicto}}"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

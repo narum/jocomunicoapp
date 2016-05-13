@@ -1302,7 +1302,7 @@ angular.module('controllers', [])
                     $scope.cfgScanStartClick = false;
                     $scope.cfgCancelScanOnOff = false;
                 }
-
+                $scope.getSentence();
                 $scope.getPred();
                 //If there are some request to edit from another controller, the edit panel it's loaded
                 if ($rootScope.editPanelInfo != null) {
@@ -1319,6 +1319,15 @@ angular.module('controllers', [])
                     });
 
                 }
+            };
+            $scope.getSentence = function () {
+                var url = $scope.baseurl + "Board/getTempSentence";
+
+                return $http.post(url).success(function (response)
+                {
+                    $scope.dataTemp = response.data;
+                });
+                
             };
             //Get priamry user board (primary board in the priamry group) and show it
             $scope.getPrimaryUserBoard = function () {

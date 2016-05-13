@@ -329,16 +329,36 @@
     border-bottom-right-radius: 10px;
 }
 .backgroundLlegir{
-    padding-right: 6%;
+    width: 94%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/llegir_fons.png');
+    background-size: 100% 100%;
+    border-radius: 7px;
 }
 .backgroundDelete{
-    padding-left: 6%;
+    width: 94%;
+    left: 6%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/borrar_ultim_fons.png');
+    background-size: 100% 100%;
+    border-radius: 7px;
+}
+.backgroundDeleteAll{
+    width: 94%;
+    left: 6%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/borrar_fons.png');
+    background-size: 100% 100%;
+    border-radius: 7px;
 }
 .icon{
     position: absolute;
-    max-height: 85%;
-    max-width: 85%;
-    padding:10%
+    max-height: 80%;
+    max-width: 80%;
+    padding:10%;
 }
 .goodPhrase{
     display: block;

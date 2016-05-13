@@ -277,6 +277,23 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    
+    /*
+     * Get the sentence
+     */
+
+    public function getTempSentence_post() {
+        $idusu = $this->session->userdata('idusu');
+
+        $data = $this->Lexicon->recuperarFrase($idusu);
+        
+        $newdata = $this->inserty($data);
+        
+        $response = [
+            'data' => $newdata
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 
     /*
      * Insert a especial picto (concatenation picto) in the array.
