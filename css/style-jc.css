@@ -54,14 +54,12 @@
 
 
 @media (max-width:1000px){
-    .col-xs-12{
-        font-size: 11.5px;
-    }
-    .col-xs-6{
-        font-size: 12px;
-    }
+    
     input[type="radio"]{
         margin: 0px;
+    }
+    html *{
+        font-size: 1.4vw;
     }
 }
 

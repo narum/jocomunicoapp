@@ -2,7 +2,6 @@
 
     <div class="topBarDialog"><div class="editfields editTitle text-center" style="padding: 1% 1% 1% 1%;" ng-click="EnableEditViewTrash()">Edit<img type="image" class="img-icon" ng-src="/img/icons/edit_blanc.png" style="height: 50% ; position: relative; top: -0.3vh"/></div></div>
 
-    <div>
         <div class='Defpadding boxEditTrash'>       
             <div class='col-xs-4 text-center editTrash25'>
                 <img class="fullheight" max-width="100%" height="100%" ng-src="{{baseurl}}img/srcWeb/trashnou.png" ng-drop="true"  ng-drop-success="onDropRemove($data,$event)"/>
@@ -50,14 +49,28 @@
                     <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                            uib-popover="poner texto aqui">
                 </div>
-                {{content.automaticreturn}}<input ng-model="autoreturn" ng-disabled="StatusEnableEditViewTrash" type="checkbox" ng-click="changeAutoReturn(autoreturn)"/>
+                <div class="col-xs-6 textNoOverflow">
+                    {{content.automaticreturn}}
+                </div>
+                <div class="col-xs-1">
+                    <input id="switch1" class="switch" type="checkbox"
+                           ng-model="autoreturn" ng-show="false" ng-click="changeAutoReturn(autoreturn)" ng-disabled="StatusEnableEditViewTrash">
+                    <label for="switch1">&nbsp;</label>
+                </div>
             </div>
             <div class='col-xs-offset-1 col-xs-12 textTrash'>
                 <div class="col-xs-2 infoIconBox">
                     <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
                            uib-popover="poner texto aqui">
                 </div>
-                {{content.automaticread}}<input ng-model="autoread" ng-disabled="StatusEnableEditViewTrash" type="checkbox" ng-click="changeAutoReadSentence(autoread)"/>
+                <div class="col-xs-6 textNoOverflow">
+                    {{content.automaticread}}
+                </div>
+                <div class="col-xs-1">
+                    <input id="switch2" class="switch" type="checkbox"
+                           ng-model="autoread" ng-show="false" ng-click="changeAutoReadSentence(autoread)" ng-disabled="StatusEnableEditViewTrash">
+                    <label for="switch2">&nbsp;</label>
+                </div>
             </div>
         </div>
     </div>

@@ -15,16 +15,16 @@
                         <input type="text" class="form-control text-center panelTitle"  name="NameBoard" ng-model="panel.GBname" ng-value="panel.GBname" ng-change="changeGroupBoardName(panel.GBname, panel.ID_GB)"/>
                     </div>
                     <div class="col-xs-4 editaPanel text-center" ng-click="editPanel(panel.ID_GB)">
-                        edita <img ng-src="{{baseurl}}/img/icons/edit_blanc.png" width="15%" height="50%"/>
+                        {{content.edit}} <img ng-src="{{baseurl}}/img/icons/edit_blanc.png" width="15%" height="50%"/>
                     </div>
                     <div ng-if="panel.primaryGroupBoard == 0" class="col-xs-4 noPrimaryPanel text-center" ng-click="setPrimary(panel.ID_GB)">
-                        Fes principal
+                        {{content.makePrimary}}
                     </div>
                     <div ng-if="panel.primaryGroupBoard == 1" class="col-xs-4 primaryPanel text-center">
-                        Principal
+                        {{content.primary}}
                     </div>
                     <div class="col-xs-4 nouPanel text-center" ng-click="CreateBoard(panel.ID_GB)">
-                        nou <img ng-src="{{baseurl}}/img/icons/file_blanc.png" width="15%" height="50%"/>
+                        {{content.new}} <img ng-src="{{baseurl}}/img/icons/file_blanc.png" width="15%" height="50%"/>
                     </div>
                 </div>
             </div>

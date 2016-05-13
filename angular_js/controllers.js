@@ -1417,6 +1417,7 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata).success(function (response)
                 {
+                    $scope.autoreturn = "";
                     $scope.nameboard = response.name;
                     $scope.altura = $scope.range(20)[response.row - 1].valueOf();
                     $scope.amplada = $scope.range(20)[response.col - 1].valueOf();
