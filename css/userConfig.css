@@ -1,7 +1,33 @@
-.scrollMenuUserConfig{
+.scroll{
+    overflow-y: scroll;
+}
+/*Scroll properties*/
+#scrollBar::-webkit-scrollbar{
+width:15px;
+background-color:none;
+} 
+#scrollBar::-webkit-scrollbar-thumb{
+/*background:-webkit-linear-gradient(0, #92dbe1Turquesa 40%, #78b3b8Turquesa Oscuro 100%);*/
+background-color: #92dbe1;/*Turquesa*/
+border-radius:10px;
+}
+#scrollBar::-webkit-scrollbar-thumb:hover{
+background:#78b3b8; /*Turquesa Oscuro*/
+}
+#scrollBar::-webkit-scrollbar-thumb:active{
+background-color:#92dbe1;/*Turquesa*/
+}
+/*#scrollBar::-webkit-scrollbar-track{
+border:1px gray solid;
+border-radius:10px;
+-webkit-box-shadow:0 0 6px gray inset;
+}*/
+
+.MenuUserConfig{
     height: 80vh;
     margin-top: 7vh;
-    overflow: hidden;
+    margin-bottom: 7vh;
+    /*overflow: hidden;*/
 }
 
 /*box User config*/
@@ -320,6 +346,7 @@ input.imageSwitch[type=checkbox]:empty + label:hover{
     box-shadow: 0 0 10px #404040;
 }
 .boxEdit{
+    width: 8vh;
     margin: 0px;
     padding: 0px;
     margin-top: 0.7vh;
@@ -328,6 +355,10 @@ input.imageSwitch[type=checkbox]:empty + label:hover{
     font-size: 2.3vh;
     background-color: #fddfad;
     cursor: pointer;
+}
+input.switch:empty ~ label
+{
+    margin-top: 0.7vh;
 }
 /*Input time propertis*/
 .inputTimeConfig{
@@ -379,7 +410,7 @@ input[type=number] {
     height: 4vh;
     background-color: white;
     margin: 0;
-    font-size: 2.4vh;
+    font-size: 2vh;
 }
 .voices .dropdown-arrow{
     width: 100%;

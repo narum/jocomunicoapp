@@ -57,6 +57,8 @@ class Main extends REST_Controller {
         $data = json_decode($this->query("data"), true); // convertimos el string json del post en array.
 
         $response = $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
+        //reescrivimos la cookies
+        $this->main_model->getConfig($ID_SU);
         //respuesta
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
@@ -84,6 +86,8 @@ class Main extends REST_Controller {
         }else{
             $this->response("Passwords does not match", 400);
         }
+        //reescrivimos la cookies
+        $this->main_model->getConfig($ID_SU);
     }
     
     public function changeDefUser_post()
@@ -93,6 +97,8 @@ class Main extends REST_Controller {
         $data = ['cfgDefUser'=> $ID_U]; // convertimos el string json del post en array.
 
         $response = $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
+        //reescrivimos la cookies
+        $this->main_model->getConfig($ID_SU);
         //respuesta
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
@@ -103,6 +109,8 @@ class Main extends REST_Controller {
         $data = ['cfg'.$this->query('data') => $this->query('value')]; // convertimos el string json del post en array.
 
         $response = $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
+        //reescrivimos la cookies
+        $this->main_model->getConfig($ID_SU);
         //respuesta
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }

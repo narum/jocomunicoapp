@@ -1,5 +1,9 @@
 @charset "UTF-8";
 /* CSS Document */
+button:first-child,
+input:focus{
+    outline: none;
+}
 .cruz{
     background-color: #151515;
     height: 100%;

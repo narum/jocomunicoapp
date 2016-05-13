@@ -23,10 +23,9 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row scroll" id="scrollBar">
         <div class="col-xs-2 col-xs-offset-5 loadingGif" ng-show="!viewActived"><img class="img-responsive" src="/img/srcWeb/Login/loading.gif"/></div>
-        <div class="col-xs-9 col-xs-offset-2 scrollMenuUserConfig" ng-scrollbar rebuild-on="rebuild:me" rebuild-on-resize  ng-show="viewActived">
-            <div class="col-xs-11" >
+        <div class="col-xs-8 col-xs-offset-2 MenuUserConfig" ng-show="viewActived">
             <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-12.png')">
                 <div class="col-xs-12">
                     <form name="userDataForm">
@@ -75,7 +74,7 @@
                                     </div>
         <!--collapsed contnet-->
                                     <div class="row">
-                                        <div class="col-xs-12" uib-collapse="!canEdit" collapsed="rebuild()" expanded="rebuild()">
+                                        <div class="col-xs-12" uib-collapse="!canEdit">
                                             <div class="row">
                                                 <div class="col-xs-8 col-xs-offset-4 verticalMarginTop FonsTurquesaClar" ng-class="{FonsTurquesaSucces: userData.cfgIsFem=='0'}">
                                                     <input type="radio" id="radioUserConfig1" class="" ng-model="userData.cfgIsFem" value="0" ng-click="changeRadioEstate(userData.cfgIsFem, 'IsFem')" ng-show="false">
@@ -120,7 +119,7 @@
                                                             </div>
                                                             <!--<div class="row" uib-collapse="!(oldPassState=='true')"><div class="col-xs-12"><hr/></div></div>-->
                                                             <div class="row">
-                                                                <div id="DadesUsuariLeft" class="col-xs-7"  uib-collapse="!(oldPassState=='true')" collapsed="rebuild()" expanded="rebuild()">
+                                                                <div id="DadesUsuariLeft" class="col-xs-7"  uib-collapse="!(oldPassState=='true')">
                                                                     <div class="row">{{content.newPass1}}
                                                                     <input type="image" class="loadingGifSm pull-right" ng-show="newPassLengthOk=='false'" ng-src="/img/icons/infoRed.png" popover-placement="top-left" popover-trigger="focus"
                                                                         ng-app=""uib-popover="{{content.popNewPassMinLength}}">
@@ -130,7 +129,7 @@
                                                                         ng-app=""uib-popover="{{content.popNewPassEqual}}">
                                                                     </div>
                                                                 </div>
-                                                                <div id="DadesUsuariRight" class="col-xs-5"  uib-collapse="!(oldPassState=='true')" collapsed="rebuild()" expanded="rebuild()">
+                                                                <div id="DadesUsuariRight" class="col-xs-5"  uib-collapse="!(oldPassState=='true')">
                                                                     <div class="row">
                                                                         <input
                                                                             class="inputDadesUsuari"
@@ -198,7 +197,7 @@
                                     </div>
         <!--collapsed contnet-->
                                     <div class="row">
-                                        <div class="col-xs-12" uib-collapse="!canEdit" collapsed="rebuild()" expanded="rebuild()">
+                                        <div class="col-xs-12" uib-collapse="!canEdit">
                                             <div class="row">
                                                 <div class="col-xs-9 col-xs-offset-3 verticalMarginTop FonsTurquesaClar" ng-class="{FonsTurquesaSucces: userData.cfgIsFem=='1'}">
                                                     <input type="radio" id="radioUserConfig2" class="" ng-model="userData.cfgIsFem" value="1" ng-click="changeRadioEstate(userData.cfgIsFem, 'IsFem')" ng-show="false">
@@ -227,7 +226,6 @@
                     </form>
                 </div>
             </div><br/>
-            
             <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-08.png')">
                 <div class="col-xs-12">
                     <div id="header" class="row"><div class="col-xs-10 headerTitle">{{content.titleBar2}}</div></div>
@@ -248,9 +246,9 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar1" collapsed="rebuild()" expanded="rebuild()">
+                            <div class="col-xs-12" uib-collapse="!contentBar1">
                             <div class="row contentBar">
-                                <div class="col-xs-3">Selecciona l'idioma:</div>
+                                <div class="col-xs-3">{{content.selectLanguage}}</div>
                                 <div class="col-xs-5">
                                     <div class="btn-group pull-right" role="group" >
                                         <button type="button" class="btn btn-group-turquoise" ng-repeat="language in interfaceLanguages"
@@ -263,7 +261,7 @@
                                         class="btn-turquoise pull-right"
                                         data-toggle="modal"
                                         data-target="#LanguageModal"
-                                        ng-click="addLanguageTo='interface';">Afegeix un idioma
+                                        ng-click="addLanguageTo='interface';">{{content.addLanguage}}
                                     </button>
                                 </div>
                             </div>
@@ -275,14 +273,14 @@
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="marginModalTop" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-08.png')">
                                                         <div id="header" class="row">
-                                                            <div class="col-xs-10 headerTitle">Afegir idioma</div>
+                                                            <div class="col-xs-10 headerTitle">{{content.addLanguage2}}</div>
                                                         </div>
                                                         <div class="row backgroundUserConfigBox">
                                                             <div class="row">
-                                                                <div class="col-xs-12 fonsAlert"><img class="img-Alert" src="/img/icons/Icon_Alert.png"/>Alerta!!!!</div>
+                                                                <div class="col-xs-12 fonsAlert"><img class="img-Alert" src="/img/icons/Icon_Alert.png"/>{{content.addLanguageAlert1}}</div>
                                                             </div>
                                                             <div class="row dadesUsuariCentre">
-                                                                Si afageixes un idioma s'hauran de crear nous panells tal tal tal tal tal tal tal
+                                                                {{content.addLanguageAlert2}}
                                                             </div>
                                                             <div class='row dadesUsuariCentre'>
                                                                 <div class="col-xs-2">
@@ -324,9 +322,9 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar2 || !userData.cfgExpansionOnOff" collapsed="rebuild()" expanded="rebuild()">
+                            <div class="col-xs-12" uib-collapse="!contentBar2 || !userData.cfgExpansionOnOff">
                             <div class="row contentBar">
-                                <div class="col-xs-3">Selecciona l'idioma:</div>
+                                <div class="col-xs-3">{{content.selectLanguage}}</div>
                                 <div class="col-xs-5">
                                     <div class="btn-group pull-right" role="group" >
                                         <button type="button" class="btn btn-group-turquoise" ng-repeat="language in expansionLanguages" ng-if="language.idInterfaceLanguage==userData.ID_ULanguage"
@@ -339,7 +337,7 @@
                                         class="btn-turquoise pull-right"
                                         data-toggle="modal"
                                         data-target="#LanguageModal"
-                                        ng-click="addLanguageTo='expansion'">Afegeix un idioma
+                                        ng-click="addLanguageTo='expansion'">{{content.addLanguage}}
                                     </button>
                                 </div>
                             </div>
@@ -361,7 +359,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar3" collapsed="rebuild()" expanded="rebuild()">
+                            <div class="col-xs-12" uib-collapse="!contentBar3">
                             <div class="row contentBar">
                                 <div class="row">
                                     <div class="col-xs-2">
@@ -382,55 +380,10 @@
                                             <label for="checkMenu3"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/menuButton3.png"/></label>
                                     </div>
                                 </div>
-                                <div class="row verticalMarginTop">
-                                    <div class="col-xs-4">{{content.sentenceBar}}</div>
-                                    <div class="col-xs-6">
-                                        <input type="checkbox" id="checkSentence1" class="imageSwitch" ng-model="userData.cfgAutoEraseSentenceBar" ng-click="changeOnOff(userData.cfgAutoEraseSentenceBar, 'AutoEraseSentenceBar')" ng-show="false">
-                                            <label for="checkSentence1"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/sentenceBarAutoErase.gif"/></label>
-                                    </div>
-                                </div>
                             </div>
                             </div>
                             </div>
                         </div>
-<!--Barra de lectura-->                     
-<!--                        <div class="row menuBar">
-                            <div class="row headerBar">
-                                <div class="col-xs-6">
-                                    <div class="col-xs-2 infoIconBox">
-                                        <input type="image" class="img-icon" ng-src="/img/icons/info.png" popover-placement="top-left" popover-trigger="focus"
-                                               uib-popover="{{content.popSentenceBarInfo}}">
-                                    </div>
-                                    <div class="col-xs-10 buttonBar" ng-click="contentBar4=!contentBar4">{{content.sentenceBar}}</div>
-                                </div>
-                                <div class="col-xs-4 buttonBar" ng-click="contentBar4=!contentBar4">&nbsp;</div>
-                                <div class="col-xs-1">
-                                <input type="checkbox" id="switch2" class="switch" ng-model="" ng-click="" ng-show="false"/>
-                                    <label for="switch2">&nbsp;</label>
-                                </div>
-                                <div class="col-xs-1 buttonBar" ng-click="contentBar4=!contentBar4">&nbsp;
-                                    <img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src="/img/icons/Loading_icon.gif"/>
-                                </div>
-                            </div>
-                            <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar4">
-                            <div class="row contentBar">
-                                <div class="col-xs-2">
-                                    <input type="radio" id="radioSentence1" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="0" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
-                                        <label for="radioSentence1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/sentenceUp.png"/></label>
-                                </div>
-                                <div class="col-xs-4">
-                                    <input type="radio" id="radioSentence2" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="1" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
-                                        <label for="radioSentence2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/sentenceDown.png"/></label>
-                                </div>
-                                <div class="col-xs-5">
-                                    <input type="checkbox" id="checkSentence1" class="imageSwitch" ng-model="userData.cfgAutoEraseSentenceBar" ng-click="changeOnOff(userData.cfgAutoEraseSentenceBar, 'AutoEraseSentenceBar')" ng-show="false">
-                                        <label for="checkSentence1"><img class="img-configSwitch" src="/img/srcWeb/UserConfig/sentenceBarAutoErase.gif"/></label>
-                                </div>
-                            </div>
-                            </div>
-                            </div>
-                        </div>-->
 <!--Configuración interficie-->             
                         <div class="row menuBar">
                             <div class="row headerBar">
@@ -451,16 +404,35 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar5" collapsed="rebuild()" expanded="rebuild()">
+                            <div class="col-xs-12" uib-collapse="!contentBar5">
                             <div class="row contentBar">
-                                <div class="col-xs-3"></div>
-                                <div class="col-xs-4">
+                                <div class="col-xs-1"></div>
+                                <div class="col-xs-2">
                                     <input type="radio" id="radioTextInCell1" class="imageRadio" ng-model="userData.cfgTextInCell" value="0" ng-click="changeRadioEstate(userData.cfgTextInCell, 'TextInCell')" ng-show="false">
                                         <label for="radioTextInCell1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/textInCellOff.png"/></label>
                                 </div>
-                                <div class="col-xs-4">
+                                <div class="col-xs-3">
                                     <input type="radio" id="radioTextInCell2" class="imageRadio" ng-model="userData.cfgTextInCell" value="1" ng-click="changeRadioEstate(userData.cfgTextInCell, 'TextInCell')" ng-show="false">
                                         <label for="radioTextInCell2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/textInCellOn.png"/></label>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="row">
+                                        <div class="col-xs-7">{{content.sentenceBar}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-7">{{content.sentenceBar2}}</div>
+                                        <div class="col-xs-5">
+                                            <input type="checkbox" id="switch12" class="switch" ng-model="userData.cfgAutoEraseSentenceBar" ng-click="changeOnOff(userData.cfgAutoEraseSentenceBar, 'AutoEraseSentenceBar')" ng-show="false"/>
+                                            <label for="switch12">&nbsp;</label>
+                                        </div>
+                                    </div>
+                                    <div class="row verticalMarginTop">
+                                        <div class="col-xs-7">{{content.expansionFeedback}}</div>
+                                        <div class="col-xs-5">
+                                            <input type="checkbox" id="switch13" class="switch" ng-model="userData.cfgUserExpansionFeedback" ng-click="changeOnOff(userData.cfgUserExpansionFeedback, 'UserExpansionFeedback')" ng-show="false"/>
+                                            <label for="switch13">&nbsp;</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             </div>
@@ -476,8 +448,8 @@
                                     </div>
                                     <div class="col-xs-10">{{content.predictionSistem}}</div>
                                 </div>
-                                <div class="col-xs-2 FonsTaronja" ng-class="{disabledText: !userData.cfgPredOnOff}">Pictogramas:</div>
-                                <div class="col-xs-1" ng-class="{disabledText: !userData.cfgPredOnOff}">
+                                <div class="col-xs-2 FonsTaronja" ng-class="{disabledText: !userData.cfgPredOnOff}">{{content.pictograms}}</div>
+                                <div class="col-xs-2" ng-class="{disabledText: !userData.cfgPredOnOff}">
                                     <select class="boxEdit dropdown-arrow"
                                             ng-options="f for f in numPictosBarPred"
                                             ng-model="userData.cfgPredBarNumPred"
@@ -485,7 +457,7 @@
                                             ng-change="changeRadioEstate(userData.cfgPredBarNumPred, 'PredBarNumPred')">
                                     </select>
                                 </div>
-                                <div class="col-xs-1">&nbsp;</div>
+                                <!--<div class="col-xs-1">&nbsp;</div>-->
                                 <div class="col-xs-1">
                                     <input type="checkbox" id="switch4" class="switch" ng-model="userData.cfgPredOnOff" ng-click="changeOnOff(userData.cfgPredOnOff, 'PredOnOff')" ng-show="false"/>
                                     <label for="switch4">&nbsp;</label>
@@ -517,7 +489,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar7" collapsed="rebuild()" expanded="rebuild()">
+                            <div class="col-xs-12" uib-collapse="!contentBar7">
                             <div class="row contentBar">
                                 <div class="row">
                                     <div class="col-xs-2">
@@ -537,7 +509,7 @@
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="row">
-                                            <div class="col-xs-6" ng-class="{disabledText: !userData.cfgTimeLapseSelectOnOff||!(userData.cfgUsageMouseOneCTwoC=='0')}">Lapse time:</div>
+                                            <div class="col-xs-6" ng-class="{disabledText: !userData.cfgTimeLapseSelectOnOff||!(userData.cfgUsageMouseOneCTwoC=='0')}">{{content.lapseTime}}</div>
                                             <div class="col-xs-4">
                                                 <div class="backgroundGreyTime">
                                                     <input
@@ -555,7 +527,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-6" ng-class="{disabledText: !userData.cfgTimeNoRepeatedClickOnOff||!(userData.cfgUsageMouseOneCTwoC=='0')}">No repeat time:</div>
+                                            <div class="col-xs-6" ng-class="{disabledText: !userData.cfgTimeNoRepeatedClickOnOff||!(userData.cfgUsageMouseOneCTwoC=='0')}">{{content.noRepeatTime}}</div>
                                             <div class="col-xs-4">
                                                 <div class="backgroundGreyTime">
                                                     <input
@@ -594,13 +566,9 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar8 || !userData.cfgScanningOnOff" collapsed="rebuild()" expanded="rebuild()">
+                            <div class="col-xs-12" uib-collapse="!contentBar8 || !userData.cfgScanningOnOff">
                             <div class="row contentBar">
                                 <div class="row">
-                                    <div class="col-xs-2">
-                                        <input type="radio" id="radioScan1" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="0" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
-                                            <label for="radioScan1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningCustom.png"/></label>
-                                    </div>
                                     <div class="col-xs-2">
                                         <input type="radio" id="radioScan2" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="1" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
                                             <label for="radioScan2"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningRow.png"/></label>
@@ -609,9 +577,13 @@
                                         <input type="radio" id="radioScan3" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="2" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
                                             <label for="radioScan3"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningCol.png"/></label>
                                     </div>
+                                    <div class="col-xs-2">
+                                        <input type="radio" id="radioScan1" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="0" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
+                                            <label for="radioScan1"><img class="img-configRadio" src="/img/srcWeb/UserConfig/cfgScanningCustom.png"/></label>
+                                    </div>
                                     <div class="col-xs-6">
                                         <div class="row">
-                                            <div class="col-xs-6" ng-class="{disabledText: !userData.cfgScanningAutoOnOff||userData.cfgUsageMouseOneCTwoC=='2'}">Escaneo automatico:</div>
+                                            <div class="col-xs-6" ng-class="{disabledText: !userData.cfgScanningAutoOnOff||userData.cfgUsageMouseOneCTwoC=='2'}">{{content.automaticScan}}</div>
                                             <div class="col-xs-4">
                                                 <div class="backgroundGreyTime">
                                                     <input
@@ -629,7 +601,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-6" ng-class="{disabledText: !(userData.cfgUsageMouseOneCTwoC=='1')||userData.cfgScanningAutoOnOff}">Tiempo de click:</div>
+                                            <div class="col-xs-6" ng-class="{disabledText: !(userData.cfgUsageMouseOneCTwoC=='1')||userData.cfgScanningAutoOnOff}">{{content.clickTime}}</div>
                                             <div class="col-xs-4">
                                                 <div class="backgroundGreyTime">
                                                     <input
@@ -643,14 +615,14 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-6" ng-show="userData.cfgScanningAutoOnOff&&!(userData.cfgUsageMouseOneCTwoC=='2')">Cancelar Escaneo</div>
+                                            <div class="col-xs-6" ng-show="userData.cfgScanningAutoOnOff&&!(userData.cfgUsageMouseOneCTwoC=='2')">{{content.scanCancel}}</div>
                                             <div class="col-xs-2">
                                                 <input type="checkbox" id="switch8" class="switch" ng-model="userData.cfgCancelScanOnOff" ng-click="changeOnOff(userData.cfgCancelScanOnOff, 'ScanningCancelScanOnOff')" ng-show="false"/>
                                                     <label for="switch8" ng-show="userData.cfgScanningAutoOnOff&&!(userData.cfgUsageMouseOneCTwoC=='2')">&nbsp;</label>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-6" ng-show="userData.cfgScanningAutoOnOff&&!(userData.cfgUsageMouseOneCTwoC=='2')">Start Click</div>
+                                            <div class="col-xs-6" ng-show="userData.cfgScanningAutoOnOff&&!(userData.cfgUsageMouseOneCTwoC=='2')">{{content.startClick}}</div>
                                             <div class="col-xs-2">
                                                 <input type="checkbox" id="switch9" class="switch" ng-model="userData.cfgScanStartClick" ng-click="changeOnOff(userData.cfgScanStartClick, 'ScanStartClick')" ng-show="false"/>
                                                     <label for="switch9" ng-show="userData.cfgScanningAutoOnOff&&!(userData.cfgUsageMouseOneCTwoC=='2')">&nbsp;</label>
@@ -706,11 +678,11 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar10 || !userData.cfgInterfaceVoiceOnOff" collapsed="rebuild()" expanded="rebuild()">
+                            <div class="col-xs-12" uib-collapse="!contentBar10 || !userData.cfgInterfaceVoiceOnOff">
                             <div class="row contentBar Voices">
                                 <div class="row verticalMarginBottom">
                                     <div class="col-xs-3 verticalMarginVoice" ng-show="!local"></div>
-                                    <div class="col-xs-3 verticalMarginVoice" ng-show="local">Veu Predeterminada:</div>
+                                    <div class="col-xs-3 verticalMarginVoice" ng-show="local">{{content.currentVoice}}</div>
                                     <div class="col-xs-6 verticalMarginVoice">
                                         <select class="boxEdit dropdown-arrow"
                                                 ng-options="voice.voiceName as voice.voiceCompleteName for voice in interfaceVoicesList"
@@ -723,7 +695,7 @@
                                         <input type="image" class="img-audioButton" ng-src="{{imgsrc1}}" ng-click="generateAudio();"></div>
                                 </div>
                                 <div class="row" ng-show="local">
-                                    <div class="col-xs-3 verticalMarginVoice">Veu offline:</div>
+                                    <div class="col-xs-3 verticalMarginVoice">{{content.offlineVoice}}</div>
                                     <div class="col-xs-6 verticalMarginVoice">
                                         <select class="boxEdit dropdown-arrow"
                                                 ng-options="voice.voiceName as voice.voiceCompleteName for voice in interfaceVoicesListOffline"
@@ -755,11 +727,11 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-xs-12" uib-collapse="!contentBar11" collapsed="rebuild()" expanded="rebuild()">
+                            <div class="col-xs-12" uib-collapse="!contentBar11">
                             <div class="row contentBar Voices">
                                 <div class="row verticalMarginBottom">
                                     <div class="col-xs-3 verticalMarginVoice" ng-show="!local"></div>
-                                    <div class="col-xs-3 verticalMarginVoice" ng-show="local">Veu Predeterminada:</div>
+                                    <div class="col-xs-3 verticalMarginVoice" ng-show="local">{{content.currentVoice}}</div>
                                     <div class="col-xs-6 verticalMarginVoice">
                                         <select class="boxEdit dropdown-arrow"
                                                 ng-options="voice.voiceName as voice.voiceCompleteName for voice in expansionVoicesList"
@@ -772,7 +744,7 @@
                                         <input type="image" class="img-audioButton" ng-src="{{imgsrc3}}" ng-click="generateAudio();"></div>
                                 </div>
                                 <div class="row" ng-show="local">
-                                    <div class="col-xs-3 verticalMarginVoice">Veu offline:</div>
+                                    <div class="col-xs-3 verticalMarginVoice">{{content.offlineVoice}}</div>
                                     <div class="col-xs-6 verticalMarginVoice">
                                         <select class="boxEdit dropdown-arrow"
                                                 ng-options="voice.voiceName as voice.voiceCompleteName for voice in expansionVoicesOffline"
@@ -785,7 +757,7 @@
                                         <input type="image" class="img-audioButton" ng-src="{{imgsrc4}}" ng-click="generateAudio();"></div>
                                 </div>
                                 <div class="row" ng-show="local">
-                                    <div class="col-xs-3">Voice rate:</div>
+                                    <div class="col-xs-3">{{content.voiceRate}}</div>
                                     <div class="col-xs-6">
                                         <div class="backgroundGreyTime">
                                             <input
@@ -805,8 +777,7 @@
 
                     </div>
                 </div>
-            </div>
-            </div>
+            </div><br/><br/>
         </div>
     </div>
 </div>

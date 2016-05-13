@@ -229,6 +229,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row fonsBlanc">
+                            <div class="col-xs-1 FonsTurquesa icon-question-sign"></div>
+                            <div class="col-xs-6 noPaddingRight">Resuelve la equación:</div>
+                            <div class="col-xs-3 FonsEquacio noPaddingRight">
+                                <button type="button" ng-disabled="false" ng-click="checkCaptcha()" class="icon-refresh buttonCaptcha pull-left"/>                                </button>
+                                    <!--asi colocamos nuestro captcha en el formulario-->
+                                    <captcha field1="{{field1}}" operator="{{operator}}" field2="{{field2}}"></captcha>
+                            </div>
+                            <div class="col-xs-2 noPaddingNoMargin">
+                                    <!--campoo que hace de respuesta a nuestro captcha-->
+                                    <input class="inputCaptcha pull-right" ng-model="resultado"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

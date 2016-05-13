@@ -70,16 +70,23 @@ class Login_model extends CI_Model {
         $this->session->set_userdata('uinterfacelangabbr', $userConfig["languageabbr"]);
         $this->session->set_userdata('autoEraseSentenceBar', $userConfig["cfgAutoEraseSentenceBar"]);
         $this->session->set_userdata('isfem', $userConfig["cfgIsFem"]);
+        $this->session->set_userdata('cfgExpansionOnOff', $userConfig["cfgExpansionOnOff"]);
+        $this->session->set_userdata('cfgPredBarNumPred', $userConfig["cfgPredBarNumPred"]);
 
         // Save Expansion language in the COOKIES
         $this->db->select('canExpand');
         $this->db->where('ID_Language', $userConfig["cfgExpansionLanguage"]);
-        $canExpand = $this->db->get('Languages');
+        $query3 = $this->db->get('Languages');
 
-        if ($canExpand == '1'){
-            $this->session->set_userdata('ulangabbr', $userConfig["languageabbr"]);
-        }else{
-            $this->session->set_userdata('ulangabbr', 'ES');
+        if ($query3->num_rows() > 0) {
+            $aux = $query3->result();
+            $canExpand = $aux[0]->canExpand;
+
+            if ($canExpand == '1'){
+                $this->session->set_userdata('ulangabbr', $userConfig["languageabbr"]);
+            }else{
+                $this->session->set_userdata('ulangabbr', 'ES');
+            }
         }
 
         // Guardamos los datos como objeto

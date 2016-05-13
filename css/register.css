@@ -214,3 +214,41 @@ html, body, .container-table {
     margin-top: 0.6vh;
     text-decoration:none;
 }
+.fonsBlanc{
+    margin-top: 3vh;
+    background-color: white;
+    border-radius: 5px;
+    height: 5vh;
+}
+.FonsTurquesa{
+    background-color: #99ccdd;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    height: 5vh;
+    vertical-align: middle;
+    color: #555;
+    padding-top: 1vh;
+}
+.FonsEquacio{
+    background-color: #99ccdd;
+    height: 5vh;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+}
+.buttonCaptcha{
+    height: 5vh !important;
+    font-size: 2vh;
+}
+.noPaddingRight{
+    padding-right: 0px;
+}
+.noPaddingNoMargin{
+    padding: 0px;
+    margin: 0px;
+}
+.inputCaptcha{
+    margin: 0px;
+    height: 5vh;
+    width: 7vh;
+}

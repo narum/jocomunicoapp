@@ -82,7 +82,7 @@ angular.module('controllers', [])
         })
 
 //Controlador del registro de usuario
-        .controller('RegisterCtrl', function ($scope, $rootScope, Resources, md5, $q, $location) {
+        .controller('RegisterCtrl', function ($scope, $captcha, Resources, md5, $q, $location) {
 
             //Inicializamos el formulario y las variables necesarias
             $scope.formData = {};  //Datos del formulario
@@ -274,6 +274,19 @@ angular.module('controllers', [])
                 } else {
                     return true;
                 }
+            }
+            
+            $scope.checkCaptcha = function() {
+                    //si pasa la validacion correctamente
+                    if($captcha.checkResult($scope.resultado) === true)
+                    {
+                            alert("El captcha ha pasado la validación");
+                    }
+                    //si falla la validacion
+                    else
+                    {
+                            alert("Error, captcha incorrecto");
+                    }
             }
 
             $scope.submitForm = function (formData) {
@@ -539,6 +552,7 @@ angular.module('controllers', [])
                             $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
                             $scope.userData.cfgHistOnOff = ($scope.userData.cfgHistOnOff === "1");
                             $scope.userData.cfgInterfaceVoiceOnOff = ($scope.userData.cfgInterfaceVoiceOnOff === "1");
+                            $scope.userData.cfgUserExpansionFeedback = ($scope.userData.cfgUserExpansionFeedback === "1");
                             $scope.userData.cfgInterfaceVoiceMascFem = ($scope.userData.cfgInterfaceVoiceMascFem === "masc");
 
                             var count = results.users[0].ID_ULanguage;
