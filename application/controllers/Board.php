@@ -17,6 +17,7 @@ class Board extends REST_Controller {
         $this->load->library('Mypattern');
         $this->load->library('Myexpander');
         $this->load->library('Myprediction');
+        $this->load->library('Myaudio');
         $this->load->library('session');
     }
 
@@ -42,8 +43,6 @@ class Board extends REST_Controller {
         $data = array(
             'uinterfacelangauge' => $luid // Id language
         );
-
-        
     }
 
     /*
@@ -269,15 +268,32 @@ class Board extends REST_Controller {
         $this->Lexicon->afegirParaula($idusu, $id, $imgtemp);
 
         $data = $this->Lexicon->recuperarFrase($idusu);
-        
+
         $newdata = $this->inserty($data);
-        
+
+        $numdata = count($newdata);
+        $read = $newdata[$numdata - 1]->text;
+
+        // GENERAR AUDIO
+        $audio = new Myaudio();
+        $aux = $audio->generateAudio($idusu, $read, true);
+
         $response = [
-            'data' => $newdata
+            'data' => $newdata,
+            'audio' => $aux[0],
+            'boolError' => $aux[1],
+            'textError' => $aux[2],
+            'codeError' => $aux[3],
         ];
+
+        while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
+            usleep(100000);
+        }
+
+
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     /*
      * Get the sentence
      */
@@ -286,9 +302,9 @@ class Board extends REST_Controller {
         $idusu = $this->session->userdata('idusu');
 
         $data = $this->Lexicon->recuperarFrase($idusu);
-        
+
         $newdata = $this->inserty($data);
-        
+
         $response = [
             'data' => $newdata
         ];
@@ -299,12 +315,12 @@ class Board extends REST_Controller {
      * Insert a especial picto (concatenation picto) in the array.
      */
 
-    public function inserty($data){
+    public function inserty($data) {
         $newdata = array();
         $j = 0;
-        for ($i=0; $i<count($data); $i++) {
+        for ($i = 0; $i < count($data); $i++) {
             $newdata[$j] = $data[$i];
-            if($data[$i]->coord){
+            if ($data[$i]->coord) {
                 $j++;
                 $newdata[$j] = (object) array('imgtemp' => "y.png");
             }
@@ -312,11 +328,12 @@ class Board extends REST_Controller {
         }
         return $newdata;
     }
-    
+
     /*
      * Remove the last word (pictogram) added in the S_Temp database table.
      * Then, get the entire sentence from this table.
      */
+
     public function deleteLastWord_post() {
 
         $idusu = $this->session->userdata('idusu');
@@ -326,8 +343,8 @@ class Board extends REST_Controller {
 
         $data = $this->Lexicon->recuperarFrase($idusu);
 
-        $newdata = $this->inserty($data); 
-        
+        $newdata = $this->inserty($data);
+
         $response = [
             'data' => $newdata
         ];
@@ -344,8 +361,8 @@ class Board extends REST_Controller {
         $this->BoardInterface->removeSentence($idusu);
 
         $data = $this->Lexicon->recuperarFrase($idusu);
-        
-        $newdata = $this->inserty($data); 
+
+        $newdata = $this->inserty($data);
 
         $response = [
             'data' => $newdata
@@ -385,9 +402,22 @@ class Board extends REST_Controller {
 //            if ($info['frasefinal'] == ""){
 //                $response = null;
 //            }else{
+            // GENERAR AUDIO
+            $audio = new Myaudio();
+            $aux = $audio->generateAudio($idusu, $info['frasefinal'], false);
+
             $response = [
-                'info' => $info
+                'info' => $info,
+                'audio' => $aux[0],
+                'boolError' => $aux[1],
+                'textError' => $aux[2],
+                'codeError' => $aux[3],
             ];
+
+            while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
+                usleep(100000);
+            }
+
 //            }
             //redirect(base_url().'resultatsBoard', 'location');
             $this->response($response, REST_Controller::HTTP_OK);
@@ -480,8 +510,8 @@ class Board extends REST_Controller {
         }
         $idusu = $this->session->userdata('idusu');
         $data = $this->Lexicon->recuperarFrase($idusu);
-        
-        $newdata = $this->inserty($data); 
+
+        $newdata = $this->inserty($data);
 
         $response = [
             'tense' => $tense,
@@ -694,9 +724,7 @@ class Board extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
-    
-    
+
     public function autoReadSentence_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -735,7 +763,7 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
-        
+
         $board = $this->BoardInterface->getIDGroupBoards($id);
         $primaryboard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
 
@@ -747,13 +775,13 @@ class Board extends REST_Controller {
 
         $this->BoardInterface->removeBoard($id);
         $this->BoardInterface->commitTrans();
-        
+
         $response = [
             'idboard' => $primaryboard[0]->ID_Board
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     public function copyBoard_post() {
         $this->BoardInterface->initTrans();
         $postdata = file_get_contents("php://input");
@@ -762,25 +790,25 @@ class Board extends REST_Controller {
         $srcGroupBoard = $request->srcGroupBoard;
         $IDGboard = $request->idGroupBoard;
         $sameGroupBoard = 0;
-        if ($srcGroupBoard == $IDGboard ){
+        if ($srcGroupBoard == $IDGboard) {
             $sameGroupBoard = 1;
         }
-        echo $sameGroupBoard." : VALIDATION! -> ".$srcGroupBoard." = ".$IDGboard;
+        echo $sameGroupBoard . " : VALIDATION! -> " . $srcGroupBoard . " = " . $IDGboard;
         $name = $request->CreateBoardName;
         $width = $request->width;
         $height = $request->height;
         $autoReturn = $request->autoreturn;
         $autoReadSentence = $request->autoread;
-        
-        $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height,$autoReturn, $autoReadSentence);
+
+        $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
         $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
         /*
          * This commented part can update the size of the board if it is implemented.
          * 
-        $this->addColumns(0, 0, $idBoard, $NEW_width);
-        $this->addRows($width, 0, $idBoard, $NEW_height);
-        */
-        
+          $this->addColumns(0, 0, $idBoard, $NEW_width);
+          $this->addRows($width, 0, $idBoard, $NEW_height);
+         */
+
         $this->BoardInterface->commitTrans();
         $response = [
             'idBoard' => $idDst
@@ -885,24 +913,23 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $score = $request->score;
-        
+
         $idusu = $this->session->userdata('idusu');
         $id = $this->BoardInterface->getIdLastSentence($idusu);
-        if ($id === null){
+        if ($id === null) {
             $this->response(300);
         }
         $this->BoardInterface->score($id, $score);
         $this->response(REST_Controller::HTTP_OK);
     }
-    
+
     public function modifyColorCell_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
         $color = $request->color;
-        
-        $this->BoardInterface->modifyColorCell($id, $color);
 
+        $this->BoardInterface->modifyColorCell($id, $color);
     }
-    
+
 }

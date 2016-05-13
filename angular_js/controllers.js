@@ -1694,6 +1694,11 @@ angular.module('controllers', [])
                     $http.post(url, postdata).success(function (response)
                     {
                         $scope.dataTemp = response.data;
+                        $scope.dataAudio = response.audio;
+
+                        $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
+                        $scope.sound.play();
+                        
                         $scope.getPred();
                     });
 
@@ -1814,7 +1819,11 @@ angular.module('controllers', [])
                     //$scope.dataTemp = response.data;
                     $scope.info = response.info;
                     //$scope.data = response.data;
-                    $scope.playSentenceAudio();
+                    $scope.dataAudio = response.audio;
+
+                    $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
+                    $scope.sound.play();
+                    
                     $scope.puntuar();
 
 
