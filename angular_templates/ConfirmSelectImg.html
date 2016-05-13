@@ -23,6 +23,6 @@
     <input type="file" id="file-input" onchange="angular.element(this).scope().getPreviewImg()"/>
 </div>
 <div class="row" style="height: 20%">
-    <input class="dialogButton col-xs-offset-3 col-xs-2" type="button" value="confirm" ng-click="confirm();"/>
-    <input class="dialogButton col-xs-offset-2 col-xs-2" type="button" value="close" ng-click="closeThisDialog();"/>
+    <input class="dialogButton col-xs-offset-3 col-xs-2" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
+    <input class="dialogButton col-xs-offset-2 col-xs-2" type="button" value="{{content.cancel}}" ng-click="closeThisDialog();"/>
 </div>
