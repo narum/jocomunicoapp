@@ -427,7 +427,7 @@ class Myaudio {
     
     /**
      * 
-     * It generates the audio and saves to the database and into an audio file
+     * It generates the audio and saves it to the database and into an audio file
      * @param string $md5 filename without the extension
      * @param string $text string to synthesize
      * @param string $voice voice name for offline voices or id for online voices (except 
@@ -812,6 +812,59 @@ class Myaudio {
         $output[0] = $error;
         $output[1] = $errormessage;
         $output[2] = $errorcode;
+        return $output;
+    }
+    
+    /**
+     * 
+     * It generates the audio for the dropdown voices' menus in the user configuration of the app 
+     * and saves it to the database and into an audio file
+     * @param string $idusu user id
+     * @param string $text string to synthesize
+     * @param string $voice voice name for offline voices or id for online voices (except 
+     * for DEFAULT online interface voices)
+     * @param string $type online or offline
+     * @param int $language id of the language of the string to synthetize
+     * @param type $rate rate of speech speed of offline voices
+     * @return array $output[0] Name of the generated audio file with the extension
+     * NOTE: calling function should check for returned errors in $output[1],
+     * errormessage in $output[2] errorcode in $output[3]
+     */
+    public function selectedVoiceAudio($idusu, $text, $voice, $type, $language, $rate) 
+    {
+        $CI = &get_instance();
+        $CI->load->model('Audio_model');
+        
+        $output = array();
+        $output[1] = false; // error
+        $output[2] = null; // error message
+        $output[3] = 0; // error code
+        
+        // the name of the fetched (from the database) or the generated audio file
+        // it will be in output[0]
+        $filename = null;
+        $key = "";
+        
+        // Encoded file name: #INTERFACE@IdInterfaceLanguage#(masc|fem)$string
+        if ($type == "online") $key = "#INTERFACEVOICE@".$language."#".$voice."(".$type.")"."$".$text;
+        else $key = "#INTERFACEVOICE_USU".$idusu."@".$language."#".$voice."(".$type.")"."$".$text;
+        
+        $md5 = md5($key);
+
+        $isindb = $CI->Audio_model->isAudioInDatabase($md5);
+
+        // if it's already in the database
+        if ($isindb) $filename = $isindb;
+        else {
+            $auxresponse = $this->synthesizeAudio($md5, $text, $voice, $type, $language, $rate);
+            $filename = $auxresponse[0];
+            $output[1] = $auxresponse[1];
+            $output[2] = $auxresponse[2];
+            $output[3] = $auxresponse[3];
+        }
+        
+        $output[0] = $filename;
+        
         return $output;
     }
     

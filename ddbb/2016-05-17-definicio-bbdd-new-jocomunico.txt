@@ -324,7 +324,7 @@ CREATE TABLE Cell (
 	ID_CFunction INT NULL,
 	textInCell VARCHAR(100),
 	textInCellTextOnOff  ENUM('0', '1') DEFAULT '1',
-	cellType ENUM('picto', 'link', 'funct', 'sentence', 'sfolder') NULL,
+	cellType ENUM('picto', 'link', 'funct', 'sentence', 'sfolder', 'other') NULL,
 	activeCell ENUM('0', '1') DEFAULT '1',
 	INDEX CPicto (ID_CPicto),
 	FOREIGN KEY (ID_CPicto) REFERENCES Pictograms (pictoid) ON DELETE SET NULL,
