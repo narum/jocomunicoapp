@@ -816,5 +816,29 @@ class Myaudio {
         return $output;
     }
     
+    /**
+     * If there is no error, waits for the file to be available and frees it 
+     * @param type $file
+     * @param type $error
+     */
+    public function waitForFile($file, $error)
+    {
+        if (!$error) {
+            $handle = fopen("mp3/".$file, "r");
+            if (is_resource($handle)) {
+                fclose($handle);
+            }
+            else {
+                $i = 0;
+                while (!is_resource($handle) && $i<10) {
+                    $i++;
+                    $handle = fopen("mp3/".$file, "r");
+                    usleep(100000);
+                }
+                fclose($handle);
+            }
+        }
+    }
+    
 }
 /* End of file Myaudio.php */

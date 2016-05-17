@@ -278,6 +278,8 @@ class Board extends REST_Controller {
         // GENERAR AUDIO
         $audio = new Myaudio();
         $aux = $audio->generateAudio($idusu, $read, true);
+        
+        $audio->waitForFile($aux[0], $aux[1]);
 
         $response = [
             'data' => $newdata,
@@ -286,11 +288,6 @@ class Board extends REST_Controller {
             'textError' => $aux[2],
             'codeError' => $aux[3],
         ];
-
-//        while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
-//            usleep(100000);
-//        }
-
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
@@ -407,6 +404,8 @@ class Board extends REST_Controller {
             $audio = new Myaudio();
             $aux = $audio->generateAudio($idusu, $info['frasefinal'], false);
 
+            $audio->waitForFile($aux[0], $aux[1]);
+            
             $response = [
                 'info' => $info,
                 'audio' => $aux[0],
@@ -414,13 +413,7 @@ class Board extends REST_Controller {
                 'textError' => $aux[2],
                 'codeError' => $aux[3],
             ];
-
-//            while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
-//                usleep(100000);
-//            }
-
-//            }
-            //redirect(base_url().'resultatsBoard', 'location');
+            
             $this->response($response, REST_Controller::HTTP_OK);
         }
     }
@@ -518,6 +511,8 @@ class Board extends REST_Controller {
         // GENERAR AUDIO
         $audio = new Myaudio();
         $aux = $audio->generateAudio($idusu, $read, true);
+        
+        $audio->waitForFile($aux[0], $aux[1]);
 
          $response = [
             'tense' => $tense,
@@ -530,10 +525,6 @@ class Board extends REST_Controller {
             'textError' => $aux[2],
             'codeError' => $aux[3],
         ];
-        
-//        while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
-//            usleep(100000);
-//        }
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
@@ -962,6 +953,8 @@ class Board extends REST_Controller {
         // GENERAR AUDIO
         $audio = new Myaudio();
         $aux = $audio->generateAudio($idusu, $text, true);
+        
+        $audio->waitForFile($aux[0], $aux[1]);
 
         $response = [
             'audio' => $aux[0],
@@ -969,11 +962,6 @@ class Board extends REST_Controller {
             'textError' => $aux[2],
             'codeError' => $aux[3],
         ];
-
-//        while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
-//            usleep(100000);
-//        }
-
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
