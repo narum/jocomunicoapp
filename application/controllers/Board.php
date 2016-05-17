@@ -808,7 +808,6 @@ class Board extends REST_Controller {
         if ($srcGroupBoard == $IDGboard) {
             $sameGroupBoard = 1;
         }
-        echo $sameGroupBoard . " : VALIDATION! -> " . $srcGroupBoard . " = " . $IDGboard;
         $name = $request->CreateBoardName;
         $width = $request->width;
         $height = $request->height;

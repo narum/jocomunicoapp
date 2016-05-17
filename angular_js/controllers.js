@@ -2196,7 +2196,7 @@ angular.module('controllers', [])
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
 
-                /*
+                /*MODIF: cambiar nombre variables
                  * Remove the currentimg. If there are no imgCell nothings happens. If there are imgCell
                  * removes it. If there are imgCell and a provisional img removes it, but not the imgCell
                  */
@@ -2588,7 +2588,7 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
 
-                    var URL = $scope.baseurl + "PanelGroup/newGroupPanel";
+                    var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
 
 
                     $http.post(URL, $scope.CreateBoardData).success(function (response)
