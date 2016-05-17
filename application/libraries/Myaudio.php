@@ -728,21 +728,23 @@ class Myaudio {
                     $msAudioFormat = new COM('SAPI.SpAudioFormat');
                 }
                 // Path al fitxer on guardarem les veus
-                $wavfile = "C:\\xampp\htdocs\mp3\\".$filename.".mp3";
-                echo $wavfile;
-                
+                $wavfile = "C:\\xampp\htdocs\\v3\mp3\\".$filename.".mp3";
+
                 // hem de triar la veu que vol l'usuari (trobada anteriorment)
                 $msVoice->Voice = $chosenVoice;
+
                 // passem la frase d'utf-8 a format de Windows perquè llegeixi bé
                 // tots els caràcters
                 $fraseconvertida = iconv("utf-8", "Windows-1252", $text);
                 // guardarem el fitxer amb la menor qualitat possible, format 4
                 $msAudioFormat->Type = 4;
                 $msFileStream->Format = $msAudioFormat;
+
                 // obrim el fitxer on escriurem l'àudio en format CreateWrite
                 $msFileStream->Open($wavfile, 3, 0);
+
                 $msVoice->AudioOutputStream = $msFileStream;
-                            
+
                 // es diu la frase de manera asíncrona
                 $msVoice->Speak($fraseconvertida, 1);
                 // esperem a que acabi, ja que si no talla la frase
@@ -814,6 +816,31 @@ class Myaudio {
         $output[0] = $filename;
         
         return $output;
+    }
+    
+        
+    /**
+     * If there is no error, waits for the file to be available and frees it 
+     * @param type $file
+     * @param type $error
+     */
+    public function waitForFile($file, $error)
+    {
+        if (!$error) {
+            $handle = fopen("mp3/".$file, "r");
+            if (is_resource($handle)) {
+                fclose($handle);
+            }
+            else {
+                $i = 0;
+                while (!is_resource($handle) && $i<10) {
+                    $i++;
+                    $handle = fopen("mp3/".$file, "r");
+                    usleep(100000);
+                }
+                fclose($handle);
+            }
+        }
     }
     
 }

@@ -823,15 +823,25 @@ angular.module('controllers', [])
                 }
             };
 
-            $scope.generateAudio = function () {
-//        Resources.main.save({'IdU':$rootScope.userId, 'text':'Aquesta es la veu seleccionada', 'interface':'false'}, {'funct': "generateAudio"}).$promise
-//        .then(function (results) {
-//        console.log(results);
-                $scope.sound = ngAudio.load("mp3/" + "45c71c3398bc9fea91ad50b66c844a7c.mp3");
-//        $scope.sound = ngAudio.load("mp3/"+results[0]);
-                $scope.sound.play();
-//        $scope.sound = ngAudio.load($scope.baseurl + );
-//        });
+            $scope.generateAudio = function (voice,type) {
+                angular.forEach($scope.expansionVoicesList, function (value) {
+                    if (value.voiceName === voice && value.voiceType === 'online') {
+                            voice=value.ID_Voice;
+                            type='online';
+                        }
+                });
+                if(voice==$scope.interfaceVoicesList[0].voiceName||voice==$scope.interfaceVoicesList[1].voiceName){
+                    type='online';
+                }
+                Resources.main.save({'IdU':$rootScope.userId, 'text':$scope.content.voicePlay, 'voice':voice, 'type':type, 'language':$scope.userData.ID_ULanguage, 'rate':'0'}, {'funct': "generateAudio"}).$promise
+                .then(function (results) {
+                    if(results[1]){
+                        alert(results[2]);
+                    }else{
+                        $scope.sound = ngAudio.load("mp3/"+results[0]);
+                        $scope.sound.play();
+                    }
+                });
             };
 
             $scope.exit = function () {

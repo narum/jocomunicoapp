@@ -171,11 +171,16 @@ class Main extends REST_Controller {
         
         $idusu = $this->query('IdU');
         $text = $this->query('text');
-        $interface = $this->query('interface');
+        $voice = $this->query('voice');
+        $type = $this->query('type');
+        $language = $this->query('language');
+        $rate = $this->query('rate');
         
         $audio = new Myaudio();
         
-        $response = $audio->generateAudio($idusu, $text, false);
+        $response = $audio->selectedVoiceAudio($idusu, $text, $voice, $type, $language, $rate);
+        
+        $audio->waitForFile($response[0], $response[1]);
         
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }

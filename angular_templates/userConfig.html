@@ -422,8 +422,8 @@
                                     <div class="row">
                                         <div class="col-xs-7">{{content.sentenceBar2}}</div>
                                         <div class="col-xs-5">
-                                            <input type="checkbox" id="switch12" class="switch" ng-model="userData.cfgAutoEraseSentenceBar" ng-click="changeOnOff(userData.cfgAutoEraseSentenceBar, 'AutoEraseSentenceBar')" ng-show="false"/>
-                                            <label for="switch12">&nbsp;</label>
+                                            <input type="checkbox" id="switch14" class="switch" ng-model="userData.cfgAutoEraseSentenceBar" ng-click="changeOnOff(userData.cfgAutoEraseSentenceBar, 'AutoEraseSentenceBar')" ng-show="false"/>
+                                            <label for="switch14">&nbsp;</label>
                                         </div>
                                     </div>
                                     <div class="row verticalMarginTop">
@@ -692,7 +692,7 @@
                                     </div>
                                     <div class="col-xs-1"></div>
                                     <div class="col-xs-1" ng-init="imgsrc1='/img/srcWeb/UserConfig/audioPlay.png'" ng-mouseover="imgsrc1='/img/srcWeb/UserConfig/audioPlay2.png'" ng-mouseout="imgsrc1='/img/srcWeb/UserConfig/audioPlay.png'">
-                                        <input type="image" class="img-audioButton" ng-src="{{imgsrc1}}" ng-click="generateAudio();"></div>
+                                        <input type="image" class="img-audioButton" ng-src="{{imgsrc1}}" ng-click="generateAudio(userData.cfgInterfaceVoiceOnline,'offline');"></div>
                                 </div>
                                 <div class="row" ng-show="local">
                                     <div class="col-xs-3 verticalMarginVoice">{{content.offlineVoice}}</div>
@@ -705,7 +705,7 @@
                                     </div>
                                     <div class="col-xs-1"></div>
                                     <div class="col-xs-1" ng-init="imgsrc2='/img/srcWeb/UserConfig/audioPlay.png'" ng-mouseover="imgsrc2='/img/srcWeb/UserConfig/audioPlay2.png'" ng-mouseout="imgsrc2='/img/srcWeb/UserConfig/audioPlay.png'">
-                                        <input type="image" class="img-audioButton" ng-src="{{imgsrc2}}" ng-click="generateAudio();"></div>
+                                        <input type="image" class="img-audioButton" ng-src="{{imgsrc2}}" ng-click="generateAudio(userData.cfgInterfaceVoiceOffline,'offline');"></div>
                                 </div>
                             </div>
                             </div>
@@ -741,7 +741,7 @@
                                     </div>
                                     <div class="col-xs-1"></div>
                                     <div class="col-xs-1" ng-init="imgsrc3='/img/srcWeb/UserConfig/audioPlay.png'" ng-mouseover="imgsrc3='/img/srcWeb/UserConfig/audioPlay2.png'" ng-mouseout="imgsrc3='/img/srcWeb/UserConfig/audioPlay.png'">
-                                        <input type="image" class="img-audioButton" ng-src="{{imgsrc3}}" ng-click="generateAudio();"></div>
+                                        <input type="image" class="img-audioButton" ng-src="{{imgsrc3}}" ng-click="generateAudio(userData.cfgExpansionVoiceOnline,'offline');"></div>
                                 </div>
                                 <div class="row" ng-show="local">
                                     <div class="col-xs-3 verticalMarginVoice">{{content.offlineVoice}}</div>
@@ -754,7 +754,7 @@
                                     </div>
                                     <div class="col-xs-1"></div>
                                     <div class="col-xs-1" ng-init="imgsrc4='/img/srcWeb/UserConfig/audioPlay.png'" ng-mouseover="imgsrc4='/img/srcWeb/UserConfig/audioPlay2.png'" ng-mouseout="imgsrc4='/img/srcWeb/UserConfig/audioPlay.png'">
-                                        <input type="image" class="img-audioButton" ng-src="{{imgsrc4}}" ng-click="generateAudio();"></div>
+                                        <input type="image" class="img-audioButton" ng-src="{{imgsrc4}}" ng-click="generateAudio(userData.cfgExpansionVoiceOffline,'offline');"></div>
                                 </div>
                                 <div class="row" ng-show="local">
                                     <div class="col-xs-3">{{content.voiceRate}}</div>
@@ -773,8 +773,6 @@
                             </div>
                             </div>
                         </div>
-                        
-
                     </div>
                 </div>
             </div><br/><br/>
