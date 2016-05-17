@@ -46,23 +46,12 @@
 
                         <img ng-if="picto.ID_CFunction !== null" ng-src="{{baseurl}}img/srcWeb/functions.png" class="function"/>
 
-                        <div ng-if="picto.imgCell && isPictoActive(picto)" class="contentCell">
+                        <div ng-if="isPictoActive(picto)" class="contentCell">
                             <!--MODIF: deberia ser con texto on/off???-->
                             <div ng-style="cfgTextInCell ? {'height':'70%'}:{'height':'100%'}">
-                                <img class="imgResponsive" ng-src="{{baseurl}}{{picto.imgCell}}"/>
-                            </div>
-
-                        </div>
-
-                        <div ng-if="picto.imgPicto && !picto.imgCell && isPictoActive(picto)" class="contentCell">  
-                            <div ng-style="cfgTextInCell ? {'height':'70%'}:{'height':'100%'}">
-                                <img ng-src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
-                            </div>
-                        </div>
-
-                        <div ng-if="picto.imgFunct && !picto.imgPicto && !picto.imgCell && isPictoActive(picto)" class="contentCell">  
-                            <div ng-style="cfgTextInCell ? {'height':'70%'}:{'height':'100%'}">
-                                <img ng-src="{{baseurl}}img{{picto.imgFunct}}" class="imgResponsive"/>
+                                <img ng-if="picto.imgCell" class="imgResponsive" ng-src="{{baseurl}}{{picto.imgCell}}"/>   
+                                <img ng-if="picto.imgPicto && !picto.imgCell" ng-src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
+                                <img ng-if="picto.imgFunct && !picto.imgPicto && !picto.imgCell" ng-src="{{baseurl}}img{{picto.imgFunct}}" class="imgResponsive"/>
                             </div>
                         </div>
 

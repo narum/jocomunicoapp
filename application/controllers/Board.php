@@ -287,9 +287,9 @@ class Board extends REST_Controller {
             'codeError' => $aux[3],
         ];
 
-        while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
-            usleep(100000);
-        }
+//        while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
+//            usleep(100000);
+//        }
 
 
         $this->response($response, REST_Controller::HTTP_OK);
@@ -415,9 +415,9 @@ class Board extends REST_Controller {
                 'codeError' => $aux[3],
             ];
 
-            while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
-                usleep(100000);
-            }
+//            while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
+//                usleep(100000);
+//            }
 
 //            }
             //redirect(base_url().'resultatsBoard', 'location');
@@ -444,7 +444,7 @@ class Board extends REST_Controller {
      */
 
     public function getPrimaryUserBoard_post() {
-
+        
         $board = $this->BoardInterface->getPrimaryGroupBoard();
         $primaryBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
 
@@ -531,9 +531,9 @@ class Board extends REST_Controller {
             'codeError' => $aux[3],
         ];
         
-        while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
-            usleep(100000);
-        }
+//        while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
+//            usleep(100000);
+//        }
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
@@ -919,7 +919,11 @@ class Board extends REST_Controller {
         // CARGA recommenderArray                 
         $prediction = new Myprediction();
         $recommenderArray = $prediction->getPrediction();
-
+        
+        for ($i = 0; $i < count($recommenderArray); $i++){
+            $img = $this->BoardInterface->getImgCell($recommenderArray[$i]->pictoid);
+            $recommenderArray[$i]->imgtemp = $img;
+        }
         $response = [ 'recommenderArray' => $recommenderArray];
         $this->response($response, REST_Controller::HTTP_OK);
     }
@@ -946,5 +950,32 @@ class Board extends REST_Controller {
 
         $this->BoardInterface->modifyColorCell($id, $color);
     }
+    
+    /*
+     * Generate audio
+     */
+    public function readText_post(){
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $text = $request->text;
+        $idusu = $this->session->userdata('idusu');
+        
+        // GENERAR AUDIO
+        $audio = new Myaudio();
+        $aux = $audio->generateAudio($idusu, $text, true);
 
+        $response = [
+            'audio' => $aux[0],
+            'boolError' => $aux[1],
+            'textError' => $aux[2],
+            'codeError' => $aux[3],
+        ];
+
+//        while (!file_exists('mp3/' . $aux[0]) && !$aux[1]) {
+//            usleep(100000);
+//        }
+
+
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 }

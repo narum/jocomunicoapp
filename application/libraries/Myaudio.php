@@ -315,7 +315,7 @@ class Myaudio {
     {
         $CI = &get_instance();
         $CI->load->model('Audio_model');
-        echo $text;
+        
         $output = array();
         $output[1] = false; // error
         $output[2] = null; // error message

@@ -826,11 +826,14 @@ angular.module('controllers', [])
             };
         })
 
-        .controller('myCtrl', function ($location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {
+        .controller('myCtrl', function (Resources, $location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
+            } else {
+                Resources.main.get({'IdSu': $rootScope.sUserId}, {'funct': "getConfig"});
             }
+
             // Pedimos los textos para cargar la pagina
             txtContent("mainboard").then(function (results) {
                 $rootScope.content = results.data;
@@ -1232,7 +1235,7 @@ angular.module('controllers', [])
             {
                 //-----------Iniciacion-----------
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
-
+                console.log(userConfig);
                 var url = $scope.baseurl + "Board/loadCFG";
 
                 var postdata = {lusuid: userConfig.ID_ULanguage};
@@ -1355,7 +1358,7 @@ angular.module('controllers', [])
             /*
              * Show board and the pictograms
              */
-            $scope.showBoard = function (id, text)
+            $scope.showBoard = function (id)
             {
                 //MODIF: leer texto panel
                 //If the id is 0, show the actual board. Else the current board is changed (and showed)
@@ -1592,20 +1595,28 @@ angular.module('controllers', [])
                         readed = true;
                     }
                     if (cell.boardLink !== null) {
-                        if (readed === true){
+                        if (readed === true) {
                             text = "";
-                        }else {
+                        } else {
                             text = cell.textInCell;
-                        } 
-                        $scope.showBoard(cell.boardLink, text);
+                        }
+                        var postdata = {text: text};
+                        var url = $scope.baseurl + "Board/readText";
+                        $http.post(url, postdata).then(function (response) {
+                            $scope.dataAudio = response.audio;
+
+                            $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
+                            $scope.sound.play();
+                        });
+                        $scope.showBoard(cell.boardLink);
                         readed = true;
                     }
                     if (cell.ID_CFunction !== null) {
-                        if (readed === true){
+                        if (readed === true) {
                             text = "";
-                        }else if (cell.textInCell !== null) {
+                        } else if (cell.textInCell !== null) {
                             text = cell.textInCell;
-                        } else{
+                        } else {
                             text = cell.textFunction;
                         }
                         $scope.clickOnFunction(cell.ID_CFunction, text);
@@ -1644,7 +1655,7 @@ angular.module('controllers', [])
                 {
                     //MODIF: No se perque tarda mes del temps que s'ha assignat
                     $scope.OverAutoClick = $timeout(function () {
-                        $scope.addToSentence(object);
+                        $scope.addToSentence(object.id, object.imgPicto, object.pictotext);
                     }, $scope.cfgTimeOver);
                 } else if (type === 2)
                 {
@@ -1697,7 +1708,7 @@ angular.module('controllers', [])
              * Add the selected pictogram to the sentence
              */
             $scope.addToSentence = function (id, img, text) {
-                img = null; //MODIF: necesitamos que jose nos pase la foto personalizada aparte de la original
+                
                 if ($scope.TimeMultiClic === 0)
                 {
 
@@ -1708,7 +1719,6 @@ angular.module('controllers', [])
 
                     var url = $scope.baseurl + "Board/addWord";
                     var postdata = {id: id, imgtemp: img, text: text};
-
 
                     $http.post(url, postdata).success(function (response)
                     {
@@ -1772,12 +1782,17 @@ angular.module('controllers', [])
              * If you click in a function (not a pictogram) this controller carry you
              * to the specific function
              */
-            $scope.clickOnFunction = function (id, text) {               
+            $scope.clickOnFunction = function (id, text) {
                 var url = $scope.baseurl + "Board/getFunction";
                 var postdata = {id: id, text: text, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
-                
+
                 $http.post(url, postdata).success(function (response)
                 {
+                    $scope.dataAudio = response.audio;
+
+                    $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
+                    $scope.sound.play();
+
                     $scope.dataTemp = response.data;
                     $scope.tense = response.tense;
                     $scope.tipusfrase = response.tipusfrase;
@@ -2414,10 +2429,10 @@ angular.module('controllers', [])
                     var url = $scope.baseurl + "Board/editCell";
                     var postdata = {id: idCell, idPicto: $scope.idPictoEdit, idSentence: $scope.sentenceSelectedId, idSFolder: $scope.sFolderSelectedId, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1", numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1, numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2, cellType: $scope.cellType, color: $scope.colorSelected, imgCell: ''};
                     // Check another time null values and config the data that will be save in the data base
-                    if (!$scope.checkboxFuncType || ($scope.cellType === 'link')) {
+                    if (!$scope.checkboxFuncType) {
                         postdata.idFunct = null;
                     }
-                    if (!$scope.checkboxBoardsGroup || ($scope.cellType === 'funct')) {
+                    if (!$scope.checkboxBoardsGroup) {
                         postdata.boardLink = null;
                     }
                     if (!$scope.checkboxTextInCell) {
