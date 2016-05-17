@@ -197,6 +197,7 @@ class Main_model extends CI_Model {
         $this->session->set_userdata('idusu', $userConfig["ID_User"]);
         $this->session->set_userdata('uname', $userConfig["SUname"]);
         $this->session->set_userdata('ulanguage', $userConfig["cfgExpansionLanguage"]);
+        //MODIF: Cuando lo juntemos con jose dará fallo. Jose tiene que cambiar "uinterfacelangauge" por este
         $this->session->set_userdata('uinterfacelangauge', $userConfig["ID_ULanguage"]);
         $this->session->set_userdata('uinterfacelangtype', $userConfig["type"]);
         $this->session->set_userdata('uinterfacelangnadjorder', $userConfig["nounAdjOrder"]);
@@ -204,16 +205,23 @@ class Main_model extends CI_Model {
         $this->session->set_userdata('uinterfacelangabbr', $userConfig["languageabbr"]);
         $this->session->set_userdata('autoEraseSentenceBar', $userConfig["cfgAutoEraseSentenceBar"]);
         $this->session->set_userdata('isfem', $userConfig["cfgIsFem"]);
+        $this->session->set_userdata('cfgExpansionOnOff', $userConfig["cfgExpansionOnOff"]);
+        $this->session->set_userdata('cfgPredBarNumPred', $userConfig["cfgPredBarNumPred"]);
 
         // Save Expansion language in the COOKIES
         $this->db->select('canExpand');
         $this->db->where('ID_Language', $userConfig["cfgExpansionLanguage"]);
-        $canExpand = $this->db->get('Languages');
+        $query3 = $this->db->get('Languages');
 
-        if ($canExpand == '1'){
-            $this->session->set_userdata('ulangabbr', $userConfig["languageabbr"]);
-        }else{
-            $this->session->set_userdata('ulangabbr', 'ES');
+        if ($query3->num_rows() > 0) {
+            $aux = $query3->result();
+            $canExpand = $aux[0]->canExpand;
+
+            if ($canExpand == '1'){
+                $this->session->set_userdata('ulangabbr', $userConfig["languageabbr"]);
+            }else{
+                $this->session->set_userdata('ulangabbr', 'ES');
+            }
         }
 
         return $Array;

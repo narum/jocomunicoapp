@@ -214,3 +214,49 @@ html, body, .container-table {
     margin-top: 0.6vh;
     text-decoration:none;
 }
+
+
+#captcha input[disabled]{
+    color:black;
+    background-color: white;
+}
+.noMargin{
+    margin-top:0px !important;
+}
+.marginTopInput{
+    margin-top: 3vh;
+}
+.FonsEquacio{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: #99ccdd;
+    height: 5vh;
+    margin: 0px;
+    margin-left:0.5vw;
+    padding: 0px;
+    text-align: center;
+}
+.buttonCaptcha{
+    margin: 0px;
+    height: 5vh !important;
+    font-size: 2vh;
+}
+.noPaddingNoMargin{
+    padding: 0px;
+    margin: 0px;
+}
+.inputCaptcha{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin: 0px;
+    height: 5vh;
+    width: 140%;
+}
+.errorCaptcha{
+    border: 3px solid red;
+    color:red;
+}
+.successCaptcha{
+    border: 3px solid green;
+    color:green;
+}

@@ -82,7 +82,7 @@ angular.module('controllers', [])
         })
 
 //Controlador del registro de usuario
-        .controller('RegisterCtrl', function ($scope, $rootScope, Resources, md5, $q, $location) {
+        .controller('RegisterCtrl', function ($scope, $captcha, Resources, md5, $q, $location) {
 
             //Inicializamos el formulario y las variables necesarias
             $scope.formData = {};  //Datos del formulario
@@ -275,9 +275,25 @@ angular.module('controllers', [])
                     return true;
                 }
             }
+            
+            $scope.checkCaptcha = function() {
+                    //si pasa la validacion correctamente
+                    if($captcha.checkResult($scope.resultado) === true)
+                    {
+                        $scope.captchaState = 'has-success';
+                        return true;
+                    }
+                    //si falla la validacion
+                    else
+                    {
+                        return false;
+                    }
+            }
 
             $scope.submitForm = function (formData) {
                 // Llamamos las funciones para printar el error en el formulario si nunca se han llamado
+                
+                if(!$scope.checkCaptcha()){$scope.captchaState='has-error';}
                 $scope.checkUser(formData);
                 $scope.checkEmail(formData);
                 $scope.checkPassword(formData);
@@ -290,7 +306,7 @@ angular.module('controllers', [])
                     languageOk = false;
                 }
                 // Comprobamos todos los campos del formulario accediendo a las funciones o mirando las variables de estado
-                if (userOk && $scope.checkPassword(formData) && $scope.checkName(formData) && $scope.checkLastname(formData) && emailOk && languageOk && $scope.sex(formData)) {
+                if ($scope.checkCaptcha() && userOk && $scope.checkPassword(formData) && $scope.checkName(formData) && $scope.checkLastname(formData) && emailOk && languageOk && $scope.sex(formData)) {
                     $location.path('/registerComplete');
 
                     //Borramos los campos inecesarios
@@ -539,6 +555,7 @@ angular.module('controllers', [])
                             $scope.userData.cfgScanStartClick = ($scope.userData.cfgScanStartClick === "1");
                             $scope.userData.cfgHistOnOff = ($scope.userData.cfgHistOnOff === "1");
                             $scope.userData.cfgInterfaceVoiceOnOff = ($scope.userData.cfgInterfaceVoiceOnOff === "1");
+                            $scope.userData.cfgUserExpansionFeedback = ($scope.userData.cfgUserExpansionFeedback === "1");
                             $scope.userData.cfgInterfaceVoiceMascFem = ($scope.userData.cfgInterfaceVoiceMascFem === "masc");
 
                             var count = results.users[0].ID_ULanguage;

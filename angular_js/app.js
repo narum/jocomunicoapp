@@ -12,7 +12,8 @@ angular.module('app', [
         
 	//Modules
 	'controllers',
-	'services'
+	'services',
+        'udpCaptcha'
 
 ])
 .config(function($httpProvider, $routeProvider, $locationProvider) {
