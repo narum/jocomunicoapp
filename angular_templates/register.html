@@ -229,17 +229,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row fonsBlanc">
-                            <div class="col-xs-1 FonsTurquesa icon-question-sign"></div>
-                            <div class="col-xs-6 noPaddingRight">Resuelve la equación:</div>
-                            <div class="col-xs-3 FonsEquacio noPaddingRight">
-                                <button type="button" ng-disabled="false" ng-click="checkCaptcha()" class="icon-refresh buttonCaptcha pull-left"/>                                </button>
-                                    <!--asi colocamos nuestro captcha en el formulario-->
+                        <div class="row marginTopInput" id="captcha">
+                            <div class="col-xs-6">
+                                <div class="form-group has-feedback noMargin">
+                                    <div class="input-group input-group-auto inputMarginRigth">
+                                        <span class="input-group-addon"><i class="icon-question-sign"></i></span>
+                                        <input class="form-control" value="Resuleve:" ng-disabled='true'>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-xs-3 FonsEquacio">
+                                <button type="button" ng-disabled="false" ng-click="checkCaptcha()" class="icon-refresh buttonCaptcha pull-right"/>
                                     <captcha field1="{{field1}}" operator="{{operator}}" field2="{{field2}}"></captcha>
                             </div>
                             <div class="col-xs-2 noPaddingNoMargin">
-                                    <!--campoo que hace de respuesta a nuestro captcha-->
-                                    <input class="inputCaptcha pull-right" ng-model="resultado"/>
+                                    <input class="inputCaptcha" ng-model="resultado" ng-change="captchaState=''" ng-class="{errorCaptcha: captchaState=='has-error', successCaptcha: captchaState=='has-success'}"/>
                             </div>
                         </div>
                     </div>

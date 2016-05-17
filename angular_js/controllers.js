@@ -280,17 +280,20 @@ angular.module('controllers', [])
                     //si pasa la validacion correctamente
                     if($captcha.checkResult($scope.resultado) === true)
                     {
-                            alert("El captcha ha pasado la validación");
+                        $scope.captchaState = 'has-success';
+                        return true;
                     }
                     //si falla la validacion
                     else
                     {
-                            alert("Error, captcha incorrecto");
+                        return false;
                     }
             }
 
             $scope.submitForm = function (formData) {
                 // Llamamos las funciones para printar el error en el formulario si nunca se han llamado
+                
+                if(!$scope.checkCaptcha()){$scope.captchaState='has-error';}
                 $scope.checkUser(formData);
                 $scope.checkEmail(formData);
                 $scope.checkPassword(formData);
@@ -303,7 +306,7 @@ angular.module('controllers', [])
                     languageOk = false;
                 }
                 // Comprobamos todos los campos del formulario accediendo a las funciones o mirando las variables de estado
-                if (userOk && $scope.checkPassword(formData) && $scope.checkName(formData) && $scope.checkLastname(formData) && emailOk && languageOk && $scope.sex(formData)) {
+                if ($scope.checkCaptcha() && userOk && $scope.checkPassword(formData) && $scope.checkName(formData) && $scope.checkLastname(formData) && emailOk && languageOk && $scope.sex(formData)) {
                     $location.path('/registerComplete');
 
                     //Borramos los campos inecesarios
