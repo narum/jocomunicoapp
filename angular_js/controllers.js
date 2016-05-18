@@ -275,25 +275,27 @@ angular.module('controllers', [])
                     return true;
                 }
             }
-            
-            $scope.checkCaptcha = function() {
-                    //si pasa la validacion correctamente
-                    if($captcha.checkResult($scope.resultado) === true)
-                    {
-                        $scope.captchaState = 'has-success';
-                        return true;
-                    }
-                    //si falla la validacion
-                    else
-                    {
-                        return false;
-                    }
+
+            $scope.checkCaptcha = function () {
+                //si pasa la validacion correctamente
+                if ($captcha.checkResult($scope.resultado) === true)
+                {
+                    $scope.captchaState = 'has-success';
+                    return true;
+                }
+                //si falla la validacion
+                else
+                {
+                    return false;
+                }
             }
 
             $scope.submitForm = function (formData) {
                 // Llamamos las funciones para printar el error en el formulario si nunca se han llamado
-                
-                if(!$scope.checkCaptcha()){$scope.captchaState='has-error';}
+
+                if (!$scope.checkCaptcha()) {
+                    $scope.captchaState = 'has-error';
+                }
                 $scope.checkUser(formData);
                 $scope.checkEmail(formData);
                 $scope.checkPassword(formData);
@@ -975,7 +977,7 @@ angular.module('controllers', [])
                         if ($scope.scanLongClickController)
                         {
                             $timeout.cancel($scope.scanLongClickTime);
-                            //$scope.nextBlockScan();
+                            $scope.nextBlockScan();
 
 
                         } else
@@ -1307,6 +1309,7 @@ angular.module('controllers', [])
                 $scope.cfgScanStartClick = userConfig.cfgScanStartClick;
                 $scope.cfgCancelScanOnOff = userConfig.cfgCancelScanOnOff == 1 ? true : false;
                 $scope.cfgTextInCell = userConfig.cfgTextInCell == 1 ? true : false;
+                $scope.cfgUserExpansionFeedback = userConfig.cfgUserExpansionFeedback == 1 ? true : false;
                 if (userConfig.cfgUsageMouseOneCTwoC == 0) {
                     $scope.longclick = false;
                     $scope.timerScan = false;
@@ -1413,7 +1416,7 @@ angular.module('controllers', [])
              */
             $scope.edit = function ()
             {
-                $scope.evt = {nameboard:"", altura: 1, amplada: 1, autoreturn: false, autoread: false};
+                $scope.evt = {nameboard: "", altura: 1, amplada: 1, autoreturn: false, autoread: false};
                 $scope.colorPaintingSelected = "#fff";
                 $scope.painting = false;
                 $scope.getPrimaryBoard();
@@ -1444,7 +1447,7 @@ angular.module('controllers', [])
                     $scope.evt.amplada = $scope.range(20)[response.col - 1].valueOf();
                     $scope.evt.autoreturn = (response.autoReturn === '1' ? true : false);
                     $scope.evt.autoread = (response.autoRead === '1' ? true : false);
-                    
+
                 });
             };
             // Gets all the boards in the group and select the primary
@@ -1725,7 +1728,7 @@ angular.module('controllers', [])
              * Add the selected pictogram to the sentence
              */
             $scope.addToSentence = function (id, img, text) {
-                
+
                 if ($scope.TimeMultiClic === 0)
                 {
 
@@ -1874,8 +1877,9 @@ angular.module('controllers', [])
 
                     $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
                     $scope.sound.play();
-
-                    $scope.puntuar();
+                    if ($scope.cfgUserExpansionFeedback) {
+                        $scope.puntuar();
+                    }
 
 
                 });

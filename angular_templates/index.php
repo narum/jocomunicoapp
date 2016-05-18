@@ -10,11 +10,11 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>css/typeahead.css">
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>css/app.css">
         <!--MODIF: sacar de aqui y poner en el html. Primero sacar todo lo comun-->
-        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>css/editCell.css">
+        
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>css/generico.css">
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/libraries/ngDialog.min.css"/>
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/libraries/ngDialog-theme-default.min.css"/>
-        <link rel="stylesheet" href="<?= base_url(); ?>/css/style-jc.css"/>
+        
         
     </head>
     <body>
