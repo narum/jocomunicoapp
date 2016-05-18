@@ -2142,6 +2142,7 @@ angular.module('controllers', [])
 
                                     $http.post(URL, $scope.CopyBoardData).success(function (response)
                                     {
+                                        $scope.idGroupBoard = $scope.CopyBoardData.idGroupBoard.ID_GB;
                                         $scope.showBoard(response.idBoard);
                                         $scope.edit();
                                     });
@@ -2588,7 +2589,7 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
 
-                    var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
+                    var URL = $scope.baseurl + "PanelGroup/newGroupPanel";
 
 
                     $http.post(URL, $scope.CreateBoardData).success(function (response)

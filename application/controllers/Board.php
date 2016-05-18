@@ -278,7 +278,6 @@ class Board extends REST_Controller {
         // GENERAR AUDIO
         $audio = new Myaudio();
         $aux = $audio->generateAudio($idusu, $read, true);
-        
         $audio->waitForFile($aux[0], $aux[1]);
 
         $response = [
