@@ -1413,6 +1413,7 @@ angular.module('controllers', [])
              */
             $scope.edit = function ()
             {
+                $scope.evt = {nameboard:"", altura: 1, amplada: 1, autoreturn: false, autoread: false};
                 $scope.colorPaintingSelected = "#fff";
                 $scope.painting = false;
                 $scope.getPrimaryBoard();
@@ -1438,13 +1439,12 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata).success(function (response)
                 {
-                    $scope.autoreturn = "";
-                    $scope.nameboard = response.name;
-                    $scope.altura = $scope.range(20)[response.row - 1].valueOf();
-                    $scope.amplada = $scope.range(20)[response.col - 1].valueOf();
-                    $scope.autoreturn = (response.autoReturn === '1' ? true : false);
-                    $scope.autoread = (response.autoRead === '1' ? true : false);
-
+                    $scope.evt.nameboard = response.name;
+                    $scope.evt.altura = $scope.range(20)[response.row - 1].valueOf();
+                    $scope.evt.amplada = $scope.range(20)[response.col - 1].valueOf();
+                    $scope.evt.autoreturn = (response.autoReturn === '1' ? true : false);
+                    $scope.evt.autoread = (response.autoRead === '1' ? true : false);
+                    
                 });
             };
             // Gets all the boards in the group and select the primary
@@ -1461,20 +1461,20 @@ angular.module('controllers', [])
 
             };
             //Change the autoReturn poperty in the database
-            $scope.changeAutoReturn = function (autoreturn)
+            $scope.changeAutoReturn = function ()
             {
-                var postdata = {id: $scope.idboard, value: autoreturn.valueOf()};
+                var postdata = {id: $scope.idboard, value: $scope.evt.autoreturn};
                 var URL = $scope.baseurl + "Board/changeAutoReturn";
                 $http.post(URL, postdata).
                         success(function ()
                         {
-
+                            $scope.edit();
                         });
             };
             //Change the autoReadSentence poperty in the database
-            $scope.changeAutoReadSentence = function (autoread)
+            $scope.changeAutoReadSentence = function ()
             {
-                var postdata = {id: $scope.idboard, value: autoread.valueOf()};
+                var postdata = {id: $scope.idboard, value: $scope.evt.autoread};
                 var URL = $scope.baseurl + "Board/changeAutoRead";
                 $http.post(URL, postdata).
                         success(function ()
@@ -2097,7 +2097,7 @@ angular.module('controllers', [])
 
             };
             $scope.RemoveBoard = function () {
-                $scope.RemoveBoardData = {BoardName: $scope.nameboard}
+                $scope.RemoveBoardData = {BoardName: $scope.evt.nameboard}
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmRemoveBoard.html',
                     scope: $scope,
@@ -2130,7 +2130,7 @@ angular.module('controllers', [])
                             success(function (response)
                             {
                                 $scope.panels = response.panels;
-                                $scope.CopyBoardData = {CreateBoardName: $scope.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.altura, width: $scope.amplada, autoreturn: $scope.autoreturn, autoread: $scope.autoread, srcGroupBoard: $scope.idGroupBoard.toString()};
+                                $scope.CopyBoardData = {CreateBoardName: $scope.evt.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.evt.altura, width: $scope.evt.amplada, autoreturn: $scope.evt.autoreturn, autoread: $scope.evt.autoread, srcGroupBoard: $scope.idGroupBoard.toString()};
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCopyBoard.html',
                                     scope: $scope,

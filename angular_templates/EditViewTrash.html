@@ -7,7 +7,7 @@
                 <img class="fullheight" max-width="100%" height="100%" ng-src="{{baseurl}}img/srcWeb/trashnou.png" ng-drop="true"  ng-drop-success="onDropRemove($data,$event)"/>
             </div>
             <div class='col-xs-7 text-center editTrash25'>
-                <input type="text" class="form-control text-center editTextInput" ng-disabled="StatusEnableEditViewTrash" name="NameBoard" ng-model="$parent.BoardName" ng-value="nameboard" ng-change="changeNameBoard($parent.BoardName, $parent.idboard)"/>
+                <input type="text" class="form-control text-center editTextInput" ng-disabled="StatusEnableEditViewTrash" name="NameBoard" ng-model="$parent.evt.nameboard" ng-change="changeNameBoard($parent.evt.nameboard, $parent.idboard)"/>
             </div>
             <div class='col-xs-12 editTrash3 text-center '>
                 <div class="col-xs-offset-1 col-xs-3 editTrashYellow text-center fullheight">
@@ -15,9 +15,9 @@
                 </div>
                 <div class="col-xs-2 fullheight">
                     <select class="dropdown-arrow fullheight" ng-disabled="StatusEnableEditViewTrash" style="width: 100%"
-                            ng-model="altura"
+                            ng-model="$parent.evt.altura"
                             ng-options="h for h in range(20)"
-                            ng-change='changeSize(altura.valueOf(), amplada.valueOf(), "0");'>
+                            ng-change='changeSize($parent.evt.altura.valueOf(), $parent.evt.amplada.valueOf(), "0");'>
                     </select>
                 </div>
                 <div class="col-xs-3 editTrashYellow text-center fullheight">
@@ -25,9 +25,9 @@
                 </div>
                 <div class="col-xs-2 fullheight">
                     <select class="dropdown-arrow fullheight" ng-disabled="StatusEnableEditViewTrash" style="width: 100%;"
-                            ng-model="amplada"
+                            ng-model="$parent.evt.amplada"
                             ng-options="w for w in range(20)"
-                            ng-change='changeSize(altura.valueOf(), amplada.valueOf(), "1");'>
+                            ng-change='changeSize($parent.evt.altura.valueOf(), $parent.evt.amplada.valueOf(), "1");'>
                     </select>
                 </div>
             </div>
@@ -53,8 +53,8 @@
                     {{content.automaticreturn}}
                 </div>
                 <div class="col-xs-1">
-                    <input id="switch1" class="switch" type="checkbox"
-                           ng-model="autoreturn" ng-show="false" ng-click="changeAutoReturn(autoreturn)" ng-disabled="StatusEnableEditViewTrash">
+                    <input id="switch1" class="switch" type="checkbox" 
+                           ng-model="$parent.evt.autoreturn" ng-show="false" ng-click="changeAutoReturn()" ng-disabled="StatusEnableEditViewTrash">
                     <label for="switch1">&nbsp;</label>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                 </div>
                 <div class="col-xs-1">
                     <input id="switch2" class="switch" type="checkbox"
-                           ng-model="autoread" ng-show="false" ng-click="changeAutoReadSentence(autoread)" ng-disabled="StatusEnableEditViewTrash">
+                           ng-model="$parent.evt.autoread" ng-show="false" ng-click="changeAutoReadSentence()" ng-disabled="StatusEnableEditViewTrash">
                     <label for="switch2">&nbsp;</label>
                 </div>
             </div>
