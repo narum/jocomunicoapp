@@ -295,9 +295,9 @@ class Myaudio {
      */
     public function generateAudio($idusu, $text, $interface) 
     {
+        
         $CI = &get_instance();
         $CI->load->model('Audio_model');
-        
         $output = array();
         $output[1] = false; // error
         $output[2] = null; // error message
