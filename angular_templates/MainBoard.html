@@ -4,11 +4,11 @@
 <link rel="stylesheet" type="text/css" href="css/editCell.css">
 <link rel="stylesheet" href="css/style-jc.css"/>
 <div id="main" style="background-image: url('/img/FonsRegistre.png');background-size:100% 100%">
-    <div class="row" ng-controller="menuCtrl" ng-include="baseurl + '/angular_templates/MenuView.html'">                     
-    </div>
-    <div class="row" ng-init="config()" style="padding: 5vh; height: 94%" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
+    <!--<div class="row" ng-controller="menuCtrl" ng-include="baseurl + '/angular_templates/MenuView.html'">                     
+    </div>-->
+    <div class="row mainBoard" ng-init="config()" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
 
-        <div  ng-if="(cfgPredOnOff === '1' && cfgPredBarVertHor === '0')" id="predView" ng-if="inPred" class="col-xs-{{predViewWidth}} fullheight">
+        <div  ng-if="(cfgPredOnOff === '1' && cfgPredBarVertHor === '0')" id="predView" ng-if="inPred" class="col-xs-{{predViewWidth}}">
             <div  class="row fullheight predMargin">
                 <div class="col-sm-12" ng-include="baseurl + '/angular_templates/PredView.html'">
                 </div>
@@ -16,12 +16,12 @@
         </div>
 
         <div id="userview" class="col-xs-{{userViewWidth}}" style="height:{{userViewHeight}}%" >
-            <div class="container-fluid sentenceMargin" ng-if="cfgSentenceBarUpDown === '0' && !inEdit" style="height:{{sentenceViewHeight}}%">
+            <div class="col-xs-12 sentenceMargin" ng-if="cfgSentenceBarUpDown === '0' && !inEdit" style="height:{{sentenceViewHeight}}%">
                 <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     
                 </div>
             </div>
 
-            <div class="container-fluid boardMargin" style="height:{{boardHeight}}%">
+            <div class="col-xs-12 boardMargin" style="height:{{boardHeight}}%">
                 <div class="row fullheight imgRounded boardPadding" style="background-image: url(img/srcWeb/Patterns1-08.png)">
                     <div ng-bind="picto"></div>
                     <div ng-if="inScan && isScanningCancel === true" class="returnScan"></div>
