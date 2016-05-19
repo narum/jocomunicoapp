@@ -4,6 +4,19 @@ button:first-child,
 input:focus{
     outline: none;
 }
+.row{ 
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.container-fluid
+{
+    padding-right: 0px;
+    padding-left: 0px;
+}
+[class*="col-"]{
+    padding-right: 0px;
+    padding-left: 0px;
+}
 .cruz{
     background-color: #151515;
     height: 100%;
@@ -11,6 +24,12 @@ input:focus{
     width: 35px;
     border-top-right-radius: 10px;
 }
+.textNoOverflow{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+/* CSS Document */
 .dialogButton{
     background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
@@ -56,8 +75,8 @@ input:focus{
     width: 100%;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
-    min-height: 25px;
-    max-height: 35px;
+    min-height: 3vh;
+    max-height: 4vh;
     /*gradient in all browsers*/
     background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
@@ -81,8 +100,8 @@ input:focus{
     background: url("/img/srcWeb/boto_desplegable.jpg") no-repeat right #fff;
     background-size: 3vh 3vh;
     border: 0px;
-    min-width:40px;
     height: 3vh;
+    font-size: 2.2vh;
 }
 .dropdown-arrow.panellPrincipal{
     width: 50%;
@@ -167,4 +186,86 @@ input.switch:checked ~ label:before
 input.switch:checked ~ label:after
 {
     margin-left: 2em;
+}
+.boxEdit{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 3vh;
+    line-height: 3vh;
+    margin-top: 2%;
+    border: none;
+}
+.imgRounded{
+    border-radius: 7px;
+}
+.imgResponsive {
+    display: block;
+    max-width: 75%;
+    height: auto;
+    max-height: 75%;
+    width: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    position: relative;
+    z-index: 2;
+}
+.iconResponsive{
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    width: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    position: relative;
+    z-index: 2;
+}
+.imgInfo{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: block;
+    max-width: 75%;
+    height: auto;
+    max-height: 75%;
+    width: auto;
+    position: relative;
+    z-index: 2;
+}
+.cruz{
+    background-color: #151515;
+    height: 100%;
+    float: right;
+    width: 35px;
+    border-top-right-radius: 10px;
+}
+.editfields{
+    background-color: #151515;
+    height: 98%;
+    float: right;
+    width: 60px;
+    border-top-right-radius: 10px;
+}
+.Defmargin
+{
+    margin: 0.5vh 1% 0.5vh 1%;
+}
+.menu{
+    position: absolute;
+    height: 5vh;
+    width: 100%;
+}
+
+#header{
+    height:6%;
+    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
+    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background-color: #4c4c4c;
 }

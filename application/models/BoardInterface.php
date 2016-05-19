@@ -871,5 +871,21 @@ class BoardInterface extends CI_Model {
         $this->db->where('ID_Cell', $id);
         $this->db->update('Cell', $data);
     }
+    /*
+     * Get the last img asociate to the picto
+     */
+    function getImgCell($id){
+        $idusu = $this->session->userdata('idusu');
+        $this->db->order_by('R_S_HistoricPictograms.ID_RSHPSentencePicto', 'desc');
+        $this->db->where('S_Historic.ID_SHUser', $idusu);
+        $this->db->where('R_S_HistoricPictograms.pictoid', $id);
+        $this->db->join('S_Historic', 'S_Historic.ID_SHistoric = R_S_HistoricPictograms.ID_RSHPSentence');
+        $query = $this->db->get('R_S_HistoricPictograms');
+        if ($query->num_rows() > 0) {
+            $aux = $query->result();
+            return $aux[0]->imgtemp;
+        } else
+            return null;
+    }
 
 }

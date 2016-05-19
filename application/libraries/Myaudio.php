@@ -295,9 +295,9 @@ class Myaudio {
      */
     public function generateAudio($idusu, $text, $interface) 
     {
+        
         $CI = &get_instance();
         $CI->load->model('Audio_model');
-        
         $output = array();
         $output[1] = false; // error
         $output[2] = null; // error message
@@ -818,7 +818,6 @@ class Myaudio {
         return $output;
     }
     
-        
     /**
      * If there is no error, waits for the file to be available and frees it 
      * @param type $file

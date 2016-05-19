@@ -28,8 +28,8 @@ class PanelGroup extends REST_Controller {
             }
         }
     }
-    public function getPanelGroupInfo_post()
-    {
+
+    public function getPanelGroupInfo_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $ID_GBoard = $request->idGroupBoard;
@@ -37,16 +37,17 @@ class PanelGroup extends REST_Controller {
         $primaryBoard = $this->BoardInterface->getInfoGroupBoard($ID_GBoard);
 
         $response = [
-            'ID_GB' => $primaryBoard[0]->ID_GB, 
-            'ID_GBUser' => $primaryBoard[0]->ID_GBUser, 
-            'GBname' => $primaryBoard[0]->GBname, 
-            'primaryGroupBoard' => $primaryBoard[0]->primaryGroupBoard, 
-            'defWidth' => $primaryBoard[0]->defWidth, 
-            'defHeight' => $primaryBoard[0]->defHeight, 
+            'ID_GB' => $primaryBoard[0]->ID_GB,
+            'ID_GBUser' => $primaryBoard[0]->ID_GBUser,
+            'GBname' => $primaryBoard[0]->GBname,
+            'primaryGroupBoard' => $primaryBoard[0]->primaryGroupBoard,
+            'defWidth' => $primaryBoard[0]->defWidth,
+            'defHeight' => $primaryBoard[0]->defHeight,
             'imgGB' => $primaryBoard[0]->imgGB
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+
     public function getUserPanelGroups_post() {
         $idusu = $this->session->userdata('idusu');
         $panels = $this->panelInterface->getUserPanels($idusu);
@@ -108,6 +109,7 @@ class PanelGroup extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+
     //MODIF: Esta repetida, mirar que se puede hacer
     public function addColumns($columns, $rows, $idBoard, $columnsToAdd) {
         $currentPos = ($columns + $columnsToAdd) * $rows;
@@ -124,6 +126,7 @@ class PanelGroup extends REST_Controller {
             }
         }
     }
+
     //MODIF: Esta repetida, mirar que se puede hacer
     public function addRows($columns, $rows, $idBoard, $rowsToAdd) {
         $currentPos = $columns * $rows + 1;
@@ -134,7 +137,7 @@ class PanelGroup extends REST_Controller {
             }
         }
     }
-    
+
     public function modifyGroupBoardName_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -155,6 +158,7 @@ class PanelGroup extends REST_Controller {
         //MODIF: 2 es el panel default
         $idusu = $this->session->userdata('idusu');
         $primaryBoard = $this->BoardInterface->getInfoGroupBoard(2);
+
         $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
         $boards = $this->BoardInterface->getBoards(2);
         //If we want to allow the user copy group boards this line have to be removed
@@ -163,11 +167,13 @@ class PanelGroup extends REST_Controller {
         $sameGroupBoard = 1;
         for ($i = 0; $i < count($boards); $i++) {
             $idSrc = $boards[$i]->ID_Board;
+
             $name = $boards[$i]->Bname;
             $width = $boards[$i]->width;
             $height = $boards[$i]->height;
             $autoReturn = $boards[$i]->autoReturn;
             $autoReadSentence = $boards[$i]->autoReadSentence;
+
             $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
             if($boards[$i]->primaryBoard){
                 $this->BoardInterface->changePrimaryBoard($idDst, $IDGboard);
@@ -175,10 +181,12 @@ class PanelGroup extends REST_Controller {
             }
             $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
         }
+
         $this->BoardInterface->commitTrans();
         $response = [
             'idBoard' => $idToShow
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+
 }

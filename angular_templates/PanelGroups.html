@@ -4,27 +4,27 @@
     <div class="row" ng-controller="menuCtrl" ng-include="baseurl + '/angular_templates/MenuView.html'">   
     </div>
     <div class="row folderContainer">
-        <div class="col-xs-5 imgRounded panelGroupContainer" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-08.png)">
+        <div class="col-xs-5 imgRounded panelGroupContainer" style="background-image: url(img/srcWeb/Patterns1-08.png)">
             <div class="topBar"></div>
             <div class="col-xs-offset-1 scrollMenuPanels" ng-class="isScroll?'col-xs-10':'col-xs-11'" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:me" is-bar-shown="isScroll">
                 <div class="col-xs-12 addPanel" ng-click="newPanellGroup()">
-                    <img src="{{baseurl}}/img/srcWeb/afegir.png" width="100%" height="100%"/>
+                    <img ng-src="{{baseurl}}/img/srcWeb/afegir.png" width="100%" height="100%"/>
                 </div>
                 <div class="col-xs-12 panelContainer" ng-repeat="panel in panels" on-Finish-Loop="scrollbarPanel">
                     <div class="col-xs-8 text-center fullheight">
                         <input type="text" class="form-control text-center panelTitle"  name="NameBoard" ng-model="panel.GBname" ng-value="panel.GBname" ng-change="changeGroupBoardName(panel.GBname, panel.ID_GB)"/>
                     </div>
                     <div class="col-xs-4 editaPanel text-center" ng-click="editPanel(panel.ID_GB)">
-                        edita <img src="{{baseurl}}/img/icons/edit_blanc.png" width="15%" height="50%"/>
+                        {{content.edit}} <img ng-src="{{baseurl}}/img/icons/edit_blanc.png" width="15%" height="50%"/>
                     </div>
                     <div ng-if="panel.primaryGroupBoard == 0" class="col-xs-4 noPrimaryPanel text-center" ng-click="setPrimary(panel.ID_GB)">
-                        Fes principal
+                        {{content.makePrimary}}
                     </div>
                     <div ng-if="panel.primaryGroupBoard == 1" class="col-xs-4 primaryPanel text-center">
-                        Principal
+                        {{content.primary}}
                     </div>
                     <div class="col-xs-4 nouPanel text-center" ng-click="CreateBoard(panel.ID_GB)">
-                        nou <img src="{{baseurl}}/img/icons/file_blanc.png" width="15%" height="50%"/>
+                        {{content.new}} <img ng-src="{{baseurl}}/img/icons/file_blanc.png" width="15%" height="50%"/>
                     </div>
                 </div>
             </div>

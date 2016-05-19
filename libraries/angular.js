@@ -7038,7 +7038,7 @@ function $TemplateCacheProvider() {
  *   allowing other directives to read the interpolated value.
  *
  * * *Observing interpolated attributes:* Use `$observe` to observe the value changes of attributes
- *   that contain interpolation (e.g. `src="{{bar}}"`). Not only is this very efficient but it's also
+ *   that contain interpolation (e.g. `ng-src="{{bar}}"`). Not only is this very efficient but it's also
  *   the only way to easily get the actual value because during the linking phase the interpolation
  *   hasn't been evaluated yet and so the value is at this time set to `undefined`.
  *

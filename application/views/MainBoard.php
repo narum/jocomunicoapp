@@ -65,7 +65,7 @@
 
                                     <div class="col-xs-12" ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}">
 
-                                        <img ng-if="picto.imgPicto" width="100%" height="100%" src="{{baseurl}}img/pictos/{{picto.imgPicto}}"  ng-click="addToSentence(picto.pictoid);" ng-right-click="openMenu(picto.pictoid);" ng-drop="true" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="true" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"/>
+                                        <img ng-if="picto.imgPicto" width="100%" height="100%" ng-src="{{baseurl}}img/pictos/{{picto.imgPicto}}"  ng-click="addToSentence(picto.pictoid);" ng-right-click="openMenu(picto.pictoid);" ng-drop="true" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="true" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true"/>
                                         
                                         
                                         

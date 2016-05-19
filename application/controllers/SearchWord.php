@@ -22,6 +22,9 @@ class SearchWord extends REST_Controller {
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
+        if ($canExpand == '0'){
+            $language = $this->session->userdata('ulangabbr', 'ES');
+        }
         $user = $this->session->userdata('idusu');
 
         

@@ -1,19 +1,6 @@
 @charset "UTF-8";
 /* CSS Document */
 /*MODIF: mi idea era poner aqui lo comun*/
-.row{ 
-    margin-left: 0px;
-    margin-right: 0px;
-}
-.container-fluid
-{
-    padding-right: 0px;
-    padding-left: 0px;
-}
-[class*="col-"]{
-    padding-right: 0px;
-    padding-left: 0px;
-}
 .fullheight{
     height:100%;
 }
@@ -23,17 +10,28 @@
 
 #main{
     height:100vh;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+
+}
+.mainBoard{
+    padding: 5vh; 
+    height: 100vh;
 }
 
-#header{
-    height:6%;
-    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
-    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background-color: #4c4c4c;
+.boardPadding{
+    padding: 2vh;
+}
+.colorMargin{
+    padding-left: 1vh;
+}
+
+html *
+{
+   font-size: 2vh;
+   line-height: 2.8vh;
+   font-family: "Trebuchet MS", Helvetica, sans-serif;;
 }
 
 #body{
@@ -50,14 +48,12 @@
 
 
 @media (max-width:1000px){
-    .col-xs-12{
-        font-size: 11.5px;
-    }
-    .col-xs-6{
-        font-size: 12px;
-    }
+    
     input[type="radio"]{
         margin: 0px;
+    }
+    html *{
+        font-size: 1.4vw;
     }
 }
 
@@ -65,39 +61,53 @@
 #footer{
     height:00%;
 }
-#sentenceView{
-    height:100%;
-
-}
 
 #userview{
-    height:100%;
+    height:90vh;
 
 }
 #predView{
-    height:100%;
-    padding: 0.5vh 0% 4vh 0%;
+    height:90vh;
+    padding-right: 1vh;
 }
 
 #searchView{
-    height:48%;
-    margin-right: 2%;
+    height:56.5%;
+    margin-left: 1vh;
+    margin-top: 1vh;
 }
 #searchFolder{
+    margin-top: 1vh;
     height:20%;
 }
 
 #trashView{
-    height:45%;
-    margin-bottom: 2vh;
-    margin-top: 0.5vh;
-    margin-right: 3%;
+    height: 42%;
+    margin-left: 1vh;
 }
-
+.trashPadding
+{
+    padding: 2vh 4vh;
+}
+.searchPadding
+{
+    padding: 2vh 3vh;
+}
+.PaddingSent
+{
+    padding-top: 0.5% !important;
+    padding-bottom: 0.5% !important;
+    padding-right: 1.5% !important;
+}
 
 .cellSearch{
     position: absolute;
     height: 100%;
+    background-color: white; 
+    width:90%; 
+    height:90% !important;
+    margin-bottom: 1%; 
+    margin-right: 0%;
 }
 
 .emptyImg{
@@ -141,10 +151,6 @@
     align-items: center;
 }
 
-.menu{
-    position:relative;
-}
-
 .ngdialog.dialogEdit .ngdialog-content{
     width : 80vw;
     height: 80vh;
@@ -168,6 +174,13 @@
     padding: 0em;
 }
 .ngdialog.dialogRemoveBoard .ngdialog-content{
+    width : 45vw;
+    height: 25vh;
+    background-image: url(/img/srcWeb/Patterns1-08.png);
+    border-radius: 10px;
+    padding: 0em;
+}
+.ngdialog.dialogResize .ngdialog-content{
     width : 45vw;
     height: 25vh;
     background-image: url(/img/srcWeb/Patterns1-08.png);
@@ -202,10 +215,6 @@
     transform: translate(0%, 25%);
 }
 
-.containerCell{
-    padding: 2px;
-
-}
 .contentCell{
     padding: 2.5%;
     border-radius: 15px;
@@ -218,7 +227,6 @@
     background: rgba(255,255,255,0.8);
 }
 .FolderButton{
-    margin: 10%;
     background-color: white;
 }
 .returnScan{
@@ -252,10 +260,10 @@
     width: 97.6%;
 }
 .backgroundCell{
-    padding: 0.5vh 0.25vw;
+    padding: 2px;
     width: 100%;
     height: 100%;
-    border-radius: 15px;
+    border-radius: 10px;
     z-index: 0;
     position: absolute;
     background-clip: content-box;
@@ -269,6 +277,7 @@
     width: auto;
     z-index: 3;
     position: absolute;
+    padding: 2px;
 }
 
 .shadow{
@@ -284,7 +293,10 @@
 }
 
 .containerPredCell{
-    padding: 1vh 15% 1vh 15%;
+    padding: 1vh 2vh;
+}
+.predPadding{
+    padding: 1vh 0vh;
 }
 
 .textCell{
@@ -301,7 +313,7 @@
 .textCell:first-letter {text-transform: uppercase}
 
 .sfolder{
-    padding:2.5%;
+    padding:2px;
     color:red;
     width: 100%;
     height: 100%;
@@ -320,16 +332,36 @@
     border-bottom-right-radius: 10px;
 }
 .backgroundLlegir{
-    padding-right: 6%;
+    width: 94%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/llegir_fons.png');
+    background-size: 100% 100%;
+    border-radius: 7px;
 }
 .backgroundDelete{
-    padding-left: 6%;
+    width: 94%;
+    left: 6%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/borrar_ultim_fons.png');
+    background-size: 100% 100%;
+    border-radius: 7px;
+}
+.backgroundDeleteAll{
+    width: 94%;
+    left: 6%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/borrar_fons.png');
+    background-size: 100% 100%;
+    border-radius: 7px;
 }
 .icon{
     position: absolute;
-    max-height: 85%;
-    max-width: 85%;
-    padding:10%
+    max-height: 80%;
+    max-width: 80%;
+    padding:10%;
 }
 .goodPhrase{
     display: block;

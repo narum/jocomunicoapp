@@ -1,5 +1,6 @@
 .ngsb-wrap {
     -ms-touch-action: none;
+    padding-top: 10vh;
 }
 .ngsb-wrap .ngsb-container {
     width: auto;

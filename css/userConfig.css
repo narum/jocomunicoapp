@@ -6,6 +6,11 @@ html *{
 .scroll{
     overflow-y: scroll;
 }
+html *
+{
+   font-size: 3vh;
+   font-family: "Trebuchet MS", Helvetica, sans-serif;;
+}
 /*Scroll properties*/
 #scrollBar::-webkit-scrollbar{
 width:15px;
