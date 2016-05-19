@@ -9,14 +9,14 @@
     <div class="row" ng-init="config()" style="padding: 5vh; height: 94%" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
 
         <div  ng-if="(cfgPredOnOff === '1' && cfgPredBarVertHor === '0')" id="predView" ng-if="inPred" class="col-xs-{{predViewWidth}} fullheight">
-            <div  class="row fullheight">
+            <div  class="row fullheight predMargin">
                 <div class="col-sm-12" ng-include="baseurl + '/angular_templates/PredView.html'">
                 </div>
             </div>
         </div>
 
         <div id="userview" class="col-xs-{{userViewWidth}}" style="height:{{userViewHeight}}%" >
-            <div id="sentenceView" class="container-fluid Defmargin" ng-if="cfgSentenceBarUpDown === '0' && !inEdit" style="height:{{sentenceViewHeight}}%">
+            <div class="container-fluid sentenceMargin" ng-if="cfgSentenceBarUpDown === '0' && !inEdit" style="height:{{sentenceViewHeight}}%">
                 <div class="row fullheight" ng-include="baseurl + '/angular_templates/SentenceView.html'">                     
                 </div>
             </div>

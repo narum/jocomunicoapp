@@ -17,7 +17,10 @@
 }
 
 .boardMargin{
-    margin: 1vh;
+    margin: 0.5vh;
+}
+.sentenceMargin{
+    margin: 0.5vh;
 }
 
 .boardPadding{
@@ -58,10 +61,6 @@ html *
 #footer{
     height:00%;
 }
-#sentenceView{
-    height:100%;
-
-}
 
 #userview{
     height:100%;
@@ -69,7 +68,6 @@ html *
 }
 #predView{
     height:100%;
-    padding: 0.5vh 0% 4vh 0%;
 }
 
 #searchView{
@@ -286,7 +284,13 @@ html *
 }
 
 .containerPredCell{
-    padding: 1vh 15% 1vh 15%;
+    padding: 1vh 2vh;
+}
+.predPadding{
+    padding: 1vh 0vh;
+}
+.predMargin{
+    margin: 0.5vh;
 }
 
 .textCell{
