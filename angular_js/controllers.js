@@ -1300,7 +1300,6 @@ angular.module('controllers', [])
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
                 $scope.longclick = userConfig.cfgScanningAutoOnOff == 0 ? true : false;
                 $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
-                $scope.StatusEnableEditViewTrash = true;
                 $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff == 1 ? true : false;
                 $scope.cfgTimeOver = userConfig.cfgTimeLapseSelect;
                 $scope.cfgTimeNoRepeatedClickOnOff = userConfig.cfgTimeNoRepeatedClickOnOff;
@@ -1789,15 +1788,6 @@ angular.module('controllers', [])
                         $scope.generate();
                     }
                 });
-            };
-            $scope.EnableEditViewTrash = function () {
-                if ($scope.StatusEnableEditViewTrash == true)
-                {
-                    $scope.StatusEnableEditViewTrash = false;
-                } else
-                {
-                    $scope.StatusEnableEditViewTrash = true;
-                }
             };
             /*
              * If you click in a function (not a pictogram) this controller carry you

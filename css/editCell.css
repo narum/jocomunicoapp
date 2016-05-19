@@ -190,21 +190,19 @@
     padding-top: 2.5vh;
     padding-bottom: 3.5vh;
 }
-.verticalCenter{
-    transform: translate(0%, -50%);
-    top: 50%; 
-}
 .boxEditTrash{
-    height: 85%;
+    height: 100%;
 }
 .editTrash25{
-    height: 22%;
-    margin-bottom: 1vh;
+    height: 25%;
+    margin-bottom: 1.5vh;
 }
-.editTrash3{
-    height: 3vh;
-    margin-left: 5%;
-    margin-bottom: 1vh;
+.editTrash4{
+    height: 4vh;
+    margin-bottom: 1.5vh;
+}
+.dropdown-arrow {
+    background-size: 3vh 4vh;
 }
 .textTrash{
     height: 3vh;
@@ -213,9 +211,15 @@
 }
 .editTrashYellow{
     background-color: #fac659;
-    margin-left: 5px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
+}
+.rowText{
+    margin-right: -5px;
+}
+.columnText{
+    margin-right: -5px;
+    margin-left: 10px;
 }
 .backgroundFolderWhite{
     background:  url('/img/folder.png') no-repeat;

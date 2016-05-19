@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div ng-if="cellType === 'picto'" class="col-xs-12 content3">
-                <div class="col-xs-6 verticalCenter">
+                <div class="col-xs-6 ">
                     <input class="boxEdit" type="text" ng-model="pictoEditSearch" ng-keyup="search(pictoEditSearch, SearchType);" placeholder="{{content.placeholderSearch}}" /><br>
                     <form name="SearchForm">
                         <div class="col-xs-12 typeCellText">
@@ -173,12 +173,12 @@
             </div>
         </div>
         <div class="col-xs-12 content1-5">
-            <div class="col-xs-2 verticalCenter">
+            <div class="col-xs-2 ">
                 1<input type="checkbox"
                         ng-model="checkboxScanBlockText1"
                         />
             </div>
-            <div class="col-xs-3 verticalCenter">
+            <div class="col-xs-3 ">
                 <select class="boxEdit dropdown-arrow"
                         ng-disabled="!checkboxScanBlockText1"
                         ng-model="numScanBlockText1"
@@ -186,17 +186,17 @@
                         >
                 </select>
             </div>
-            <div class="col-xs-7 verticalCenter">
+            <div class="col-xs-7 ">
                 <input class="boxEdit" type="text" ng-model="textInScanBlockText1" ng-disabled="!checkboxScanBlockText1"/>
             </div>
         </div>
         <div class="col-xs-12 content1-5">
-            <div class="col-xs-2 verticalCenter">
+            <div class="col-xs-2 ">
                 2<input type="checkbox"
                         ng-model="checkboxScanBlockText2"
                         />
             </div>
-            <div class="col-xs-3 verticalCenter">
+            <div class="col-xs-3 ">
                 <select class="boxEdit dropdown-arrow"
                         ng-disabled="!checkboxScanBlockText2"
                         ng-model="numScanBlockText2"
@@ -204,7 +204,7 @@
                         >
                 </select>
             </div>
-            <div class="col-xs-7 verticalCenter">
+            <div class="col-xs-7 ">
                 <input class="boxEdit" type="text" ng-model="textInScanBlockText2" ng-disabled="!checkboxScanBlockText2"/>
             </div>
         </div>
