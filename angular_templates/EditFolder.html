@@ -7,31 +7,31 @@
                     ng-value="color">        </option>
         </select>
         <div class="imgRounded FolderButton" ng-click="startPainting()">
-            start
+            {{content.start}}
         </div>
         <div class="imgRounded FolderButton" ng-click="stopPainting()">
-            stop
+            {{content.stop}}
         </div>
     </div>
 </div>
 <div class="col-xs-10 fullheight" style="padding-right:1vh">
     <div class="fullheight imgRounded " style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
-        <div class="topBar"><div class="editTitle">Els meus panells</div></div>
+        <div class="topBar"><div class="editTitle">{{content.mypanells}}</div></div>
         <div id="paddingFolder">
             <div  class="col-xs-2">
                 <div class=" imgRounded FolderButton" ng-click="copyBoard()">
-                    {{$parent.content.cpboard}}
+                    {{content.cpboard}}
                 </div>
             </div>
 
             <div  class="col-xs-2">
                 <div class=" imgRounded FolderButton" ng-click="CreateBoard()">
-                    {{$parent.content.nwboard}}
+                    {{content.nwboard}}
                 </div>
             </div>
             <div  class="col-xs-2">
                 <div class=" imgRounded FolderButton" ng-click="RemoveBoard()">
-                    {{$parent.content.rmboard}}
+                    {{content.rmboard}}
                 </div>
             </div>
             <div  class="col-xs-2">
