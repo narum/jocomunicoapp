@@ -1583,7 +1583,8 @@ angular.module('controllers', [])
                 }
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmResize.html',
-                    scope: $scope
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogResize'
                 }).then(function (value) {
                     //if confirm
                     $http.post(url, postdata).then(function (response) {
