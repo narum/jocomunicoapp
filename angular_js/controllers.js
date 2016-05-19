@@ -391,6 +391,10 @@ angular.module('controllers', [])
                     .then(function (results) {
                         $scope.validated = results.validated;
                         $scope.activedValidation = true;// para activar la vista;
+                        
+                        //Cargamos la board inicial (Oscar)
+                        var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
+                        $http.post(URL)
                     });
         })
 
@@ -558,15 +562,14 @@ angular.module('controllers', [])
                             $scope.userData.cfgUserExpansionFeedback = ($scope.userData.cfgUserExpansionFeedback === "1");
                             $scope.userData.cfgInterfaceVoiceMascFem = ($scope.userData.cfgInterfaceVoiceMascFem === "masc");
 
+                            console.log(results.users);
                             var count = results.users[0].ID_ULanguage;
-                            var numberOfInterfaceLanguages = 0;
                             angular.forEach(results.users, function (value) {
                                 if (value.ID_ULanguage == count) {
                                     $scope.interfaceLanguages.push({name: results.languages[value.ID_ULanguage - 1].languageName, user: value.ID_User});
                                     count++;
-                                    numberOfInterfaceLanguages++;
                                 }
-                                $scope.expansionLanguages.push({idInterfaceLanguage: numberOfInterfaceLanguages, name: results.languages[value.cfgExpansionLanguage - 1].languageName, user: value.ID_User});
+                                $scope.expansionLanguages.push({idInterfaceLanguage: count-1, name: results.languages[value.cfgExpansionLanguage - 1].languageName, user: value.ID_User});
 
                             });
 
@@ -586,9 +589,7 @@ angular.module('controllers', [])
                         });
             };
 
-            $scope.rebuild = function () {
-                $scope.$broadcast("rebuild:me");
-            };
+
             //Cambiar datos de usuario
             $scope.saveUserData = function () {
                 if (($scope.userDataForm.realName == undefined || $scope.userDataForm.realName == '') && ($scope.userDataForm.surNames == undefined || $scope.userDataForm.surNames == '')) {
@@ -677,15 +678,29 @@ angular.module('controllers', [])
             };
 
             $scope.changeOnOff = function (bool, data) {
+                console.log($scope.expansionLanguages);
+                console.log($scope.interfaceLanguages);
                 if (bool) {
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': '1'}, {'funct': "changeCfgBool"}).$promise
+                    .then(function (results) {
+                            window.localStorage.removeItem('userData');
+                            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+                    });
                 } else {
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': '0'}, {'funct': "changeCfgBool"}).$promise
+                    .then(function (results) {
+                            window.localStorage.removeItem('userData');
+                            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+                    });
                 }
             }
 
             $scope.changeRadioEstate = function (value, data) {
                 Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': value}, {'funct': "changeCfgBool"}).$promise
+                .then(function (results) {
+                        window.localStorage.removeItem('userData');
+                        window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+                });
             }
             $scope.changeCfgVoices = function (value, data) {
                 Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': value}, {'funct': "changeCfgVoices"}).$promise
@@ -797,9 +812,9 @@ angular.module('controllers', [])
                         });
             };
             $scope.getConfig()
-                    .then(function () {
-                        $scope.getAudioLists();
-                    });
+                .then(function () {
+                    $scope.getAudioLists();
+                });
 
             $scope.expansionVoiceChange = function (data) {
                 angular.forEach($scope.expansionVoicesList, function (value) {

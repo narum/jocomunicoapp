@@ -108,9 +108,9 @@ class Main extends REST_Controller {
         $ID_SU = $this->query('IdSu');
         $data = ['cfg'.$this->query('data') => $this->query('value')]; // convertimos el string json del post en array.
 
-        $response = $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
+        $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
         //reescrivimos la cookies
-        $this->main_model->getConfig($ID_SU);
+        $response = $this->main_model->getConfig($ID_SU);
         //respuesta
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }

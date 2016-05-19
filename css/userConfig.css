@@ -1,3 +1,8 @@
+html *{
+    font-size: 3vh;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
 .scroll{
     overflow-y: scroll;
 }
@@ -201,6 +206,9 @@ input[type="text"] {
 .verticalMarginTop{
     margin-top: 3vh;
 }
+.verticalMarginTop2{
+    margin-top: 7vh;
+}
 .textNegreta{
     font-weight: bold;
 }
@@ -369,7 +377,7 @@ input.switch:empty ~ label
     color:black;
     border: none;
     font-size: 2.5vh;
-    padding-left: 1.5vh;
+    padding-left: 1vh;
     background-color: #faa258;
 }
 .inputTimeConfig:disabled{
@@ -416,6 +424,9 @@ input[type=number] {
     width: 100%;
     background-size: 4vh 4vh;
 }
+.voices .boxEdit *{
+    font-size: 2vh;
+}
 .voices input.switch:empty ~ label:before,
 .voices input.switch:empty ~ label:after
 {
@@ -439,4 +450,25 @@ input[type=number] {
 }
 .verticalMarginVoice{
     margin-top: 1vh;
+}
+.paddingLeft{
+    padding-left: 1.2vw;
+}
+.paddingLeft2{
+    padding-left: 0.6vw;
+}
+.paddingLeft3{
+    padding-left: 3vw;
+}
+#interficie .img-configRadio{
+    height: 6vw;
+}
+.titlePictosUserConfig *{
+    font-size: 2.2vh;
+    text-align: center;
+}
+.arrowMenuBar{
+    margin-top: 1.2vh;
+    height: 2vh;
+    width: auto;
 }

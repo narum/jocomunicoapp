@@ -151,5 +151,34 @@ class PanelGroup extends REST_Controller {
         $this->response($response, REST_Controller::HTTP_OK);
     }
 
-
+    public function copyGroupBoard_post() {
+        //MODIF: 2 es el panel default
+        $idusu = $this->session->userdata('idusu');
+        $primaryBoard = $this->BoardInterface->getInfoGroupBoard(2);
+        $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
+        $boards = $this->BoardInterface->getBoards(2);
+        //If we want to allow the user copy group boards this line have to be removed
+        $this->panelInterface->setPrimaryGroupBoard($IDGboard, $idusu);
+        $srcGroupBoard = 2;
+        $sameGroupBoard = 1;
+        for ($i = 0; $i < count($boards); $i++) {
+            $idSrc = $boards[$i]->ID_Board;
+            $name = $boards[$i]->Bname;
+            $width = $boards[$i]->width;
+            $height = $boards[$i]->height;
+            $autoReturn = $boards[$i]->autoReturn;
+            $autoReadSentence = $boards[$i]->autoReadSentence;
+            $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
+            if($boards[$i]->primaryBoard){
+                $this->BoardInterface->changePrimaryBoard($idDst, $IDGboard);
+                $idToShow = $idDst;
+            }
+            $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
+        }
+        $this->BoardInterface->commitTrans();
+        $response = [
+            'idBoard' => $idToShow
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 }
