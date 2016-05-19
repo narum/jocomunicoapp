@@ -20,17 +20,11 @@
     height: 100vh;
 }
 
-.boardMargin{
-    margin: 0.5vh;
-    display: inline-block;
-}
-.sentenceMargin{
-    margin: 0.5vh;
-    display: inline-block;
-}
-
 .boardPadding{
     padding: 2vh;
+}
+.colorMargin{
+    padding-left: 1vh;
 }
 
 html *
@@ -74,21 +68,22 @@ html *
 }
 #predView{
     height:90vh;
+    padding-right: 1vh;
 }
 
 #searchView{
-    height:48%;
-    margin-right: 2%;
+    height:53.5%;
+    margin-left: 1vh;
+    margin-top: 1vh;
 }
 #searchFolder{
+    margin-top: 1vh;
     height:20%;
 }
 
 #trashView{
-    height:45%;
-    margin-bottom: 2vh;
-    margin-top: 0.5vh;
-    margin-right: 3%;
+    height: 45%;
+    margin-left: 1vh;
 }
 
 
@@ -141,10 +136,6 @@ html *
     padding-left: 5%;
     padding-right: 5%;
     align-items: center;
-}
-
-.menu{
-    position:relative;
 }
 
 .ngdialog.dialogEdit .ngdialog-content{
@@ -223,7 +214,6 @@ html *
     background: rgba(255,255,255,0.8);
 }
 .FolderButton{
-    margin: 10%;
     background-color: white;
 }
 .returnScan{
@@ -294,9 +284,6 @@ html *
 }
 .predPadding{
     padding: 1vh 0vh;
-}
-.predMargin{
-    margin: 0.5vh;
 }
 
 .textCell{

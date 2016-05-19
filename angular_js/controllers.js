@@ -1282,7 +1282,7 @@ angular.module('controllers', [])
                 $scope.sentenceViewHeight = 16;
                 $scope.userViewWidth = 12;
                 $scope.searchFolderHeight = 0;
-                $scope.boardHeight = 78;
+                $scope.boardHeight = 83;
                 if ($scope.cfgPredOnOff === '1' && $scope.cfgPredBarVertHor === '0') { // Prediction on and vertical
                     $scope.predViewWidth = 1;
                     $scope.userViewWidth = 11;
@@ -1424,10 +1424,10 @@ angular.module('controllers', [])
                 $scope.inScan = false;
                 $scope.cfgPredOnOff = 0;
                 $scope.predViewWidth = 0;
-                $scope.boardHeight = 96;
+                $scope.boardHeight = 100;
                 $scope.userViewWidth = 9;
                 $scope.editViewWidth = 3;
-                $scope.userViewHeight = 80;
+                $scope.userViewHeight = 78;
                 $scope.searchFolderHeight = 20;
 
                 if (window.innerWidth < 1050) {
