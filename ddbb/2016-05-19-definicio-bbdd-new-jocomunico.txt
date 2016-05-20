@@ -64,7 +64,7 @@ CREATE TABLE SuperUser (
 	cfgTimeLapseSelect INT DEFAULT '1500',
 	cfgTimeNoRepeatedClickOnOff ENUM('0', '1') DEFAULT '0',
 	cfgTimeNoRepeatedClick INT DEFAULT '300',
-	UserValidated ENUM('0', '1') DEFAULT '0'
+	UserValidated ENUM('0', '1', '2') DEFAULT '0'
 ) ENGINE=INNODB;
 
 

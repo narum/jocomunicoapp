@@ -2095,7 +2095,7 @@ class Mypattern {
         }
         
         // IMPERATIVE
-        if ($propietatsfrase['tipusfrase'] == "ordre" && !$propietatsfrase['negativa']) {
+        if ($propietatsfrase['tipusfrase'] == "ordre" && !$this->frasenegativa) {
             // afegir si us plau
             $aux = array();
             $aux[0] = "si us plau";
@@ -2503,7 +2503,7 @@ class Mypattern {
         }
         
         // IMPERATIVE
-        if ($propietatsfrase['tipusfrase'] == "ordre"  && !$propietatsfrase['negativa']) {
+        if ($propietatsfrase['tipusfrase'] == "ordre"  && !$this->frasenegativa) {
             // afegir por favor
             $aux = array();
             $aux[0] = "por favor";
