@@ -4,7 +4,7 @@
 <div class="container container-table">
     <div class="row vertical-center-row">
         <div class="form form-horizontal">
-            <div class="col-xs-2 col-xs-offset-5" ng-show="!activedValidation&&!viewActived"><img class="img-responsive" src="/img/srcWeb/Login/loading.gif"/></div>
+            <div class="col-xs-2 col-xs-offset-5" ng-show="!activedValidation&&!viewActived"><img class="img-responsive" ng-src={{img.loading}}/></div>
             <div class="col-xs-8 col-xs-offset-2 boxRegistreUsuari" ng-show="activedValidation&&viewActived">
                 <div class="row barraSuperiorRegistre">
                     <div class="col-xs-6"><p class="nomBarraSuperiorRegistre">{{ content.title }}</p></div>

@@ -31,10 +31,6 @@ angular.module('app', [
 			controller:'myCtrl',
 			templateUrl:'../../angular_templates/MainBoard.html'
 		})
-		.when('/adeu', {
-			controller:'AdeuCtrl',
-			templateUrl:'../../angular_templates/adeu.html'
-		})
 		.when('/register', {
 			controller:'RegisterCtrl',
 			templateUrl:'../../angular_templates/register.html'

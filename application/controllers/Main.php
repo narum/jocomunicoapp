@@ -184,4 +184,12 @@ class Main extends REST_Controller {
         
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
+    public function userValidate2_post(){
+        $ID_SU = $this->query('IdSu');
+        $data = [$this->query('data') => $this->query('value')]; // convertimos el string json del post en array.
+
+        $response = $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
+        //respuesta
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
 }

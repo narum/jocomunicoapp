@@ -477,3 +477,6 @@ input[type=number] {
     height: 2vh;
     width: auto;
 }
+.errorSelect{
+    border: 0.5vh solid #fd065d;
+}
