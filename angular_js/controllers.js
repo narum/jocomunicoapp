@@ -1067,6 +1067,7 @@ angular.module('controllers', [])
                                 if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
                                     $scope.isScanning = "nowait";
                                     $scope.InitScan();
+//                                    alert($scope.currentScanBlock1 + "    " + $scope.maxScanBlock1);
                                 }
                             }
                         } else if ($scope.currentScanBlock == 2) {

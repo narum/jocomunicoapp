@@ -1,4 +1,4 @@
-<div ng-if='inScan && isScanning == "sentence" && isScanningCancel === false' class="col-xs-12 scaneoSent" style="height:{{sentenceViewHeight}}%"></div>
+<div ng-if='inScan && isScanning == "sentence" && isScanningCancel === false' class="col-xs-12 scaneo"></div>
 <div ng-if="cfgMenuReadActive == 1" class="col-xs-1 fullheight"  ng-click="isClickEnable()?generate():null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(2,'generate'):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null">
     <div ng-if='inScan && isScanning == "read" && isScanningCancel === false' class="scaneo" style="margin: 0px;"></div>
     <div class="backgroundLlegir"></div>

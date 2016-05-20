@@ -52,7 +52,7 @@ class Recommender extends CI_Model {
         $this->db->join('pictograms', 'pictogramslanguage.pictoid = pictograms.pictoid', 'left');                             
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));
         $this->db->where_in('pictogramslanguage.pictotext', $subjList);
-        $this->db->limit(5); 
+        $this->db->limit(7); 
         $query = $this->db->get();     
                 
         if ($query->num_rows() > 0) {
@@ -70,7 +70,7 @@ class Recommender extends CI_Model {
         $this->db->join('pictograms', 'pictogramslanguage.pictoid = pictograms.pictoid', 'left');                             
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));
         $this->db->where('pictograms.pictoType', $pictoType);               
-        $this->db->limit(5);
+        $this->db->limit(7);
         $this->db->order_by('pictogramslanguage.pictofreq', 'desc');   
         $query = $this->db->get();   
         
@@ -88,7 +88,7 @@ class Recommender extends CI_Model {
         $this->db->from('pictogramslanguage');
         $this->db->join('pictograms', 'pictogramslanguage.pictoid = pictograms.pictoid', 'left');                             
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));
-        $this->db->limit(5);
+        $this->db->limit(7);
         $this->db->order_by('pictogramslanguage.pictofreq', 'desc');   
         $query = $this->db->get();   
         
@@ -109,7 +109,7 @@ class Recommender extends CI_Model {
         $this->db->where('p_statsuserpictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('p_statsuserpictox2.picto1id', $inputid1);  
-        $this->db->limit(5);
+        $this->db->limit(7);
         $this->db->order_by('countx2', 'desc');        
         $query = $this->db->get();
         
@@ -131,7 +131,7 @@ class Recommender extends CI_Model {
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('p_statsuserpictox2.picto1id', $inputid1);  
         $this->db->where_in('nameclass'.$this->session->userdata('ulangabbr').'.class', $fits);
-        $this->db->limit(5);
+        $this->db->limit(7);
         $this->db->order_by('countx2', 'desc');        
         $query = $this->db->get();
         
@@ -156,7 +156,7 @@ class Recommender extends CI_Model {
         //$this->db->where('s_historic.sentenceDate', '2016-04-20');               
         $this->db->where_in('s_historic.sentenceDate', $date);
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                                                           
-        $this->db->limit(5);
+        $this->db->limit(7);
         $this->db->group_by('r_s_historicpictograms.pictoid, pictogramslanguage.pictotext, pictograms.imgPicto');
         $this->db->order_by('repes', 'desc');        
         $query = $this->db->get();
@@ -183,7 +183,7 @@ class Recommender extends CI_Model {
         $this->db->where_in('s_historic.sentenceDate', $date);
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('pictograms.pictoType', $pictoType);               
-        $this->db->limit(5);
+        $this->db->limit(7);
         $this->db->group_by('r_s_historicpictograms.pictoid, pictogramslanguage.pictotext, pictograms.imgPicto');
         $this->db->order_by('repes', 'desc');        
         $query = $this->db->get();
@@ -254,7 +254,7 @@ class Recommender extends CI_Model {
         $this->db->join('pictograms', 'p_statsuserpicto.pictoid = pictograms.pictoid', 'left'); 
         $this->db->where('p_statsuserpicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                             
-        $this->db->limit(5);
+        $this->db->limit(7);
         $this->db->order_by('countx1', 'desc');        
         $query = $this->db->get();     
                 
@@ -276,7 +276,7 @@ class Recommender extends CI_Model {
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                                              
         $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
         $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
-        $this->db->limit(5);
+        $this->db->limit(7);
         $this->db->order_by('countx3', 'desc');        
         $query = $this->db->get();
         
@@ -300,7 +300,7 @@ class Recommender extends CI_Model {
         $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
         $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
         $this->db->where_in('nameclass'.$this->session->userdata('ulangabbr').'.class', $fits);
-        $this->db->limit(5);
+        $this->db->limit(7);
         $this->db->order_by('countx3', 'desc');                                            
         $query = $this->db->get();
         
@@ -435,10 +435,10 @@ class Recommender extends CI_Model {
         return $freqUsuari; // Algorisme V2 - Predictor freqüència II (d'usuari)   
                 
         $subjs = $this->getSubj();
-        //return $subjs; // Algorisme V5 - Predictor inicial (cas 00 no hi ha res (fix jo i tu))
+        //return $subjs; // Algorisme V7 - Predictor inicial (cas 00 no hi ha res (fix jo i tu))
         
         $verbs = $this->getfreqIdiomaType('verb');
-        //return $verbs; // Algorisme V5 - Predictor inicial (verbs)                                                        
+        //return $verbs; // Algorisme V7 - Predictor inicial (verbs)                                                        
         
         $context = $this->getContext();
         //return $context; // Algorisme V6 - Predictor de context (total)
@@ -469,13 +469,13 @@ class Recommender extends CI_Model {
         else if ($inputType[0]->pictoType != 'verb' && $inputType[0]->pictoType != 'name') {
             
             $subjs = $this->getSubj();
-            //return $subjs; // Algorisme V5 - Predictor inicial (cas 00 no hi ha res (fix jo i tu))   
+            //return $subjs; // Algorisme V7 - Predictor inicial (cas 00 no hi ha res (fix jo i tu))   
             
             $contextTypeName = $this->getContextType('name');
             //return $contextTypeName; // Algorisme V6 - Predictor de context (name)
             
             $verbs = $this->getfreqIdiomaType('verb');
-            //return $verbs; // Algorisme V5 - Predictor inicial (verbs) 
+            //return $verbs; // Algorisme V7 - Predictor inicial (verbs) 
             
             $contextTypeVerb = $this->getContextType('verb');
             //return $contextTypeVerb; // Algorisme V6 - Predictor de context (verb)                        
@@ -499,7 +499,7 @@ class Recommender extends CI_Model {
         $inputid2 = $paraulesFrase[sizeof($paraulesFrase)-1]->pictoid;
         
         //$verbs = $this->getfreqIdiomaType('verb');
-        //return $verbs; // Algorisme V5 - Predictor inicial (verbs)                
+        //return $verbs; // Algorisme V7 - Predictor inicial (verbs)                
                     
         //$freqIdioma = $this->getfreqIdioma();
         //return $freqIdioma; // Algorisme V1 - Predictor freqüència I (de llenguatge)
