@@ -5,11 +5,7 @@ html *{
 
 .scroll{
     overflow-y: scroll;
-}
-html *
-{
-   font-size: 3vh;
-   font-family: "Trebuchet MS", Helvetica, sans-serif;;
+    min-height: 94vh;
 }
 /*Scroll properties*/
 #scrollBar::-webkit-scrollbar{
@@ -44,6 +40,9 @@ border-radius:10px;
 #boxUserConfig{
     margin-right:1vh;
     border-radius: 15px;
+}
+#header{
+    height:6vh;
 }
 #boxUserConfig #header{
     height:6vh;
@@ -393,6 +392,7 @@ input.switch:empty ~ label
 }
 .backgroundGreyTime{
     margin-top: 0.4vh;
+    height: 3.5vh !important;
     width: 14vh;
     font-size: 2.5vh;
     color: #cccccc;
