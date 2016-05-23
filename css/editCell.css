@@ -19,9 +19,7 @@
     padding-right: 25% !important;
 }
 .content1nocolor{ 
-    height: 15%;
-    padding-left: 3% !important;
-    padding-right: 3% !important;
+    height: 18%;
 }
 .content1-5{ 
     background-color: #fddfad;
@@ -139,8 +137,8 @@
     text-align: center;
 }
 .boxEdit{
-    width: 90%;
-    margin-left: 5%;
+    width: 100%;
+    margin-left: 0%;
     margin-right: 5%;
     height: 4vh;
     margin-top: 2%;
