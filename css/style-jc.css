@@ -402,9 +402,15 @@ html *
     height: 100%;
 }
 .colorFolderButton{
+    background: -moz-linear-gradient(top, rgba(74, 74, 74,0) 0%, rgba(74, 74, 74,0.20) 20%, rgba(74, 74, 74,0.40) 40%, rgba(74, 74, 74,0.60) 60%, rgba(74, 74, 74,00) 80%, rgba(74, 74, 74,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(74, 74, 74,0)), color-stop(20%,rgba(74, 74, 74,0.20)), color-stop(40%,rgba(74, 74, 74,0.40)), color-stop(60%,rgba(74, 74, 74,0.60)), color-stop(80%,rgba(74, 74, 74,0.80)), color-stop(100%,rgba(74, 74, 74,1)));
+    background: -webkit-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: -o-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: -ms-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: linear-gradient(to bottom, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
     height: 100%;
-    color: #000;
-    background-color: #4c4c4c;
+    color: white;
+    background-color: #2d2d2d;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -413,9 +419,15 @@ html *
     margin-left: 3vh;
 }
 .colorFolderButtonDown{
+    background: -moz-linear-gradient(top, rgba(138, 138, 138,0) 0%, rgba(138, 138, 138,0.20) 20%, rgba(138, 138, 138,0.40) 40%, rgba(138, 138, 138,0.60) 60%, rgba(138, 138, 138,00) 80%, rgba(138, 138, 138,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(138, 138, 138,0)), color-stop(20%,rgba(138, 138, 138,0.20)), color-stop(40%,rgba(138, 138, 138,0.40)), color-stop(60%,rgba(138, 138, 138,0.60)), color-stop(80%,rgba(138, 138, 138,0.80)), color-stop(100%,rgba(138, 138, 138,1)));
+    background: -webkit-linear-gradient(top, rgba(138, 138, 138,0) 0%,rgba(138, 138, 138,0.2) 20%,rgba(138, 138, 138,0.4) 40%,rgba(138, 138, 138,0.6) 60%,rgba(138, 138, 138,0.8) 80%,rgba(138, 138, 138,1) 100%);
+    background: -o-linear-gradient(top, rgba(138, 138, 138,0) 0%,rgba(138, 138, 138,0.2) 20%,rgba(138, 138, 138,0.4) 40%,rgba(138, 138, 138,0.6) 60%,rgba(138, 138, 138,0.8) 80%,rgba(138, 138, 138,1) 100%);
+    background: -ms-linear-gradient(top, rgba(138, 138, 138,0) 0%,rgba(138, 138, 138,0.2) 20%,rgba(138, 138, 138,0.4) 40%,rgba(138, 138, 138,0.6) 60%,rgba(138, 138, 138,0.8) 80%,rgba(138, 138, 138,1) 100%);
+    background: linear-gradient(to bottom, rgba(138, 138, 138,0) 0%,rgba(138, 138, 138,0.2) 20%,rgba(138, 138, 138,0.4) 40%,rgba(138, 138, 138,0.6) 60%,rgba(138, 138, 138,0.8) 80%,rgba(138, 138, 138,1) 100%);
     height: 100%;
-    color: #000;
-    background-color: #6c6c6c;
+    color: white;
+    background-color: #acacac;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -432,4 +444,16 @@ html *
 .colorFolderPadding
 {
     padding: 3vh;
+}
+.pruebisima{
+    background-color: red;
+}
+.searchBox{
+    width: 100%;
+    margin-left: 0%;
+    margin-right: 5%;
+    height: 4vh;
+    margin-top: 2%;
+    border: none;
+    padding-left: 5px;
 }

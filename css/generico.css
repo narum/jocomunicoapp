@@ -93,7 +93,8 @@ input:focus{
     background-color: #4c4c4c;
 }
 .dialogContent{
-    padding: 1em;
+    padding: 2vh;
+    height: 93%;    
 }
 .dropdown-arrow:disabled {
     background-color: #dddddd;
@@ -116,7 +117,12 @@ input:focus{
     border: 2px solid;
     border-color: #4c4c4c;
 }
-
+.dropdown-arrow.color option:hover {
+    box-shadow: 0 0 10px 100px #1882A8 inset;
+}
+.dropdown-arrow.color:focus > option:hover { 
+    background: #000 !important;
+}
 .infoIconBox{
     text-align: center;
     padding-top: 0.6vh;

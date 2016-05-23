@@ -1417,7 +1417,7 @@ angular.module('controllers', [])
             $scope.edit = function ()
             {
                 $scope.evt = {nameboard: "", altura: 1, amplada: 1, autoreturn: false, autoread: false};
-                $scope.colorPaintingSelected = "#fff";
+                $scope.colorPaintingSelected = "ffffff";
                 $scope.painting = false;
                 $scope.getPrimaryBoard();
                 $scope.inEdit = true;

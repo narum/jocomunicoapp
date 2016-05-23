@@ -5,7 +5,7 @@
 }
 .title1{ 
     background-color: #fff;
-    height: 8%;
+    height: 9%;
     padding-right: 2%;
 }
 .title2{ 
@@ -14,7 +14,7 @@
 }
 .content1{ 
     background-color: #fddfad;
-    height: 8%;
+    height: 9%;
     padding-left: 25% !important;
     padding-right: 25% !important;
 }
@@ -23,7 +23,7 @@
 }
 .content1-5{ 
     background-color: #fddfad;
-    height: 12%;
+    height: 13%;
     margin-top: -0.1px;/*to solve a little problem in chrome*/
 }
 .content2{ 
@@ -32,14 +32,14 @@
 }
 .content3{ 
     background-color: #fddfad;
-    height: 24%;
+    height: 27%;
 }
 .contentNull{ 
     background: url('/img/srcWeb/Patterns1-05.png');
-    height: 24%;
+    height: 27%;
 }
 .content4{ 
-    height: 30%;
+    height: 35%;
 
 }
 .backgroundImgEdit{
@@ -107,12 +107,11 @@
     z-index: 5;
 }
 .saveEdit{
-    margin-left: 8%;
+    padding-left: 1vh;
     border-radius: 150px;
 }
-.marginEditcell{
-    margin-left: 2.5%; 
-    width: 39%;
+.paddingEditcell{
+    padding-left: 2vh;
 }
 
 .titleTextTypus{
@@ -137,8 +136,8 @@
     text-align: center;
 }
 .boxEdit{
-    width: 100%;
-    margin-left: 0%;
+    width: 90%;
+    margin-left: 5%;
     margin-right: 5%;
     height: 4vh;
     margin-top: 2%;
