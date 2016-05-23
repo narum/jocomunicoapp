@@ -990,7 +990,7 @@ angular.module('controllers', [])
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
                 $scope.inScan = true;
                 $scope.getMaxScanBlock1();
-                //MODIF: usar cfgOneClicko algo asi
+                
                 function myTimer() {
                     $scope.NextBlockScan();
                 }
@@ -1176,6 +1176,7 @@ angular.module('controllers', [])
                                 if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
                                     $scope.isScanning = "nowait";
                                     $scope.InitScan();
+//                                    alert($scope.currentScanBlock1 + "    " + $scope.maxScanBlock1);
                                 }
                             }
                         } else if ($scope.currentScanBlock == 2) {
@@ -1535,8 +1536,9 @@ angular.module('controllers', [])
                 $scope.boardHeight = 100;
                 $scope.userViewWidth = 9;
                 $scope.editViewWidth = 3;
-                $scope.userViewHeight = 78;
-                $scope.searchFolderHeight = 20;
+                $scope.userViewHeight = 85;
+                $scope.searchFolderHeight = 13;
+                
 
                 if (window.innerWidth < 1050) {
                     $scope.userViewWidth = 8;

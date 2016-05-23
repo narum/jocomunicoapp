@@ -1,36 +1,40 @@
 
 <div class="imgRounded row fullheight searchPadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-09.png);">
-    <div class="col-xs-12 content1nocolor" style="height: 20%">
+    <div class="col-xs-12 content1nocolor">
         <input type="text" class="boxEdit" ng-model="pictoEditSearch" ng-keyup="search(pictoEditSearch, SearchType);" placeholder="{{content.placeholderSearch}}"/><br>
     </div>
     <div class="text-center col-xs-12" style="height: 20%">
-        <form role="form" class="text-center" name="SearchForm">
-            <div class="col-xs-12 form-group" style="height: 50%">
+        <form role="form" class="text-center col-xs-12" name="SearchForm" style="height: 50%">
+            <div class="col-xs-4 text-left">
                 <label class="radio-inline">
                     <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Tots"/>
                     {{content.all}}
-                </label>
+                </label>    
+            </div>
+            <div class="col-xs-4 text-left">
                 <label class="radio-inline"><input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Noms"/>
                     {{content.names}}
                 </label>
+            </div>
+            <div class="col-xs-4 text-right">
                 <label class="radio-inline">
                     <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Adj" />
                     {{content.adj}}
                 </label>
-
-
-
-
-
-                <br />
+            </div>
+            <div class="col-xs-4 text-left">
                 <label class="radio-inline">
                     <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Verb"/>
                     {{content.verbs}}
                 </label>
+            </div>
+            <div class="col-xs-4 text-left">
                 <label class="radio-inline">
                     <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Exp"/>
                     {{content.expressions}}
                 </label>
+            </div>
+            <div class="col-xs-4 text-right">
                 <label class="radio-inline">
                     <input type="radio" ng-model="SearchType" ng-click="search(pictoEditSearch, SearchType);" value="Altres"/>
                     {{content.others}}
@@ -38,8 +42,8 @@
             </div>
         </form>
     </div>
-    <div class="col-xs-12" style="height: 65%">
-        <div class="row fullheight" style="margin-left: 4%">
+    <div class="col-xs-12" style="height: 63%">
+        <div class="row fullheight">
 
             <!--<div bind-html-compile="dataword" class="" ng-repeat="i in range(6)" style="height: 50%; width: 33%; position: absolute; left:{{(i%3)*33}}%; border-radius: 7px; border: none; margin-left: 4%;" ng-style="i > 3 ? {'top':'50%'}:{'top':'0%'}">
                 <img class="imgRounded cellSearch" style="background-color: white;"/>

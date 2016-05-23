@@ -1,12 +1,6 @@
 @charset "UTF-8";
 /* CSS Document */
 /*MODIF: mi idea era poner aqui lo comun*/
-.fullheight{
-    height:100%;
-}
-.fullwidth{
-    width: 100%;
-}
 
 #main{
     height:100vh;
@@ -91,7 +85,11 @@ html *
 }
 .searchPadding
 {
-    padding: 2vh 3vh;
+    padding: 2vh 4vh;
+}
+.paddingFolder
+{
+    padding: 4vh 4vh;
 }
 .PaddingSent
 {
@@ -101,13 +99,14 @@ html *
 }
 
 .cellSearch{
-    position: absolute;
+    padding: 2px;
+    width: 100%;
     height: 100%;
+    border-radius: 10px;
+    z-index: 0;
+    position: absolute;
+    background-clip: content-box;
     background-color: white; 
-    width:90%; 
-    height:90% !important;
-    margin-bottom: 1%; 
-    margin-right: 0%;
 }
 
 .emptyImg{
@@ -226,9 +225,7 @@ html *
 .ngdialog-overlay{
     background: rgba(255,255,255,0.8);
 }
-.FolderButton{
-    background-color: white;
-}
+
 .returnScan{
     width: 25% ;
     height: 25%;
@@ -244,20 +241,12 @@ html *
     background-color: rgba(255,255,255,0.8);
 }
 .scaneo{
-    margin: -2px;
     width: 100%;
     height: 100%;
     border: 7px solid #2e758a;
     border-radius: 7px;
     z-index: 24;
     position: absolute;
-}
-.scaneoSent{
-    border: 7px solid #2e758a;
-    border-radius: 7px;
-    z-index: 24;
-    position: absolute;
-    width: 97.6%;
 }
 .backgroundCell{
     padding: 2px;
@@ -284,7 +273,6 @@ html *
     box-shadow: 3px -2px #4a4a4a;
 }
 .contentPredCell{
-    padding: 2.5%;
     border-radius: 10px;
     height: 100%;
     width: 100%;
@@ -297,6 +285,8 @@ html *
 }
 .predPadding{
     padding: 1vh 0vh;
+    height: 100%;
+    width: 100%;
 }
 
 .textCell{
@@ -389,4 +379,57 @@ html *
 .phraseText{
     bottom:0; 
     position:absolute;
+}
+.folderButton{
+    height: 100%;
+    border-radius: 5px;
+    box-shadow: 2px -2px 0px 1px #333;
+    border: none;
+    color: #000;
+    background-color: #fff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column; 
+    cursor: pointer;
+}
+.folderButton:active{
+    box-shadow: 0px -0px 0px 1px #333;
+    transform: translate(2px, -2px);
+}
+.folderButtons{
+    height: 100%;
+}
+.colorFolderButton{
+    height: 100%;
+    color: #000;
+    background-color: #4c4c4c;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    margin-left: 3vh;
+}
+.colorFolderButtonDown{
+    height: 100%;
+    color: #000;
+    background-color: #6c6c6c;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    margin-left: 3vh;
+}
+.selectFolder{
+    float: right;
+}
+.paddinFolderButton{
+    padding-right: 3vh;
+}
+.colorFolderPadding
+{
+    padding: 3vh;
 }
