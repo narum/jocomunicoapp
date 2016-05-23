@@ -1,5 +1,11 @@
 @charset "UTF-8";
 /* CSS Document */
+.fullheight{
+    height:100%;
+}
+.fullwidth{
+    width: 100%;
+}
 button:first-child,
 input:focus{
     outline: none;

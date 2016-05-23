@@ -1,12 +1,6 @@
 @charset "UTF-8";
 /* CSS Document */
 /*MODIF: mi idea era poner aqui lo comun*/
-.fullheight{
-    height:100%;
-}
-.fullwidth{
-    width: 100%;
-}
 
 #main{
     height:100vh;
