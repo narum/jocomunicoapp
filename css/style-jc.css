@@ -402,9 +402,24 @@ html *
 .folderButtons{
     
 }
+.colorFolderButton{
+    height: 40px;
+    color: #000;
+    background-color: #4c4c4c;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    
+}
 .selectFolder{
     float: right;
 }
 .paddinFolderButton{
     padding: 0.5vh;
+}
+.colorFolderPadding
+{
+    padding: 2vh 4vh;
 }

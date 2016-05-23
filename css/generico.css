@@ -107,8 +107,8 @@ input:focus{
     width: 50%;
 }
 .dropdown-arrow.color{
-    border: 1px solid;
-    border-color: #cbcbcb;
+    border: 2px solid;
+    border-color: #4c4c4c;
 }
 
 .infoIconBox{
