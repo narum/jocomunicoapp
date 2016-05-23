@@ -93,6 +93,10 @@ html *
 {
     padding: 2vh 4vh;
 }
+.paddingFolder
+{
+    padding: 4vh 4vh;
+}
 .PaddingSent
 {
     padding-top: 0.5% !important;
@@ -382,13 +386,10 @@ html *
     bottom:0; 
     position:absolute;
 }
-#paddingFolder
-{
-    padding: 2vh 4vh;
-}
 .folderButton{
-    height: 40px;
-    border-radius: 10px;
+    height: 100%;
+    border-radius: 5px;
+    box-shadow: 2px -2px 0px 1px #333;
     border: none;
     color: #000;
     background-color: #fff;
@@ -396,11 +397,10 @@ html *
     display: flex;
     justify-content: center;
     align-content: center;
-    flex-direction: column;
-    
+    flex-direction: column;   
 }
 .folderButtons{
-    
+    height: 100%;
 }
 .colorFolderButton{
     height: 40px;
