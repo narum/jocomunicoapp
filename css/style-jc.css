@@ -382,6 +382,10 @@ html *
     bottom:0; 
     position:absolute;
 }
+#paddingFolder
+{
+    padding: 2vh 4vh;
+}
 .folderButton{
     height: 40px;
     border-radius: 10px;
@@ -393,10 +397,14 @@ html *
     justify-content: center;
     align-content: center;
     flex-direction: column;
+    
 }
 .folderButtons{
-    display: flex;
-    justify-content: center;
-    align-content: center;
     
+}
+.selectFolder{
+    float: right;
+}
+.paddinFolderButton{
+    padding: 0.5vh;
 }
