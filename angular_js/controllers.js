@@ -1427,8 +1427,8 @@ angular.module('controllers', [])
                 $scope.boardHeight = 100;
                 $scope.userViewWidth = 9;
                 $scope.editViewWidth = 3;
-                $scope.userViewHeight = 78;
-                $scope.searchFolderHeight = 20;
+                $scope.userViewHeight = 85;
+                $scope.searchFolderHeight = 13;
 
                 if (window.innerWidth < 1050) {
                     $scope.userViewWidth = 8;
