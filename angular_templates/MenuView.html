@@ -5,19 +5,20 @@
     <div id="header" class="container-fluid text-center row" style="height: 100% !important">
         <div id="menuText" class="col-xs-offset-2 col-xs-10">
             <div class="col-xs-2" ng-click="editMenu();">
-                {{content.editpanel}}
+                {{content.editpanel}} EDIT
             </div>
             <div class="col-xs-1" ng-click="panelMenu()">
                 {{content.grouppanels}}
             </div>
             <div class="col-xs-3" ng-click="userConfig();">
-                {{content.cfguser}}
+                {{content.cfguser}} CONF
             </div>
             <div class="col-xs-offset-1 col-xs-1" ng-click="home();">
-                {{content.home}}
+                {{content.home}} HOME 
+                <!--modif: trure home i edit-->
             </div>
             <div class="col-xs-1"  ng-click="logOut();">
-                {{content.logout}}
+                {{content.logout}} LO
             </div>
         </div>
     </div>

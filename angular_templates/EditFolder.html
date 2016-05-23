@@ -1,25 +1,24 @@
 
-<div class="col-xs-{{12-editViewWidth}} fullheight">
+<div class="col-xs-{{12-editViewWidth}} fullheight ">
     <div class="fullheight imgRounded " style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
-        <div class="topBar"><div class="editTitle">{{content.mypanells}}</div></div>
         <div id="paddingFolder">
-            <div  class="col-xs-2">
-                <div class=" imgRounded FolderButton" ng-click="copyBoard()">
-                    {{content.cpboard}}
+            <div class="col-xs-7 folderButtons">
+                <div  class="col-xs-4 folderButton ">
+                    <div class=" imgRounded FolderButton" ng-click="copyBoard()">
+                        {{content.cpboard}}
+                    </div>
                 </div>
-            </div>
 
-            <div  class="col-xs-2">
-                <div class=" imgRounded FolderButton" ng-click="CreateBoard()">
-                    {{content.nwboard}}
+                <div  class="col-xs-4 folderButton ">
+                    <div class=" imgRounded FolderButton" ng-click="CreateBoard()">
+                        {{content.nwboard}}
+                    </div>
                 </div>
-            </div>
-            <div  class="col-xs-2">
-                <div class=" imgRounded FolderButton" ng-click="RemoveBoard()">
-                    {{content.rmboard}}
+                <div  class="col-xs-4 folderButton ">
+                    <div class=" imgRounded FolderButton" ng-click="RemoveBoard()">
+                        {{content.rmboard}}
+                    </div>
                 </div>
-            </div>
-            <div  class="col-xs-2">
             </div>
             <div class=" imgRounded col-xs-4">
                 <select class="boxEdit dropdown-arrow" 
