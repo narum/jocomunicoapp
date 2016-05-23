@@ -155,11 +155,14 @@ class Main extends REST_Controller {
             $expansionVoicesOffline = 'App on server';
         }
         
-        $response = [
+        $voices = [
             'interfaceVoices'=>$interfaceVoices,
             'interfaceVoicesOffline'=>$interfaceVoicesOffline,
             'expansionVoices'=>$expansionVoices,
-            'expansionVoicesOffline'=>$expansionVoicesOffline,
+            'expansionVoicesOffline'=>$expansionVoicesOffline
+            ];
+        $response = [
+            'voices'=>$voices,
             'appRunning'=>$appRunning
             ];
         

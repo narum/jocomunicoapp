@@ -261,8 +261,10 @@ input[type="text"] {
 .marginBoxCentral{
     margin: 3vh;
 }
-.popover{
+.infoIconBox *{
     font-size: 2vh;
+}
+.popover{
     font-family: "Trebuchet MS", Helvetica, sans-serif;
     border: none;
     box-shadow: 0 0 10px #404040;
@@ -479,4 +481,8 @@ input[type=number] {
 }
 .errorSelect{
     border: 0.5vh solid #fd065d;
+}
+.textError{
+    padding-top: 2vh;
+    font-size: 2.2vh;
 }

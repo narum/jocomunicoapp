@@ -822,10 +822,21 @@ angular.module('controllers', [])
             $scope.getAudioLists = function () {
                 Resources.main.get({'funct': "getVoices"}).$promise
                         .then(function (results) {
-                            $scope.interfaceVoicesList = results.interfaceVoices[0];
-                            $scope.expansionVoicesList = results.expansionVoices[0];
-                            $scope.interfaceVoicesList[0].voiceCompleteName = results.interfaceVoices[0][0].voiceName + ' - [online]';
-                            $scope.interfaceVoicesList[1].voiceCompleteName = results.interfaceVoices[0][1].voiceName + ' - [online]';
+                            var error = false;
+                            angular.forEach(results.voices, function (voice){
+                                if(voice[1]&&!error){
+                                    error=true;
+                                    txtContent("errorVoices").then(function (content) {
+                                        $scope.errorMessage = content.data[voice[3]];
+                                        $scope.errorCode = voice[3];
+                                        $('#errorVoicesModal').modal({backdrop:'static'});
+                                    });
+                                }
+                            });
+                            $scope.interfaceVoicesList = results.voices.interfaceVoices[0];
+                            $scope.expansionVoicesList = results.voices.expansionVoices[0];
+                            $scope.interfaceVoicesList[0].voiceCompleteName = results.voices.interfaceVoices[0][0].voiceName + ' - [online]';
+                            $scope.interfaceVoicesList[1].voiceCompleteName = results.voices.interfaceVoices[0][1].voiceName + ' - [online]';
                             var count1 = 0;
                             var count2 = 0;
                             angular.forEach($scope.interfaceVoicesList, function (value) {
@@ -840,7 +851,12 @@ angular.module('controllers', [])
                                     var language = value.vocalwareLangAbbr;
                                     var country = value.vocalwareDescr;
                                     var type = value.voiceType;
-                                    $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' (' + country + ') - ' + '[' + type + ']';
+                                    if (country==null){
+                                        $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' - ' + '[' + type + ']';
+
+                                    }else{
+                                        $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' (' + country + ') - ' + '[' + type + ']';
+                                    }
                                 } else {
                                     $scope.expansionVoicesList[count2].voiceCompleteName = value.voiceName + ' - [offline]';
                                 }
@@ -851,8 +867,8 @@ angular.module('controllers', [])
                             });
                             if (results.appRunning == 'local') {
                                 $scope.local = true;
-                                $scope.interfaceVoicesListOffline = results.interfaceVoicesOffline[0];
-                                $scope.expansionVoicesOffline = results.expansionVoicesOffline[0];
+                                $scope.interfaceVoicesListOffline = results.voices.interfaceVoicesOffline[0];
+                                $scope.expansionVoicesOffline = results.voices.expansionVoicesOffline[0];
                                 var count3 = 0;
                                 var count4 = 0;
                                 angular.forEach($scope.interfaceVoicesListOffline, function (value) {
@@ -908,8 +924,13 @@ angular.module('controllers', [])
                 }
                 Resources.main.save({'IdU':$rootScope.userId, 'text':$scope.content.voicePlay, 'voice':voice, 'type':type, 'language':$scope.userData.ID_ULanguage, 'rate':'0'}, {'funct': "generateAudio"}).$promise
                 .then(function (results) {
+                    console.log(results);
                     if(results[1]){
-                        alert(results[2]);
+                        txtContent("errorVoices").then(function (content) {
+                            $scope.errorMessage = content.data[results[3]];
+                            $scope.errorCode = results[3];
+                            $('#errorVoicesModal').modal({backdrop:'static'});
+                        });
                     }else{
                         $scope.sound = ngAudio.load("mp3/"+results[0]);
                         $scope.sound.play();
