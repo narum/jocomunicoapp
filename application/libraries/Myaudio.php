@@ -728,9 +728,7 @@ class Myaudio {
                     $msAudioFormat = new COM('SAPI.SpAudioFormat');
                 }
                 // Path al fitxer on guardarem les veus
-                $wavfile = "C:\\xampp\htdocs\mp3\\".$filename.".mp3";
-                echo $wavfile;
-                
+                $wavfile = "C:\\xampp\htdocs\jocomunicoapp\mp3\\".$filename.".mp3";
                 // hem de triar la veu que vol l'usuari (trobada anteriorment)
                 $msVoice->Voice = $chosenVoice;
                 // passem la frase d'utf-8 a format de Windows perquè llegeixi bé

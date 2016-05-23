@@ -1,27 +1,26 @@
 
-<div class="col-xs-{{12-editViewWidth}} fullheight">
+<div class="col-xs-{{12-editViewWidth}} fullheight ">
     <div class="fullheight imgRounded " style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
-        <div class="topBar"><div class="editTitle">{{content.mypanells}}</div></div>
         <div id="paddingFolder">
-            <div  class="col-xs-2">
-                <div class=" imgRounded FolderButton" ng-click="copyBoard()">
-                    {{content.cpboard}}
+            <div class="col-xs-7 folderButtons row">
+                <div  class="col-xs-4 paddinFolderButton">
+                    <div class=" imgRounded FolderButton" ng-click="copyBoard()">
+                        {{content.cpboard}}
+                    </div>
                 </div>
-            </div>
 
-            <div  class="col-xs-2">
-                <div class=" imgRounded FolderButton" ng-click="CreateBoard()">
-                    {{content.nwboard}}
+                <div  class="col-xs-4 paddinFolderButton">
+                    <div class=" imgRounded FolderButton" ng-click="CreateBoard()">
+                        {{content.nwboard}}
+                    </div>
+                </div>
+                <div  class="col-xs-4 paddinFolderButton">
+                    <div class=" imgRounded FolderButton" ng-click="RemoveBoard()">
+                        {{content.rmboard}}
+                    </div>
                 </div>
             </div>
-            <div  class="col-xs-2">
-                <div class=" imgRounded FolderButton" ng-click="RemoveBoard()">
-                    {{content.rmboard}}
-                </div>
-            </div>
-            <div  class="col-xs-2">
-            </div>
-            <div class=" imgRounded col-xs-4">
+            <div class=" imgRounded col-xs-4 selectFolder">
                 <select class="boxEdit dropdown-arrow" 
                         ng-model="selectBoard"
                         ng-options="b.Bname for b in allBoards track by b.ID_Board"

@@ -227,9 +227,7 @@ html *
 .ngdialog-overlay{
     background: rgba(255,255,255,0.8);
 }
-.FolderButton{
-    background-color: white;
-}
+
 .returnScan{
     width: 25% ;
     height: 25%;
@@ -383,4 +381,30 @@ html *
 .phraseText{
     bottom:0; 
     position:absolute;
+}
+#paddingFolder
+{
+    padding: 2vh 4vh;
+}
+.folderButton{
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    color: #000;
+    background-color: #fff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    
+}
+.folderButtons{
+    
+}
+.selectFolder{
+    float: right;
+}
+.paddinFolderButton{
+    padding: 0.5vh;
 }
