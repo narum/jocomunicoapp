@@ -1373,29 +1373,44 @@ class Lexicon extends CI_Model {
             if ($paraulesFrase[$i] != null) {//esto se podria quitar...
                 $word = $paraulesFrase[$i];
                 $inputid = $word->id;
-                $this->db->where('pictoid', $inputid);
-                $this->db->where('ID_PSUPUser', $iduser);
-                $query = $this->db->get('P_StatsUserPicto');
-                if ($query->num_rows() > 0) {
-                    $stat = $query->result();
-                    $num = $stat[0]->countx1 + 1;
-                    $this->db->where('pictoid', $inputid);
-                    $this->db->where('ID_PSUPUser', $iduser);
-                    $data = array(
-                        'countx1' => $num
-                    );
-                    $query = $this->db->update('P_StatsUserPicto', $data);
-                } else {
-                    $data = array(
-                        'countx1' => '1',
-                        'pictoid' => $inputid,
-                        'ID_PSUPUser' => $iduser
-                    );
-                    $query = $this->db->insert('P_StatsUserPicto', $data);
-                }
+                
+                $this->addWordStatsX1($inputid, $iduser, false);
             }
         }
     }
+    
+    /*
+     * Adds or updates the stats of the pictogram with pictoid
+     * for the user with id=iduser. If first is set to true, it only
+     * sets the counter to 1 if that user had never used that pictogram
+     * before.
+     */
+    public function addWordStatsX1($pictoid, $iduser, $first) {
+        
+        $this->db->where('pictoid', $pictoid);
+        $this->db->where('ID_PSUPUser', $iduser);
+        $query = $this->db->get('P_StatsUserPicto');
+        if ($query->num_rows() > 0) {
+            if (!$first) {
+                $stat = $query->result();
+                $num = $stat[0]->countx1 + 1;
+                $this->db->where('pictoid', $inputid);
+                $this->db->where('ID_PSUPUser', $iduser);
+                $data = array(
+                    'countx1' => $num
+                );
+                $query = $this->db->update('P_StatsUserPicto', $data);
+            }
+        } else {
+            $data = array(
+                'countx1' => '1',
+                'pictoid' => $inputid,
+                'ID_PSUPUser' => $iduser
+            );
+            $query = $this->db->insert('P_StatsUserPicto', $data);
+        }
+    }
+    
     /*
      * Inserts, in pairs, each pictogram in P_StatsUserPicto.
      * If this combination of pictograms already exist increment count
