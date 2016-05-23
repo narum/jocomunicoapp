@@ -881,7 +881,7 @@ angular.module('controllers', [])
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
                 $scope.inScan = true;
                 $scope.getMaxScanBlock1();
-                //MODIF: usar cfgOneClicko algo asi
+                
                 function myTimer() {
                     $scope.NextBlockScan();
                 }
