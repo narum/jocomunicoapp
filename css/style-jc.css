@@ -405,15 +405,26 @@ html *
     justify-content: center;
     align-content: center;
     flex-direction: column;
-    
+    margin-left: 3vh;
+}
+.colorFolderButtonDown{
+    height: 100%;
+    color: #000;
+    background-color: #6c6c6c;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    margin-left: 3vh;
 }
 .selectFolder{
     float: right;
 }
 .paddinFolderButton{
-    padding: 0.5vh;
+    padding-right: 3vh;
 }
 .colorFolderPadding
 {
-    padding: 2vh 4vh;
+    padding: 3vh;
 }

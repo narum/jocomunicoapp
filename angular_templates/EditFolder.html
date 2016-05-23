@@ -39,8 +39,11 @@
             </select>
         </div>
         <div class="col-xs-5">
-            <div class="imgRounded colorFolderButton" ng-click="startPainting()">
+            <div class="imgRounded colorFolderButton" ng-click="startPainting()" ng-if="!painting">
                 {{content.start}}
+            </div>
+            <div class="imgRounded colorFolderButtonDown" ng-click="stopPainting()" ng-if="painting">
+                {{content.stop}}
             </div>
         </div>
     </div>
