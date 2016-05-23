@@ -33,9 +33,9 @@
     <div class="fullheight imgRounded colorFolderPadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-09.png)">
         <div class="col-xs-7">
             <select class="boxEdit dropdown-arrow color" style="background-color: #{{colorPaintingSelected}};" ng-model="colorPaintingSelected" ng-change="changePaintingColor(colorPaintingSelected)">
-                <option ng-repeat="color in ['ffffff', 'ffd751', 'ff5927', '41c426', 'f73b5e', '67b5cb']"
+                <option ng-value="color" ng-selected="{{color == 'ffd751'}}" ng-repeat="color in ['ffffff', 'ffd751', 'ff5927', '41c426', 'f73b5e', '67b5cb']"
                         style="background-color: #{{color}};"
-                        ng-value="color">        </option>
+                        >        </option>
             </select>
         </div>
         <div class="col-xs-5">
