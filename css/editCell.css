@@ -198,11 +198,12 @@
     margin-bottom: 1.5vh;
 }
 .editTrash4{
-    height: 14%;
+    height: 4vh;
     margin-bottom: 1.5vh;
 }
 .dropdown-arrow {
     background-size: 3vh 4vh;
+    height: 4vh;
 }
 .textTrash{
     height: 3vh;
