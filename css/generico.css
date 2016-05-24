@@ -213,9 +213,9 @@ input.switch:checked ~ label:after
 }
 .imgResponsive {
     display: block;
-    max-width: 75%;
+    max-width: 85%;
     height: auto;
-    max-height: 75%;
+    max-height: 85%;
     width: auto;
     top: 50%;
     left: 50%;
