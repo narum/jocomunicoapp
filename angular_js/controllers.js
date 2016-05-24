@@ -1506,16 +1506,18 @@ angular.module('controllers', [])
                 $scope.edit();
             };
             // Change the name board
-            $scope.changeNameBoard = function (nameboard, boardindex)
+            $scope.changeNameBoard = function (key, nameboard, boardindex)
             {
-                var postdata = {Name: nameboard, ID: boardindex};
-                var URL = $scope.baseurl + "Board/modifyNameboard";
-                $http.post(URL, postdata).
-                        success(function (response)
-                        {
-                            $scope.statusWord = response.status;
-                            $scope.dataWord = response.data;
-                        });
+                if(key.keyCode === 13)
+                {
+                    var postdata = {Name: nameboard, ID: boardindex};
+                    var URL = $scope.baseurl + "Board/modifyNameboard";
+                    $http.post(URL, postdata).
+                            success(function (response)
+                            {
+                                $scope.edit();
+                            });
+                }
             };
 
             /*
@@ -1945,8 +1947,9 @@ angular.module('controllers', [])
              * Return pictograms from database. The result depends on 
              * Searchtype (noms, verbs...) and Name (letters with the word start with)
              */
-            $scope.search = function (name, Searchtype)
+            $scope.searchDone = function (name, Searchtype)
             {
+                
                 var URL = "";
                 var postdata = {id: name};
                 //Radio button function parameter, to set search type
@@ -1973,16 +1976,17 @@ angular.module('controllers', [])
                     default:
                         URL = $scope.baseurl + "SearchWord/getDBAll";
                 }
-
-
-
-
                 //Request via post to controller search data from database
                 $http.post(URL, postdata).
                         success(function (response)
                         {
                             $scope.dataWord = response.data;
                         });
+            };
+            $scope.search = function (name, Searchtype)
+            {
+                $timeout.cancel($scope.searchTimeout);
+                $scope.searchTimeout = $timeout(function(){$scope.searchDone(name, Searchtype)}, 500);
             };
             //Dragndrop events
             $scope.centerAnchor = true;

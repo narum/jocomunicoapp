@@ -1,10 +1,14 @@
 <div class="topBarDialog"><div class="editTitle">{{content.rmboardtitle}}</div><div class="cruz"></div></div>
-<div class="dialogContent row" style="margin-top: 2%">
-    <p class="text-center col-xs-12 dialogText">
-        {{content.rmboardtext}} {{RemoveBoardData.BoardName}}
-    </p>
-</div>
-<div class="row" style="margin-top: 2%">
-    <input class="dialogButton col-xs-offset-3 col-xs-2 dialogTitle" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
-    <input class="dialogButton col-xs-offset-2 col-xs-2 dialogTitle" type="button" value="{{content.cancel}}" ng-click="closeThisDialog();"/>
+<div class="imgRounded" style=" padding: 2vh; height: 80%">
+    <div style="background-color: #fff; height: 100%">
+        <div class="confirmContent row" >
+            <p class="text-center col-xs-12 dialogText">
+                {{content.rmboardtext}} {{RemoveBoardData.BoardName}}
+            </p>
+        </div>
+        <div class="row" style="margin-top: 2%">
+            <input class=" dialogButton col-xs-offset-3 col-xs-2 dialogTitle" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
+            <input class=" dialogButton col-xs-offset-2 col-xs-2 dialogTitle" type="button" value="{{content.cancel}}" ng-click="closeThisDialog();"/>
+        </div>
+    </div>
 </div>
