@@ -40,6 +40,7 @@ border-radius:10px;
 #boxUserConfig{
     margin-right:1vh;
     border-radius: 15px;
+    cursor:default;
 }
 #header{
     height:6vh;
@@ -114,6 +115,25 @@ border-radius:10px;
     border:none;
     margin-left: 2px;
     margin-bottom: 0.2vh;
+}
+.btn-gray {
+    height: 5.2vh;
+    font-size: 2.5vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 5px;
+    color: white;
+    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
+    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background-color: #666666;
+    border: none;
+}
+.btn-gray:hover{
+    background-color: black;
 }
 .backgroundUserDataBox{
     margin:3vh;
@@ -255,7 +275,7 @@ input[type="text"] {
     font-weight: bold;
 }
 .marginModalTop{
-    margin-top: 25vh;
+    margin-top: 8vh;
 }
 .marginBoxCentral{
     margin: 3vh;
@@ -265,10 +285,14 @@ input[type="text"] {
 }
 .popover{
     font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 2vh;
     border: none;
     box-shadow: 0 0 10px #404040;
     min-width: 20vw;
     max-width: 60vw;
+}
+.popoverFontSize *{
+    font-size: 2vh;
 }
 .menuBar{
     margin-bottom: 1vh;
@@ -290,6 +314,10 @@ input[type="text"] {
 .FonsTaronja{
     text-align: center;
     background-color: #fddfad;
+    cursor: pointer;
+}
+#predSistem .FonsTaronja{
+    cursor:default;
 }
 .disabledText{
     color: gray;
@@ -314,10 +342,13 @@ input[type="text"] {
     padding: 3vh;
 }
 .img-Alert{
-    height: 5.6vh;
+    height: 4.5vh;
     width: auto;
-    margin-right: 3vh;
-    margin-left: 1vh;
+}
+.img-owl{
+    height: 20vh;
+    width: auto;
+    margin-right: 5vw;
 }
 
 .img-configRadio{
@@ -337,14 +368,14 @@ input.imageRadio[type=radio]:empty + label:hover{
 }
 
 .img-config{
-    height: 4.8vw;
+    height: 4.2vw;
     width: auto;
     box-shadow: 0 1vh 1vh rgba(0, 0, 0, 0.7);
     cursor: default;
 }
 
 .img-configSwitch{
-    height: 4.8vw;
+    height: 4.2vw;
     width: auto;
     cursor: pointer;
 }
@@ -485,4 +516,5 @@ input[type=number] {
 .textError{
     padding-top: 2vh;
     font-size: 2.2vh;
+    color: gray;
 }

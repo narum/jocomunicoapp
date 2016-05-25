@@ -1,11 +1,14 @@
 <link rel="stylesheet" type="text/css" href="css/login.css">
 <link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
+<style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.FonsRegistre}}') no-repeat center center fixed;
+    -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
+</style>
 <div class="row barraSuperior"></div>
 <div class="container container-table">
     <div class="row vertical-center-row">
         <form name="loginForm">
             <div class="col-xs-2 col-xs-offset-5" ng-show="!viewActived"><img class="img-responsive" ng-src={{img.loading}}/></div>
-            <div class="col-xs-8 col-xs-offset-2 boxLogin" ng-show="viewActived">
+            <div class="col-xs-8 col-xs-offset-2 boxLogin" style="background-image: url({{img.Patterns1_08}})" ng-show="viewActived">
                 <div class="row barraBoxLogin">
                     <div class="col-xs-7">
                         <div class="textResponsiveBarra" ng-show="!view2">{{content.login}} &nbsp;<image class="imatgeClau" ng-src={{img.clau}}/></div>

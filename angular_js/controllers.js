@@ -12,6 +12,8 @@ angular.module('controllers', [])
 
             //Imagenes
             $scope.img = [];
+            $scope.img.FonsRegistre = '/img/FonsRegistre.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             $scope.img.clau = '/img/srcWeb/Login/clau.png';
             $scope.img.fletxaLogin2 = '/img/srcWeb/Login/fletxaLogin2.png';
@@ -79,8 +81,13 @@ angular.module('controllers', [])
                 Resources.register.save({'user': $scope.user}, {'funct': "passRecoveryMail"}).$promise
                         .then(function (results) {
                             console.log(results.message);
-                            if (results.exist) { // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                $location.path('/emailSended');
+                            console.log(results);
+                            if (results.exist) {
+                                if(results.local){
+                                    $location.path(results.url);
+                                }else{                  // añadir else if de results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                    $location.path('/emailSended');
+                                }
                             } else {
                                 $scope.state2 = 'has-error';
                             }
@@ -89,7 +96,7 @@ angular.module('controllers', [])
         })
 
 //Controlador del registro de usuario
-        .controller('RegisterCtrl', function ($scope, $captcha, Resources, md5, $q, $location) {
+        .controller('RegisterCtrl', function ($scope, $rootScope, $captcha, Resources, md5, $q, $location) {
 
             //Inicializamos el formulario y las variables necesarias
             $scope.formData = {};  //Datos del formulario
@@ -104,6 +111,8 @@ angular.module('controllers', [])
 
             //Imagenes
             $scope.img = [];
+            $scope.img.FonsRegistre = '/img/FonsRegistre.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             $scope.img.yo_3 = '/img/icons/yo_3.png';
             $scope.img.yo_1 = '/img/icons/yo_1.png';
@@ -326,6 +335,8 @@ angular.module('controllers', [])
                 // Comprobamos todos los campos del formulario accediendo a las funciones o mirando las variables de estado
                 if ($scope.checkCaptcha() && userOk && $scope.checkPassword(formData) && $scope.checkName(formData) && $scope.checkLastname(formData) && emailOk && languageOk && $scope.gender(formData)) {
                     $location.path('/registerComplete');
+                    $rootScope.viewActived2 = false; // para activar el gif de loading...
+                    $rootScope.localServer = true;
 
                     //Borramos los campos inecesarios
                     delete formData.confirmPassword;
@@ -345,9 +356,9 @@ angular.module('controllers', [])
                                     var deferred = $q.defer();//PROMESAS
                                     //enviamos los usuarios con cada idioma.
                                     Resources.register.save({'SUname': formData.SUname, 'ID_ULanguage': value.ID_Language, 'defLanguage': defLanguage}, {'funct': "saveUserData"}).$promise
-                                            .then(function (results) {
-                                                deferred.resolve(results);//PROMESAS
-                                                $id_su = results.ID_SU;
+                                            .then(function (response) {
+                                                deferred.resolve(response);//PROMESAS
+                                                $id_su = response.ID_SU;
                                             });
                                     promises.push(deferred.promise);//PROMESAS
                                 });
@@ -357,9 +368,12 @@ angular.module('controllers', [])
                                     //Vista confirmación
                                     Resources.register.save({'user': $id_su}, {'funct': "generateValidationMail"}).$promise
                                             .then(function (results) {
-                                                console.log(results.message);
-                                                if (results.exist) { // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                                    $scope.viewActived = true; // para activar la vista
+                                                if (results.local) { // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                                    $rootScope.localServer = true;
+                                                    $rootScope.viewActived2 = true; // para activar la vista
+                                                }else{
+                                                    $rootScope.localServer = false;
+                                                    $rootScope.viewActived2 = true; // para activar la vista
                                                 }
                                             });
                                 });
@@ -375,6 +389,8 @@ angular.module('controllers', [])
             $scope.viewActived = false; // para activar el gif de loading...
             //Imagenes
             $scope.img = [];
+            $scope.img.FonsRegistre = '/img/FonsRegistre.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             //Pedimos los idiomas disponibles
             var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
@@ -411,10 +427,6 @@ angular.module('controllers', [])
                     .then(function (results) {
                         $scope.validated = results.validated;
                         $scope.activedValidation = true;// para activar la vista;
-                        
-                        //Cargamos la board inicial (Oscar)
-                        var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
-                        $http.post(URL)
                     });
         })
 
@@ -433,6 +445,8 @@ angular.module('controllers', [])
 
             //Imagenes
             $scope.img = [];
+            $scope.img.FonsRegistre = '/img/FonsRegistre.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             
             //HTML text content
@@ -526,7 +540,7 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-        .controller('UserConfCtrl', function ($scope, $rootScope, Resources, ngAudio, AuthService, $q, txtContent, $location, $timeout) {
+        .controller('UserConfCtrl', function ($scope, $rootScope, Resources, ngAudio, $http, AuthService, $q, txtContent, $location, $timeout) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -550,7 +564,7 @@ angular.module('controllers', [])
             $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.whiteLoading = '/img/icons/whiteLoading.gif';
             $scope.img.Loading_icon = '/img/icons/Loading_icon.gif';
-            $scope.img.Icon_Alert = '/img/icons/Icon_Alert.png';
+            $scope.img.Icon_Alert = '/img/icons/info alert.png';
             $scope.img.infoRed = '/img/icons/infoRed.png';
             $scope.img.info = '/img/icons/info.png';
             $scope.img.orangeArrow = '/img/srcWeb/UserConfig/orangeArrow.png';
@@ -558,6 +572,7 @@ angular.module('controllers', [])
             $scope.img.audioPlay2 = '/img/srcWeb/UserConfig/audioPlay2.png';
             $scope.img.menuUp = '/img/srcWeb/UserConfig/menuUp.png';
             $scope.img.menuDown = '/img/srcWeb/UserConfig/menuDown.png';
+            $scope.img.MenuHomeActive = '/img/srcWeb/UserConfig/MenuHomeActive.jpg';
             $scope.img.menuButton1 = '/img/srcWeb/UserConfig/menuButton1.jpg';
             $scope.img.menuButton2 = '/img/srcWeb/UserConfig/menuButton2.jpg';
             $scope.img.menuButton3 = '/img/srcWeb/UserConfig/menuButton3.jpg';
@@ -569,6 +584,9 @@ angular.module('controllers', [])
             $scope.img.cfgScanningRow = '/img/srcWeb/UserConfig/cfgScanningRow.png';
             $scope.img.cfgScanningCol = '/img/srcWeb/UserConfig/cfgScanningCol.png';
             $scope.img.cfgScanningCustom = '/img/srcWeb/UserConfig/cfgScanningCustom.png';
+            $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
+            $scope.img.lowDormFlecha = '/img/srcWeb/Mus/lowDormFlecha.png';
+            $scope.img.lowHolaFlecha = '/img/srcWeb/Mus/lowHolaFlecha.png';
             //Pedimos la configuración del usuario a la base de datos
             $scope.getConfig = function () {
                 $scope.interfaceLanguages = [];
@@ -598,6 +616,7 @@ angular.module('controllers', [])
                             //change string (0,1) to boolean (true,false)
                             $scope.userData.cfgExpansionOnOff = ($scope.userData.cfgExpansionOnOff === "1");
                             $scope.userData.cfgPredOnOff = ($scope.userData.cfgPredOnOff === "1");
+                            $scope.userData.cfgMenuHomeActive = ($scope.userData.cfgMenuHomeActive === "1");
                             $scope.userData.cfgMenuReadActive = ($scope.userData.cfgMenuReadActive === "1");
                             $scope.userData.cfgMenuDeleteLastActive = ($scope.userData.cfgMenuDeleteLastActive === "1");
                             $scope.userData.cfgMenuDeleteAllActive = ($scope.userData.cfgMenuDeleteAllActive === "1");
@@ -634,7 +653,6 @@ angular.module('controllers', [])
                             // Pedimos los textos para cargar la pagina
                             txtContent("userConfig").then(function (results) {
                                 $scope.content = results.data;
-                                $scope.viewActived = true;
                                 $scope.$broadcast("rebuild:me");
                                 //Enable bar after change Language
                                 $scope.interfaceLanguageBarEnable = true;
@@ -758,6 +776,8 @@ angular.module('controllers', [])
                 Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': value}, {'funct': "changeCfgVoices"}).$promise
                 if($scope.userData.UserValidated=='1'&&$scope.userData.cfgExpansionVoiceOnline!=null&&(!$scope.local||$scope.userData.cfgExpansionVoiceOffline!=null)){
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': 'UserValidated', 'value': '2'}, {'funct': "userValidate2"}).$promise
+                    //Cargamos la board inicial (Oscar)
+                    $http.post($scope.baseurl + "PanelGroup/copyGroupBoard");
                 }
             }
 
@@ -820,7 +840,7 @@ angular.module('controllers', [])
 
             //Audio Configuration (Myaudio library access)
             $scope.getAudioLists = function () {
-                Resources.main.get({'funct': "getVoices"}).$promise
+                return Resources.main.get({'funct': "getVoices"}).$promise
                         .then(function (results) {
                             var error = false;
                             angular.forEach(results.voices, function (voice){
@@ -860,7 +880,7 @@ angular.module('controllers', [])
                                 } else {
                                     $scope.expansionVoicesList[count2].voiceCompleteName = value.voiceName + ' - [offline]';
                                 }
-                                if (value.ID_Voice == $scope.userData.cfgExpansionVoiceOnline) {
+                                if (value.ID_Voice == $scope.userData.cfgExpansionVoiceOnline&&!($scope.userData.cfgExpansionVoiceOnline==null)) {
                                     $scope.userData.cfgExpansionVoiceOnline = value.voiceName;
                                 }
                                 count2++;
@@ -884,7 +904,10 @@ angular.module('controllers', [])
             };
             $scope.getConfig()
                 .then(function () {
-                    $scope.getAudioLists();
+                    $scope.getAudioLists()
+                    .then(function (){
+                        $scope.viewActived = true;
+                    });
                 });
 
             $scope.expansionVoiceChange = function (data) {
@@ -901,6 +924,8 @@ angular.module('controllers', [])
                 });
                 if($scope.userData.UserValidated=='1'&&$scope.userData.cfgExpansionVoiceOnline!=null&&(!$scope.local||$scope.userData.cfgExpansionVoiceOffline!=null)){
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': 'UserValidated', 'value': '2'}, {'funct': "userValidate2"}).$promise
+                    //Cargamos la board inicial (Oscar)
+                    $http.post($scope.baseurl + "PanelGroup/copyGroupBoard");
                 }
             };
 

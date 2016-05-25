@@ -90,13 +90,14 @@
         <!-- Modal -->
                                             <div class="modal fade" id="PassModal" role="dialog">
                                                 <div class="modal-dialog modal-lg">
-                                                        <div class="marginModalTop" id="boxUserConfig" style="background-image: url({{img.Patterns1_12}})">
+                                                         <div class="row marginModalTop"><img class="img-owl pull-right" src={{img.lowDormFlecha}}/></div>
+                                                        <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_12}})">
                                                         <div id="header" class="row">
                                                             <div class="col-xs-10 headerTitle">{{content.changePassTitle}}</div>
                                                         </div>
                                                         <div class="row backgroundUserDataBox">
                                                             <div id="DadesUsuariLeft" class="col-xs-7">
-                                                                <div class="row verticalMarginTop">{{content.oldPass}}
+                                                                <div class="row verticalMarginTop popoverFontSize infoIconBox">{{content.oldPass}}
                                                                     <img class="loadingGifSm pull-right" ng-show="loadingOldPass" ng-src={{img.Loading_icon}}/>
                                                                     <input type="image" class="loadingGifSm pull-right" ng-show="oldPassState=='false'" ng-src={{img.infoRed}} popover-placement="bottom-left" popover-trigger="focus"
                                                                         ng-app=""uib-popover="{{content.popOldPass}}">
@@ -120,12 +121,12 @@
                                                             <!--<div class="row" uib-collapse="!(oldPassState=='true')"><div class="col-xs-12"><hr/></div></div>-->
                                                             <div class="row">
                                                                 <div id="DadesUsuariLeft" class="col-xs-7"  uib-collapse="!(oldPassState=='true')">
-                                                                    <div class="row">{{content.newPass1}}
-                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassLengthOk=='false'" ng-src={{img.infoRed}} popover-placement="top-left" popover-trigger="focus"
+                                                                    <div class="row popoverFontSize infoIconBox">{{content.newPass1}}
+                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassLengthOk=='false'" ng-src={{img.infoRed}} popover-placement="bottom-left" popover-trigger="focus"
                                                                         ng-app=""uib-popover="{{content.popNewPassMinLength}}">
                                                                     </div>
-                                                                    <div class="row verticalMarginTop">{{content.newPass2}}
-                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassState=='false'" ng-src={{img.infoRed}} popover-placement="top-left" popover-trigger="focus"
+                                                                    <div class="row verticalMarginTop popoverFontSize infoIconBox">{{content.newPass2}}
+                                                                    <input type="image" class="loadingGifSm pull-right" ng-show="newPassState=='false'" ng-src={{img.infoRed}} popover-placement="bottom-left" popover-trigger="focus"
                                                                         ng-app=""uib-popover="{{content.popNewPassEqual}}">
                                                                     </div>
                                                                 </div>
@@ -207,12 +208,12 @@
                                             <div class="row verticalMarginTop">
                                                 <div class="col-xs-3"></div>
                                                 <div class="col-xs-5 verticalMarginTop">
-                                                    <button type="reset" class="btn-turquoise" ng-click="canEdit = !canEdit; deleteForm();">{{content.cancel}}</button>
+                                                    <button type="reset" class="btn-gray" ng-click="canEdit = !canEdit; deleteForm();">{{content.cancel}}</button>
                                                 </div>
                                                 <div class="col-xs-4 verticalMarginTop">
                                                     <button
                                                         type="submit"
-                                                        class="btn-turquoise pull-right"
+                                                        class="btn-gray pull-right"
                                                         ng-click="canEdit = !canEdit; saveUserData();">{{content.save}}
                                                     </button>
                                                 </div>
@@ -240,7 +241,7 @@
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar1=!contentBar1">{{content.interfaceLanguage}}</div>
                                 </div>
-                                <div class="col-xs-2 FonsTaronja" ng-class="{disabledText: !interfaceLanguageBarEnable}">{{interfaceLanguage}}</div>
+                                <div class="col-xs-2 FonsTaronja" ng-click="contentBar1=!contentBar1" ng-class="{disabledText: !interfaceLanguageBarEnable}">{{interfaceLanguage}}</div>
                                 <div class="col-xs-4 buttonBar" ng-click="contentBar1=!contentBar1">&nbsp;
                                     <img class="loadingGifSm pull-right" ng-show="!interfaceLanguageBarEnable" src={{img.Loading_icon}}/>
                                     <img class="arrowMenuBar pull-right" ng-show="interfaceLanguageBarEnable" src={{img.orangeArrow}}/>
@@ -249,8 +250,8 @@
                             <div class="row">
                             <div class="col-xs-12" uib-collapse="!contentBar1">
                             <div class="row contentBar">
-                                <div class="col-xs-3 paddingLeft">{{content.selectLanguage}}</div>
-                                <div class="col-xs-5">
+                                <div class="col-xs-4 paddingLeft">{{content.selectLanguage}}</div>
+                                <div class="col-xs-4">
                                     <div class="btn-group pull-right" role="group" >
                                         <button type="button" class="btn btn-group-turquoise" ng-repeat="language in interfaceLanguages"
                                                 ng-click="changeLanguage(language.user);" >{{language.name}}</button>
@@ -259,7 +260,7 @@
                                 <div class="col-xs-4">
                                     <button
                                         type="button"
-                                        class="btn-turquoise pull-right"
+                                        class="btn-gray pull-right"
                                         data-toggle="modal"
                                         data-target="#LanguageModal"
                                         ng-click="addLanguageTo='interface';">{{content.addLanguage}}
@@ -272,20 +273,22 @@
 <!--LanguagesModal-->                       
                                             <div class="modal fade" id="LanguageModal" role="dialog">
                                                 <div class="modal-dialog modal-lg">
-                                                    <div class="marginModalTop" id="boxUserConfig" style="background-image: url({{img.Patterns1_08}})">
+                                                     <div class="row marginModalTop"><img class="img-owl pull-right" src={{img.lowHolaFlecha}}/></div>
+                                                    <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_08}})">
                                                         <div id="header" class="row">
                                                             <div class="col-xs-10 headerTitle">{{content.addLanguage2}}</div>
                                                         </div>
                                                         <div class="row backgroundUserConfigBox">
-                                                            <div class="row">
-                                                                <div class="col-xs-12 fonsAlert"><img class="img-Alert" src={{img.Icon_Alert}}/>{{content.addLanguageAlert1}}</div>
+                                                            <div class="row fonsAlert">
+                                                                <div class="col-xs-1 text-center"><img class="img-Alert" src={{img.Icon_Alert}}/></div>
+                                                                <div class="col-xs-11">{{content.addLanguageAlert1}}</div>
                                                             </div>
                                                             <div class="row dadesUsuariCentre">
                                                                 {{content.addLanguageAlert2}}
                                                             </div>
                                                             <div class='row dadesUsuariCentre'>
                                                                 <div class="col-xs-2">
-                                                                    <button type="reset" class="btn-turquoise" data-dismiss="modal" ng-click="languageEnable=false">{{content.cancel}}</button>
+                                                                    <button type="reset" class="btn-gray" data-dismiss="modal" ng-click="languageEnable=false">{{content.cancel}}</button>
                                                                 </div>
                                                                 <div class="col-xs-8">
                                                                     <div class="btn-group center" role="group" >
@@ -294,7 +297,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-xs-2">
-                                                                    <button type="submit" class="btn-turquoise pull-right" data-dismiss="modal" ng-disabled="!languageEnable" ng-click="addLanguage('submit');">{{content.save}}</button>
+                                                                    <button type="submit" class="btn-gray pull-right" data-dismiss="modal" ng-disabled="!languageEnable" ng-click="addLanguage('submit');">{{content.save}}</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -312,7 +315,7 @@
                                     </div>
                                     <div class="col-xs-10 buttonBar" ng-click="contentBar2=!contentBar2">{{content.expansionLanguage}}</div>
                                 </div>
-                                <div class="col-xs-2 FonsTaronja" ng-class="{disabledText: !expansionLanguageEnable||!userData.cfgExpansionOnOff}">{{expansionLanguage}}</div>
+                                <div class="col-xs-2 FonsTaronja" ng-click="contentBar2=!contentBar2" ng-class="{disabledText: !expansionLanguageEnable||!userData.cfgExpansionOnOff}">{{expansionLanguage}}</div>
                                 <div class="col-xs-2 buttonBar" ng-click="contentBar2=!contentBar2">&nbsp;</div>
                                 <div class="col-xs-1">
                                     <input type="checkbox" id="switch1" class="switch" ng-model="userData.cfgExpansionOnOff" ng-click="changeOnOff(userData.cfgExpansionOnOff, 'ExpansionOnOff')" ng-show="false"/>
@@ -327,8 +330,8 @@
                             <div class="row">
                             <div class="col-xs-12" uib-collapse="!contentBar2 || !userData.cfgExpansionOnOff">
                             <div class="row contentBar">
-                                <div class="col-xs-3 paddingLeft">{{content.selectLanguage}}</div>
-                                <div class="col-xs-5">
+                                <div class="col-xs-4 paddingLeft">{{content.selectLanguage}}</div>
+                                <div class="col-xs-4">
                                     <div class="btn-group pull-right" role="group" >
                                         <button type="button" class="btn btn-group-turquoise" ng-repeat="language in expansionLanguages" ng-if="language.idInterfaceLanguage==userData.ID_ULanguage"
                                                 ng-click="changeLanguage(language.user);" >{{language.name}}</button>
@@ -337,7 +340,7 @@
                                 <div class="col-xs-4">
                                     <button
                                         type="button"
-                                        class="btn-turquoise pull-right"
+                                        class="btn-gray pull-right"
                                         data-toggle="modal"
                                         data-target="#LanguageModal"
                                         ng-click="addLanguageTo='expansion'">{{content.addLanguage}}
@@ -415,23 +418,28 @@
                                 <!--ErrorVoicesModal-->
                                             <div class="modal fade" id="errorVoicesModal" role="dialog">
                                                 <div class="modal-dialog modal-lg">
-                                                    <div class="marginModalTop" id="boxUserConfig" style="background-image: url({{img.Patterns1_08}})">
+                                                    <div class="row marginModalTop"><img class="img-owl pull-right" src={{img.lowSorpresaFlecha}}/></div>
+                                                    <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_08}})">
                                                         <div id="header" class="row">
                                                             <div class="col-xs-10 headerTitle">{{content.errorVoicesTitle}}</div>
                                                         </div>
                                                         <div class="row backgroundUserConfigBox">
-                                                            <div class="row">
-                                                                <div class="col-xs-12 fonsAlert"><img class="img-Alert" src={{img.Icon_Alert}}/>Error</div>
+                                                            <div class="row fonsAlert">
+                                                                <div class="col-xs-1 text-center"><img class="img-Alert" src={{img.Icon_Alert}}/></div>
+                                                                <div class="col-xs-11">{{content.error}}</div>
                                                             </div>
                                                             <div class="row dadesUsuariCentre">
-                                                                {{errorMessage}}
-                                                            </div>
-                                                            <div class='row dadesUsuariCentre'>
-                                                                <div class="col-xs-6 textError">
-                                                                    Error {{errorCode}}
-                                                                </div>
-                                                                <div class="col-xs-6">
-                                                                    <button type="reset" class="btn-turquoise pull-right" data-dismiss="modal">{{content.ok}}</button>
+                                                                <div class="col-xs-1"></div>
+                                                                <div class="col-xs-11">
+                                                                    <div class="row">{{errorMessage}}</div>
+                                                                    <div class="row verticalMarginTop">
+                                                                        <div class="col-xs-6 textError">
+                                                                            Error {{errorCode}}
+                                                                        </div>
+                                                                        <div class="col-xs-6">
+                                                                            <button type="reset" class="btn-gray pull-right" data-dismiss="modal">{{content.ok}}</button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -527,6 +535,8 @@
                                             <label for="radioMenu2"><img class="img-configRadio" ng-src={{img.menuDown}}/></label>
                                     </div>
                                     <div class="col-xs-7">
+                                        <input type="checkbox" id="checkMenuHomeActive" class="imageSwitch" ng-model="userData.cfgMenuHomeActive" ng-click="changeOnOff(userData.cfgMenuHomeActive, 'MenuHomeActive')" ng-show="false">
+                                            <label for="checkMenuHomeActive"><img class="img-configSwitch" ng-src={{img.MenuHomeActive}}/></label>
                                         <input type="checkbox" id="checkMenu1" class="imageSwitch" ng-model="userData.cfgMenuReadActive" ng-click="changeOnOff(userData.cfgMenuReadActive, 'MenuReadActive')" ng-show="false">
                                             <label for="checkMenu1"><img class="img-configSwitch" ng-src={{img.menuButton1}}/></label>
                                         <img class="img-config" src="/img/srcWeb/UserConfig/sentenceBar.png"/>
@@ -601,7 +611,7 @@
                         </div>
 <!--Sistema Predicción-->                   
                         <div class="row menuBar">
-                            <div class="row headerBar" ng-class="{disabledBar:!userData.cfgPredOnOff}">
+                            <div id="predSistem" class="row headerBar" ng-class="{disabledBar:!userData.cfgPredOnOff}">
                                 <div class="col-xs-6">
                                     <div class="col-xs-2 infoIconBox">
                                         <input type="image" class="img-icon" ng-src={{img.info}} popover-placement="top-left" popover-trigger="focus"
@@ -820,7 +830,7 @@
 <!--Buttons-->
                         <div class="row verticalMarginTop">
                             <div class="col-xs-12">
-                                <button class="btn-turquoise pull-right" ng-click="exit();">{{content.save}}</button>
+                                <button class="btn-gray pull-right" ng-click="exit();">{{content.save}}</button>
                             </div>
                         </div>
 
