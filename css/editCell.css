@@ -82,12 +82,12 @@
 }
 .buttonAddPhoto{
     display: block;
-    max-width: 25%;
+    max-width: 100%;
     height: auto;
-    max-height: 25%;
+    max-height: 100%;
     width: auto;
-    top: 85%;
-    left: 85%;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%,-50%);
     border-radius: 10px;
     position: absolute;
@@ -129,6 +129,11 @@
 }
 .buttonTitle{
     padding-right: 5% !important;
+    top: 50%;
+    transform:translate(0%,-50%);
+}
+.colorTitle{
+    padding-right: 0% !important;
     top: 50%;
     transform:translate(0%,-50%);
 }
@@ -256,7 +261,10 @@
     border-radius: 7px;
 }
 .imgSearchView{
-    height: 72%;
+    height: 57%;
+}
+.buttonsSearchView{
+    height: 15%;
 }
 .imgSearchCell{
     height: 70%;

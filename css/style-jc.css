@@ -338,6 +338,14 @@ html *
     height: 50%;
     border-bottom-right-radius: 10px;
 }
+.backgroundHome{
+    width: 94%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/borrar_ultim_fons.png');
+    background-size: 100% 100%;
+    border-radius: 7px;
+}
 .backgroundLlegir{
     width: 94%;
     height: 100%;    

@@ -795,7 +795,37 @@ class BoardInterface extends CI_Model {
         $query = $this->db->get('R_BoardCell');
 
         if ($query->num_rows() > 0) {
-            $output = $query->result();
+            $output = $query->result()[0]->customScanBlock1;
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    function getColumns($IDboard) {
+        $output = array();
+
+        $this->db->select('width');
+        $this->db->where('ID_Board', $IDboard);
+        $query = $this->db->get('Boards');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result()[0]->width;
+        } else
+            $output = null;
+
+        return $output;
+    }
+    
+    function getRows($IDboard) {
+        $output = array();
+
+        $this->db->select('height');
+        $this->db->where('ID_Board', $IDboard);
+        $query = $this->db->get('Boards');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result()[0]->height;
         } else
             $output = null;
 
@@ -809,9 +839,9 @@ class BoardInterface extends CI_Model {
         $this->db->where('customScanBlock1', $scanGroup);
         $this->db->where('ID_RBoard', $IDboard);
         $query = $this->db->get('R_BoardCell');
-
+        
         if ($query->num_rows() > 0) {
-            $output = $query->result();
+            $output = $query->result()[0]->customScanBlock2;
         } else
             $output = null;
 
