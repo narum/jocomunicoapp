@@ -1508,7 +1508,7 @@ angular.module('controllers', [])
             // Change the name board
             $scope.changeNameBoard = function (key, nameboard, boardindex)
             {
-                if(key.keyCode === 13)
+                if(key === 13)
                 {
                     var postdata = {Name: nameboard, ID: boardindex};
                     var URL = $scope.baseurl + "Board/modifyNameboard";
