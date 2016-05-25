@@ -12,10 +12,10 @@ Local
 	
 		Inici (serà el Login i registre)
 		Panells (grup de panells)
+		Configuració
 		FAQ
 		Tutorial
 		Privacitat
-		Idioma
 		Logout
 		
 	Loggejat a un panell
@@ -23,10 +23,10 @@ Local
 		Inici (serà el Login i registre)
 		Edita panell
 		Panells (grup de panells)
+		Configuració
 		FAQ
 		Tutorial
 		Privacitat
-		Idioma
 		Logout
 
 Servidor
@@ -47,11 +47,11 @@ Servidor
 		Inici 
 		Sobre Jocomunico
 		Panells (grup de panells)
+		Configuració
 		FAQ
 		Tutorial
 		Contacte
 		Privacitat
-		Idioma
 		Logout
 		
 	Loggejat a un panell
@@ -60,9 +60,9 @@ Servidor
 		Sobre Jocomunico
 		Edita panell
 		Panells (grup de panells)
+		Configuració
 		FAQ
 		Tutorial
 		Contacte
 		Privacitat
-		Idioma
 		Logout

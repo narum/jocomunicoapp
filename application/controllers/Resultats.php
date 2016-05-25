@@ -36,7 +36,7 @@ class Resultats extends CI_Controller {
             
             // GENERAR AUDIO
             // $audio = new Myaudio();
-            // $aux = $audio->generateAudio($this->session->userdata('idsubuser'), $info['frasefinal'], true);
+            // $aux = $audio->generateAudio($this->session->userdata('idusu'), $info['frasefinal'], true);
             
             // si no hi ha cap error
 //            if (!$aux[1]) {
