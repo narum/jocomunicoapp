@@ -30,6 +30,15 @@ input:focus{
     width: 35px;
     border-top-right-radius: 10px;
 }
+.cruzTop{
+    background-color: #151515;
+    height: 100%;
+    float: right;
+    width: 35px;
+    border-top-right-radius: 10px;
+    top: -5px;
+    
+}
 .textNoOverflow{
     text-overflow: ellipsis;
     overflow: hidden;
@@ -37,17 +46,20 @@ input:focus{
 }
 /* CSS Document */
 .dialogButton{
-    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
-    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background-color: #4c4c4c;
-    height: 40px;
-    border-radius: 10px;
+    background: -moz-linear-gradient(top, rgba(74, 74, 74,0) 0%, rgba(74, 74, 74,0.20) 20%, rgba(74, 74, 74,0.40) 40%, rgba(74, 74, 74,0.60) 60%, rgba(74, 74, 74,00) 80%, rgba(74, 74, 74,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(74, 74, 74,0)), color-stop(20%,rgba(74, 74, 74,0.20)), color-stop(40%,rgba(74, 74, 74,0.40)), color-stop(60%,rgba(74, 74, 74,0.60)), color-stop(80%,rgba(74, 74, 74,0.80)), color-stop(100%,rgba(74, 74, 74,1)));
+    background: -webkit-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: -o-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: -ms-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: linear-gradient(to bottom, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background-color: #2d2d2d;
+    
+    max-height: 40px;
+    height: 100%;
+    border-radius: 5px;
     border: none;
     color: #fff;
+    font-weight: bold;
 }
 .dialogTitle{
     position: relative;
@@ -58,6 +70,9 @@ input:focus{
 .dialogText{
     color: #4c4c4c;
     font-weight: bold;
+}
+.paddingTextRight{
+    padding-right: 10px; 
 }
 .topBar{
 
@@ -77,12 +92,40 @@ input:focus{
 }
 .topBarDialog{
 
-    height: 20%;
+    height: 15%;
     width: 100%;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
-    min-height: 3vh;
-    max-height: 4vh;
+    /*gradient in all browsers*/
+    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
+    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background-color: #4c4c4c;
+}
+.topBarDialogS{
+
+    height: 15%;
+    width: 100%;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    /*gradient in all browsers*/
+    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
+    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background-color: #4c4c4c;
+}
+.topBarDialogM{
+
+    height: 12%;
+    width: 100%;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
     /*gradient in all browsers*/
     background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
@@ -93,7 +136,19 @@ input:focus{
     background-color: #4c4c4c;
 }
 .dialogContent{
-    padding: 1em;
+    padding: 2vh;
+    height: 93%;    
+}
+.textConfirm{
+    height: 10%;
+    margin: 1vh 0vh;
+}
+.confirmContent{
+    padding: 2vh;
+        
+}
+.confirmButtons{
+    height:30%;
 }
 .dropdown-arrow:disabled {
     background-color: #dddddd;
@@ -116,7 +171,15 @@ input:focus{
     border: 2px solid;
     border-color: #4c4c4c;
 }
-
+.dropdown-arrow.confirm{
+    border: 1px solid;
+}
+.dropdown-arrow.color option:hover {
+    box-shadow: 0 0 10px 100px #1882A8 inset;
+}
+.dropdown-arrow.color:focus > option:hover { 
+    background: #000 !important;
+}
 .infoIconBox{
     text-align: center;
     padding-top: 0.6vh;
@@ -207,9 +270,9 @@ input.switch:checked ~ label:after
 }
 .imgResponsive {
     display: block;
-    max-width: 75%;
+    max-width: 85%;
     height: auto;
-    max-height: 75%;
+    max-height: 85%;
     width: auto;
     top: 50%;
     left: 50%;
@@ -241,13 +304,6 @@ input.switch:checked ~ label:after
     position: relative;
     z-index: 2;
 }
-.cruz{
-    background-color: #151515;
-    height: 100%;
-    float: right;
-    width: 35px;
-    border-top-right-radius: 10px;
-}
 .editfields{
     background-color: #151515;
     height: 98%;
@@ -274,4 +330,85 @@ input.switch:checked ~ label:after
     background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
     background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
     background-color: #4c4c4c;
+}
+.folderButton{
+    height: 100%;
+    border-radius: 5px;
+    box-shadow: 2px -2px 0px 1px #333;
+    border: none;
+    color: #000;
+    background-color: #fff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column; 
+    cursor: pointer;
+}
+.folderButton:active{
+    box-shadow: 0px -0px 0px 1px #333;
+    transform: translate(2px, -2px);
+}
+.folderButtons{
+    height: 100%;
+}
+.colorFolderButton{
+    background: -moz-linear-gradient(top, rgba(74, 74, 74,0) 0%, rgba(74, 74, 74,0.20) 20%, rgba(74, 74, 74,0.40) 40%, rgba(74, 74, 74,0.60) 60%, rgba(74, 74, 74,00) 80%, rgba(74, 74, 74,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(74, 74, 74,0)), color-stop(20%,rgba(74, 74, 74,0.20)), color-stop(40%,rgba(74, 74, 74,0.40)), color-stop(60%,rgba(74, 74, 74,0.60)), color-stop(80%,rgba(74, 74, 74,0.80)), color-stop(100%,rgba(74, 74, 74,1)));
+    background: -webkit-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: -o-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: -ms-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: linear-gradient(to bottom, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    height: 100%;
+    color: white;
+    background-color: #2d2d2d;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    margin-left: 3vh;
+}
+.colorFolderButtonDown{
+    background: -moz-linear-gradient(top, rgba(138, 138, 138,0) 0%, rgba(138, 138, 138,0.20) 20%, rgba(138, 138, 138,0.40) 40%, rgba(138, 138, 138,0.60) 60%, rgba(138, 138, 138,00) 80%, rgba(138, 138, 138,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(138, 138, 138,0)), color-stop(20%,rgba(138, 138, 138,0.20)), color-stop(40%,rgba(138, 138, 138,0.40)), color-stop(60%,rgba(138, 138, 138,0.60)), color-stop(80%,rgba(138, 138, 138,0.80)), color-stop(100%,rgba(138, 138, 138,1)));
+    background: -webkit-linear-gradient(top, rgba(138, 138, 138,0) 0%,rgba(138, 138, 138,0.2) 20%,rgba(138, 138, 138,0.4) 40%,rgba(138, 138, 138,0.6) 60%,rgba(138, 138, 138,0.8) 80%,rgba(138, 138, 138,1) 100%);
+    background: -o-linear-gradient(top, rgba(138, 138, 138,0) 0%,rgba(138, 138, 138,0.2) 20%,rgba(138, 138, 138,0.4) 40%,rgba(138, 138, 138,0.6) 60%,rgba(138, 138, 138,0.8) 80%,rgba(138, 138, 138,1) 100%);
+    background: -ms-linear-gradient(top, rgba(138, 138, 138,0) 0%,rgba(138, 138, 138,0.2) 20%,rgba(138, 138, 138,0.4) 40%,rgba(138, 138, 138,0.6) 60%,rgba(138, 138, 138,0.8) 80%,rgba(138, 138, 138,1) 100%);
+    background: linear-gradient(to bottom, rgba(138, 138, 138,0) 0%,rgba(138, 138, 138,0.2) 20%,rgba(138, 138, 138,0.4) 40%,rgba(138, 138, 138,0.6) 60%,rgba(138, 138, 138,0.8) 80%,rgba(138, 138, 138,1) 100%);
+    height: 100%;
+    color: white;
+    background-color: #acacac;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    margin-left: 3vh;
+}
+.selectFolder{
+    float: right;
+}
+.paddinFolderButton{
+    padding-right: 3vh;
+}
+.colorFolderPadding
+{
+    padding: 3vh;
+}
+.confirmDefPad{
+    padding: 2vh;
+    height: 85%;
+}
+.confirmDefPadM{
+    padding: 2vh;
+    height: 88%;
+}
+.confirmDefPadS{
+    padding: 2vh;
+    height: 85%;
+}
+.confirmBackgroundColor{
+    background-color: #fff;
+    height: 100%;
 }

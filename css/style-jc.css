@@ -85,7 +85,25 @@ html *
 }
 .searchPadding
 {
+    height: 90%;
     padding: 2vh 4vh;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+.searchTab
+{
+    height: 10%;
+    width: 50%;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+.searchTabDisable
+{
+    background-color:rgba(0,0,0,0.5);
+    height: 100%;
+    width: 100%;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
 }
 .paddingFolder
 {
@@ -215,7 +233,6 @@ html *
 }
 
 .contentCell{
-    padding: 2.5%;
     border-radius: 15px;
     height: 100%;
     width: 100%;
@@ -380,56 +397,12 @@ html *
     bottom:0; 
     position:absolute;
 }
-.folderButton{
-    height: 100%;
-    border-radius: 5px;
-    box-shadow: 2px -2px 0px 1px #333;
+.searchBox{
+    width: 100%;
+    margin-left: 0%;
+    margin-right: 5%;
+    height: 4vh;
+    margin-top: 2%;
     border: none;
-    color: #000;
-    background-color: #fff;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column; 
-    cursor: pointer;
-}
-.folderButton:active{
-    box-shadow: 0px -0px 0px 1px #333;
-    transform: translate(2px, -2px);
-}
-.folderButtons{
-    height: 100%;
-}
-.colorFolderButton{
-    height: 100%;
-    color: #000;
-    background-color: #4c4c4c;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
-    margin-left: 3vh;
-}
-.colorFolderButtonDown{
-    height: 100%;
-    color: #000;
-    background-color: #6c6c6c;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
-    margin-left: 3vh;
-}
-.selectFolder{
-    float: right;
-}
-.paddinFolderButton{
-    padding-right: 3vh;
-}
-.colorFolderPadding
-{
-    padding: 3vh;
+    padding-left: 5px;
 }

@@ -1,15 +1,21 @@
-<div class="topBarDialog"><div class="editTitle">Copiar Panells</div><div class="cruz"></div></div>
-<div class="dialogContent row" style="height: 25%">
-        <input type="text" class="col-xs-offset-2 col-xs-8 dialogText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName" placeholder="{{content.tipnameboard}}"/>
-</div>
-<div class="row" style="height: 25%">
-    <!--MODIF: FALTA AFEGIR CONTENT-->
-    <select class="col-xs-offset-3 col-xs-6 dropdown-arrow"
-        ng-model="CopyBoardData.idGroupBoard"
-        ng-options="panel.GBname for panel in panels track by panel.ID_GB">
-    </select>
-</div>
-<div class="row" style="height: 25%">
-    <input class="dialogButton col-xs-offset-3 col-xs-2 dialogTitle" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
-    <input class="dialogButton col-xs-offset-2 col-xs-2 dialogTitle" type="button" value="{{content.cancel}}" ng-click="closeThisDialog();"/>
+<div class="topBarDialogM"><div class="editTitle">{{content.cpboardtitle}}</div><div class="cruz"></div></div>
+<div class="imgRounded confirmDefPadM">
+    <div class="imgRounded confirmBackgroundColor dialogContent" >
+        <div class=" row text-center" style="height: 35%">
+            {{content.putNameBoard}}
+            <input type="text" class="col-xs-offset-2 col-xs-8 dialogText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName" placeholder="{{content.tipnameboard}}"/>
+        </div>
+        <div class="row text-center" style="height: 25%">
+            {{content.selectGroupBoard}}
+            <select class="col-xs-offset-2 col-xs-8 dropdown-arrow confirm"
+                    ng-model="CopyBoardData.idGroupBoard"
+                    ng-options="panel.GBname for panel in panels track by panel.ID_GB">
+            </select>
+        </div>
+        <div class="text-center textConfirm">{{content.copyBoard}}</div>
+        <div class="row confirmButtons">
+            <input class="dialogButton col-xs-offset-3 col-xs-2" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
+            <input class="dialogButton col-xs-offset-2 col-xs-2" type="button" value="{{content.cancel}}" ng-click="closeThisDialog();"/>
+        </div>
+    </div>
 </div>
