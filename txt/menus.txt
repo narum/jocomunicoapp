@@ -1,0 +1,68 @@
+Local
+
+	No loggejat
+	
+		Inici (serà el Login i registre)
+		FAQ
+		Tutorial
+		Privacitat
+		Idioma
+
+	Loggejat
+	
+		Inici (serà el Login i registre)
+		Panells (grup de panells)
+		FAQ
+		Tutorial
+		Privacitat
+		Idioma
+		Logout
+		
+	Loggejat a un panell
+	
+		Inici (serà el Login i registre)
+		Edita panell
+		Panells (grup de panells)
+		FAQ
+		Tutorial
+		Privacitat
+		Idioma
+		Logout
+
+Servidor
+
+	No loggejat
+	
+		Inici 
+		Sobre Jocomunico
+		Login i registre
+		FAQ
+		Tutorial
+		Contacte
+		Privacitat
+		Idioma
+
+	Loggejat
+
+		Inici 
+		Sobre Jocomunico
+		Panells (grup de panells)
+		FAQ
+		Tutorial
+		Contacte
+		Privacitat
+		Idioma
+		Logout
+		
+	Loggejat a un panell
+	
+		Inici 
+		Sobre Jocomunico
+		Edita panell
+		Panells (grup de panells)
+		FAQ
+		Tutorial
+		Contacte
+		Privacitat
+		Idioma
+		Logout

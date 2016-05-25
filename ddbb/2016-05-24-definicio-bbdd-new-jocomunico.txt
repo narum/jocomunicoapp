@@ -53,6 +53,7 @@ CREATE TABLE SuperUser (
 	cfgTimeScanning INT DEFAULT '1000',
 	cfgScanStartClick ENUM('0', '1') DEFAULT '0',
 	cfgMenuReadActive ENUM('0', '1') DEFAULT '1',
+	cfgMenuHomeActive ENUM('0', '1') DEFAULT '1',
 	cfgMenuDeleteLastActive ENUM('0', '1') DEFAULT '1',
 	cfgMenuDeleteAllActive ENUM('0', '1') DEFAULT '1',
 	cfgSentenceBarUpDown ENUM('0', '1') DEFAULT '0',

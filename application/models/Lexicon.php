@@ -1394,7 +1394,7 @@ class Lexicon extends CI_Model {
             if (!$first) {
                 $stat = $query->result();
                 $num = $stat[0]->countx1 + 1;
-                $this->db->where('pictoid', $inputid);
+                $this->db->where('pictoid', $pictoid);
                 $this->db->where('ID_PSUPUser', $iduser);
                 $data = array(
                     'countx1' => $num
@@ -1404,7 +1404,7 @@ class Lexicon extends CI_Model {
         } else {
             $data = array(
                 'countx1' => '1',
-                'pictoid' => $inputid,
+                'pictoid' => $pictoid,
                 'ID_PSUPUser' => $iduser
             );
             $query = $this->db->insert('P_StatsUserPicto', $data);
