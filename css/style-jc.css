@@ -85,7 +85,25 @@ html *
 }
 .searchPadding
 {
+    height: 90%;
     padding: 2vh 4vh;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+.searchTab
+{
+    height: 10%;
+    width: 50%;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+.searchTabDisable
+{
+    background-color:rgba(0,0,0,0.5);
+    height: 100%;
+    width: 100%;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
 }
 .paddingFolder
 {
@@ -215,7 +233,6 @@ html *
 }
 
 .contentCell{
-    padding: 2.5%;
     border-radius: 15px;
     height: 100%;
     width: 100%;

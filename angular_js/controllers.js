@@ -881,7 +881,7 @@ angular.module('controllers', [])
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
                 $scope.inScan = true;
                 $scope.getMaxScanBlock1();
-                
+
                 function myTimer() {
                     $scope.NextBlockScan();
                 }
@@ -1429,7 +1429,8 @@ angular.module('controllers', [])
                 $scope.editViewWidth = 3;
                 $scope.userViewHeight = 85;
                 $scope.searchFolderHeight = 13;
-                
+                $scope.typeSearh = "picto";
+
 
                 if (window.innerWidth < 1050) {
                     $scope.userViewWidth = 8;
@@ -1450,6 +1451,11 @@ angular.module('controllers', [])
                     $scope.evt.autoread = (response.autoRead === '1' ? true : false);
 
                 });
+            };
+            $scope.changeEditSearch = function () {
+                if($scope.typeSearh === "picto") $scope.typeSearh = "img";
+                else $scope.typeSearh = "picto";
+
             };
             // Gets all the boards in the group and select the primary
             $scope.getPrimaryBoard = function () {
@@ -1944,6 +1950,27 @@ angular.module('controllers', [])
                         });
             };
             /*
+             * Return uploaded images from database.
+             */
+            $scope.searchImg = function (name, typeImgEditSearch){
+                var URL = "";
+                switch (typeImgEditSearch)
+                {
+                    case "Arasaac":
+                        URL = $scope.baseurl + "ImgUploader/getImagesArasaac";
+                        break;
+                    case "Uploads":
+                        URL = $scope.baseurl + "ImgUploader/getImagesUploads";
+                        break;
+                }
+                var postdata = {name: name};
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.imgData = response.data;
+                        });
+            }
+            /*
              * Return pictograms from database. The result depends on 
              * Searchtype (noms, verbs...) and Name (letters with the word start with)
              */
@@ -2004,10 +2031,18 @@ angular.module('controllers', [])
             $scope.$on('draggable:start', onDraggableEvent);
             // $scope.$on('draggable:move', onDraggableEvent);
             $scope.$on('draggable:end', onDraggableEvent);
+            /*
+             * PosInBoard is the element over we drop the "draggable data". Data contains the info we drag 
+            */
             $scope.onDropSwap = function (posInBoard, data, evt) {
                 var URL = "";
-                //Significa que no hay que hacer swap, solo medio swap...
-                if (data.idpicto) {
+                //Significa que no hay que hacer swap, solo cambiar la imagen
+                if (data.imgPath) {
+                    var postdata = {pos: posInBoard, idboard: $scope.idboard, imgCell: data.imgPath};
+                    console.log(postdata);
+                    URL = $scope.baseurl + "Board/changeImgCell";
+                }//Significa que no hay que hacer swap, solo medio swap...
+                else if (data.idpicto) {
                     URL = $scope.baseurl + "Board/addPicto";
                     var postdata = {id: data.idpicto, pos: posInBoard, idboard: $scope.idboard};
                 } else {
@@ -2259,20 +2294,8 @@ angular.module('controllers', [])
                 };
                 // When the user upload an image, this function return the data to display the preview
                 $scope.getPreviewImg = function () {
-                    var type = document.getElementById('file-input').files[0].type;
-                    if (!(type == "image/gif" || type == "image/jpeg" || type == "image/png")) {
-                        //alert("Extension incorrecta");
-                        return false;
-                    }
-                    $scope.myFileProvisional = document.getElementById('file-input').files[0];
-                    var r = new FileReader();
-                    r.onloadend = function (e) {
-                        $timeout(function () {
-                            $scope.previewImgProvisional = e.target.result;
-                        });
-
-                    };
-                    r.readAsDataURL($scope.myFileProvisional);
+                    $scope.myFileProvisional = document.getElementById('file-input').files;
+                    console.log($scope.myFileProvisional);
                     // Like I said, only upload image or picto image will have a real value
                     $scope.picImgProvisional = null;
                 };
@@ -2287,12 +2310,15 @@ angular.module('controllers', [])
                 };
                 // Upload and resize the image and the, call savedata()
                 $scope.uploadFile = function () {
-                    var file = $scope.myFile;
+                    var i;
                     console.log('file is ');
-                    console.dir(file);
+                    console.log($scope.myFile);
+                    console.log($scope.myFile.length);
                     var uploadUrl = $scope.baseurl + "/ImgUploader/upload";
                     var fd = new FormData();
-                    fd.append('file', file);
+                    for (i = 0; i < $scope.myFile.length; i++) {
+                        fd.append('file'+i,  $scope.myFile[i]);
+                    }
                     $http.post(uploadUrl, fd, {
                         headers: {'Content-Type': undefined}
                     })

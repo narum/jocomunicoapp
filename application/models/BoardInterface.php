@@ -887,5 +887,13 @@ class BoardInterface extends CI_Model {
         } else
             return null;
     }
+    
+    function updateImgCell($id, $imgCell){
+        $data = array(
+            'imgCell' => $imgCell
+        );
+        $this->db->where('ID_Cell', $id);
+        $this->db->update('Cell', $data);
+    }
 
 }

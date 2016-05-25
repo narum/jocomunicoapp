@@ -30,33 +30,37 @@ class ImgUploader extends REST_Controller {
 
     public function upload_post() {
         $target_dir = "img/users/";
-        $target_file = $this->Rename_Img(basename($_FILES['file']['name']));
-        if (!($_FILES['file']['type'] == "image/gif" || $_FILES['file']['type'] == "image/jpeg" || $_FILES['file']['type'] == "image/png")) {
-            $errorText = 'extension no valida.';
-            $response = [
-                'errorText' => $errorText
-            ];
-            $this->response($response, 300);
+        for ($i = 0; $i < count($_FILES); $i++) {
+            $imgObject = $this->Rename_Img(basename($_FILES['file' . $i]['name']));
+            if (!($_FILES['file' . $i]['type'] == "image/gif" || $_FILES['file' . $i]['type'] == "image/jpeg" || $_FILES['file' . $i]['type'] == "image/png")) {
+                $errorText = 'extension no valida.';
+                $response = [
+                    'errorText' => $errorText
+                ];
+                $this->response($response, 300);
+            }
+            if (file_exists($target_dir . $imgObject['md5Name'])) {
+                //MODIF: lanzar error 
+                $errorText = 'Ya existe una imagen con ese nombre.';
+                $response = [
+                    'errorText' => $errorText
+                ];
+                $this->response($response, 300);
+            }
+            //MODIF: poner tamaño a 100 kb y tamaño 150 minimo
+            if ($_FILES['file' . $i]['size'] > 100000) {
+                $success = $this->Img_Resize($_FILES['file' . $i]['tmp_name'], $target_dir, $imgObject['md5Name']);
+            } else {
+                $success = move_uploaded_file($_FILES['file' . $i]['tmp_name'], $target_dir . $imgObject['md5Name']);
+            }
+            if ($success) {
+                $idusu = $this->session->userdata('idusu');
+                $this->ImgUploader_model->insertImg($idusu, basename($_FILES['file' . $i]['name']), $imgObject['id'], $imgObject['md5Name']);
+            }
         }
-        if (file_exists($target_dir . $target_file)) {
-            //MODIF: lanzar error 
-            $errorText = 'Ya existe una imagen con ese nombre.';
-            $response = [
-                'errorText' => $errorText
-            ];
-            $this->response($response, 300);
-        }
-        //MODIF: poner tamaño a 100 kb y tamaño 150 minimo
-        if ($_FILES['file']['size'] > 100000) {
-            $success = $this->Img_Resize($_FILES['file']['tmp_name'], $target_dir, $target_file);
-        } else {
-            $success = move_uploaded_file($_FILES['file']['tmp_name'], $target_dir . $target_file);
-        }
-        if (!$success) {
-           
-        }
+
         $response = [
-            'nombre' => $target_dir . $target_file
+            'nombre' => $target_dir . $imgObject['md5Name']
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
@@ -73,8 +77,10 @@ class ImgUploader extends REST_Controller {
         $ext = substr($name, $pointpos, $namelen);
         $name = "idi" . $id . "-idu" . $idusu . "-" . $fecha->getTimestamp();
         $name = md5($name . $idusu);
-        $name = $name . $ext;
-        return $name;
+        $md5Name = $name . $ext;
+        $img = ['md5Name' => $md5Name,
+            'id' => $id];
+        return $img;
     }
 
     function Img_Resize($src_path, $target_dir, $dst_path) {
@@ -168,6 +174,40 @@ class ImgUploader extends REST_Controller {
             rename($target_dir . $newdst_path, $newsrc_path);
         }
         return $success;
+    }
+
+    function getImagesUploads_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $name = $request->name;
+
+        $idusu = $this->session->userdata('idusu');
+        $data = $this->ImgUploader_model->getImages($idusu, $name);
+
+        $response = [
+            'data' => $data
+        ];
+
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+
+    function getImagesArasaac_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $name = $request->name;
+
+        $idusu = $this->session->userdata('idusu');
+        $languageInt = $this->session->userdata('uinterfacelangauge');
+        $data = $this->ImgUploader_model->getImagesArasaac($idusu, $name, $languageInt);
+        for ($i = 0; $i < count($data); $i++) {
+            $data[$i]["imgPath"] = "img/pictos/" . $data[$i]["imgPath"];
+        }
+
+        $response = [
+            'data' => $data
+        ];
+
+        $this->response($response, REST_Controller::HTTP_OK);
     }
 
 }

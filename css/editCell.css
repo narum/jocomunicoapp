@@ -255,8 +255,12 @@
     height: 4vh;
     border-radius: 7px;
 }
-
-
+.imgSearchView{
+    height: 72%;
+}
+.imgSearchCell{
+    height: 70%;
+}
 
 
 #file-input{

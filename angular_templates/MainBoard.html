@@ -50,7 +50,7 @@
 
                         <div ng-if="isPictoActive(picto)" class="contentCell">
                             <!--MODIF: deberia ser con texto on/off???-->
-                            <div ng-style="cfgTextInCell ? {'height':'70%'}:{'height':'100%'}">
+                            <div ng-style="cfgTextInCell ? {'height':'85%'}:{'height':'100%'}">
                                 <img ng-if="picto.imgCell" class="imgResponsive" ng-src="{{baseurl}}{{picto.imgCell}}"/>   
                                 <img ng-if="picto.imgPicto && !picto.imgCell" ng-src="{{baseurl}}img/pictos/{{picto.imgPicto}}" class="imgResponsive"/>
                                 <img ng-if="picto.imgFunct && !picto.imgPicto && !picto.imgCell" ng-src="{{baseurl}}img{{picto.imgFunct}}" class="imgResponsive"/>

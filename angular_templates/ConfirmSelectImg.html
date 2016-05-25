@@ -20,7 +20,7 @@
     <label for="file-input" class="fullheight fullwidth">
         <img class="imgRounded buttonAddPhoto" width="100%" height="100%" ng-src="{{baseurl}}img/icons/add_photo.png"/>
     </label>
-    <input type="file" id="file-input" onchange="angular.element(this).scope().getPreviewImg()"/>
+    <input type="file" multiple id="file-input" onchange="angular.element(this).scope().getPreviewImg()"/>
 </div>
 <div class="row" style="height: 20%">
     <input class="dialogButton col-xs-offset-3 col-xs-2" type="button" value="{{content.confirm}}" ng-click="confirm();"/>

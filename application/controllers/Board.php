@@ -679,6 +679,23 @@ class Board extends REST_Controller {
         $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType, $color, $imgCell);
         $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
     }
+    
+    public function changeImgCell_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $id = $request->idboard;
+        $posInBoard = $request->pos;
+        $imgCell = $request->imgCell;
+        
+        $cell = $this->BoardInterface->getIDCell($posInBoard, $id);
+        $this->BoardInterface->updateImgCell($cell[0]->ID_RCell, $imgCell);
+        $data = $this->BoardInterface->getCellsBoard($id);
+
+        $response = [
+            'data' => $data
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 
     public function changePrimaryBoard_post() {
         $postdata = file_get_contents("php://input");
