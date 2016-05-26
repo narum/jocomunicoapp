@@ -97,7 +97,7 @@
                                                         </div>
                                                         <div class="row backgroundUserDataBox">
                                                             <div id="DadesUsuariLeft" class="col-xs-7">
-                                                                <div class="row verticalMarginTop popoverFontSize infoIconBox">{{content.oldPass}}
+                                                                <div class="row verticalMarginTop popoverFontSize">{{content.oldPass}}
                                                                     <img class="loadingGifSm pull-right" ng-show="loadingOldPass" ng-src={{img.Loading_icon}}/>
                                                                     <input type="image" class="loadingGifSm pull-right" ng-show="oldPassState=='false'" ng-src={{img.infoRed}} popover-placement="bottom-left" popover-trigger="focus"
                                                                         ng-app=""uib-popover="{{content.popOldPass}}">
@@ -121,11 +121,11 @@
                                                             <!--<div class="row" uib-collapse="!(oldPassState=='true')"><div class="col-xs-12"><hr/></div></div>-->
                                                             <div class="row">
                                                                 <div id="DadesUsuariLeft" class="col-xs-7"  uib-collapse="!(oldPassState=='true')">
-                                                                    <div class="row popoverFontSize infoIconBox">{{content.newPass1}}
+                                                                    <div class="row popoverFontSize">{{content.newPass1}}
                                                                     <input type="image" class="loadingGifSm pull-right" ng-show="newPassLengthOk=='false'" ng-src={{img.infoRed}} popover-placement="bottom-left" popover-trigger="focus"
                                                                         ng-app=""uib-popover="{{content.popNewPassMinLength}}">
                                                                     </div>
-                                                                    <div class="row verticalMarginTop popoverFontSize infoIconBox">{{content.newPass2}}
+                                                                    <div class="row verticalMarginTop popoverFontSize">{{content.newPass2}}
                                                                     <input type="image" class="loadingGifSm pull-right" ng-show="newPassState=='false'" ng-src={{img.infoRed}} popover-placement="bottom-left" popover-trigger="focus"
                                                                         ng-app=""uib-popover="{{content.popNewPassEqual}}">
                                                                     </div>

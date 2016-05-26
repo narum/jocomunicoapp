@@ -28377,3 +28377,721 @@ INFO - 2016-05-25 17:12:50 --> Language file loaded: language/english/rest_contr
 INFO - 2016-05-25 17:12:50 --> Model Class Initialized
 INFO - 2016-05-25 17:12:50 --> Final output sent to browser
 DEBUG - 2016-05-25 17:12:50 --> Total execution time: 0.7657
+INFO - 2016-05-25 17:27:38 --> Config Class Initialized
+INFO - 2016-05-25 17:27:38 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:27:38 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:27:38 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:27:38 --> URI Class Initialized
+DEBUG - 2016-05-25 17:27:38 --> No URI present. Default controller set.
+INFO - 2016-05-25 17:27:38 --> Router Class Initialized
+INFO - 2016-05-25 17:27:38 --> Output Class Initialized
+INFO - 2016-05-25 17:27:38 --> Security Class Initialized
+DEBUG - 2016-05-25 17:27:38 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:27:38 --> Input Class Initialized
+INFO - 2016-05-25 17:27:38 --> Language Class Initialized
+INFO - 2016-05-25 17:27:38 --> Loader Class Initialized
+INFO - 2016-05-25 17:27:38 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:27:38 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:27:38 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:27:39 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:27:39 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:27:39 --> Controller Class Initialized
+INFO - 2016-05-25 17:27:39 --> File loaded: C:\xampp\htdocs\v3\application\views\../../angular_templates/index.php
+INFO - 2016-05-25 17:27:39 --> Final output sent to browser
+DEBUG - 2016-05-25 17:27:39 --> Total execution time: 0.7462
+INFO - 2016-05-25 17:27:39 --> Config Class Initialized
+INFO - 2016-05-25 17:27:39 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:27:39 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:27:39 --> Config Class Initialized
+INFO - 2016-05-25 17:27:39 --> Config Class Initialized
+INFO - 2016-05-25 17:27:39 --> Config Class Initialized
+INFO - 2016-05-25 17:27:39 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:27:39 --> Hooks Class Initialized
+INFO - 2016-05-25 17:27:39 --> Hooks Class Initialized
+INFO - 2016-05-25 17:27:39 --> Config Class Initialized
+INFO - 2016-05-25 17:27:39 --> Config Class Initialized
+INFO - 2016-05-25 17:27:39 --> Hooks Class Initialized
+INFO - 2016-05-25 17:27:39 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:27:39 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:27:39 --> URI Class Initialized
+DEBUG - 2016-05-25 17:27:39 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:27:39 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:27:39 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:27:39 --> Utf8 Class Initialized
+DEBUG - 2016-05-25 17:27:39 --> UTF-8 Support Enabled
+DEBUG - 2016-05-25 17:27:39 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:27:39 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:27:39 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:27:39 --> Router Class Initialized
+INFO - 2016-05-25 17:27:39 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:27:39 --> URI Class Initialized
+INFO - 2016-05-25 17:27:39 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:27:39 --> Output Class Initialized
+INFO - 2016-05-25 17:27:39 --> Router Class Initialized
+INFO - 2016-05-25 17:27:39 --> URI Class Initialized
+INFO - 2016-05-25 17:27:39 --> URI Class Initialized
+INFO - 2016-05-25 17:27:39 --> URI Class Initialized
+INFO - 2016-05-25 17:27:40 --> Security Class Initialized
+INFO - 2016-05-25 17:27:40 --> URI Class Initialized
+INFO - 2016-05-25 17:27:40 --> Output Class Initialized
+INFO - 2016-05-25 17:27:40 --> Router Class Initialized
+INFO - 2016-05-25 17:27:40 --> Router Class Initialized
+INFO - 2016-05-25 17:27:40 --> Router Class Initialized
+INFO - 2016-05-25 17:27:40 --> Router Class Initialized
+INFO - 2016-05-25 17:27:40 --> Security Class Initialized
+DEBUG - 2016-05-25 17:27:40 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:27:40 --> Output Class Initialized
+INFO - 2016-05-25 17:27:40 --> Output Class Initialized
+INFO - 2016-05-25 17:27:40 --> Input Class Initialized
+INFO - 2016-05-25 17:27:40 --> Output Class Initialized
+INFO - 2016-05-25 17:27:40 --> Output Class Initialized
+DEBUG - 2016-05-25 17:27:40 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:27:40 --> Security Class Initialized
+INFO - 2016-05-25 17:27:40 --> Language Class Initialized
+INFO - 2016-05-25 17:27:40 --> Security Class Initialized
+INFO - 2016-05-25 17:27:40 --> Security Class Initialized
+INFO - 2016-05-25 17:27:40 --> Security Class Initialized
+INFO - 2016-05-25 17:27:40 --> Input Class Initialized
+DEBUG - 2016-05-25 17:27:40 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2016-05-25 17:27:40 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2016-05-25 17:27:40 --> Global POST, GET and COOKIE data sanitized
+ERROR - 2016-05-25 17:27:40 --> 404 Page Not Found: Libraries/bootstrap.min.css.map
+INFO - 2016-05-25 17:27:40 --> Language Class Initialized
+DEBUG - 2016-05-25 17:27:40 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:27:40 --> Input Class Initialized
+INFO - 2016-05-25 17:27:40 --> Input Class Initialized
+INFO - 2016-05-25 17:27:40 --> Input Class Initialized
+ERROR - 2016-05-25 17:27:40 --> 404 Page Not Found: Libraries/angular-animate.min.js.map
+INFO - 2016-05-25 17:27:40 --> Language Class Initialized
+INFO - 2016-05-25 17:27:40 --> Language Class Initialized
+INFO - 2016-05-25 17:27:40 --> Input Class Initialized
+INFO - 2016-05-25 17:27:40 --> Language Class Initialized
+INFO - 2016-05-25 17:27:40 --> Language Class Initialized
+ERROR - 2016-05-25 17:27:40 --> 404 Page Not Found: Libraries/angular-cookies.min.js.map
+ERROR - 2016-05-25 17:27:40 --> 404 Page Not Found: Libraries/angular-resource.min.js.map
+ERROR - 2016-05-25 17:27:40 --> 404 Page Not Found: Libraries/angular-route.min.js.map
+ERROR - 2016-05-25 17:27:40 --> 404 Page Not Found: Libraries/angular.min.js.map
+INFO - 2016-05-25 17:27:40 --> Config Class Initialized
+INFO - 2016-05-25 17:27:40 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:27:40 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:27:40 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:27:40 --> URI Class Initialized
+INFO - 2016-05-25 17:27:40 --> Router Class Initialized
+INFO - 2016-05-25 17:27:41 --> Output Class Initialized
+INFO - 2016-05-25 17:27:41 --> Security Class Initialized
+DEBUG - 2016-05-25 17:27:41 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:27:41 --> Input Class Initialized
+INFO - 2016-05-25 17:27:41 --> Language Class Initialized
+INFO - 2016-05-25 17:27:41 --> Loader Class Initialized
+INFO - 2016-05-25 17:27:41 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:27:41 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:27:41 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:27:41 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:27:41 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:27:41 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:27:41 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:27:41 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:27:41 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:27:41 --> Model Class Initialized
+INFO - 2016-05-25 17:27:41 --> Final output sent to browser
+DEBUG - 2016-05-25 17:27:41 --> Total execution time: 1.1408
+INFO - 2016-05-25 17:27:41 --> Config Class Initialized
+INFO - 2016-05-25 17:27:41 --> Config Class Initialized
+INFO - 2016-05-25 17:27:41 --> Hooks Class Initialized
+INFO - 2016-05-25 17:27:41 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:27:42 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:27:42 --> Utf8 Class Initialized
+DEBUG - 2016-05-25 17:27:42 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:27:42 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:27:42 --> URI Class Initialized
+INFO - 2016-05-25 17:27:42 --> URI Class Initialized
+INFO - 2016-05-25 17:27:42 --> Router Class Initialized
+INFO - 2016-05-25 17:27:42 --> Router Class Initialized
+INFO - 2016-05-25 17:27:42 --> Output Class Initialized
+INFO - 2016-05-25 17:27:42 --> Output Class Initialized
+INFO - 2016-05-25 17:27:42 --> Security Class Initialized
+INFO - 2016-05-25 17:27:42 --> Security Class Initialized
+DEBUG - 2016-05-25 17:27:42 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2016-05-25 17:27:42 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:27:42 --> Input Class Initialized
+INFO - 2016-05-25 17:27:42 --> Input Class Initialized
+INFO - 2016-05-25 17:27:42 --> Language Class Initialized
+INFO - 2016-05-25 17:27:42 --> Language Class Initialized
+INFO - 2016-05-25 17:27:42 --> Loader Class Initialized
+INFO - 2016-05-25 17:27:42 --> Loader Class Initialized
+INFO - 2016-05-25 17:27:42 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:27:42 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:27:42 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:27:42 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:27:42 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:27:42 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:27:42 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:27:42 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:27:43 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:27:43 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:27:43 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:27:43 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:27:43 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:27:43 --> Model Class Initialized
+INFO - 2016-05-25 17:27:43 --> Final output sent to browser
+DEBUG - 2016-05-25 17:27:43 --> Total execution time: 1.3406
+INFO - 2016-05-25 17:27:43 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:27:43 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:27:43 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:27:43 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:27:43 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:27:43 --> Model Class Initialized
+INFO - 2016-05-25 17:27:43 --> Model Class Initialized
+INFO - 2016-05-25 17:27:43 --> Final output sent to browser
+DEBUG - 2016-05-25 17:27:43 --> Total execution time: 1.7073
+INFO - 2016-05-25 17:34:54 --> Config Class Initialized
+INFO - 2016-05-25 17:34:55 --> Hooks Class Initialized
+INFO - 2016-05-25 17:34:55 --> Config Class Initialized
+DEBUG - 2016-05-25 17:34:55 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:34:55 --> Hooks Class Initialized
+INFO - 2016-05-25 17:34:55 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:34:55 --> Config Class Initialized
+DEBUG - 2016-05-25 17:34:55 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:34:55 --> URI Class Initialized
+INFO - 2016-05-25 17:34:55 --> Hooks Class Initialized
+INFO - 2016-05-25 17:34:55 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:34:55 --> URI Class Initialized
+DEBUG - 2016-05-25 17:34:55 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:34:55 --> Config Class Initialized
+INFO - 2016-05-25 17:34:55 --> Router Class Initialized
+INFO - 2016-05-25 17:34:55 --> Router Class Initialized
+INFO - 2016-05-25 17:34:55 --> Hooks Class Initialized
+INFO - 2016-05-25 17:34:55 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:34:55 --> Output Class Initialized
+INFO - 2016-05-25 17:34:55 --> URI Class Initialized
+DEBUG - 2016-05-25 17:34:55 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:34:55 --> Output Class Initialized
+INFO - 2016-05-25 17:34:55 --> Security Class Initialized
+INFO - 2016-05-25 17:34:55 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:34:55 --> Security Class Initialized
+INFO - 2016-05-25 17:34:55 --> Router Class Initialized
+DEBUG - 2016-05-25 17:34:55 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:34:55 --> URI Class Initialized
+DEBUG - 2016-05-25 17:34:55 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:34:55 --> Output Class Initialized
+INFO - 2016-05-25 17:34:55 --> Input Class Initialized
+INFO - 2016-05-25 17:34:55 --> Router Class Initialized
+INFO - 2016-05-25 17:34:55 --> Input Class Initialized
+INFO - 2016-05-25 17:34:55 --> Security Class Initialized
+INFO - 2016-05-25 17:34:55 --> Language Class Initialized
+INFO - 2016-05-25 17:34:55 --> Language Class Initialized
+INFO - 2016-05-25 17:34:55 --> Output Class Initialized
+INFO - 2016-05-25 17:34:55 --> Loader Class Initialized
+DEBUG - 2016-05-25 17:34:55 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:34:55 --> Loader Class Initialized
+INFO - 2016-05-25 17:34:55 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:34:55 --> Security Class Initialized
+INFO - 2016-05-25 17:34:55 --> Input Class Initialized
+INFO - 2016-05-25 17:34:55 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:34:55 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:34:55 --> Language Class Initialized
+DEBUG - 2016-05-25 17:34:55 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:34:55 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:34:55 --> Input Class Initialized
+INFO - 2016-05-25 17:34:55 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:34:55 --> Loader Class Initialized
+INFO - 2016-05-25 17:34:55 --> Language Class Initialized
+INFO - 2016-05-25 17:34:55 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:34:55 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:34:55 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:34:56 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:34:56 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:34:56 --> Loader Class Initialized
+INFO - 2016-05-25 17:34:56 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:34:56 --> Controller Class Initialized
+INFO - 2016-05-25 17:34:56 --> Helper loaded: url_helper
+DEBUG - 2016-05-25 17:34:56 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:34:56 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:34:56 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:34:56 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:34:56 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:34:56 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:34:56 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:34:56 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:34:56 --> Model Class Initialized
+INFO - 2016-05-25 17:34:56 --> Final output sent to browser
+DEBUG - 2016-05-25 17:34:56 --> Total execution time: 1.4265
+INFO - 2016-05-25 17:34:56 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:34:56 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:34:56 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:34:56 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:34:56 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:34:56 --> Model Class Initialized
+INFO - 2016-05-25 17:34:56 --> Final output sent to browser
+DEBUG - 2016-05-25 17:34:56 --> Total execution time: 1.6703
+INFO - 2016-05-25 17:34:56 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:34:56 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:34:56 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:34:56 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:34:57 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:34:57 --> Model Class Initialized
+INFO - 2016-05-25 17:34:57 --> Final output sent to browser
+DEBUG - 2016-05-25 17:34:57 --> Total execution time: 1.9292
+INFO - 2016-05-25 17:34:57 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:34:57 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:34:57 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:34:57 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:34:57 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:34:57 --> Model Class Initialized
+INFO - 2016-05-25 17:34:57 --> Final output sent to browser
+DEBUG - 2016-05-25 17:34:57 --> Total execution time: 2.2126
+INFO - 2016-05-25 17:34:59 --> Config Class Initialized
+INFO - 2016-05-25 17:34:59 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:34:59 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:34:59 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:35:00 --> Config Class Initialized
+INFO - 2016-05-25 17:35:00 --> Hooks Class Initialized
+INFO - 2016-05-25 17:35:00 --> URI Class Initialized
+INFO - 2016-05-25 17:35:00 --> Config Class Initialized
+INFO - 2016-05-25 17:35:00 --> Router Class Initialized
+DEBUG - 2016-05-25 17:35:00 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:35:00 --> Hooks Class Initialized
+INFO - 2016-05-25 17:35:00 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:35:00 --> Config Class Initialized
+INFO - 2016-05-25 17:35:00 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:35:00 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:35:00 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:35:00 --> Output Class Initialized
+INFO - 2016-05-25 17:35:00 --> Security Class Initialized
+INFO - 2016-05-25 17:35:00 --> Config Class Initialized
+INFO - 2016-05-25 17:35:00 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:35:00 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:35:00 --> URI Class Initialized
+INFO - 2016-05-25 17:35:00 --> URI Class Initialized
+DEBUG - 2016-05-25 17:35:00 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:35:00 --> Input Class Initialized
+INFO - 2016-05-25 17:35:00 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:35:00 --> Config Class Initialized
+DEBUG - 2016-05-25 17:35:00 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:35:00 --> Hooks Class Initialized
+INFO - 2016-05-25 17:35:00 --> Router Class Initialized
+INFO - 2016-05-25 17:35:00 --> Router Class Initialized
+INFO - 2016-05-25 17:35:00 --> Output Class Initialized
+INFO - 2016-05-25 17:35:00 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:35:00 --> Language Class Initialized
+INFO - 2016-05-25 17:35:00 --> URI Class Initialized
+INFO - 2016-05-25 17:35:00 --> Output Class Initialized
+DEBUG - 2016-05-25 17:35:00 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:35:01 --> Security Class Initialized
+INFO - 2016-05-25 17:35:01 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:35:01 --> Router Class Initialized
+INFO - 2016-05-25 17:35:01 --> URI Class Initialized
+INFO - 2016-05-25 17:35:01 --> Loader Class Initialized
+INFO - 2016-05-25 17:35:01 --> URI Class Initialized
+INFO - 2016-05-25 17:35:01 --> Security Class Initialized
+INFO - 2016-05-25 17:35:01 --> Output Class Initialized
+INFO - 2016-05-25 17:35:01 --> Router Class Initialized
+DEBUG - 2016-05-25 17:35:01 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:35:01 --> Router Class Initialized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:35:01 --> Input Class Initialized
+INFO - 2016-05-25 17:35:01 --> Security Class Initialized
+DEBUG - 2016-05-25 17:35:01 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:35:01 --> Output Class Initialized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:35:01 --> Input Class Initialized
+INFO - 2016-05-25 17:35:01 --> Output Class Initialized
+DEBUG - 2016-05-25 17:35:01 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:35:01 --> Security Class Initialized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:35:01 --> Input Class Initialized
+INFO - 2016-05-25 17:35:01 --> Language Class Initialized
+INFO - 2016-05-25 17:35:01 --> Security Class Initialized
+DEBUG - 2016-05-25 17:35:01 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:35:01 --> Language Class Initialized
+INFO - 2016-05-25 17:35:01 --> Loader Class Initialized
+INFO - 2016-05-25 17:35:01 --> Input Class Initialized
+INFO - 2016-05-25 17:35:01 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:35:01 --> Language Class Initialized
+INFO - 2016-05-25 17:35:01 --> Loader Class Initialized
+DEBUG - 2016-05-25 17:35:01 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:35:01 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:35:01 --> Loader Class Initialized
+INFO - 2016-05-25 17:35:01 --> Language Class Initialized
+INFO - 2016-05-25 17:35:01 --> Input Class Initialized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:35:01 --> Controller Class Initialized
+INFO - 2016-05-25 17:35:01 --> Loader Class Initialized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:35:01 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:35:01 --> Language Class Initialized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: date_helper
+DEBUG - 2016-05-25 17:35:01 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:35:01 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:35:01 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:35:01 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:35:01 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:35:01 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:35:01 --> Loader Class Initialized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:35:01 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:35:01 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:35:01 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:35:01 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:35:01 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:35:01 --> Model Class Initialized
+INFO - 2016-05-25 17:35:01 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:35:02 --> Final output sent to browser
+INFO - 2016-05-25 17:35:02 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:35:02 --> Database Driver Class Initialized
+DEBUG - 2016-05-25 17:35:02 --> Total execution time: 2.2195
+INFO - 2016-05-25 17:35:02 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:35:02 --> Config Class Initialized
+INFO - 2016-05-25 17:35:02 --> Controller Class Initialized
+INFO - 2016-05-25 17:35:02 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:35:02 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+DEBUG - 2016-05-25 17:35:02 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:35:02 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:35:02 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:35:02 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:35:02 --> URI Class Initialized
+INFO - 2016-05-25 17:35:02 --> Model Class Initialized
+INFO - 2016-05-25 17:35:02 --> Router Class Initialized
+INFO - 2016-05-25 17:35:02 --> Final output sent to browser
+INFO - 2016-05-25 17:35:02 --> Output Class Initialized
+DEBUG - 2016-05-25 17:35:02 --> Total execution time: 2.6168
+INFO - 2016-05-25 17:35:02 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:35:02 --> Config Class Initialized
+INFO - 2016-05-25 17:35:02 --> Security Class Initialized
+INFO - 2016-05-25 17:35:02 --> Controller Class Initialized
+INFO - 2016-05-25 17:35:02 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:35:02 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2016-05-25 17:35:02 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:35:03 --> Input Class Initialized
+DEBUG - 2016-05-25 17:35:03 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:35:03 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:35:03 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:35:03 --> Language Class Initialized
+INFO - 2016-05-25 17:35:03 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:35:03 --> URI Class Initialized
+INFO - 2016-05-25 17:35:03 --> Loader Class Initialized
+INFO - 2016-05-25 17:35:03 --> Model Class Initialized
+INFO - 2016-05-25 17:35:03 --> Router Class Initialized
+INFO - 2016-05-25 17:35:03 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:35:03 --> Final output sent to browser
+INFO - 2016-05-25 17:35:03 --> Output Class Initialized
+INFO - 2016-05-25 17:35:03 --> Helper loaded: date_helper
+DEBUG - 2016-05-25 17:35:03 --> Total execution time: 3.3492
+INFO - 2016-05-25 17:35:03 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:35:03 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:35:03 --> Security Class Initialized
+INFO - 2016-05-25 17:35:03 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:35:03 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:35:03 --> Database Driver Class Initialized
+DEBUG - 2016-05-25 17:35:03 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:35:03 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:35:03 --> Input Class Initialized
+INFO - 2016-05-25 17:35:03 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:35:03 --> Language Class Initialized
+INFO - 2016-05-25 17:35:03 --> Model Class Initialized
+INFO - 2016-05-25 17:35:03 --> Loader Class Initialized
+INFO - 2016-05-25 17:35:03 --> Final output sent to browser
+INFO - 2016-05-25 17:35:03 --> Helper loaded: url_helper
+DEBUG - 2016-05-25 17:35:03 --> Total execution time: 3.2323
+INFO - 2016-05-25 17:35:03 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:35:03 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:35:03 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:35:03 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:35:04 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:35:04 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:35:04 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:35:04 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:35:04 --> Model Class Initialized
+INFO - 2016-05-25 17:35:04 --> Final output sent to browser
+DEBUG - 2016-05-25 17:35:04 --> Total execution time: 3.5357
+INFO - 2016-05-25 17:35:04 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:35:04 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:35:04 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:35:04 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:35:04 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:35:04 --> Model Class Initialized
+INFO - 2016-05-25 17:35:04 --> Final output sent to browser
+DEBUG - 2016-05-25 17:35:04 --> Total execution time: 4.3979
+INFO - 2016-05-25 17:35:04 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:35:04 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:35:04 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:35:04 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:35:04 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:35:05 --> Model Class Initialized
+INFO - 2016-05-25 17:35:05 --> Final output sent to browser
+DEBUG - 2016-05-25 17:35:05 --> Total execution time: 2.8426
+INFO - 2016-05-25 17:35:05 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:35:05 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:35:05 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:35:05 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:35:05 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:35:05 --> Model Class Initialized
+INFO - 2016-05-25 17:35:05 --> Final output sent to browser
+DEBUG - 2016-05-25 17:35:05 --> Total execution time: 2.5951
+INFO - 2016-05-25 17:38:47 --> Config Class Initialized
+INFO - 2016-05-25 17:38:47 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:38:47 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:47 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:47 --> URI Class Initialized
+DEBUG - 2016-05-25 17:38:47 --> No URI present. Default controller set.
+INFO - 2016-05-25 17:38:47 --> Router Class Initialized
+INFO - 2016-05-25 17:38:47 --> Output Class Initialized
+INFO - 2016-05-25 17:38:47 --> Security Class Initialized
+DEBUG - 2016-05-25 17:38:47 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:38:47 --> Input Class Initialized
+INFO - 2016-05-25 17:38:47 --> Language Class Initialized
+INFO - 2016-05-25 17:38:47 --> Loader Class Initialized
+INFO - 2016-05-25 17:38:47 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:38:47 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:38:47 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:38:47 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:38:48 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:38:48 --> Controller Class Initialized
+INFO - 2016-05-25 17:38:48 --> File loaded: C:\xampp\htdocs\v3\application\views\../../angular_templates/index.php
+INFO - 2016-05-25 17:38:48 --> Final output sent to browser
+DEBUG - 2016-05-25 17:38:48 --> Total execution time: 0.7973
+INFO - 2016-05-25 17:38:48 --> Config Class Initialized
+INFO - 2016-05-25 17:38:48 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:38:48 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:48 --> Config Class Initialized
+INFO - 2016-05-25 17:38:48 --> Config Class Initialized
+INFO - 2016-05-25 17:38:48 --> Config Class Initialized
+INFO - 2016-05-25 17:38:48 --> Config Class Initialized
+INFO - 2016-05-25 17:38:48 --> Config Class Initialized
+INFO - 2016-05-25 17:38:48 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:48 --> Hooks Class Initialized
+INFO - 2016-05-25 17:38:48 --> Hooks Class Initialized
+INFO - 2016-05-25 17:38:48 --> Hooks Class Initialized
+INFO - 2016-05-25 17:38:48 --> URI Class Initialized
+INFO - 2016-05-25 17:38:48 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:38:48 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:48 --> Hooks Class Initialized
+INFO - 2016-05-25 17:38:48 --> Router Class Initialized
+DEBUG - 2016-05-25 17:38:48 --> UTF-8 Support Enabled
+DEBUG - 2016-05-25 17:38:48 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:48 --> Utf8 Class Initialized
+DEBUG - 2016-05-25 17:38:48 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:48 --> Utf8 Class Initialized
+DEBUG - 2016-05-25 17:38:48 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:48 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:48 --> Output Class Initialized
+INFO - 2016-05-25 17:38:49 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:49 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:49 --> URI Class Initialized
+INFO - 2016-05-25 17:38:49 --> URI Class Initialized
+INFO - 2016-05-25 17:38:49 --> Security Class Initialized
+INFO - 2016-05-25 17:38:49 --> URI Class Initialized
+INFO - 2016-05-25 17:38:49 --> Router Class Initialized
+INFO - 2016-05-25 17:38:49 --> URI Class Initialized
+INFO - 2016-05-25 17:38:49 --> URI Class Initialized
+DEBUG - 2016-05-25 17:38:49 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:38:49 --> Router Class Initialized
+INFO - 2016-05-25 17:38:49 --> Router Class Initialized
+INFO - 2016-05-25 17:38:49 --> Input Class Initialized
+INFO - 2016-05-25 17:38:49 --> Output Class Initialized
+INFO - 2016-05-25 17:38:49 --> Router Class Initialized
+INFO - 2016-05-25 17:38:49 --> Router Class Initialized
+INFO - 2016-05-25 17:38:49 --> Output Class Initialized
+INFO - 2016-05-25 17:38:49 --> Output Class Initialized
+INFO - 2016-05-25 17:38:49 --> Security Class Initialized
+INFO - 2016-05-25 17:38:49 --> Output Class Initialized
+INFO - 2016-05-25 17:38:49 --> Language Class Initialized
+INFO - 2016-05-25 17:38:49 --> Output Class Initialized
+INFO - 2016-05-25 17:38:49 --> Security Class Initialized
+INFO - 2016-05-25 17:38:49 --> Security Class Initialized
+INFO - 2016-05-25 17:38:49 --> Security Class Initialized
+INFO - 2016-05-25 17:38:49 --> Security Class Initialized
+DEBUG - 2016-05-25 17:38:49 --> Global POST, GET and COOKIE data sanitized
+ERROR - 2016-05-25 17:38:49 --> 404 Page Not Found: Libraries/bootstrap.min.css.map
+DEBUG - 2016-05-25 17:38:49 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2016-05-25 17:38:49 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:38:49 --> Input Class Initialized
+DEBUG - 2016-05-25 17:38:49 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2016-05-25 17:38:49 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:38:49 --> Language Class Initialized
+INFO - 2016-05-25 17:38:49 --> Input Class Initialized
+INFO - 2016-05-25 17:38:49 --> Input Class Initialized
+INFO - 2016-05-25 17:38:49 --> Input Class Initialized
+INFO - 2016-05-25 17:38:49 --> Input Class Initialized
+INFO - 2016-05-25 17:38:49 --> Language Class Initialized
+INFO - 2016-05-25 17:38:49 --> Language Class Initialized
+INFO - 2016-05-25 17:38:49 --> Language Class Initialized
+ERROR - 2016-05-25 17:38:49 --> 404 Page Not Found: Libraries/angular-animate.min.js.map
+INFO - 2016-05-25 17:38:49 --> Language Class Initialized
+ERROR - 2016-05-25 17:38:49 --> 404 Page Not Found: Libraries/angular-resource.min.js.map
+ERROR - 2016-05-25 17:38:49 --> 404 Page Not Found: Libraries/angular-route.min.js.map
+ERROR - 2016-05-25 17:38:49 --> 404 Page Not Found: Libraries/angular-cookies.min.js.map
+ERROR - 2016-05-25 17:38:49 --> 404 Page Not Found: Libraries/angular.min.js.map
+INFO - 2016-05-25 17:38:49 --> Config Class Initialized
+INFO - 2016-05-25 17:38:49 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:38:49 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:49 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:49 --> URI Class Initialized
+INFO - 2016-05-25 17:38:50 --> Router Class Initialized
+INFO - 2016-05-25 17:38:50 --> Output Class Initialized
+INFO - 2016-05-25 17:38:50 --> Security Class Initialized
+DEBUG - 2016-05-25 17:38:50 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:38:50 --> Input Class Initialized
+INFO - 2016-05-25 17:38:50 --> Language Class Initialized
+INFO - 2016-05-25 17:38:50 --> Loader Class Initialized
+INFO - 2016-05-25 17:38:50 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:38:50 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:38:50 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:38:50 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:38:50 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:38:50 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:38:50 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:38:50 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:38:50 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:38:51 --> Model Class Initialized
+INFO - 2016-05-25 17:38:51 --> Final output sent to browser
+DEBUG - 2016-05-25 17:38:51 --> Total execution time: 1.3704
+INFO - 2016-05-25 17:38:51 --> Config Class Initialized
+INFO - 2016-05-25 17:38:51 --> Config Class Initialized
+INFO - 2016-05-25 17:38:51 --> Hooks Class Initialized
+INFO - 2016-05-25 17:38:51 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:38:51 --> UTF-8 Support Enabled
+DEBUG - 2016-05-25 17:38:51 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:51 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:51 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:51 --> URI Class Initialized
+INFO - 2016-05-25 17:38:51 --> URI Class Initialized
+INFO - 2016-05-25 17:38:51 --> Router Class Initialized
+INFO - 2016-05-25 17:38:51 --> Router Class Initialized
+INFO - 2016-05-25 17:38:51 --> Output Class Initialized
+INFO - 2016-05-25 17:38:51 --> Output Class Initialized
+INFO - 2016-05-25 17:38:51 --> Security Class Initialized
+INFO - 2016-05-25 17:38:51 --> Security Class Initialized
+DEBUG - 2016-05-25 17:38:51 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2016-05-25 17:38:51 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:38:51 --> Input Class Initialized
+INFO - 2016-05-25 17:38:51 --> Input Class Initialized
+INFO - 2016-05-25 17:38:51 --> Language Class Initialized
+INFO - 2016-05-25 17:38:51 --> Language Class Initialized
+INFO - 2016-05-25 17:38:52 --> Loader Class Initialized
+INFO - 2016-05-25 17:38:52 --> Loader Class Initialized
+INFO - 2016-05-25 17:38:52 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:38:52 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:38:52 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:38:52 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:38:52 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:38:52 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:38:52 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:38:52 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:38:52 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:38:52 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:38:52 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:38:52 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:38:52 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:38:52 --> Model Class Initialized
+INFO - 2016-05-25 17:38:52 --> Final output sent to browser
+DEBUG - 2016-05-25 17:38:52 --> Total execution time: 1.4982
+INFO - 2016-05-25 17:38:52 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:38:52 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:38:52 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:38:52 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:38:52 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:38:52 --> Model Class Initialized
+INFO - 2016-05-25 17:38:53 --> Model Class Initialized
+INFO - 2016-05-25 17:38:53 --> Final output sent to browser
+DEBUG - 2016-05-25 17:38:53 --> Total execution time: 1.9341
+INFO - 2016-05-25 17:38:57 --> Config Class Initialized
+INFO - 2016-05-25 17:38:57 --> Hooks Class Initialized
+DEBUG - 2016-05-25 17:38:57 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:57 --> Config Class Initialized
+INFO - 2016-05-25 17:38:57 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:57 --> Hooks Class Initialized
+INFO - 2016-05-25 17:38:57 --> URI Class Initialized
+INFO - 2016-05-25 17:38:57 --> Config Class Initialized
+DEBUG - 2016-05-25 17:38:57 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:58 --> Router Class Initialized
+INFO - 2016-05-25 17:38:58 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:58 --> Hooks Class Initialized
+INFO - 2016-05-25 17:38:58 --> URI Class Initialized
+INFO - 2016-05-25 17:38:58 --> Output Class Initialized
+INFO - 2016-05-25 17:38:58 --> Config Class Initialized
+DEBUG - 2016-05-25 17:38:58 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:58 --> Router Class Initialized
+INFO - 2016-05-25 17:38:58 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:58 --> Hooks Class Initialized
+INFO - 2016-05-25 17:38:58 --> Security Class Initialized
+DEBUG - 2016-05-25 17:38:58 --> UTF-8 Support Enabled
+INFO - 2016-05-25 17:38:58 --> URI Class Initialized
+INFO - 2016-05-25 17:38:58 --> Output Class Initialized
+DEBUG - 2016-05-25 17:38:58 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:38:58 --> Utf8 Class Initialized
+INFO - 2016-05-25 17:38:58 --> Router Class Initialized
+INFO - 2016-05-25 17:38:58 --> Security Class Initialized
+INFO - 2016-05-25 17:38:58 --> Input Class Initialized
+INFO - 2016-05-25 17:38:58 --> URI Class Initialized
+INFO - 2016-05-25 17:38:58 --> Output Class Initialized
+INFO - 2016-05-25 17:38:58 --> Language Class Initialized
+DEBUG - 2016-05-25 17:38:58 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:38:58 --> Input Class Initialized
+INFO - 2016-05-25 17:38:58 --> Router Class Initialized
+INFO - 2016-05-25 17:38:58 --> Loader Class Initialized
+INFO - 2016-05-25 17:38:58 --> Security Class Initialized
+INFO - 2016-05-25 17:38:58 --> Language Class Initialized
+INFO - 2016-05-25 17:38:58 --> Output Class Initialized
+DEBUG - 2016-05-25 17:38:58 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:38:58 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:38:58 --> Loader Class Initialized
+INFO - 2016-05-25 17:38:58 --> Security Class Initialized
+INFO - 2016-05-25 17:38:58 --> Input Class Initialized
+INFO - 2016-05-25 17:38:58 --> Helper loaded: date_helper
+DEBUG - 2016-05-25 17:38:58 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-05-25 17:38:58 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:38:58 --> Language Class Initialized
+INFO - 2016-05-25 17:38:58 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:38:58 --> Input Class Initialized
+INFO - 2016-05-25 17:38:58 --> Loader Class Initialized
+INFO - 2016-05-25 17:38:58 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:38:58 --> Language Class Initialized
+INFO - 2016-05-25 17:38:58 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:38:58 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:38:58 --> Helper loaded: url_helper
+INFO - 2016-05-25 17:38:58 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:38:58 --> Loader Class Initialized
+INFO - 2016-05-25 17:38:58 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:38:58 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:38:58 --> Controller Class Initialized
+INFO - 2016-05-25 17:38:58 --> Helper loaded: url_helper
+DEBUG - 2016-05-25 17:38:58 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:38:58 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:38:58 --> Helper loaded: date_helper
+INFO - 2016-05-25 17:38:59 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:38:59 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:38:59 --> Helper loaded: form_helper
+INFO - 2016-05-25 17:38:59 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:38:59 --> Database Driver Class Initialized
+INFO - 2016-05-25 17:38:59 --> Model Class Initialized
+INFO - 2016-05-25 17:38:59 --> Final output sent to browser
+DEBUG - 2016-05-25 17:38:59 --> Total execution time: 1.4837
+INFO - 2016-05-25 17:38:59 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:38:59 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:38:59 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:38:59 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:38:59 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:38:59 --> Model Class Initialized
+INFO - 2016-05-25 17:38:59 --> Final output sent to browser
+DEBUG - 2016-05-25 17:38:59 --> Total execution time: 1.7996
+INFO - 2016-05-25 17:38:59 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:38:59 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:38:59 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:39:00 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:39:00 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:39:00 --> Model Class Initialized
+INFO - 2016-05-25 17:39:00 --> Final output sent to browser
+DEBUG - 2016-05-25 17:39:00 --> Total execution time: 2.2406
+INFO - 2016-05-25 17:39:00 --> Session: Class initialized using 'files' driver.
+INFO - 2016-05-25 17:39:00 --> Controller Class Initialized
+DEBUG - 2016-05-25 17:39:00 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-05-25 17:39:00 --> Helper loaded: inflector_helper
+INFO - 2016-05-25 17:39:00 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-05-25 17:39:00 --> Model Class Initialized
+INFO - 2016-05-25 17:39:00 --> Final output sent to browser
+DEBUG - 2016-05-25 17:39:00 --> Total execution time: 2.4621
