@@ -1040,106 +1040,56 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     if ($scope.isScanningCancel === true) {
                         $scope.isScanningCancel = false;
-                    } else if ($scope.isScanning === "goodPhrase") {
-                        $scope.isScanning = "badPhrase";
-                    } else if ($scope.isScanning === "badPhrase") {
-                        $scope.feedback(1);
                     } else {
-                        if ($scope.currentScanBlock == 1) {
-                            if ($scope.isScanning === "waiting") {
+                        switch ($scope.isScanning) {
+                            case "goodPhrase":
+                                $scope.isScanning = "badPhrase";
+                                break;
+                            case "badPhrase":
+                                $scope.feedback(1);
+                                break;
+                            case "waiting"://MODIF: puede haber más de un caso segun si tiene activado o no las cosas
                                 $scope.isScanning = "prediction";
-                            } else if ($scope.isScanning === "prediction") {
+                                break;
+                            case "prediction": //MODIF: puede haber más de un caso segun si tiene activado o no las cosas
                                 $scope.isScanning = "sentence";
-                            } else if ($scope.isScanning === "sentence") {
+                                break;
+                            case "sentence":
                                 $scope.isScanning = "board";
-                                $scope.currentScanBlock1 = 1;
-                            } else if ($scope.isScanning === "board") {
-                                $scope.currentScanBlock1 = $scope.currentScanBlock1 + 1;
-                                if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
-                                    $scope.isScanning = "nowait";
-                                    $scope.InitScan();
-//                                    alert($scope.currentScanBlock1 + "    " + $scope.maxScanBlock1);
-                                }
-                            }
-                        } else if ($scope.currentScanBlock == 2) {
-                            if ($scope.isScanning === "prediction") {
+                                //Get column or row bla bla bla
+                                break;
+                            case "board":
+                                //Get column or row bla bla bla
+                                break;
+                            case "predictionCell":
                                 $scope.indexScannedCells = $scope.indexScannedCells + 1;
-                                // MODIF: no puede ser mas grande que esta ni tmpoco que el da la cfg
-                                if ($scope.indexScannedCells >= $scope.arrayScannedCells.length) {
-                                    $scope.isScanning = "nowait";
+                                if ($scope.indexScannedCells > $scope.arrayScannedCells.length - 1){
                                     $scope.InitScan();
                                 }
-                            } else if ($scope.isScanning === "home") {
-                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuReadActive == 1) {
-                                    $scope.isScanning = "read";
-                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive == 1) {
-                                    $scope.isScanning = "deletelast";
-                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
-                                    $scope.isScanning = "deleteall";
-                                } else {
-                                    $scope.isScanning = "nowait";
-                                    $scope.InitScan();
+                                break;
+                            case "home":
+                                $scope.isScanning = "read";
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuReadActive === 0) {
+                                    $scope.nextBlockScan();
                                 }
-                            } else if ($scope.isScanning === "read") {
-                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive == 1) {
-                                    $scope.isScanning = "deletelast";
-                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
-                                    $scope.isScanning = "deleteall";
-                                } else {
-                                    $scope.isScanning = "nowait";
-                                    $scope.InitScan();
+                                break;
+                            case "read":
+                                $scope.isScanning = "deletelast";
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive === 0) {
+                                    $scope.nextBlockScan();
                                 }
-                            } else if ($scope.isScanning === "deletelast") {
-                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
-                                    $scope.isScanning = "deleteall";
-                                } else {
-                                    $scope.isScanning = "nowait";
-                                    $scope.InitScan();
+                                break;
+                            case "deletelast":
+                                $scope.isScanning = "deleteall";
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive === 0) {
+                                    $scope.nextBlockScan();
                                 }
-                            } else if ($scope.isScanning === "deleteall") {
-                                $scope.isScanning = "nowait";
-                                $scope.InitScan();
-                            } else if ($scope.isScanning === "board") {
-                                if ($scope.cfgScanningCustomRowCol == 0) {
-                                    if ($scope.currentScanBlock2 !== null) {
-                                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                                            $scope.currentScanBlock2 = null;
-                                        }
-                                        
-                                    } else {
-                                        $scope.isScanning = "nowait";
-                                        $scope.InitScan();
-                                    }
-                                } else {
-                                    $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                                    if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                                        $scope.isScanning = "nowait";
-                                        $scope.InitScan();
-                                    }
-                                    $scope.checkScannedCell();
-                                }
-                            }
-                        }// Only custom scan
-                        else if ($scope.currentScanBlock === 3) {
-                            $scope.indexScannedCells = $scope.indexScannedCells + 1;
-                            if ($scope.indexScannedCells > $scope.arrayScannedCells.length) {
-                                $scope.isScanning = "nowait";
-                                $scope.InitScan();
-                            }
-                            $scope.checkScannedCell();
+                                break;
+                            case "deleteall":
+                                $scope.isScanning = "board";
+                                break;
                         }
                     }
-                }
-            };
-            $scope.checkScannedCell = function () {
-                var picto;
-                if ($scope.cfgScanningCustomRowCol == 1) {
-                    picto = $scope.data[$scope.columns * ($scope.currentScanBlock1 - 1) + $scope.currentScanBlock2 - 1];
-                } else if ($scope.cfgScanningCustomRowCol == 2) {
-                    picto = $scope.data[$scope.columns * ($scope.currentScanBlock2 - 1) + $scope.currentScanBlock1 - 1];
-                } else{
-                    console.log($scope.arrayScannedCells[$scope.indexScannedCells]);
                 }
             };
             //Pass to the next scan level (subgroup)
@@ -1152,87 +1102,50 @@ angular.module('controllers', [])
                     }
                     if ($scope.isScanningCancel === true) {
                         $scope.InitScan();
-                    } else if ($scope.isScanning === "goodPhrase") {
-                        $scope.feedback(1);
-                    } else if ($scope.isScanning === "badPhrase") {
-                        $scope.feedback(0);
                     } else {
-                        if ($scope.currentScanBlock === 1) {
-                            if ($scope.timerScan == 1 && $scope.cfgCancelScanOnOff) {
-                                $scope.isScanningCancel = true;
-                            }
-                            $scope.currentScanBlock = 2;
-                            if ($scope.isScanning === "waiting") {
-                                //this is the only case when currentScanBlock is not increased
-                                $scope.currentScanBlock = 1;
-                                //Get the next block to scan
-                                if ($scope.cfgPredOnOff === '1') {
-                                    $scope.isScanning = "prediction";
-                                } else if ($scope.cfgMenuDeleteLastActive + $scope.cfgMenuDeleteAllActive + $scope.cfgMenuReadActive > 1) {
-                                    $scope.isScanning = "sentence";
-                                } else {
-                                    $scope.isScanning = "board";
-                                }
-                            } else if ($scope.isScanning === "prediction") {
+                        switch ($scope.isScanning) {
+                            case "goodPhrase":
+                                $scope.feedback(1);
+                                break;
+                            case "badPhrase":
+                                $scope.feedback(0);
+                                break;
+                            case "waiting"://MODIF: puede haber más de un caso segun si tiene activado o no las cosas
+                                $scope.isScanning = "prediction";
+                                break;
+                            case "prediction": //MODIF: get bla bla bla
                                 $scope.arrayScannedCells = $scope.recommenderArray;
                                 $scope.indexScannedCells = 0;
-                            } else if ($scope.isScanning === "sentence") {
-                                //Get the next block to scan
-                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuHomeActive == 1) {
-                                    $scope.isScanning = "home";
-                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuReadActive == 1) {
-                                    $scope.isScanning = "read";
-                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive == 1) {
-                                    $scope.isScanning = "deletelast";
-                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
-                                    $scope.isScanning = "deleteall";
-                                } else {
-                                    $scope.InitScan();
+                                $scope.isScanning = "predictionCell";
+                                break;
+                            case "sentence":
+                                $scope.isScanning = "home";
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuHomeActive === 0) {
+                                    $scope.nextBlockScan();
                                 }
-                            } else if ($scope.isScanning === "board") {
-                                $scope.getMaxScanBlock2();
-                            }
-                        } else if ($scope.currentScanBlock === 2) {
-                            //In the level 3 we have select one cell (picto, function, or whatever)
-                            $scope.currentScanBlock = 3;
-                            if ($scope.isScanning === "prediction") {
+                                break;
+                            case "board":
+                                //Get column or row bla bla bla
+                                break;
+                            case "predictionCell":
                                 $scope.addToSentence($scope.arrayScannedCells[$scope.indexScannedCells].pictoid, $scope.arrayScannedCells[$scope.indexScannedCells].imgCell, $scope.arrayScannedCells[$scope.indexScannedCells].pictotext);
                                 $scope.InitScan();
-                            } else if ($scope.isScanning === "home") {
-                                $scope.goPrimaryBoard();
-                                //$scope.InitScan();
-                            } else if ($scope.isScanning === "read") {
+                                break;
+                            case "home":
+                                 $scope.goPrimaryBoard();
+                                break;
+                            case "read":
                                 $scope.generate();
-                                //$scope.InitScan();
-                            } else if ($scope.isScanning === "deletelast") {
+                                $scope.InitScan();
+                                break;
+                            case "deletelast":
                                 $scope.deleteLast();
                                 $scope.InitScan();
-                            } else if ($scope.isScanning === "deleteall") {
+                                break;
+                            case "deleteall":
                                 $scope.deleteAll();
                                 $scope.InitScan();
-                            } else if ($scope.isScanning === "board") {
-                                if ($scope.cfgScanningCustomRowCol != 0) {
-                                    $scope.selectScannedCell();
-                                }//Except if we are in custom scan, in which can exist another block
-                                else {
-                                    if ($scope.timerScan == 1 && $scope.cfgCancelScanOnOff)
-                                        $scope.isScanningCancel = true;
-                                    var url = $scope.baseurl + "Board/getScannedCells";
-                                    var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
-                                    $http.post(url, postdata).success(function (response)
-                                    {
-                                        $scope.arrayScannedCells = response.array;
-                                        $scope.indexScannedCells = 0;
-                                        //There is one cell in that group
-
-                                        if ($scope.arrayScannedCells.length === 1) {
-                                            $scope.selectScannedCell();
-                                        }
-                                    });
-                                }
-                            }
-                        } else if ($scope.currentScanBlock === 3) {
-                            $scope.selectScannedCell();
+                                break;
                         }
                     }
                 }
@@ -1263,7 +1176,7 @@ angular.module('controllers', [])
                     $scope.InitScan();
                 });
             };
-            
+
             $scope.isPictoActive = function (picto) {
                 return (picto.activeCell == 1 || (picto.activeCell == 0 && $scope.inEdit));
             };
@@ -1540,7 +1453,7 @@ angular.module('controllers', [])
             // Change the name board
             $scope.changeNameBoard = function (key, nameboard, boardindex)
             {
-                if(key === 13)
+                if (key === 13)
                 {
                     var postdata = {Name: nameboard, ID: boardindex};
                     var URL = $scope.baseurl + "Board/modifyNameboard";
@@ -2013,7 +1926,7 @@ angular.module('controllers', [])
              */
             $scope.searchDone = function (name, Searchtype)
             {
-                
+
                 var URL = "";
                 var postdata = {id: name};
                 //Radio button function parameter, to set search type
@@ -2050,7 +1963,9 @@ angular.module('controllers', [])
             $scope.search = function (name, Searchtype)
             {
                 $timeout.cancel($scope.searchTimeout);
-                $scope.searchTimeout = $timeout(function(){$scope.searchDone(name, Searchtype)}, 500);
+                $scope.searchTimeout = $timeout(function () {
+                    $scope.searchDone(name, Searchtype)
+                }, 500);
             };
             //get all the photos attached to the pictos
             $scope.searchFoto = function (name)
