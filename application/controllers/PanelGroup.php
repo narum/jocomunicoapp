@@ -157,32 +157,38 @@ class PanelGroup extends REST_Controller {
     public function copyGroupBoard_post() {
         //MODIF: 2 es el panel default
         $idusu = $this->session->userdata('idusu');
-        $primaryBoard = $this->BoardInterface->getInfoGroupBoard(2);
+        $board = $this->BoardInterface->getPrimaryGroupBoard();
+        if ($board == null) {
+            $primaryBoard = $this->BoardInterface->getInfoGroupBoard(2);
 
-        $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
-        $boards = $this->BoardInterface->getBoards(2);
-        //If we want to allow the user copy group boards this line have to be removed
-        $this->panelInterface->setPrimaryGroupBoard($IDGboard, $idusu);
-        $srcGroupBoard = 2;
-        $sameGroupBoard = 1;
-        for ($i = 0; $i < count($boards); $i++) {
-            $idSrc = $boards[$i]->ID_Board;
+            $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
+            $boards = $this->BoardInterface->getBoards(2);
+            //If we want to allow the user copy group boards this line have to be removed
+            $this->panelInterface->setPrimaryGroupBoard($IDGboard, $idusu);
+            $srcGroupBoard = 2;
+            $sameGroupBoard = 1;
+            for ($i = 0; $i < count($boards); $i++) {
+                $idSrc = $boards[$i]->ID_Board;
 
-            $name = $boards[$i]->Bname;
-            $width = $boards[$i]->width;
-            $height = $boards[$i]->height;
-            $autoReturn = $boards[$i]->autoReturn;
-            $autoReadSentence = $boards[$i]->autoReadSentence;
+                $name = $boards[$i]->Bname;
+                $width = $boards[$i]->width;
+                $height = $boards[$i]->height;
+                $autoReturn = $boards[$i]->autoReturn;
+                $autoReadSentence = $boards[$i]->autoReadSentence;
 
-            $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
-            if($boards[$i]->primaryBoard){
-                $this->BoardInterface->changePrimaryBoard($idDst, $IDGboard);
-                $idToShow = $idDst;
+                $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
+                if ($boards[$i]->primaryBoard) {
+                    $this->BoardInterface->changePrimaryBoard($idDst, $IDGboard);
+                    $idToShow = $idDst;
+                }
+                $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
             }
-            $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
-        }
 
-        $this->BoardInterface->commitTrans();
+            $this->BoardInterface->commitTrans();
+        }else{
+            $primaryUserBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
+            $idToShow = $primaryUserBoard[0]->ID_Board;
+        }
         $response = [
             'idBoard' => $idToShow
         ];
