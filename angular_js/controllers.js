@@ -2108,7 +2108,7 @@ angular.module('controllers', [])
                 $scope.myFile = document.getElementById('file-input').files;
                 $scope.uploading = true;
                 var i;
-                var uploadUrl = $scope.baseurl + "/ImgUploader/upload";
+                var uploadUrl = $scope.baseurl + "ImgUploader/upload";
                 var fd = new FormData();
                 for (i = 0; i < $scope.myFile.length; i++) {
                     fd.append('file' + i, $scope.myFile[i]);
