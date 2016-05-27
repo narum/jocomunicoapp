@@ -39,7 +39,9 @@ class ImgUploader extends REST_Controller {
                 ];
                 $this->response($response, 300);
             }
-            if (file_exists($target_dir . $imgObject['md5Name'])) {
+            $handle = fopen($target_dir . $imgObject['md5Name'], "r");
+            if (is_resource($handle)) {
+                fclose($handle);
                 //MODIF: lanzar error 
                 $errorText = 'Ya existe una imagen con ese nombre.';
                 $response = [
@@ -67,15 +69,15 @@ class ImgUploader extends REST_Controller {
     }
 
     function Rename_Img($string) {
+                
         $idusu = $this->session->userdata('idusu');
-        $id = $this->ImgUploader_model->getCountIdImgUsu($idusu);
-        $fecha = new DateTime();
+        $fecha = microtime();
         //MODIF: Pasar superuser no user
-        $name = $string;
-        $namelen = strlen($name);
-        $pointpos = strrpos($name, '.');
-        $ext = substr($name, $pointpos, $namelen);
-        $name = "idi" . $id . "-idu" . $idusu . "-" . $fecha->getTimestamp();
+        $stringlen = strlen($string);
+        $pointpos = strrpos($string, '.');
+                
+        $ext = substr($string, $pointpos, $stringlen);
+        $name = "idu" . $idusu . "-" . $string. "-" . $fecha;
         $name = md5($name . $idusu);
         $md5Name = $name . $ext;
         $img = ['md5Name' => $md5Name,
