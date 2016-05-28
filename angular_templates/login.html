@@ -1,9 +1,23 @@
 <link rel="stylesheet" type="text/css" href="css/login.css">
 <link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
-<style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.FonsRegistre}}') no-repeat center center fixed;
+<style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;
     -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
-<div class="row barraSuperior"></div>
+<!--menu superior dropdown-->
+    <div id="dropdownMenuButton" ng-init="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton1.png';dropdownMenuOpen=false" ng-mouseover="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton2.png'" ng-mouseout="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton1.png'">
+        <input type="image" class="img-dropdownMenuButton" ng-src="{{imgMenuButton}}" ng-click="dropdownMenuOpen=!dropdownMenuOpen">
+    </div>
+    <div class="dropdownMenuBar">
+        <div class="menuBarAnimation" ng-class="{menuBarAnimationOpened: dropdownMenuOpen}"></div>
+    </div>
+
+    <div class="row buttonsMenuBar" ng-class="{buttonsMenuBarOpened: dropdownMenuOpen}">
+        <div class="pull-right marginButtonMenuBar" ng-repeat="button in dropdownMenuBar" ng-init="button.icon=button.iconInitial">
+            <input type="radio" id="{{button.name}}" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarValue" value="{{button.value}}" ng-click="$root.dropdownMenuBarValue = button.value; go(button.href)" ng-show="false">
+            <label for="{{button.name}}" ng-mouseover="button.icon=button.iconHover" ng-mouseout="button.icon=button.iconInitial"><img class="icondropdownMenuBar" ng-src="{{button.icon}}" ng-show="!(dropdownMenuBarValue=='{{button.value}}')"/><img class="icondropdownMenuBar" ng-src="{{button.iconSelected}}" ng-show="dropdownMenuBarValue=='{{button.value}}'"/></br>{{button.name}}</label>
+        </div>
+    </div>
+
 <div class="container container-table">
     <div class="row vertical-center-row">
         <form name="loginForm">

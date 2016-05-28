@@ -2,7 +2,7 @@ angular.module('controllers', [])
 
 // Controlador del Login
 
-        .controller('LoginCtrl', function ($scope, Resources, $location, AuthService) {
+        .controller('LoginCtrl', function ($scope, Resources, $location, AuthService, $rootScope) {
             //Definición de variables
             $scope.viewActived = false; // para activar el gif de loading...
             $scope.view2 = false;// vista de recuperación de contraseña
@@ -12,13 +12,24 @@ angular.module('controllers', [])
 
             //Imagenes
             $scope.img = [];
-            $scope.img.FonsRegistre = '/img/FonsRegistre.png';
+            $scope.img.fons = '/img/srcWeb/fons.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             $scope.img.clau = '/img/srcWeb/Login/clau.png';
             $scope.img.fletxaLogin2 = '/img/srcWeb/Login/fletxaLogin2.png';
             $scope.img.BotoEntra = '/img/srcWeb/Login/BotoEntra.png';
             $scope.img.BotoEntra2 = '/img/srcWeb/Login/BotoEntra2.png';
+            
+            //Dropdown Menu Bar
+            $rootScope.dropdownMenuBar = [];
+            $rootScope.dropdownMenuBar.push({name: 'Inici', href: '/register', value:'inici', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png'});
+            $rootScope.dropdownMenuBar.push({name: 'FAQ', href: '', value:'faq', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png'});
+            $rootScope.dropdownMenuBar.push({name: 'Tutorial', href: '', value:'tutorial', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png'});
+            $rootScope.dropdownMenuBarValue = 'faq';
+            $rootScope.go = function(path){
+                $location.path(path);
+            };
+            
             //Pedimos el contenido en los idiomas disponibles.
             Resources.register.get({'section': 'login'}, {'funct': "allContent"}).$promise
                     .then(function (results) {
@@ -111,7 +122,7 @@ angular.module('controllers', [])
 
             //Imagenes
             $scope.img = [];
-            $scope.img.FonsRegistre = '/img/FonsRegistre.png';
+            $scope.img.fons = '/img/srcWeb/fons.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             $scope.img.yo_3 = '/img/icons/yo_3.png';
@@ -389,7 +400,7 @@ angular.module('controllers', [])
             $scope.viewActived = false; // para activar el gif de loading...
             //Imagenes
             $scope.img = [];
-            $scope.img.FonsRegistre = '/img/FonsRegistre.png';
+            $scope.img.fons = '/img/srcWeb/fons.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             //Pedimos los idiomas disponibles
@@ -445,7 +456,7 @@ angular.module('controllers', [])
 
             //Imagenes
             $scope.img = [];
-            $scope.img.FonsRegistre = '/img/FonsRegistre.png';
+            $scope.img.fons = '/img/srcWeb/fons.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             
@@ -558,7 +569,7 @@ angular.module('controllers', [])
             var count2 = 0;
             //Imagenes
             $scope.img = [];
-            $scope.img.FonsRegistre = '/img/FonsRegistre.png';
+            $scope.img.fons = '/img/srcWeb/fons.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             $scope.img.Patterns1_12 = '/img/srcWeb/Patterns1-12.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';

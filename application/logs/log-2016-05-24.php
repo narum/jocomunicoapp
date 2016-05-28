@@ -18772,7 +18772,7 @@ INFO - 2016-05-24 17:01:11 --> Security Class Initialized
 INFO - 2016-05-24 17:01:11 --> Language Class Initialized
 INFO - 2016-05-24 17:01:11 --> Security Class Initialized
 DEBUG - 2016-05-24 17:01:11 --> Global POST, GET and COOKIE data sanitized
-ERROR - 2016-05-24 17:01:11 --> 404 Page Not Found: %7B%7BimgFonsRegistre%7D%7D/index
+ERROR - 2016-05-24 17:01:11 --> 404 Page Not Found: %7B%7Bimgfons%7D%7D/index
 INFO - 2016-05-24 17:01:11 --> Language Class Initialized
 DEBUG - 2016-05-24 17:01:11 --> Global POST, GET and COOKIE data sanitized
 DEBUG - 2016-05-24 17:01:11 --> Global POST, GET and COOKIE data sanitized
@@ -18945,7 +18945,7 @@ INFO - 2016-05-24 17:01:46 --> Language Class Initialized
 INFO - 2016-05-24 17:01:46 --> Input Class Initialized
 INFO - 2016-05-24 17:01:46 --> Input Class Initialized
 ERROR - 2016-05-24 17:01:46 --> 404 Page Not Found: %7B%7BimgPatterns1_12%7D%7D/index
-ERROR - 2016-05-24 17:01:46 --> 404 Page Not Found: %7B%7BimgFonsRegistre%7D%7D/index
+ERROR - 2016-05-24 17:01:46 --> 404 Page Not Found: %7B%7Bimgfons%7D%7D/index
 INFO - 2016-05-24 17:01:46 --> Language Class Initialized
 INFO - 2016-05-24 17:01:46 --> Language Class Initialized
 INFO - 2016-05-24 17:01:46 --> Language Class Initialized
