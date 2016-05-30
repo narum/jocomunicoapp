@@ -774,7 +774,6 @@ class Myaudio {
 
                 // Path al fitxer on guardarem les veus
                 $wavfile = "C:\\xampp\htdocs\mp3\\".$filename.".mp3";
-                echo $wavfile;
                 
                 // hem de triar la veu que vol l'usuari (trobada anteriorment)
                 $msVoice->Voice = $chosenVoice;
