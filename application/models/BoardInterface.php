@@ -724,11 +724,11 @@ class BoardInterface extends CI_Model {
         $this->db->join('r_boardcell', 'r_boardcell.ID_RCell = cell.ID_Cell', 'left');
         $query = $this->db->get('cell');
         if($sameGroupBoard === 1){    
-            $row->boardLink = "NULL";
+            $row->boardLink = null;
         }
         foreach ($query->result() as $row) {
             if($sameGroupBoard === 0){    
-                $row->boardLink = "NULL";
+                $row->boardLink = null;
             }
             $data = array(
                 'isFixedInGroupBoards' => $row->isFixedInGroupBoards,
