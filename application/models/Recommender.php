@@ -1262,6 +1262,21 @@ class Recommender extends CI_Model {
         
         return $VF;
     }
+    
+    private function delfreqUsuariX1() {
+        $this->db->where('ID_PSUPUser', $this->session->userdata('idusu'));                             
+        $this->db->delete('p_statsuserpicto');
+    }
+    
+    public function delfreqUsuariX2() {
+        $this->db->where('ID_PSUP2User', $this->session->userdata('idusu'));                             
+        $this->db->delete('p_statsuserpictox2');
+    }
+    
+    public function delfreqUsuariX3() {
+        $this->db->where('ID_PSUP3User', $this->session->userdata('idusu'));                             
+        $this->db->delete('p_statsuserpictox3');
+    }
 }
 
 ?>
