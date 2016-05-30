@@ -543,7 +543,8 @@ class Board extends REST_Controller {
         $this->BoardInterface->updateDataCell($id, $cell[0]->ID_RCell);
 
         $data = $this->BoardInterface->getCellsBoard($idboard);
-
+        $idusu = $this->session->userdata('idusu');
+        $this->Lexicon->addWordStatsX1($id, $idusu, true);
         $response = [
             'data' => $data
         ];
@@ -824,8 +825,8 @@ class Board extends REST_Controller {
         $name = $request->CreateBoardName;
         $width = $request->width;
         $height = $request->height;
-        $autoReturn = $request->autoreturn;
-        $autoReadSentence = $request->autoread;
+        $autoReturn = $request->autoreturn ? '1': '0';
+        $autoReadSentence = $request->autoread ? '1': '0';
 
         $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
         $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
@@ -861,10 +862,20 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->idboard;
-
-        $max = $this->BoardInterface->getMaxScanBlock1($id);
+        $type = $request->type;
+        switch ($type){
+            case 0:
+                $max = $this->BoardInterface->getMaxScanBlock1($id);
+                break;
+            case 1:
+                $max = $this->BoardInterface->getRows($id);
+                break;
+            case 2:
+                $max = $this->BoardInterface->getColumns($id);
+                break;
+        }
         $response = [
-            'max' => $max[0]->customScanBlock1
+            'max' => $max
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
@@ -874,12 +885,24 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->idboard;
+        $type = $request->type;
         $scanGroup = $request->scanGroup;
-
-        $max = $this->BoardInterface->getMaxScanBlock2($id, $scanGroup);
+        
+        switch ($type){
+            case 0:
+                $max = $this->BoardInterface->getMaxScanBlock2($id, $scanGroup);
+                break;
+            case 1:
+                $max = $this->BoardInterface->getColumns($id);
+                break;
+            case 2:
+                $max = $this->BoardInterface->getRows($id);
+                break;
+        }
+        
         if ($max != null) {
             $response = [
-                'max' => $max[0]->customScanBlock2
+                'max' => $max
             ];
         } else {
             $response = [

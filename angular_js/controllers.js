@@ -998,131 +998,96 @@ angular.module('controllers', [])
                 }
             };
 
-            // Get the number of scan blocks
+            // Get the number of scan blocks 
             $scope.getMaxScanBlock1 = function ()
             {
-                if ($scope.cfgScanningCustomRowCol == 1) {
-                    $scope.maxScanBlock1 = $scope.rows;
-                } else if ($scope.cfgScanningCustomRowCol == 2) {
-                    $scope.maxScanBlock1 = $scope.columns;
-                } else if ($scope.cfgScanningCustomRowCol == 0) {
-                    var url = $scope.baseurl + "Board/getMaxScanBlock1";
-                    var postdata = {idboard: $scope.idboard};
+                var url = $scope.baseurl + "Board/getMaxScanBlock1";
+                var postdata = {idboard: $scope.idboard, type: $scope.cfgScanningCustomRowCol};
 
-                    $http.post(url, postdata).success(function (response)
-                    {
-                        $scope.maxScanBlock1 = response.max;
-                    });
-                }
+                $http.post(url, postdata).success(function (response)
+                {
+                    $scope.maxScanBlock1 = response.max;
+                });
+
             };
             // Get the number of level 2 scan blocks
             $scope.getMaxScanBlock2 = function ()
             {
                 $scope.currentScanBlock2 = 1;
-                if ($scope.cfgScanningCustomRowCol == 1) {
-                    $scope.maxScanBlock2 = $scope.columns;
-                } else if ($scope.cfgScanningCustomRowCol == 2) {
-                    $scope.maxScanBlock2 = $scope.rows;
-                } else if ($scope.cfgScanningCustomRowCol == 0) {
-                    var url = $scope.baseurl + "Board/getMaxScanBlock2";
-                    var postdata = {idboard: $scope.idboard, scanGroup: $scope.currentScanBlock1};
 
-                    $http.post(url, postdata).success(function (response)
-                    {
-                        $scope.maxScanBlock2 = response.max;
-                        // If there is no subgroup passes to the next scan level (3)
-                        if ($scope.maxScanBlock2 === null) {
-                            $scope.currentScanBlock2 = null;
-                            $scope.isScanningCancel = false;
-                            $scope.selectBlockScan();
-                        }
-                        // There is no group selected
-                        if ($scope.maxScanBlock2 === "No group found") {
-                            $scope.isScanning = "nowait";
-                            $scope.InitScan();
-                        }
-                    });
-                }
+                var url = $scope.baseurl + "Board/getMaxScanBlock2";
+                var postdata = {idboard: $scope.idboard, type: $scope.cfgScanningCustomRowCol, scanGroup: $scope.currentScanBlock1};
+
+                $http.post(url, postdata).success(function (response)
+                {
+                    $scope.maxScanBlock2 = response.max;
+                    // If there is no subgroup passes to the next scan level (3)
+                    if ($scope.maxScanBlock2 === null) {
+                        $scope.currentScanBlock2 = null;
+                        $scope.isScanningCancel = false;
+                        $scope.selectBlockScan();
+                    }
+                    // There is no group selected
+                    if ($scope.maxScanBlock2 === "No group found") {
+                        $scope.isScanning = "nowait";
+                        $scope.InitScan();
+                    }
+                });
+
             };
             // Change teh current scan block
             $scope.nextBlockScan = function () {
                 if ($scope.inScan) {
                     if ($scope.isScanningCancel === true) {
                         $scope.isScanningCancel = false;
-                    } else if ($scope.isScanning === "goodPhrase") {
-                        $scope.isScanning = "badPhrase";
-                    } else if ($scope.isScanning === "badPhrase") {
-                        $scope.feedback(1);
                     } else {
-                        if ($scope.currentScanBlock == 1) {
-                            if ($scope.isScanning === "waiting") {
+                        switch ($scope.isScanning) {
+                            case "goodPhrase":
+                                $scope.isScanning = "badPhrase";
+                                break;
+                            case "badPhrase":
+                                $scope.feedback(1);
+                                break;
+                            case "waiting"://MODIF: puede haber más de un caso segun si tiene activado o no las cosas
                                 $scope.isScanning = "prediction";
-                            } else if ($scope.isScanning === "prediction") {
+                                break;
+                            case "prediction": //MODIF: puede haber más de un caso segun si tiene activado o no las cosas
                                 $scope.isScanning = "sentence";
-                            } else if ($scope.isScanning === "sentence") {
+                                break;
+                            case "sentence":
                                 $scope.isScanning = "board";
-                                $scope.currentScanBlock1 = 1;
-                            } else if ($scope.isScanning === "board") {
-                                $scope.currentScanBlock1 = $scope.currentScanBlock1 + 1;
-                                if ($scope.currentScanBlock1 > $scope.maxScanBlock1) {
-                                    $scope.isScanning = "nowait";
-                                    $scope.InitScan();
-//                                    alert($scope.currentScanBlock1 + "    " + $scope.maxScanBlock1);
-                                }
-                            }
-                        } else if ($scope.currentScanBlock == 2) {
-                            if ($scope.isScanning === "prediction") {
+                                //Get column or row bla bla bla
+                                break;
+                            case "board":
+                                //Get column or row bla bla bla
+                                break;
+                            case "predictionCell":
                                 $scope.indexScannedCells = $scope.indexScannedCells + 1;
-                                // MODIF: no puede ser mas grande que esta ni tmpoco que el da la cfg
-                                if ($scope.indexScannedCells >= $scope.arrayScannedCells.length) {
-                                    $scope.isScanning = "nowait";
+                                if ($scope.indexScannedCells > $scope.arrayScannedCells.length - 1){
                                     $scope.InitScan();
                                 }
-                            } else if ($scope.isScanning === "read") {
-                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive == 1) {
-                                    $scope.isScanning = "deletelast";
-                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
-                                    $scope.isScanning = "deleteall";
-                                } else {
-                                    $scope.isScanning = "nowait";
-                                    $scope.InitScan();
+                                break;
+                            case "home":
+                                $scope.isScanning = "read";
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuReadActive === 0) {
+                                    $scope.nextBlockScan();
                                 }
-                            } else if ($scope.isScanning === "deletelast") {
-                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
-                                    $scope.isScanning = "deleteall";
-                                } else {
-                                    $scope.isScanning = "nowait";
-                                    $scope.InitScan();
+                                break;
+                            case "read":
+                                $scope.isScanning = "deletelast";
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive === 0) {
+                                    $scope.nextBlockScan();
                                 }
-                            } else if ($scope.isScanning === "deleteall") {
-                                $scope.isScanning = "nowait";
-                                $scope.InitScan();
-                            } else if ($scope.isScanning === "board") {
-                                if ($scope.cfgScanningCustomRowCol == 0) {
-                                    if ($scope.currentScanBlock2 !== null) {
-                                        $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                                        if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                                            $scope.currentScanBlock2 = null;
-                                        }
-                                    } else {
-                                        $scope.isScanning = "nowait";
-                                        $scope.InitScan();
-                                    }
-                                } else {
-                                    $scope.currentScanBlock2 = $scope.currentScanBlock2 + 1;
-                                    if ($scope.currentScanBlock2 > $scope.maxScanBlock2) {
-                                        $scope.isScanning = "nowait";
-                                        $scope.InitScan();
-                                    }
+                                break;
+                            case "deletelast":
+                                $scope.isScanning = "deleteall";
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive === 0) {
+                                    $scope.nextBlockScan();
                                 }
-                            }
-                        }// Only custom scan
-                        else if ($scope.currentScanBlock === 3) {
-                            $scope.indexScannedCells = $scope.indexScannedCells + 1;
-                            if ($scope.indexScannedCells > $scope.arrayScannedCells.length) {
-                                $scope.isScanning = "nowait";
-                                $scope.InitScan();
-                            }
+                                break;
+                            case "deleteall":
+                                $scope.isScanning = "board";
+                                break;
                         }
                     }
                 }
@@ -1137,82 +1102,50 @@ angular.module('controllers', [])
                     }
                     if ($scope.isScanningCancel === true) {
                         $scope.InitScan();
-                    } else if ($scope.isScanning === "goodPhrase") {
-                        $scope.feedback(1);
-                    } else if ($scope.isScanning === "badPhrase") {
-                        $scope.feedback(0);
                     } else {
-                        if ($scope.currentScanBlock === 1) {
-                            if ($scope.timerScan == 1 && $scope.cfgCancelScanOnOff) {
-                                $scope.isScanningCancel = true;
-                            }
-                            $scope.currentScanBlock = 2;
-                            if ($scope.isScanning === "waiting") {
-                                //this is the only case when currentScanBlock is not increased
-                                $scope.currentScanBlock = 1;
-                                //Get the next block to scan
-                                if ($scope.cfgPredOnOff === '1') {
-                                    $scope.isScanning = "prediction";
-                                } else if ($scope.cfgMenuDeleteLastActive + $scope.cfgMenuDeleteAllActive + $scope.cfgMenuReadActive > 1) {
-                                    $scope.isScanning = "sentence";
-                                } else {
-                                    $scope.isScanning = "board";
-                                }
-                            } else if ($scope.isScanning === "prediction") {
+                        switch ($scope.isScanning) {
+                            case "goodPhrase":
+                                $scope.feedback(1);
+                                break;
+                            case "badPhrase":
+                                $scope.feedback(0);
+                                break;
+                            case "waiting"://MODIF: puede haber más de un caso segun si tiene activado o no las cosas
+                                $scope.isScanning = "prediction";
+                                break;
+                            case "prediction": //MODIF: get bla bla bla
                                 $scope.arrayScannedCells = $scope.recommenderArray;
                                 $scope.indexScannedCells = 0;
-                            } else if ($scope.isScanning === "sentence") {
-                                //Get the next block to scan
-                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuReadActive == 1) {
-                                    $scope.isScanning = "read";
-                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive == 1) {
-                                    $scope.isScanning = "deletelast";
-                                } else if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive == 1) {
-                                    $scope.isScanning = "deleteall";
-                                } else {
-                                    $scope.InitScan();
+                                $scope.isScanning = "predictionCell";
+                                break;
+                            case "sentence":
+                                $scope.isScanning = "home";
+                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuHomeActive === 0) {
+                                    $scope.nextBlockScan();
                                 }
-                            } else if ($scope.isScanning === "board") {
-                                $scope.getMaxScanBlock2();
-                            }
-                        } else if ($scope.currentScanBlock === 2) {
-                            //In the level 3 we have select one cell (picto, function, or whatever)
-                            $scope.currentScanBlock = 3;
-                            if ($scope.isScanning === "prediction") {
+                                break;
+                            case "board":
+                                //Get column or row bla bla bla
+                                break;
+                            case "predictionCell":
                                 $scope.addToSentence($scope.arrayScannedCells[$scope.indexScannedCells].pictoid, $scope.arrayScannedCells[$scope.indexScannedCells].imgCell, $scope.arrayScannedCells[$scope.indexScannedCells].pictotext);
                                 $scope.InitScan();
-                            } else if ($scope.isScanning === "read") {
+                                break;
+                            case "home":
+                                 $scope.goPrimaryBoard();
+                                break;
+                            case "read":
                                 $scope.generate();
-                                //$scope.InitScan();
-                            } else if ($scope.isScanning === "deletelast") {
+                                $scope.InitScan();
+                                break;
+                            case "deletelast":
                                 $scope.deleteLast();
                                 $scope.InitScan();
-                            } else if ($scope.isScanning === "deleteall") {
+                                break;
+                            case "deleteall":
                                 $scope.deleteAll();
                                 $scope.InitScan();
-                            } else if ($scope.isScanning === "board") {
-                                if ($scope.cfgScanningCustomRowCol != 0) {
-                                    $scope.selectScannedCell();
-                                }//Except if we are in custom scan, in which can exist another block
-                                else {
-                                    if ($scope.timerScan == 1 && $scope.cfgCancelScanOnOff)
-                                        $scope.isScanningCancel = true;
-                                    var url = $scope.baseurl + "Board/getScannedCells";
-                                    var postdata = {idboard: $scope.idboard, numCustomScanBlock1: $scope.currentScanBlock1, numCustomScanBlock2: $scope.currentScanBlock2};
-                                    $http.post(url, postdata).success(function (response)
-                                    {
-                                        $scope.arrayScannedCells = response.array;
-                                        $scope.indexScannedCells = 0;
-                                        //There is one cell in that group
-
-                                        if ($scope.arrayScannedCells.length === 1) {
-                                            $scope.selectScannedCell();
-                                        }
-                                    });
-                                }
-                            }
-                        } else if ($scope.currentScanBlock === 3) {
-                            $scope.selectScannedCell();
+                                break;
                         }
                     }
                 }
@@ -1243,6 +1176,7 @@ angular.module('controllers', [])
                     $scope.InitScan();
                 });
             };
+
             $scope.isPictoActive = function (picto) {
                 return (picto.activeCell == 1 || (picto.activeCell == 0 && $scope.inEdit));
             };
@@ -1293,11 +1227,12 @@ angular.module('controllers', [])
                     }
                 }
                 // Sentece bar configuration
+                $scope.cfgMenuHomeActive = userConfig.cfgMenuHomeActive;
                 $scope.cfgMenuReadActive = userConfig.cfgMenuReadActive;
                 $scope.cfgMenuDeleteLastActive = userConfig.cfgMenuDeleteLastActive;
                 $scope.cfgMenuDeleteAllActive = userConfig.cfgMenuDeleteAllActive;
                 $scope.cfgSentenceBarUpDown = userConfig.cfgSentenceBarUpDown;
-                $scope.pictoBarWidth = 12 - $scope.cfgMenuReadActive - $scope.cfgMenuDeleteLastActive - $scope.cfgMenuDeleteAllActive;
+                $scope.pictoBarWidth = 12 - $scope.cfgMenuHomeActive - $scope.cfgMenuReadActive - $scope.cfgMenuDeleteLastActive - $scope.cfgMenuDeleteAllActive;
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
                 $scope.longclick = userConfig.cfgScanningAutoOnOff == 0 ? true : false;
                 $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
@@ -1416,6 +1351,7 @@ angular.module('controllers', [])
              */
             $scope.edit = function ()
             {
+                $scope.uploading = false;
                 $scope.evt = {nameboard: "", altura: 1, amplada: 1, autoreturn: false, autoread: false};
                 $scope.colorPaintingSelected = "ffffff";
                 $scope.painting = false;
@@ -1430,6 +1366,7 @@ angular.module('controllers', [])
                 $scope.userViewHeight = 85;
                 $scope.searchFolderHeight = 13;
                 $scope.typeSearh = "picto";
+                $scope.typeImgEditSearch = "Arasaac";
 
 
                 if (window.innerWidth < 1050) {
@@ -1445,16 +1382,18 @@ angular.module('controllers', [])
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.evt.nameboard = response.name;
-                    $scope.evt.altura = $scope.range(20)[response.row - 1].valueOf();
-                    $scope.evt.amplada = $scope.range(20)[response.col - 1].valueOf();
+                    $scope.evt.altura = $scope.range(12)[response.row - 1].valueOf();
+                    $scope.evt.amplada = $scope.range(12)[response.col - 1].valueOf();
                     $scope.evt.autoreturn = (response.autoReturn === '1' ? true : false);
                     $scope.evt.autoread = (response.autoRead === '1' ? true : false);
 
                 });
             };
             $scope.changeEditSearch = function () {
-                if($scope.typeSearh === "picto") $scope.typeSearh = "img";
-                else $scope.typeSearh = "picto";
+                if ($scope.typeSearh === "picto")
+                    $scope.typeSearh = "img";
+                else
+                    $scope.typeSearh = "picto";
 
             };
             // Gets all the boards in the group and select the primary
@@ -1478,7 +1417,7 @@ angular.module('controllers', [])
                 $http.post(URL, postdata).
                         success(function ()
                         {
-                            $scope.edit();
+
                         });
             };
             //Change the autoReadSentence poperty in the database
@@ -1514,7 +1453,7 @@ angular.module('controllers', [])
             // Change the name board
             $scope.changeNameBoard = function (key, nameboard, boardindex)
             {
-                if(key === 13)
+                if (key === 13)
                 {
                     var postdata = {Name: nameboard, ID: boardindex};
                     var URL = $scope.baseurl + "Board/modifyNameboard";
@@ -1689,7 +1628,12 @@ angular.module('controllers', [])
                     }, $scope.cfgTimeOver);
                 } else if (type === 2)
                 {
-                    if (object === 'generate')
+                    if (object === 'home')
+                    {
+                        $scope.OverAutoClick = $timeout(function () {
+                            $scope.goPrimaryBoard();
+                        }, $scope.cfgTimeOver);
+                    } else if (object === 'generate')
                     {
                         //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
@@ -1818,7 +1762,7 @@ angular.module('controllers', [])
                     $scope.tense = response.tense;
                     $scope.tipusfrase = response.tipusfrase;
                     $scope.negativa = response.negativa;
-                    if (response.control !== "") {
+                    if ((response.control !== "") && (response.control !== "home")) {
                         var url = $scope.baseurl + "Board/" + response.control;
                         var postdata = {tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
@@ -1827,6 +1771,8 @@ angular.module('controllers', [])
                             $scope.dataTemp = response.data;
                             $scope.info = response.info;
                         });
+                    } else if ((response.control === "home")) {
+                        $scope.config();
                     }
                     $scope.autoReturn();
                     $scope.autoRead();
@@ -1858,6 +1804,10 @@ angular.module('controllers', [])
                     $scope.info = "";
                     $scope.getPred();
                 });
+            };
+
+            $scope.goPrimaryBoard = function () {
+                $scope.config();
             };
             /*
              * Generate the current senence under contruction.
@@ -1952,7 +1902,7 @@ angular.module('controllers', [])
             /*
              * Return uploaded images from database.
              */
-            $scope.searchImg = function (name, typeImgEditSearch){
+            $scope.searchImg = function (name, typeImgEditSearch) {
                 var URL = "";
                 switch (typeImgEditSearch)
                 {
@@ -1976,7 +1926,7 @@ angular.module('controllers', [])
              */
             $scope.searchDone = function (name, Searchtype)
             {
-                
+
                 var URL = "";
                 var postdata = {id: name};
                 //Radio button function parameter, to set search type
@@ -2013,19 +1963,56 @@ angular.module('controllers', [])
             $scope.search = function (name, Searchtype)
             {
                 $timeout.cancel($scope.searchTimeout);
-                $scope.searchTimeout = $timeout(function(){$scope.searchDone(name, Searchtype);},500);
+                $scope.searchTimeout = $timeout(function () {
+                    $scope.searchDone(name, Searchtype)
+                }, 500);
+            };
+            //get all the photos attached to the pictos
+            $scope.searchFoto = function (name)
+            {
+                var URL = $scope.baseurl + "SearchWord/getDBAll";
+                var postdata = {id: name};
+                //Request via post to controller search data from database
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.allImg = response.data;
+                        });
+            };
+            // Upload and resize the image and the, call savedata()
+            $scope.uploadFile = function () {
+                $scope.myFile = document.getElementById('file-input').files;
+                $scope.uploading = true;
+                var i;
+                console.log('file is ');
+                console.log($scope.myFile);
+                console.log($scope.myFile.length);
+                var uploadUrl = $scope.baseurl + "/ImgUploader/upload";
+                var fd = new FormData();
+                for (i = 0; i < $scope.myFile.length; i++) {
+                    fd.append('file' + i, $scope.myFile[i]);
+                }
+                $http.post(uploadUrl, fd, {
+                    headers: {'Content-Type': undefined}
+                })
+                        .success(function (response) {
+                            $scope.uploading = false;
+                            //alert("asd");
+                        })
+                        .error(function (response) {
+                            //alert(response.errorText);
+                        });
             };
 
             
             /*
              * PosInBoard is the element over we drop the "draggable data". Data contains the info we drag 
-            */
+             */
             $scope.onDropSwap = function (posInBoard, data, evt) {
                 var URL = "";
                 //Significa que no hay que hacer swap, solo cambiar la imagen
                 if (data.imgPath) {
                     var postdata = {pos: posInBoard, idboard: $scope.idboard, imgCell: data.imgPath};
-                    console.log(postdata);
                     URL = $scope.baseurl + "Board/changeImgCell";
                 }//Significa que no hay que hacer swap, solo medio swap...
                 else if (data.idpicto) {
@@ -2094,8 +2081,8 @@ angular.module('controllers', [])
                             {
 
                                 $scope.CreateBoardData = {CreateBoardName: '', height: response.defHeight.toString(), width: response.defWidth.toString(), idGroupBoard: response.ID_GB};
-                                $scope.CreateBoardData.height = $scope.range(20)[response.defHeight - 1].valueOf();
-                                $scope.CreateBoardData.width = $scope.range(20)[response.defWidth - 1].valueOf();
+                                $scope.CreateBoardData.height = $scope.range(12)[response.defHeight - 1].valueOf();
+                                $scope.CreateBoardData.width = $scope.range(12)[response.defWidth - 1].valueOf();
                                 //alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
@@ -2195,130 +2182,19 @@ angular.module('controllers', [])
             // Get the cell clicked (the cell in the cicked position in the current board
             var url = $scope.baseurl + "Board/getCell";
             var postdata = {pos: $scope.idEditCell, idboard: $scope.idboard};
-            /*
-             * Upload file is (maybe) difficult to understand. There are two img in the data base:
-             *       imgPicto: default picto image
-             *       imgCell: image which the user upload or select. This will be preval over the imgPicto
-             *       
-             *      To upload the img we need:
-             *          uploadedFile: the path to the uploaded file (imgCell)
-             *          myFile: the file input (in "angular conversion")
-             *          previewImg: contains the data to display the preview
-             *          pictoSelected: contains the selected picto
-             *          
-             *       In order to take a preview of the img to upload we will need: 
-             *          previewImgProvisional: contains provisionally the data to display the preview
-             *          picImgProvisional: the provisionally picto img
-             *       Only one will have a real value
-             *       MODIF: remove myFileProvisional y ver si funciona
-             * 
-             */
+
             $http.post(url, postdata).success(function (response)
             {
                 $scope.previewImg = null;
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
-
-                /*MODIF: cambiar nombre variables
+                /*
                  * Remove the currentimg. If there are no imgCell nothings happens. If there are imgCell
                  * removes it. If there are imgCell and a provisional img removes it, but not the imgCell
                  */
                 $scope.removeFile = function () {
-                    $scope.MoveBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: 0};
-                    ngDialog.openConfirm({
-                        template: $scope.baseurl + '/angular_templates/ConfirmRemoveImg.html',
-                        scope: $scope,
-                        className: 'ngdialog-theme-default dialogMoveBoard'
-                    }).then(function () {
-                        if ($scope.previewImg != null) {
-                            $scope.previewImg = null;
-                        } else if ($scope.pictoSelected != null) {
-                            $scope.pictoSelected = null;
-                        } else {
-                            $scope.myFile = null;
-                            $scope.uploadedFile = null;
-                            document.getElementById('file-input').value = null;
-                        }
-                    }, function (value) {
-                    });
-
-
+                    $scope.uploadedFile = null;
                 };
-                //get all the photos attached to the pictos
-                $scope.searchFoto = function (name)
-                {
-                    var URL = $scope.baseurl + "SearchWord/getDBAll";
-                    var postdata = {id: name};
-                    //Request via post to controller search data from database
-                    $http.post(URL, postdata).
-                            success(function (response)
-                            {
-                                $scope.allImg = response.data;
-                            });
-                };
-                //Open a new dialog when the user will select the img to the cell
-                $scope.selectImgToUpload = function () {
-                    $scope.selectedImg = null;
-                    $scope.selectedImgType = 0;
-                    ngDialog.openConfirm({
-                        template: $scope.baseurl + '/angular_templates/ConfirmSelectImg.html',
-                        scope: $scope,
-                        className: 'ngdialog-theme-default dialogImgSelect',
-                        showClose: false
-                    }).then(function () {
-                        $scope.myFile = $scope.myFileProvisional;
-                        $scope.previewImg = $scope.previewImgProvisional;
-                        if ($scope.picImgProvisional == null) {
-                            $scope.pictoSelected = null;
-                        } else {
-                            // Add the url to the picto img string
-                            $scope.pictoSelected = "img/pictos/" + $scope.picImgProvisional;
-                        }
-
-                    }, function (value) {
-                    });
-                };
-                // When the user upload an image, this function return the data to display the preview
-                $scope.getPreviewImg = function () {
-                    $scope.myFileProvisional = document.getElementById('file-input').files;
-                    console.log($scope.myFileProvisional);
-                    // Like I said, only upload image or picto image will have a real value
-                    $scope.picImgProvisional = null;
-                };
-                // Change the selected image to a picto img
-                $scope.selectProvisionalPicto = function (img) {
-                    $scope.picImgProvisional = img;
-                    // Like I said, only upload image or picto image will have a real value
-                    $scope.myFileProvisional = null;
-                    $scope.previewImgProvisional = null;
-                    document.getElementById('file-input').value = null;
-
-                };
-                // Upload and resize the image and the, call savedata()
-                $scope.uploadFile = function () {
-                    var i;
-                    console.log('file is ');
-                    console.log($scope.myFile);
-                    console.log($scope.myFile.length);
-                    var uploadUrl = $scope.baseurl + "/ImgUploader/upload";
-                    var fd = new FormData();
-                    for (i = 0; i < $scope.myFile.length; i++) {
-                        fd.append('file'+i,  $scope.myFile[i]);
-                    }
-                    $http.post(uploadUrl, fd, {
-                        headers: {'Content-Type': undefined}
-                    })
-                            .success(function (response) {
-                                $scope.myFile = null;
-                                $scope.previewImg = null;
-                                $scope.uploadedFile = response.nombre;
-                                $scope.savedata();
-                            })
-                            .error(function (response) {
-                                //alert(response.errorText);
-                            });
-                };
-
                 // Gets functions from database and shows them the dropmenu
                 $scope.getFunctions = function () {
                     var url = $scope.baseurl + "Board/getFunctions";
@@ -2417,9 +2293,9 @@ angular.module('controllers', [])
                 $scope.getBoards();
                 $scope.colorSelected = $scope.Editinfo.color;
                 $scope.cellType = $scope.Editinfo.cellType;
-                $scope.numScanBlockText1 = $scope.range(20)[$scope.Editinfo.customScanBlock1];
+                $scope.numScanBlockText1 = $scope.range(12)[$scope.Editinfo.customScanBlock1];
                 $scope.textInScanBlockText1 = $scope.Editinfo.customScanBlockText1;
-                $scope.numScanBlockText2 = $scope.range(20)[$scope.Editinfo.customScanBlock2];
+                $scope.numScanBlockText2 = $scope.range(12)[$scope.Editinfo.customScanBlock2];
                 $scope.textInScanBlockText2 = $scope.Editinfo.customScanBlockText2;
                 $scope.idPictoEdit = $scope.Editinfo.ID_CPicto;
                 $scope.imgPictoEdit = $scope.Editinfo.imgPicto;
@@ -2447,18 +2323,10 @@ angular.module('controllers', [])
                 if (response.info.cellType === 'sfolder') {
                     $scope.getSFolder(response.info.sentenceFolder);
                 }
-                // When confirm is clicked, call uploadFile if there image to upload or savedata otherwise
-                $scope.aceptar = function () {
-                    if ($scope.myFile != null) {
-                        $scope.uploadFile();
-                    } else {
-                        $scope.savedata();
-                    }
-                };
                 // Save all the provisionally data asigned to the cell
                 $scope.savedata = function () {
                     var url = $scope.baseurl + "Board/editCell";
-                    var postdata = {id: idCell, idPicto: $scope.idPictoEdit, idSentence: $scope.sentenceSelectedId, idSFolder: $scope.sFolderSelectedId, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1", numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1, numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2, cellType: $scope.cellType, color: $scope.colorSelected, imgCell: ''};
+                    var postdata = {id: idCell, idPicto: $scope.idPictoEdit, idSentence: $scope.sentenceSelectedId, idSFolder: $scope.sFolderSelectedId, boardLink: $scope.boardsGroup.ID_Board, idFunct: $scope.funcType.ID_Function, textInCell: $scope.textInCell, visible: "1", isFixed: "1", numScanBlockText1: $scope.numScanBlockText1, textInScanBlockText1: $scope.textInScanBlockText1, numScanBlockText2: $scope.numScanBlockText2, textInScanBlockText2: $scope.textInScanBlockText2, cellType: $scope.cellType, color: $scope.colorSelected, imgCell: $scope.uploadedFile};
                     // Check another time null values and config the data that will be save in the data base
                     if (!$scope.checkboxFuncType) {
                         postdata.idFunct = null;
@@ -2492,17 +2360,6 @@ angular.module('controllers', [])
                     if ($scope.cellType !== 'sfolder') {
                         postdata.idSFolder = null;
                     }
-                    //If the user has selected a picto image save in imgCell
-                    if ($scope.pictoSelected != null) {
-                        postdata.imgCell = $scope.pictoSelected;
-                    }// Else, save in it uploadedFile (this could be a new uploaded img or the previous one) 
-                    else if ($scope.uploadedFile != null) {
-                        postdata.imgCell = $scope.uploadedFile;
-                    } else {
-                        postdata.imgCell = null;
-                    }
-
-
 
                     $http.post(url, postdata).success(function ()
                     {
