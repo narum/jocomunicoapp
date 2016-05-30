@@ -1,0 +1,67 @@
+@charset "UTF-8";
+/* CSS Document */
+.folderContainer{
+    padding: 5vh 5vw;
+    height: 100vh;
+}
+.panelGroupContainer{
+    margin-left: 5vw;
+    height: 70%;
+}
+.historicContainer{
+    margin-left: 1vw;
+    height: 100%;
+}
+.panelContainer{
+    background-color: whitesmoke;
+    height: 25%;
+    width: 86%;
+    margin: 1vh 2%;
+    border-radius: 10px;
+}
+.panelTitle{
+    padding: 0px;
+    border: none !important;
+    background-color: whitesmoke;
+    box-shadow:none !important;    
+    font-size: 25px;
+    transform: translate(0%, 50%);
+    position: relative;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.editaPanel{
+    border-top-right-radius: 10px;
+    height: 33%; 
+    background: #92dbe1;
+    color: white;
+    font-weight: bold;
+}
+.noPrimaryPanel{
+    height: 34%; 
+    background: #c0f5f9;
+}
+.primaryPanel{
+    height: 34%; 
+    background: #f9d05a;
+    font-weight: bold;
+}
+.nouPanel{
+    border-bottom-right-radius: 10px;
+    height: 33%; 
+    background: #92dbe1;
+    color: white;
+    font-weight: bold;
+}
+.addPanel{
+    height: 25%;
+    width: 86%;
+    margin: 1vh 2%;
+}
+
+.scrollMenuPanels{
+    height: 80%;
+    margin-top: 5vh;
+    overflow: hidden;
+}

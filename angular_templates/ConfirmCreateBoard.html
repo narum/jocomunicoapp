@@ -1,0 +1,28 @@
+<div class="topBarDialogM"><div class="editTitle">{{content.nwboardtitle}}</div><div class="cruz"></div></div>
+<div class="imgRounded confirmDefPadM">
+    <div class="dialogContent imgRounded confirmBackgroundColor" >
+        <div class=" row text-center" style="height: 35%">
+            {{content.putNameBoard}}
+            <input type="text" class="col-xs-offset-2 col-xs-8 dialogText"  name="CreateBoardName" ng-model="CreateBoardData.CreateBoardName" placeholder="{{content.newboardtext}}"/>
+        </div>
+        <div class="row" style="height: 20%; margin-left: 20px;">
+            <div class="col-xs-3 text-right paddingTextRight"> {{content.rows}}</div>
+            <select class=" col-xs-2 dropdown-arrow confirm"
+                    ng-model="CreateBoardData.height"
+                    ng-options="h for h in range(20)"
+                    >
+            </select>
+            <div class="col-xs-2 text-right paddingTextRight" style="margin-left: 10px"> {{content.columns}}</div>
+            <select class="col-xs-2 dropdown-arrow confirm"
+                    ng-model="CreateBoardData.width"
+                    ng-options="w for w in range(20)">
+            </select>
+        </div>
+        <p class="text-center" style="height: 10%">{{content.createBoard}}</p>
+        <div class="row confirmButtons">
+            
+            <input class="dialogButton col-xs-offset-3 col-xs-2" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
+            <input class="dialogButton col-xs-offset-2 col-xs-2" type="button" value="{{content.cancel}}" ng-click="closeThisDialog();"/>
+        </div>
+    </div>
+</div>

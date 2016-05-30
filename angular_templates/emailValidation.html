@@ -1,0 +1,43 @@
+<link rel="stylesheet" type="text/css" href="http://localhost/jocomunicoapp/css/register.css">
+<link rel="stylesheet" type="text/css" href="http://localhost/jocomunicoapp/css/responsiveForm.css">
+<style>html, body, .container-table{height: 94vh;background: url('{{img.FonsRegistre}}') no-repeat center center fixed;
+    -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
+</style>
+<div id="header" class="container-fluid text-center row"></div>
+<div class="container container-table">
+    <div class="row vertical-center-row">
+        <div class="form form-horizontal">
+            <div class="col-xs-2 col-xs-offset-5" ng-show="!activedValidation&&!viewActived"><img class="img-responsive" ng-src={{img.loading}}/></div>
+            <div class="col-xs-8 col-xs-offset-2 boxRegistreUsuari" style="background-image: url({{img.Patterns1_08}})" ng-show="activedValidation&&viewActived">
+                <div class="row barraSuperiorRegistre">
+                    <div class="col-xs-6"><p class="nomBarraSuperiorRegistre">{{ content.title }}</p></div>
+                    <div class="col-xs-6">
+                        <button
+                            type="button"
+                            class="icon-globe btn-idioma"
+                            ng-click="changeContentLanguage()"> &nbsp;{{languageNameNext}}
+                        </button>
+                         <a class="icon-remove-sign pull-right butoSortirBarraSuperiorRegistre" ng-href="#/login"></a>
+                    </div>
+                </div>
+                <div class="row boxFormulariRegistreUsuari">
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <div class="row resposta" ng-show="validated&&activedValidation&&viewActived">
+                            <div class="col-xs-2 check"><div class="icon-ok"></div></div>
+                            <div class="col-xs-10 textresposta">{{content.validationOk}}<br/><br/>{{content.validationOk2}}<br/><br/>{{content.validationOk3}}</div>
+                        </div>
+                        <div class="row resposta" ng-show="!validated&&activedValidation&&viewActived">
+                            <div class="col-xs-2 cross"><div class="icon-remove"></div></div>
+                            <div class="col-xs-10 textresposta">{{content.validationWrong}}<br/><br/>{{content.validationWrong2}}<br/><br/>{{content.validationOk3}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2 col-xs-offset-10 butoLogin">
+                                <a class="btn-login" href="/#/login">Ok</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
