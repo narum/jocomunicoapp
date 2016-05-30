@@ -906,7 +906,7 @@ angular.module('controllers', [])
                     $scope.isScanning = "waiting";
                 } else if ($scope.cfgPredOnOff === '1') {
                     $scope.isScanning = "prediction";
-                } else if (userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive > 1) {
+                } else if (userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive + userConfig.cfgMenuHomeActive > 0) {
                     $scope.isScanning = "sentence";
                 } else {
                     $scope.isScanning = "board";
@@ -1085,15 +1085,14 @@ angular.module('controllers', [])
                 if ($scope.indexScannedCells > $scope.maxCustomScanBlock) {
                     $scope.indexScannedCells = null;
                 }
-                console.log($scope.arrayScannedCells);
                 var moreThanOneGroup = false;
                 var lastGroup = -1;
                 var toScan = false;
                 for (var i = 0; i < $scope.arrayScannedCells.length; i++) {
-                    if($scope.arrayScannedCells[i].customScanBlock2 != lastGroup){
-                        if(lastGroup == -1){
+                    if ($scope.arrayScannedCells[i].customScanBlock2 != lastGroup) {
+                        if (lastGroup == -1) {
                             lastGroup = $scope.arrayScannedCells[i].customScanBlock2;
-                        }else{
+                        } else {
                             moreThanOneGroup = true;
                         }
                     }
@@ -1106,7 +1105,7 @@ angular.module('controllers', [])
                 if (!toScan) {
                     $scope.nextBlockScan();
                 }
-                if (!moreThanOneGroup && toScan){
+                if (!moreThanOneGroup && toScan) {
                     $scope.selectBlockScan();
                 }
 
@@ -1149,11 +1148,17 @@ angular.module('controllers', [])
                             case "badPhrase":
                                 $scope.feedback(1);
                                 break;
-                            case "waiting"://MODIF: puede haber más de un caso segun si tiene activado o no las cosas
+                            case "waiting":
                                 $scope.isScanning = "prediction";
+                                if ($scope.cfgPredOnOff !== '1') {
+                                    $scope.nextBlockScan();
+                                }
                                 break;
-                            case "prediction": //MODIF: puede haber más de un caso segun si tiene activado o no las cosas
+                            case "prediction":
                                 $scope.isScanning = "sentence";
+                                if ($scope.cfgMenuDeleteLastActive + $scope.cfgMenuDeleteAllActive + $scope.cfgMenuReadActive + $scope.cfgMenuHomeActive < 1) {
+                                    $scope.nextBlockScan();
+                                }
                                 break;
                             case "sentence":
                                 $scope.isScanning = "board";
@@ -1186,25 +1191,24 @@ angular.module('controllers', [])
                                 break;
                             case "home":
                                 $scope.isScanning = "read";
-                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuReadActive === 0) {
+                                if ($scope.cfgMenuReadActive == 0) {
                                     $scope.nextBlockScan();
                                 }
                                 break;
                             case "read":
                                 $scope.isScanning = "deletelast";
-                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteLastActive === 0) {
+                                if ($scope.cfgMenuDeleteLastActive == 0) {
                                     $scope.nextBlockScan();
                                 }
                                 break;
                             case "deletelast":
                                 $scope.isScanning = "deleteall";
-                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuDeleteAllActive === 0) {
+                                if ($scope.cfgMenuDeleteAllActive == 0) {
                                     $scope.nextBlockScan();
                                 }
                                 break;
                             case "deleteall":
-                                $scope.isScanning = "board";
-                                break;
+                                $scope.InitScan();
                         }
                     }
                 }
@@ -1237,7 +1241,7 @@ angular.module('controllers', [])
                                 break;
                             case "sentence":
                                 $scope.isScanning = "home";
-                                if (JSON.parse(localStorage.getItem('userData')).cfgMenuHomeActive === 0) {
+                                if ($scope.cfgMenuHomeActive === 0) {
                                     $scope.nextBlockScan();
                                 }
                                 break;
