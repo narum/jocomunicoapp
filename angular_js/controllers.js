@@ -1085,16 +1085,29 @@ angular.module('controllers', [])
                 if ($scope.indexScannedCells > $scope.maxCustomScanBlock) {
                     $scope.indexScannedCells = null;
                 }
+                console.log($scope.arrayScannedCells);
+                var moreThanOneGroup = false;
+                var lastGroup = -1;
                 var toScan = false;
                 for (var i = 0; i < $scope.arrayScannedCells.length; i++) {
+                    if($scope.arrayScannedCells[i].customScanBlock2 != lastGroup){
+                        if(lastGroup == -1){
+                            lastGroup = $scope.arrayScannedCells[i].customScanBlock2;
+                        }else{
+                            moreThanOneGroup = true;
+                        }
+                    }
                     if ($scope.arrayScannedCells[i].customScanBlock2 == $scope.indexScannedCells) {
                         if ($scope.haveToBeScanned($scope.arrayScannedCells[i])) {
                             toScan = true;
                         }
                     }
                 }
-                if (toScan === false) {
+                if (!toScan) {
                     $scope.nextBlockScan();
+                }
+                if (!moreThanOneGroup && toScan){
+                    $scope.selectBlockScan();
                 }
 
             };
