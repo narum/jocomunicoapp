@@ -2013,24 +2013,10 @@ angular.module('controllers', [])
             $scope.search = function (name, Searchtype)
             {
                 $timeout.cancel($scope.searchTimeout);
-                $scope.searchTimeout = $timeout(function(){$scope.searchDone(name, Searchtype)}, 500);
+                $scope.searchTimeout = $timeout(function(){$scope.searchDone(name, Searchtype);},500);
             };
-            //Dragndrop events
-            $scope.centerAnchor = true;
-            $scope.toggleCenterAnchor = function () {
-                $scope.centerAnchor = !$scope.centerAnchor;
-            };
-            var onDraggableEvent = function (evt, data) {
-                //console.log("128", "onDraggableEvent", evt, data);
-                if (evt.name === "draggable:start") {
-                    $scope.hide = false;
-                } else if (evt.name === "draggable:end") {
-                    $scope.hide = true;
-                }
-            };
-            $scope.$on('draggable:start', onDraggableEvent);
-            // $scope.$on('draggable:move', onDraggableEvent);
-            $scope.$on('draggable:end', onDraggableEvent);
+
+            
             /*
              * PosInBoard is the element over we drop the "draggable data". Data contains the info we drag 
             */
@@ -2133,7 +2119,7 @@ angular.module('controllers', [])
 
             };
             $scope.RemoveBoard = function () {
-                $scope.RemoveBoardData = {BoardName: $scope.evt.nameboard}
+                $scope.RemoveBoardData = {BoardName: $scope.evt.nameboard};
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmRemoveBoard.html',
                     scope: $scope,

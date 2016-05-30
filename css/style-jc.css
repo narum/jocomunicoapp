@@ -315,6 +315,7 @@ html *
     z-index: 2;
     position: relative;
     padding-left: 4px;
+    cursor: default;
 }
 
 .textCell:first-letter {text-transform: uppercase}
