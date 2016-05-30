@@ -79,7 +79,27 @@ class Recommender extends CI_Model {
             $output = $query->result();
         }
         return $output;   
-    }    
+    }
+    
+    private function getfreqUsuariX2NonExpan($inputid1) {                            
+        $output = array();
+        $output = null;
+        
+        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
+        $this->db->from('p_statsuserpictox2');              
+        $this->db->join('pictogramslanguage', 'p_statsuserpictox2.picto2id = pictogramslanguage.pictoid', 'left'); 
+        $this->db->join('pictograms', 'p_statsuserpictox2.picto2id = pictograms.pictoid', 'left'); 
+        $this->db->where('p_statsuserpictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                                                   
+        $this->db->where('p_statsuserpictox2.picto1id', $inputid1);  
+        $this->db->order_by('countx2', 'desc');        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;   
+    } 
     
     private function getfreqUsuariNameX2($inputid1, $fits) {
         $output = array();
@@ -735,8 +755,8 @@ class Recommender extends CI_Model {
         $this->db->join('pictograms', 'p_statsuserpicto.pictoid = pictograms.pictoid', 'left'); 
         $this->db->where('p_statsuserpicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                             
-        $this->db->order_by('countx1', 'desc'); 
-        //$this->db->order_by('pictograms.pictoid', 'random');
+        $this->db->order_by('countx1', 'desc');
+        $this->db->order_by('pictograms.pictoid', 'random');
         $query = $this->db->get();     
                 
         if ($query->num_rows() > 0) {
@@ -758,6 +778,27 @@ class Recommender extends CI_Model {
         $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
         $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
         $this->db->limit(3);
+        $this->db->order_by('countx3', 'desc');        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;   
+    }
+    
+    private function getfreqUsuariX3NonExpan($inputid1, $inputid2) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
+        $this->db->from('p_statsuserpictox3');       
+        $this->db->join('pictogramslanguage', 'p_statsuserpictox3.picto3id = pictogramslanguage.pictoid', 'left'); 
+        $this->db->join('pictograms', 'p_statsuserpictox3.picto3id = pictograms.pictoid', 'left');
+        $this->db->where('p_statsuserpictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
+        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                                              
+        $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
+        $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
         $this->db->order_by('countx3', 'desc');        
         $query = $this->db->get();
         
@@ -857,7 +898,38 @@ class Recommender extends CI_Model {
     }
     
     function getRecommenderX1() {
+        $pred = null;
+        if ($this->session->userdata('cfgExpansionOnOff')) $pred = $this->getRecommenderX1Expan();
+        else $pred = $this->getRecommenderX1NonExpan();
+        return $pred;
+    }
         
+    function getRecommenderX2() {
+        $pred = null;
+        if ($this->session->userdata('cfgExpansionOnOff')) $pred = $this->getRecommenderX2Expan();
+        else $pred = $this->getRecommenderX2NonExpan();
+        return $pred;
+    }   
+   
+    function getRecommenderX3() {   
+        $pred = null;
+        if ($this->session->userdata('cfgExpansionOnOff')) $pred = $this->getRecommenderX3Expan();
+        else $pred = $this->getRecommenderX3NonExpan();
+        return $pred;
+    }
+    
+    function getcountElem(){
+        $output = 0;
+        $this->db->where('ID_RSTPUser', $this->session->userdata('idusu'));        
+        $query = $this->db->get('r_s_temppictograms');
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->num_rows();
+        }
+        return $output; 
+    }
+    
+    private function getRecommenderX1Expan() {
         $TSize = $this->session->userdata('cfgPredBarNumPred');
 
         // Algorisme V5 - Predictor inicial (cas 00 no hi ha res (fix jo i tu)  
@@ -891,11 +963,24 @@ class Recommender extends CI_Model {
         // rellena
         if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX1($VF, $contextTypeName2Days, $TSize);
         if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX1($VF, $freqUsuari, $TSize);           
- 
+                
         return $VF;
     }
-        
-    function getRecommenderX2() {
+    
+    private function getRecommenderX1NonExpan() {
+        $TSize = $this->session->userdata('cfgPredBarNumPred');
+
+        // Algorisme V5 - Predictor inicial (cas 00 no hi ha res (fix jo i tu)  
+        $VF = $this->getSubj();        
+
+        // Algorisme V2 - Predictor freqüència II (d'usuari)                   
+        $freqUsuari = $this->getfreqUsuariX1();
+        $VF = $this->rellenaVFX1($VF, $freqUsuari, $TSize);           
+
+        return $VF;
+    }  
+    
+    private function getRecommenderX2Expan() {
         $paraulesFrase = $this->getIdsElem();
         $inputid1 = $paraulesFrase[sizeof($paraulesFrase)-1]->pictoid;        
         $inputType = $this->getTypesElem($inputid1);
@@ -968,10 +1053,36 @@ class Recommender extends CI_Model {
             $VF = $this->rellenaVFX2X3($VF, $freqX1, $TSize);
         }
         
+        // Algorisme V6 - Predictor de context (name) total
+        if (sizeof($VF) < $TSize) {
+            $contextTypeNameAll = $this->getContextTypeAll('name');
+            $VF = $this->rellenaVFX1($VF, $contextTypeNameAll, $TSize); 
+        }
         return $VF;
-    }   
-   
-    function getRecommenderX3() {   
+    }
+    
+    private function getRecommenderX2NonExpan() {
+        
+        $paraulesFrase = $this->getIdsElem();
+        $inputid1 = $paraulesFrase[sizeof($paraulesFrase)-1]->pictoid;        
+
+        // Algorisme V2 - Predictor freqüència II (d'usuari)
+        $VF = array();
+        $VF = array_merge($VF,$this->getfreqUsuariX2NonExpan($inputid1));        
+        $TSize = $this->session->userdata('cfgPredBarNumPred');
+        
+        // rellena
+        if (sizeof($VF) < $TSize) {
+            $freqX1 = $this->getfreqUsuariX1();
+            unset($freqX1[0]);
+            unset($freqX1[1]);
+            $VF = $this->rellenaVFX2X3($VF, $freqX1, $TSize);
+        }
+
+        return $VF;                
+    }
+    
+    private function getRecommenderX3Expan() {
         $paraulesFrase = $this->getIdsElem();
         $inputid1 = $paraulesFrase[sizeof($paraulesFrase)-2]->pictoid;
         $inputid2 = $paraulesFrase[sizeof($paraulesFrase)-1]->pictoid;
@@ -998,7 +1109,7 @@ class Recommender extends CI_Model {
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbs2Days, $TSize);
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
         }
-        else if ($inputType2[0]->pictoType == 'verb') { 
+        else if ($inputType2[0]->pictoType == 'verb') {
             $caseList = array("theme", "locto", "locfrom", "manera", "time", "tool");            
             foreach ($caseList as $case) {
                 if ($case == "time" || $case == "tool") {
@@ -1122,16 +1233,35 @@ class Recommender extends CI_Model {
         return $VF;
     }
     
-    function getcountElem(){
-        $output = 0;
-        $this->db->where('ID_RSTPUser', $this->session->userdata('idusu'));        
-        $query = $this->db->get('r_s_temppictograms');
+    private function getRecommenderX3NonExpan() {
+        $paraulesFrase = $this->getIdsElem();
+        $inputid1 = $paraulesFrase[sizeof($paraulesFrase)-2]->pictoid;
+        $inputid2 = $paraulesFrase[sizeof($paraulesFrase)-1]->pictoid;
         
-        if ($query->num_rows() > 0) {
-            $output = $query->num_rows();
+        $inputType1 = $this->getTypesElem($inputid1);
+        $inputType2 = $this->getTypesElem($inputid2);
+        
+        // Algorisme V2 - Predictor freqüència II (d'usuari)
+        $VF = array();
+        $VF = array_merge($VF,$this->getfreqUsuariX3NonExpan($inputid1, $inputid2));        
+        $TSize = $this->session->userdata('cfgPredBarNumPred');
+                        
+        // rellena
+        if (sizeof($VF) < $TSize) {
+            $freqX2 = $this->getfreqUsuariX2NonExpan($inputid2);
+            $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
         }
-        return $output; 
-    }       
+
+        // rellena
+        if (sizeof($VF) < $TSize) {
+            $freqX1 = $this->getfreqUsuariX1();
+            unset($freqX1[0]);
+            unset($freqX1[1]);
+            $VF = $this->rellenaVFX2X3($VF, $freqX1, $TSize);
+        }
+        
+        return $VF;
+    }
 }
 
 ?>
