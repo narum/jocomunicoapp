@@ -872,7 +872,7 @@ angular.module('controllers', [])
                 $scope.InitScan();
             });
 
-            //MODIF: Coger de BBDD escaneo por intervalo o no en el if
+            
             $scope.InitScan = function ()
             {
                 if ($scope.inEdit) {
@@ -883,14 +883,14 @@ angular.module('controllers', [])
                 if ($scope.cfgScanningCustomRowCol == 0) {
                     $scope.getMaxScanBlock1();
                 }
-                function myTimer() {
-                    $scope.NextBlockScan();
-                }
+                
+                //When the scan is automatic, this timer manage when the scan have to move to the next block
                 if ($scope.timerScan) {
                     $interval.cancel($scope.intervalScan);
                     var Intervalscan = userConfig.cfgTimeScanning;
                     function myTimer() {
                         if ($scope.isScanningCancel) {
+                            //We are not scanning cancel anmore
                             $scope.isScanningCancel = false;
                         } else {
                             $scope.nextBlockScan();
@@ -902,10 +902,8 @@ angular.module('controllers', [])
                 }
 
                 $scope.arrayScannedCells = null;
-                $scope.currentScanBlock = 1;
-                $scope.currentScanBlock1 = 1;
-                $scope.currentScanBlock2 = 1;
                 $scope.isScanningCancel = false;
+                //The user cfg tell us where we have to start
                 if ($scope.cfgScanStartClick == '1' && $scope.isScanning != "nowait") {
                     $scope.isScanning = "waiting";
                 } else if ($scope.cfgPredOnOff === '1') {
@@ -916,7 +914,7 @@ angular.module('controllers', [])
                     $scope.isScanning = "board";
                 }
             };
-
+            //Return true if the cell it's being scanned
             $scope.isScanned = function (picto) {
                 if ($scope.inScan && $scope.isScanningCancel === false && $scope.arrayScannedCells != null) {
                     switch ($scope.isScanning) {
@@ -940,7 +938,6 @@ angular.module('controllers', [])
                             }
                             break;
                     }
-
                 }
                 return false;
 
@@ -953,10 +950,11 @@ angular.module('controllers', [])
                 }
             });
 
-
+            //Control the left click button while scanning
             $scope.scanLeftClick = function ()
             {
                 if ($scope.inScan) {
+                    //If user have start scan click activate we have to wait until he press one button
                     if ($scope.isScanning == "waiting") {
                         //MODIF: puede haber más de un caso segun si tiene activado o no las cosas. Despues de waiting se desactiva el next por tiempo
                         $scope.isScanning = "prediction";
@@ -968,6 +966,24 @@ angular.module('controllers', [])
                     }
                 }
             };
+            
+            //Control the right click button while scanning
+            $scope.scanRightClick = function ()
+            {
+                if ($scope.inScan) {
+                    //If user have start scan click activate we have to wait until he press one button
+                    if ($scope.isScanning == "waiting") {
+                        //MODIF: puede haber más de un caso segun si tiene activado o no las cosas. Despues de waiting se desactiva el next por tiempo
+                        $scope.isScanning = "prediction";
+                    } else {
+                        if (!$scope.longclick && !$scope.timerScan)
+                        {
+                            $scope.nextBlockScan();
+                        }
+                    }
+                }
+            };
+            //Control the long click button while scanning (to detect when it's a long one)
             $scope.playLongClick = function ()
             {
                 var userConfig = JSON.parse(localStorage.getItem('userData'));
@@ -980,6 +996,7 @@ angular.module('controllers', [])
                     }
                 }
             };
+            //Control the long click button while scanning (to detect when it's a short one)
             $scope.cancelLongClick = function ()
             {
                 if ($scope.inScan) {
@@ -992,21 +1009,6 @@ angular.module('controllers', [])
                         } else
                         {
 
-                        }
-                    }
-                }
-            };
-
-            $scope.scanRightClick = function ()
-            {
-                if ($scope.inScan) {
-                    if ($scope.isScanning == "waiting") {
-                        //MODIF: puede haber más de un caso segun si tiene activado o no las cosas. Despues de waiting se desactiva el next por tiempo
-                        $scope.isScanning = "prediction";
-                    } else {
-                        if (!$scope.longclick && !$scope.timerScan)
-                        {
-                            $scope.nextBlockScan();
                         }
                     }
                 }
@@ -1037,16 +1039,20 @@ angular.module('controllers', [])
             };
             //Update the array that contains the cells that we have to scan
             $scope.getScanArray = function () {
+                //True if in the group there are at least one cell that it have to be scanned
                 var toScan = false;
                 var arrayScannedCellsProv = [];
                 if ($scope.cfgScanningCustomRowCol == 0) {
+                    //The last group have been reached
                     if ($scope.indexScannedBlock > $scope.maxCustomScanBlock) {
                         $scope.InitScan();
                         return false;
                     } else {
                         var j = 0;
+                        //Search in the board the cells that are in the current scan block
                         for (var i = 0; i < $scope.columns * $scope.rows; i++) {
                             if ($scope.data[i].customScanBlock1 == $scope.indexScannedBlock) {
+                                //If the cell is disable it won't be added to the array
                                 if ($scope.haveToBeScanned($scope.data[i])) {
                                     toScan = true;
                                     arrayScannedCellsProv[j] = $scope.data[i];
@@ -1055,6 +1061,7 @@ angular.module('controllers', [])
                             }
                         }
                     }
+                    //Works like the last one except that the cell will be added to the array anyway (to avoid strange empty slots in the scan) and we have not to read all the cell, we acces to the cell by the pos 
                 } else if ($scope.cfgScanningCustomRowCol == 1) {
                     if ($scope.indexScannedBlock > $scope.rows - 1) {
                         $scope.InitScan();
@@ -1067,6 +1074,7 @@ angular.module('controllers', [])
                             }
                         }
                     }
+                    //Pretty the same
                 } else {
                     if ($scope.indexScannedBlock > $scope.columns - 1) {
                         $scope.InitScan();
@@ -1080,7 +1088,7 @@ angular.module('controllers', [])
                         }
                     }
                 }
-                //If all the cell inside the array have no value (empty or no active cells) pass to the next block
+                //If all the cells inside the array have no value (empty or no active cells) pass to the next block
                 if (toScan === false) {
                     arrayScannedCellsProv = null;
                     $scope.nextBlockScan();
@@ -1092,7 +1100,7 @@ angular.module('controllers', [])
                     });
                 }
             };
-
+            //This method check if the actual scan block (second level in the custom scan) it's correct
             $scope.getCustomScanCell = function () {
                 if ($scope.indexScannedCells > $scope.maxCustomScanBlock) {
                     $scope.indexScannedCells = null;
@@ -1100,7 +1108,9 @@ angular.module('controllers', [])
                 var moreThanOneGroup = false;
                 var lastGroup = -1;
                 var toScan = false;
+                //Search in the array cell the cells that are in the current scan block 2 
                 for (var i = 0; i < $scope.arrayScannedCells.length; i++) {
+                    //Check if there are only one subgroup
                     if ($scope.arrayScannedCells[i].customScanBlock2 != lastGroup) {
                         if (lastGroup == -1) {
                             lastGroup = $scope.arrayScannedCells[i].customScanBlock2;
@@ -1114,14 +1124,17 @@ angular.module('controllers', [])
                         }
                     }
                 }
+                //If all the cells inside the array have no value (empty or no active cells) pass to the next block
                 if (!toScan) {
                     $scope.nextBlockScan();
                 }
+                //If there are only one subgroup, then select the group (if we don't do this the user have to do a extra and confusing click
                 if (!moreThanOneGroup && toScan) {
                     $scope.selectBlockScan();
                 }
 
             };
+            //Check if the actual cell (in this point we are pinting to just a one, not a group) is active. Also check if we pass all the cells to start again
             $scope.getScanCell = function () {
                 if ($scope.cfgScanningCustomRowCol == 0) {
                     if ($scope.indexScannedCells > $scope.arrayScannedCells.length - 1) {
