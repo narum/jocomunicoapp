@@ -45,13 +45,14 @@ class Recommender extends CI_Model {
         $output = array();
         $output = null;
         
-        $subjList = array("jo", "yo", "tu");
+        // Ids of the pictograms for "I" and "you" in all languages
+        $subjList = array(444, 466);
         
         $this->db->select('pictograms.imgPicto, pictograms.pictoid, pictogramslanguage.pictotext');
         $this->db->from('pictogramslanguage');
         $this->db->join('pictograms', 'pictogramslanguage.pictoid = pictograms.pictoid', 'left');                             
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));
-        $this->db->where_in('pictogramslanguage.pictotext', $subjList);
+        $this->db->where_in('pictograms.pictoid', $subjList);
         $query = $this->db->get();     
                 
         if ($query->num_rows() > 0) {
@@ -475,7 +476,29 @@ class Recommender extends CI_Model {
             $output = $query->result();
         }
         return $output;   
-    }  
+    }
+    
+    public function startsWith($haystack, $needle) {
+        return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;
+    }
+
+    
+    private function boolDetPos($pictoid) {
+        $output = null;
+        
+        $this->db->select('type');
+        $this->db->from('modifier'.$this->session->userdata('ulangabbr'));              
+        $this->db->where('modid', $pictoid);  
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        
+        $res = false;
+        if ($output[0]->type == 'det' || $this->startsWith($output[0]->type, 'pos')) $res = true;
+        return $res;
+    }
    
     private function getMMFits($tipus, $case){      
         $output = array();
@@ -807,29 +830,6 @@ class Recommender extends CI_Model {
         }
         return $output;   
     }
-    
-    function getfreqUsuariFilterX3($inputid1, $inputid2, $fits) {
-        $output = array();
-        $output = null;
-        
-        $this->db->select('pictograms.imgPicto, p_statsuserpictox3.picto3id as `pictoid`, pictogramslanguage.pictotext');
-        $this->db->from('p_statsuserpictox3');       
-        $this->db->join('nameclass'.$this->session->userdata('ulangabbr'), 'p_statsuserpictox3.picto3id = nameclass'.$this->session->userdata('ulangabbr').'.nameid', 'left'); 
-        $this->db->join('pictogramslanguage', 'p_statsuserpictox3.picto3id = pictogramslanguage.pictoid', 'left'); 
-        $this->db->join('pictograms', 'p_statsuserpictox3.picto3id = pictograms.pictoid', 'left'); 
-        $this->db->where('p_statsuserpictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
-        $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                             
-        $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
-        $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
-        $this->db->where_in('nameclass'.$this->session->userdata('ulangabbr').'.class', $fits);
-        $this->db->order_by('countx3', 'desc');                                            
-        $query = $this->db->get();
-        
-        if ($query->num_rows() > 0) {
-            $output = $query->result();
-        }
-        return $output;   
-    }
 
     private function insertFloorVF($VF, $Prediction, $FSize) {
         $k = 0;
@@ -839,11 +839,23 @@ class Recommender extends CI_Model {
                 array_push($VF,$value);
                 $FSize = 7;
             }
-            for ($i = 0; $i < sizeof($VF); $i++) {
-                if($k == floor($FSize/2) || $value->pictoid == $VF[$i]->pictoid) { break; }
-                else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
-                    array_push($VF,$value);
-                    $k++;
+                                    
+            $repe = false;
+            $paraulesFrase = $this->getIdsElem();
+            for ($i = 0; $i < sizeof($paraulesFrase); $i++) {
+                if ($value->pictoid == $paraulesFrase[$i]->pictoid) {
+                    $repe = true;
+                    break;
+                }
+            }
+            
+            if (!$repe) {   
+                for ($i = 0; $i < sizeof($VF); $i++) {
+                    if($k == floor($FSize/2) || $value->pictoid == $VF[$i]->pictoid) { break; }
+                    else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
+                        array_push($VF,$value);
+                        $k++;
+                    }
                 }
             }
         }
@@ -858,12 +870,24 @@ class Recommender extends CI_Model {
                 array_push($VF,$value);
                 $FSize = 7;
             }
-            for ($i = 0; $i < sizeof($VF); $i++) {
-                if($k == ceil($FSize/2) || $value->pictoid == $VF[$i]->pictoid) { break; }
-                else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
-                    array_push($VF,$value);
-                    $k++;
+                        
+            $repe = false;
+            $paraulesFrase = $this->getIdsElem();
+            for ($i = 0; $i < sizeof($paraulesFrase); $i++) {
+                if ($value->pictoid == $paraulesFrase[$i]->pictoid) {
+                    $repe = true;
+                    break;
                 }
+            }
+            
+            if (!$repe) {      
+                for ($i = 0; $i < sizeof($VF); $i++) {
+                    if($k == ceil($FSize/2) || $value->pictoid == $VF[$i]->pictoid) { break; }
+                    else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
+                        array_push($VF,$value);
+                        $k++;
+                    }
+                }            
             }
         }
         return $VF;
@@ -874,11 +898,23 @@ class Recommender extends CI_Model {
             if (sizeof($VF) == 0) {
                 $VF = array();
                 array_push($VF,$value);
+            } 
+            
+            $repe = false;
+            $paraulesFrase = $this->getIdsElem();
+            for ($i = 0; $i < sizeof($paraulesFrase); $i++) {
+                if ($value->pictoid == $paraulesFrase[$i]->pictoid) {
+                    $repe = true;
+                    break;
+                }
             }
-            for ($i = 0; sizeof($VF) < $TSize && $i < sizeof($VF); $i++) {
-                if ($value->pictoid == $VF[$i]->pictoid) { break; }
-                else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
-                    array_push($VF,$value);
+            
+            if (!$repe) {            
+                for ($i = 0; sizeof($VF) < $TSize && $i < sizeof($VF); $i++) {
+                    if ($value->pictoid == $VF[$i]->pictoid) { break; }
+                    else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
+                        array_push($VF,$value);
+                    }
                 }
             }
         }
@@ -887,10 +923,22 @@ class Recommender extends CI_Model {
     
     private function rellenaVFX1($VF, $Prediction, $TSize) {
         foreach($Prediction as $value) {
-            for ($i = 0; sizeof($VF) < $TSize &&  $i < sizeof($VF); $i++) {
-                if ($value->pictoid == $VF[$i]->pictoid) { break; }
-                else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
-                    array_push($VF,$value);
+                                    
+            $repe = false;
+            $paraulesFrase = $this->getIdsElem();
+            for ($i = 0; $i < sizeof($paraulesFrase); $i++) {
+                if ($value->pictoid == $paraulesFrase[$i]->pictoid) {
+                    $repe = true;
+                    break;
+                }
+            }            
+            
+            if (!$repe) {            
+                for ($i = 0; sizeof($VF) < $TSize &&  $i < sizeof($VF); $i++) {
+                    if ($value->pictoid == $VF[$i]->pictoid) { break; }
+                    else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
+                        array_push($VF,$value);
+                    }
                 }
             }
         }
@@ -989,8 +1037,8 @@ class Recommender extends CI_Model {
         $VF = array();
         $VF = array_merge($VF,$this->getfreqUsuariX2($inputid1));
         $TSize = $this->session->userdata('cfgPredBarNumPred');
-        $FSize = $TSize - sizeof($VF);
-
+        $FSize = $TSize - sizeof($VF);        
+        
         if ($inputType[0]->pictoType == 'name') {
             // Algorisme V6 - Predictor de context (verb) últims 2 dies
             $contextTypeVerb2Day = $this->getContextType2Days('verb');
@@ -1031,7 +1079,20 @@ class Recommender extends CI_Model {
                 }
             }
         }
-        else if ($inputType[0]->pictoType != 'verb' && $inputType[0]->pictoType != 'name') {
+        else if ($inputType[0]->pictoType == 'modifier' && $this->boolDetPos($inputid1)) {
+            // Algorisme V6 - Predictor de context (name) últims 2 dies                                
+            $contextTypeName2Days = $this->getContextType2Days('name');
+            $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);                   
+            
+            // Algorisme V6 - Predictor de context (name) total                      
+            $contextTypeNamesAll = $this->getContextTypeAll('name');
+            $VF = $this->insertFloorVF($VF, $contextTypeNamesAll, $FSize);   
+            
+                        // rellena
+            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
+            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeNamesAll, $TSize);            
+        }
+        else {
             // Algorisme V6 - Predictor de context (name) últims 2 dies                                
             $contextTypeName2Days = $this->getContextType2Days('name');
             $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);                   
@@ -1096,7 +1157,21 @@ class Recommender extends CI_Model {
         $TSize = 7;
         $FSize = $TSize - sizeof($VF);
         
-        if ($inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType == 'name' ) {          
+        if ($inputType2[0]->pictoType == 'modifier' && $this->boolDetPos($inputid2)) {
+            // Algorisme V6 - Predictor de context (name) últims 2 dies                                
+            $contextTypeName2Days = $this->getContextType2Days('name');
+            $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);                   
+            
+            // Algorisme V6 - Predictor de context (name) total                      
+            $contextTypeNamesAll = $this->getContextTypeAll('name');
+            $VF = $this->insertFloorVF($VF, $contextTypeNamesAll, $FSize);   
+            
+                        // rellena
+            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
+            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeNamesAll, $TSize);            
+        }
+        else if ($inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType == 'name' || 
+                ($inputType1[0]->pictoType == 'name' && $inputType2[0]->pictoType != 'verb')) {          
             
             // Algorisme V6 - Predictor de context (verb) últims 2 dies                       
             $contextTypeVerbs2Days = $this->getContextType2Days('verb');
