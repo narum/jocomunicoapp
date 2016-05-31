@@ -789,20 +789,26 @@ class Board extends REST_Controller {
 
         $board = $this->BoardInterface->getIDGroupBoards($id);
         $primaryboard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
-
-        $cell = $this->BoardInterface->getCellsBoard($id);
-        for ($i = 0; $i < count($cell); $i++) {
-            $this->BoardInterface->removeCell($cell[$i]->ID_RCell, $id);
+        $primaryboardID = $primaryboard[0]->ID_Board;
+        if($id === $primaryboardID){
+            
         }
-        $this->BoardInterface->removeBoardLinks($id);
+        else{
+            
+            $cell = $this->BoardInterface->getCellsBoard($id);
+            for ($i = 0; $i < count($cell); $i++) {
+                $this->BoardInterface->removeCell($cell[$i]->ID_RCell, $id);
+            }
+            $this->BoardInterface->removeBoardLinks($id);
 
-        $this->BoardInterface->removeBoard($id);
-        $this->BoardInterface->commitTrans();
+            $this->BoardInterface->removeBoard($id);
+            $this->BoardInterface->commitTrans();
 
-        $response = [
-            'idboard' => $primaryboard[0]->ID_Board
-        ];
-        $this->response($response, REST_Controller::HTTP_OK);
+            $response = [
+                'idboard' => $primaryboard[0]->ID_Board
+            ];
+            $this->response($response, REST_Controller::HTTP_OK);
+        }
     }
 
     public function copyBoard_post() {

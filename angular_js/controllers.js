@@ -2159,22 +2159,8 @@ angular.module('controllers', [])
                             //alert(response.errorText);
                         });
             };
-            //Dragndrop events
-            $scope.centerAnchor = true;
-            $scope.toggleCenterAnchor = function () {
-                $scope.centerAnchor = !$scope.centerAnchor;
-            };
-            var onDraggableEvent = function (evt, data) {
-                //console.log("128", "onDraggableEvent", evt, data);
-                if (evt.name === "draggable:start") {
-                    $scope.hide = false;
-                } else if (evt.name === "draggable:end") {
-                    $scope.hide = true;
-                }
-            };
-            $scope.$on('draggable:start', onDraggableEvent);
-            // $scope.$on('draggable:move', onDraggableEvent);
-            $scope.$on('draggable:end', onDraggableEvent);
+
+            
             /*
              * PosInBoard is the element over we drop the "draggable data". Data contains the info we drag 
              */
@@ -2276,7 +2262,7 @@ angular.module('controllers', [])
 
             };
             $scope.RemoveBoard = function () {
-                $scope.RemoveBoardData = {BoardName: $scope.evt.nameboard}
+                $scope.RemoveBoardData = {BoardName: $scope.evt.nameboard};
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmRemoveBoard.html',
                     scope: $scope,
@@ -2309,7 +2295,7 @@ angular.module('controllers', [])
                             success(function (response)
                             {
                                 $scope.panels = response.panels;
-                                $scope.CopyBoardData = {CreateBoardName: $scope.evt.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.evt.altura, width: $scope.evt.amplada, autoreturn: $scope.evt.autoreturn, autoread: $scope.evt.autoread, srcGroupBoard: $scope.idGroupBoard.toString()};
+                                $scope.CopyBoardData = {CreateBoardName: "", CopiedBoardName: $scope.evt.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.evt.altura, width: $scope.evt.amplada, autoreturn: $scope.evt.autoreturn, autoread: $scope.evt.autoread, srcGroupBoard: $scope.idGroupBoard.toString()};
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCopyBoard.html',
                                     scope: $scope,
