@@ -872,7 +872,7 @@ angular.module('controllers', [])
                 $scope.InitScan();
             });
 
-            
+
             $scope.InitScan = function ()
             {
                 if ($scope.inEdit) {
@@ -883,7 +883,7 @@ angular.module('controllers', [])
                 if ($scope.cfgScanningCustomRowCol == 0) {
                     $scope.getMaxScanBlock1();
                 }
-                
+
                 //When the scan is automatic, this timer manage when the scan have to move to the next block
                 if ($scope.timerScan) {
                     $interval.cancel($scope.intervalScan);
@@ -956,8 +956,10 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     //If user have start scan click activate we have to wait until he press one button
                     if ($scope.isScanning == "waiting") {
-                        //MODIF: puede haber más de un caso segun si tiene activado o no las cosas. Despues de waiting se desactiva el next por tiempo
                         $scope.isScanning = "prediction";
+                        if ($scope.cfgPredOnOff !== '1') {
+                            $scope.nextBlockScan();
+                        }
                     } else {
                         if (!$scope.longclick)
                         {
@@ -966,15 +968,17 @@ angular.module('controllers', [])
                     }
                 }
             };
-            
+
             //Control the right click button while scanning
             $scope.scanRightClick = function ()
             {
                 if ($scope.inScan) {
                     //If user have start scan click activate we have to wait until he press one button
                     if ($scope.isScanning == "waiting") {
-                        //MODIF: puede haber más de un caso segun si tiene activado o no las cosas. Despues de waiting se desactiva el next por tiempo
                         $scope.isScanning = "prediction";
+                        if ($scope.cfgPredOnOff !== '1') {
+                            $scope.nextBlockScan();
+                        }
                     } else {
                         if (!$scope.longclick && !$scope.timerScan)
                         {
@@ -2160,7 +2164,7 @@ angular.module('controllers', [])
                         });
             };
 
-            
+
             /*
              * PosInBoard is the element over we drop the "draggable data". Data contains the info we drag 
              */

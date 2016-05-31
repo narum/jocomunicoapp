@@ -96,7 +96,7 @@
 
     </div>
     <!-- MODIF: Poner control si no scan-->
-    <div ng-if="!puntuando" class="scoreContainer">
+    <div ng-if="puntuando" class="scoreContainer">
             <div class="scoreContainerLeft">
                 <img src="/img/srcWeb/feliz_1.png" class="goodPhrase" ng-click="isClickEnable()?feedback(1):null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(3,'Good'):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null" ng-class="{'scaneo': isScanning == 'goodPhrase'}"/>
             </div>
