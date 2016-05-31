@@ -1,17 +1,19 @@
-<div class="topBarDialog"><div class="editTitle">Copiar Panells</div><div class="cruz"></div></div>
-<div class="dialogContent">
-    <div class="dialogContent text-center dialogText" style="margin-bottom: 3vh">
-        
-            <p ng-if="FormData.HWType === 0">
+<div class="topBarDialogS"><div class="editTitle">{{content.resizecolrow}}</div><div class="cruzTop"></div></div>
+<div class="imgRounded confirmDefPadS">
+    <div class="imgRounded confirmBackgroundColor" >
+        <div class="confirmContent row" >
+
+            <p ng-if="FormData.HWType === 0" class="text-center col-xs-12 dialogText">
                 Eliminar {{FormData.Dnum}} filas?
             </p>
-            <p ng-if="FormData.HWType === 1">
+            <p ng-if="FormData.HWType === 1" class="text-center col-xs-12 dialogText">
                 Eliminar {{FormData.Dnum}} columnes?
             </p>
-        
-    </div>
-    <div class="row" style="margin-top: 2%">
-        <input class="dialogButton col-xs-offset-3 col-xs-2 dialogTitle" type="button" value="{{content.confirm}}" ng-click="confirm(FormData); $scope.edit()"/>
-        <input class="dialogButton col-xs-offset-2 col-xs-2 dialogTitle" type="button" value="{{content.cancel}}" ng-click="closeThisDialog(0); $scope.edit()"/>
+
+        </div>
+        <div class="row confirmButtons">
+            <input class=" dialogButton col-xs-offset-3 col-xs-2" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
+            <input class=" dialogButton col-xs-offset-2 col-xs-2" type="button" value="{{content.cancel}}" ng-click="closeThisDialog();"/>
+        </div>
     </div>
 </div>

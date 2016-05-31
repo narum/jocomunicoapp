@@ -197,13 +197,6 @@ html *
     border-radius: 10px;
     padding: 0em;
 }
-.ngdialog.dialogResize .ngdialog-content{
-    width : 45vw;
-    height: 25vh;
-    background-image: url(/img/srcWeb/Patterns1-08.png);
-    border-radius: 10px;
-    padding: 0em;
-}
 .ngdialog.dialogCopyBoard .ngdialog-content{
     width : 50vw;
     height: 35vh;
@@ -218,7 +211,13 @@ html *
     border-radius: 10px;
     padding: 0em;
 }
-
+.ngdialog.dialogResize .ngdialog-content{
+    width : 45vw;
+    height: 25vh;
+    background-image: url(/img/srcWeb/Patterns1-08.png);
+    border-radius: 10px;
+    padding: 0em;
+}
 .ngdialog.dialogImgSelect .ngdialog-content{
     width : 50vw;
     height: 40vh;
