@@ -204,10 +204,9 @@
             <div class="col-xs-8 fullheight" >
                 <div class="backgroundImgEdit"></div>
                 <div class="borderImgEdit"></div>
-                <img ng-if="previewImg != null" class="imgRounded imgEdit" width="100%" height="100%" data-ng-src="{{previewImg}}"/>
-                <img ng-if="pictoSelected != null" class="imgRounded imgEdit" width="100%" height="100%" ng-src="{{pictoSelected}}"/>
-                <img ng-if="previewImg == null && pictoSelected == null && uploadedFile !== null" class="imgRounded imgEdit" width="100%" height="100%" ng-src="{{baseurl}}{{uploadedFile}}"/>
-                <img ng-if="previewImg == null && pictoSelected == null && uploadedFile == null && imgPictoEdit !== null" class="imgRounded imgEdit" width="100%" height="100%" ng-src="{{baseurl}}img/pictos/{{imgPictoEdit}}"/>
+                <img ng-if="uploadedFile !== null" class="imgRounded imgEdit" width="100%" height="100%" ng-src="{{baseurl}}{{uploadedFile}}"/>
+                <img ng-if="uploadedFile == null && imgPictoEdit !== null" class="imgRounded imgEdit" width="100%" height="100%" ng-src="{{baseurl}}img/pictos/{{imgPictoEdit}}"/>
+                <img ng-if="uploadedFile === null && imgPictoEdit === null && imgFunct !== null" class="imgRounded imgEdit" width="100%" height="100%" ng-src="{{baseurl}}img{{imgFunct}}"/> 
                 <img class="imgRounded buttonRemovePhoto" width="100%" height="100%" ng-src="{{baseurl}}img/icons/remove_photo.png" ng-click="removeFile()"/>
 
             </div>

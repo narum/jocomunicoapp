@@ -1709,6 +1709,7 @@ angular.module('controllers', [])
                     }).error(function (response) {});
                 }, function (value) {
                     //if close
+                    $scope.edit();
                     $scope.showBoard('0');
                 });
             };
@@ -2351,7 +2352,6 @@ angular.module('controllers', [])
 
             $http.post(url, postdata).success(function (response)
             {
-                $scope.previewImg = null;
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
                 /*
@@ -2444,16 +2444,6 @@ angular.module('controllers', [])
                     $scope.sFolderSelectedImg = img;
                     $scope.sFolderSelectedText = text;
                 };
-                // Asigns the selected pictograma to the cell (provisionally) and show it to the user
-                $scope.selectPicto = function (id, img) {
-                    $scope.idPictoEdit = id;
-                    $scope.imgPictoEdit = img;
-                    //Remove the uploaded/preview/selected image
-                    $scope.previewImg = null;
-                    $scope.pictoSelected = null;
-                    $scope.myFile = null;
-                    $scope.uploadedFile = null;
-                };
                 //Initialize the dropdwon menus and all the variables that will be shown to the user
                 $scope.getFunctions();
                 $scope.getBoards();
@@ -2466,6 +2456,7 @@ angular.module('controllers', [])
                 $scope.idPictoEdit = $scope.Editinfo.ID_CPicto;
                 $scope.imgPictoEdit = $scope.Editinfo.imgPicto;
                 $scope.uploadedFile = $scope.Editinfo.imgCell;
+                $scope.imgFunct = $scope.Editinfo.imgFunct;
                 // Check the values in order to active checkbox and this stuff
                 if ($scope.Editinfo.textInCell !== null) {
                     $scope.checkboxTextInCell = true;
