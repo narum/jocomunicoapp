@@ -664,7 +664,7 @@ class Myaudio {
             $concatveus .= "-v '".$voice."' ";
             $concatveus .= "-o mp3/".$filename.".m4a --data-format=aach ";
 
-            $cmd="say ".$concatveus."'".$text."' > /dev/null 2>&1 &";
+            $cmd="say ".$concatveus.'"'.$text.'" > /dev/null 2>&1 &';
             shell_exec($cmd);
 
         } catch (Exception $ex) {
