@@ -26,7 +26,7 @@
 
                     <div ng-if="inScan && isScanningCancel == true" class="imgRounded returnScanContainer" style="position: absolute;">
                         <div class="imgRounded returnScanContent">
-                            <img class="returnScanIcon" ng-src="/img/pictos/no_querer.png"/>
+                            <img class="returnScanIcon" ng-src="/img/srcWeb/falta_picto.png"/>
                         </div>
                     </div>
 
@@ -34,11 +34,12 @@
                         <svg ng-if="picto.boardLink != null" class="sfolder" version="1.1" id="Capa_1" preserveAspectRatio="none" viewBox="0 0 1020 1020" enable-background="new 0 0 1020 1020" xml:space="preserve">
 
                         <path fill="#{{picto.color}}" d="M185.127,0H425.89c17.358,3.666,33.149,15.672,39.751,32.354c4.051,9.47,4.409,19.842,5.671,29.909
-                              c145.722,0.425,291.443-0.014,437.165,0.186c33.509-0.598,66.938,14.583,87.604,41.119c13.122,17.611,21.104,38.701,23.92,60.43
-                              v755.796c-3.839,30.826-19.803,60.603-45.09,78.984c-15.686,11.873-35.023,17.199-53.949,21.223H98.892
-                              c-19.643-3.532-39.285-9.895-54.997-22.631C18.9,979.28,3.719,949.928,0,919.621V162.788C4.768,125.202,27.24,88.931,62.408,73.02
-                              c23.534-11.807,50.482-11.037,76.075-10.877c1.421-10.599,1.022-21.954,6.202-31.663C151.845,14.211,168.048,3.44,185.127,0z"/>
+	c145.722,0.425,291.443-0.014,437.165,0.186c33.509-0.598,66.938,14.583,87.604,41.119c13.122,17.611,21.104,38.701,23.92,60.43
+	v755.796c-3.839,30.826-19.803,60.603-45.09,78.984c-15.686,11.873-35.023,17.199-53.949,21.223H98.892
+	c-19.643-3.532-39.285-9.895-54.997-22.631C18.9,979.28,3.719,949.928,0,919.621V162.788C4.768,125.202,27.24,88.931,62.408,73.02
+	c23.534-11.807,50.482-11.037,76.075-10.877c1.421-10.599,1.022-21.954,6.202-31.663C151.845,14.211,168.048,3.44,185.127,0z"/>
                         </svg>
+                        
                         <div ng-if="picto.boardLink == null" class="backgroundCell" ng-style="{'background-color':'#{{picto.color}}'}"></div>
                         <!-- put the scan color over the image.
                              Only if we are in Scan mode
@@ -95,16 +96,14 @@
 
     </div>
     <!-- MODIF: Poner control si no scan-->
-    <div ng-if="puntuando" class="scoreContainer row">
-        <div class="scoreContent row">
-            <div class="col-xs-6" style="height:100%">
+    <div ng-if="!puntuando" class="scoreContainer">
+            <div class="scoreContainerLeft">
                 <img src="/img/srcWeb/feliz_1.png" class="goodPhrase" ng-click="isClickEnable()?feedback(1):null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(3,'Good'):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null" ng-class="{'scaneo': isScanning == 'goodPhrase'}"/>
             </div>
 
-            <div class="col-xs-6" style="height:100%">
+            <div class="scoreContainerRight">
                 <img src="/img/srcWeb/triste_1.png" class="goodPhrase" ng-click="isClickEnable()?feedback(0):null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(3,'Bad'):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null" ng-class="{'scaneo': isScanning == 'badPhrase'}"/>
             </div>
-        </div>
     </div>
 </div>
 

@@ -258,6 +258,7 @@ html *
     height: 100%;
     z-index: 24;
     border-radius: 15px;
+    border: 7px solid #2e758a;
     background: white;
 }
 .returnScanIcon{
@@ -269,8 +270,6 @@ html *
     max-height: 80%;
     width: auto;
     height: auto;
-    border: 7px solid #2e758a;
-    border-radius: 7px;
 }
 .scaneo{
     width: 100%;
@@ -395,10 +394,11 @@ html *
     padding:10%;
 }
 .goodPhrase{
+    border-radius: 15px;
     display: block;
-    max-width: 50%;
+    max-width: 100%;
     height: auto;
-    max-height: 50%;
+    max-height: 100%;
     width: auto;
     top: 50%;
     left: 50%;
@@ -407,9 +407,12 @@ html *
     z-index: 2;
 }
 .scoreContainer{
-    height: 30%;
+    max-height: 200px;
     position: absolute;
-    width: 60%;
+    max-width: 350px;
+    height: 30vh;
+    position: absolute;
+    width: 35vw;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
@@ -418,12 +421,23 @@ html *
     border-radius: 15px;
     padding: 2vh;
 }
-.scoreContent{
-    width: 100%;
+.scoreContainerLeft{
     height: 100%;
-    z-index: 24;
-    border-radius: 15px;
+    width: 48%;
+    margin-right: 2%;
     background: white;
+    border-radius: 15px;
+    background-clip: content-box;
+    float: left;
+}
+.scoreContainerRight{
+    height: 100%;
+    width: 48%;
+    margin-left: 2%;
+    background: white;
+    border-radius: 15px;
+    background-clip: content-box;
+    float: left;
 }
 .phraseText{
     bottom:0; 
