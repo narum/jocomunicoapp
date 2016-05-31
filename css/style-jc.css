@@ -114,6 +114,7 @@ html *
     padding-top: 0.5% !important;
     padding-bottom: 0.5% !important;
     padding-right: 1.5% !important;
+    cursor: default;
 }
 
 .cellSearch{

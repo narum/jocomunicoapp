@@ -1697,6 +1697,7 @@ angular.module('controllers', [])
                     }).error(function (response) {});
                 }, function (value) {
                     //if close
+                    $scope.edit();
                     $scope.showBoard('0');
                 });
             };
