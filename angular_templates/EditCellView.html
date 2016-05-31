@@ -128,9 +128,9 @@
             </div>
             <div class="col-xs-3 col-xs-offset-3 colorTitle">
                 <select class="boxEdit dropdown-arrow color" style="background-color: #{{colorSelected}};" ng-model="colorSelected">
-                    <option ng-repeat="color in ['ffffff', 'ffd751', 'ff5927', '41c426', 'f73b5e', '67b5cb']"
-                            style="background-color: #{{color}};"
-                            ng-value="color">        </option>
+                    <option ng-repeat="color in colors"
+                        style="background-color: #{{color.tagString}}"
+                        ng-value="color.tagString">{{color.content}}</option>
                 </select>
             </div>
         </div>

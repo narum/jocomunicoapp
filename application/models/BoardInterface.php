@@ -925,5 +925,17 @@ class BoardInterface extends CI_Model {
         $this->db->where('ID_Cell', $id);
         $this->db->update('Cell', $data);
     }
+    
+     function getColors(){
+        $idLanguage = $this->session->userdata('uinterfacelangauge');
+        $this->db->select('tagString, content'); // Seleccionar les columnes
+        $this->db->from('Content');// Seleccionem la taula
+        $this->db->where('section', 'color');// filtrem per columnes
+        $this->db->where('ID_CLanguage', $idLanguage);// filtrem per columnes
+        $this->db->order_by('Content.tagString', 'asc');
+        $query = $this->db->get();// Fem la query i la guardem a la variable query
+
+        return $query->result_array();// retornem l'array query amb els resultats
+     }
 
 }

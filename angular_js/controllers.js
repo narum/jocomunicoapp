@@ -1514,8 +1514,7 @@ angular.module('controllers', [])
             {
                 $scope.uploading = false;
                 $scope.evt = {nameboard: "", altura: 1, amplada: 1, autoreturn: false, autoread: false};
-                $scope.colorPaintingSelected = "ffffff";
-                $scope.painting = false;
+                $scope.fv = {colorPaintingSelected: "ffffff", painting: false};
                 $scope.getPrimaryBoard();
                 $scope.inEdit = true;
                 $scope.inScan = false;
@@ -1529,13 +1528,12 @@ angular.module('controllers', [])
                 $scope.typeSearh = "picto";
                 $scope.typeImgEditSearch = "Arasaac";
 
-
                 if (window.innerWidth < 1050) {
                     $scope.userViewWidth = 8;
                     $scope.editViewWidth = 4;
                 }
 
-
+                $scope.getColors();
 
                 var url = $scope.baseurl + "Board/getCellboard";
                 var postdata = {idboard: $scope.idboard};
@@ -1550,6 +1548,16 @@ angular.module('controllers', [])
 
                 });
             };
+
+            $scope.getColors = function () {
+                var url = $scope.baseurl + "Board/getColors";
+                $http.post(url).success(function (response)
+                {
+                    $scope.colors = response.data;
+                    console.log($scope.colors);
+                });
+            };
+
             $scope.changeEditSearch = function () {
                 if ($scope.typeSearh === "picto")
                     $scope.typeSearh = "img";
@@ -1751,14 +1759,14 @@ angular.module('controllers', [])
                         }
                         $scope.clickOnFunction(cell.ID_CFunction, text);
                     }
-                } else if ($scope.inEdit && $scope.painting) {
-                    var postdata = {id: cell.ID_RCell, color: $scope.colorPaintingSelected};
+                } else if ($scope.inEdit && $scope.fv.painting) {
+                    var postdata = {id: cell.ID_RCell, color: $scope.fv.colorPaintingSelected};
                     var url = $scope.baseurl + "Board/modifyColorCell";
                     $http.post(url, postdata).then(function ()
                     {
                         //To update the field in the ng-repeat we have to change the object itself (not only the property)
                         var obj = $scope.data[cell.posInBoard - 1];
-                        obj.color = $scope.colorPaintingSelected;
+                        obj.color = $scope.fv.colorPaintingSelected;
                         $scope.data[cell.posInBoard - 1] = angular.copy(obj);
                     });
                 }
@@ -1918,21 +1926,23 @@ angular.module('controllers', [])
 
                     $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
                     $scope.sound.play();
-
+                    var control = response.control;
                     $scope.dataTemp = response.data;
                     $scope.tense = response.tense;
                     $scope.tipusfrase = response.tipusfrase;
                     $scope.negativa = response.negativa;
-                    if ((response.control !== "") && (response.control !== "home")) {
-                        var url = $scope.baseurl + "Board/" + response.control;
+                    if ((control !== "") && (control !== "home")) {
+                        var url = $scope.baseurl + "Board/" + control;
                         var postdata = {tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
                         $http.post(url, postdata).success(function (response)
                         {
-                            $scope.dataTemp = response.data;
+                            if (control !== "generate") {
+                                $scope.dataTemp = response.data;
+                            }
                             $scope.info = response.info;
                         });
-                    } else if ((response.control === "home")) {
+                    } else if ((control === "home")) {
                         $scope.config();
                     }
                     $scope.autoReturn();
@@ -2324,16 +2334,12 @@ angular.module('controllers', [])
                 });
 
             };
-            $scope.changePaintingColor = function (color) {
-                $scope.colorPaintingSelected = color;
-
-            };
             $scope.startPainting = function () {
-                $scope.painting = true;
+                $scope.fv.painting = true;
 
             };
             $scope.stopPainting = function () {
-                $scope.painting = false;
+                $scope.fv.painting = false;
             };
         })
 

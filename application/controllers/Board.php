@@ -1010,4 +1010,14 @@ class Board extends REST_Controller {
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    
+    public function getColors_post() {
+        $data = $this->BoardInterface->getColors();
+        
+        $response = [
+            'data' => $data
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 }
