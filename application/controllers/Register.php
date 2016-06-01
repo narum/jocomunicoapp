@@ -9,6 +9,7 @@ class Register extends REST_Controller {
     {
         parent::__construct('rest', TRUE);
         $this->load->model('main_model');
+        $this->load->library('Myaudio');
     }
     
     public function allContent_get()
@@ -134,7 +135,6 @@ class Register extends REST_Controller {
             $defUser = ['cfgDefUser'=> $response["ID_U"]];
             //Save new password
             $this->main_model->changeData('SuperUser', 'ID_SU', $response["ID_SU"], $defUser);
-            $response = $defUser;
         }
 
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
@@ -176,54 +176,65 @@ class Register extends REST_Controller {
         $user = $this->query("user");
         if($user == NULL || $user == "") {
             $this->response("missing arguments", 400);
-            return;
-        }
-        $sended=false;
-        $exist=false;
-        $message="User Does not exist";
-        //Check if user exist
-        $userValidated=$this->main_model->checkData('SuperUser', 'ID_SU', $user);
-        //If user exists get data from user
-        if($userValidated === "true"){
-            $data=$this->main_model->getData('SuperUser', 'ID_SU', $user);
-            $exist=true;
-        }
-        if($exist){
+        }else{
 
-                //send email
-                $email=$data["email"];
-                $userName=$data["realname"] ." " . $data["surnames"] ;
-                $ID_SU=$data["ID_SU"];
-                $pass=$data["pswd"];
-                $language=$data["cfgDefUser"];
-                $hash=md5($pass . $ID_SU);
-                $url= base_url() . '#/emailValidation/' . $hash . '/' . $ID_SU;
-    
-                if($language==1){
-                    //Catalan email
-                    $subject    = 'JoComunico/Recuperació de contrasenya';
-                    $message   = 'Accedeix el següent enllaç per validar la conta. \r\n ' . $url;
+            $sended=false;
+            $local=false;
+            $message="User Does not exist";
+
+            //Check if user exist
+            $userValidated=$this->main_model->checkData('SuperUser', 'ID_SU', $user);
+            //If user exists
+            if($userValidated === "true"){
+
+                //Check server is local or online
+                $audio = new Myaudio();
+                $appRunning = $audio->AppLocalOrServer();
+                if ($appRunning == 'local'){
+                    $local=true;
+                    $message="Local server";
+                    //Change user validated to 1
+                    $this->main_model->changeData('SuperUser', 'ID_SU', $user, ['UserValidated' => '1']);
                 }else{
-                    //Spanish email
-                    $subject    = 'JoComunico/Recuperación de contraseña';
-                    $message   = 'Dirigete al siguiente enlace para validar la cuenta. \r\n ' . $url;
-                }
-    
-                $sended=$this->sendEmail($email, $userName, $subject, $message);
-            }
+                    //get data from user
+                    $data=$this->main_model->getData('SuperUser', 'ID_SU', $user);
 
+                    //send email
+                    $email=$data["email"];
+                    $userName=$data["realname"] ." " . $data["surnames"] ;
+                    $ID_SU=$data["ID_SU"];
+                    $pass=$data["pswd"];
+                    $language=$data["cfgDefUser"];
+                    $hash=md5($pass . $ID_SU);
+                    $url= base_url() . '#/emailValidation/' . $hash . '/' . $ID_SU;
+
+                    if($language==1){
+                        //Catalan email
+                        $subject    = 'JoComunico/Recuperació de contrasenya';
+                        $message   = 'Accedeix el següent enllaç per validar la conta. \r\n ' . $url;
+                    }else{
+                        //Spanish email
+                        $subject    = 'JoComunico/Recuperación de contraseña';
+                        $message   = 'Dirigete al siguiente enlace para validar la cuenta. \r\n ' . $url;
+                    }
+
+                    $sended=$this->sendEmail($email, $userName, $subject, $message);
+                }
+            }
             $response = [
                 "sendend" => $sended,
-                "exist" => $exist,
+                "local" => $local,
                 "message" => $message
             ];
 
             $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+        }
     }
     public function passRecoveryMail_post()
     {
         $sended=false;
         $exist=false;
+        $local=false;
         $message="User Does not exist";
 
         $user = $this->query("user");
@@ -256,32 +267,46 @@ class Register extends REST_Controller {
             }
 
             if($exist){
-
-                //send email
+                
+                //User data for email
                 $email=$data["email"];
                 $userName=$data["realname"] ." " . $data["surnames"] ;
                 $ID_SU=$data["ID_SU"];
                 $pass=$data["pswd"];
                 $language=$data["cfgDefUser"];
                 $hash=md5($pass . $ID_SU);
+                $path= '/passRecovery/' . $hash . '/' . $ID_SU;
                 $url= base_url() . '#/passRecovery/' . $hash . '/' . $ID_SU;
-    
-                if($language==1){
-                    //Catalan email
-                    $subject    = 'JoComunico/Recuperació de contrasenya';
-                    $message   = 'Accedeix el següent enllaç per introduir la nova contrasenya. \r\n ' . $url;
+                
+                //Check server is local or online
+                $audio = new Myaudio();
+                $appRunning = $audio->AppLocalOrServer();
+                if ($appRunning == 'local'){
+                    $sended=false;
+                    $local=true;
+                    $message="Local server";
                 }else{
-                    //Spanish email
-                    $subject    = 'JoComunico/Recuperación de contraseña';
-                    $message   = 'Dirigete al siguiente enlace para introducir la nueva contraseña. \r\n ' . $url;
+
+                    //send email
+                    if($language==1){
+                        //Catalan email
+                        $subject    = 'JoComunico/Recuperació de contrasenya';
+                        $message   = 'Accedeix el següent enllaç per introduir la nova contrasenya. \r\n ' . $url;
+                    }else{
+                        //Spanish email
+                        $subject    = 'JoComunico/Recuperación de contraseña';
+                        $message   = 'Dirigete al siguiente enlace para introducir la nueva contraseña. \r\n ' . $url;
+                    }
+
+                    $sended=$this->sendEmail($email, $userName, $subject, $message);
                 }
-    
-                $sended=$this->sendEmail($email, $userName, $subject, $message);
             }
 
             $response = [
                 "sendend" => $sended,
                 "exist" => $exist,
+                "local" => $local,
+                "url" => $path,
                 "message" => $message
             ];
 

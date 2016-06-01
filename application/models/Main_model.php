@@ -203,7 +203,7 @@ class Main_model extends CI_Model {
         $this->session->set_userdata('uinterfacelangnadjorder', $userConfig["nounAdjOrder"]);
         $this->session->set_userdata('uinterfacelangncorder', $userConfig["nounComplementOrder"]);
         $this->session->set_userdata('uinterfacelangabbr', $userConfig["languageabbr"]);
-        $this->session->set_userdata('autoEraseSentenceBar', $userConfig["cfgAutoEraseSentenceBar"]);
+        $this->session->set_userdata('cfgAutoEraseSentenceBar', $userConfig["cfgAutoEraseSentenceBar"]);
         $this->session->set_userdata('isfem', $userConfig["cfgIsFem"]);
         $this->session->set_userdata('cfgExpansionOnOff', $userConfig["cfgExpansionOnOff"]);
         $this->session->set_userdata('cfgPredBarNumPred', $userConfig["cfgPredBarNumPred"]);

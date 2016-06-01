@@ -2,7 +2,7 @@ angular.module('controllers', [])
 
 // Controlador del Login
 
-        .controller('LoginCtrl', function ($scope, Resources, $location, AuthService) {
+        .controller('LoginCtrl', function ($scope, Resources, $location, AuthService, $rootScope) {
             //Definición de variables
             $scope.viewActived = false; // para activar el gif de loading...
             $scope.view2 = false;// vista de recuperación de contraseña
@@ -10,6 +10,26 @@ angular.module('controllers', [])
             var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
             var numberOfLanguages = 0;// numero de idiomas (inicialmente a 0 pero se actualiza automaticamente en la siguiente función al hacer la peticion a la base de datos)
 
+            //Imagenes
+            $scope.img = [];
+            $scope.img.fons = '/img/srcWeb/fons.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            $scope.img.loading = '/img/srcWeb/Login/loading.gif';
+            $scope.img.clau = '/img/srcWeb/Login/clau.png';
+            $scope.img.fletxaLogin2 = '/img/srcWeb/Login/fletxaLogin2.png';
+            $scope.img.BotoEntra = '/img/srcWeb/Login/BotoEntra.png';
+            $scope.img.BotoEntra2 = '/img/srcWeb/Login/BotoEntra2.png';
+            
+            //Dropdown Menu Bar
+            $rootScope.dropdownMenuBar = [];
+            $rootScope.dropdownMenuBar.push({name: 'Inici', href: '/register', value:'inici', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png'});
+            $rootScope.dropdownMenuBar.push({name: 'FAQ', href: '', value:'faq', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png'});
+            $rootScope.dropdownMenuBar.push({name: 'Tutorial', href: '', value:'tutorial', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png'});
+            $rootScope.dropdownMenuBarValue = 'faq';
+            $rootScope.go = function(path){
+                $location.path(path);
+            };
+            
             //Pedimos el contenido en los idiomas disponibles.
             Resources.register.get({'section': 'login'}, {'funct': "allContent"}).$promise
                     .then(function (results) {
@@ -49,7 +69,7 @@ angular.module('controllers', [])
                         .then(function (result) {				// respuesta ok!
                             var token = result.data.token;
                             var userConfig = result.data.userConfig;
-                            if (userConfig.UserValidated == '1') {
+                            if (userConfig.UserValidated == '1'||userConfig.UserValidated == '2') {
                                 AuthService.login(token, userConfig);
                                 $location.path('/');
                             } else {
@@ -72,8 +92,13 @@ angular.module('controllers', [])
                 Resources.register.save({'user': $scope.user}, {'funct': "passRecoveryMail"}).$promise
                         .then(function (results) {
                             console.log(results.message);
-                            if (results.exist) { // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                $location.path('/emailSended');
+                            console.log(results);
+                            if (results.exist) {
+                                if(results.local){
+                                    $location.path(results.url);
+                                }else{                  // añadir else if de results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                    $location.path('/emailSended');
+                                }
                             } else {
                                 $scope.state2 = 'has-error';
                             }
@@ -82,7 +107,7 @@ angular.module('controllers', [])
         })
 
 //Controlador del registro de usuario
-        .controller('RegisterCtrl', function ($scope, $captcha, Resources, md5, $q, $location) {
+        .controller('RegisterCtrl', function ($scope, $rootScope, $captcha, Resources, md5, $q, $location) {
 
             //Inicializamos el formulario y las variables necesarias
             $scope.formData = {};  //Datos del formulario
@@ -95,6 +120,17 @@ angular.module('controllers', [])
             var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
             $scope.viewActived = false; // para activar el gif de loading...
 
+            //Imagenes
+            $scope.img = [];
+            $scope.img.fons = '/img/srcWeb/fons.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            $scope.img.loading = '/img/srcWeb/Login/loading.gif';
+            $scope.img.yo_3 = '/img/icons/yo_3.png';
+            $scope.img.yo_1 = '/img/icons/yo_1.png';
+            $scope.img.fletxaLogin2 = '/img/srcWeb/Login/fletxaLogin2.png';
+            $scope.img.BotoCrea = '/img/srcWeb/Login/BotoCrea.png';
+            $scope.img.BotoCrea2 = '/img/srcWeb/Login/BotoCrea2.png';
+            
             //Pedimos los idiomas disponibles
             Resources.register.get({'section': 'userRegister'}, {'funct': "allContent"}).$promise
                     .then(function (results) {
@@ -255,19 +291,19 @@ angular.module('controllers', [])
             };
 
             //Genero de la aplicación (Masculino/femenino)
-            $scope.sex = function (sex) {
-                if (sex == 'female') {
+            $scope.gender = function (gender) {
+                if (gender == 'female') {
                     $scope.state.female = 'has-success';
                     $scope.state.male = '';
                     $scope.formData.cfgIsFem = '1';
                     return true;
-                } else if (sex == 'male') {
+                } else if (gender == 'male') {
                     $scope.state.female = '';
                     $scope.state.male = 'has-success';
                     $scope.formData.cfgIsFem = '0';
                     return true;
                 }
-                if (sex.cfgIsFem == null || sex.cfgIsFem == '') {
+                if (gender.cfgIsFem == null || gender.cfgIsFem == '') {
                     $scope.state.female = 'has-error';
                     $scope.state.male = 'has-error';
                     return false;
@@ -301,15 +337,17 @@ angular.module('controllers', [])
                 $scope.checkPassword(formData);
                 $scope.checkName(formData);
                 $scope.checkLastname(formData);
-                $scope.sex(formData);
+                $scope.gender(formData);
                 // Comprobamos si el usuario ha introducido algun idioma
                 if ($scope.languageList.length == 0) {
                     $scope.state.languageSelected = 'has-error';
                     languageOk = false;
                 }
                 // Comprobamos todos los campos del formulario accediendo a las funciones o mirando las variables de estado
-                if ($scope.checkCaptcha() && userOk && $scope.checkPassword(formData) && $scope.checkName(formData) && $scope.checkLastname(formData) && emailOk && languageOk && $scope.sex(formData)) {
+                if ($scope.checkCaptcha() && userOk && $scope.checkPassword(formData) && $scope.checkName(formData) && $scope.checkLastname(formData) && emailOk && languageOk && $scope.gender(formData)) {
                     $location.path('/registerComplete');
+                    $rootScope.viewActived2 = false; // para activar el gif de loading...
+                    $rootScope.localServer = true;
 
                     //Borramos los campos inecesarios
                     delete formData.confirmPassword;
@@ -324,16 +362,14 @@ angular.module('controllers', [])
                     //enviamos los datos del formulario.
                     Resources.register.save(data, {'funct': "saveData"}).$promise
                             .then(function (results) {
-                                console.log('response:', results);
                                 var promises = []; //PROMESAS
                                 angular.forEach($scope.languageList, function (value) {
                                     var deferred = $q.defer();//PROMESAS
                                     //enviamos los usuarios con cada idioma.
                                     Resources.register.save({'SUname': formData.SUname, 'ID_ULanguage': value.ID_Language, 'defLanguage': defLanguage}, {'funct': "saveUserData"}).$promise
-                                            .then(function (results) {
-                                                deferred.resolve(results);//PROMESAS
-                                                $id_su = results.ID_SU;
-                                                console.log('response:', results);
+                                            .then(function (response) {
+                                                deferred.resolve(response);//PROMESAS
+                                                $id_su = response.ID_SU;
                                             });
                                     promises.push(deferred.promise);//PROMESAS
                                 });
@@ -343,9 +379,12 @@ angular.module('controllers', [])
                                     //Vista confirmación
                                     Resources.register.save({'user': $id_su}, {'funct': "generateValidationMail"}).$promise
                                             .then(function (results) {
-                                                console.log(results.message);
-                                                if (results.exist) { // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                                    $scope.viewActived = true; // para activar la vista
+                                                if (results.local) { // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                                    $rootScope.localServer = true;
+                                                    $rootScope.viewActived2 = true; // para activar la vista
+                                                }else{
+                                                    $rootScope.localServer = false;
+                                                    $rootScope.viewActived2 = true; // para activar la vista
                                                 }
                                             });
                                 });
@@ -356,8 +395,14 @@ angular.module('controllers', [])
 
 //User email validation
         .controller('emailValidationCtrl', function ($scope, $routeParams, Resources) {
+            //Variables
             $scope.activedValidation = false;// para activar el gif de loading
             $scope.viewActived = false; // para activar el gif de loading...
+            //Imagenes
+            $scope.img = [];
+            $scope.img.fons = '/img/srcWeb/fons.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             //Pedimos los idiomas disponibles
             var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
             Resources.register.get({'section': 'emailValidation'}, {'funct': "allContent"}).$promise
@@ -409,6 +454,12 @@ angular.module('controllers', [])
             $scope.state = {password: "", confirmPassword: ""};// estado de cada campo del formulario
             var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
 
+            //Imagenes
+            $scope.img = [];
+            $scope.img.fons = '/img/srcWeb/fons.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            $scope.img.loading = '/img/srcWeb/Login/loading.gif';
+            
             //HTML text content
             Resources.register.get({'section': 'passRecovery'}, {'funct': "allContent"}).$promise
                     .then(function (results) {
@@ -500,7 +551,7 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-        .controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, $q, txtContent, $location, $timeout) {
+        .controller('UserConfCtrl', function ($http, $scope, $rootScope, Resources, AuthService, $q, txtContent, $location, $timeout) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -516,6 +567,37 @@ angular.module('controllers', [])
             $scope.userDataForm = [];
             var count1 = 0;
             var count2 = 0;
+            //Imagenes
+            $scope.img = [];
+            $scope.img.fons = '/img/srcWeb/fons.png';
+            $scope.img.loading = '/img/srcWeb/Login/loading.gif';
+            $scope.img.Patterns1_12 = '/img/srcWeb/Patterns1-12.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            $scope.img.whiteLoading = '/img/icons/whiteLoading.gif';
+            $scope.img.Loading_icon = '/img/icons/Loading_icon.gif';
+            $scope.img.Icon_Alert = '/img/icons/info alert.png';
+            $scope.img.infoRed = '/img/icons/infoRed.png';
+            $scope.img.info = '/img/icons/info.png';
+            $scope.img.orangeArrow = '/img/srcWeb/UserConfig/orangeArrow.png';
+            $scope.img.audioPlay = '/img/srcWeb/UserConfig/audioPlay.png';
+            $scope.img.audioPlay2 = '/img/srcWeb/UserConfig/audioPlay2.png';
+            $scope.img.menuUp = '/img/srcWeb/UserConfig/menuUp.png';
+            $scope.img.menuDown = '/img/srcWeb/UserConfig/menuDown.png';
+            $scope.img.MenuHomeActive = '/img/srcWeb/UserConfig/MenuHomeActive.jpg';
+            $scope.img.menuButton1 = '/img/srcWeb/UserConfig/menuButton1.jpg';
+            $scope.img.menuButton2 = '/img/srcWeb/UserConfig/menuButton2.jpg';
+            $scope.img.menuButton3 = '/img/srcWeb/UserConfig/menuButton3.jpg';
+            $scope.img.textInCellOff = '/img/srcWeb/UserConfig/textInCellOff.png';
+            $scope.img.textInCellOn = '/img/srcWeb/UserConfig/textInCellOn.png';
+            $scope.img.cfgUsageMouse = '/img/srcWeb/UserConfig/cfgUsageMouse.png';
+            $scope.img.cfgUsageOneC = '/img/srcWeb/UserConfig/cfgUsageOneC.png';
+            $scope.img.cfgUsageTwoC = '/img/srcWeb/UserConfig/cfgUsageTwoC.png';
+            $scope.img.cfgScanningRow = '/img/srcWeb/UserConfig/cfgScanningRow.png';
+            $scope.img.cfgScanningCol = '/img/srcWeb/UserConfig/cfgScanningCol.png';
+            $scope.img.cfgScanningCustom = '/img/srcWeb/UserConfig/cfgScanningCustom.png';
+            $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
+            $scope.img.lowDormFlecha = '/img/srcWeb/Mus/lowDormFlecha.png';
+            $scope.img.lowHolaFlecha = '/img/srcWeb/Mus/lowHolaFlecha.png';
             //Pedimos la configuración del usuario a la base de datos
             $scope.getConfig = function () {
                 $scope.interfaceLanguages = [];
@@ -545,6 +627,7 @@ angular.module('controllers', [])
                             //change string (0,1) to boolean (true,false)
                             $scope.userData.cfgExpansionOnOff = ($scope.userData.cfgExpansionOnOff === "1");
                             $scope.userData.cfgPredOnOff = ($scope.userData.cfgPredOnOff === "1");
+                            $scope.userData.cfgMenuHomeActive = ($scope.userData.cfgMenuHomeActive === "1");
                             $scope.userData.cfgMenuReadActive = ($scope.userData.cfgMenuReadActive === "1");
                             $scope.userData.cfgMenuDeleteLastActive = ($scope.userData.cfgMenuDeleteLastActive === "1");
                             $scope.userData.cfgMenuDeleteAllActive = ($scope.userData.cfgMenuDeleteAllActive === "1");
@@ -561,17 +644,19 @@ angular.module('controllers', [])
                             $scope.userData.cfgInterfaceVoiceMascFem = ($scope.userData.cfgInterfaceVoiceMascFem === "masc");
 
                             var count = results.users[0].ID_ULanguage;
-                            var numberOfInterfaceLanguages = 0;
                             angular.forEach(results.users, function (value) {
                                 if (value.ID_ULanguage == count) {
                                     $scope.interfaceLanguages.push({name: results.languages[value.ID_ULanguage - 1].languageName, user: value.ID_User});
                                     count++;
-                                    numberOfInterfaceLanguages++;
                                 }
-                                $scope.expansionLanguages.push({idInterfaceLanguage: numberOfInterfaceLanguages, name: results.languages[value.cfgExpansionLanguage - 1].languageName, user: value.ID_User});
+                                $scope.expansionLanguages.push({idInterfaceLanguage: count-1, name: results.languages[value.cfgExpansionLanguage - 1].languageName, user: value.ID_User});
 
                             });
 
+                            //Mostrar el menu voices cuando no se ha introducido ninguna voz
+                            if($scope.userData.UserValidated=='1'){
+                                $scope.contentBar11=true;
+                            }
                             //Delete name and surnames input text box
                             delete $scope.userDataForm.realName;
                             delete $scope.userDataForm.surNames;
@@ -579,7 +664,6 @@ angular.module('controllers', [])
                             // Pedimos los textos para cargar la pagina
                             txtContent("userConfig").then(function (results) {
                                 $scope.content = results.data;
-                                $scope.viewActived = true;
                                 $scope.$broadcast("rebuild:me");
                                 //Enable bar after change Language
                                 $scope.interfaceLanguageBarEnable = true;
@@ -588,9 +672,7 @@ angular.module('controllers', [])
                         });
             };
 
-            $scope.rebuild = function () {
-                $scope.$broadcast("rebuild:me");
-            };
+
             //Cambiar datos de usuario
             $scope.saveUserData = function () {
                 if (($scope.userDataForm.realName == undefined || $scope.userDataForm.realName == '') && ($scope.userDataForm.surNames == undefined || $scope.userDataForm.surNames == '')) {
@@ -681,16 +763,33 @@ angular.module('controllers', [])
             $scope.changeOnOff = function (bool, data) {
                 if (bool) {
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': '1'}, {'funct': "changeCfgBool"}).$promise
+                    .then(function (results) {
+                            window.localStorage.removeItem('userData');
+                            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+                    });
                 } else {
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': '0'}, {'funct': "changeCfgBool"}).$promise
+                    .then(function (results) {
+                            window.localStorage.removeItem('userData');
+                            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+                    });
                 }
             }
 
             $scope.changeRadioEstate = function (value, data) {
                 Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': value}, {'funct': "changeCfgBool"}).$promise
+                .then(function (results) {
+                        window.localStorage.removeItem('userData');
+                        window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+                });
             }
             $scope.changeCfgVoices = function (value, data) {
                 Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': value}, {'funct': "changeCfgVoices"}).$promise
+                if($scope.userData.UserValidated=='1'&&$scope.userData.cfgExpansionVoiceOnline!=null&&(!$scope.local||$scope.userData.cfgExpansionVoiceOffline!=null)){
+                    Resources.main.save({'IdSu': $rootScope.sUserId, 'data': 'UserValidated', 'value': '2'}, {'funct': "userValidate2"}).$promise
+                    //Cargamos la board inicial (Oscar)
+                    $http.post($scope.baseurl + "PanelGroup/copyGroupBoard");
+                }
             }
 
             $scope.changeMascFem = function (bool, data) {
@@ -752,12 +851,23 @@ angular.module('controllers', [])
 
             //Audio Configuration (Myaudio library access)
             $scope.getAudioLists = function () {
-                Resources.main.get({'funct': "getVoices"}).$promise
+                return Resources.main.get({'funct': "getVoices"}).$promise
                         .then(function (results) {
-                            $scope.interfaceVoicesList = results.interfaceVoices[0];
-                            $scope.expansionVoicesList = results.expansionVoices[0];
-                            $scope.interfaceVoicesList[0].voiceCompleteName = results.interfaceVoices[0][0].voiceName + ' - [online]';
-                            $scope.interfaceVoicesList[1].voiceCompleteName = results.interfaceVoices[0][1].voiceName + ' - [online]';
+                            var error = false;
+                            angular.forEach(results.voices, function (voice){
+                                if(voice[1]&&!error){
+                                    error=true;
+                                    txtContent("errorVoices").then(function (content) {
+                                        $scope.errorMessage = content.data[voice[3]];
+                                        $scope.errorCode = voice[3];
+                                        $('#errorVoicesModal').modal({backdrop:'static'});
+                                    });
+                                }
+                            });
+                            $scope.interfaceVoicesList = results.voices.interfaceVoices[0];
+                            $scope.expansionVoicesList = results.voices.expansionVoices[0];
+                            $scope.interfaceVoicesList[0].voiceCompleteName = results.voices.interfaceVoices[0][0].voiceName + ' - [online]';
+                            $scope.interfaceVoicesList[1].voiceCompleteName = results.voices.interfaceVoices[0][1].voiceName + ' - [online]';
                             var count1 = 0;
                             var count2 = 0;
                             angular.forEach($scope.interfaceVoicesList, function (value) {
@@ -772,19 +882,24 @@ angular.module('controllers', [])
                                     var language = value.vocalwareLangAbbr;
                                     var country = value.vocalwareDescr;
                                     var type = value.voiceType;
-                                    $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' (' + country + ') - ' + '[' + type + ']';
+                                    if (country==null){
+                                        $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' - ' + '[' + type + ']';
+
+                                    }else{
+                                        $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' (' + country + ') - ' + '[' + type + ']';
+                                    }
                                 } else {
                                     $scope.expansionVoicesList[count2].voiceCompleteName = value.voiceName + ' - [offline]';
                                 }
-                                if (value.ID_Voice == $scope.userData.cfgExpansionVoiceOnline) {
+                                if (value.ID_Voice == $scope.userData.cfgExpansionVoiceOnline&&!($scope.userData.cfgExpansionVoiceOnline==null)) {
                                     $scope.userData.cfgExpansionVoiceOnline = value.voiceName;
                                 }
                                 count2++;
                             });
                             if (results.appRunning == 'local') {
                                 $scope.local = true;
-                                $scope.interfaceVoicesListOffline = results.interfaceVoicesOffline[0];
-                                $scope.expansionVoicesOffline = results.expansionVoicesOffline[0];
+                                $scope.interfaceVoicesListOffline = results.voices.interfaceVoicesOffline[0];
+                                $scope.expansionVoicesOffline = results.voices.expansionVoicesOffline[0];
                                 var count3 = 0;
                                 var count4 = 0;
                                 angular.forEach($scope.interfaceVoicesListOffline, function (value) {
@@ -799,9 +914,12 @@ angular.module('controllers', [])
                         });
             };
             $scope.getConfig()
-                    .then(function () {
-                        $scope.getAudioLists();
+                .then(function () {
+                    $scope.getAudioLists()
+                    .then(function (){
+                        $scope.viewActived = true;
                     });
+                });
 
             $scope.expansionVoiceChange = function (data) {
                 angular.forEach($scope.expansionVoicesList, function (value) {
@@ -815,6 +933,11 @@ angular.module('controllers', [])
                         }
                     }
                 });
+                if($scope.userData.UserValidated=='1'&&$scope.userData.cfgExpansionVoiceOnline!=null&&(!$scope.local||$scope.userData.cfgExpansionVoiceOffline!=null)){
+                    Resources.main.save({'IdSu': $rootScope.sUserId, 'data': 'UserValidated', 'value': '2'}, {'funct': "userValidate2"}).$promise
+                    //Cargamos la board inicial (Oscar)
+                    $http.post($scope.baseurl + "PanelGroup/copyGroupBoard");
+                }
             };
 
             $scope.mascFemVoice = function (data) {
@@ -824,46 +947,51 @@ angular.module('controllers', [])
                     $scope.changeMascFem(true, 'InterfaceVoiceMascFem');
                 }
             };
-            $scope.generateAudio = function (voice, type) {
+
+            $scope.generateAudio = function (voice,type) {
                 angular.forEach($scope.expansionVoicesList, function (value) {
                     if (value.voiceName === voice && value.voiceType === 'online') {
-                        voice = value.ID_Voice;
-                        type = 'online';
+                            voice=value.ID_Voice;
+                            type='online';
+                        }
+                });
+                if(voice==$scope.interfaceVoicesList[0].voiceName||voice==$scope.interfaceVoicesList[1].voiceName){
+                    type='online';
+                }
+                Resources.main.save({'IdU':$rootScope.userId, 'text':$scope.content.voicePlay, 'voice':voice, 'type':type, 'language':$scope.userData.ID_ULanguage, 'rate':'0'}, {'funct': "generateAudio"}).$promise
+                .then(function (results) {
+                    console.log(results);
+                    if(results[1]){
+                        txtContent("errorVoices").then(function (content) {
+                            $scope.errorMessage = content.data[results[3]];
+                            $scope.errorCode = results[3];
+                            $('#errorVoicesModal').modal({backdrop:'static'});
+                        });
+                    }else{
+                        
                     }
                 });
-                if (voice == $scope.interfaceVoicesList[0].voiceName || voice == $scope.interfaceVoicesList[1].voiceName) {
-                    type = 'online';
-                }
-                Resources.main.save({'IdU': $rootScope.userId, 'text': $scope.content.voicePlay, 'voice': voice, 'type': type, 'language': $scope.userData.ID_ULanguage, 'rate': '0'}, {'funct': "generateAudio"}).$promise
-                        .then(function (results) {
-                            console.log(results);
-                            if (results[1]) {
-                                txtContent("errorVoices").then(function (content) {
-                                    $scope.errorMessage = content.data[results[3]];
-                                    $scope.errorCode = results[3];
-                                    $('#errorVoicesModal').modal({backdrop: 'static'});
-                                });
-                            } else {
-                                $scope.sound = ngAudio.load("mp3/" + results[0]);
-                                $scope.sound.play();
-                            }
-                        });
             };
             $scope.exit = function () {
                 $scope.viewActived = false;
                 $scope.getConfig()
                         .then(function () {
-                            $location.path('/');
+                            $location.path('/panelGroups');
                         });
             };
         })
-
         .controller('myCtrl', function (Resources, $location, $scope, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {
-            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+
             if (!$rootScope.isLogged) {
                 $location.path('/login');
-            } else {
-                Resources.main.get({'IdSu': $rootScope.sUserId}, {'funct': "getConfig"});
+            }else{
+                Resources.main.get({'IdSu': $rootScope.sUserId}, {'funct': "getConfig"}).$promise
+                .then(function (results) {
+                    if(results.userConfig.UserValidated=='1'){
+                        //redirecciona a configuración de usuario para el primer acceso a la aplicación
+                        $location.path('/userConfig');
+                    }
+                });
             }
 
             // Pedimos los textos para cargar la pagina
@@ -2792,3 +2920,4 @@ angular.module('controllers', [])
                 }
             }
         });
+        

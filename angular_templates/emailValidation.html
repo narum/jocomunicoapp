@@ -1,11 +1,14 @@
 <link rel="stylesheet" type="text/css" href="css/register.css">
 <link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
-<div class="row barraSuperior"></div>
+<style>html, body, .container-table{height: 94vh;background: url('{{img.fons}}') no-repeat center center fixed;
+    -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
+</style>
+<div id="header" class="container-fluid text-center row"></div>
 <div class="container container-table">
     <div class="row vertical-center-row">
         <div class="form form-horizontal">
-            <div class="col-xs-2 col-xs-offset-5" ng-show="!activedValidation&&!viewActived"><img class="img-responsive" src="/img/srcWeb/Login/loading.gif"/></div>
-            <div class="col-xs-8 col-xs-offset-2 boxRegistreUsuari" ng-show="activedValidation&&viewActived">
+            <div class="col-xs-2 col-xs-offset-5" ng-show="!activedValidation&&!viewActived"><img class="img-responsive" ng-src={{img.loading}}/></div>
+            <div class="col-xs-8 col-xs-offset-2 boxRegistreUsuari" style="background-image: url({{img.Patterns1_08}})" ng-show="activedValidation&&viewActived">
                 <div class="row barraSuperiorRegistre">
                     <div class="col-xs-6"><p class="nomBarraSuperiorRegistre">{{ content.title }}</p></div>
                     <div class="col-xs-6">

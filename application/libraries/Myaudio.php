@@ -788,8 +788,9 @@ class Myaudio {
 
                 // obrim el fitxer on escriurem l'àudio en format CreateWrite
                 $msFileStream->Open($wavfile, 3, 0);
+
                 $msVoice->AudioOutputStream = $msFileStream;
-                            
+
                 // es diu la frase de manera asíncrona
                 $msVoice->Speak($fraseconvertida, 1);
                 // esperem a que acabi, ja que si no talla la frase
@@ -892,5 +893,4 @@ class Myaudio {
     }
     
 }
-
 /* End of file Myaudio.php */

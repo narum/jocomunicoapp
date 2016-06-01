@@ -108,9 +108,9 @@ class Main extends REST_Controller {
         $ID_SU = $this->query('IdSu');
         $data = ['cfg'.$this->query('data') => $this->query('value')]; // convertimos el string json del post en array.
 
-        $response = $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
+        $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
         //reescrivimos la cookies
-        $this->main_model->getConfig($ID_SU);
+        $response = $this->main_model->getConfig($ID_SU);
         //respuesta
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
@@ -155,11 +155,14 @@ class Main extends REST_Controller {
             $expansionVoicesOffline = 'App on server';
         }
         
-        $response = [
+        $voices = [
             'interfaceVoices'=>$interfaceVoices,
             'interfaceVoicesOffline'=>$interfaceVoicesOffline,
             'expansionVoices'=>$expansionVoices,
-            'expansionVoicesOffline'=>$expansionVoicesOffline,
+            'expansionVoicesOffline'=>$expansionVoicesOffline
+            ];
+        $response = [
+            'voices'=>$voices,
             'appRunning'=>$appRunning
             ];
         
@@ -171,12 +174,25 @@ class Main extends REST_Controller {
         
         $idusu = $this->query('IdU');
         $text = $this->query('text');
-        $interface = $this->query('interface');
+        $voice = $this->query('voice');
+        $type = $this->query('type');
+        $language = $this->query('language');
+        $rate = $this->query('rate');
         
         $audio = new Myaudio();
         
-        $response = $audio->generateAudio($idusu, $text, false);
+        $response = $audio->selectedVoiceAudio($idusu, $text, $voice, $type, $language, $rate);
         
+        $audio->waitForFile($response[0], $response[1]);
+        
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
+    public function userValidate2_post(){
+        $ID_SU = $this->query('IdSu');
+        $data = [$this->query('data') => $this->query('value')]; // convertimos el string json del post en array.
+
+        $response = $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
+        //respuesta
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
 }

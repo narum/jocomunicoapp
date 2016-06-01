@@ -2,16 +2,81 @@
     padding-right: 15px;
     padding-left: 15px;
 }
-
-html, body, .container-table {
-    height: 100%;
-    height: 100vh;
-    background: url("/img/FonsRegistre.png") no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+/*Dropdown menu bar*/
+.dropdownMenuBar{
+    z-index:1;
+    position: fixed;
 }
+.menuBarAnimation{
+    position: relative;
+    margin-top: 4vh;
+    margin-left: 4vh;
+    height: 7vh;
+    width: 7.8vh;
+    background-color: #adadad;
+
+    -webkit-transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
+    -moz-transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
+    -o-transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
+    transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
+}
+.menuBarAnimationOpened{
+    background-color: #474747;
+    margin-top: 0px;
+    margin-left: 0px;
+    height: 15vh;
+    width: 100vw;
+}
+.img-dropdownMenuButton{
+    z-index:3;
+    position: fixed;
+    margin-top: 4vh;
+    margin-left: 4vh;
+    height: 7vh;
+    width: auto;
+}
+.buttonsMenuBar{
+    z-index:2;
+    position: fixed;
+    width: 100vw;
+    opacity: 0;
+    
+    margin-top: 5vh;
+    font-size: 2vh;
+    text-align: center;
+}
+.buttonsMenuBarOpened{
+    -webkit-transition: opacity 1s ease-out;
+    -webkit-transition-delay: 0.5s;
+    -moz-transition: opacity 1s ease-out;
+    -moz-transition-delay: 0.5s;
+    -o-transition: opacity 1s ease-out;
+    -o-transition-delay: 0.5s;
+    transition: opacity 1s ease-out;
+    transition-delay: 0.5s;
+    opacity: 1;
+}
+.icondropdownMenuBar{
+    height: 2vh;
+    width: auto;
+}
+.marginButtonMenuBar{
+    margin-right: 8vh;
+}
+.marginButtonMenuBar label{
+    font-weight: normal;
+}
+input.statesButtonMenuBar[type=radio]:empty + label{
+    cursor: pointer;
+    color: #828282;
+}
+input.statesButtonMenuBar[type=radio]:checked + label{
+    color: white !important;
+}
+input.statesButtonMenuBar[type=radio]:empty + label:hover{
+    color: black;
+}
+
 /*Per centrar el div central*/
 .container-table {
     display: table;
@@ -21,27 +86,19 @@ html, body, .container-table {
     display: table-cell;
     vertical-align: middle;
 }
-
-.barraSuperior{
-    background-image: url("/img/fonsBarraSuperior.png");
-    
-    height: 6vh;
-    width: 110vw;
-    
-    position: fixed;
-    z-index:1;
-}
-
 .boxLogin{
-    background-image: url("/img/Patterns1-08.png");
-    /*height: 35vh;*/
     border-radius: 15px;
     padding: 0px;
 }
 .barraBoxLogin{
-    background-image: url("/img/fonsBarraSuperior.png");
+    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
+    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background-color: #4c4c4c;
     height: 6vh;
-    
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
 }

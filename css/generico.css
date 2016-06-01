@@ -431,6 +431,78 @@ input.switch:checked ~ label:after
     background-color: #fff;
     height: 100%;
 }
+/*Modal*/
+/*box User config*/
+#boxUserConfig{
+    margin-right:1vh;
+    border-radius: 15px;
+    cursor:default;
+}
+#header{
+    height:6vh;
+}
+#boxUserConfig #header{
+    height:6vh;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.headerTitle{
+    color:white;
+    padding-top: 1vh;
+    padding-left: 2vw;
+}
 .marginModalTop{
     margin-top: 25vh;
+}
+.backgroundUserConfigBox{
+    margin:3vh;
+    border-radius: 15px;
+    background-color: #fddfad;
+}
+.fonsAlert{
+    font-size: 4vh;
+    background-color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 3vh;
+}
+.img-Alert{
+    height: 4.5vh;
+    width: auto;
+}
+.dadesUsuariCentre{
+    padding: 3vh;
+}
+.verticalMarginTop{
+    margin-top: 3vh;
+}
+.textError{
+    padding-top: 2vh;
+    font-size: 2.2vh;
+    color: gray;
+}
+.btn-gray {
+    height: 5.2vh;
+    font-size: 2.5vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 5px;
+    color: white;
+    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
+    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background-color: #666666;
+    border: none;
+}
+.btn-gray:hover{
+    background-color: black;
+}
+.img-owl{
+    height: 20vh;
+    width: auto;
+    margin-right: 5vw;
 }

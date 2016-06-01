@@ -1,14 +1,31 @@
 <link rel="stylesheet" type="text/css" href="css/login.css">
 <link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
-<div class="row barraSuperior"></div>
+<style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;
+    -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
+</style>
+<!--menu superior dropdown-->
+    <div id="dropdownMenuButton" ng-init="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton1.png';dropdownMenuOpen=false" ng-mouseover="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton2.png'" ng-mouseout="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton1.png'">
+        <input type="image" class="img-dropdownMenuButton" ng-src="{{imgMenuButton}}" ng-click="dropdownMenuOpen=!dropdownMenuOpen">
+    </div>
+    <div class="dropdownMenuBar">
+        <div class="menuBarAnimation" ng-class="{menuBarAnimationOpened: dropdownMenuOpen}"></div>
+    </div>
+
+    <div class="row buttonsMenuBar" ng-class="{buttonsMenuBarOpened: dropdownMenuOpen}">
+        <div class="pull-right marginButtonMenuBar" ng-repeat="button in dropdownMenuBar" ng-init="button.icon=button.iconInitial">
+            <input type="radio" id="{{button.name}}" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarValue" value="{{button.value}}" ng-click="$root.dropdownMenuBarValue = button.value; go(button.href)" ng-show="false">
+            <label for="{{button.name}}" ng-mouseover="button.icon=button.iconHover" ng-mouseout="button.icon=button.iconInitial"><img class="icondropdownMenuBar" ng-src="{{button.icon}}" ng-show="!(dropdownMenuBarValue=='{{button.value}}')"/><img class="icondropdownMenuBar" ng-src="{{button.iconSelected}}" ng-show="dropdownMenuBarValue=='{{button.value}}'"/></br>{{button.name}}</label>
+        </div>
+    </div>
+
 <div class="container container-table">
     <div class="row vertical-center-row">
         <form name="loginForm">
-            <div class="col-xs-2 col-xs-offset-5" ng-show="!viewActived"><img class="img-responsive" src="/img/srcWeb/Login/loading.gif"/></div>
-            <div class="col-xs-8 col-xs-offset-2 boxLogin" ng-show="viewActived">
+            <div class="col-xs-2 col-xs-offset-5" ng-show="!viewActived"><img class="img-responsive" ng-src={{img.loading}}/></div>
+            <div class="col-xs-8 col-xs-offset-2 boxLogin" style="background-image: url({{img.Patterns1_08}})" ng-show="viewActived">
                 <div class="row barraBoxLogin">
                     <div class="col-xs-7">
-                        <div class="textResponsiveBarra" ng-show="!view2">{{content.login}} &nbsp;<image class="imatgeClau" ng-src="/img/srcWeb/Login/clau.png"/></div>
+                        <div class="textResponsiveBarra" ng-show="!view2">{{content.login}} &nbsp;<image class="imatgeClau" ng-src={{img.clau}}/></div>
                         <div class="textResponsiveBarra" ng-show="view2">{{content.title}}</div>
                     </div>
                     <div class="col-xs-5">
@@ -86,10 +103,10 @@
             <div class="col-xs-2 boxButo" ng-show="viewActived&&!view2">
                 <div class="buto">
                     <div class="col-xs-2 triangle">
-                        <image class="imgTriangle" alt="Responsive image" src="/img/srcWeb/Login/fletxaLogin2.png" />
+                        <image class="imgTriangle" alt="Responsive image" ng-src={{img.fletxaLogin2}}/>
                     </div>
                     <div class="col-xs-10">
-                        <div id="divID" ng-init="imgsrc='/img/srcWeb/Login/BotoEntra.png'" ng-mouseover="imgsrc='/img/srcWeb/Login/BotoEntra2.png'" ng-mouseout="imgsrc='/img/srcWeb/Login/BotoEntra.png'">
+                        <div id="divID" ng-init="imgsrc=img.BotoEntra" ng-mouseover="imgsrc=img.BotoEntra2" ng-mouseout="imgsrc=img.BotoEntra">
                             <input type="image" class="img img-rounded" alt="Responsive image" ng-src="{{imgsrc}}" ng-click="login()">
                         </div>
                     </div>
