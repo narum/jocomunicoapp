@@ -500,7 +500,7 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-        .controller('UserConfCtrl', function ($scope, $rootScope, Resources, ngAudio, AuthService, $q, txtContent, $location, $timeout) {
+        .controller('UserConfCtrl', function ($scope, $rootScope, Resources, AuthService, $q, txtContent, $location, $timeout) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -825,17 +825,6 @@ angular.module('controllers', [])
                 }
             };
 
-            $scope.generateAudio = function () {
-//        Resources.main.save({'IdU':$rootScope.userId, 'text':'Aquesta es la veu seleccionada', 'interface':'false'}, {'funct': "generateAudio"}).$promise
-//        .then(function (results) {
-//        console.log(results);
-                $scope.sound = ngAudio.load("mp3/" + "45c71c3398bc9fea91ad50b66c844a7c.mp3");
-//        $scope.sound = ngAudio.load("mp3/"+results[0]);
-                $scope.sound.play();
-//        $scope.sound = ngAudio.load($scope.baseurl + );
-//        });
-            };
-
             $scope.exit = function () {
                 $scope.viewActived = false;
                 $scope.getConfig()
@@ -845,7 +834,7 @@ angular.module('controllers', [])
             };
         })
 
-        .controller('myCtrl', function (Resources, $location, $scope, ngAudio, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {
+        .controller('myCtrl', function (Resources, $location, $scope, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -1744,8 +1733,10 @@ angular.module('controllers', [])
                         $http.post(url, postdata).then(function (response) {
                             $scope.dataAudio = response.audio;
 
-                            $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
-                            $scope.sound.play();
+                            $scope.sound = "mp3/" + $scope.dataAudio;
+                            $timeout(function () {
+                                $('#utterance').get(0).play();
+                            });
                         });
                         $scope.showBoard(cell.boardLink);
                         readed = true;
@@ -1869,8 +1860,10 @@ angular.module('controllers', [])
                         $scope.dataTemp = response.data;
                         $scope.dataAudio = response.audio;
 
-                        $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
-                        $scope.sound.play();
+                        $scope.sound = "mp3/" + $scope.dataAudio;
+                        $timeout(function () {
+                            $('#utterance').get(0).play();
+                        });
 
                         $scope.getPred();
                     });
@@ -1925,8 +1918,11 @@ angular.module('controllers', [])
                 {
                     $scope.dataAudio = response.audio;
 
-                    $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
-                    $scope.sound.play();
+                    $scope.sound = "mp3/" + $scope.dataAudio;
+                    $timeout(function () {
+                        $('#utterance').get(0).play();
+                    });
+
                     var control = response.control;
                     $scope.dataTemp = response.data;
                     $scope.tense = response.tense;
@@ -1997,8 +1993,10 @@ angular.module('controllers', [])
                     //$scope.data = response.data;
                     $scope.dataAudio = response.audio;
 
-                    $scope.sound = ngAudio.load($scope.baseurl + "mp3/" + $scope.dataAudio);
-                    $scope.sound.play();
+                    $scope.sound = "mp3/" + $scope.dataAudio;
+                    $timeout(function () {
+                        $('#utterance').get(0).play();
+                    });
                     if ($scope.cfgUserExpansionFeedback) {
                         $scope.puntuar();
 
@@ -2052,8 +2050,10 @@ angular.module('controllers', [])
                         {
                             $scope.dataAudio = response.data;
 
-                            $scope.sound = ngAudio.load($scope.baseurl + $scope.dataAudio);
-                            $scope.sound.play();
+                            $scope.sound = "mp3/" + $scope.dataAudio;
+                            $timeout(function () {
+                                $('#utterance').get(0).play();
+                            });
 
                         });
             };
@@ -2067,9 +2067,10 @@ angular.module('controllers', [])
                         {
                             $scope.dataAudio = response.data;
 
-                            //alert($scope.dataAudio);
-                            $scope.sound = ngAudio.load($scope.baseurl + $scope.dataAudio);
-                            $scope.sound.play();
+                            $scope.sound = "mp3/" + $scope.dataAudio;
+                            $timeout(function () {
+                                $('#utterance').get(0).play();
+                            });
 
                         });
             };
