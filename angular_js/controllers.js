@@ -1013,7 +1013,10 @@ angular.module('controllers', [])
                             $('#errorVoicesModal').modal({backdrop:'static'});
                         });
                     }else{
-                        
+                        $scope.sound = "mp3/"+results[0];
+                        $timeout(function() {
+                            $('#utterance').get(0).play();
+                        });
                     }
                 });
             };

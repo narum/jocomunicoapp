@@ -91,7 +91,9 @@ input.statesButtonMenuBar[type=checkbox]:empty + label:hover{
 .LanguagesButtonMenuBar{
     margin-right: 2vh;
 }
-
+textarea:focus, input:focus {
+    box-shadow: none;
+}
 
 
 
