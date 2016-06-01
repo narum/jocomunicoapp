@@ -36,25 +36,6 @@ border-radius:10px;
     /*overflow: hidden;*/
 }
 
-/*box User config*/
-#boxUserConfig{
-    margin-right:1vh;
-    border-radius: 15px;
-    cursor:default;
-}
-#header{
-    height:6vh;
-}
-#boxUserConfig #header{
-    height:6vh;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-}
-.headerTitle{
-    color:white;
-    padding-top: 1vh;
-    padding-left: 2vw;
-}
 .editButton{
     color: white;
     background-color: #333333;

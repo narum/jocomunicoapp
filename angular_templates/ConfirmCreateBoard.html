@@ -1,9 +1,9 @@
-<div class="topBarDialogM"><div class="editTitle">{{content.nwboardtitle}}</div><div class="cruz"></div></div>
+<div class="topBarDialogM"><div class="editTitle">{{content.nwboardtext}}</div><div class="cruz"></div></div>
 <div class="imgRounded confirmDefPadM">
     <div class="dialogContent imgRounded confirmBackgroundColor" >
         <div class=" row text-center" style="height: 35%">
-            {{content.putNameBoard}}
-            <input type="text" class="col-xs-offset-2 col-xs-8 dialogText"  name="CreateBoardName" ng-model="CreateBoardData.CreateBoardName" placeholder="{{content.newboardtext}}"/>
+            {{content.nwboardtext}}
+            <input type="text" class="col-xs-offset-2 col-xs-8 dialogText" ng-class=" {'dialogTextDange' : CreateBoardData.CreateBoardName.length <= 0} "  name="CreateBoardName" ng-model="CreateBoardData.CreateBoardName" placeholder="{{content.nwboardtext}}"/>
         </div>
         <div class="row" style="height: 20%; margin-left: 20px;">
             <div class="col-xs-3 text-right paddingTextRight"> {{content.rows}}</div>
@@ -21,7 +21,8 @@
         <p class="text-center" style="height: 10%">{{content.createBoard}}</p>
         <div class="row confirmButtons">
             
-            <input class="dialogButton col-xs-offset-3 col-xs-2" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
+            <input disabled ng-if="CreateBoardData.CreateBoardName.length <= 0" class="dialogButtonDisabled col-xs-offset-3 col-xs-2" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
+            <input ng-if="CreateBoardData.CreateBoardName.length > 0" class="dialogButton col-xs-offset-3 col-xs-2" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
             <input class="dialogButton col-xs-offset-2 col-xs-2" type="button" value="{{content.cancel}}" ng-click="closeThisDialog();"/>
         </div>
     </div>

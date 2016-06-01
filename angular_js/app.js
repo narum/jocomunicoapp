@@ -6,7 +6,6 @@ angular.module('app', [
         'ngDraggable',
 	'ui.bootstrap',
         'ngDialog',
-        'ngAudio',
         'ngScrollbar',
         'ngAnimate',
         

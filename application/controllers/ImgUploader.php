@@ -31,7 +31,7 @@ class ImgUploader extends REST_Controller {
     public function upload_post() {
         $target_dir = "img/users/";
         for ($i = 0; $i < count($_FILES); $i++) {
-            $imgObject = $this->Rename_Img(basename($_FILES['file' . $i]['name']));
+            $md5Name = $this->Rename_Img(basename($_FILES['file' . $i]['name']));
             if (!($_FILES['file' . $i]['type'] == "image/gif" || $_FILES['file' . $i]['type'] == "image/jpeg" || $_FILES['file' . $i]['type'] == "image/png")) {
                 $errorText = 'extension no valida.';
                 $response = [
@@ -39,7 +39,9 @@ class ImgUploader extends REST_Controller {
                 ];
                 $this->response($response, 300);
             }
-            if (file_exists($target_dir . $imgObject['md5Name'])) {
+            $handle = fopen($target_dir . $md5Name, "r");
+            if (is_resource($handle)) {
+                fclose($handle);
                 //MODIF: lanzar error 
                 $errorText = 'Ya existe una imagen con ese nombre.';
                 $response = [
@@ -49,38 +51,36 @@ class ImgUploader extends REST_Controller {
             }
             //MODIF: poner tamaño a 100 kb y tamaño 150 minimo
             if ($_FILES['file' . $i]['size'] > 100000) {
-                $success = $this->Img_Resize($_FILES['file' . $i]['tmp_name'], $target_dir, $imgObject['md5Name']);
+                $success = $this->Img_Resize($_FILES['file' . $i]['tmp_name'], $target_dir, $md5Name);
             } else {
-                $success = move_uploaded_file($_FILES['file' . $i]['tmp_name'], $target_dir . $imgObject['md5Name']);
+                $success = move_uploaded_file($_FILES['file' . $i]['tmp_name'], $target_dir . $md5Name);
             }
             if ($success) {
                 $idusu = $this->session->userdata('idusu');
-                $this->ImgUploader_model->insertImg($idusu, basename($_FILES['file' . $i]['name']), $imgObject['id'], $imgObject['md5Name']);
+                $this->ImgUploader_model->insertImg($idusu, basename($_FILES['file' . $i]['name']), $md5Name);
             }
         }
 
         $response = [
-            'nombre' => $target_dir . $imgObject['md5Name']
+            'nombre' => $target_dir . $md5Name
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
 
     function Rename_Img($string) {
+                
         $idusu = $this->session->userdata('idusu');
-        $id = $this->ImgUploader_model->getCountIdImgUsu($idusu);
-        $fecha = new DateTime();
+        $fecha = microtime();
         //MODIF: Pasar superuser no user
-        $name = $string;
-        $namelen = strlen($name);
-        $pointpos = strrpos($name, '.');
-        $ext = substr($name, $pointpos, $namelen);
-        $name = "idi" . $id . "-idu" . $idusu . "-" . $fecha->getTimestamp();
+        $stringlen = strlen($string);
+        $pointpos = strrpos($string, '.');
+                
+        $ext = substr($string, $pointpos, $stringlen);
+        $name = "idu" . $idusu . "-" . $string. "-" . $fecha;
         $name = md5($name . $idusu);
         $md5Name = $name . $ext;
-        $img = ['md5Name' => $md5Name,
-            'id' => $id];
-        return $img;
+        return $md5Name;
     }
 
     function Img_Resize($src_path, $target_dir, $dst_path) {

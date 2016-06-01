@@ -117,7 +117,7 @@ class BoardInterface extends CI_Model {
         //Este tiene que ser left, si pictograms.picto id = null significa que esta vacia
         $this->db->join('Pictograms', 'Cell.ID_CPicto = Pictograms.pictoid', 'left');
         $this->db->join('PictogramsLanguage', 'Pictograms.pictoid = PictogramsLanguage.pictoid AND PictogramsLanguage.languageid = "' . $idlang . '"', 'left');
-
+        $this->db->join('Function', 'Cell.ID_CFunction = Function.ID_Function', 'left');
         $query = $this->db->get('R_BoardCell');
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -724,11 +724,11 @@ class BoardInterface extends CI_Model {
         $this->db->join('r_boardcell', 'r_boardcell.ID_RCell = cell.ID_Cell', 'left');
         $query = $this->db->get('cell');
         if($sameGroupBoard === 1){    
-            $row->boardLink = "NULL";
+            $row->boardLink = null;
         }
         foreach ($query->result() as $row) {
             if($sameGroupBoard === 0){    
-                $row->boardLink = "NULL";
+                $row->boardLink = null;
             }
             $data = array(
                 'isFixedInGroupBoards' => $row->isFixedInGroupBoards,
@@ -925,5 +925,17 @@ class BoardInterface extends CI_Model {
         $this->db->where('ID_Cell', $id);
         $this->db->update('Cell', $data);
     }
+    
+     function getColors(){
+        $idLanguage = $this->session->userdata('uinterfacelangauge');
+        $this->db->select('tagString, content'); // Seleccionar les columnes
+        $this->db->from('Content');// Seleccionem la taula
+        $this->db->where('section', 'color');// filtrem per columnes
+        $this->db->where('ID_CLanguage', $idLanguage);// filtrem per columnes
+        $this->db->order_by('Content.tagString', 'asc');
+        $query = $this->db->get();// Fem la query i la guardem a la variable query
+
+        return $query->result_array();// retornem l'array query amb els resultats
+     }
 
 }

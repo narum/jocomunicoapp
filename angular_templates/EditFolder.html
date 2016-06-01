@@ -32,17 +32,17 @@
 <div  class="col-xs-{{editViewWidth}} fullheight colorMargin">
     <div class="fullheight imgRounded colorFolderPadding" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-09.png)">
         <div class="col-xs-7">
-            <select class="folderBox dropdown-arrow color" style="background-color: #{{colorPaintingSelected}};" ng-model="colorPaintingSelected" ng-change="changePaintingColor(colorPaintingSelected)">
-                <option ng-repeat="color in ['ffffff', 'ffd751', 'ff5927', '41c426', 'f73b5e', '67b5cb']"
-                        style="background-color: #{{color}}"
-                        ng-value="color">        </option>
+            <select class="folderBox dropdown-arrow color" style="background-color: #{{$parent.fv.colorPaintingSelected}};" ng-model="$parent.fv.colorPaintingSelected" ng-change="$parent.startPainting();">
+                <option ng-repeat="color in $parent.colors"
+                        style="background-color: #{{color.tagString}}"
+                        ng-value="color.tagString">{{color.content}}</option>
             </select>
         </div>
         <div class="col-xs-5">
-            <div class="imgRounded colorFolderButtonDown" ng-click="startPainting()" ng-if="!painting">
+            <div class="imgRounded colorFolderButtonDown" ng-click="$parent.startPainting()" ng-if="!$parent.fv.painting">
                 {{content.start}}
             </div>
-            <div class="imgRounded colorFolderButton" ng-click="stopPainting()" ng-if="painting">
+            <div class="imgRounded colorFolderButton" ng-click="$parent.stopPainting()" ng-if="$parent.fv.painting">
                 {{content.stop}}
             </div>
         </div>

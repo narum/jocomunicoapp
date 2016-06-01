@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+
 class Myaudio {
             
     function __construct() {}
@@ -38,7 +39,9 @@ class Myaudio {
     public function getOS() { 
         
         $server_data = $_SERVER['HTTP_USER_AGENT'];
+
         $os_platform    =   "Unknown OS Platform";
+
         $os_array       =   array(
                                 '/windows nt 10/i'      =>  'Windows',
                                 '/windows nt 6.3/i'     =>  'Windows',
@@ -64,11 +67,14 @@ class Myaudio {
                                 '/blackberry/i'         =>  'BlackBerry',
                                 '/webos/i'              =>  'Mobile'
                             );
+
         foreach ($os_array as $regex => $value) { 
+
             if (preg_match($regex, $server_data)) {
                 $os_platform    =   $value;
             }
         }   
+
         return $os_platform;
     }
     
@@ -92,6 +98,7 @@ class Myaudio {
                 try {
                     // Llistat de veus
                     $cmdresponse = shell_exec("say --voice=?");
+
                     // Partim pels espais d'abans de la definició de l'idioma de format xX_xX
                     // fins al salt de línia
                     $voices = preg_split( '/[\s]+..[_-][a-zA-Z]+[\s]+#[^\r\n]*(\r\n|\r|\n)/', $cmdresponse);
@@ -111,9 +118,11 @@ class Myaudio {
                             . "voices or install external voices for Mac OS X (i.e. Acapela voices).";
                     $errorcode = 102;
                 }
+
                 break;
                     
             case "Windows":
+
                 // error de Microsoft Speech Platform
                 $errorMSP = false;
                 $errorMSPtmp = null;
@@ -121,13 +130,16 @@ class Myaudio {
                 try {
                     // Recollim els objectes de les llibreries Speech de Microsoft que necessitem
                     $msVoice = new COM('Speech.SpVoice');
+
                     $numvoices = $msVoice->GetVoices()->Count;
+
                     // agafem les veus, la descripció la farem servir per buscar els idiomes
                     // de cada una d'elles, idealment són les que s'haurien de llistar
                     // a la interfície de l'usuari
                     for ($i=0; $i<$numvoices; $i++) {
                         $voices[] = $msVoice->GetVoices()->Item($i)->GetDescription;
                     }
+
                     // DEBUG
                     // print_r($voices);
                     
@@ -142,11 +154,15 @@ class Myaudio {
                 
                 try {
                     // Recollim els objectes de les llibreries SAPI que necessitem
+
                     $msSAPIVoice = new COM('SAPI.SpVoice');
+
                     $numvoicesSAPI = $msSAPIVoice->GetVoices()->Count;
+
                     // agafem les veus, la descripció la farem servir per buscar els idiomes
                     // de cada una d'elles, idealment són les que s'haurien de llistar
                     // a la interfície de l'usuari
+
                     for ($i=0; $i<$numvoicesSAPI; $i++) {
                         $voices[] = $msSAPIVoice->GetVoices()->Item($i)->GetDescription;
                     }
@@ -171,6 +187,7 @@ class Myaudio {
                             . "Install Microsoft Speech Platform or SAPI voices.";
                     $errorcode = 104;
                 }
+
                 break;
                 
             default:
@@ -189,6 +206,7 @@ class Myaudio {
         
         return $output;
     }
+
     /** 
      * @param bool $online parameter that says if online voices need to be added
      * (for the Interface voices, there will only be two default online voices for each language)
@@ -295,9 +313,9 @@ class Myaudio {
      */
     public function generateAudio($idusu, $text, $interface) 
     {
-        
         $CI = &get_instance();
         $CI->load->model('Audio_model');
+        
         $output = array();
         $output[1] = false; // error
         $output[2] = null; // error message
@@ -388,7 +406,9 @@ class Myaudio {
             
             $key .= $voice."#".$type."$".$text;
             $md5 = md5($key);
+
             $isindb = $CI->Audio_model->isAudioInDatabase($md5);
+
             // if it's already in the database
             if ($isindb) $filename = $isindb;
             else {
@@ -510,6 +530,7 @@ class Myaudio {
                         $errormessage = $auxresponse[1];
                         $errorcode = $auxresponse[2];
                     }
+
                     break;
                 
                 case "Windows":
@@ -523,6 +544,7 @@ class Myaudio {
                     }
                     
                     break;
+
                 default:
                     $error = true;
                     $errormessage = "Error. Your OS is not compatible with offline voices. "
@@ -562,8 +584,10 @@ class Myaudio {
         $output = array();
         
         $curl = curl_init();
+
         $url = "http://www.vocalware.com/tts/gen.php";
         $secret_phrase = "5a823f715692c02de9e215fef94c5dc2";
+
         $data = array(
             'EID' => '2',
             'LID' => $vocalwareLID,
@@ -573,18 +597,25 @@ class Myaudio {
             'ACC' => '5795433',
             'API' => '2490514'                    
         );
+
         $data['CS'] = md5($data['EID'].$data['LID'].$data['VID'].$data['TXT'].$data['EXT'].$data['ACC'].$data['API'].$secret_phrase);
+
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
         $result = curl_exec($curl);
+
         curl_close($curl);
                 
         // if no error occurred (we assume there's an error if the mp3 data is less than 1000 characters)
         if ($result && !strpos($result, "Error: ") && (strlen($result) > 1000)) {
+
             try {
                 $filenamewrite = "mp3/".$filename.".mp3";
                 $fitxertxtwrite = fopen($filenamewrite,"w+b");
+
                 if (flock($fitxertxtwrite, LOCK_EX)) {
                     fwrite($fitxertxtwrite, $result);
                     flock($fitxertxtwrite, LOCK_UN);
@@ -629,10 +660,13 @@ class Myaudio {
             $concatveus = "";
         
             if ($rate > 0) $concatveus .= "-r ".$rate." ";
+
             $concatveus .= "-v '".$voice."' ";
             $concatveus .= "-o mp3/".$filename.".m4a --data-format=aach ";
-            $cmd="say ".$concatveus."'".$text."' > /dev/null 2>&1 &";
+
+            $cmd="say ".$concatveus.'"'.$text.'" > /dev/null 2>&1 &';
             shell_exec($cmd);
+
         } catch (Exception $ex) {
             $error = true;
             $errormessage = "Error. Unable to access your selected Mac OS X voice due to unkown circumstances. "
@@ -669,10 +703,13 @@ class Myaudio {
         // error de Microsoft Speech Platform
         $errorMSP = false;
         $errorMSPtmp = null;
+
         try {
             // Recollim els objectes de les llibreries Speech de Microsoft que necessitem
             $msVoice = new COM('Speech.SpVoice');
+
             $numvoices = $msVoice->GetVoices()->Count;
+
             // per cada veu miram si la descripció coincideix amb el nom de la veu
             // seleccionada per l'usuari
             for ($i=0; $i<$numvoices; $i++) {
@@ -686,13 +723,17 @@ class Myaudio {
             $errorMSP = true;
             $errorMSPtmp = "Error. Unable to access Microsoft Speech Platform.";
         }
+
         // error de SAPI
         $errorSAPI = false;
         $errorSAPItmp = null;
+
         try {
             // Recollim els objectes de les llibreries SAPI que necessitem
             $msVoice = new COM('SAPI.SpVoice');
+
             $numvoicesSAPI = $msVoice->GetVoices()->Count;
+
             // per cada veu miram si la descripció coincideix amb el nom de la veu
             // seleccionada per l'usuari
             for ($i=0; $i<$numvoicesSAPI; $i++) {
@@ -706,6 +747,7 @@ class Myaudio {
             $errorSAPI = true;
             $errorSAPItmp = "Error. Unable to access SAPI voices.";
         }
+
         if ($errorMSP && $errorSAPI) {
             $error = true;
             $errormessage = "Error. Unable to access your selected Windows voice due to unkown circumstances. "
@@ -715,7 +757,9 @@ class Myaudio {
         }
         // si no hi ha hagut cap error, procedim a generar l'audio
         else {
+
             try {
+
                 $msFileStream = null;
                 $msAudioFormat = null;
                 
@@ -727,15 +771,17 @@ class Myaudio {
                     $msFileStream = new COM('SAPI.SpFileStream');
                     $msAudioFormat = new COM('SAPI.SpAudioFormat');
                 }
-                // Path al fitxer on guardarem les veus
-                $wavfile = "C:\\xampp\htdocs\\v3\mp3\\".$filename.".mp3";
 
+                // Path al fitxer on guardarem les veus
+                $wavfile = "C:\\xampp\htdocs\jocomunicoapp\mp3\\".$filename.".mp3";
+                
                 // hem de triar la veu que vol l'usuari (trobada anteriorment)
                 $msVoice->Voice = $chosenVoice;
 
                 // passem la frase d'utf-8 a format de Windows perquè llegeixi bé
                 // tots els caràcters
                 $fraseconvertida = iconv("utf-8", "Windows-1252", $text);
+
                 // guardarem el fitxer amb la menor qualitat possible, format 4
                 $msAudioFormat->Type = 4;
                 $msFileStream->Format = $msAudioFormat;
@@ -749,11 +795,13 @@ class Myaudio {
                 $msVoice->Speak($fraseconvertida, 1);
                 // esperem a que acabi, ja que si no talla la frase
                 $msVoice->WaitUntilDone(-1);
+
                 // tanquem el fitxer i alliberem la memòria dels objectes
                 $msFileStream->Close();
                 $msAudioFormat = null;
                 $msFileStream = null;
                 $msVoice = null;
+
             } catch (Exception $e) {
                 $error = true;
                 $errormessage = "Error. An error occurred while writing your Windows audio file.";
@@ -802,7 +850,9 @@ class Myaudio {
         else $key = "#INTERFACEVOICE_USU".$idusu."@".$language."#".$voice."(".$type.")"."$".$text;
         
         $md5 = md5($key);
+
         $isindb = $CI->Audio_model->isAudioInDatabase($md5);
+
         // if it's already in the database
         if ($isindb) $filename = $isindb;
         else {
