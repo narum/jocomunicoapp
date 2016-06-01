@@ -1,9 +1,11 @@
 <link rel="stylesheet" type="text/css" href="css/register.css">
 <link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
-<style>html, body, .container-table{height: 94vh;background: url('{{img.fons}}') no-repeat center center fixed;
+<style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;
     -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
-<div id="header" class="container-fluid text-center row"></div>
+<!--menu superior dropdown-->
+<div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
+
 <div class="container container-table">
     <div class="row vertical-center-row">
         <div class="form form-horizontal">
@@ -12,11 +14,6 @@
                 <div class="row barraSuperiorRegistre">
                     <div class="col-xs-6"><p class="nomBarraSuperiorRegistre">{{ content.title }}</p></div>
                     <div class="col-xs-6">
-                        <button
-                            type="button"
-                            class="icon-globe btn-idioma"
-                            ng-click="changeContentLanguage()"> &nbsp;{{languageNameNext}}
-                        </button>
                          <a class="icon-remove-sign pull-right butoSortirBarraSuperiorRegistre" ng-href="#/login"></a>
                     </div>
                 </div>

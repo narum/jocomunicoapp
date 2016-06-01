@@ -3,7 +3,9 @@
 <style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;
     -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
-<div class="row barraSuperior"></div>
+<!--menu superior dropdown-->
+<div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
+
 <div class="container container-table">
     <div class="row vertical-center-row">
         <form name="PassForm">
@@ -14,11 +16,6 @@
                         <div class="textResponsiveBarra">{{content.title}}</div>
                     </div>
                     <div class="col-xs-5">
-                        <button
-                            type="button"
-                            class="icon-globe btn-idioma"
-                            ng-click="changeContentLanguage()"> &nbsp;{{languageNameNext}}
-                        </button>
                          <a class="icon-remove-sign pull-right butoSortirBarraSuperiorRegistre" ng-href="#/login"></a>
                     </div>
                 </div>

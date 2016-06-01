@@ -8,7 +8,7 @@ angular.module('controllers', [])
             $scope.view2 = false;// vista de recuperación de contraseña
             var loginResource = Resources.login;
             var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
-            var numberOfLanguages = 0;// numero de idiomas (inicialmente a 0 pero se actualiza automaticamente en la siguiente función al hacer la peticion a la base de datos)
+            $rootScope.dropdownMenuBarLanguageSelected = 'CA';
 
             //Imagenes
             $scope.img = [];
@@ -19,44 +19,47 @@ angular.module('controllers', [])
             $scope.img.fletxaLogin2 = '/img/srcWeb/Login/fletxaLogin2.png';
             $scope.img.BotoEntra = '/img/srcWeb/Login/BotoEntra.png';
             $scope.img.BotoEntra2 = '/img/srcWeb/Login/BotoEntra2.png';
-            
+
+            //HTML text content
+            Resources.register.get({'section': 'login', 'idLanguage': currentLanguage}, {'funct': "content"}).$promise
+                .then(function (results) {
+                    $scope.content=results.data;
+                    $scope.viewActived = true; // para activar la vista
+                });
+
             //Dropdown Menu Bar
-            $rootScope.dropdownMenuBar = [];
-            $rootScope.dropdownMenuBar.push({name: 'Inici', href: '/register', value:'inici', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png'});
-            $rootScope.dropdownMenuBar.push({name: 'FAQ', href: '', value:'faq', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png'});
-            $rootScope.dropdownMenuBar.push({name: 'Tutorial', href: '', value:'tutorial', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png'});
-            $rootScope.dropdownMenuBarValue = 'faq';
-            $rootScope.go = function(path){
-                $location.path(path);
-            };
-            
-            //Pedimos el contenido en los idiomas disponibles.
-            Resources.register.get({'section': 'login'}, {'funct': "allContent"}).$promise
-                    .then(function (results) {
-                        $scope.availableLanguageOptions = results.languages;// Idiomas disponibles para el desplegable del formulario
-                        content = results.content;// Contenido en cada idioma
-                        $scope.content = content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
-                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
-                        numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
-                        $scope.viewActived = true; // para activar la vista
-                    });
-            //Cambiar el idioma del contenido
-            $scope.changeContentLanguage = function () {
-                currentLanguage++;
-                // El content esta dentro de un array que empieza por la posición 1 y el nombre de cada idioma en un array que empieza en la posicion 0.
-                if (currentLanguage > numberOfLanguages) {
-                    currentLanguage = 1;
-                    $scope.content = content[1];
-                    $scope.languageNameNext = $scope.availableLanguageOptions[1].languageName;
-                } else {
-                    $scope.content = content[currentLanguage];
-                    if ((currentLanguage + 1) > numberOfLanguages) {
-                        $scope.languageNameNext = $scope.availableLanguageOptions[0].languageName;
-                    } else {
-                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;
+                $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
+                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+
+                //Choose the buttons to show on bar
+                angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                    if(value.name=='Inici'||value.name=='FAQ'||value.name=='Tutorial'||value.name=='Privacitat'){
+                        value.show=true;
+                    }else{
+                        value.show=false;
                     }
-                }
-            };
+                });
+                //function to change html view
+                $rootScope.go = function(path){
+                    $location.path(path);
+                    $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                };
+
+            //Languages on dropdown menu bar
+                $rootScope.languageButton={name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
+                $rootScope.dropdownMenuBarLanguage = false;
+
+                Resources.register.get({'funct': "languagesAvailable"}).$promise
+                .then(function (results){
+                    $rootScope.languages=results.languages;
+                });
+
+                $rootScope.changeLanguage = function(value){
+                    Resources.register.get({'section': 'login', 'idLanguage': value}, {'funct': "content"}).$promise
+                        .then(function (results) {
+                            $scope.content=results.data;
+                        });
+                };
 
             // Función que coje el user y pass y comprueba que sean correctos
             $scope.login = function () {
@@ -72,6 +75,7 @@ angular.module('controllers', [])
                             if (userConfig.UserValidated == '1'||userConfig.UserValidated == '2') {
                                 AuthService.login(token, userConfig);
                                 $location.path('/');
+                                $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
                             } else {
                                 $scope.state = 'has-warning';
                             }
@@ -98,6 +102,7 @@ angular.module('controllers', [])
                                     $location.path(results.url);
                                 }else{                  // añadir else if de results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                     $location.path('/emailSended');
+                                    $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
                                 }
                             } else {
                                 $scope.state2 = 'has-error';
@@ -113,7 +118,6 @@ angular.module('controllers', [])
             $scope.formData = {};  //Datos del formulario
             $scope.languageList = []; //lista de idiomas seleccionados por el usuario
             $scope.state = {user: "", password: ""};// estado de cada campo del formulario
-            var numberOfLanguages = 0;// numero de idiomas (inicialmente a 0 pero se actualiza automaticamente en la siguiente función al hacer la peticion a la base de datos)
             var userOk = false; // variables de validación
             var emailOk = false; // variables de validación
             var languageOk = false; // variables de validación
@@ -131,35 +135,48 @@ angular.module('controllers', [])
             $scope.img.BotoCrea = '/img/srcWeb/Login/BotoCrea.png';
             $scope.img.BotoCrea2 = '/img/srcWeb/Login/BotoCrea2.png';
             
-            //Pedimos los idiomas disponibles
-            Resources.register.get({'section': 'userRegister'}, {'funct': "allContent"}).$promise
-                    .then(function (results) {
-                        $scope.availableLanguageOptions = results.languages;// Idiomas disponibles para el desplegable del formulario
-                        content = results.content;// Contenido en cada idioma
-                        $scope.content = content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
-                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
-                        numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
-                        $scope.viewActived = true; // para activar la vista del formulario
+            //HTML text content
+            Resources.register.get({'section': 'userRegister', 'idLanguage': currentLanguage}, {'funct': "content"}).$promise
+                .then(function (results) {
+                    $scope.content=results.data;
+                    $scope.viewActived = true; // para activar la vista
+                });
 
-                    });
+            //Dropdown Menu Bar
+                $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
+                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+                $rootScope.dropdownMenuBarLanguageSelected = 'CA';//default language selected
 
-            //Cambiar el idioma del contenido
-            $scope.changeContentLanguage = function () {
-                currentLanguage++;
-                // El content esta dentro de un array que empieza por la posición 1 y el nombre de cada idioma en un array que empieza en la posicion 0.
-                if (currentLanguage > numberOfLanguages) {
-                    currentLanguage = 1;
-                    $scope.content = content[1];
-                    $scope.languageNameNext = $scope.availableLanguageOptions[1].languageName;
-                } else {
-                    $scope.content = content[currentLanguage];
-                    if ((currentLanguage + 1) > numberOfLanguages) {
-                        $scope.languageNameNext = $scope.availableLanguageOptions[0].languageName;
-                    } else {
-                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;
+                //Choose the buttons to show on bar
+                angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                    if(value.name=='Inici'||value.name=='FAQ'||value.name=='Tutorial'||value.name=='Privacitat'){
+                        value.show=true;
+                    }else{
+                        value.show=false;
                     }
-                }
-            };
+                });
+                //function to change html view
+                $rootScope.go = function(path){
+                    $location.path(path);
+                    $rootScope.dropdownMenuBarValue = path; //Dropdown bar button selected on this view
+                };
+
+            //Languages on dropdown menu bar
+                $rootScope.languageButton={name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
+                $rootScope.dropdownMenuBarLanguage = false;
+
+                Resources.register.get({'funct': "languagesAvailable"}).$promise
+                .then(function (results){
+                    $rootScope.languages = results.languages;
+                    $scope.availableLanguageOptions = results.languages;
+                });
+                //Change HTML text content language
+                $rootScope.changeLanguage = function(value){
+                    Resources.register.get({'section': 'userRegister', 'idLanguage': value}, {'funct': "content"}).$promise
+                        .then(function (results) {
+                            $scope.content=results.data;
+                        });
+                };
 
             //Borrar el formulario
             $scope.resetForm = function () {
@@ -346,6 +363,7 @@ angular.module('controllers', [])
                 // Comprobamos todos los campos del formulario accediendo a las funciones o mirando las variables de estado
                 if ($scope.checkCaptcha() && userOk && $scope.checkPassword(formData) && $scope.checkName(formData) && $scope.checkLastname(formData) && emailOk && languageOk && $scope.gender(formData)) {
                     $location.path('/registerComplete');
+                    $rootScope.dropdownMenuBarValue = ''; //Dropdown bar button selected on this view
                     $rootScope.viewActived2 = false; // para activar el gif de loading...
                     $rootScope.localServer = true;
 
@@ -394,7 +412,7 @@ angular.module('controllers', [])
         })
 
 //User email validation
-        .controller('emailValidationCtrl', function ($scope, $routeParams, Resources) {
+        .controller('emailValidationCtrl', function ($scope, $routeParams, Resources, $rootScope, $location) {
             //Variables
             $scope.activedValidation = false;// para activar el gif de loading
             $scope.viewActived = false; // para activar el gif de loading...
@@ -403,36 +421,49 @@ angular.module('controllers', [])
             $scope.img.fons = '/img/srcWeb/fons.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
-            //Pedimos los idiomas disponibles
-            var currentLanguage = 1; // idioma por defecto al iniciar (catalan)
-            Resources.register.get({'section': 'emailValidation'}, {'funct': "allContent"}).$promise
-                    .then(function (results) {
-                        $scope.availableLanguageOptions = results.languages;// Idiomas disponibles para el desplegable del formulario
-                        content = results.content;// Contenido en cada idioma
-                        $scope.content = content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
-                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
-                        numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
-                        $scope.viewActived = true; // para activar la vista
+            
+            //HTML text content
+            Resources.register.get({'section': 'emailValidation', 'idLanguage': '1'}, {'funct': "content"}).$promise
+                .then(function (results) {
+                    $scope.content=results.data;
+                    $scope.viewActived = true; // para activar la vista
+                });
 
-                    });
-            //Cambiar el idioma del contenido
-            $scope.changeContentLanguage = function () {
-                currentLanguage++;
-                // El content esta dentro de un array que empieza por la posición 1 y el nombre de cada idioma en un array que empieza en la posicion 0.
-                if (currentLanguage > numberOfLanguages) {
-                    currentLanguage = 1;
-                    $scope.content = content[1];
-                    $scope.languageNameNext = $scope.availableLanguageOptions[1].languageName;
-                } else {
-                    $scope.content = content[currentLanguage];
-                    if ((currentLanguage + 1) > numberOfLanguages) {
-                        $scope.languageNameNext = $scope.availableLanguageOptions[0].languageName;
-                    } else {
-                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;
+            //Dropdown Menu Bar
+                $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
+                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+                $rootScope.dropdownMenuBarLanguageSelected = 'CA';//default language selected
+
+                //Choose the buttons to show on bar
+                angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                    if(value.name=='Inici'||value.name=='FAQ'||value.name=='Tutorial'||value.name=='Privacitat'){
+                        value.show=true;
+                    }else{
+                        value.show=false;
                     }
-                }
-            };
+                });
+                //function to change html view
+                $rootScope.go = function(path){
+                    $location.path(path);
+                    $rootScope.dropdownMenuBarValue = path; //Dropdown bar button selected on this view
+                };
 
+            //Languages on dropdown menu bar
+                $rootScope.languageButton={name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
+                $rootScope.dropdownMenuBarLanguage = false;
+
+                Resources.register.get({'funct': "languagesAvailable"}).$promise
+                .then(function (results){
+                    $rootScope.languages=results.languages;
+                });
+                //Change HTML text content language
+                $rootScope.changeLanguage = function(value){
+                    Resources.register.get({'section': 'emailValidation', 'idLanguage': value}, {'funct': "content"}).$promise
+                        .then(function (results) {
+                            $scope.content=results.data;
+                        });
+                };
+                
             //Enviamos la clave y el id para comprobar el email del usuario
             Resources.register.save({'emailKey': $routeParams.emailKey, 'ID_SU': $routeParams.id}, {'funct': "emailValidation"}).$promise
                     .then(function (results) {
@@ -442,7 +473,7 @@ angular.module('controllers', [])
         })
 
 //Password recovery controller
-        .controller('passRecoveryCtrl', function ($scope, $routeParams, Resources, md5) {
+        .controller('passRecoveryCtrl', function ($scope, $rootScope, $routeParams, Resources, md5, $location) {
 
             //HTML views
             $scope.linkExpiredView = false;
@@ -461,15 +492,46 @@ angular.module('controllers', [])
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             
             //HTML text content
-            Resources.register.get({'section': 'passRecovery'}, {'funct': "allContent"}).$promise
-                    .then(function (results) {
-                        $scope.availableLanguageOptions = results.languages;// Idiomas disponibles para el desplegable del formulario
-                        content = results.content;// Contenido en cada idioma
-                        $scope.content = content[currentLanguage];// Contenido a mostrar en el idioma seleccionado
-                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;// nombre del siguiente idioma para el boton
-                        numberOfLanguages = ($scope.availableLanguageOptions.length);// numero de idiomas
-                        $scope.viewActived = true; // para activar la vista
-                    });
+            Resources.register.get({'section': 'passRecovery', 'idLanguage': currentLanguage}, {'funct': "content"}).$promise
+                .then(function (results) {
+                    $scope.content=results.data;
+                    $scope.viewActived = true; // para activar la vista
+                });
+
+            //Dropdown Menu Bar
+                $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
+                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+                $rootScope.dropdownMenuBarLanguageSelected = 'CA';//default language selected
+
+                //Choose the buttons to show on bar
+                angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                    if(value.name=='Inici'||value.name=='FAQ'||value.name=='Tutorial'||value.name=='Privacitat'){
+                        value.show=true;
+                    }else{
+                        value.show=false;
+                    }
+                });
+                //function to change html view
+                $rootScope.go = function(path){
+                    $location.path(path);
+                    $rootScope.dropdownMenuBarValue = path; //Dropdown bar button selected on this view
+                };
+
+            //Languages on dropdown menu bar
+                $rootScope.languageButton={name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
+                $rootScope.dropdownMenuBarLanguage = false;
+
+                Resources.register.get({'funct': "languagesAvailable"}).$promise
+                .then(function (results){
+                    $rootScope.languages=results.languages;
+                });
+                //Change HTML text content language
+                $rootScope.changeLanguage = function(value){
+                    Resources.register.get({'section': 'passRecovery', 'idLanguage': value}, {'funct': "content"}).$promise
+                        .then(function (results) {
+                            $scope.content=results.data;
+                        });
+                };
 
             //Check if url user exists
             Resources.register.save({'emailKey': $routeParams.emailKey, 'ID_SU': $routeParams.id}, {'funct': "emailValidation"}).$promise
@@ -484,24 +546,6 @@ angular.module('controllers', [])
                             $scope.passChangedView = false;
                         }
                     });
-
-            //Change HTML text content language
-            $scope.changeContentLanguage = function () {
-                currentLanguage++;
-                // El content esta dentro de un array que empieza por la posición 1 y el nombre de cada idioma en un array que empieza en la posicion 0.
-                if (currentLanguage > numberOfLanguages) {
-                    currentLanguage = 1;
-                    $scope.content = content[1];
-                    $scope.languageNameNext = $scope.availableLanguageOptions[1].languageName;
-                } else {
-                    $scope.content = content[currentLanguage];
-                    if ((currentLanguage + 1) > numberOfLanguages) {
-                        $scope.languageNameNext = $scope.availableLanguageOptions[0].languageName;
-                    } else {
-                        $scope.languageNameNext = $scope.availableLanguageOptions[currentLanguage].languageName;
-                    }
-                }
-            };
 
             //Check if passwords are equal.
             $scope.checkPassword = function (formData) {
@@ -555,6 +599,7 @@ angular.module('controllers', [])
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
+                $rootScope.dropdownMenuBarValue = '/'; //Dropdown bar button selected on this view
             }
             // Declaración de variables
             $scope.canEdit = false;
@@ -979,6 +1024,7 @@ angular.module('controllers', [])
                 $scope.getConfig()
                         .then(function () {
                             $location.path('/panelGroups');
+                            $rootScope.dropdownMenuBarValue = '/panelGroups'; //Dropdown bar button selected on this view
                         });
             };
         })

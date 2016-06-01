@@ -1,0 +1,98 @@
+/*Dropdown menu bar*/
+
+.dropdownMenuBar{
+    z-index:1;
+    position: fixed;
+}
+.menuBarAnimation{
+    position: relative;
+    margin-top: 4vh;
+    margin-left: 4vh;
+    height: 7vh;
+    width: 7.8vh;
+    background-color: #adadad;
+
+    -webkit-transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
+    -moz-transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
+    -o-transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
+    transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
+}
+.menuBarAnimationOpened{
+    background-color: #474747;
+    margin-top: 0px;
+    margin-left: 0px;
+    height: 15vh;
+    width: 100vw;
+}
+.img-dropdownMenuButton{
+    z-index:3;
+    position: fixed;
+    margin-top: 4vh;
+    margin-left: 4vh;
+    height: 7vh;
+    width: auto;
+}
+.buttonsMenuBar{
+    z-index:2;
+    position: fixed;
+    width: 100vw;
+    opacity: 0;
+    
+    margin-top: 5vh;
+    font-size: 1.5vh;
+    text-align: center;
+}
+.buttonsMenuBarOpened{
+    -webkit-transition: opacity 1s ease-out;
+    -webkit-transition-delay: 0.5s;
+    -moz-transition: opacity 1s ease-out;
+    -moz-transition-delay: 0.5s;
+    -o-transition: opacity 1s ease-out;
+    -o-transition-delay: 0.5s;
+    transition: opacity 1s ease-out;
+    transition-delay: 0.5s;
+    opacity: 1;
+}
+.icondropdownMenuBar{
+    height: 2vh;
+    width: auto;
+    margin-bottom: 0.6vh;
+}
+.marginButtonMenuBar{
+    width: 14vh;
+}
+.marginButtonMenuBar label{
+    font-weight: normal;
+}
+input.statesButtonMenuBar[type=radio]:empty + label,
+input.statesButtonMenuBar[type=checkbox]:empty + label{
+    cursor: pointer;
+    color: #828282;
+}
+input.statesButtonMenuBar[type=radio]:checked + label,
+input.statesButtonMenuBar[type=checkbox]:checked + label{
+    color: white !important;
+}
+input.statesButtonMenuBar[type=radio]:empty + label:hover,
+input.statesButtonMenuBar[type=checkbox]:empty + label:hover{
+    color: black;
+}
+.marginLanguagesButtonMenuBar{
+    margin-right: 2.5vh;
+    -webkit-transition: opacity 1s;
+    -moz-transition: opacity 1s;
+    -o-transition: opacity 1s;
+    transition: opacity 1s;
+    opacity: 0;
+}
+.marginLanguagesButtonMenuBarSelected{
+    opacity: 1;
+}
+.LanguagesButtonMenuBar{
+    margin-right: 2vh;
+}
+
+
+
+
+

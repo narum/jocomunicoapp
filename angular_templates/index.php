@@ -18,9 +18,8 @@
         
     </head>
     <body>
-
         <div ng-view class="root" ng-init="baseurl = '<?= base_url(); ?>'"></div>
-
+        
         <script type="text/javascript" src="<?= base_url(); ?>libraries/jquery.min.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular.min.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular-animate.min.js"></script>
