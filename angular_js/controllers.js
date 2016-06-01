@@ -824,7 +824,31 @@ angular.module('controllers', [])
                     $scope.changeMascFem(true, 'InterfaceVoiceMascFem');
                 }
             };
-
+            $scope.generateAudio = function (voice, type) {
+                angular.forEach($scope.expansionVoicesList, function (value) {
+                    if (value.voiceName === voice && value.voiceType === 'online') {
+                        voice = value.ID_Voice;
+                        type = 'online';
+                    }
+                });
+                if (voice == $scope.interfaceVoicesList[0].voiceName || voice == $scope.interfaceVoicesList[1].voiceName) {
+                    type = 'online';
+                }
+                Resources.main.save({'IdU': $rootScope.userId, 'text': $scope.content.voicePlay, 'voice': voice, 'type': type, 'language': $scope.userData.ID_ULanguage, 'rate': '0'}, {'funct': "generateAudio"}).$promise
+                        .then(function (results) {
+                            console.log(results);
+                            if (results[1]) {
+                                txtContent("errorVoices").then(function (content) {
+                                    $scope.errorMessage = content.data[results[3]];
+                                    $scope.errorCode = results[3];
+                                    $('#errorVoicesModal').modal({backdrop: 'static'});
+                                });
+                            } else {
+                                $scope.sound = ngAudio.load("mp3/" + results[0]);
+                                $scope.sound.play();
+                            }
+                        });
+            };
             $scope.exit = function () {
                 $scope.viewActived = false;
                 $scope.getConfig()
@@ -1732,11 +1756,18 @@ angular.module('controllers', [])
                         var url = $scope.baseurl + "Board/readText";
                         $http.post(url, postdata).then(function (response) {
                             $scope.dataAudio = response.audio;
-
-                            $scope.sound = "mp3/" + $scope.dataAudio;
-                            $timeout(function () {
-                                $('#utterance').get(0).play();
-                            });
+                            if ($scope.dataAudio[1]) {
+                                txtContent("errorVoices").then(function (content) {
+                                    $scope.errorMessage = content.data[$scope.dataAudio[3]];
+                                    $scope.errorCode = $scope.dataAudio[3];
+                                    $('#errorVoicesModal').modal({backdrop: 'static'});
+                                });
+                            } else {
+                                $scope.sound = "mp3/" + $scope.dataAudio;
+                                $timeout(function () {
+                                    $('#utterance').get(0).play();
+                                });
+                            }
                         });
                         $scope.showBoard(cell.boardLink);
                         readed = true;
@@ -1860,10 +1891,18 @@ angular.module('controllers', [])
                         $scope.dataTemp = response.data;
                         $scope.dataAudio = response.audio;
 
-                        $scope.sound = "mp3/" + $scope.dataAudio;
-                        $timeout(function () {
-                            $('#utterance').get(0).play();
-                        });
+                        if ($scope.dataAudio[1]) {
+                            txtContent("errorVoices").then(function (content) {
+                                $scope.errorMessage = content.data[$scope.dataAudio[3]];
+                                $scope.errorCode = $scope.dataAudio[3];
+                                $('#errorVoicesModal').modal({backdrop: 'static'});
+                            });
+                        } else {
+                            $scope.sound = "mp3/" + $scope.dataAudio;
+                            $timeout(function () {
+                                $('#utterance').get(0).play();
+                            });
+                        }
 
                         $scope.getPred();
                     });
@@ -1918,10 +1957,18 @@ angular.module('controllers', [])
                 {
                     $scope.dataAudio = response.audio;
 
-                    $scope.sound = "mp3/" + $scope.dataAudio;
-                    $timeout(function () {
-                        $('#utterance').get(0).play();
-                    });
+                    if ($scope.dataAudio[1]) {
+                        txtContent("errorVoices").then(function (content) {
+                            $scope.errorMessage = content.data[$scope.dataAudio[3]];
+                            $scope.errorCode = $scope.dataAudio[3];
+                            $('#errorVoicesModal').modal({backdrop: 'static'});
+                        });
+                    } else {
+                        $scope.sound = "mp3/" + $scope.dataAudio;
+                        $timeout(function () {
+                            $('#utterance').get(0).play();
+                        });
+                    }
 
                     var control = response.control;
                     $scope.dataTemp = response.data;
@@ -1993,10 +2040,18 @@ angular.module('controllers', [])
                     //$scope.data = response.data;
                     $scope.dataAudio = response.audio;
 
-                    $scope.sound = "mp3/" + $scope.dataAudio;
-                    $timeout(function () {
-                        $('#utterance').get(0).play();
-                    });
+                    if ($scope.dataAudio[1]) {
+                        txtContent("errorVoices").then(function (content) {
+                            $scope.errorMessage = content.data[$scope.dataAudio[3]];
+                            $scope.errorCode = $scope.dataAudio[3];
+                            $('#errorVoicesModal').modal({backdrop: 'static'});
+                        });
+                    } else {
+                        $scope.sound = "mp3/" + $scope.dataAudio;
+                        $timeout(function () {
+                            $('#utterance').get(0).play();
+                        });
+                    }
                     if ($scope.cfgUserExpansionFeedback) {
                         $scope.puntuar();
 
@@ -2050,10 +2105,18 @@ angular.module('controllers', [])
                         {
                             $scope.dataAudio = response.data;
 
-                            $scope.sound = "mp3/" + $scope.dataAudio;
-                            $timeout(function () {
-                                $('#utterance').get(0).play();
-                            });
+                            if ($scope.dataAudio[1]) {
+                                txtContent("errorVoices").then(function (content) {
+                                    $scope.errorMessage = content.data[$scope.dataAudio[3]];
+                                    $scope.errorCode = $scope.dataAudio[3];
+                                    $('#errorVoicesModal').modal({backdrop: 'static'});
+                                });
+                            } else {
+                                $scope.sound = "mp3/" + $scope.dataAudio;
+                                $timeout(function () {
+                                    $('#utterance').get(0).play();
+                                });
+                            }
 
                         });
             };
@@ -2067,10 +2130,18 @@ angular.module('controllers', [])
                         {
                             $scope.dataAudio = response.data;
 
-                            $scope.sound = "mp3/" + $scope.dataAudio;
-                            $timeout(function () {
-                                $('#utterance').get(0).play();
-                            });
+                            if ($scope.dataAudio[1]) {
+                                txtContent("errorVoices").then(function (content) {
+                                    $scope.errorMessage = content.data[$scope.dataAudio[3]];
+                                    $scope.errorCode = $scope.dataAudio[3];
+                                    $('#errorVoicesModal').modal({backdrop: 'static'});
+                                });
+                            } else {
+                                $scope.sound = "mp3/" + $scope.dataAudio;
+                                $timeout(function () {
+                                    $('#utterance').get(0).play();
+                                });
+                            }
 
                         });
             };
