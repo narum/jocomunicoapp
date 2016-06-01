@@ -48,12 +48,8 @@ class Register extends REST_Controller {
     
     public function languagesAvailable_get()
     {
-        $query = $this->main_model->getLanguagesAvailable();
-        //Cojemos los datos de las dos columnas de la petición y lo convertimos en un objecto clave:valor
-            $array1 = array_column($query, 'ID_Language');
-            $array2 = array_column($query, 'languageName');
-            $languages = array_combine($array1, $array2);
-        // Convertimos el array en un objeto
+        $languages = $this->main_model->getLanguagesAvailable();
+
             $response = [
                 "languages" => $languages
             ];
