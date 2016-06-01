@@ -199,11 +199,11 @@ class Recommender extends CI_Model {
         $this->db->from('p_statsuserpictox2');       
         $this->db->join('pictogramslanguage', 'p_statsuserpictox2.picto2id = pictogramslanguage.pictoid', 'left');
         $this->db->join('pictograms', 'p_statsuserpictox2.picto2id = pictograms.pictoid', 'left'); 
-        $this->db->join('modifier'.$this->session->userdata('ulangabbr'), 'pictograms.pictoid = modifier'.$this->session->userdata('ulangabbr').'.modid', 'left');
+        $this->db->join('advtype'.$this->session->userdata('ulangabbr'), 'pictograms.pictoid = advtype'.$this->session->userdata('ulangabbr').'.advid', 'left');
         $this->db->where('p_statsuserpictox2.ID_PSUP2User', $this->session->userdata('idusu'));        
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('p_statsuserpictox2.picto1id', $inputid1);  
-        $this->db->where('modifier'.$this->session->userdata('ulangabbr').'.type', $fits);  
+        $this->db->where('advtype'.$this->session->userdata('ulangabbr').'.type', $fits);  
         $this->db->order_by('countx2', 'desc');        
         $query = $this->db->get();
         
@@ -221,12 +221,12 @@ class Recommender extends CI_Model {
         $this->db->from('p_statsuserpictox3');       
         $this->db->join('pictogramslanguage', 'p_statsuserpictox3.picto3id = pictogramslanguage.pictoid', 'left');
         $this->db->join('pictograms', 'p_statsuserpictox3.picto3id = pictograms.pictoid', 'left'); 
-        $this->db->join('modifier'.$this->session->userdata('ulangabbr'), 'pictograms.pictoid = modifier'.$this->session->userdata('ulangabbr').'.modid', 'left');
+        $this->db->join('advtype'.$this->session->userdata('ulangabbr'), 'pictograms.pictoid = advtype'.$this->session->userdata('ulangabbr').'.advid', 'left');
         $this->db->where('p_statsuserpictox3.ID_PSUP3User', $this->session->userdata('idusu'));        
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('p_statsuserpictox3.picto1id', $inputid1);  
         $this->db->where('p_statsuserpictox3.picto2id', $inputid2);  
-        $this->db->where('modifier'.$this->session->userdata('ulangabbr').'.type', $fits);  
+        $this->db->where('advtype'.$this->session->userdata('ulangabbr').'.type', $fits);  
         $this->db->order_by('countx3', 'desc');        
         $query = $this->db->get();
         
@@ -444,10 +444,10 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPicto');              
         $this->db->join('pictogramslanguage', 'P_StatsUserPicto.pictoid = pictogramslanguage.pictoid', 'left'); 
         $this->db->join('pictograms', 'P_StatsUserPicto.pictoid = pictograms.pictoid', 'left'); 
-        $this->db->join('modifier'.$this->session->userdata('ulangabbr'), 'P_StatsUserPicto.pictoid = modifier'.$this->session->userdata('ulangabbr').'.modid', 'left'); 
+        $this->db->join('advtype'.$this->session->userdata('ulangabbr'), 'P_StatsUserPicto.pictoid = advtype'.$this->session->userdata('ulangabbr').'.advid', 'left'); 
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
         $this->db->where('pictogramslanguage.languageid', $this->session->userdata('ulanguage'));                                                           
-        $this->db->where('modifier'.$this->session->userdata('ulangabbr').'.type', $pictoType);               
+        $this->db->where('advtype'.$this->session->userdata('ulangabbr').'.type', $pictoType);               
         $this->db->group_by('P_StatsUserPicto.pictoid, pictogramslanguage.pictotext, pictograms.imgPicto');
         $this->db->order_by('repes', 'desc');        
         $query = $this->db->get();                
@@ -750,6 +750,9 @@ class Recommender extends CI_Model {
         if ($tipus != null && $tipus[0]->$caseTipus == 'verb') {
             $fits = 'verb';
         }
+        else if ($tipus != null && $tipus[0]->$caseTipus == 'adj') {
+            $fits = 'adj';
+        }   
         else if ($tipus != null && $tipus[0]->$caseTipus == 'adv') {
             $fits = 'adv';
         }   
@@ -1060,6 +1063,7 @@ class Recommender extends CI_Model {
                 }
                 else {
                     if (sizeof($VF) < $TSize) {
+                        
                         $fits = $this->get1OptFits($inputid1, $case, 1);
                         $VF = $this->get1OptFitsX2($inputid1, $case, $VF, $TSize, $fits);
                     }
