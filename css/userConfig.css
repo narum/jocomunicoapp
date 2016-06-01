@@ -126,10 +126,6 @@ border-radius:10px;
     border-radius: 15px;
     background-color: #fddfad;
 }
-.loadingGif{
-    margin-top: 20vh;
-    padding: 10vh;
-}
 #DadesUsuariLeft{
     padding-left: 3vh;
     padding-right: 1.5vh;
@@ -254,9 +250,6 @@ input[type="text"] {
 .configLink:hover{
     color: #464646;
     font-weight: bold;
-}
-.marginModalTop{
-    margin-top: 8vh;
 }
 .marginBoxCentral{
     margin: 3vh;

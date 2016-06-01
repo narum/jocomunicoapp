@@ -456,6 +456,9 @@ input.switch:checked ~ label:after
 .marginModalTop{
     margin-top: 25vh;
 }
+.marginModalTopOwl{
+    margin-top: 8vh;
+}
 .backgroundUserConfigBox{
     margin:3vh;
     border-radius: 15px;
@@ -506,4 +509,7 @@ input.switch:checked ~ label:after
     height: 20vh;
     width: auto;
     margin-right: 5vw;
+}
+.textCenter{
+    text-align: center;
 }

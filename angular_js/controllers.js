@@ -22,44 +22,44 @@ angular.module('controllers', [])
 
             //HTML text content
             Resources.register.get({'section': 'login', 'idLanguage': currentLanguage}, {'funct': "content"}).$promise
-                .then(function (results) {
-                    $scope.content=results.data;
-                    $scope.viewActived = true; // para activar la vista
-                });
+                    .then(function (results) {
+                        $scope.content = results.data;
+                        $scope.viewActived = true; // para activar la vista
+                    });
 
             //Dropdown Menu Bar
-                $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
-                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+            $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
+            $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
 
-                //Choose the buttons to show on bar
-                angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                    if(value.name=='Inici'||value.name=='FAQ'||value.name=='Tutorial'||value.name=='Privacitat'){
-                        value.show=true;
-                    }else{
-                        value.show=false;
-                    }
-                });
-                //function to change html view
-                $rootScope.go = function(path){
-                    $location.path(path);
-                    $rootScope.dropdownMenuBarValue = path; //Button selected on this view
-                };
+            //Choose the buttons to show on bar
+            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                if (value.name == 'Inici' || value.name == 'FAQ' || value.name == 'Tutorial' || value.name == 'Privacitat') {
+                    value.show = true;
+                } else {
+                    value.show = false;
+                }
+            });
+            //function to change html view
+            $rootScope.go = function (path) {
+                $location.path(path);
+                $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+            };
 
             //Languages on dropdown menu bar
-                $rootScope.languageButton={name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
-                $rootScope.dropdownMenuBarLanguage = false;
+            $rootScope.languageButton = {name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
+            $rootScope.dropdownMenuBarLanguage = false;
 
-                Resources.register.get({'funct': "languagesAvailable"}).$promise
-                .then(function (results){
-                    $rootScope.languages=results.languages;
-                });
+            Resources.register.get({'funct': "languagesAvailable"}).$promise
+                    .then(function (results) {
+                        $rootScope.languages = results.languages;
+                    });
 
-                $rootScope.changeLanguage = function(value){
-                    Resources.register.get({'section': 'login', 'idLanguage': value}, {'funct': "content"}).$promise
+            $rootScope.changeLanguage = function (value) {
+                Resources.register.get({'section': 'login', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
-                            $scope.content=results.data;
+                            $scope.content = results.data;
                         });
-                };
+            };
 
             // Función que coje el user y pass y comprueba que sean correctos
             $scope.login = function () {
@@ -72,7 +72,7 @@ angular.module('controllers', [])
                         .then(function (result) {				// respuesta ok!
                             var token = result.data.token;
                             var userConfig = result.data.userConfig;
-                            if (userConfig.UserValidated == '1'||userConfig.UserValidated == '2') {
+                            if (userConfig.UserValidated == '1' || userConfig.UserValidated == '2') {
                                 AuthService.login(token, userConfig);
                                 $location.path('/');
                                 $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
@@ -98,9 +98,9 @@ angular.module('controllers', [])
                             console.log(results.message);
                             console.log(results);
                             if (results.exist) {
-                                if(results.local){
+                                if (results.local) {
                                     $location.path(results.url);
-                                }else{                  // añadir else if de results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                } else {                  // añadir else if de results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                     $location.path('/emailSended');
                                     $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
                                 }
@@ -134,49 +134,49 @@ angular.module('controllers', [])
             $scope.img.fletxaLogin2 = '/img/srcWeb/Login/fletxaLogin2.png';
             $scope.img.BotoCrea = '/img/srcWeb/Login/BotoCrea.png';
             $scope.img.BotoCrea2 = '/img/srcWeb/Login/BotoCrea2.png';
-            
+
             //HTML text content
             Resources.register.get({'section': 'userRegister', 'idLanguage': currentLanguage}, {'funct': "content"}).$promise
-                .then(function (results) {
-                    $scope.content=results.data;
-                    $scope.viewActived = true; // para activar la vista
-                });
+                    .then(function (results) {
+                        $scope.content = results.data;
+                        $scope.viewActived = true; // para activar la vista
+                    });
 
             //Dropdown Menu Bar
-                $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
-                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
-                $rootScope.dropdownMenuBarLanguageSelected = 'CA';//default language selected
+            $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
+            $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+            $rootScope.dropdownMenuBarLanguageSelected = 'CA';//default language selected
 
-                //Choose the buttons to show on bar
-                angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                    if(value.name=='Inici'||value.name=='FAQ'||value.name=='Tutorial'||value.name=='Privacitat'){
-                        value.show=true;
-                    }else{
-                        value.show=false;
-                    }
-                });
-                //function to change html view
-                $rootScope.go = function(path){
-                    $location.path(path);
-                    $rootScope.dropdownMenuBarValue = path; //Dropdown bar button selected on this view
-                };
+            //Choose the buttons to show on bar
+            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                if (value.name == 'Inici' || value.name == 'FAQ' || value.name == 'Tutorial' || value.name == 'Privacitat') {
+                    value.show = true;
+                } else {
+                    value.show = false;
+                }
+            });
+            //function to change html view
+            $rootScope.go = function (path) {
+                $location.path(path);
+                $rootScope.dropdownMenuBarValue = path; //Dropdown bar button selected on this view
+            };
 
             //Languages on dropdown menu bar
-                $rootScope.languageButton={name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
-                $rootScope.dropdownMenuBarLanguage = false;
+            $rootScope.languageButton = {name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
+            $rootScope.dropdownMenuBarLanguage = false;
 
-                Resources.register.get({'funct': "languagesAvailable"}).$promise
-                .then(function (results){
-                    $rootScope.languages = results.languages;
-                    $scope.availableLanguageOptions = results.languages;
-                });
-                //Change HTML text content language
-                $rootScope.changeLanguage = function(value){
-                    Resources.register.get({'section': 'userRegister', 'idLanguage': value}, {'funct': "content"}).$promise
+            Resources.register.get({'funct': "languagesAvailable"}).$promise
+                    .then(function (results) {
+                        $rootScope.languages = results.languages;
+                        $scope.availableLanguageOptions = results.languages;
+                    });
+            //Change HTML text content language
+            $rootScope.changeLanguage = function (value) {
+                Resources.register.get({'section': 'userRegister', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
-                            $scope.content=results.data;
+                            $scope.content = results.data;
                         });
-                };
+            };
 
             //Borrar el formulario
             $scope.resetForm = function () {
@@ -400,7 +400,7 @@ angular.module('controllers', [])
                                                 if (results.local) { // Cambiar por results.sended cuando funcione el servidor smtp y envie el mail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                                     $rootScope.localServer = true;
                                                     $rootScope.viewActived2 = true; // para activar la vista
-                                                }else{
+                                                } else {
                                                     $rootScope.localServer = false;
                                                     $rootScope.viewActived2 = true; // para activar la vista
                                                 }
@@ -421,49 +421,49 @@ angular.module('controllers', [])
             $scope.img.fons = '/img/srcWeb/fons.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
-            
+
             //HTML text content
             Resources.register.get({'section': 'emailValidation', 'idLanguage': '1'}, {'funct': "content"}).$promise
-                .then(function (results) {
-                    $scope.content=results.data;
-                    $scope.viewActived = true; // para activar la vista
-                });
+                    .then(function (results) {
+                        $scope.content = results.data;
+                        $scope.viewActived = true; // para activar la vista
+                    });
 
             //Dropdown Menu Bar
-                $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
-                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
-                $rootScope.dropdownMenuBarLanguageSelected = 'CA';//default language selected
+            $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
+            $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+            $rootScope.dropdownMenuBarLanguageSelected = 'CA';//default language selected
 
-                //Choose the buttons to show on bar
-                angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                    if(value.name=='Inici'||value.name=='FAQ'||value.name=='Tutorial'||value.name=='Privacitat'){
-                        value.show=true;
-                    }else{
-                        value.show=false;
-                    }
-                });
-                //function to change html view
-                $rootScope.go = function(path){
-                    $location.path(path);
-                    $rootScope.dropdownMenuBarValue = path; //Dropdown bar button selected on this view
-                };
+            //Choose the buttons to show on bar
+            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                if (value.name == 'Inici' || value.name == 'FAQ' || value.name == 'Tutorial' || value.name == 'Privacitat') {
+                    value.show = true;
+                } else {
+                    value.show = false;
+                }
+            });
+            //function to change html view
+            $rootScope.go = function (path) {
+                $location.path(path);
+                $rootScope.dropdownMenuBarValue = path; //Dropdown bar button selected on this view
+            };
 
             //Languages on dropdown menu bar
-                $rootScope.languageButton={name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
-                $rootScope.dropdownMenuBarLanguage = false;
+            $rootScope.languageButton = {name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
+            $rootScope.dropdownMenuBarLanguage = false;
 
-                Resources.register.get({'funct': "languagesAvailable"}).$promise
-                .then(function (results){
-                    $rootScope.languages=results.languages;
-                });
-                //Change HTML text content language
-                $rootScope.changeLanguage = function(value){
-                    Resources.register.get({'section': 'emailValidation', 'idLanguage': value}, {'funct': "content"}).$promise
+            Resources.register.get({'funct': "languagesAvailable"}).$promise
+                    .then(function (results) {
+                        $rootScope.languages = results.languages;
+                    });
+            //Change HTML text content language
+            $rootScope.changeLanguage = function (value) {
+                Resources.register.get({'section': 'emailValidation', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
-                            $scope.content=results.data;
+                            $scope.content = results.data;
                         });
-                };
-                
+            };
+
             //Enviamos la clave y el id para comprobar el email del usuario
             Resources.register.save({'emailKey': $routeParams.emailKey, 'ID_SU': $routeParams.id}, {'funct': "emailValidation"}).$promise
                     .then(function (results) {
@@ -490,48 +490,48 @@ angular.module('controllers', [])
             $scope.img.fons = '/img/srcWeb/fons.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
-            
+
             //HTML text content
             Resources.register.get({'section': 'passRecovery', 'idLanguage': currentLanguage}, {'funct': "content"}).$promise
-                .then(function (results) {
-                    $scope.content=results.data;
-                    $scope.viewActived = true; // para activar la vista
-                });
+                    .then(function (results) {
+                        $scope.content = results.data;
+                        $scope.viewActived = true; // para activar la vista
+                    });
 
             //Dropdown Menu Bar
-                $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
-                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
-                $rootScope.dropdownMenuBarLanguageSelected = 'CA';//default language selected
+            $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
+            $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+            $rootScope.dropdownMenuBarLanguageSelected = 'CA';//default language selected
 
-                //Choose the buttons to show on bar
-                angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                    if(value.name=='Inici'||value.name=='FAQ'||value.name=='Tutorial'||value.name=='Privacitat'){
-                        value.show=true;
-                    }else{
-                        value.show=false;
-                    }
-                });
-                //function to change html view
-                $rootScope.go = function(path){
-                    $location.path(path);
-                    $rootScope.dropdownMenuBarValue = path; //Dropdown bar button selected on this view
-                };
+            //Choose the buttons to show on bar
+            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                if (value.name == 'Inici' || value.name == 'FAQ' || value.name == 'Tutorial' || value.name == 'Privacitat') {
+                    value.show = true;
+                } else {
+                    value.show = false;
+                }
+            });
+            //function to change html view
+            $rootScope.go = function (path) {
+                $location.path(path);
+                $rootScope.dropdownMenuBarValue = path; //Dropdown bar button selected on this view
+            };
 
             //Languages on dropdown menu bar
-                $rootScope.languageButton={name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
-                $rootScope.dropdownMenuBarLanguage = false;
+            $rootScope.languageButton = {name: 'Idioma', iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
+            $rootScope.dropdownMenuBarLanguage = false;
 
-                Resources.register.get({'funct': "languagesAvailable"}).$promise
-                .then(function (results){
-                    $rootScope.languages=results.languages;
-                });
-                //Change HTML text content language
-                $rootScope.changeLanguage = function(value){
-                    Resources.register.get({'section': 'passRecovery', 'idLanguage': value}, {'funct': "content"}).$promise
+            Resources.register.get({'funct': "languagesAvailable"}).$promise
+                    .then(function (results) {
+                        $rootScope.languages = results.languages;
+                    });
+            //Change HTML text content language
+            $rootScope.changeLanguage = function (value) {
+                Resources.register.get({'section': 'passRecovery', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
-                            $scope.content=results.data;
+                            $scope.content = results.data;
                         });
-                };
+            };
 
             //Check if url user exists
             Resources.register.save({'emailKey': $routeParams.emailKey, 'ID_SU': $routeParams.id}, {'funct': "emailValidation"}).$promise
@@ -595,12 +595,40 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-        .controller('UserConfCtrl', function ($http, $scope, $rootScope, Resources, AuthService, $q, txtContent, $location, $timeout) {
+        .controller('UserConfCtrl', function ($http, $scope, $rootScope, Resources, AuthService, txtContent, $location, $timeout) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
                 $rootScope.dropdownMenuBarValue = '/'; //Dropdown bar button selected on this view
             }
+            //Dropdown Menu Bar
+            $rootScope.dropdownMenuBarValue = '/userConfig'; //Button selected on this view
+            $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
+
+            //Choose the buttons to show on bar
+            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                if (value.name == 'Inici' || value.name == 'Panells' || value.name == 'Configuració' || value.name == 'FAQ' || value.name == 'Tutorial' || value.name == 'Privacitat' || value.name == 'Log out') {
+                    value.show = true;
+                } else {
+                    value.show = false;
+                }
+            });
+            //function to change html view
+            $rootScope.go = function (path) {
+                if(path=='logout'){
+                    $('#logoutModal').modal({backdrop:'static'});
+//                        AuthService.logout();
+//                        $location.path('/login');
+                }else{
+                    $location.path(path);
+                    $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                }
+            };
+            //Log Out
+            $rootScope.logout = function (){
+                AuthService.logout();
+            };
+            
             // Declaración de variables
             $scope.canEdit = false;
             $scope.viewActived = false;
@@ -694,13 +722,13 @@ angular.module('controllers', [])
                                     $scope.interfaceLanguages.push({name: results.languages[value.ID_ULanguage - 1].languageName, user: value.ID_User});
                                     count++;
                                 }
-                                $scope.expansionLanguages.push({idInterfaceLanguage: count-1, name: results.languages[value.cfgExpansionLanguage - 1].languageName, user: value.ID_User});
+                                $scope.expansionLanguages.push({idInterfaceLanguage: count - 1, name: results.languages[value.cfgExpansionLanguage - 1].languageName, user: value.ID_User});
 
                             });
 
                             //Mostrar el menu voices cuando no se ha introducido ninguna voz
-                            if($scope.userData.UserValidated=='1'){
-                                $scope.contentBar11=true;
+                            if ($scope.userData.UserValidated == '1') {
+                                $scope.contentBar11 = true;
                             }
                             //Delete name and surnames input text box
                             delete $scope.userDataForm.realName;
@@ -808,29 +836,29 @@ angular.module('controllers', [])
             $scope.changeOnOff = function (bool, data) {
                 if (bool) {
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': '1'}, {'funct': "changeCfgBool"}).$promise
-                    .then(function (results) {
-                            window.localStorage.removeItem('userData');
-                            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
-                    });
+                            .then(function (results) {
+                                window.localStorage.removeItem('userData');
+                                window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+                            });
                 } else {
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': '0'}, {'funct': "changeCfgBool"}).$promise
-                    .then(function (results) {
-                            window.localStorage.removeItem('userData');
-                            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
-                    });
+                            .then(function (results) {
+                                window.localStorage.removeItem('userData');
+                                window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+                            });
                 }
             }
 
             $scope.changeRadioEstate = function (value, data) {
                 Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': value}, {'funct': "changeCfgBool"}).$promise
-                .then(function (results) {
-                        window.localStorage.removeItem('userData');
-                        window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
-                });
+                        .then(function (results) {
+                            window.localStorage.removeItem('userData');
+                            window.localStorage.setItem('userData', JSON.stringify(results.userConfig));
+                        });
             }
             $scope.changeCfgVoices = function (value, data) {
                 Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': value}, {'funct': "changeCfgVoices"}).$promise
-                if($scope.userData.UserValidated=='1'&&$scope.userData.cfgExpansionVoiceOnline!=null&&(!$scope.local||$scope.userData.cfgExpansionVoiceOffline!=null)){
+                if ($scope.userData.UserValidated == '1' && $scope.userData.cfgExpansionVoiceOnline != null && (!$scope.local || $scope.userData.cfgExpansionVoiceOffline != null)) {
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': 'UserValidated', 'value': '2'}, {'funct': "userValidate2"}).$promise
                     //Cargamos la board inicial (Oscar)
                     $http.post($scope.baseurl + "PanelGroup/copyGroupBoard");
@@ -899,13 +927,13 @@ angular.module('controllers', [])
                 return Resources.main.get({'funct': "getVoices"}).$promise
                         .then(function (results) {
                             var error = false;
-                            angular.forEach(results.voices, function (voice){
-                                if(voice[1]&&!error){
-                                    error=true;
+                            angular.forEach(results.voices, function (voice) {
+                                if (voice[1] && !error) {
+                                    error = true;
                                     txtContent("errorVoices").then(function (content) {
                                         $scope.errorMessage = content.data[voice[3]];
                                         $scope.errorCode = voice[3];
-                                        $('#errorVoicesModal').modal({backdrop:'static'});
+                                        $('#errorVoicesModal').modal({backdrop: 'static'});
                                     });
                                 }
                             });
@@ -927,16 +955,16 @@ angular.module('controllers', [])
                                     var language = value.vocalwareLangAbbr;
                                     var country = value.vocalwareDescr;
                                     var type = value.voiceType;
-                                    if (country==null){
+                                    if (country == null) {
                                         $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' - ' + '[' + type + ']';
 
-                                    }else{
+                                    } else {
                                         $scope.expansionVoicesList[count2].voiceCompleteName = name + ' - ' + language + ' (' + country + ') - ' + '[' + type + ']';
                                     }
                                 } else {
                                     $scope.expansionVoicesList[count2].voiceCompleteName = value.voiceName + ' - [offline]';
                                 }
-                                if (value.ID_Voice == $scope.userData.cfgExpansionVoiceOnline&&!($scope.userData.cfgExpansionVoiceOnline==null)) {
+                                if (value.ID_Voice == $scope.userData.cfgExpansionVoiceOnline && !($scope.userData.cfgExpansionVoiceOnline == null)) {
                                     $scope.userData.cfgExpansionVoiceOnline = value.voiceName;
                                 }
                                 count2++;
@@ -959,12 +987,12 @@ angular.module('controllers', [])
                         });
             };
             $scope.getConfig()
-                .then(function () {
-                    $scope.getAudioLists()
-                    .then(function (){
-                        $scope.viewActived = true;
+                    .then(function () {
+                        $scope.getAudioLists()
+                                .then(function () {
+                                    $scope.viewActived = true;
+                                });
                     });
-                });
 
             $scope.expansionVoiceChange = function (data) {
                 angular.forEach($scope.expansionVoicesList, function (value) {
@@ -978,7 +1006,7 @@ angular.module('controllers', [])
                         }
                     }
                 });
-                if($scope.userData.UserValidated=='1'&&$scope.userData.cfgExpansionVoiceOnline!=null&&(!$scope.local||$scope.userData.cfgExpansionVoiceOffline!=null)){
+                if ($scope.userData.UserValidated == '1' && $scope.userData.cfgExpansionVoiceOnline != null && (!$scope.local || $scope.userData.cfgExpansionVoiceOffline != null)) {
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': 'UserValidated', 'value': '2'}, {'funct': "userValidate2"}).$promise
                     //Cargamos la board inicial (Oscar)
                     $http.post($scope.baseurl + "PanelGroup/copyGroupBoard");
@@ -993,7 +1021,7 @@ angular.module('controllers', [])
                 }
             };
 
-            $scope.generateAudio = function (voice,type) {
+            $scope.generateAudio = function (voice, type) {
                 angular.forEach($scope.expansionVoicesList, function (value) {
                     if (value.voiceName === voice && value.voiceType === 'online') {
                             voice=value.ID_Voice;
@@ -1031,16 +1059,56 @@ angular.module('controllers', [])
         })
         .controller('myCtrl', function (Resources, $location, $scope, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {
 
+            //Dropdown Menu Bar
+            $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
+            $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
+
+            //Choose the buttons to show on bar
+            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                if (value.name == 'Inici' || value.name == 'Editar panell' || value.name == 'Panells' || value.name == 'Configuració' || value.name == 'FAQ' || value.name == 'Tutorial' || value.name == 'Privacitat' || value.name == 'Log out') {
+                    value.show = true;
+                } else {
+                    value.show = false;
+                }
+            });
+            //function to change html view
+            $rootScope.go = function (path) {
+                if(path == '/'){
+                    $scope.config();
+                }else if(path == 'logout'){
+                    $scope.logOut();
+                }else if(path == 'editPanel'){
+                    $scope.edit();
+                }else{
+                $location.path(path);
+                $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                }
+            };
+            
+            $scope.logOut = function () {
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogLogOut'
+                }).then(function () {
+                    AuthService.logout();
+                    $location.path('/login');
+                }, function (value) {
+
+                });
+
+            };
+
             if (!$rootScope.isLogged) {
                 $location.path('/login');
-            }else{
+            } else {
                 Resources.main.get({'IdSu': $rootScope.sUserId}, {'funct': "getConfig"}).$promise
-                .then(function (results) {
-                    if(results.userConfig.UserValidated=='1'){
-                        //redirecciona a configuración de usuario para el primer acceso a la aplicación
-                        $location.path('/userConfig');
-                    }
-                });
+                        .then(function (results) {
+                            if (results.userConfig.UserValidated == '1') {
+                                //redirecciona a configuración de usuario para el primer acceso a la aplicación
+                                $location.path('/userConfig');
+                            }
+                        });
             }
 
             // Pedimos los textos para cargar la pagina
@@ -2837,6 +2905,37 @@ angular.module('controllers', [])
                 }
                 return n;
             };
+            //Dropdown Menu Bar
+            $rootScope.dropdownMenuBarValue = '/panelGroups'; //Button selected on this view
+            $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
+
+            //Choose the buttons to show on bar
+            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                if (value.name == 'Inici' || value.name == 'Panells' || value.name == 'Configuració' || value.name == 'FAQ' || value.name == 'Tutorial' || value.name == 'Privacitat' || value.name == 'Log out') {
+                    value.show = true;
+                } else {
+                    value.show = false;
+                }
+            });
+            //function to change html view
+            $rootScope.go = function (path) {
+                if(path=='logout'){
+                    ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogLogOut'
+                    }).then(function () {
+                        AuthService.logout();
+                        $location.path('/login');
+                    }, function (value) {
+
+                    });
+                }else{
+                    $location.path(path);
+                    $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                }
+            };
+            
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -2968,4 +3067,4 @@ angular.module('controllers', [])
                 }
             }
         });
-        
+
