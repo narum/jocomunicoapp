@@ -56,7 +56,7 @@
             <div class="row fullheight">
 
                 <div bind-html-compile="dataword" class='col-xs-4' ng-repeat="picto in dataWord| limitTo: 6" style="height: 50%; margin-left: 0 !important">
-                    <div class="cellSearch imgRounded"  ng-if="true" ng-drag="true" ng-drag-data="{idpicto:'{{picto.id}}'}" data-allow-transform="true">
+                    <div class="cellSearch imgRounded"  ng-if="true" ng-drag="!fv.painting" ng-drag-data="{idpicto:'{{picto.id}}'}" data-allow-transform="true">
                         <div ng-if="cfgTextInCell && picto.text !== null" class="textCell">{{picto.text}}</div>
                         <div ng-style="cfgTextInCell ? {'height': '70%'} : {'height': '100%'}">
                             <img class="imgRounded imgResponsive" ng-src="{{baseurl}}img/pictos/{{picto.imgPicto}}"/>
@@ -91,7 +91,7 @@
                 <div class="cellSearch imgRounded"  ng-if="true">
                     <div class="textCell">{{img.imgName}}</div>
                     <div class="imgSearchCell">
-                        <img class="imgRounded imgResponsive" ng-src="{{baseurl}}{{img.imgPath}}" ng-drag="true" ng-drag-data="{imgPath:'{{img.imgPath}}'}" data-allow-transform="true"/>
+                        <img class="imgRounded imgResponsive" ng-src="{{baseurl}}{{img.imgPath}}" ng-drag="!fv.painting" ng-drag-data="{imgPath:'{{img.imgPath}}'}" data-allow-transform="true"/>
                     </div>
                 </div>
             </div>

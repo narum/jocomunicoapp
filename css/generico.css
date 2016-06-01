@@ -288,6 +288,7 @@ input.switch:checked ~ label:after
     border-radius: 7px;
 }
 .imgResponsive {
+    pointer-events: none;
     display: block;
     max-width: 85%;
     height: auto;

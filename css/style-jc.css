@@ -290,6 +290,7 @@ html *
     background-clip: content-box;
 }
 .function{
+    pointer-events: none;
     right: 0px;
     bottom: 0px;
     max-width: 100%;

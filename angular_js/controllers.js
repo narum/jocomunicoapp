@@ -1041,7 +1041,6 @@ angular.module('controllers', [])
                     $scope.intervalScan = $interval(myTimer, Intervalscan);
 
                 }
-
                 $scope.arrayScannedCells = null;
                 $scope.isScanningCancel = false;
                 //The user cfg tell us where we have to start
@@ -2187,7 +2186,7 @@ angular.module('controllers', [])
 
                     }
 
-
+                    $scope.getPred();
                 });
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
