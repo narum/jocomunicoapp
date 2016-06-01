@@ -88,10 +88,10 @@
         </div>
         <div class="col-xs-12 imgSearchView">
             <div class='col-xs-4' ng-repeat="img in imgData| limitTo: 6" style="height: 50%; margin-left: 0 !important">
-                <div class="cellSearch imgRounded"  ng-if="true">
+                <div class="cellSearch imgRounded" ng-drag="!fv.painting" ng-drag-data="{imgPath:'{{img.imgPath}}'}" data-allow-transform="true">
                     <div class="textCell">{{img.imgName}}</div>
                     <div class="imgSearchCell">
-                        <img class="imgRounded imgResponsive" ng-src="{{baseurl}}{{img.imgPath}}" ng-drag="!fv.painting" ng-drag-data="{imgPath:'{{img.imgPath}}'}" data-allow-transform="true"/>
+                            <img class="imgRounded imgResponsive" ng-src="{{baseurl}}{{img.imgPath}}" />
                     </div>
                 </div>
             </div>
