@@ -615,20 +615,20 @@ angular.module('controllers', [])
             });
             //function to change html view
             $rootScope.go = function (path) {
-                if(path=='logout'){
-                    $('#logoutModal').modal({backdrop:'static'});
+                if (path == 'logout') {
+                    $('#logoutModal').modal({backdrop: 'static'});
 //                        AuthService.logout();
 //                        $location.path('/login');
-                }else{
+                } else {
                     $location.path(path);
                     $rootScope.dropdownMenuBarValue = path; //Button selected on this view
                 }
             };
             //Log Out
-            $rootScope.logout = function (){
+            $rootScope.logout = function () {
                 AuthService.logout();
             };
-            
+
             // Declaración de variables
             $scope.canEdit = false;
             $scope.viewActived = false;
@@ -1024,29 +1024,29 @@ angular.module('controllers', [])
             $scope.generateAudio = function (voice, type) {
                 angular.forEach($scope.expansionVoicesList, function (value) {
                     if (value.voiceName === voice && value.voiceType === 'online') {
-                            voice=value.ID_Voice;
-                            type='online';
-                        }
-                });
-                if(voice==$scope.interfaceVoicesList[0].voiceName||voice==$scope.interfaceVoicesList[1].voiceName){
-                    type='online';
-                }
-                Resources.main.save({'IdU':$rootScope.userId, 'text':$scope.content.voicePlay, 'voice':voice, 'type':type, 'language':$scope.userData.ID_ULanguage, 'rate':'0'}, {'funct': "generateAudio"}).$promise
-                .then(function (results) {
-                    console.log(results);
-                    if(results[1]){
-                        txtContent("errorVoices").then(function (content) {
-                            $scope.errorMessage = content.data[results[3]];
-                            $scope.errorCode = results[3];
-                            $('#errorVoicesModal').modal({backdrop:'static'});
-                        });
-                    }else{
-                        $scope.sound = "mp3/"+results[0];
-                        $timeout(function() {
-                            $('#utterance').get(0).play();
-                        });
+                        voice = value.ID_Voice;
+                        type = 'online';
                     }
                 });
+                if (voice == $scope.interfaceVoicesList[0].voiceName || voice == $scope.interfaceVoicesList[1].voiceName) {
+                    type = 'online';
+                }
+                Resources.main.save({'IdU': $rootScope.userId, 'text': $scope.content.voicePlay, 'voice': voice, 'type': type, 'language': $scope.userData.ID_ULanguage, 'rate': '0'}, {'funct': "generateAudio"}).$promise
+                        .then(function (results) {
+                            console.log(results);
+                            if (results[1]) {
+                                txtContent("errorVoices").then(function (content) {
+                                    $scope.errorMessage = content.data[results[3]];
+                                    $scope.errorCode = results[3];
+                                    $('#errorVoicesModal').modal({backdrop: 'static'});
+                                });
+                            } else {
+                                $scope.sound = "mp3/" + results[0];
+                                $timeout(function () {
+                                    $('#utterance').get(0).play();
+                                });
+                            }
+                        });
             };
             $scope.exit = function () {
                 $scope.viewActived = false;
@@ -1057,7 +1057,7 @@ angular.module('controllers', [])
                         });
             };
         })
-        .controller('myCtrl', function (Resources, $location, $scope, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, $q) {
+        .controller('myCtrl', function (Resources, $location, $scope, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, AuthService) {
 
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
@@ -1073,18 +1073,18 @@ angular.module('controllers', [])
             });
             //function to change html view
             $rootScope.go = function (path) {
-                if(path == '/'){
+                if (path == '/') {
                     $scope.config();
-                }else if(path == 'logout'){
+                } else if (path == 'logout') {
                     $scope.logOut();
-                }else if(path == 'editPanel'){
+                } else if (path == 'editPanel') {
                     $scope.edit();
-                }else{
-                $location.path(path);
-                $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                } else {
+                    $location.path(path);
+                    $rootScope.dropdownMenuBarValue = path; //Button selected on this view
                 }
             };
-            
+
             $scope.logOut = function () {
                 ngDialog.openConfirm({
                     template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
@@ -1130,7 +1130,20 @@ angular.module('controllers', [])
                 $scope.InitScan();
             });
 
-
+            $scope.setTimer = function () {
+                $interval.cancel($scope.intervalScan);
+                var Intervalscan = $scope.cfgTimeScanning;
+                function myTimer() {
+                    if ($scope.isScanningCancel) {
+                        //We are not scanning cancel anmore
+                        $scope.isScanningCancel = false;
+                    } else {
+                        $scope.nextBlockScan();
+                    }
+                }
+                ;
+                $scope.intervalScan = $interval(myTimer, Intervalscan);
+            };
             $scope.InitScan = function ()
             {
                 if ($scope.inEdit) {
@@ -1144,20 +1157,9 @@ angular.module('controllers', [])
 
                 //When the scan is automatic, this timer manage when the scan have to move to the next block
                 if ($scope.timerScan) {
-                    $interval.cancel($scope.intervalScan);
-                    var Intervalscan = userConfig.cfgTimeScanning;
-                    function myTimer() {
-                        if ($scope.isScanningCancel) {
-                            //We are not scanning cancel anmore
-                            $scope.isScanningCancel = false;
-                        } else {
-                            $scope.nextBlockScan();
-                        }
-                    }
-                    ;
-                    $scope.intervalScan = $interval(myTimer, Intervalscan);
-
+                    $scope.setTimer();
                 }
+
                 $scope.arrayScannedCells = null;
                 $scope.isScanningCancel = false;
                 //The user cfg tell us where we have to start
@@ -1165,7 +1167,7 @@ angular.module('controllers', [])
                     $scope.isScanning = "waiting";
                 } else if ($scope.cfgPredOnOff === '1') {
                     $scope.isScanning = "prediction";
-                } else if (userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive + userConfig.cfgMenuHomeActive > 0) {
+                } else if (userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive + userConfig.cfgMenuHomeActive > 0 && userConfig.cfgSentenceBarUpDown == 0) {
                     $scope.isScanning = "sentence";
                 } else {
                     $scope.isScanning = "board";
@@ -1217,6 +1219,11 @@ angular.module('controllers', [])
                         if ($scope.cfgPredOnOff !== '1') {
                             $scope.nextBlockScan();
                         }
+                        $scope.setTimer();
+                    } else if ($scope.isScanningCancel) {
+                        $scope.isScanningCancel = false;
+                        $scope.isScanning = "nowait";
+                        $scope.InitScan();
                     } else {
                         if (!$scope.longclick)
                         {
@@ -1236,6 +1243,12 @@ angular.module('controllers', [])
                         if ($scope.cfgPredOnOff !== '1') {
                             $scope.nextBlockScan();
                         }
+                        $scope.setTimer();
+                    }
+                    if ($scope.isScanningCancel) {
+                        $scope.isScanningCancel = false;
+                        $scope.isScanning = "nowait";
+                        $scope.InitScan();
                     } else {
                         if (!$scope.longclick && !$scope.timerScan)
                         {
@@ -1306,7 +1319,10 @@ angular.module('controllers', [])
                 if ($scope.cfgScanningCustomRowCol == 0) {
                     //The last group have been reached
                     if ($scope.indexScannedBlock > $scope.maxCustomScanBlock) {
-                        $scope.InitScan();
+                        $scope.isScanning = "sentenceDown";
+                        if ($scope.cfgSentenceBarUpDown == 0) {
+                            $scope.nextBlockScan();
+                        }
                         return false;
                     } else {
                         var j = 0;
@@ -1325,7 +1341,10 @@ angular.module('controllers', [])
                     //Works like the last one except that the cell will be added to the array anyway (to avoid strange empty slots in the scan) and we have not to read all the cell, we acces to the cell by the pos 
                 } else if ($scope.cfgScanningCustomRowCol == 1) {
                     if ($scope.indexScannedBlock > $scope.rows - 1) {
-                        $scope.InitScan();
+                        $scope.isScanning = "sentenceDown";
+                        if ($scope.cfgSentenceBarUpDown == 0) {
+                            $scope.nextBlockScan();
+                        }
                         return false;
                     } else {
                         for (var i = 0; i < $scope.columns; i++) {
@@ -1338,7 +1357,10 @@ angular.module('controllers', [])
                     //Pretty the same
                 } else {
                     if ($scope.indexScannedBlock > $scope.columns - 1) {
-                        $scope.InitScan();
+                        $scope.isScanning = "sentenceDown";
+                        if ($scope.cfgSentenceBarUpDown == 0) {
+                            $scope.nextBlockScan();
+                        }
                         return false;
                     } else {
                         for (var i = 0; i < $scope.rows; i++) {
@@ -1399,6 +1421,7 @@ angular.module('controllers', [])
             $scope.getScanCell = function () {
                 if ($scope.cfgScanningCustomRowCol == 0) {
                     if ($scope.indexScannedCells > $scope.arrayScannedCells.length - 1) {
+                        $scope.isScanning = "nowait";
                         $scope.InitScan();
                         return false;
                     }
@@ -1409,6 +1432,7 @@ angular.module('controllers', [])
                 } else {
                     //Nos hemos pasado
                     if (($scope.cfgScanningCustomRowCol == 1 && $scope.indexScannedCells > $scope.columns - 1) || ($scope.cfgScanningCustomRowCol == 2 && $scope.indexScannedCells > $scope.rows - 1)) {
+                        $scope.isScanning = "nowait";
                         $scope.InitScan();
                         return false;
                     }
@@ -1434,16 +1458,20 @@ angular.module('controllers', [])
                         case "waiting"://Do nothing
                             break;
                         case "prediction":
-                            $scope.isScanning = "sentence";
-                            if ($scope.cfgMenuDeleteLastActive + $scope.cfgMenuDeleteAllActive + $scope.cfgMenuReadActive + $scope.cfgMenuHomeActive < 1) {
+                            $scope.isScanning = "sentenceUp";
+                            if ($scope.cfgMenuDeleteLastActive + $scope.cfgMenuDeleteAllActive + $scope.cfgMenuReadActive + $scope.cfgMenuHomeActive < 1 || $scope.cfgSentenceBarUpDown == 1) {
                                 $scope.nextBlockScan();
                             }
                             break;
-                        case "sentence":
+                        case "sentenceUp":
                             $scope.isScanning = "board";
                             $scope.indexScannedCells = 0; //Cell inside the array
                             $scope.indexScannedBlock = 0; //Column or row inside the whole board
                             $scope.arrayScannedCells = $scope.getScanArray();
+                            break;
+                        case "sentenceDown":
+                            $scope.isScanning = "nowait";
+                            $scope.InitScan();
                             break;
                         case "board":
                             $scope.indexScannedBlock = $scope.indexScannedBlock + 1;
@@ -1451,6 +1479,7 @@ angular.module('controllers', [])
                             break;
                         case "boardCustomExtra":
                             if ($scope.indexScannedCells === null) {
+                                $scope.isScanning = "nowait";
                                 $scope.InitScan();
                                 return false;
                             } else {
@@ -1465,6 +1494,7 @@ angular.module('controllers', [])
                         case "predictionCell":
                             $scope.indexScannedCells = $scope.indexScannedCells + 1;
                             if ($scope.indexScannedCells > $scope.arrayScannedCells.length - 1) {
+                                $scope.isScanning = "nowait";
                                 $scope.InitScan();
                             }
                             break;
@@ -1487,6 +1517,7 @@ angular.module('controllers', [])
                             }
                             break;
                         case "deleteall":
+                            $scope.isScanning = "nowait";
                             $scope.InitScan();
                     }
 
@@ -1495,6 +1526,10 @@ angular.module('controllers', [])
             //Pass to the next scan level (subgroup)
             $scope.selectBlockScan = function () {
                 if ($scope.inScan) {
+                    //when we select a picto cancel the actual timer and set up another
+                    if ($scope.timerScan) {
+                        $scope.setTimer();
+                    }
                     //cancel long click
                     if ($scope.longclick)
                     {
@@ -1515,7 +1550,8 @@ angular.module('controllers', [])
                             $scope.isScanning = "predictionCell";
                             $scope.isScanningCancel = $scope.cfgCancelScanOnOff;
                             break;
-                        case "sentence":
+                        case "sentenceUp":
+                        case "sentenceDown":
                             $scope.isScanningCancel = $scope.cfgCancelScanOnOff;
                             $scope.isScanning = "home";
                             if ($scope.cfgMenuHomeActive === 0) {
@@ -1656,6 +1692,7 @@ angular.module('controllers', [])
                 $scope.cfgScanningCustomRowCol = userConfig.cfgScanningCustomRowCol;
                 $scope.longclick = userConfig.cfgScanningAutoOnOff == 0 ? true : false;
                 $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
+                $scope.cfgTimeScanning = userConfig.cfgTimeScanning;
                 $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff == 1 ? true : false;
                 $scope.cfgTimeOver = userConfig.cfgTimeLapseSelect;
                 $scope.cfgTimeNoRepeatedClickOnOff = userConfig.cfgTimeNoRepeatedClickOnOff;
@@ -1811,7 +1848,6 @@ angular.module('controllers', [])
                 $http.post(url).success(function (response)
                 {
                     $scope.colors = response.data;
-                    console.log($scope.colors);
                 });
             };
 
@@ -1822,15 +1858,24 @@ angular.module('controllers', [])
                     $scope.typeSearh = "picto";
 
             };
-            // Gets all the boards in the group and select the primary
+            // Gets all the boards and initialize the two dropdown menus
             $scope.getPrimaryBoard = function () {
                 var url = $scope.baseurl + "Board/getBoards";
                 var postdata = {idboard: $scope.idboard};
 
                 $http.post(url, postdata).success(function (response)
                 {
-                    $scope.selectBoard = {ID_Board: $scope.idboard.toString()};
+
                     $scope.allBoards = response.boards;
+                    console.log($scope.allBoards);
+                    console.log($scope.idboard);
+                    console.log($scope.allBoards.length);
+                    for (var i = 0; i < $scope.allBoards.length; i++) {
+                        if ($scope.allBoards[i].ID_Board == $scope.idboard) {
+                            $scope.sb = {selectBoard: $scope.allBoards[i]};
+                            break;
+                        }
+                    }
                     $scope.primaryBoard = {ID_Board: response.primaryBoard.ID_Board};
                 });
 
@@ -1870,9 +1915,9 @@ angular.module('controllers', [])
                 });
             };
             // Change the shown board
-            $scope.changeBoard = function (viewBoard)
+            $scope.changeBoard = function ()
             {
-                $scope.showBoard(viewBoard.ID_Board);
+                $scope.showBoard($scope.sb.selectBoard.ID_Board);
                 // We are in edit mode so update the edit information
                 $scope.edit();
             };
@@ -2007,7 +2052,7 @@ angular.module('controllers', [])
                                     $('#errorVoicesModal').modal({backdrop: 'static'});
                                 });
                             } else {
-                                $scope.sound = "mp3/" + $scope.dataAudio;
+                                $scope.sound = "mp3/" + $scope.dataAudio[0];
                                 $timeout(function () {
                                     $('#utterance').get(0).play();
                                 });
@@ -2133,6 +2178,7 @@ angular.module('controllers', [])
                     $http.post(url, postdata).success(function (response)
                     {
                         $scope.dataTemp = response.data;
+                        $scope.info = "";
                         $scope.dataAudio = response.audio;
 
                         if ($scope.dataAudio[1]) {
@@ -2142,7 +2188,7 @@ angular.module('controllers', [])
                                 $('#errorVoicesModal').modal({backdrop: 'static'});
                             });
                         } else {
-                            $scope.sound = "mp3/" + $scope.dataAudio;
+                            $scope.sound = "mp3/" + $scope.dataAudio[0];
                             $timeout(function () {
                                 $('#utterance').get(0).play();
                             });
@@ -2208,7 +2254,7 @@ angular.module('controllers', [])
                             $('#errorVoicesModal').modal({backdrop: 'static'});
                         });
                     } else {
-                        $scope.sound = "mp3/" + $scope.dataAudio;
+                        $scope.sound = "mp3/" + $scope.dataAudio[0];
                         $timeout(function () {
                             $('#utterance').get(0).play();
                         });
@@ -2291,7 +2337,7 @@ angular.module('controllers', [])
                             $('#errorVoicesModal').modal({backdrop: 'static'});
                         });
                     } else {
-                        $scope.sound = "mp3/" + $scope.dataAudio;
+                        $scope.sound = "mp3/" + $scope.dataAudio[0];
                         $timeout(function () {
                             $('#utterance').get(0).play();
                         });
@@ -2356,7 +2402,7 @@ angular.module('controllers', [])
                                     $('#errorVoicesModal').modal({backdrop: 'static'});
                                 });
                             } else {
-                                $scope.sound = "mp3/" + $scope.dataAudio;
+                                $scope.sound = "mp3/" + $scope.dataAudio[0];
                                 $timeout(function () {
                                     $('#utterance').get(0).play();
                                 });
@@ -2381,7 +2427,7 @@ angular.module('controllers', [])
                                     $('#errorVoicesModal').modal({backdrop: 'static'});
                                 });
                             } else {
-                                $scope.sound = "mp3/" + $scope.dataAudio;
+                                $scope.sound = "mp3/" + $scope.dataAudio[0];
                                 $timeout(function () {
                                     $('#utterance').get(0).play();
                                 });
@@ -2919,23 +2965,23 @@ angular.module('controllers', [])
             });
             //function to change html view
             $rootScope.go = function (path) {
-                if(path=='logout'){
+                if (path == 'logout') {
                     ngDialog.openConfirm({
-                    template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
-                    scope: $scope,
-                    className: 'ngdialog-theme-default dialogLogOut'
+                        template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
+                        scope: $scope,
+                        className: 'ngdialog-theme-default dialogLogOut'
                     }).then(function () {
                         AuthService.logout();
                         $location.path('/login');
                     }, function (value) {
 
                     });
-                }else{
+                } else {
                     $location.path(path);
                     $rootScope.dropdownMenuBarValue = path; //Button selected on this view
                 }
             };
-            
+
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -2963,7 +3009,7 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
 
-                    var URL = $scope.baseurl + "PanelGroup/newGroupPanel";
+                    var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
 
 
                     $http.post(URL, $scope.CreateBoardData).success(function (response)

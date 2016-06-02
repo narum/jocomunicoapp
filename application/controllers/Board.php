@@ -282,10 +282,7 @@ class Board extends REST_Controller {
 
         $response = [
             'data' => $newdata,
-            'audio' => $aux[0],
-            'boolError' => $aux[1],
-            'textError' => $aux[2],
-            'codeError' => $aux[3],
+            'audio' => $aux
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
@@ -407,10 +404,7 @@ class Board extends REST_Controller {
             
             $response = [
                 'info' => $info,
-                'audio' => $aux[0],
-                'boolError' => $aux[1],
-                'textError' => $aux[2],
-                'codeError' => $aux[3],
+                'audio' => $aux
             ];
             
             $this->response($response, REST_Controller::HTTP_OK);
@@ -519,10 +513,7 @@ class Board extends REST_Controller {
             'negativa' => $negativa,
             'control' => $control,
             'data' => $newdata,
-            'audio' => $aux[0],
-            'boolError' => $aux[1],
-            'textError' => $aux[2],
-            'codeError' => $aux[3],
+            'audio' => $aux
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
@@ -1002,10 +993,7 @@ class Board extends REST_Controller {
         $audio->waitForFile($aux[0], $aux[1]);
 
         $response = [
-            'audio' => $aux[0],
-            'boolError' => $aux[1],
-            'textError' => $aux[2],
-            'codeError' => $aux[3],
+            'audio' => $aux
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);

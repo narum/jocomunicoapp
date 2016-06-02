@@ -159,13 +159,14 @@ class PanelGroup extends REST_Controller {
         $idusu = $this->session->userdata('idusu');
         $board = $this->BoardInterface->getPrimaryGroupBoard();
         if ($board == null) {
-            $primaryBoard = $this->BoardInterface->getInfoGroupBoard(2);
+            $srcGroupBoard = 2;
+            $primaryBoard = $this->BoardInterface->getInfoGroupBoard($srcGroupBoard);
 
             $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
-            $boards = $this->BoardInterface->getBoards(2);
+            $boards = $this->BoardInterface->getBoards($srcGroupBoard);
             //If we want to allow the user copy group boards this line have to be removed
             $this->panelInterface->setPrimaryGroupBoard($IDGboard, $idusu);
-            $srcGroupBoard = 2;
+            
             $sameGroupBoard = 1;
             for ($i = 0; $i < count($boards); $i++) {
                 $idSrc = $boards[$i]->ID_Board;

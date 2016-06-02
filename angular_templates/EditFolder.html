@@ -21,9 +21,9 @@
         </div>
         <div class=" imgRounded col-xs-4 selectFolder">
             <select class="folderBox dropdown-arrow" 
-                    ng-model="selectBoard"
-                    ng-options="b.Bname for b in allBoards track by b.ID_Board"
-                    ng-change="changeBoard(selectBoard.valueOf())">
+                    ng-model="$parent.sb.selectBoard"
+                    ng-options="b.Bname for b in allBoards"
+                    ng-change="changeBoard()">
             </select>
         </div>
 
