@@ -1,13 +1,15 @@
 <link rel="stylesheet" type="text/css" href="css/userConfig.css">
 <link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
+<audio id="utterance" src="{{sound}}" type="audio/mp3"></audio>
 <style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;
     -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
 <!--menu superior dropdown-->
 <div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
+<div ng-include="'/angular_templates/logoutModal.html'"></div>
 
 <div class="row scroll" id="scrollBar">
-    <div class="col-xs-2 col-xs-offset-5 loadingGif" ng-show="!viewActived"><img class="img-responsive" ng-src={{img.loading}}/></div>
+    <div class="col-xs-12 loadingGif" ng-show="!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
     <div class="col-xs-8 col-xs-offset-2 MenuUserConfig" ng-show="viewActived">
         <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_12}})">
             <div class="col-xs-12">
@@ -73,7 +75,7 @@
     <!-- Modal -->
                                         <div class="modal fade" id="PassModal" role="dialog">
                                             <div class="modal-dialog modal-lg">
-                                                     <div class="row marginModalTop"><img class="img-owl pull-right" src={{img.lowDormFlecha}}/></div>
+                                                     <div class="row marginModalTopOwl"><img class="img-owl pull-right" src={{img.lowDormFlecha}}/></div>
                                                     <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_12}})">
                                                     <div id="header" class="row">
                                                         <div class="col-xs-10 headerTitle">{{content.changePassTitle}}</div>
@@ -256,7 +258,7 @@
 <!--LanguagesModal-->                       
                                         <div class="modal fade" id="LanguageModal" role="dialog">
                                             <div class="modal-dialog modal-lg">
-                                                 <div class="row marginModalTop"><img class="img-owl pull-right" src={{img.lowHolaFlecha}}/></div>
+                                                 <div class="row marginModalTopOwl"><img class="img-owl pull-right" src={{img.lowHolaFlecha}}/></div>
                                                 <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_08}})">
                                                     <div id="header" class="row">
                                                         <div class="col-xs-10 headerTitle">{{content.addLanguage2}}</div>
@@ -401,7 +403,7 @@
                             <!--ErrorVoicesModal-->
                                         <div class="modal fade" id="errorVoicesModal" role="dialog">
                                             <div class="modal-dialog modal-lg">
-                                                <div class="row marginModalTop"><img class="img-owl pull-right" src={{img.lowSorpresaFlecha}}/></div>
+                                                <div class="row marginModalTopOwl"><img class="img-owl pull-right" src={{img.lowSorpresaFlecha}}/></div>
                                                 <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_08}})">
                                                     <div id="header" class="row">
                                                         <div class="col-xs-10 headerTitle">{{content.errorVoicesTitle}}</div>
@@ -773,7 +775,7 @@
                                     <div class="row">
                                         <div class="col-xs-6" ng-show="userData.cfgScanningAutoOnOff&&!(userData.cfgUsageMouseOneCTwoC=='2')">{{content.scanCancel}}</div>
                                         <div class="col-xs-2">
-                                            <input type="checkbox" id="switch8" class="switch" ng-model="userData.cfgCancelScanOnOff" ng-click="changeOnOff(userData.cfgCancelScanOnOff, 'ScanningCancelScanOnOff')" ng-show="false"/>
+                                            <input type="checkbox" id="switch8" class="switch" ng-model="userData.cfgCancelScanOnOff" ng-click="changeOnOff(userData.cfgCancelScanOnOff, 'CancelScanOnOff')" ng-show="false"/>
                                                 <label for="switch8" ng-show="userData.cfgScanningAutoOnOff&&!(userData.cfgUsageMouseOneCTwoC=='2')">&nbsp;</label>
                                         </div>
                                     </div>

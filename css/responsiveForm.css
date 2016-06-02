@@ -6,6 +6,14 @@ html, body{
     font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
 
+/*Loading gif image*/
+.loadingGif{
+    margin-top: 45vh;
+    text-align: center;
+}
+.img-loadingGif{
+    height: 5vh;
+}
 /* Automatic resize Input Type from viewheight
        input-group input-group-auto           */
     

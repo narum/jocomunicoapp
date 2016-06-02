@@ -6,7 +6,7 @@
     <div class="dropdownMenuBar">
         <div class="menuBarAnimation" ng-class="{menuBarAnimationOpened: dropdownMenuOpen}"></div>
     </div>
-    <div class="row buttonsMenuBar" ng-class="{buttonsMenuBarOpened: dropdownMenuOpen}" ng-show="dropdownMenuOpen">
+    <div class="row buttonsMenuBar" ng-class="{buttonsMenuBarOpened: dropdownMenuOpen}" ng-show='dropdownMenuOpen'>
         <div class="row">
             <div class="pull-right marginButtonMenuBar" ng-init="languageButton.icon=languageButton.iconInitial" ng-show="dropdownMenuBarChangeLanguage">
                 <input type="checkbox" id="languageButon" class="statesButtonMenuBar" ng-model="dropdownMenuBarLanguage" ng-show="false">

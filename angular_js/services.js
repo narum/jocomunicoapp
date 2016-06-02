@@ -14,7 +14,7 @@ angular.module('services', [])
 	};
 })
 
-.factory('AuthService', function($rootScope, $http){
+.factory('AuthService', function($rootScope, $http, $location){
 
 	// Funciones de comprobación del login
 	
@@ -43,6 +43,8 @@ angular.module('services', [])
 			delete $http.defaults.headers.common['Authorization'];
 			delete $http.defaults.headers.common['X-Authorization'];
 			$rootScope.isLogged = false;
+                        $location.path('/login');
+                        $rootScope.dropdownMenuBarValue = '/';
 		}
 	}
 })

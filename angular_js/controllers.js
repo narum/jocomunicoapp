@@ -595,12 +595,40 @@ angular.module('controllers', [])
         })
 
 //Controlador de la configuración de usuario
-        .controller('UserConfCtrl', function ($http, $scope, $rootScope, Resources, AuthService, $q, txtContent, $location, $timeout) {
+        .controller('UserConfCtrl', function ($http, $scope, $rootScope, Resources, AuthService, txtContent, $location, $timeout) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
                 $rootScope.dropdownMenuBarValue = '/'; //Dropdown bar button selected on this view
             }
+            //Dropdown Menu Bar
+            $rootScope.dropdownMenuBarValue = '/userConfig'; //Button selected on this view
+            $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
+
+            //Choose the buttons to show on bar
+            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                if (value.name == 'Inici' || value.name == 'Panells' || value.name == 'Configuració' || value.name == 'FAQ' || value.name == 'Tutorial' || value.name == 'Privacitat' || value.name == 'Log out') {
+                    value.show = true;
+                } else {
+                    value.show = false;
+                }
+            });
+            //function to change html view
+            $rootScope.go = function (path) {
+                if(path=='logout'){
+                    $('#logoutModal').modal({backdrop:'static'});
+//                        AuthService.logout();
+//                        $location.path('/login');
+                }else{
+                    $location.path(path);
+                    $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                }
+            };
+            //Log Out
+            $rootScope.logout = function (){
+                AuthService.logout();
+            };
+            
             // Declaración de variables
             $scope.canEdit = false;
             $scope.viewActived = false;
@@ -996,26 +1024,29 @@ angular.module('controllers', [])
             $scope.generateAudio = function (voice, type) {
                 angular.forEach($scope.expansionVoicesList, function (value) {
                     if (value.voiceName === voice && value.voiceType === 'online') {
-                        voice = value.ID_Voice;
-                        type = 'online';
+                            voice=value.ID_Voice;
+                            type='online';
+                        }
+                });
+                if(voice==$scope.interfaceVoicesList[0].voiceName||voice==$scope.interfaceVoicesList[1].voiceName){
+                    type='online';
+                }
+                Resources.main.save({'IdU':$rootScope.userId, 'text':$scope.content.voicePlay, 'voice':voice, 'type':type, 'language':$scope.userData.ID_ULanguage, 'rate':'0'}, {'funct': "generateAudio"}).$promise
+                .then(function (results) {
+                    console.log(results);
+                    if(results[1]){
+                        txtContent("errorVoices").then(function (content) {
+                            $scope.errorMessage = content.data[results[3]];
+                            $scope.errorCode = results[3];
+                            $('#errorVoicesModal').modal({backdrop:'static'});
+                        });
+                    }else{
+                        $scope.sound = "mp3/"+results[0];
+                        $timeout(function() {
+                            $('#utterance').get(0).play();
+                        });
                     }
                 });
-                if (voice == $scope.interfaceVoicesList[0].voiceName || voice == $scope.interfaceVoicesList[1].voiceName) {
-                    type = 'online';
-                }
-                Resources.main.save({'IdU': $rootScope.userId, 'text': $scope.content.voicePlay, 'voice': voice, 'type': type, 'language': $scope.userData.ID_ULanguage, 'rate': '0'}, {'funct': "generateAudio"}).$promise
-                        .then(function (results) {
-                            console.log(results);
-                            if (results[1]) {
-                                txtContent("errorVoices").then(function (content) {
-                                    $scope.errorMessage = content.data[results[3]];
-                                    $scope.errorCode = results[3];
-                                    $('#errorVoicesModal').modal({backdrop: 'static'});
-                                });
-                            } else {
-
-                            }
-                        });
             };
             $scope.exit = function () {
                 $scope.viewActived = false;
@@ -1030,7 +1061,7 @@ angular.module('controllers', [])
 
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
-            $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+            $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
 
             //Choose the buttons to show on bar
             angular.forEach($rootScope.dropdownMenuBar, function (value) {
@@ -1042,8 +1073,30 @@ angular.module('controllers', [])
             });
             //function to change html view
             $rootScope.go = function (path) {
+                if(path == '/'){
+                    $scope.config();
+                }else if(path == 'logout'){
+                    $scope.logOut();
+                }else if(path == 'editPanel'){
+                    $scope.edit();
+                }else{
                 $location.path(path);
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                }
+            };
+            
+            $scope.logOut = function () {
+                ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogLogOut'
+                }).then(function () {
+                    AuthService.logout();
+                    $location.path('/login');
+                }, function (value) {
+
+                });
+
             };
 
             if (!$rootScope.isLogged) {
@@ -2854,7 +2907,7 @@ angular.module('controllers', [])
             };
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBarValue = '/panelGroups'; //Button selected on this view
-            $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+            $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
 
             //Choose the buttons to show on bar
             angular.forEach($rootScope.dropdownMenuBar, function (value) {
@@ -2866,8 +2919,21 @@ angular.module('controllers', [])
             });
             //function to change html view
             $rootScope.go = function (path) {
-                $location.path(path);
-                $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                if(path=='logout'){
+                    ngDialog.openConfirm({
+                    template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
+                    scope: $scope,
+                    className: 'ngdialog-theme-default dialogLogOut'
+                    }).then(function () {
+                        AuthService.logout();
+                        $location.path('/login');
+                    }, function (value) {
+
+                    });
+                }else{
+                    $location.path(path);
+                    $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                }
             };
             
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
