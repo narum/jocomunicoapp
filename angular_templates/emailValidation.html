@@ -4,13 +4,13 @@
     -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
 <!--menu superior dropdown-->
-<div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
+<div ng-include="'/angular_templates/dropdownMenuBar.html'" ng-show="viewActived"></div>
 
-<div class="container container-table">
+<div class="loadingGif" ng-show="!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
+<div class="container container-table" ng-show="viewActived">
     <div class="row vertical-center-row">
         <div class="form form-horizontal">
-            <div class="col-xs-12 loadingGif" ng-show="!activedValidation&&!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
-            <div class="col-xs-8 col-xs-offset-2 boxRegistreUsuari" style="background-image: url({{img.Patterns1_08}})" ng-show="activedValidation&&viewActived">
+            <div class="col-xs-8 col-xs-offset-2 boxRegistreUsuari" style="background-image: url({{img.Patterns1_08}})" ng-show="activedValidation">
                 <div class="row barraSuperiorRegistre">
                     <div class="col-xs-6"><p class="nomBarraSuperiorRegistre">{{ content.title }}</p></div>
                     <div class="col-xs-6">
@@ -19,11 +19,11 @@
                 </div>
                 <div class="row boxFormulariRegistreUsuari">
                     <div class="col-xs-10 col-xs-offset-1">
-                        <div class="row resposta" ng-show="validated&&activedValidation&&viewActived">
+                        <div class="row resposta" ng-show="validated&&activedValidation">
                             <div class="col-xs-2 check"><div class="icon-ok"></div></div>
                             <div class="col-xs-10 textresposta">{{content.validationOk}}<br/><br/>{{content.validationOk2}}<br/><br/>{{content.validationOk3}}</div>
                         </div>
-                        <div class="row resposta" ng-show="!validated&&activedValidation&&viewActived">
+                        <div class="row resposta" ng-show="!validated&&activedValidation">
                             <div class="col-xs-2 cross"><div class="icon-remove"></div></div>
                             <div class="col-xs-10 textresposta">{{content.validationWrong}}<br/><br/>{{content.validationWrong2}}<br/><br/>{{content.validationOk3}}</div>
                         </div>

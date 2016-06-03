@@ -5,12 +5,12 @@
     -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
 <!--menu superior dropdown-->
-<div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
+<div ng-include="'/angular_templates/dropdownMenuBar.html'" ng-show="viewActived"></div>
 <div ng-include="'/angular_templates/logoutModal.html'"></div>
 
-<div class="row scroll" id="scrollBar">
-    <div class="col-xs-12 loadingGif" ng-show="!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
-    <div class="col-xs-8 col-xs-offset-2 MenuUserConfig" ng-show="viewActived">
+<div class="loadingGif" ng-show="!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
+<div class="row scroll" id="scrollBar" ng-show="viewActived">
+    <div class="col-xs-8 col-xs-offset-2 MenuUserConfig">
         <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_12}})">
             <div class="col-xs-12">
                 <form name="userDataForm">

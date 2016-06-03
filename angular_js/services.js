@@ -57,6 +57,92 @@ angular.module('services', [])
 		return Resources.main.get({'section':section, 'idLanguage':languageid}, {'funct': "content"}).$promise;
 	}
 })
+//Función que inicializa la barra del menu superior
+.factory('dropdownMenuBarInit',  function(Resources, $rootScope, txtContent){
+    return function(Language){
+        //check if the APP is running locally or server
+        if($rootScope.localServer==undefined){
+            Resources.register.get({'funct': "runningLocalOrServer"}).$promise
+                .then(function (results) {
+                    if(results.appRunning=='local'){
+                        $rootScope.localServer=true;
+                    }else{
+                        $rootScope.localServer=false;
+                    }
+            });
+        }
+        //Get menu bar content
+        var content = function(){
+            if($rootScope.isLogged){
+                return txtContent("menuBar").then(function (results) {
+                    $rootScope.dropdownMenuBarChangeLanguage = false; //Show language button
+                    $rootScope.dropdownMenuBarLanguage = false; // Show the langauges available
+                    return results;
+                });
+            }else{
+                return Resources.register.get({'section': 'menuBar', 'idLanguage': Language}, {'funct': "content"}).$promise
+                .then(function (results) {
+                    //Languages on dropdown menu bar
+                    Resources.register.get({'funct': "languagesAvailable"}).$promise
+                    .then(function (languageAbbr) {
+                        $rootScope.languages = languageAbbr.languages;
+                        $rootScope.dropdownMenuBarChangeLanguage = true; //Show language button
+                        $rootScope.dropdownMenuBarLanguage = false; // Show the langauges available
+                    });
+                    return results;
+                });
+            }
+        }
+        if($rootScope.dropdownMenuBar == undefined||$rootScope.dropdownMenuBar.length == 0){
+            return content().then(function(results){
+                //Dropdown Menu Bar
+                $rootScope.dropdownMenuBar = [];
+                $rootScope.dropdownMenuBar.push({name: results.data.logout, href: 'logout', iconInitial: '/img/srcWeb/DropdownMenuBar/clauIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/clauIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/clauIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.privacity, href: '/privacity', iconInitial: '/img/srcWeb/DropdownMenuBar/lockIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/lockIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/lockIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.contact, href: '/contact', iconInitial: '/img/srcWeb/DropdownMenuBar/mailIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/mailIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/mailIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.tutorial, href: '/tutorial', iconInitial: '/img/srcWeb/DropdownMenuBar/tutorialIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/tutorialIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/tutorialIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.faq, href: '/faq', iconInitial: '/img/srcWeb/DropdownMenuBar/faqIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/faqIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/faqIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.userConfig, href: '/userConfig', iconInitial: '/img/srcWeb/DropdownMenuBar/configIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/configIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/configIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.panelGroups, href: '/panelGroups', iconInitial: '/img/srcWeb/DropdownMenuBar/panellsIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/panellsIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/panellsIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.editPanel, href: 'editPanel', iconInitial: '/img/srcWeb/DropdownMenuBar/editaPanellIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/editaPanellIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/editaPanellIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.info, href: '/info', iconInitial: '/img/srcWeb/DropdownMenuBar/sobrejocomIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/sobrejocomIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/sobrejocomIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.init, href: '/', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png', show:false});
+                $rootScope.languageButton = {name: results.data.languages, iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
+                $rootScope.languageButtonIcon = $rootScope.languageButton.iconInitial;
+                if($rootScope.localServer){
+                    $rootScope.dropdownMenuBar.splice(2, 1);//Borrar item de un array .splice(posicion, numero de items)
+                    $rootScope.dropdownMenuBar.splice(7, 1);//Borrar item de un array .splice(posicion, numero de items)
+                }
+            });
+        }else{
+            return content().then(function(results){
+                if($rootScope.localServer){
+                    $rootScope.dropdownMenuBar[0].name = results.data.logout;
+                    $rootScope.dropdownMenuBar[1].name = results.data.privacity;
+                    $rootScope.dropdownMenuBar[2].name = results.data.tutorial;
+                    $rootScope.dropdownMenuBar[3].name = results.data.faq;
+                    $rootScope.dropdownMenuBar[4].name = results.data.userConfig;
+                    $rootScope.dropdownMenuBar[5].name = results.data.panelGroups;
+                    $rootScope.dropdownMenuBar[6].name = results.data.editPanel;
+                    $rootScope.dropdownMenuBar[7].name = results.data.init;
+                    $rootScope.languageButton.name = results.data.languages;
+                }else{
+                    $rootScope.dropdownMenuBar[0].name = results.data.logout;
+                    $rootScope.dropdownMenuBar[1].name = results.data.privacity;
+                    $rootScope.dropdownMenuBar[2].name = results.data.contact;
+                    $rootScope.dropdownMenuBar[3].name = results.data.tutorial;
+                    $rootScope.dropdownMenuBar[4].name = results.data.faq;
+                    $rootScope.dropdownMenuBar[5].name = results.data.userConfig;
+                    $rootScope.dropdownMenuBar[6].name = results.data.panelGroups;
+                    $rootScope.dropdownMenuBar[7].name = results.data.editPanel;
+                    $rootScope.dropdownMenuBar[8].name = results.data.info;
+                    $rootScope.dropdownMenuBar[9].name = results.data.init;
+                    $rootScope.languageButton.name = results.data.languages;
+                }
+            });
+        }
+    };
+})
 
 
 

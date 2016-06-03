@@ -4,13 +4,13 @@
     -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
 <!--menu superior dropdown-->
-<div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
+<div ng-include="'/angular_templates/dropdownMenuBar.html'" ng-show="enterPassView||linkExpiredView||passChangedView"></div>
 
-<div class="container container-table">
+<div class="loadingGif" ng-show="!enterPassView&&!linkExpiredView&&!passChangedView"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
+<div class="container container-table" ng-show="enterPassView||linkExpiredView||passChangedView">
     <div class="row vertical-center-row">
         <form name="PassForm">
-            <div class="col-xs-12 loadingGif" ng-show="!enterPassView&&!linkExpiredView&&!passChangedView"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
-            <div class="col-xs-8 col-xs-offset-2 boxLogin" style="background-image: url({{img.Patterns1_08}})" ng-show="enterPassView||linkExpiredView||passChangedView">
+            <div class="col-xs-8 col-xs-offset-2 boxLogin" style="background-image: url({{img.Patterns1_08}})">
                 <div class="row barraBoxLogin">
                     <div class="col-xs-7">
                         <div class="textResponsiveBarra">{{content.title}}</div>

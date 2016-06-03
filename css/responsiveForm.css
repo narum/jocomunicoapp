@@ -8,11 +8,11 @@ html, body{
 
 /*Loading gif image*/
 .loadingGif{
-    margin-top: 45vh;
+    margin-top: 46vh;
     text-align: center;
 }
 .img-loadingGif{
-    height: 5vh;
+    height: 8vh;
 }
 /* Automatic resize Input Type from viewheight
        input-group input-group-auto           */
