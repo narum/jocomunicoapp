@@ -1160,7 +1160,7 @@ class Recommender extends CI_Model {
         $VF = array_merge($VF,$this->getfreqUsuariX3($inputid1, $inputid2));        
         $TSize = 7;
         $FSize = $TSize - sizeof($VF);
-        
+              
         if ($inputType2[0]->pictoType == 'modifier' && $this->boolDetPos($inputid2)) {
             // Algorisme V6 - Predictor de context (name) últims 2 dies                                
             $contextTypeName2Days = $this->getContextType2Days('name');
@@ -1226,26 +1226,27 @@ class Recommender extends CI_Model {
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbsAll, $TSize);
         }                        
-        else if ($inputType1[0]->pictoType == 'verb') {            
-            $caseList = array("theme", "locto", "locfrom", "manera", "time", "tool");            
+        else if ($inputType1[0]->pictoType == 'verb') {              
+            $caseList = array("theme", "locto", "locfrom", "manera", "time", "tool"); 
+           
             foreach ($caseList as $case) {
                 if ($case == "time" || $case == "tool") {
-                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid2, $case)[0]->$case == 1) $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
+                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 1) $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
                 }
                 else {
                     if (sizeof($VF) < $TSize) {
-                        $fits = $this->get1OptFits($inputid2, $case, 1);
+                        $fits = $this->get1OptFits($inputid1, $case, 1);
                         $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits);
                     }
                 }
-            }
+            }            
             foreach ($caseList as $case) {
                 if ($case == "time" || $case == "tool") {
-                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid2, $case)[0]->$case == 'opt')$VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
+                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 'opt')$VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
                 }
                 else {
                     if (sizeof($VF) < $TSize) {
-                        $fits = $this->get1OptFits($inputid2, $case, 'opt');
+                        $fits = $this->get1OptFits($inputid1, $case, 'opt');
                         $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits); 
                     }
                 }
