@@ -950,7 +950,7 @@ class Recommender extends CI_Model {
     
     function getRecommenderX1() {
         $pred = null;
-        if ($this->session->userdata('cfgExpansionOnOff')) $pred = $this->getRecommenderX1Expan();
+        if ($this->session->userdata('cfgExpansionOnOff')) $pred = $this->getRecommenderX1Expan(1);
         else $pred = $this->getRecommenderX1NonExpan();
         return $pred;
     }
@@ -980,11 +980,15 @@ class Recommender extends CI_Model {
         return $output; 
     }
     
-    private function getRecommenderX1Expan() {
+    private function getRecommenderX1Expan($primera) {
         $TSize = $this->session->userdata('cfgPredBarNumPred');
 
         // Algorisme V5 - Predictor inicial (cas 00 no hi ha res (fix jo i tu)  
-        $VF = $this->getSubj();        
+        $VF = $this->getSubj();
+        if (!$primera) {
+            unset($VF[0]);
+            unset($VF[1]);
+        }
 
         // Algorisme V6 - Predictor de context (name) últims 2 dies
         $contextTypeName2Days = $this->getContextType2Days('name');
@@ -1013,7 +1017,13 @@ class Recommender extends CI_Model {
         }
         // rellena
         if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX1($VF, $contextTypeName2Days, $TSize);
-        if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX1($VF, $freqUsuari, $TSize);           
+        if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX1($VF, $freqUsuari, $TSize);
+        
+        // rellena - Algorisme V6 - Predictor de context (name) total                      
+        if (sizeof($VF) < $TSize) {
+            $contextTypeNamesAll = $this->getContextTypeAll('name');
+            $VF = $this->rellenaVFX2X3($VF, $contextTypeNamesAll, $TSize);  
+        }
                 
         return $VF;
     }
@@ -1304,9 +1314,7 @@ class Recommender extends CI_Model {
         
         // rellena
         if (sizeof($VF) < $TSize) {
-            $freqX1 = $this->getRecommenderX1();
-            unset($freqX1[0]);
-            unset($freqX1[1]);
+            $freqX1 = $this->getRecommenderX1Expan(0);
             $VF = $this->rellenaVFX2X3($VF, $freqX1, $TSize);
         }
         
