@@ -732,9 +732,6 @@ class BoardInterface extends CI_Model {
         $this->db->where('ID_RBoard', $idSrc);
         $this->db->join('r_boardcell', 'r_boardcell.ID_RCell = cell.ID_Cell', 'left');
         $query = $this->db->get('cell');
-        if ($sameGroupBoard === 1) {
-            $row->boardLink = null;
-        }
         foreach ($query->result() as $row) {
             if ($sameGroupBoard === 0) {
                 $row->boardLink = null;

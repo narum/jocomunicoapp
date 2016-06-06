@@ -158,7 +158,9 @@ class PanelGroup extends REST_Controller {
         //MODIF: 2 es el panel default
         $idusu = $this->session->userdata('idusu');
         $board = $this->BoardInterface->getPrimaryGroupBoard();
-        if ($board == null) {
+        //if ($board == null) {
+       
+            $changedLinks = array();
             $srcGroupBoard = 2;
             $primaryBoard = $this->BoardInterface->getInfoGroupBoard($srcGroupBoard);
 
@@ -183,13 +185,18 @@ class PanelGroup extends REST_Controller {
                     $idToShow = $idDst;
                 }
                 $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
+                array_push($changedLinks, $idSrc);
+                array_push($changedLinks, $idDst);
             }
-
-            $this->BoardInterface->commitTrans();
-        }else{
-            $primaryUserBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
-            $idToShow = $primaryUserBoard[0]->ID_Board;
-        }
+            for($i = 0; $i < count($changedLinks); $i++){
+                $this->panelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i+1]);
+                $i++;
+            }
+            
+        //}else{
+           // $primaryUserBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
+           // $idToShow = $primaryUserBoard[0]->ID_Board;
+        //}
         $response = [
             'idBoard' => $idToShow
         ];

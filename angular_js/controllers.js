@@ -2043,7 +2043,7 @@ angular.module('controllers', [])
                         }
                         var postdata = {text: text};
                         var url = $scope.baseurl + "Board/readText";
-                        $http.post(url, postdata).then(function (response) {
+                        $http.post(url, postdata).success(function (response) {
                             $scope.dataAudio = response.audio;
                             if ($scope.dataAudio[1]) {
                                 txtContent("errorVoices").then(function (content) {
@@ -2245,6 +2245,7 @@ angular.module('controllers', [])
 
                 $http.post(url, postdata).success(function (response)
                 {
+                    var control = response.control;
                     $scope.dataAudio = response.audio;
 
                     if ($scope.dataAudio[1]) {
@@ -2254,13 +2255,14 @@ angular.module('controllers', [])
                             $('#errorVoicesModal').modal({backdrop: 'static'});
                         });
                     } else {
-                        $scope.sound = "mp3/" + $scope.dataAudio[0];
-                        $timeout(function () {
-                            $('#utterance').get(0).play();
-                        });
+                        if (control !== "generate") {
+                            $scope.sound = "mp3/" + $scope.dataAudio[0];
+                            $timeout(function () {
+                                $('#utterance').get(0).play();
+                            });
+                        }
                     }
 
-                    var control = response.control;
                     $scope.dataTemp = response.data;
                     $scope.tense = response.tense;
                     $scope.tipusfrase = response.tipusfrase;
@@ -2273,8 +2275,24 @@ angular.module('controllers', [])
                         {
                             if (control !== "generate") {
                                 $scope.dataTemp = response.data;
+                                if (control === "deleteAllWords") {
+                                    $scope.tense = "defecte";
+                                    $scope.tipusfrase = "defecte";
+                                    $scope.negativa = false;
+                                }
+                            } else {
+                                $scope.tense = "defecte";
+                                $scope.tipusfrase = "defecte";
+                                $scope.negativa = false
+
+                                $scope.dataAudio = response.audio;
+                                $scope.sound = "mp3/" + $scope.dataAudio[0];
+                                $timeout(function () {
+                                    $('#utterance').get(0).play();
+                                });
                             }
                             $scope.info = response.info;
+
                         });
                     } else if ((control === "home")) {
                         $scope.config();
@@ -2344,9 +2362,6 @@ angular.module('controllers', [])
                     }
                     if ($scope.cfgUserExpansionFeedback) {
                         $scope.puntuar();
-
-
-
                     }
 
                     $scope.getPred();
@@ -2354,8 +2369,6 @@ angular.module('controllers', [])
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
-
-
             };
             //Show the feedback panel, scanning it if inScan is true
             $scope.puntuar = function () {
@@ -2649,12 +2662,11 @@ angular.module('controllers', [])
                     var URL = $scope.baseurl + "Board/removeBoard";
                     $http.post(URL, postdata).success(function (response)
                     {
-                        if(response.idboard != null)
+                        if (response.idboard != null)
                         {
                             $scope.showBoard(response.idboard);
                             $scope.edit();
-                        }
-                        else{
+                        } else {
                             $location.path('/panelGroups');
                         }
                     });
@@ -3015,13 +3027,15 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
 
-                    var URL = $scope.baseurl + "PanelGroup/newGroupPanel";
+                    var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
 
 
                     $http.post(URL, $scope.CreateBoardData).success(function (response)
                     {
                         $rootScope.editPanelInfo = {idBoard: response.idBoard};
                         $location.path('/');
+                    }, function (value) {
+                        console.log(value);
                     });
 
                 }, function (value) {

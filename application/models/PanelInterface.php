@@ -77,4 +77,16 @@ class PanelInterface extends CI_Model {
         ));
     }
     
+    /*
+     * Update all the board links from oldBL to newBL in a groupboard(useful after copygroupboard) 
+     */
+    function updateBoardLinks($IDGB, $oldBoardLink, $newBoardLink) {
+        $data = array(
+            'boardLink' => $newBoardLink
+        );
+        $this->db->query("update Cell,R_BoardCell,Boards "
+                . "SET Cell.boardLink = ".$newBoardLink." "
+                . "WHERE Boards.ID_GBBoard = ".$IDGB." AND Cell.boardLink = ".$oldBoardLink." AND R_BoardCell.ID_RBoard = Boards.ID_Board AND Cell.ID_Cell = R_BoardCell.ID_RCell");
+        return $data;
+    }
 }
