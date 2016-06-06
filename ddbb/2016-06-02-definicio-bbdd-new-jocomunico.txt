@@ -129,7 +129,7 @@ CREATE TABLE Boards (
 	autoReturn ENUM('0', '1') DEFAULT '1',
 	autoReadSentence ENUM('0', '1') DEFAULT '0',
 	INDEX GBBoard (ID_GBBoard),
-	FOREIGN KEY (ID_GBBoard) REFERENCES GroupBoards (ID_GB) ON DELETE SET NULL
+	FOREIGN KEY (ID_GBBoard) REFERENCES GroupBoards (ID_GB) ON DELETE CASCADE
 ) ENGINE=INNODB;	
 
 
