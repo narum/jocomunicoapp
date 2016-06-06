@@ -774,6 +774,10 @@ class BoardInterface extends CI_Model {
         $this->db->where('ID_Board', $IDboard);
         $this->db->delete('Boards');
     }
+    function removeGoupBoard($IDGB) {
+        $this->db->where('ID_GB', $IDGB);
+        $this->db->delete('groupboards');
+    }
 
     function removeBoardLinks($IDboard) {
         $output = array();

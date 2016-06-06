@@ -2649,8 +2649,14 @@ angular.module('controllers', [])
                     var URL = $scope.baseurl + "Board/removeBoard";
                     $http.post(URL, postdata).success(function (response)
                     {
-                        $scope.showBoard(response.idboard);
-                        $scope.edit();
+                        if(response.idboard != null)
+                        {
+                            $scope.showBoard(response.idboard);
+                            $scope.edit();
+                        }
+                        else{
+                            $location.path('/panelGroups');
+                        }
                     });
                 }, function (value) {
                 });
@@ -3009,7 +3015,7 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
 
-                    var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
+                    var URL = $scope.baseurl + "PanelGroup/newGroupPanel";
 
 
                     $http.post(URL, $scope.CreateBoardData).success(function (response)

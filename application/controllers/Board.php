@@ -780,9 +780,24 @@ class Board extends REST_Controller {
 
         $board = $this->BoardInterface->getIDGroupBoards($id);
         $primaryboard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
+        $boards = $this->BoardInterface->getBoards($board[0]->ID_GBBoard);
         $primaryboardID = $primaryboard[0]->ID_Board;
-        if($id === $primaryboardID){
-            
+        if($id == $primaryboardID){
+            for($x = 0; $boards[$x] != NULL; $x++){
+                $cell = $this->BoardInterface->getCellsBoard($boards[$x]->ID_Board);
+                for ($i = 0; $i < count($cell); $i++) {
+                    $this->BoardInterface->removeCell($cell[$i]->ID_RCell, $boards[$x]->ID_Board);
+                }
+                $this->BoardInterface->removeBoardLinks($boards[$x]->ID_Board);
+
+                $this->BoardInterface->removeBoard($boards[$x]->ID_Board);
+            }
+            $this->BoardInterface->removeGoupBoard($board[0]->ID_GBBoard);
+            $this->BoardInterface->commitTrans();
+            $response = [
+                'idboard' => null
+            ];
+            $this->response($response, REST_Controller::HTTP_OK);
         }
         else{
             
