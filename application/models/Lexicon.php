@@ -1518,8 +1518,30 @@ class Lexicon extends CI_Model {
                 );
                 $query = $this->db->insert('P_StatsUserPictox3', $data);
             }
-        }
+        }        
     }
+    
+    /*
+    * Adds or updates the stats of the pictogram with pictoid
+    * for the user with id=iduser. If first is set to true, it only
+    * sets the counter to 1 if that user had never used that pictogram
+    * before.
+    */
+   public function addImgTempStatsX1($pictoid, $iduser, $imgtemp) {
+
+       $this->db->where('pictoid', $pictoid);
+       $this->db->where('ID_PSUPUser', $iduser);
+       $query = $this->db->get('P_StatsUserPicto');
+       
+       if ($query->num_rows() > 0) {
+            $this->db->where('pictoid', $pictoid);
+            $this->db->where('ID_PSUPUser', $iduser);
+            $data = array(
+                'imgtemp' => $imgtemp
+            );
+            $query = $this->db->update('P_StatsUserPicto', $data);
+       }
+   }
     
 }
 ?>
