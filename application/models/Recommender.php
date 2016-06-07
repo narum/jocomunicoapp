@@ -840,7 +840,6 @@ class Recommender extends CI_Model {
             if (sizeof($VF) == 0) {
                 $VF = array();
                 array_push($VF,$value);
-                $FSize = 7;
             }
                                     
             $repe = false;
@@ -871,7 +870,6 @@ class Recommender extends CI_Model {
             if (sizeof($VF) == 0) {
                 $VF = array();
                 array_push($VF,$value);
-                $FSize = 7;
             }
                         
             $repe = false;
@@ -995,7 +993,7 @@ class Recommender extends CI_Model {
         $k = 0;
         foreach($contextTypeName2Days as $value) {
             for ($i = 0; $i < sizeof($VF); $i++) {
-                if($k == ceil($TSize-2/2) || $value->pictoid == $VF[$i]->pictoid) { break; }
+                if($k == ceil(($TSize-2)/2) || $value->pictoid == $VF[$i]->pictoid) { break; }
                 else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
                     array_push($VF,$value);
                     $k++;
@@ -1008,13 +1006,14 @@ class Recommender extends CI_Model {
         $k = 0;
         foreach($freqUsuari as $value) {
             for ($i = 0; $i < sizeof($VF); $i++) {
-                if($k == floor($TSize-2/2) || $value->pictoid == $VF[$i]->pictoid) { break; }
+                if($k == floor(($TSize-2)/2) || $value->pictoid == $VF[$i]->pictoid) { break; }
                 else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
                     array_push($VF,$value);
                     $k++;
                 }
             }
         }
+        
         // rellena
         if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX1($VF, $contextTypeName2Days, $TSize);
         if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX1($VF, $freqUsuari, $TSize);
@@ -1165,10 +1164,19 @@ class Recommender extends CI_Model {
         $inputType1 = $this->getTypesElem($inputid1);
         $inputType2 = $this->getTypesElem($inputid2);
         
+        $verb = false;
+        for ($i = sizeof($paraulesFrase); $i > 0; $i--) {
+            if ($this->getTypesElem($paraulesFrase[sizeof($paraulesFrase)-$i]->pictoid)[0]->pictoType == 'verb')
+            {
+                $verb = true;
+                break;
+            }
+        }
+        
         // Algorisme V2 - Predictor freqüència II (d'usuari)
         $VF = array();
         $VF = array_merge($VF,$this->getfreqUsuariX3($inputid1, $inputid2));        
-        $TSize = 7;
+        $TSize = $this->session->userdata('cfgPredBarNumPred');
         $FSize = $TSize - sizeof($VF);
               
         if ($inputType2[0]->pictoType == 'modifier' && $this->boolDetPos($inputid2)) {
@@ -1184,9 +1192,8 @@ class Recommender extends CI_Model {
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeNamesAll, $TSize);            
         }
-        else if ($inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType == 'name' || 
-                ($inputType1[0]->pictoType == 'name' && $inputType2[0]->pictoType != 'verb')) {          
-            
+        else if (!$verb && ($inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType == 'name' || 
+                ($inputType1[0]->pictoType == 'name' && $inputType2[0]->pictoType != 'verb'))) {          
             // Algorisme V6 - Predictor de context (verb) últims 2 dies                       
             $contextTypeVerbs2Days = $this->getContextType2Days('verb');
             $VF = $this->insertCeilVF($VF, $contextTypeVerbs2Days, $FSize);
@@ -1223,7 +1230,7 @@ class Recommender extends CI_Model {
                 }
             }
         }
-        else if ($inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType != 'name') {
+        else if (!$verb && $inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType != 'name') {
             // Algorisme V6 - Predictor de context (name) últims 2 dies                                
             $contextTypeName2Days = $this->getContextType2Days('name');
             $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);                   
@@ -1262,7 +1269,7 @@ class Recommender extends CI_Model {
                 }
             }
         }
-        else if ($inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType != 'name') {
+        else if (!$verb && $inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType != 'name') {
             // Algorisme V6 - Predictor de context (name) últims 2 dies                                
             $contextTypeName2Days = $this->getContextType2Days('name');
             $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);                   
@@ -1275,7 +1282,7 @@ class Recommender extends CI_Model {
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbsAll, $TSize);
         }                        
-        else if ($inputType1[0]->pictoType == 'name') {            
+        else if (!$verb && $inputType1[0]->pictoType == 'name') {            
             // Algorisme V6 - Predictor de context (verb) últims 2 dies
             $contextTypeVerbs2Days = $this->getContextType2Days('verb');
             $VF = $this->insertCeilVF($VF, $contextTypeVerbs2Days, $FSize);
@@ -1292,23 +1299,55 @@ class Recommender extends CI_Model {
                 $freqX2 = $this->getRecommenderX2();    
                 $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
             }
-        }
-        else { // ni name ni verb  
-            // Algorisme V6 - Predictor de context (name) últims 2 dies          
-            $contextTypeName2Days = $this->getContextType2Days('name');
-            $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);
-            
-            // Algorisme V6 - Predictor de context (verb) total  
-            $contextTypeVerbsAll = $this->getContextTypeAll('verb');
-            $VF = $this->insertFloorVF($VF, $contextTypeVerbsAll, $FSize);
-            
-            // rellena
-            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
-            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbsAll, $TSize);
+        }        
+        else { // ni name ni verb
+            if ($verb) {
+                for ($i = sizeof($paraulesFrase); $i > 0; $i--) {
+                    if ($this->getTypesElem($paraulesFrase[sizeof($paraulesFrase)-$i]->pictoid)[0]->pictoType == 'verb') {
+                        $inputid1 = $paraulesFrase[sizeof($paraulesFrase)-$i]->pictoid;
+                        $caseList = array("theme", "locto", "locfrom", "manera", "time", "tool");            
+                        foreach ($caseList as $case) {
+                            if ($case == "time" || $case == "tool") {
+                                if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 1) $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
+                            }
+                            else {
+                                if (sizeof($VF) < $TSize) {
+                                    $fits = $this->get1OptFits($inputid1, $case, 1);
+                                    $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits);
+                                }
+                            }
+                        }
+                        foreach ($caseList as $case) {
+                            if ($case == "time" || $case == "tool") {
+                                if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 'opt') $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
+                            }
+                            else {
+                                if (sizeof($VF) < $TSize) {
+                                    $fits = $this->get1OptFits($inputid1, $case, 'opt');
+                                    $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits); 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                // Algorisme V6 - Predictor de context (name) últims 2 dies          
+                $contextTypeName2Days = $this->getContextType2Days('name');
+                $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);
 
-            if (sizeof($VF) < $TSize) {
-                $freqX2 = $this->getRecommenderX2();    
-                $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
+                // Algorisme V6 - Predictor de context (verb) total  
+                $contextTypeVerbsAll = $this->getContextTypeAll('verb');
+                $VF = $this->insertFloorVF($VF, $contextTypeVerbsAll, $FSize);
+
+                // rellena
+                if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
+                if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbsAll, $TSize);
+
+                if (sizeof($VF) < $TSize) {
+                    $freqX2 = $this->getRecommenderX2();    
+                    $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
+                }
             }
         }
         
