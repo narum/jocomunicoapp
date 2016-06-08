@@ -1677,7 +1677,7 @@ angular.module('controllers', [])
                 if ($scope.cfgPredOnOff === '1' && $scope.cfgPredBarVertHor === '0') { // Prediction on and vertical
                     $scope.predViewWidth = 1;
                     $scope.userViewWidth = 11;
-                    if (window.innerWidth < 1050) {
+                    if (window.innerWidth < 1250) {
                         $scope.predViewWidth = 2;
                         $scope.userViewWidth = 10;
                     }
@@ -1835,8 +1835,8 @@ angular.module('controllers', [])
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.evt.nameboard = response.name;
-                    $scope.evt.altura = $scope.range(12)[response.row - 1].valueOf();
-                    $scope.evt.amplada = $scope.range(12)[response.col - 1].valueOf();
+                    $scope.evt.altura = $scope.range(10)[response.row - 1].valueOf();
+                    $scope.evt.amplada = $scope.range(10)[response.col - 1].valueOf();
                     $scope.evt.autoreturn = (response.autoReturn === '1' ? true : false);
                     $scope.evt.autoread = (response.autoRead === '1' ? true : false);
 
@@ -2071,6 +2071,10 @@ angular.module('controllers', [])
                         }
                         $scope.clickOnFunction(cell.ID_CFunction, text);
                     }
+                    if(cell.boardLink === null){
+                        $scope.autoReturn();
+                        $scope.autoRead();
+                    }
                 } else if ($scope.inEdit && $scope.fv.painting) {
                     var postdata = {id: cell.ID_RCell, color: $scope.fv.colorPaintingSelected};
                     var url = $scope.baseurl + "Board/modifyColorCell";
@@ -2196,9 +2200,6 @@ angular.module('controllers', [])
 
                         $scope.getPred();
                     });
-
-                    $scope.autoReturn();
-                    $scope.autoRead();
                 }
                 //MODIF: comentario op por parte de jordi
                 if ($scope.cfgTimeNoRepeatedClickOnOff === 1)
@@ -2297,8 +2298,6 @@ angular.module('controllers', [])
                     } else if ((control === "home")) {
                         $scope.config();
                     }
-                    $scope.autoReturn();
-                    $scope.autoRead();
                 });
             };
             /*
@@ -2627,8 +2626,8 @@ angular.module('controllers', [])
                             {
 
                                 $scope.CreateBoardData = {CreateBoardName: '', height: response.defHeight.toString(), width: response.defWidth.toString(), idGroupBoard: response.ID_GB};
-                                $scope.CreateBoardData.height = $scope.range(12)[response.defHeight - 1].valueOf();
-                                $scope.CreateBoardData.width = $scope.range(12)[response.defWidth - 1].valueOf();
+                                $scope.CreateBoardData.height = $scope.range(10)[response.defHeight - 1].valueOf();
+                                $scope.CreateBoardData.width = $scope.range(10)[response.defWidth - 1].valueOf();
                                 //alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
@@ -2829,9 +2828,9 @@ angular.module('controllers', [])
                 $scope.getBoards();
                 $scope.colorSelected = $scope.Editinfo.color;
                 $scope.cellType = $scope.Editinfo.cellType;
-                $scope.numScanBlockText1 = $scope.range(12)[$scope.Editinfo.customScanBlock1 - 1];
+                $scope.numScanBlockText1 = $scope.range(10)[$scope.Editinfo.customScanBlock1 - 1];
                 $scope.textInScanBlockText1 = $scope.Editinfo.customScanBlockText1;
-                $scope.numScanBlockText2 = $scope.range(12)[$scope.Editinfo.customScanBlock2 - 1];
+                $scope.numScanBlockText2 = $scope.range(10)[$scope.Editinfo.customScanBlock2 - 1];
                 $scope.textInScanBlockText2 = $scope.Editinfo.customScanBlockText2;
                 $scope.idPictoEdit = $scope.Editinfo.ID_CPicto;
                 $scope.imgPictoEdit = $scope.Editinfo.imgPicto;
@@ -2963,7 +2962,7 @@ angular.module('controllers', [])
             $scope.range = function ($repeatnum)
             {
                 var n = [];
-                for (i = 0; i < $repeatnum; i++)
+                for (i = 1; i < $repeatnum; i++)
                 {
                     n.push(i);
                 }

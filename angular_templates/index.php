@@ -3,7 +3,9 @@
         <title>JoComunico</title>
         <link rel="icon" type="image/ico" href="img/icons/favicon.png">
         <base href="/"></base>
-        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+       
+        <meta name="viewport" content="width=device-width, user-scalable=0, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+        <meta name="HandheldFriendly" content="true">
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>libraries/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>libraries/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>css/typeahead.css">

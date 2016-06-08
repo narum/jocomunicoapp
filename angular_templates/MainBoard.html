@@ -11,11 +11,11 @@
 <div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
 <div id="main" style="background-image: url('/img/srcWeb/fons.png');background-size:100% 100%">
                   
-    <div class="row mainBoard" ng-init="config()" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
+    <div class="row mainBoard" ng-init="config()" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()" ng-style="!inEdit ? {'padding':'3px'}:{}">
 
         <div  ng-if="(cfgPredOnOff === '1' && cfgPredBarVertHor === '0')" id="predView" ng-if="inPred" class="col-xs-{{predViewWidth}}">
             <div  class="row fullheight">
-                <div class="col-sm-12" ng-include="baseurl + '/angular_templates/PredView.html'">
+                <div class="col-xs-12" ng-include="baseurl + '/angular_templates/PredView.html'">
                 </div>
             </div>
         </div>
@@ -78,12 +78,12 @@
 
         <div ng-if="inEdit" class="col-xs-{{editViewWidth}} fullheight" style="height:{{userViewHeight}}%">
             <div id="trashview" class="row fullheight">
-                <div class="col-sm-12" ng-include="baseurl + '/angular_templates/EditViewTrash.html'">
+                <div class="col-xs-12" ng-include="baseurl + '/angular_templates/EditViewTrash.html'">
 
                 </div>
             </div>
             <div id="searchView" class="row fullheight">
-                <div class="col-sm-12" ng-include="baseurl + '/angular_templates/EditView.html'">
+                <div class="col-xs-12" ng-include="baseurl + '/angular_templates/EditView.html'">
 
                 </div>
             </div>

@@ -61,7 +61,6 @@ html *
 
 }
 #predView{
-    height:90vh;
     padding-right: 1vh;
 }
 
@@ -141,6 +140,19 @@ html *
     background-color: white;
 }
 
+.sentencePadding{
+   padding-left: 5%; 
+   width: 90%
+}
+
+.sentenceCell{
+    width: 10%;
+    height:80%
+}
+.sentenceCellIndicator{
+    width: 10%;
+    height:100%
+}
 .speakButton{
     height: 100%;
     text-align: center;
@@ -332,9 +344,8 @@ html *
     position: relative;
     padding-left: 4px;
     cursor: default;
+    text-transform: uppercase
 }
-
-.textCell:first-letter {text-transform: uppercase}
 
 .sfolder{
     padding:2px;
