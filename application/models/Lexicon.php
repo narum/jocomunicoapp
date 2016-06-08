@@ -90,6 +90,7 @@ class Lexicon extends CI_Model {
         
         return $output;
     }
+    
     function getVerbs()
     {
         $output = array();
@@ -104,6 +105,7 @@ class Lexicon extends CI_Model {
         else $output = null;
         return $output;
     }
+    
     function getAdjs($tipus)
     {
         $output = array();
@@ -121,6 +123,7 @@ class Lexicon extends CI_Model {
         else $output = null;
         return $output;
     }
+    
     function getAdvs($tipus)
     {
         $output = array();
@@ -138,6 +141,7 @@ class Lexicon extends CI_Model {
         else $output = null;
         return $output;
     }
+    
     function getModifs($tipus)
     {
         $output = array();
@@ -154,6 +158,7 @@ class Lexicon extends CI_Model {
         else $output = null;
         return $output;
     }
+    
     function getExprs($tipus)
     {
         $output = array();
@@ -171,6 +176,7 @@ class Lexicon extends CI_Model {
         else $output = null;
         return $output;
     }
+    
     function getPartPregunta()
     {
         $output = array();
@@ -1160,6 +1166,34 @@ class Lexicon extends CI_Model {
         return $output;   
     }
     
+    // Retorna el text de l'última frase generada, si no n'hi havia cap de feta retorna null
+    function getLastGeneratedText($idusu)
+    {
+        $text = null;
+        
+        $this->db->where('ID_SHUser', $idusu);
+        $this->db->order_by('ID_SHistoric', 'desc');
+        $query = $this->db->get('S_Historic');
+        
+        // tal com està fet el codi, quan s'apreta generar frase, crea una entrada mig buida a 
+        // S_Historic, per tant la frase anterior es troba en la segona posició
+        // aleshores borrem aquesta entrada mig buida
+        if ($query->num_rows() > 1) {
+            $aux = $query->result();
+            
+            $text = $aux[1]->generatorString;
+            $idsentence = $aux[0]->ID_SHistoric;
+            
+            if ($aux[0]->generatorString == null) {
+                $this->db->where('ID_SHistoric', $idsentence);
+                $this->db->delete('S_Historic');
+            }
+            
+        }
+        
+        return $text;   
+    }
+    
     // Retorna l'estructura de la paraula Verbless o de qualsevol Verb amb els seus patterns
     function getPatternsVerb($verbid, $withsubject)
     {
@@ -1484,8 +1518,30 @@ class Lexicon extends CI_Model {
                 );
                 $query = $this->db->insert('P_StatsUserPictox3', $data);
             }
-        }
+        }        
     }
+    
+    /*
+    * Adds or updates the stats of the pictogram with pictoid
+    * for the user with id=iduser. If first is set to true, it only
+    * sets the counter to 1 if that user had never used that pictogram
+    * before.
+    */
+   public function addImgTempStatsX1($pictoid, $iduser, $imgtemp) {
+
+       $this->db->where('pictoid', $pictoid);
+       $this->db->where('ID_PSUPUser', $iduser);
+       $query = $this->db->get('P_StatsUserPicto');
+       
+       if ($query->num_rows() > 0) {
+            $this->db->where('pictoid', $pictoid);
+            $this->db->where('ID_PSUPUser', $iduser);
+            $data = array(
+                'imgtemp' => $imgtemp
+            );
+            $query = $this->db->update('P_StatsUserPicto', $data);
+       }
+   }
     
 }
 ?>

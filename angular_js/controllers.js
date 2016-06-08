@@ -1305,7 +1305,7 @@ angular.module('controllers', [])
                 var maxCustomScanBlockProv = 0;
                 for (var i = 0; i < $scope.arrayScannedCells.length; i++) {
                     if ($scope.arrayScannedCells[i].customScanBlock2 > maxCustomScanBlockProv) {
-                        maxCustomScanBlockProv = $scope.arrayScannedCells[i].customScanBlock1;
+                        maxCustomScanBlockProv = $scope.arrayScannedCells[i].customScanBlock2;
                     }
                 }
                 $scope.maxCustomScanBlock = maxCustomScanBlockProv;

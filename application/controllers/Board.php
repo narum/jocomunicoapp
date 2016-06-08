@@ -678,11 +678,12 @@ class Board extends REST_Controller {
         $id = $request->idboard;
         $posInBoard = $request->pos;
         $imgCell = $request->imgCell;
+        $idusu = $this->session->userdata('idusu');
         
         $cell = $this->BoardInterface->getIDCell($posInBoard, $id);
-        $this->BoardInterface->updateImgCell($cell[0]->ID_RCell, $imgCell);
+        $idPicto = $this->BoardInterface->updateImgCell($cell[0]->ID_RCell, $imgCell);
         $data = $this->BoardInterface->getCellsBoard($id);
-
+        $this->Lexicon->addImgTempStatsX1($idPicto, $idusu, $imgCell);
         $response = [
             'data' => $data
         ];

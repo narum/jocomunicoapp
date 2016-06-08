@@ -7,40 +7,13 @@ class Myprediction {
     function getPrediction() {
         $numpar = $this->getcountElem();
         if ($numpar == 0) {
-//            echo "entra 0";
-//            echo "sale 0";
             return $this->getRecommenderX1();
         }
         else if ($numpar == 1) {
-//            echo "entra 1";
-            $res = $this->getRecommenderX2();
-            if ($res == null) {
-//                echo "sale 0";
-                return $this->getRecommenderX1();
-            }
-            else {
-//                echo "sale 1";                    
-                return $res;
-            }
+            return $this->getRecommenderX2();
         }
         else {
-//          echo "entra +2";
-            $res = $this->getRecommenderX3();
-            if ($res == null) {
-                $res = $this->getRecommenderX2();
-                if ($res == null) {
-    //              echo "sale 0";
-                    return $this->getRecommenderX1();
-                }
-                else {
-    //              echo "sale 1";                    
-                    return $res;
-                }                
-            }                
-            else {       
-//              echo "sale +2";
-                return $res;
-            }
+            return $this->getRecommenderX3();     
         }
     }    
     
