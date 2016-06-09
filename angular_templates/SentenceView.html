@@ -9,7 +9,7 @@
 <div ng-if="cfgMenuReadActive == 1" class="col-xs-1 fullheight"  ng-click="isClickEnable() ? generate() : null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(2,'generate'):null" ng-mouseleave="cfgTimeOverOnOff ? CancelTimeoutOverClick() : null">
     <div ng-if='inScan && isScanning == "read" && isScanningCancel === false' class="scaneo" style="margin: 0px;"></div>
     <div class="backgroundLlegir">
-        <img class="imgResponsive icon " ng-src="{{baseurl}}img/srcWeb/Menu/llegir_icon.png"/>
+        <img class="imgResponsive icon " ng-src="{{baseurl}}img/srcWeb/Menu/bocablanco.png"/>
     </div>
 </div>
 <!-- I know there is a lot of condition here. I will try to explain. The picto text have to be displayed only if there is no error or no phrase the sentencecell have to contain the img an the picto text, so we have to expand the it. If there is one of both (error or frase) the sentencecell is shorter (but not the img picto, the picto text is removed) and the error or phrase will be displayed in the same space where the imgpicto was.-->
@@ -34,11 +34,11 @@
                 </div>
             </div>
             <!--Display the phrase-->
-            <div ng-if="!info.error" class="col-xs-12 phraseText">
+            <div ng-if="!info.error || info.errorcode == 7" class="col-xs-12 phraseText text-uppercase">
                 {{info.frasefinal}}
             </div>
             <!--Display the eror text-->
-            <div ng-if="info.error" class="col-xs-12 phraseText">
+            <div ng-if="info.error && info.errorcode != 7" class="col-xs-12 phraseText">
                 {{info.errormessage}}
             </div>
         </div>

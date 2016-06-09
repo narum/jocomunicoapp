@@ -1656,9 +1656,9 @@ angular.module('controllers', [])
                 $scope.searchFolderHeight = 0;
 
                 $scope.puntuando = false;
-                $scope.tense = "defecte";
-                $scope.tipusfrase = "defecte";
-                $scope.negativa = false;
+                if (!$scope.tense) $scope.tense = "defecte";
+                if (!$scope.tipusfrase) $scope.tipusfrase = "defecte";
+                if (!$scope.negativa) $scope.negativa = false;
                 $scope.SearchType = "Tots";
                 $scope.inEdit = false;
                 $scope.inScan = false;
@@ -2322,6 +2322,10 @@ angular.module('controllers', [])
 
                 $http.post(url).success(function (response)
                 {
+                   
+                    $scope.tense = "defecte";
+                    $scope.tipusfrase = "defecte";
+                    $scope.negativa = false;
                     $scope.dataTemp = response.data;
                     $scope.info = "";
                     $scope.getPred();

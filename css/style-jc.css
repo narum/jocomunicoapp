@@ -271,7 +271,7 @@ html *
     height: 100%;
     z-index: 24;
     border-radius: 15px;
-    border: 7px solid #2e758a;
+    border: 7px solid #ff0000;
     background: white;
 }
 .returnScanIcon{
@@ -287,7 +287,7 @@ html *
 .scaneo{
     width: 100%;
     height: 100%;
-    border: 7px solid #2e758a;
+    border: 7px solid #ff0000;
     border-radius: 7px;
     z-index: 24;
     position: absolute;

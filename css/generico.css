@@ -1,6 +1,9 @@
 @charset "UTF-8";
 /* CSS Document */
 @-ms-viewport { width: device-width; zoom:1.0; }
+* {
+  -touch-action: none;
+}
 .fullheight{
     height:100%;
 }

@@ -4,6 +4,7 @@ angular.module('app', [
 	'ngResource',
 	'ngCookies',
         'ngDraggable',
+        'ngTouch',
 	'ui.bootstrap',
         'ngDialog',
         'ngScrollbar',
