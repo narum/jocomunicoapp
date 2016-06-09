@@ -42,7 +42,7 @@ angular.module('controllers', [])
             });
             $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
             //function to change html view
-            $rootScope.go = function (path) {
+            $scope.go = function (path) {
                 $location.path(path);
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
             };
@@ -156,7 +156,7 @@ angular.module('controllers', [])
             });
             $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
             //function to change html view
-            $rootScope.go = function (path) {
+            $scope.go = function (path) {
                 $location.path(path);
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
             };
@@ -443,7 +443,7 @@ angular.module('controllers', [])
             });
             $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
             //function to change html view
-            $rootScope.go = function (path) {
+            $scope.go = function (path) {
                 $location.path(path);
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
             };
@@ -504,7 +504,7 @@ angular.module('controllers', [])
             });
             $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
             //function to change html view
-            $rootScope.go = function (path) {
+            $scope.go = function (path) {
                 $location.path(path);
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
             };
@@ -609,7 +609,7 @@ angular.module('controllers', [])
                 });
             });
             //function to change html view
-            $rootScope.go = function (path) {
+            $scope.go = function (path) {
                 if(path=='logout'){
                     $('#logoutModal').modal('toggle');
                 }else{
@@ -617,8 +617,12 @@ angular.module('controllers', [])
                     $rootScope.dropdownMenuBarValue = path; //Button selected on this view
                 }
             };
-            //Log Out
-            $rootScope.logout = function (){
+            //Log Out Modal
+            Resources.main.get({'section':'logoutModal', 'idLanguage':$rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
+            .then(function (results) {
+                $scope.logoutContent=results.data;
+            });
+            $scope.logout = function (){
                 $scope.viewActived = false;
                 $timeout(function(){
                     AuthService.logout();
@@ -666,6 +670,12 @@ angular.module('controllers', [])
             $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
             $scope.img.lowDormFlecha = '/img/srcWeb/Mus/lowDormFlecha.png';
             $scope.img.lowHolaFlecha = '/img/srcWeb/Mus/lowHolaFlecha.png';
+            $scope.img.scanOrder123 = '/img/srcWeb/UserConfig/scanOrder123.gif';
+            $scope.img.scanOrder132 = '/img/srcWeb/UserConfig/scanOrder132.gif';
+            $scope.img.scanOrder213 = '/img/srcWeb/UserConfig/scanOrder213.gif';
+            $scope.img.scanOrder231 = '/img/srcWeb/UserConfig/scanOrder231.gif';
+            $scope.img.scanOrder312 = '/img/srcWeb/UserConfig/scanOrder312.gif';
+            $scope.img.scanOrder321 = '/img/srcWeb/UserConfig/scanOrder321.gif';
             //Pedimos la configuración del usuario a la base de datos
             $scope.getConfig = function () {
                 $scope.interfaceLanguages = [];
@@ -710,6 +720,7 @@ angular.module('controllers', [])
                             $scope.userData.cfgInterfaceVoiceOnOff = ($scope.userData.cfgInterfaceVoiceOnOff === "1");
                             $scope.userData.cfgUserExpansionFeedback = ($scope.userData.cfgUserExpansionFeedback === "1");
                             $scope.userData.cfgInterfaceVoiceMascFem = ($scope.userData.cfgInterfaceVoiceMascFem === "masc");
+                            $scope.userData.scanOrder = $scope.userData.cfgScanOrderPred + $scope.userData.cfgScanOrderMenu + $scope.userData.cfgScanOrderPanel;
 
                             var count = results.users[0].ID_ULanguage;
                             angular.forEach(results.users, function (value) {
@@ -824,7 +835,16 @@ angular.module('controllers', [])
                             $scope.interfaceLanguages = [];
                             delete $scope.expansionLanguages;
                             $scope.expansionLanguages = [];
-                            $scope.getConfig();
+                            $scope.getConfig()
+                            .then(function(){
+                                //Change content language logout modal
+                                Resources.main.get({'section':'logoutModal', 'idLanguage':$rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
+                                .then(function (results) {
+                                    $scope.logoutContent=results.data;
+                                    //Change content language dropdown Menu Bar
+                                    dropdownMenuBarInit();
+                                });
+                            });
                         });
             };
 
@@ -844,7 +864,7 @@ angular.module('controllers', [])
                 }
             }
 
-            $scope.changeRadioEstate = function (value, data) {
+            $scope.changeRadioState = function (value, data) {
                 Resources.main.save({'IdSu': $rootScope.sUserId, 'data': data, 'value': value}, {'funct': "changeCfgBool"}).$promise
                         .then(function (results) {
                             window.localStorage.removeItem('userData');
@@ -878,7 +898,7 @@ angular.module('controllers', [])
 
             $scope.checkNumberTime = function (value, data) {
                 if (angular.isNumber(value)) {
-                    $scope.changeRadioEstate(value, data);
+                    $scope.changeRadioState(value, data);
                 }
             };
 
@@ -1043,6 +1063,11 @@ angular.module('controllers', [])
                     }
                 });
             };
+            $scope.changeScanOrder = function(value){
+                $scope.changeRadioState(value.charAt(0),'ScanOrderPred');
+                $scope.changeRadioState(value.charAt(1),'ScanOrderMenu');
+                $scope.changeRadioState(value.charAt(2),'ScanOrderPanel');
+            };
             $scope.exit = function () {
                 $scope.viewActived = false;
                 $scope.getConfig()
@@ -1073,11 +1098,11 @@ angular.module('controllers', [])
                 });
             });
             //function to change html view
-            $rootScope.go = function (path) {
+            $scope.go = function (path) {
                 if(path == '/'){
                     $scope.config();
                 }else if(path == 'logout'){
-                    $scope.logOut();
+                    $('#logoutModal').modal('toggle');
                 }else if(path == 'editPanel'){
                     $scope.edit();
                 }else{
@@ -1086,18 +1111,33 @@ angular.module('controllers', [])
                 }
             };
             
-            $scope.logOut = function () {
-                ngDialog.openConfirm({
-                    template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
-                    scope: $scope,
-                    className: 'ngdialog-theme-default dialogLogOut'
-                }).then(function () {
+            //Log Out Modal
+            $scope.img=[];
+            $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            Resources.main.get({'section':'logoutModal', 'idLanguage':$rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
+            .then(function (results) {
+                $scope.logoutContent=results.data;
+            });
+            $scope.logout = function (){
+                $scope.viewActived = false;
+                $timeout(function(){
                     AuthService.logout();
-                }, function (value) {
-
-                });
-
+                },1000);
             };
+            
+//            $scope.logOut = function () {
+//                ngDialog.openConfirm({
+//                    template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
+//                    scope: $scope,
+//                    className: 'ngdialog-theme-default dialogLogOut'
+//                }).then(function () {
+//                    AuthService.logout();
+//                }, function (value) {
+//
+//                });
+//
+//            };
 
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -2922,21 +2962,38 @@ angular.module('controllers', [])
                 });
             });
             //function to change html view
-            $rootScope.go = function (path) {
+            $scope.go = function (path) {
                 if(path=='logout'){
-                    ngDialog.openConfirm({
-                    template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
-                    scope: $scope,
-                    className: 'ngdialog-theme-default dialogLogOut'
-                    }).then(function () {
-                        AuthService.logout();
-                    }, function (value) {
-
-                    });
+                    $('#logoutModal').modal('toggle');
+//                    ngDialog.openConfirm({
+//                    template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
+//                    scope: $scope,
+//                    className: 'ngdialog-theme-default dialogLogOut'
+//                    }).then(function () {
+//                        AuthService.logout();
+//                    }, function (value) {
+//
+//                    });
                 }else{
                     $location.path(path);
                     $rootScope.dropdownMenuBarValue = path; //Button selected on this view
                 }
+            };
+            
+            
+            //Log Out Modal
+            $scope.img=[];
+            $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            Resources.main.get({'section':'logoutModal', 'idLanguage':$rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
+            .then(function (results) {
+                $scope.logoutContent=results.data;
+            });
+            $scope.logout = function (){
+                $scope.viewActived = false;
+                $timeout(function(){
+                    AuthService.logout();
+                },1000);
             };
             
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
