@@ -115,8 +115,8 @@
                     <label for="switch3">&nbsp;</label>
                 </div>
             </div>
-            <div class="col-xs-12 content1">
-                <input class="boxEdit" type="text" ng-model="textInCell" ng-disabled="!checkboxTextInCell"placeholder="{{textInCell == null ? Editinfo.pictotext : null}}"/>
+            <div class="col-xs-12 content1" ng-click="checkboxTextInCell = true;">
+                <input id="textInCell" class="boxEdit" type="text" ng-model="textInCell"  ng-disabled="!checkboxTextInCell"placeholder="{{textInCell == null ? Editinfo.pictotext : null}}"/>
             </div>
 
         </div>

@@ -262,30 +262,16 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
-        $read = $request->text;
         $imgtemp = $request->imgtemp;
 
         $idusu = $this->session->userdata('idusu');
         $this->Lexicon->afegirParaula($idusu, $id, $imgtemp);
 
         $data = $this->Lexicon->recuperarFrase($idusu);
-
         $newdata = $this->inserty($data);
 
-        //$numdata = count($newdata);
-        //$read = $newdata[$numdata - 1]->text;
-
-        // GENERAR AUDIO
-        $audio = new Myaudio();
-        $aux = $audio->generateAudio($idusu, $read, true);
-        $audio->waitForFile($aux[0], $aux[1]);
-
         $response = [
-            'data' => $newdata,
-            'audio' => $aux[0],
-            'boolError' => $aux[1],
-            'textError' => $aux[2],
-            'codeError' => $aux[3],
+            'data' => $newdata
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
@@ -399,18 +385,9 @@ class Board extends REST_Controller {
 //            if ($info['frasefinal'] == ""){
 //                $response = null;
 //            }else{
-            // GENERAR AUDIO
-            $audio = new Myaudio();
-            $aux = $audio->generateAudio($idusu, $info['frasefinal'], false);
-
-            $audio->waitForFile($aux[0], $aux[1]);
             
             $response = [
-                'info' => $info,
-                'audio' => $aux[0],
-                'boolError' => $aux[1],
-                'textError' => $aux[2],
-                'codeError' => $aux[3],
+                'info' => $info
             ];
             
             $this->response($response, REST_Controller::HTTP_OK);
@@ -474,7 +451,6 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
-        $read = $request->text;
         $tense = $request->tense;
         $tipusfrase = $request->tipusfrase;
         $negativa = $request->negativa;
@@ -506,23 +482,13 @@ class Board extends REST_Controller {
         $data = $this->Lexicon->recuperarFrase($idusu);
 
         $newdata = $this->inserty($data);
-        
-        // GENERAR AUDIO
-        $audio = new Myaudio();
-        $aux = $audio->generateAudio($idusu, $read, true);
-        
-        $audio->waitForFile($aux[0], $aux[1]);
 
          $response = [
             'tense' => $tense,
             'tipusfrase' => $tipusfrase,
             'negativa' => $negativa,
             'control' => $control,
-            'data' => $newdata,
-            'audio' => $aux[0],
-            'boolError' => $aux[1],
-            'textError' => $aux[2],
-            'codeError' => $aux[3],
+            'data' => $newdata
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
@@ -687,11 +653,12 @@ class Board extends REST_Controller {
         $id = $request->idboard;
         $posInBoard = $request->pos;
         $imgCell = $request->imgCell;
+        $idusu = $this->session->userdata('idusu');
         
         $cell = $this->BoardInterface->getIDCell($posInBoard, $id);
-        $this->BoardInterface->updateImgCell($cell[0]->ID_RCell, $imgCell);
+        $idPicto = $this->BoardInterface->updateImgCell($cell[0]->ID_RCell, $imgCell);
         $data = $this->BoardInterface->getCellsBoard($id);
-
+        $this->Lexicon->addImgTempStatsX1($idPicto, $idusu, $imgCell);
         $response = [
             'data' => $data
         ];
@@ -789,9 +756,24 @@ class Board extends REST_Controller {
 
         $board = $this->BoardInterface->getIDGroupBoards($id);
         $primaryboard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
+        $boards = $this->BoardInterface->getBoards($board[0]->ID_GBBoard);
         $primaryboardID = $primaryboard[0]->ID_Board;
-        if($id === $primaryboardID){
-            
+        if($id == $primaryboardID){
+            for($x = 0; $boards[$x] != NULL; $x++){
+                $cell = $this->BoardInterface->getCellsBoard($boards[$x]->ID_Board);
+                for ($i = 0; $i < count($cell); $i++) {
+                    $this->BoardInterface->removeCell($cell[$i]->ID_RCell, $boards[$x]->ID_Board);
+                }
+                $this->BoardInterface->removeBoardLinks($boards[$x]->ID_Board);
+
+                $this->BoardInterface->removeBoard($boards[$x]->ID_Board);
+            }
+            $this->BoardInterface->removeGoupBoard($board[0]->ID_GBBoard);
+            $this->BoardInterface->commitTrans();
+            $response = [
+                'idboard' => null
+            ];
+            $this->response($response, REST_Controller::HTTP_OK);
         }
         else{
             
@@ -993,19 +975,17 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $text = $request->text;
+        $interface = $request->interface;
         $idusu = $this->session->userdata('idusu');
         
         // GENERAR AUDIO
         $audio = new Myaudio();
-        $aux = $audio->generateAudio($idusu, $text, true);
+        $aux = $audio->generateAudio($idusu, $text, $interface);
         
         $audio->waitForFile($aux[0], $aux[1]);
 
         $response = [
-            'audio' => $aux[0],
-            'boolError' => $aux[1],
-            'textError' => $aux[2],
-            'codeError' => $aux[3],
+            'audio' => $aux
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);

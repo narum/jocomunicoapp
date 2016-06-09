@@ -82,7 +82,7 @@ class BoardInterface extends CI_Model {
 
         $idlang = $this->session->userdata('uinterfacelangauge');
         $lang = $this->session->userdata('ulangabbr');
-        
+
         $this->db->where('R_BoardCell.ID_RBoard', $id);
         $this->db->order_by('R_BoardCell.posInBoard', 'asc');
         $this->db->join('Cell', 'R_BoardCell.ID_RCell = Cell.ID_Cell');
@@ -90,10 +90,10 @@ class BoardInterface extends CI_Model {
         $this->db->join('Pictograms', 'Cell.ID_CPicto = Pictograms.pictoid', 'left');
         $this->db->join('PictogramsLanguage', 'Pictograms.pictoid = PictogramsLanguage.pictoid AND PictogramsLanguage.languageid = "' . $idlang . '"', 'left');
         $this->db->join('Function', 'Cell.ID_CFunction = Function.ID_Function', 'left');
-        $this->db->select('*, functName'.$lang.' as textFunction');
+        $this->db->select('*, functName' . $lang . ' as textFunction');
         $query = $this->db->get('R_BoardCell');
-        
-        
+
+
         if ($query->num_rows() > 0) {
             $output = $query->result();
         } else
@@ -108,7 +108,7 @@ class BoardInterface extends CI_Model {
 
     function getCell($pos, $idboard) {
         $output = array();
-        
+
         $idlang = $this->session->userdata('uinterfacelangauge');
 
         $this->db->where('R_BoardCell.ID_RBoard', $idboard);
@@ -254,9 +254,19 @@ class BoardInterface extends CI_Model {
 
     function updateDataCell($idpicto, $cell) {
         $output = array();
-
+        $data = array(
+            'imgCell' => NULL,
+            'textInCellTextOnOff' => '1',
+            'textInCell' => NULL,
+            'ID_CFunction' => NULL,
+            'boardLink' => NULL,
+            'ID_CPicto' => $idpicto,
+            'ID_CSentence' => NULL,
+            'sentenceFolder' => NULL,
+            'cellType' => 'picto',
+        );
         $this->db->where('ID_Cell', $cell);
-        $this->db->update('Cell', array('ID_CPicto' => $idpicto, 'cellType' => 'picto'));
+        $this->db->update('Cell', $data);
 
 
         return $output;
@@ -468,8 +478,7 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
-    
+
     /*
      * Return primaryboard from a board group
      */
@@ -723,11 +732,8 @@ class BoardInterface extends CI_Model {
         $this->db->where('ID_RBoard', $idSrc);
         $this->db->join('r_boardcell', 'r_boardcell.ID_RCell = cell.ID_Cell', 'left');
         $query = $this->db->get('cell');
-        if($sameGroupBoard === 1){    
-            $row->boardLink = null;
-        }
         foreach ($query->result() as $row) {
-            if($sameGroupBoard === 0){    
+            if ($sameGroupBoard === 0) {
                 $row->boardLink = null;
             }
             $data = array(
@@ -765,22 +771,26 @@ class BoardInterface extends CI_Model {
         $this->db->where('ID_Board', $IDboard);
         $this->db->delete('Boards');
     }
+    function removeGoupBoard($IDGB) {
+        $this->db->where('ID_GB', $IDGB);
+        $this->db->delete('groupboards');
+    }
 
     function removeBoardLinks($IDboard) {
         $output = array();
         $data = array(
-            /*'imgCell' => NULL,
-            'activeCell' => 1,
-            'textInCellTextOnOff' => 1,
-            'textInCell' => NULL,
-            'isFixedInGroupBoards' => NULL,
-            'ID_CFunction' => NULL,*/
+            /* 'imgCell' => NULL,
+              'activeCell' => 1,
+              'textInCellTextOnOff' => 1,
+              'textInCell' => NULL,
+              'isFixedInGroupBoards' => NULL,
+              'ID_CFunction' => NULL, */
             'boardLink' => NULL
-            /*'ID_CPicto' => NULL,
-            'ID_CSentence' => NULL,
-            'sentenceFolder' => NULL,
-            'cellType' => NULL,
-            'color' => 'fff'*/
+                /* 'ID_CPicto' => NULL,
+                  'ID_CSentence' => NULL,
+                  'sentenceFolder' => NULL,
+                  'cellType' => NULL,
+                  'color' => 'fff' */
         );
 
         $this->db->where('boardLink', $IDboard);
@@ -801,7 +811,7 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     function getColumns($IDboard) {
         $output = array();
 
@@ -816,7 +826,7 @@ class BoardInterface extends CI_Model {
 
         return $output;
     }
-    
+
     function getRows($IDboard) {
         $output = array();
 
@@ -839,7 +849,7 @@ class BoardInterface extends CI_Model {
         $this->db->where('customScanBlock1', $scanGroup);
         $this->db->where('ID_RBoard', $IDboard);
         $query = $this->db->get('R_BoardCell');
-        
+
         if ($query->num_rows() > 0) {
             $output = $query->result()[0]->customScanBlock2;
         } else
@@ -895,47 +905,55 @@ class BoardInterface extends CI_Model {
         $this->db->where('ID_SHistoric', $id);
         $this->db->update('S_Historic', $data);
     }
-    
-    function modifyColorCell($id, $color){
+
+    function modifyColorCell($id, $color) {
         $data = array('color' => $color);
         $this->db->where('ID_Cell', $id);
         $this->db->update('Cell', $data);
     }
+
     /*
      * Get the last img asociate to the picto
      */
-    function getImgCell($id){
+
+    function getImgCell($id) {
         $idusu = $this->session->userdata('idusu');
-        $this->db->order_by('R_S_HistoricPictograms.ID_RSHPSentencePicto', 'desc');
-        $this->db->where('S_Historic.ID_SHUser', $idusu);
-        $this->db->where('R_S_HistoricPictograms.pictoid', $id);
-        $this->db->join('S_Historic', 'S_Historic.ID_SHistoric = R_S_HistoricPictograms.ID_RSHPSentence');
-        $query = $this->db->get('R_S_HistoricPictograms');
+        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $idusu);
+        $this->db->where('P_StatsUserPicto.pictoid', $id);
+        $query = $this->db->get('P_StatsUserPicto');
         if ($query->num_rows() > 0) {
             $aux = $query->result();
             return $aux[0]->imgtemp;
         } else
             return null;
     }
-    
-    function updateImgCell($id, $imgCell){
+
+    function updateImgCell($id, $imgCell) {
         $data = array(
             'imgCell' => $imgCell
         );
         $this->db->where('ID_Cell', $id);
         $this->db->update('Cell', $data);
+        
+        $this->db->where('ID_Cell', $id);
+        $query = $this->db->get('Cell');
+        if ($query->num_rows() > 0) {
+            $aux = $query->result();
+            return $aux[0]->ID_CPicto;
+        } else
+            return null;
     }
-    
-     function getColors(){
+
+    function getColors() {
         $idLanguage = $this->session->userdata('uinterfacelangauge');
         $this->db->select('tagString, content'); // Seleccionar les columnes
-        $this->db->from('Content');// Seleccionem la taula
-        $this->db->where('section', 'color');// filtrem per columnes
-        $this->db->where('ID_CLanguage', $idLanguage);// filtrem per columnes
+        $this->db->from('Content'); // Seleccionem la taula
+        $this->db->where('section', 'color'); // filtrem per columnes
+        $this->db->where('ID_CLanguage', $idLanguage); // filtrem per columnes
         $this->db->order_by('Content.tagString', 'asc');
-        $query = $this->db->get();// Fem la query i la guardem a la variable query
+        $query = $this->db->get(); // Fem la query i la guardem a la variable query
 
-        return $query->result_array();// retornem l'array query amb els resultats
-     }
+        return $query->result_array(); // retornem l'array query amb els resultats
+    }
 
 }

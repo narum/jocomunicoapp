@@ -20538,3 +20538,99 @@ INFO - 2016-06-09 16:04:03 --> Language file loaded: language/english/rest_contr
 INFO - 2016-06-09 16:04:03 --> Model Class Initialized
 INFO - 2016-06-09 16:04:03 --> Final output sent to browser
 DEBUG - 2016-06-09 16:04:03 --> Total execution time: 0.6746
+INFO - 2016-06-09 16:14:06 --> Config Class Initialized
+INFO - 2016-06-09 16:14:06 --> Hooks Class Initialized
+DEBUG - 2016-06-09 16:14:06 --> UTF-8 Support Enabled
+INFO - 2016-06-09 16:14:06 --> Utf8 Class Initialized
+INFO - 2016-06-09 16:14:07 --> URI Class Initialized
+INFO - 2016-06-09 16:14:07 --> Router Class Initialized
+INFO - 2016-06-09 16:14:07 --> Output Class Initialized
+INFO - 2016-06-09 16:14:07 --> Security Class Initialized
+DEBUG - 2016-06-09 16:14:07 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-06-09 16:14:07 --> Input Class Initialized
+INFO - 2016-06-09 16:14:07 --> Language Class Initialized
+INFO - 2016-06-09 16:14:07 --> Loader Class Initialized
+INFO - 2016-06-09 16:14:07 --> Helper loaded: url_helper
+INFO - 2016-06-09 16:14:07 --> Helper loaded: date_helper
+INFO - 2016-06-09 16:14:07 --> Helper loaded: form_helper
+INFO - 2016-06-09 16:14:07 --> Database Driver Class Initialized
+INFO - 2016-06-09 16:14:07 --> Session: Class initialized using 'files' driver.
+INFO - 2016-06-09 16:14:07 --> Controller Class Initialized
+DEBUG - 2016-06-09 16:14:07 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-06-09 16:14:07 --> Helper loaded: inflector_helper
+INFO - 2016-06-09 16:14:07 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-06-09 16:14:07 --> Model Class Initialized
+INFO - 2016-06-09 16:14:07 --> Final output sent to browser
+DEBUG - 2016-06-09 16:14:07 --> Total execution time: 0.6562
+INFO - 2016-06-09 16:14:08 --> Config Class Initialized
+INFO - 2016-06-09 16:14:08 --> Hooks Class Initialized
+DEBUG - 2016-06-09 16:14:08 --> UTF-8 Support Enabled
+INFO - 2016-06-09 16:14:08 --> Utf8 Class Initialized
+INFO - 2016-06-09 16:14:08 --> URI Class Initialized
+INFO - 2016-06-09 16:14:08 --> Router Class Initialized
+INFO - 2016-06-09 16:14:08 --> Output Class Initialized
+INFO - 2016-06-09 16:14:08 --> Security Class Initialized
+DEBUG - 2016-06-09 16:14:08 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-06-09 16:14:08 --> Input Class Initialized
+INFO - 2016-06-09 16:14:08 --> Language Class Initialized
+INFO - 2016-06-09 16:14:08 --> Loader Class Initialized
+INFO - 2016-06-09 16:14:08 --> Helper loaded: url_helper
+INFO - 2016-06-09 16:14:08 --> Helper loaded: date_helper
+INFO - 2016-06-09 16:14:08 --> Helper loaded: form_helper
+INFO - 2016-06-09 16:14:08 --> Database Driver Class Initialized
+INFO - 2016-06-09 16:14:08 --> Session: Class initialized using 'files' driver.
+INFO - 2016-06-09 16:14:08 --> Controller Class Initialized
+DEBUG - 2016-06-09 16:14:08 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-06-09 16:14:08 --> Helper loaded: inflector_helper
+INFO - 2016-06-09 16:14:08 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-06-09 16:14:08 --> Model Class Initialized
+INFO - 2016-06-09 16:14:08 --> Final output sent to browser
+DEBUG - 2016-06-09 16:14:08 --> Total execution time: 0.6786
+INFO - 2016-06-09 16:14:45 --> Config Class Initialized
+INFO - 2016-06-09 16:14:45 --> Hooks Class Initialized
+DEBUG - 2016-06-09 16:14:46 --> UTF-8 Support Enabled
+INFO - 2016-06-09 16:14:46 --> Utf8 Class Initialized
+INFO - 2016-06-09 16:14:46 --> URI Class Initialized
+INFO - 2016-06-09 16:14:46 --> Router Class Initialized
+INFO - 2016-06-09 16:14:46 --> Output Class Initialized
+INFO - 2016-06-09 16:14:46 --> Security Class Initialized
+DEBUG - 2016-06-09 16:14:46 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-06-09 16:14:46 --> Input Class Initialized
+INFO - 2016-06-09 16:14:46 --> Language Class Initialized
+INFO - 2016-06-09 16:14:46 --> Loader Class Initialized
+INFO - 2016-06-09 16:14:46 --> Helper loaded: url_helper
+INFO - 2016-06-09 16:14:46 --> Helper loaded: date_helper
+INFO - 2016-06-09 16:14:46 --> Helper loaded: form_helper
+INFO - 2016-06-09 16:14:46 --> Database Driver Class Initialized
+INFO - 2016-06-09 16:14:46 --> Session: Class initialized using 'files' driver.
+INFO - 2016-06-09 16:14:46 --> Controller Class Initialized
+DEBUG - 2016-06-09 16:14:46 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-06-09 16:14:46 --> Helper loaded: inflector_helper
+INFO - 2016-06-09 16:14:46 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-06-09 16:14:46 --> Model Class Initialized
+INFO - 2016-06-09 16:14:46 --> Final output sent to browser
+DEBUG - 2016-06-09 16:14:46 --> Total execution time: 0.6549
+INFO - 2016-06-09 16:14:46 --> Config Class Initialized
+INFO - 2016-06-09 16:14:46 --> Hooks Class Initialized
+DEBUG - 2016-06-09 16:14:46 --> UTF-8 Support Enabled
+INFO - 2016-06-09 16:14:46 --> Utf8 Class Initialized
+INFO - 2016-06-09 16:14:46 --> URI Class Initialized
+INFO - 2016-06-09 16:14:46 --> Router Class Initialized
+INFO - 2016-06-09 16:14:46 --> Output Class Initialized
+INFO - 2016-06-09 16:14:46 --> Security Class Initialized
+DEBUG - 2016-06-09 16:14:46 --> Global POST, GET and COOKIE data sanitized
+INFO - 2016-06-09 16:14:46 --> Input Class Initialized
+INFO - 2016-06-09 16:14:46 --> Language Class Initialized
+INFO - 2016-06-09 16:14:47 --> Loader Class Initialized
+INFO - 2016-06-09 16:14:47 --> Helper loaded: url_helper
+INFO - 2016-06-09 16:14:47 --> Helper loaded: date_helper
+INFO - 2016-06-09 16:14:47 --> Helper loaded: form_helper
+INFO - 2016-06-09 16:14:47 --> Database Driver Class Initialized
+INFO - 2016-06-09 16:14:47 --> Session: Class initialized using 'files' driver.
+INFO - 2016-06-09 16:14:47 --> Controller Class Initialized
+DEBUG - 2016-06-09 16:14:47 --> Config file loaded: C:\xampp\htdocs\v3\application\config/rest.php
+INFO - 2016-06-09 16:14:47 --> Helper loaded: inflector_helper
+INFO - 2016-06-09 16:14:47 --> Language file loaded: language/english/rest_controller_lang.php
+INFO - 2016-06-09 16:14:47 --> Model Class Initialized
+INFO - 2016-06-09 16:14:47 --> Final output sent to browser
+DEBUG - 2016-06-09 16:14:47 --> Total execution time: 0.6460

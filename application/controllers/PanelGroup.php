@@ -158,14 +158,17 @@ class PanelGroup extends REST_Controller {
         //MODIF: 2 es el panel default
         $idusu = $this->session->userdata('idusu');
         $board = $this->BoardInterface->getPrimaryGroupBoard();
-        if ($board == null) {
-            $primaryBoard = $this->BoardInterface->getInfoGroupBoard(2);
+        //if ($board == null) {
+       
+            $changedLinks = array();
+            $srcGroupBoard = 2;
+            $primaryBoard = $this->BoardInterface->getInfoGroupBoard($srcGroupBoard);
 
             $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
-            $boards = $this->BoardInterface->getBoards(2);
+            $boards = $this->BoardInterface->getBoards($srcGroupBoard);
             //If we want to allow the user copy group boards this line have to be removed
             $this->panelInterface->setPrimaryGroupBoard($IDGboard, $idusu);
-            $srcGroupBoard = 2;
+            
             $sameGroupBoard = 1;
             for ($i = 0; $i < count($boards); $i++) {
                 $idSrc = $boards[$i]->ID_Board;
@@ -182,13 +185,18 @@ class PanelGroup extends REST_Controller {
                     $idToShow = $idDst;
                 }
                 $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
+                array_push($changedLinks, $idSrc);
+                array_push($changedLinks, $idDst);
             }
-
-            $this->BoardInterface->commitTrans();
-        }else{
-            $primaryUserBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
-            $idToShow = $primaryUserBoard[0]->ID_Board;
-        }
+            for($i = 0; $i < count($changedLinks); $i++){
+                $this->panelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i+1]);
+                $i++;
+            }
+            
+        //}else{
+           // $primaryUserBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
+           // $idToShow = $primaryUserBoard[0]->ID_Board;
+        //}
         $response = [
             'idBoard' => $idToShow
         ];
