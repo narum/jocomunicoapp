@@ -262,27 +262,16 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
-        $read = $request->text;
         $imgtemp = $request->imgtemp;
 
         $idusu = $this->session->userdata('idusu');
         $this->Lexicon->afegirParaula($idusu, $id, $imgtemp);
 
         $data = $this->Lexicon->recuperarFrase($idusu);
-
         $newdata = $this->inserty($data);
 
-        //$numdata = count($newdata);
-        //$read = $newdata[$numdata - 1]->text;
-
-        // GENERAR AUDIO
-        $audio = new Myaudio();
-        $aux = $audio->generateAudio($idusu, $read, true);
-        $audio->waitForFile($aux[0], $aux[1]);
-
         $response = [
-            'data' => $newdata,
-            'audio' => $aux
+            'data' => $newdata
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
@@ -396,15 +385,9 @@ class Board extends REST_Controller {
 //            if ($info['frasefinal'] == ""){
 //                $response = null;
 //            }else{
-            // GENERAR AUDIO
-            $audio = new Myaudio();
-            $aux = $audio->generateAudio($idusu, $info['frasefinal'], false);
-
-            $audio->waitForFile($aux[0], $aux[1]);
             
             $response = [
-                'info' => $info,
-                'audio' => $aux
+                'info' => $info
             ];
             
             $this->response($response, REST_Controller::HTTP_OK);
@@ -468,7 +451,6 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $id = $request->id;
-        $read = $request->text;
         $tense = $request->tense;
         $tipusfrase = $request->tipusfrase;
         $negativa = $request->negativa;
@@ -500,20 +482,13 @@ class Board extends REST_Controller {
         $data = $this->Lexicon->recuperarFrase($idusu);
 
         $newdata = $this->inserty($data);
-        
-        // GENERAR AUDIO
-        $audio = new Myaudio();
-        $aux = $audio->generateAudio($idusu, $read, true);
-        
-        $audio->waitForFile($aux[0], $aux[1]);
 
          $response = [
             'tense' => $tense,
             'tipusfrase' => $tipusfrase,
             'negativa' => $negativa,
             'control' => $control,
-            'data' => $newdata,
-            'audio' => $aux
+            'data' => $newdata
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
@@ -1000,11 +975,12 @@ class Board extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $text = $request->text;
+        $interface = $request->interface;
         $idusu = $this->session->userdata('idusu');
         
         // GENERAR AUDIO
         $audio = new Myaudio();
-        $aux = $audio->generateAudio($idusu, $text, true);
+        $aux = $audio->generateAudio($idusu, $text, $interface);
         
         $audio->waitForFile($aux[0], $aux[1]);
 

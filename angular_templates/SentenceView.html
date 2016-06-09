@@ -1,12 +1,12 @@
 <div ng-if='inScan && (isScanning == "sentenceDown" || isScanning == "sentenceUp") && isScanningCancel === false' class="col-xs-12 scaneo"></div>
-<div ng-if="cfgMenuHomeActive == 1" class="col-xs-1 fullheight"  ng-click="isClickEnable() ? goPrimaryBoard() : null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(2,'home'):null" ng-mouseleave="cfgTimeOverOnOff ? CancelTimeoutOverClick() : null">
+<div ng-if="cfgMenuHomeActive == 1" class="col-xs-1 fullheight"  ng-mousedown="isClickEnable() ? goPrimaryBoard() : null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(2,'home'):null" ng-mouseleave="cfgTimeOverOnOff ? CancelTimeoutOverClick() : null">
     <div ng-if='inScan && isScanning == "home" && isScanningCancel === false' class="scaneo" style="margin: 0px;"></div>
     <div class="backgroundHome">
         <img class="imgResponsive icon " ng-src="{{baseurl}}img/srcWeb/Menu/inici_icon.png"/>
     </div>
 
 </div>
-<div ng-if="cfgMenuReadActive == 1" class="col-xs-1 fullheight"  ng-click="isClickEnable() ? generate() : null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(2,'generate'):null" ng-mouseleave="cfgTimeOverOnOff ? CancelTimeoutOverClick() : null">
+<div ng-if="cfgMenuReadActive == 1" class="col-xs-1 fullheight"  ng-mousedown="isClickEnable() ? generate() : null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(2,'generate'):null" ng-mouseleave="cfgTimeOverOnOff ? CancelTimeoutOverClick() : null">
     <div ng-if='inScan && isScanning == "read" && isScanningCancel === false' class="scaneo" style="margin: 0px;"></div>
     <div class="backgroundLlegir">
         <img class="imgResponsive icon " ng-src="{{baseurl}}img/srcWeb/Menu/llegir_icon.png"/>
@@ -54,13 +54,13 @@
 
 </div>
 
-<div ng-if="cfgMenuDeleteLastActive == 1" class="col-xs-1 fullheight"  ng-click="isClickEnable() ? deleteLast() : null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(2,'deleteLast'):null" ng-mouseleave="cfgTimeOverOnOff ? CancelTimeoutOverClick() : null">
+<div ng-if="cfgMenuDeleteLastActive == 1" class="col-xs-1 fullheight"  ng-mousedown="isClickEnable() ? deleteLast() : null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(2,'deleteLast'):null" ng-mouseleave="cfgTimeOverOnOff ? CancelTimeoutOverClick() : null">
     <div ng-if='inScan && isScanning == "deletelast" && isScanningCancel === false' class="scaneo" style="margin: 0px;"></div>
     <div class="backgroundDelete">
         <img class="imgResponsive icon" ng-src="{{baseurl}}img/srcWeb/Menu/borrar_ultim_icon.png"/>
     </div>
 </div>
-<div ng-if="cfgMenuDeleteAllActive == 1" class="col-xs-1 fullheight" ng-click="isClickEnable() ? deleteAll() : null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(2,'deleteAll'):null" ng-mouseleave="cfgTimeOverOnOff ? CancelTimeoutOverClick() : null">
+<div ng-if="cfgMenuDeleteAllActive == 1" class="col-xs-1 fullheight" ng-mousedown="isClickEnable() ? deleteAll() : null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(2,'deleteAll'):null" ng-mouseleave="cfgTimeOverOnOff ? CancelTimeoutOverClick() : null">
     <div ng-if='inScan && isScanning == "deleteall" && isScanningCancel === false' class="scaneo" style="margin: 0px;"></div>
     <div class="backgroundDeleteAll">
         <img class="imgResponsive icon" ng-src="{{baseurl}}img/srcWeb/Menu/borrar_tot_icon.png"/>

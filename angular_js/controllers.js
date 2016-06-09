@@ -1656,9 +1656,12 @@ angular.module('controllers', [])
                 $scope.searchFolderHeight = 0;
 
                 $scope.puntuando = false;
-                if (!$scope.tense) $scope.tense = "defecte";
-                if (!$scope.tipusfrase) $scope.tipusfrase = "defecte";
-                if (!$scope.negativa) $scope.negativa = false;
+                if (!$scope.tense)
+                    $scope.tense = "defecte";
+                if (!$scope.tipusfrase)
+                    $scope.tipusfrase = "defecte";
+                if (!$scope.negativa)
+                    $scope.negativa = false;
                 $scope.SearchType = "Tots";
                 $scope.inEdit = false;
                 $scope.inScan = false;
@@ -2041,24 +2044,9 @@ angular.module('controllers', [])
                         } else {
                             text = cell.textInCell;
                         }
-                        var postdata = {text: text};
-                        var url = $scope.baseurl + "Board/readText";
-                        $http.post(url, postdata).success(function (response) {
-                            $scope.dataAudio = response.audio;
-                            if ($scope.dataAudio[1]) {
-                                txtContent("errorVoices").then(function (content) {
-                                    $scope.errorMessage = content.data[$scope.dataAudio[3]];
-                                    $scope.errorCode = $scope.dataAudio[3];
-                                    $('#errorVoicesModal').modal({backdrop: 'static'});
-                                });
-                            } else {
-                                $scope.sound = "mp3/" + $scope.dataAudio[0];
-                                $timeout(function () {
-                                    $('#utterance').get(0).play();
-                                });
-                            }
-                        });
+
                         $scope.showBoard(cell.boardLink);
+                        $scope.readText(text, true);
                         readed = true;
                     }
                     if (cell.ID_CFunction !== null) {
@@ -2069,9 +2057,10 @@ angular.module('controllers', [])
                         } else {
                             text = cell.textFunction;
                         }
-                        $scope.clickOnFunction(cell.ID_CFunction, text);
+                        $scope.clickOnFunction(cell.ID_CFunction);
+                        $scope.readText(text, true);
                     }
-                    if(cell.boardLink === null){
+                    if (cell.boardLink === null) {
                         $scope.autoReturn();
                         $scope.autoRead();
                     }
@@ -2087,7 +2076,25 @@ angular.module('controllers', [])
                     });
                 }
             };
-
+            $scope.readText = function (text, bool) {
+                $scope.sound = "mp3/empty.m4a";
+                var postdata = {text: text, interface: bool};
+                var url = $scope.baseurl + "Board/readText";
+                $http.post(url, postdata).success(function (response) {
+                    $scope.dataAudio = response.audio;
+                    if ($scope.dataAudio[1]) {
+                        txtContent("errorVoices").then(function (content) {
+                            $scope.errorMessage = content.data[$scope.dataAudio[3]];
+                            $scope.errorCode = $scope.dataAudio[3];
+                            $('#errorVoicesModal').modal({backdrop: 'static'});
+                        });
+                    } else {
+                        $scope.sound = "mp3/" + $scope.dataAudio[0];
+                        var audiotoplay = $('#utterance');
+                        audiotoplay.src = "mp3/" + $scope.dataAudio[0];
+                    }
+                });
+            }
             /*
              * If this option is true on confing, it will automatic click when mouse is over the div and the timeout ends.
              */
@@ -2177,27 +2184,14 @@ angular.module('controllers', [])
                     }
 
                     var url = $scope.baseurl + "Board/addWord";
-                    var postdata = {id: id, imgtemp: img, text: text};
+                    var postdata = {id: id, imgtemp: img};
 
                     $http.post(url, postdata).success(function (response)
                     {
                         $scope.dataTemp = response.data;
                         $scope.info = "";
-                        $scope.dataAudio = response.audio;
 
-                        if ($scope.dataAudio[1]) {
-                            txtContent("errorVoices").then(function (content) {
-                                $scope.errorMessage = content.data[$scope.dataAudio[3]];
-                                $scope.errorCode = $scope.dataAudio[3];
-                                $('#errorVoicesModal').modal({backdrop: 'static'});
-                            });
-                        } else {
-                            $scope.sound = "mp3/" + $scope.dataAudio[0];
-                            $timeout(function () {
-                                $('#utterance').get(0).play();
-                            });
-                        }
-
+                        $scope.readText(text, true);
                         $scope.getPred();
                     });
                 }
@@ -2240,29 +2234,13 @@ angular.module('controllers', [])
              * If you click in a function (not a pictogram) this controller carry you
              * to the specific function
              */
-            $scope.clickOnFunction = function (id, text) {
+            $scope.clickOnFunction = function (id) {
                 var url = $scope.baseurl + "Board/getFunction";
-                var postdata = {id: id, text: text, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
+                var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
                 $http.post(url, postdata).success(function (response)
                 {
                     var control = response.control;
-                    $scope.dataAudio = response.audio;
-
-                    if ($scope.dataAudio[1]) {
-                        txtContent("errorVoices").then(function (content) {
-                            $scope.errorMessage = content.data[$scope.dataAudio[3]];
-                            $scope.errorCode = $scope.dataAudio[3];
-                            $('#errorVoicesModal').modal({backdrop: 'static'});
-                        });
-                    } else {
-                        if (control !== "generate") {
-                            $scope.sound = "mp3/" + $scope.dataAudio[0];
-                            $timeout(function () {
-                                $('#utterance').get(0).play();
-                            });
-                        }
-                    }
 
                     $scope.dataTemp = response.data;
                     $scope.tense = response.tense;
@@ -2286,11 +2264,7 @@ angular.module('controllers', [])
                                 $scope.tipusfrase = "defecte";
                                 $scope.negativa = false
 
-                                $scope.dataAudio = response.audio;
-                                $scope.sound = "mp3/" + $scope.dataAudio[0];
-                                $timeout(function () {
-                                    $('#utterance').get(0).play();
-                                });
+                                $scope.readText($scope.info.frasefinal, false);
                             }
                             $scope.info = response.info;
 
@@ -2322,7 +2296,7 @@ angular.module('controllers', [])
 
                 $http.post(url).success(function (response)
                 {
-                   
+
                     $scope.tense = "defecte";
                     $scope.tipusfrase = "defecte";
                     $scope.negativa = false;
@@ -2349,24 +2323,11 @@ angular.module('controllers', [])
                     //$scope.dataTemp = response.data;
                     $scope.info = response.info;
                     //$scope.data = response.data;
-                    $scope.dataAudio = response.audio;
 
-                    if ($scope.dataAudio[1]) {
-                        txtContent("errorVoices").then(function (content) {
-                            $scope.errorMessage = content.data[$scope.dataAudio[3]];
-                            $scope.errorCode = $scope.dataAudio[3];
-                            $('#errorVoicesModal').modal({backdrop: 'static'});
-                        });
-                    } else {
-                        $scope.sound = "mp3/" + $scope.dataAudio[0];
-                        $timeout(function () {
-                            $('#utterance').get(0).play();
-                        });
-                    }
                     if ($scope.cfgUserExpansionFeedback) {
                         $scope.puntuar();
                     }
-
+                    $scope.readText($scope.info.frasefinal, false);
                     $scope.getPred();
                 });
                 $scope.tense = "defecte";
@@ -2401,7 +2362,7 @@ angular.module('controllers', [])
 
             };
 
-            $scope.playSentenceAudio = function ()
+            $scope.playSentenceAudio = function () //MODIF esto se usa?
             {
                 var postdata = {voice: 0, sentence: $scope.info.frasefinal};//MODIF: canviar ek voice per cfg
                 var URL = $scope.baseurl + "Board/getAudioSentence";
@@ -2426,7 +2387,7 @@ angular.module('controllers', [])
 
                         });
             };
-            $scope.playPictoAudio = function (text)
+            $scope.playPictoAudio = function (text) //esto se usa?
             {
                 var postdata = {voice: 0, sentence: text};//MODIF: canviar ek voice per cfg
                 var URL = $scope.baseurl + "Board/getAudioSentence";
