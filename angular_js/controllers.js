@@ -2954,7 +2954,7 @@ angular.module('controllers', [])
         })
 
 
-        .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService) {
+        .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources) {
             $scope.$on('scrollbar.show', function () {
                 console.log('Scrollbar show');
             });
