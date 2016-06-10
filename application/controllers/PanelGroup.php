@@ -65,9 +65,11 @@ class PanelGroup extends REST_Controller {
         $ID_GBoard = $request->ID_GB;
 
         $primaryBoard = $this->BoardInterface->getPrimaryBoard($ID_GBoard);
+        $boards = $this->BoardInterface->getBoards($ID_GBoard);
 
         $response = [
-            'id' => $primaryBoard[0]->ID_Board
+            'id' => $primaryBoard[0]->ID_Board,
+            'boards' => $boards
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);

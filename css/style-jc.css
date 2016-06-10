@@ -23,9 +23,9 @@
 
 html *
 {
-   font-size: 2vh;
-   line-height: 2.8vh;
-   font-family: "Trebuchet MS", Helvetica, sans-serif;;
+    font-size: 2vh;
+    line-height: 2.8vh;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;;
 }
 
 #body{
@@ -42,7 +42,7 @@ html *
 
 
 @media (max-width:1000px){
-    
+
     input[type="radio"]{
         margin: 0px;
     }
@@ -141,8 +141,8 @@ html *
 }
 
 .sentencePadding{
-   padding-left: 5%; 
-   width: 90%
+    padding-left: 5%; 
+    width: 90%
 }
 
 .sentenceCell{
@@ -355,7 +355,10 @@ html *
     position: absolute;
     z-index: 1;
 }
-
+.indicatorNegativeSentence{
+    border-bottom: solid 3px;
+    border-bottom-color: black;
+}
 .indicatorTenseSentence{
     background: #FEE8B6;
     height: 50%;

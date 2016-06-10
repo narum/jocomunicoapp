@@ -43,7 +43,7 @@
             </div>
         </div>
         <div class="col-xs-1 sentenceCellIndicator">
-            <div class="col-xs-12  indicatorTenseSentence">
+            <div class="col-xs-12  indicatorTenseSentence" ng-class="{'indicatorNegativeSentence':negativa}">
                 <img ng-if='tense != "defecte"' class="imgRounded imgResponsive" width="100%" height="100%" ng-src="{{baseurl}}img/indicadors/{{tense}}.png"/>
             </div>
             <div class="col-xs-12 indicatorTipusSentence">

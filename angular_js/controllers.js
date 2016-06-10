@@ -1203,7 +1203,7 @@ angular.module('controllers', [])
                 $scope.arrayScannedCells = null;
                 $scope.isScanningCancel = false;
                 //The user cfg tell us where we have to start
-                if ($scope.cfgScanStartClick == '1' && $scope.isScanning != "nowait") {
+                if ($scope.cfgScanStartClick && $scope.isScanning != "nowait") {
                     $scope.isScanning = "waiting";
                 } else if ($scope.cfgPredOnOff === '1') {
                     $scope.isScanning = "prediction";
@@ -1742,7 +1742,7 @@ angular.module('controllers', [])
                 $scope.cfgTimeNoRepeatedClick = userConfig.cfgTimeNoRepeatedClick;
                 $scope.TimeMultiClic = 0;
                 $scope.cfgScanningOnOff = userConfig.cfgScanningOnOff;
-                $scope.cfgScanStartClick = userConfig.cfgScanStartClick;
+                $scope.cfgScanStartClick = userConfig.cfgScanStartClick == 1 ? true : false;
                 $scope.cfgCancelScanOnOff = userConfig.cfgCancelScanOnOff == 1 ? true : false;
                 $scope.cfgTextInCell = userConfig.cfgTextInCell == 1 ? true : false;
                 $scope.cfgUserExpansionFeedback = userConfig.cfgUserExpansionFeedback == 1 ? true : false;
@@ -1753,6 +1753,10 @@ angular.module('controllers', [])
                     $scope.timerScan = false;
                     $scope.cfgScanStartClick = false;
                 } else if (userConfig.cfgUsageMouseOneCTwoC == 1) {
+                    if($scope.longclick){
+                        $scope.cfgScanStartClick = false;
+                        $scope.cfgCancelScanOnOff = false;
+                    }
                     $scope.cfgTimeOverOnOff = false;
                     $scope.cfgTimeNoRepeatedClickOnOff = false;
                 } else if (userConfig.cfgUsageMouseOneCTwoC == 2) {
@@ -1790,11 +1794,15 @@ angular.module('controllers', [])
                 $http.post(url).success(function (response)
                 {
                     $scope.idboard = response.idboard;
-                    $scope.showBoard('0').then(function () {
-                        if ($scope.cfgScanningOnOff == 1) {
-                            $scope.InitScan();
-                        }
-                    });
+                    if ($scope.idboard === null) {//MODIF:--Modal no hay panel principal en el grupo o no hay group panel principal
+                        $location.path('/panelGroups');
+                    } else {
+                        $scope.showBoard('0').then(function () {
+                            if ($scope.cfgScanningOnOff == 1) {
+                                $scope.InitScan();
+                            }
+                        });
+                    }
                 });
             };
             /*
@@ -1816,12 +1824,13 @@ angular.module('controllers', [])
             $scope.showBoard = function (id)
             {
                 //MODIF: leer texto panel
-                //If the id is 0, show the actual board. Else the current board is changed (and showed)
+                //If the id is 0, show (reload) the actual board. Else the current board is changed (and showed)
                 if (id === '0') {
                     id = $scope.idboard;
                 } else {
                     $scope.idboard = id;
                 }
+
                 var url = $scope.baseurl + "Board/showCellboard";
                 var postdata = {idboard: id};
 
@@ -3093,7 +3102,10 @@ angular.module('controllers', [])
                         success(function (response)
                         {
                             $scope.id = response.id;
-                            // Put the panel to edit info, and load the edit panel
+                            if($scope.id === null){//MODIF:--Modal no tiene panel pricipal, se añade uno para que pueda hacer algo (no se si se puede hacer, ya que el modal creo que se ira. Si pasa esto meter una variable en el objeto editpanelinfo)
+                                $scope.id = response.boards[0].ID_Board;
+                            }
+                            // Put the panel to edit info, and load the edit panel  
                             $rootScope.editPanelInfo = {idBoard: $scope.id};
                             $location.path('/');
                         });
