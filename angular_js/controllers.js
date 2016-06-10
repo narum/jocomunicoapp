@@ -2097,8 +2097,7 @@ angular.module('controllers', [])
                         } else {
                             text = cell.textFunction;
                         }
-                        $scope.clickOnFunction(cell.ID_CFunction);
-                        $scope.readText(text, true);
+                        $scope.clickOnFunction(cell.ID_CFunction, text, readed);
                     }
                     if (cell.boardLink === null) {
                         $scope.autoReturn();
@@ -2274,7 +2273,7 @@ angular.module('controllers', [])
              * If you click in a function (not a pictogram) this controller carry you
              * to the specific function
              */
-            $scope.clickOnFunction = function (id) {
+            $scope.clickOnFunction = function (id, text, readed) {
                 var url = $scope.baseurl + "Board/getFunction";
                 var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
@@ -2292,12 +2291,20 @@ angular.module('controllers', [])
 
                         $http.post(url, postdata).success(function (response)
                         {
+                            $scope.info = response.info;
                             if (control !== "generate") {
                                 $scope.dataTemp = response.data;
                                 if (control === "deleteAllWords") {
                                     $scope.tense = "defecte";
                                     $scope.tipusfrase = "defecte";
                                     $scope.negativa = false;
+                                    $scope.getPred();
+                                }
+                                else if (control === "deleteLastWord") {
+                                    $scope.getPred();
+                                }
+                                if (!readed) {
+                                    $scope.readText(text, true);
                                 }
                             } else {
                                 $scope.tense = "defecte";
@@ -2306,11 +2313,14 @@ angular.module('controllers', [])
 
                                 $scope.readText($scope.info.frasefinal, false);
                             }
-                            $scope.info = response.info;
-
                         });
                     } else if ((control === "home")) {
                         $scope.config();
+                    }
+                    else {
+                        if (!readed) {
+                            $scope.readText(text, true);
+                        }
                     }
                 });
             };
@@ -2954,7 +2964,7 @@ angular.module('controllers', [])
         })
 
 
-        .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService) {
+        .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources) {
             $scope.$on('scrollbar.show', function () {
                 console.log('Scrollbar show');
             });
