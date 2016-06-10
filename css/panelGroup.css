@@ -6,17 +6,21 @@
 }
 .panelGroupContainer{
     margin-left: 5vw;
-    padding-right: 0.5vw !important;
+    padding-right: 0.5vh !important;
     height: 70%;
 }
 .historicContainer{
-    padding-left: 0.5vw !important;
+    padding-left: 0.5vh !important;
     height: 70%;
 }
 .addWordContainer{
     margin-left: 5vw;
-    margin-top: 1vw;
+    margin-top: 1vh;
     height: 20%;
+}
+.paddingAddWord
+{
+    padding: 4vh 4vh;
 }
 .panelContainer{
     background-color: whitesmoke;

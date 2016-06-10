@@ -2119,8 +2119,7 @@ angular.module('controllers', [])
             };
             //Bool is true when the text comes from interface and false if the text is the sentence
             $scope.readText = function (text, bool) {
-                if ((bool && $scope.cfgInterfaceVoiceOnOff)||(!bool && $scope.cfgExpansionOnOff)){
-                    alert("peticion hecha");
+                if ((bool && $scope.cfgInterfaceVoiceOnOff) || (!bool && $scope.cfgExpansionOnOff)) {
                     $scope.sound = "mp3/empty.m4a";
                     var postdata = {text: text, interface: bool};
                     var url = $scope.baseurl + "Board/readText";
@@ -2136,8 +2135,10 @@ angular.module('controllers', [])
                             $scope.sound = "mp3/" + $scope.dataAudio[0];
                             var audiotoplay = $('#utterance');
                             audiotoplay.src = "mp3/" + $scope.dataAudio[0];
-                            if ($scope.cfgTimeOverOnOff){
-                                audiotoplay.get(0).play();
+                            if ($scope.cfgTimeOverOnOff) {
+                                $timeout(function () {
+                                    audiotoplay.get(0).play();
+                                });
                             }
                         }
                     });
