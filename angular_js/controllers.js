@@ -676,6 +676,9 @@ angular.module('controllers', [])
             $scope.img.scanOrder231 = '/img/srcWeb/UserConfig/scanOrder231.gif';
             $scope.img.scanOrder312 = '/img/srcWeb/UserConfig/scanOrder312.gif';
             $scope.img.scanOrder321 = '/img/srcWeb/UserConfig/scanOrder321.gif';
+            $scope.img.scanOrderPred = '/img/srcWeb/UserConfig/scanOrderPred.png';
+            $scope.img.scanOrderMenu = '/img/srcWeb/UserConfig/scanOrderMenu.png';
+            $scope.img.scanOrderPanel = '/img/srcWeb/UserConfig/scanOrderPanel.png';
             //Pedimos la configuración del usuario a la base de datos
             $scope.getConfig = function () {
                 $scope.interfaceLanguages = [];
@@ -711,7 +714,6 @@ angular.module('controllers', [])
                             $scope.userData.cfgMenuDeleteAllActive = ($scope.userData.cfgMenuDeleteAllActive === "1");
                             $scope.userData.cfgAutoEraseSentenceBar = ($scope.userData.cfgAutoEraseSentenceBar === "1");
                             $scope.userData.cfgTimeLapseSelectOnOff = ($scope.userData.cfgTimeLapseSelectOnOff === "1");
-                            $scope.userData.cfgTimeNoRepeatedClickOnOff = ($scope.userData.cfgTimeNoRepeatedClickOnOff === "1");
                             $scope.userData.cfgScanningOnOff = ($scope.userData.cfgScanningOnOff === "1");
                             $scope.userData.cfgScanningAutoOnOff = ($scope.userData.cfgScanningAutoOnOff === "1");
                             $scope.userData.cfgCancelScanOnOff = ($scope.userData.cfgCancelScanOnOff === "1");
@@ -720,7 +722,7 @@ angular.module('controllers', [])
                             $scope.userData.cfgInterfaceVoiceOnOff = ($scope.userData.cfgInterfaceVoiceOnOff === "1");
                             $scope.userData.cfgUserExpansionFeedback = ($scope.userData.cfgUserExpansionFeedback === "1");
                             $scope.userData.cfgInterfaceVoiceMascFem = ($scope.userData.cfgInterfaceVoiceMascFem === "masc");
-                            $scope.userData.scanOrder = $scope.userData.cfgScanOrderPred + $scope.userData.cfgScanOrderMenu + $scope.userData.cfgScanOrderPanel;
+                            $scope.scanOrder = $scope.userData.cfgScanOrderPred + $scope.userData.cfgScanOrderMenu + $scope.userData.cfgScanOrderPanel;
 
                             var count = results.users[0].ID_ULanguage;
                             angular.forEach(results.users, function (value) {
@@ -747,6 +749,8 @@ angular.module('controllers', [])
                                 //Enable bar after change Language
                                 $scope.interfaceLanguageBarEnable = true;
                                 $scope.expansionLanguageEnable = true;
+                                //Enable content view
+                                $scope.viewActived = true;
                             });
                         });
             };
@@ -1002,12 +1006,12 @@ angular.module('controllers', [])
                         });
             };
             $scope.getConfig()
-                    .then(function () {
-                        $scope.getAudioLists()
-                                .then(function () {
-                                    $scope.viewActived = true;
-                                });
-                    });
+                .then(function () {
+                    $scope.getAudioLists()
+                        .then(function () {
+//                            $scope.viewActived = true;
+                        });
+                });
 
             $scope.expansionVoiceChange = function (data) {
                 angular.forEach($scope.expansionVoicesList, function (value) {
@@ -1063,10 +1067,33 @@ angular.module('controllers', [])
                             }
                         });
             };
-            $scope.changeScanOrder = function(value){
-                $scope.changeRadioState(value.charAt(0),'ScanOrderPred');
-                $scope.changeRadioState(value.charAt(1),'ScanOrderMenu');
-                $scope.changeRadioState(value.charAt(2),'ScanOrderPanel');
+            $scope.changeScanOrder = function(){
+                if ($scope.scanOrderCount==4){
+                    $scope.scanOrder = $scope.pred + $scope.menu + $scope.panel;
+                    $scope.changeRadioState($scope.scanOrder.charAt(0),'ScanOrderPred');
+                    $scope.changeRadioState($scope.scanOrder.charAt(1),'ScanOrderMenu');
+                    $scope.changeRadioState($scope.scanOrder.charAt(2),'ScanOrderPanel');
+                    $('#scanOrderModal').modal('toggle');
+                    $scope.button1=true;
+                    $scope.button2=true;
+                    $scope.button3=true;
+                    $scope.scanOrderCount=1;
+                    $scope.ScanOrderNames=[];
+                }
+            };
+            $scope.ScanOrderNames = [];
+            $scope.selectScanOrder = function(value){
+                if (value=='Pred'){
+                    $scope.ScanOrderNames.push({'id': $scope.scanOrderCount + '.', 'name':$scope.content.scanOrderPred});
+                    $scope.pred = $scope.scanOrderCount.toString();
+                }else if (value=='Menu'){
+                    $scope.ScanOrderNames.push({'id': $scope.scanOrderCount + '.', 'name':$scope.content.scanOrderMenu});
+                    $scope.menu = $scope.scanOrderCount.toString();
+                }else if (value=='Panel'){
+                    $scope.ScanOrderNames.push({'id': $scope.scanOrderCount + '.', 'name':$scope.content.scanOrderPanel});
+                    $scope.panel = $scope.scanOrderCount.toString();
+                }
+                $scope.scanOrderCount++;
             };
             $scope.exit = function () {
                 $scope.viewActived = false;
@@ -2954,7 +2981,7 @@ angular.module('controllers', [])
         })
 
 
-        .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources) {
+        .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
             $scope.$on('scrollbar.show', function () {
                 console.log('Scrollbar show');
             });
@@ -2993,15 +3020,6 @@ angular.module('controllers', [])
             $scope.go = function (path) {
                 if(path=='logout'){
                     $('#logoutModal').modal('toggle');
-//                    ngDialog.openConfirm({
-//                    template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
-//                    scope: $scope,
-//                    className: 'ngdialog-theme-default dialogLogOut'
-//                    }).then(function () {
-//                        AuthService.logout();
-//                    }, function (value) {
-//
-//                    });
                 }else{
                     $location.path(path);
                     $rootScope.dropdownMenuBarValue = path; //Button selected on this view
@@ -3018,7 +3036,6 @@ angular.module('controllers', [])
                 $scope.logoutContent=results.data;
             });
             $scope.logout = function (){
-                $scope.viewActived = false;
                 $timeout(function(){
                     AuthService.logout();
                 },1000);

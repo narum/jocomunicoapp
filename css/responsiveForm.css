@@ -86,7 +86,7 @@ select[multiple].input-group-auto > .input-group-btn > .btn {
     font-weight: bold;
     font-size: 2.2vh;
     font-family: "Trebuchet MS", Helvetica, sans-serif;
-    position: fixed;
+    position: absolute;
     z-index:1;
 }
 .error,/*color del icono de estado, texto y el borde del input box en error*/
@@ -112,7 +112,7 @@ select[multiple].input-group-auto > .input-group-btn > .btn {
     font-weight: bold;
     font-size: 2.2vh;
     font-family: "Trebuchet MS", Helvetica, sans-serif;
-    position: fixed;
+    position: absolute;
     z-index:2;
 }
 .warning,

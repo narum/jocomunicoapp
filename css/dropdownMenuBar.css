@@ -1,23 +1,23 @@
 /*Dropdown menu bar*/
 
 .dropdownMenuBar{
-    z-index:5;
+    z-index:40;
     position: fixed;
 }
 .menuBarAnimation{
     position: relative;
-/*    margin-top: 4vh;
+    margin-top: 4vh;
     margin-left: 4vh;
     height: 7vh;
-    width: 7.8vh;*/
-    height: 5vh;
-    width: 5.8vh;
+    width: 7.8vh;
+/*    height: 5vh;
+    width: 5.8vh;*/
     background-color: #adadad;
 
-    -webkit-transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
-    -moz-transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
-    -o-transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
-    transition: background-color 1s ease, margin 0.5s ease, height 0.5s ease, width 0.5s ease;
+    -webkit-transition: background-color 0.5s ease, margin 0.25s ease, height 0.25s ease, width 0.25s ease;
+    -moz-transition: background-color 0.5s ease, margin 0.25s ease, height 0.25s ease, width 0.25s ease;
+    -o-transition: background-color 0.5s ease, margin 0.25s ease, height 0.25s ease, width 0.25s ease;
+    transition: background-color 0.5s ease, margin 0.25s ease, height 0.25s ease, width 0.25s ease;
 }
 .menuBarAnimationOpened{
     background-color: #474747;
@@ -25,18 +25,19 @@
     margin-left: 0px;
     height: 15vh;
     width: 100vw;
+    opacity: 0.95;
 }
 .img-dropdownMenuButton{
-    z-index:7;
+    z-index:42;
     position: fixed;
-/*    margin-top: 4vh;
+    margin-top: 4vh;
     margin-left: 4vh;
-    height: 7vh;*/
-    height: 5vh;
-    width: auto;
+    height: 7vh;
+/*    height: 5vh;
+    width: auto;*/
 }
 .buttonsMenuBar{
-    z-index:6;
+    z-index:41;
     position: fixed;
     width: 100vw;
     opacity: 0;
@@ -46,14 +47,14 @@
     text-align: center;
 }
 .buttonsMenuBarOpened{
-    -webkit-transition: opacity 1s ease-out;
-    -webkit-transition-delay: 0.5s;
-    -moz-transition: opacity 1s ease-out;
-    -moz-transition-delay: 0.5s;
-    -o-transition: opacity 1s ease-out;
-    -o-transition-delay: 0.5s;
-    transition: opacity 1s ease-out;
-    transition-delay: 0.5s;
+    -webkit-transition: opacity 0.5s ease-out;
+    -webkit-transition-delay: 0.25s;
+    -moz-transition: opacity 0.5s ease-out;
+    -moz-transition-delay: 0.25s;
+    -o-transition: opacity 0.5s ease-out;
+    -o-transition-delay: 0.25s;
+    transition: opacity 0.5s ease-out;
+    transition-delay: 0.25s;
     opacity: 1;
 }
 .icondropdownMenuBar{
