@@ -12,6 +12,16 @@ class Register extends REST_Controller {
         $this->load->library('Myaudio');
     }
     
+    public function runningLocalOrServer_get()
+    {
+        $audio = new Myaudio();
+        $appRunning = $audio->AppLocalOrServer();
+        $response = [
+            'appRunning'=>$appRunning
+            ];
+        
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
     public function allContent_get()
     {
         $section = $this->query("section");

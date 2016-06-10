@@ -5,12 +5,12 @@
     -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
 <!--menu superior dropdown-->
-<div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
+<div ng-include="'/angular_templates/dropdownMenuBar.html'" ng-show="viewActived"></div>
 <div ng-include="'/angular_templates/logoutModal.html'"></div>
 
-<div class="row scroll" id="scrollBar">
-    <div class="col-xs-12 loadingGif" ng-show="!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
-    <div class="col-xs-8 col-xs-offset-2 MenuUserConfig" ng-show="viewActived">
+<div class="loadingGif" ng-show="!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
+<div class="row scroll" id="scrollBar" ng-show="viewActived">
+    <div class="col-xs-8 col-xs-offset-2 MenuUserConfig">
         <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_12}})">
             <div class="col-xs-12">
                 <form name="userDataForm">
@@ -62,7 +62,7 @@
                                     <div class="col-xs-12" uib-collapse="!canEdit">
                                         <div class="row">
                                             <div class="col-xs-8 col-xs-offset-4 verticalMarginTop FonsTurquesaClar" ng-class="{FonsTurquesaSucces: userData.cfgIsFem=='0'}">
-                                                <input type="radio" id="radioUserConfig1" class="" ng-model="userData.cfgIsFem" value="0" ng-click="changeRadioEstate(userData.cfgIsFem, 'IsFem')" ng-show="false">
+                                                <input type="radio" id="radioUserConfig1" class="" ng-model="userData.cfgIsFem" value="0" ng-click="changeRadioState(userData.cfgIsFem, 'IsFem')" ng-show="false">
                                                     <label for="radioUserConfig1" class="labelTurquesa">{{content.isMasc}}</label>
                                             </div>
                                         </div>
@@ -186,7 +186,7 @@
                                     <div class="col-xs-12" uib-collapse="!canEdit">
                                         <div class="row">
                                             <div class="col-xs-9 col-xs-offset-3 verticalMarginTop FonsTurquesaClar" ng-class="{FonsTurquesaSucces: userData.cfgIsFem=='1'}">
-                                                <input type="radio" id="radioUserConfig2" class="" ng-model="userData.cfgIsFem" value="1" ng-click="changeRadioEstate(userData.cfgIsFem, 'IsFem')" ng-show="false">
+                                                <input type="radio" id="radioUserConfig2" class="" ng-model="userData.cfgIsFem" value="1" ng-click="changeRadioState(userData.cfgIsFem, 'IsFem')" ng-show="false">
                                                     <label for="radioUserConfig2" class="labelTurquesa">{{content.isFem}}</label>
                                             </div>
                                         </div>
@@ -512,11 +512,11 @@
                         <div class="row contentBar">
                             <div class="row">
                                 <div class="col-xs-2 paddingLeft">
-                                    <input type="radio" id="radioMenu1" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="0" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
+                                    <input type="radio" id="radioMenu1" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="0" ng-click="changeRadioState(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
                                         <label for="radioMenu1"><img class="img-configRadio" ng-src={{img.menuUp}}/></label>
                                 </div>
                                 <div class="col-xs-3 paddingLeft">
-                                    <input type="radio" id="radioMenu2" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="1" ng-click="changeRadioEstate(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
+                                    <input type="radio" id="radioMenu2" class="imageRadio" ng-model="userData.cfgSentenceBarUpDown" value="1" ng-click="changeRadioState(userData.cfgSentenceBarUpDown, 'SentenceBarUpDown')" ng-show="false">
                                         <label for="radioMenu2"><img class="img-configRadio" ng-src={{img.menuDown}}/></label>
                                 </div>
                                 <div class="col-xs-7">
@@ -565,11 +565,11 @@
                                 </div>
                                 <div class="row paddingLeft">
                                     <div class="col-xs-5">
-                                        <input type="radio" id="radioTextInCell1" class="imageRadio" ng-model="userData.cfgTextInCell" value="0" ng-click="changeRadioEstate(userData.cfgTextInCell, 'TextInCell')" ng-show="false">
+                                        <input type="radio" id="radioTextInCell1" class="imageRadio" ng-model="userData.cfgTextInCell" value="0" ng-click="changeRadioState(userData.cfgTextInCell, 'TextInCell')" ng-show="false">
                                             <label for="radioTextInCell1"><img class="img-configRadio" ng-src={{img.textInCellOff}}/></label>
                                     </div>
                                     <div class="col-xs-7">
-                                        <input type="radio" id="radioTextInCell2" class="imageRadio" ng-model="userData.cfgTextInCell" value="1" ng-click="changeRadioEstate(userData.cfgTextInCell, 'TextInCell')" ng-show="false">
+                                        <input type="radio" id="radioTextInCell2" class="imageRadio" ng-model="userData.cfgTextInCell" value="1" ng-click="changeRadioState(userData.cfgTextInCell, 'TextInCell')" ng-show="false">
                                             <label for="radioTextInCell2"><img class="img-configRadio" ng-src={{img.textInCellOn}}/></label>
                                     </div>
                                 </div>
@@ -589,6 +589,21 @@
                                         <label for="switch13">&nbsp;</label>
                                     </div>
                                 </div>
+<!--                                <div class="row">
+                                    <div class="col-xs-6">Color de fons del panell:</div>
+                                    <div class="col-xs-6" id="colorSelect">
+                                        <input type="radio" id="radioPatternSelect1" class="imageRadio" ng-model="userData.cfgBgColorPanel" value="1" ng-click="changeRadioState(userData.cfgBgColorPanel, 'BgColorPanel')" ng-show="false">
+                                            <label for="radioPatternSelect1" style="background: url('/img/srcWeb/patterns/pattern1.png')"><div ng-show="!(userData.cfgBgColorPanel=='1')">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div ng-show="userData.cfgBgColorPanel=='1'" class="icon-ok"></div></label>
+                                        <input type="radio" id="radioPatternSelect2" class="imageRadio" ng-model="userData.cfgBgColorPanel" value="2" ng-click="changeRadioState(userData.cfgBgColorPanel, 'BgColorPanel')" ng-show="false">
+                                            <label for="radioPatternSelect2" style="background-color:#FF0000"><div ng-show="!(userData.cfgBgColorPanel=='2')">&nbsp;&nbsp;&nbsp;</div><div ng-show="userData.cfgBgColorPanel=='2'" class="icon-ok"></div></label>
+                                        <input type="radio" id="radioPatternSelect3" class="imageRadio" ng-model="userData.cfgBgColorPanel" value="3" ng-click="changeRadioState(userData.cfgBgColorPanel, 'BgColorPanel')" ng-show="false">
+                                            <label for="radioPatternSelect3" style="background-color:#8E0B92"><div ng-show="!(userData.cfgBgColorPanel=='3')">&nbsp;&nbsp;&nbsp;</div><div ng-show="userData.cfgBgColorPanel=='3'" class="icon-ok"></div></label>
+                                        <input type="radio" id="radioPatternSelect4" class="imageRadio" ng-model="userData.cfgBgColorPanel" value="4" ng-click="changeRadioState(userData.cfgBgColorPanel, 'BgColorPanel')" ng-show="false">
+                                            <label for="radioPatternSelect4" style="background-color:#2E758A"><div ng-show="!(userData.cfgBgColorPanel=='4')">&nbsp;&nbsp;&nbsp;</div><div ng-show="userData.cfgBgColorPanel=='4'" class="icon-ok"></div></label>
+                                        <input type="radio" id="radioPatternSelect5" class="imageRadio" ng-model="userData.cfgBgColorPanel" value="5" ng-click="changeRadioState(userData.cfgBgColorPanel, 'BgColorPanel')" ng-show="false">
+                                            <label for="radioPatternSelect5" style="background-color:#000000"><div ng-show="!(userData.cfgBgColorPanel=='5')">&nbsp;&nbsp;&nbsp;</div><div ng-show="userData.cfgBgColorPanel=='5'" class="icon-ok"></div></label>
+                                    </div>
+                                </div>-->
                             </div>
                         </div>
                         </div>
@@ -610,7 +625,7 @@
                                         ng-options="f for f in numPictosBarPred"
                                         ng-model="userData.cfgPredBarNumPred"
                                         ng-disabled="!userData.cfgPredOnOff"
-                                        ng-change="changeRadioEstate(userData.cfgPredBarNumPred, 'PredBarNumPred')">
+                                        ng-change="changeRadioState(userData.cfgPredBarNumPred, 'PredBarNumPred')">
                                 </select>
                             </div>
                             <!--<div class="col-xs-1">&nbsp;</div>-->
@@ -651,17 +666,17 @@
                             <div class="row">
                                 <div class="col-xs-2 paddingLeft">
                                     <input type="radio" id="radioHardwareUsage1" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="0" 
-                                           ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=0;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
+                                           ng-click="changeRadioState(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=0;changeRadioState(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
                                         <label for="radioHardwareUsage1"><img class="img-configRadio" ng-src={{img.cfgUsageMouse}}/></label>
                                 </div>
                                 <div class="col-xs-2 paddingLeft2">
                                     <input type="radio" id="radioHardwareUsage2" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="1" 
-                                           ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=1;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
+                                           ng-click="changeRadioState(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=1;changeRadioState(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
                                         <label for="radioHardwareUsage2"><img class="img-configRadio" ng-src={{img.cfgUsageOneC}}/></label>
                                 </div>
                                 <div class="col-xs-2">
                                     <input type="radio" id="radioHardwareUsage3" class="imageRadio" ng-model="userData.cfgUsageMouseOneCTwoC" value="2" 
-                                           ng-click="changeRadioEstate(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=1;changeRadioEstate(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
+                                           ng-click="changeRadioState(userData.cfgUsageMouseOneCTwoC, 'UsageMouseOneCTwoC');userData.cfgScanningOnOff=1;changeRadioState(userData.cfgScanningOnOff, 'ScanningOnOff')" ng-show="false">
                                         <label for="radioHardwareUsage3"><img class="img-configRadio" ng-src={{img.cfgUsageTwoC}}/></label>
                                 </div>
                                 <div class="col-xs-6">
@@ -728,15 +743,15 @@
                         <div class="row contentBar">
                             <div class="row">
                                 <div class="col-xs-2 paddingLeft">
-                                    <input type="radio" id="radioScan2" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="1" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
+                                    <input type="radio" id="radioScan2" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="1" ng-click="changeRadioState(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
                                         <label for="radioScan2"><img class="img-configRadio" ng-src={{img.cfgScanningRow}}/></label>
                                 </div>
                                 <div class="col-xs-2 paddingLeft2">
-                                    <input type="radio" id="radioScan3" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="2" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
+                                    <input type="radio" id="radioScan3" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="2" ng-click="changeRadioState(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
                                         <label for="radioScan3"><img class="img-configRadio" ng-src={{img.cfgScanningCol}}/></label>
                                 </div>
                                 <div class="col-xs-2">
-                                    <input type="radio" id="radioScan1" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="0" ng-click="changeRadioEstate(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
+                                    <input type="radio" id="radioScan1" class="imageRadio" ng-model="userData.cfgScanningCustomRowCol" value="0" ng-click="changeRadioState(userData.cfgScanningCustomRowCol, 'ScanningCustomRowCol')" ng-show="false">
                                         <label for="radioScan1"><img class="img-configRadio" ng-src={{img.cfgScanningCustom}}/></label>
                                 </div>
                                 <div class="col-xs-6">
@@ -784,6 +799,72 @@
                                         <div class="col-xs-2">
                                             <input type="checkbox" id="switch9" class="switch" ng-model="userData.cfgScanStartClick" ng-click="changeOnOff(userData.cfgScanStartClick, 'ScanStartClick')" ng-show="false"/>
                                                 <label for="switch9" ng-show="userData.cfgScanningAutoOnOff&&!(userData.cfgUsageMouseOneCTwoC=='2')">&nbsp;</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-6">Color del marc:</div>
+                                        <div class="col-xs-6" id="colorSelect">
+                                            <input type="radio" id="radioColorSelect1" class="imageRadio" ng-model="userData.cfgScanColor" value="7EFF54" ng-click="changeRadioState(userData.cfgScanColor, 'ScanColor')" ng-show="false">
+                                                <label for="radioColorSelect1" style="background-color:#7EFF54"><div ng-show="!(userData.cfgScanColor=='7EFF54')">&nbsp;&nbsp;&nbsp;</div><div ng-show="userData.cfgScanColor=='7EFF54'" class="icon-ok"></div></label>
+                                            <input type="radio" id="radioColorSelect2" class="imageRadio" ng-model="userData.cfgScanColor" value="FF0000" ng-click="changeRadioState(userData.cfgScanColor, 'ScanColor')" ng-show="false">
+                                                <label for="radioColorSelect2" style="background-color:#FF0000"><div ng-show="!(userData.cfgScanColor=='FF0000')">&nbsp;&nbsp;&nbsp;</div><div ng-show="userData.cfgScanColor=='FF0000'" class="icon-ok"></div></label>
+                                            <input type="radio" id="radioColorSelect3" class="imageRadio" ng-model="userData.cfgScanColor" value="8E0B92" ng-click="changeRadioState(userData.cfgScanColor, 'ScanColor')" ng-show="false">
+                                                <label for="radioColorSelect3" style="background-color:#8E0B92"><div ng-show="!(userData.cfgScanColor=='8E0B92')">&nbsp;&nbsp;&nbsp;</div><div ng-show="userData.cfgScanColor=='8E0B92'" class="icon-ok"></div></label>
+                                            <input type="radio" id="radioColorSelect4" class="imageRadio" ng-model="userData.cfgScanColor" value="2E758A" ng-click="changeRadioState(userData.cfgScanColor, 'ScanColor')" ng-show="false">
+                                                <label for="radioColorSelect4" style="background-color:#2E758A"><div ng-show="!(userData.cfgScanColor=='2E758A')">&nbsp;&nbsp;&nbsp;</div><div ng-show="userData.cfgScanColor=='2E758A'" class="icon-ok"></div></label>
+                                            <input type="radio" id="radioColorSelect5" class="imageRadio" ng-model="userData.cfgScanColor" value="000000" ng-click="changeRadioState(userData.cfgScanColor, 'ScanColor')" ng-show="false">
+                                                <label for="radioColorSelect5" style="background-color:#000000"><div ng-show="!(userData.cfgScanColor=='000000')">&nbsp;&nbsp;&nbsp;</div><div ng-show="userData.cfgScanColor=='000000'" class="icon-ok"></div></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row verticalMarginTop">
+                                <div class="col-xs-6 paddingLeft" id="scanOrder">
+                                    <div class="row">Ordre del sistema d'escaneig:</div>
+                                    <div class="row verticalMarginTop">
+                                        <div class="col-xs-11 col-xs-offset-1">
+                                            <input type="radio" id="radioScanOrder1" class="imageRadio" ng-model="userData.scanOrder" value="132" ng-click="changeScanOrder(userData.scanOrder)" ng-show="false">
+                                                <label for="radioScanOrder1" ng-show="userData.scanOrder==123"><img class="img-configRadio" ng-src={{img.scanOrder123}}/></label>
+
+                                            <input type="radio" id="radioScanOrder2" class="imageRadio" ng-model="userData.scanOrder" value="213" ng-click="changeScanOrder(userData.scanOrder)" ng-show="false">
+                                                <label for="radioScanOrder2" ng-show="userData.scanOrder==132"><img class="img-configRadio" ng-src={{img.scanOrder132}}/></label>
+
+                                            <input type="radio" id="radioScanOrder3" class="imageRadio" ng-model="userData.scanOrder" value="312" ng-click="changeScanOrder(userData.scanOrder)" ng-show="false">
+                                                <label for="radioScanOrder3" ng-show="userData.scanOrder==213"><img class="img-configRadio" ng-src={{img.scanOrder213}}/></label>
+
+                                            <input type="radio" id="radioScanOrder5" class="imageRadio" ng-model="userData.scanOrder" value="231" ng-click="changeScanOrder(userData.scanOrder)" ng-show="false">
+                                                <label for="radioScanOrder5" ng-show="userData.scanOrder==312"><img class="img-configRadio" ng-src={{img.scanOrder312}}/></label>
+
+                                            <input type="radio" id="radioScanOrder4" class="imageRadio" ng-model="userData.scanOrder" value="321" ng-click="changeScanOrder(userData.scanOrder)" ng-show="false">
+                                                <label for="radioScanOrder4" ng-show="userData.scanOrder==231"><img class="img-configRadio" ng-src={{img.scanOrder231}}/></label>
+
+                                            <input type="radio" id="radioScanOrder6" class="imageRadio" ng-model="userData.scanOrder" value="123" ng-click="changeScanOrder(userData.scanOrder)" ng-show="false">
+                                                <label for="radioScanOrder6" ng-show="userData.scanOrder==321"><img class="img-configRadio" ng-src={{img.scanOrder321}}/></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 ">
+                                    <div class="row">&nbsp;</div>
+                                    <div class="row">&nbsp;</div>
+                                    <div class="row">
+                                        <div class="col-xs-8 col-xs-offset-1">
+                                            <div ng-show="userData.scanOrder==123||userData.scanOrder==132">1.Sistema de predicció</div>
+                                            <div ng-show="userData.scanOrder==213||userData.scanOrder==312">1.Barra de menu</div>
+                                            <div ng-show="userData.scanOrder==321||userData.scanOrder==231">1.Panell de pictogrames</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-8 col-xs-offset-1">
+                                            <div ng-show="userData.scanOrder==231||userData.scanOrder==213">2.Sistema de predicció</div>
+                                            <div ng-show="userData.scanOrder==123||userData.scanOrder==321">2.Barra de menu</div>
+                                            <div ng-show="userData.scanOrder==312||userData.scanOrder==132">2.Panell de pictogrames</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-8 col-xs-offset-1">
+                                            <div ng-show="userData.scanOrder==321||userData.scanOrder==312">3.Sistema de predicció</div>
+                                            <div ng-show="userData.scanOrder==231||userData.scanOrder==132">3.Barra de menu</div>
+                                            <div ng-show="userData.scanOrder==213||userData.scanOrder==123">3.Panell de pictogrames</div>
                                         </div>
                                     </div>
                                 </div>
