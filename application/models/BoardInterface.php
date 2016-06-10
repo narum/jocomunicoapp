@@ -732,9 +732,6 @@ class BoardInterface extends CI_Model {
         $this->db->where('ID_RBoard', $idSrc);
         $this->db->join('r_boardcell', 'r_boardcell.ID_RCell = cell.ID_Cell', 'left');
         $query = $this->db->get('cell');
-        if ($sameGroupBoard === 1) {
-            $row->boardLink = null;
-        }
         foreach ($query->result() as $row) {
             if ($sameGroupBoard === 0) {
                 $row->boardLink = null;
@@ -921,11 +918,9 @@ class BoardInterface extends CI_Model {
 
     function getImgCell($id) {
         $idusu = $this->session->userdata('idusu');
-        $this->db->order_by('R_S_HistoricPictograms.ID_RSHPSentencePicto', 'desc');
-        $this->db->where('S_Historic.ID_SHUser', $idusu);
-        $this->db->where('R_S_HistoricPictograms.pictoid', $id);
-        $this->db->join('S_Historic', 'S_Historic.ID_SHistoric = R_S_HistoricPictograms.ID_RSHPSentence');
-        $query = $this->db->get('R_S_HistoricPictograms');
+        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $idusu);
+        $this->db->where('P_StatsUserPicto.pictoid', $id);
+        $query = $this->db->get('P_StatsUserPicto');
         if ($query->num_rows() > 0) {
             $aux = $query->result();
             return $aux[0]->imgtemp;
@@ -939,6 +934,14 @@ class BoardInterface extends CI_Model {
         );
         $this->db->where('ID_Cell', $id);
         $this->db->update('Cell', $data);
+        
+        $this->db->where('ID_Cell', $id);
+        $query = $this->db->get('Cell');
+        if ($query->num_rows() > 0) {
+            $aux = $query->result();
+            return $aux[0]->ID_CPicto;
+        } else
+            return null;
     }
 
     function getColors() {

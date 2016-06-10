@@ -1305,7 +1305,7 @@ angular.module('controllers', [])
                 var maxCustomScanBlockProv = 0;
                 for (var i = 0; i < $scope.arrayScannedCells.length; i++) {
                     if ($scope.arrayScannedCells[i].customScanBlock2 > maxCustomScanBlockProv) {
-                        maxCustomScanBlockProv = $scope.arrayScannedCells[i].customScanBlock1;
+                        maxCustomScanBlockProv = $scope.arrayScannedCells[i].customScanBlock2;
                     }
                 }
                 $scope.maxCustomScanBlock = maxCustomScanBlockProv;
@@ -1656,9 +1656,12 @@ angular.module('controllers', [])
                 $scope.searchFolderHeight = 0;
 
                 $scope.puntuando = false;
-                $scope.tense = "defecte";
-                $scope.tipusfrase = "defecte";
-                $scope.negativa = false;
+                if (!$scope.tense)
+                    $scope.tense = "defecte";
+                if (!$scope.tipusfrase)
+                    $scope.tipusfrase = "defecte";
+                if (!$scope.negativa)
+                    $scope.negativa = false;
                 $scope.SearchType = "Tots";
                 $scope.inEdit = false;
                 $scope.inScan = false;
@@ -1677,7 +1680,7 @@ angular.module('controllers', [])
                 if ($scope.cfgPredOnOff === '1' && $scope.cfgPredBarVertHor === '0') { // Prediction on and vertical
                     $scope.predViewWidth = 1;
                     $scope.userViewWidth = 11;
-                    if (window.innerWidth < 1050) {
+                    if (window.innerWidth < 1250) {
                         $scope.predViewWidth = 2;
                         $scope.userViewWidth = 10;
                     }
@@ -1835,8 +1838,8 @@ angular.module('controllers', [])
                 $http.post(url, postdata).success(function (response)
                 {
                     $scope.evt.nameboard = response.name;
-                    $scope.evt.altura = $scope.range(12)[response.row - 1].valueOf();
-                    $scope.evt.amplada = $scope.range(12)[response.col - 1].valueOf();
+                    $scope.evt.altura = $scope.range(10)[response.row - 1].valueOf();
+                    $scope.evt.amplada = $scope.range(10)[response.col - 1].valueOf();
                     $scope.evt.autoreturn = (response.autoReturn === '1' ? true : false);
                     $scope.evt.autoread = (response.autoRead === '1' ? true : false);
 
@@ -2041,24 +2044,9 @@ angular.module('controllers', [])
                         } else {
                             text = cell.textInCell;
                         }
-                        var postdata = {text: text};
-                        var url = $scope.baseurl + "Board/readText";
-                        $http.post(url, postdata).then(function (response) {
-                            $scope.dataAudio = response.audio;
-                            if ($scope.dataAudio[1]) {
-                                txtContent("errorVoices").then(function (content) {
-                                    $scope.errorMessage = content.data[$scope.dataAudio[3]];
-                                    $scope.errorCode = $scope.dataAudio[3];
-                                    $('#errorVoicesModal').modal({backdrop: 'static'});
-                                });
-                            } else {
-                                $scope.sound = "mp3/" + $scope.dataAudio[0];
-                                $timeout(function () {
-                                    $('#utterance').get(0).play();
-                                });
-                            }
-                        });
+
                         $scope.showBoard(cell.boardLink);
+                        $scope.readText(text, true);
                         readed = true;
                     }
                     if (cell.ID_CFunction !== null) {
@@ -2069,7 +2057,12 @@ angular.module('controllers', [])
                         } else {
                             text = cell.textFunction;
                         }
-                        $scope.clickOnFunction(cell.ID_CFunction, text);
+                        $scope.clickOnFunction(cell.ID_CFunction);
+                        $scope.readText(text, true);
+                    }
+                    if (cell.boardLink === null) {
+                        $scope.autoReturn();
+                        $scope.autoRead();
                     }
                 } else if ($scope.inEdit && $scope.fv.painting) {
                     var postdata = {id: cell.ID_RCell, color: $scope.fv.colorPaintingSelected};
@@ -2083,7 +2076,25 @@ angular.module('controllers', [])
                     });
                 }
             };
-
+            $scope.readText = function (text, bool) {
+                $scope.sound = "mp3/empty.m4a";
+                var postdata = {text: text, interface: bool};
+                var url = $scope.baseurl + "Board/readText";
+                $http.post(url, postdata).success(function (response) {
+                    $scope.dataAudio = response.audio;
+                    if ($scope.dataAudio[1]) {
+                        txtContent("errorVoices").then(function (content) {
+                            $scope.errorMessage = content.data[$scope.dataAudio[3]];
+                            $scope.errorCode = $scope.dataAudio[3];
+                            $('#errorVoicesModal').modal({backdrop: 'static'});
+                        });
+                    } else {
+                        $scope.sound = "mp3/" + $scope.dataAudio[0];
+                        var audiotoplay = $('#utterance');
+                        audiotoplay.src = "mp3/" + $scope.dataAudio[0];
+                    }
+                });
+            }
             /*
              * If this option is true on confing, it will automatic click when mouse is over the div and the timeout ends.
              */
@@ -2173,32 +2184,16 @@ angular.module('controllers', [])
                     }
 
                     var url = $scope.baseurl + "Board/addWord";
-                    var postdata = {id: id, imgtemp: img, text: text};
+                    var postdata = {id: id, imgtemp: img};
 
                     $http.post(url, postdata).success(function (response)
                     {
                         $scope.dataTemp = response.data;
                         $scope.info = "";
-                        $scope.dataAudio = response.audio;
 
-                        if ($scope.dataAudio[1]) {
-                            txtContent("errorVoices").then(function (content) {
-                                $scope.errorMessage = content.data[$scope.dataAudio[3]];
-                                $scope.errorCode = $scope.dataAudio[3];
-                                $('#errorVoicesModal').modal({backdrop: 'static'});
-                            });
-                        } else {
-                            $scope.sound = "mp3/" + $scope.dataAudio[0];
-                            $timeout(function () {
-                                $('#utterance').get(0).play();
-                            });
-                        }
-
+                        $scope.readText(text, true);
                         $scope.getPred();
                     });
-
-                    $scope.autoReturn();
-                    $scope.autoRead();
                 }
                 //MODIF: comentario op por parte de jordi
                 if ($scope.cfgTimeNoRepeatedClickOnOff === 1)
@@ -2239,28 +2234,14 @@ angular.module('controllers', [])
              * If you click in a function (not a pictogram) this controller carry you
              * to the specific function
              */
-            $scope.clickOnFunction = function (id, text) {
+            $scope.clickOnFunction = function (id) {
                 var url = $scope.baseurl + "Board/getFunction";
-                var postdata = {id: id, text: text, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
+                var postdata = {id: id, tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
                 $http.post(url, postdata).success(function (response)
                 {
-                    $scope.dataAudio = response.audio;
-
-                    if ($scope.dataAudio[1]) {
-                        txtContent("errorVoices").then(function (content) {
-                            $scope.errorMessage = content.data[$scope.dataAudio[3]];
-                            $scope.errorCode = $scope.dataAudio[3];
-                            $('#errorVoicesModal').modal({backdrop: 'static'});
-                        });
-                    } else {
-                        $scope.sound = "mp3/" + $scope.dataAudio[0];
-                        $timeout(function () {
-                            $('#utterance').get(0).play();
-                        });
-                    }
-
                     var control = response.control;
+
                     $scope.dataTemp = response.data;
                     $scope.tense = response.tense;
                     $scope.tipusfrase = response.tipusfrase;
@@ -2273,14 +2254,24 @@ angular.module('controllers', [])
                         {
                             if (control !== "generate") {
                                 $scope.dataTemp = response.data;
+                                if (control === "deleteAllWords") {
+                                    $scope.tense = "defecte";
+                                    $scope.tipusfrase = "defecte";
+                                    $scope.negativa = false;
+                                }
+                            } else {
+                                $scope.tense = "defecte";
+                                $scope.tipusfrase = "defecte";
+                                $scope.negativa = false
+
+                                $scope.readText($scope.info.frasefinal, false);
                             }
                             $scope.info = response.info;
+
                         });
                     } else if ((control === "home")) {
                         $scope.config();
                     }
-                    $scope.autoReturn();
-                    $scope.autoRead();
                 });
             };
             /*
@@ -2305,6 +2296,10 @@ angular.module('controllers', [])
 
                 $http.post(url).success(function (response)
                 {
+
+                    $scope.tense = "defecte";
+                    $scope.tipusfrase = "defecte";
+                    $scope.negativa = false;
                     $scope.dataTemp = response.data;
                     $scope.info = "";
                     $scope.getPred();
@@ -2328,34 +2323,16 @@ angular.module('controllers', [])
                     //$scope.dataTemp = response.data;
                     $scope.info = response.info;
                     //$scope.data = response.data;
-                    $scope.dataAudio = response.audio;
 
-                    if ($scope.dataAudio[1]) {
-                        txtContent("errorVoices").then(function (content) {
-                            $scope.errorMessage = content.data[$scope.dataAudio[3]];
-                            $scope.errorCode = $scope.dataAudio[3];
-                            $('#errorVoicesModal').modal({backdrop: 'static'});
-                        });
-                    } else {
-                        $scope.sound = "mp3/" + $scope.dataAudio[0];
-                        $timeout(function () {
-                            $('#utterance').get(0).play();
-                        });
-                    }
                     if ($scope.cfgUserExpansionFeedback) {
                         $scope.puntuar();
-
-
-
                     }
-
+                    $scope.readText($scope.info.frasefinal, false);
                     $scope.getPred();
                 });
                 $scope.tense = "defecte";
                 $scope.tipusfrase = "defecte";
                 $scope.negativa = false;
-
-
             };
             //Show the feedback panel, scanning it if inScan is true
             $scope.puntuar = function () {
@@ -2385,7 +2362,7 @@ angular.module('controllers', [])
 
             };
 
-            $scope.playSentenceAudio = function ()
+            $scope.playSentenceAudio = function () //MODIF esto se usa?
             {
                 var postdata = {voice: 0, sentence: $scope.info.frasefinal};//MODIF: canviar ek voice per cfg
                 var URL = $scope.baseurl + "Board/getAudioSentence";
@@ -2410,7 +2387,7 @@ angular.module('controllers', [])
 
                         });
             };
-            $scope.playPictoAudio = function (text)
+            $scope.playPictoAudio = function (text) //esto se usa?
             {
                 var postdata = {voice: 0, sentence: text};//MODIF: canviar ek voice per cfg
                 var URL = $scope.baseurl + "Board/getAudioSentence";
@@ -2614,8 +2591,8 @@ angular.module('controllers', [])
                             {
 
                                 $scope.CreateBoardData = {CreateBoardName: '', height: response.defHeight.toString(), width: response.defWidth.toString(), idGroupBoard: response.ID_GB};
-                                $scope.CreateBoardData.height = $scope.range(12)[response.defHeight - 1].valueOf();
-                                $scope.CreateBoardData.width = $scope.range(12)[response.defWidth - 1].valueOf();
+                                $scope.CreateBoardData.height = $scope.range(10)[response.defHeight - 1].valueOf();
+                                $scope.CreateBoardData.width = $scope.range(10)[response.defWidth - 1].valueOf();
                                 //alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
                                 ngDialog.openConfirm({
                                     template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
@@ -2649,12 +2626,11 @@ angular.module('controllers', [])
                     var URL = $scope.baseurl + "Board/removeBoard";
                     $http.post(URL, postdata).success(function (response)
                     {
-                        if(response.idboard != null)
+                        if (response.idboard != null)
                         {
                             $scope.showBoard(response.idboard);
                             $scope.edit();
-                        }
-                        else{
+                        } else {
                             $location.path('/panelGroups');
                         }
                     });
@@ -2817,9 +2793,9 @@ angular.module('controllers', [])
                 $scope.getBoards();
                 $scope.colorSelected = $scope.Editinfo.color;
                 $scope.cellType = $scope.Editinfo.cellType;
-                $scope.numScanBlockText1 = $scope.range(12)[$scope.Editinfo.customScanBlock1 - 1];
+                $scope.numScanBlockText1 = $scope.range(10)[$scope.Editinfo.customScanBlock1 - 1];
                 $scope.textInScanBlockText1 = $scope.Editinfo.customScanBlockText1;
-                $scope.numScanBlockText2 = $scope.range(12)[$scope.Editinfo.customScanBlock2 - 1];
+                $scope.numScanBlockText2 = $scope.range(10)[$scope.Editinfo.customScanBlock2 - 1];
                 $scope.textInScanBlockText2 = $scope.Editinfo.customScanBlockText2;
                 $scope.idPictoEdit = $scope.Editinfo.ID_CPicto;
                 $scope.imgPictoEdit = $scope.Editinfo.imgPicto;
@@ -2951,7 +2927,7 @@ angular.module('controllers', [])
             $scope.range = function ($repeatnum)
             {
                 var n = [];
-                for (i = 0; i < $repeatnum; i++)
+                for (i = 1; i < $repeatnum; i++)
                 {
                     n.push(i);
                 }
@@ -3015,13 +2991,15 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
 
-                    var URL = $scope.baseurl + "PanelGroup/newGroupPanel";
+                    var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
 
 
                     $http.post(URL, $scope.CreateBoardData).success(function (response)
                     {
                         $rootScope.editPanelInfo = {idBoard: response.idBoard};
                         $location.path('/');
+                    }, function (value) {
+                        console.log(value);
                     });
 
                 }, function (value) {

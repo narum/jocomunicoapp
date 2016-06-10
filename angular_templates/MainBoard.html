@@ -7,15 +7,50 @@
 <style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;
     -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
+
+<script>
+    
+    var myVar;
+    var exit = 0;
+    
+    function audiohallelujah() {
+        console.log("audio");
+
+        var aux = document.getElementById('utterance');
+        aux.src="mp3/empty.m4a";
+        var audiotoplayinitial = aux.src;
+        
+        var myVar = setInterval(function(){ waitloop(audiotoplayinitial, myVar) }, 500);
+    }
+    
+    function waitloop(audiotoplayinitial, myVar) {
+        var aux = document.getElementById('utterance');
+        var audiotoplayfinal = aux.src;
+        
+        if (audiotoplayinitial !== audiotoplayfinal) {
+            exit = 0;
+            aux.play();
+            clearInterval(myVar);
+        }
+        
+        exit = exit+1;
+        
+        if (exit > 8) {
+            exit = 0;
+            clearInterval(myVar);
+        }
+    }
+</script>
+
 <!--menu superior dropdown-->
 <div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
 <div id="main" style="background-image: url('/img/srcWeb/fons.png');background-size:100% 100%">
                   
-    <div class="row mainBoard" ng-init="config()" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()">
+    <div class="row mainBoard" ng-init="config()" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()" ng-style="!inEdit ? {'padding':'3px'}:{}" onmousedown="audiohallelujah()">
 
         <div  ng-if="(cfgPredOnOff === '1' && cfgPredBarVertHor === '0')" id="predView" ng-if="inPred" class="col-xs-{{predViewWidth}}">
             <div  class="row fullheight">
-                <div class="col-sm-12" ng-include="baseurl + '/angular_templates/PredView.html'">
+                <div class="col-xs-12" ng-include="baseurl + '/angular_templates/PredView.html'">
                 </div>
             </div>
         </div>
@@ -35,7 +70,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-12 " ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}" ng-click="isClickEnable()?clickOnCell(picto):null" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(0,picto):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit && !fv.painting" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true" >
+                    <div class="col-xs-12 " ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}" ng-mousedown="isClickEnable()?clickOnCell(picto):null" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(0,picto):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit && !fv.painting" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true" >
                         <img ng-if="picto.boardLink != null" class="sfolder" ng-src="{{baseurl}}img/srcWeb/folder.png"/>
                         
                         <div class="backgroundCell" ng-style="{'background-color':'#{{picto.color}}'}"></div>
@@ -78,12 +113,12 @@
 
         <div ng-if="inEdit" class="col-xs-{{editViewWidth}} fullheight" style="height:{{userViewHeight}}%">
             <div id="trashview" class="row fullheight">
-                <div class="col-sm-12" ng-include="baseurl + '/angular_templates/EditViewTrash.html'">
+                <div class="col-xs-12" ng-include="baseurl + '/angular_templates/EditViewTrash.html'">
 
                 </div>
             </div>
             <div id="searchView" class="row fullheight">
-                <div class="col-sm-12" ng-include="baseurl + '/angular_templates/EditView.html'">
+                <div class="col-xs-12" ng-include="baseurl + '/angular_templates/EditView.html'">
 
                 </div>
             </div>

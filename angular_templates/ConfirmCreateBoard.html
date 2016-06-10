@@ -9,13 +9,13 @@
             <div class="col-xs-3 text-right paddingTextRight"> {{content.rows}}</div>
             <select class=" col-xs-2 dropdown-arrow confirm"
                     ng-model="CreateBoardData.height"
-                    ng-options="h for h in range(20)"
+                    ng-options="h for h in range(10)"
                     >
             </select>
             <div class="col-xs-2 text-right paddingTextRight" style="margin-left: 10px"> {{content.columns}}</div>
             <select class="col-xs-2 dropdown-arrow confirm"
                     ng-model="CreateBoardData.width"
-                    ng-options="w for w in range(20)">
+                    ng-options="w for w in range(10)">
             </select>
         </div>
         <p class="text-center" style="height: 10%">{{content.createBoard}}</p>
