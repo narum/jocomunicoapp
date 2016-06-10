@@ -13,7 +13,7 @@
     </div>
 </div>
 <!-- I know there is a lot of condition here. I will try to explain. The picto text have to be displayed only if there is no error or no phrase the sentencecell have to contain the img an the picto text, so we have to expand the it. If there is one of both (error or frase) the sentencecell is shorter (but not the img picto, the picto text is removed) and the error or phrase will be displayed in the same space where the imgpicto was.-->
-<div class="col-xs-{{pictoBarWidth}} prediction imgRounded PaddingSent" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-01.png)">
+<div class="col-xs-{{pictoBarWidth}} prediction imgRounded PaddingSent" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-01.png)" id="idSentenceBar">
     <div class="col-xs-12 imgRounded" style="background-image:url({{baseurl}}img/srcWeb/Menu/sentenceFieldLong.png); background-size: 100% 100%;">
         <div class="sentencePadding col-xs-10 fullheight" >
             <!--If there is no error or frase to show, under picto will be displayed the picto text so we have to adapt the content height to keep the img with the same height-->

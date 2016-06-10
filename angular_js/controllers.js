@@ -1052,11 +1052,13 @@ angular.module('controllers', [])
                 }
                 Resources.main.save({'IdU': $rootScope.userId, 'text': $scope.content.voicePlay, 'voice': voice, 'type': type, 'language': $scope.userData.ID_ULanguage, 'rate': '0'}, {'funct': "generateAudio"}).$promise
                         .then(function (results) {
-                            console.log(results);
                             if (results[1]) {
                                 txtContent("errorVoices").then(function (content) {
-                                    $scope.errorMessage = content.data[results[3]];
-                                    $scope.errorCode = results[3];
+                                    $scope.errorVoicesTitle = content.data.errorVoicesTitle;
+                                    $scope.errorVoicesSentence = content.data.error;
+                                    $scope.errorVoicesOk = content.data.ok;
+                                    $scope.errorVoicesMessage = content.data[results[3]];
+                                    $scope.errorVoicesCode = results[3];
                                     $('#errorVoicesModal').modal({backdrop: 'static'});
                                 });
                             } else {
@@ -1111,6 +1113,11 @@ angular.module('controllers', [])
             $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
             $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
             $rootScope.dropdownMenuBar = [];
+            //SentenceBar button to open dropdown menu bar when hover
+            $("#idSentenceBar").hover(function() {
+                console.log('hover');
+                $scope.dropdownMenuOpen=true;
+            });
             //Choose the buttons to show on bar
             dropdownMenuBarInit($rootScope.interfaceLanguageId)
             .then(function () {
