@@ -1,10 +1,6 @@
 @charset "UTF-8";
 /* CSS Document */
 @-ms-viewport { width: device-width; zoom:1.0; }
-* {
-  -ms-content-zooming: none;
-  touch-action: none;
-}
 .fullheight{
     height:100%;
 }
@@ -42,7 +38,7 @@ input:focus{
     width: 35px;
     border-top-right-radius: 10px;
     top: -5px;
-    
+
 }
 .textNoOverflow{
     text-overflow: ellipsis;
@@ -58,7 +54,7 @@ input:focus{
     background: -ms-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
     background: linear-gradient(to bottom, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
     background-color: #2d2d2d;
-    
+
     max-height: 40px;
     height: 100%;
     border-radius: 5px;
@@ -74,7 +70,7 @@ input:focus{
     background: -ms-linear-gradient(top, rgba(138, 138, 138,0) 0%,rgba(138, 138, 138,0.2) 20%,rgba(138, 138, 138,0.4) 40%,rgba(138, 138, 138,0.6) 60%,rgba(138, 138, 138,0.8) 80%,rgba(138, 138, 138,1) 100%);
     background: linear-gradient(to bottom, rgba(138, 138, 138,0) 0%,rgba(138, 138, 138,0.2) 20%,rgba(138, 138, 138,0.4) 40%,rgba(138, 138, 138,0.6) 60%,rgba(138, 138, 138,0.8) 80%,rgba(138, 138, 138,1) 100%);
     background-color: #acacac;
-    
+
     max-height: 40px;
     height: 100%;
     border-radius: 5px;
@@ -169,7 +165,7 @@ input:focus{
 }
 .confirmContent{
     padding: 2vh;
-        
+
 }
 .confirmButtons{
     height:30%;
@@ -182,7 +178,7 @@ input:focus{
 .dropdown-arrow{
     -webkit-appearance: none;
     -moz-appearance:none;
-    background: url("/img/srcWeb/boto_desplegable.jpg") no-repeat right #fff;
+    background: url("/img/icons/boto_desplegable.jpg") no-repeat right #fff;
     background-size: 3vh 3vh;
     border: 0px;
     height: 3vh;
@@ -414,8 +410,15 @@ input.switch:checked ~ label:after
 .selectFolder{
     float: right;
 }
+.currentGB{
+    background-image: url('/img/srcWeb/Edit/carpeta_grupboard.png');
+    background-size: 100% 100%;
+    height: 100%;
+    padding-left: 5px;
+    padding-top: 5px;
+}
 .paddinFolderButton{
-    padding-right: 3vh;
+    padding-right: 2vh;
 }
 .colorFolderPadding
 {

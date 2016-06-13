@@ -107,6 +107,7 @@ class Board extends REST_Controller {
         if ($output != null) {
             $columns = $output[0]->width;
             $rows = $output[0]->height;
+            $autoReturn = $output[0]->autoReturn;
 
             $array = $this->BoardInterface->getCellsBoard($idboard);
 
@@ -114,7 +115,8 @@ class Board extends REST_Controller {
             $response = [
                 'col' => $columns,
                 'row' => $rows,
-                'data' => $array
+                'data' => $array,
+                'autoRead' => $autoRead
             ];
 
             $this->response($response, REST_Controller::HTTP_OK);
@@ -251,7 +253,7 @@ class Board extends REST_Controller {
             }
         }
     }
-    
+
     /*
      * Add the clicked word (pictogram) in the S_Temp database table.
      * Then, get the entire sentence from this table.
@@ -385,11 +387,11 @@ class Board extends REST_Controller {
 //            if ($info['frasefinal'] == ""){
 //                $response = null;
 //            }else{
-            
+
             $response = [
                 'info' => $info
             ];
-            
+
             $this->response($response, REST_Controller::HTTP_OK);
         }
     }
@@ -413,7 +415,7 @@ class Board extends REST_Controller {
      */
 
     public function getPrimaryUserBoard_post() {
-        
+
         $board = $this->BoardInterface->getPrimaryGroupBoard();
         $primaryBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
 
@@ -435,10 +437,12 @@ class Board extends REST_Controller {
         $board = $this->BoardInterface->getIDGroupBoards($idboard);
         $boards = $this->BoardInterface->getBoards($board[0]->ID_GBBoard);
         $primaryBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
+        $nameGBoard = $this->BoardInterface->getInfoGroupBoard($board[0]->ID_GBBoard);
 
         $response = [
             'boards' => $boards,
-            'primaryBoard' => $primaryBoard[0]
+            'primaryBoard' => $primaryBoard[0],
+            'name' => $nameGBoard[0]->GBname
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
@@ -483,7 +487,7 @@ class Board extends REST_Controller {
 
         $newdata = $this->inserty($data);
 
-         $response = [
+        $response = [
             'tense' => $tense,
             'tipusfrase' => $tipusfrase,
             'negativa' => $negativa,
@@ -646,7 +650,7 @@ class Board extends REST_Controller {
         $this->BoardInterface->updateMetaCell($id, $visible, $textInCell, $isFixed, $idFunct, $boardLink, $idPicto, $idSentence, $idSFolder, $cellType, $color, $imgCell);
         $this->BoardInterface->updateScanCell($id, $numScanBlockText1, $textInScanBlockText1, $numScanBlockText2, $textInScanBlockText2);
     }
-    
+
     public function changeImgCell_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -654,7 +658,7 @@ class Board extends REST_Controller {
         $posInBoard = $request->pos;
         $imgCell = $request->imgCell;
         $idusu = $this->session->userdata('idusu');
-        
+
         $cell = $this->BoardInterface->getIDCell($posInBoard, $id);
         $idPicto = $this->BoardInterface->updateImgCell($cell[0]->ID_RCell, $imgCell);
         $data = $this->BoardInterface->getCellsBoard($id);
@@ -758,8 +762,8 @@ class Board extends REST_Controller {
         $primaryboard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GBBoard);
         $boards = $this->BoardInterface->getBoards($board[0]->ID_GBBoard);
         $primaryboardID = $primaryboard[0]->ID_Board;
-        if($id == $primaryboardID){
-            for($x = 0; $boards[$x] != NULL; $x++){
+        if ($id == $primaryboardID) {
+            for ($x = 0; $boards[$x] != NULL; $x++) {
                 $cell = $this->BoardInterface->getCellsBoard($boards[$x]->ID_Board);
                 for ($i = 0; $i < count($cell); $i++) {
                     $this->BoardInterface->removeCell($cell[$i]->ID_RCell, $boards[$x]->ID_Board);
@@ -774,9 +778,8 @@ class Board extends REST_Controller {
                 'idboard' => null
             ];
             $this->response($response, REST_Controller::HTTP_OK);
-        }
-        else{
-            
+        } else {
+
             $cell = $this->BoardInterface->getCellsBoard($id);
             for ($i = 0; $i < count($cell); $i++) {
                 $this->BoardInterface->removeCell($cell[$i]->ID_RCell, $id);
@@ -807,8 +810,8 @@ class Board extends REST_Controller {
         $name = $request->CreateBoardName;
         $width = $request->width;
         $height = $request->height;
-        $autoReturn = $request->autoreturn ? '1': '0';
-        $autoReadSentence = $request->autoread ? '1': '0';
+        $autoReturn = $request->autoreturn ? '1' : '0';
+        $autoReadSentence = $request->autoread ? '1' : '0';
 
         $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
         $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
@@ -845,7 +848,7 @@ class Board extends REST_Controller {
         $request = json_decode($postdata);
         $id = $request->idboard;
         $type = $request->type;
-        switch ($type){
+        switch ($type) {
             case 0:
                 $max = $this->BoardInterface->getMaxScanBlock1($id);
                 break;
@@ -869,8 +872,8 @@ class Board extends REST_Controller {
         $id = $request->idboard;
         $type = $request->type;
         $scanGroup = $request->scanGroup;
-        
-        switch ($type){
+
+        switch ($type) {
             case 0:
                 $max = $this->BoardInterface->getMaxScanBlock2($id, $scanGroup);
                 break;
@@ -881,7 +884,7 @@ class Board extends REST_Controller {
                 $max = $this->BoardInterface->getRows($id);
                 break;
         }
-        
+
         if ($max != null) {
             $response = [
                 'max' => $max
@@ -936,8 +939,8 @@ class Board extends REST_Controller {
         // CARGA recommenderArray                 
         $prediction = new Myprediction();
         $recommenderArray = $prediction->getPrediction();
-        
-        for ($i = 0; $i < count($recommenderArray); $i++){
+
+        for ($i = 0; $i < count($recommenderArray); $i++) {
             $img = $this->BoardInterface->getImgCell($recommenderArray[$i]->pictoid);
             $recommenderArray[$i]->imgtemp = $img;
         }
@@ -967,21 +970,22 @@ class Board extends REST_Controller {
 
         $this->BoardInterface->modifyColorCell($id, $color);
     }
-    
+
     /*
      * Generate audio
      */
-    public function readText_post(){
+
+    public function readText_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $text = $request->text;
         $interface = $request->interface;
         $idusu = $this->session->userdata('idusu');
-        
+
         // GENERAR AUDIO
         $audio = new Myaudio();
         $aux = $audio->generateAudio($idusu, $text, $interface);
-        
+
         $audio->waitForFile($aux[0], $aux[1]);
 
         $response = [
@@ -990,14 +994,15 @@ class Board extends REST_Controller {
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
+
     public function getColors_post() {
         $data = $this->BoardInterface->getColors();
-        
+
         $response = [
             'data' => $data
         ];
-        
+
         $this->response($response, REST_Controller::HTTP_OK);
     }
+
 }

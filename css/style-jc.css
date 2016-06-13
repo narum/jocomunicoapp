@@ -1,7 +1,10 @@
 @charset "UTF-8";
 /* CSS Document */
 /*MODIF: mi idea era poner aqui lo comun*/
-
+* {
+    -ms-content-zooming: none;
+    touch-action: none;
+}
 #main{
     height:100vh;
     -webkit-user-select: none;
@@ -106,7 +109,7 @@ html *
 }
 .paddingFolder
 {
-    padding: 4vh 4vh;
+    padding: 4vh 2vh;
 }
 .PaddingSent
 {

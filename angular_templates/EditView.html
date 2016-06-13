@@ -1,14 +1,14 @@
 <div class="row">
-    <div class="col-xs-12 searchTab" style="background-image:url({{baseurl}}img/srcWeb/Patterns1-08.png);">
+    <div class="col-xs-12 searchTab" style="background-image:url({{baseurl}}img/srcWeb/patterns/pattern3.png);">
         <div class="searchTabDisable" ng-if="typeSearh == 'img'" ng-click="changeEditSearch();">
         </div>
     </div>
-    <div class="col-xs-12 searchTab" style="background-image:url({{baseurl}}img/srcWeb/Patterns1-08.png);">
+    <div class="col-xs-12 searchTab" style="background-image:url({{baseurl}}img/srcWeb/patterns/pattern3.png);">
         <div class="searchTabDisable" ng-if="typeSearh == 'picto'" ng-click="changeEditSearch();">
         </div>
     </div>
 </div>
-<div class="row searchPadding" style="background-image:url({{baseurl}}img/srcWeb/Patterns1-09.png);">
+<div class="row searchPadding" style="background-image:url({{baseurl}}img/srcWeb/patterns/pattern4.png);">
     <div ng-show="typeSearh == 'picto'" ng-init="search('', 'Tots')">
         <div class="col-xs-12 content1nocolor">
             <input type="text" class="searchBox" ng-model="pictoEditSearch" ng-keyup="search(pictoEditSearch, SearchType);" placeholder="{{content.placeholderSearch}}"/><br>

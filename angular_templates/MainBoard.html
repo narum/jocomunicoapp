@@ -45,7 +45,7 @@
 <!--menu superior dropdown-->
 <div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
 <div ng-include="'/angular_templates/logoutModal.html'"></div>
-<div id="main" style="background-image: url('/img/srcWeb/fons.png');background-size:100% 100%">
+<div id="main" style="background-image: url('/img/srcWeb/patterns/fons.png');background-size:100% 100%">
                   
     <div class="row mainBoard" ng-init="config()" ng-click="scanLeftClick()" ng-right-click="scanRightClick()" ng-mousedown="playLongClick()" ng-mouseup="cancelLongClick()" ng-style="!inEdit ? {'padding':'3px'}:{}" onmousedown="audiohallelujah()">
 
@@ -63,7 +63,7 @@
             </div>
 
             <div class="col-xs-12" style="height:{{boardHeight}}%">
-                <div class="row fullheight imgRounded boardPadding" style="background-image: url(img/srcWeb/Patterns1-08.png)">
+                <div class="row fullheight imgRounded boardPadding" style="background-image: url(img/srcWeb/patterns/pattern{{cfgBgColorPanel}}.png)">
 
                     <div ng-if="inScan && isScanningCancel == true" class="imgRounded returnScanContainer" style="position: absolute;">
                         <div class="imgRounded returnScanContent">
@@ -72,21 +72,21 @@
                     </div>
 
                     <div class="col-xs-12 " ng-repeat="picto in data" ng-style="{'width':'{{100 / columns}}%','height':'{{100 / rows}}% '}" ng-mousedown="isClickEnable()?clickOnCell(picto):null" ng-right-click="openEditCellMenu({{picto.posInBoard}});" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(0,picto):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null" ng-drop="inEdit" ng-drop-success="onDropSwap({{picto.posInBoard}},$data,$event)" ng-drag="inEdit && !fv.painting" ng-drag-data="{posInBoardPicto:'{{picto.posInBoard}}'}" data-allow-transform="true" >
-                        <img ng-if="picto.boardLink != null" class="sfolder" ng-src="{{baseurl}}img/srcWeb/folder.png"/>
+                        <img ng-if="picto.boardLink != null" class="sfolder" ng-src="{{baseurl}}img/srcWeb/Mainboard/folder.png"/>
                         
                         <div class="backgroundCell" ng-style="{'background-color':'#{{picto.color}}'}"></div>
                         <!-- put the scan color over the image.
                              Only if we are in Scan mode
                         MODIF: Añadir variable if inScan-->
 
-                        <div ng-if="isScanned(picto);" class="scaneo"></div>
+                        <div ng-if="isScanned(picto);" class="scaneo" ng-style="{'border':'7px solid #{{cfgScanColor}}'}"></div>
 
                         <div ng-if="isPictoActive(picto) && cfgTextInCell && picto.textInCell !== null" class="textCell">{{picto.textInCell}}</div>
                         <div ng-if="isPictoActive(picto) && cfgTextInCell && picto.textInCell === null && picto.pictotext !== null" class="textCell">{{picto.pictotext}}</div>
                         <div ng-if="isPictoActive(picto) && cfgTextInCell && picto.textInCell === null && picto.pictotext === null" class="textCell">{{picto.textFunction}}</div>
 
 
-                        <img ng-if="isPictoActive(picto) && picto.ID_CFunction !== null" ng-src="{{baseurl}}img/srcWeb/functions.png" class="function"/>
+                        <img ng-if="isPictoActive(picto) && picto.ID_CFunction !== null" ng-src="{{baseurl}}img/srcWeb/Mainboard/functions.png" class="function"/>
 
                         <div ng-if="isPictoActive(picto)" class="contentCell">
                             <!--MODIF: deberia ser con texto on/off???-->
@@ -132,11 +132,11 @@
     <!-- MODIF: Poner control si no scan-->
     <div ng-if="puntuando" class="scoreContainer">
             <div class="scoreContainerLeft">
-                <img src="/img/srcWeb/feliz_1.png" class="goodPhrase" ng-click="isClickEnable()?feedback(1):null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(3,'Good'):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null" ng-class="{'scaneo': isScanning == 'goodPhrase'}"/>
+                <img src="/img/srcWeb/feliz_1.png" class="goodPhrase" ng-click="isClickEnable()?feedback(1):null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(3,'Good'):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null" ng-class="{'scaneo': isScanning == 'goodPhrase'}" ng-style="isScanning == 'goodPhrase' && {'border':'7px solid #{{cfgScanColor}}'}"/>
             </div>
 
             <div class="scoreContainerRight">
-                <img src="/img/srcWeb/triste_1.png" class="goodPhrase" ng-click="isClickEnable()?feedback(0):null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(3,'Bad'):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null" ng-class="{'scaneo': isScanning == 'badPhrase'}"/>
+                <img src="/img/srcWeb/triste_1.png" class="goodPhrase" ng-click="isClickEnable()?feedback(0):null" ng-mouseenter="cfgTimeOverOnOff?TimeoutOverClick(3,'Bad'):null" ng-mouseleave="cfgTimeOverOnOff?CancelTimeoutOverClick():null" ng-class="{'scaneo': isScanning == 'badPhrase'}" ng-style=" isScanning == 'badPhrase' && {'border':'7px solid #{{cfgScanColor}}'}"/>
             </div>
     </div>
 </div>
@@ -144,7 +144,7 @@
                                             <div class="modal fade" id="errorVoicesModal" role="dialog">
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="row marginModalTop"><img class="img-owl pull-right" src='/img/srcWeb/Mus/lowSorpresaFlecha.png'/></div>
-                                                    <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/Patterns1-08.png')">
+                                                    <div class="row" id="boxUserConfig" style="background-image: url('/img/srcWeb/patterns/pattern3.png')">
                                                         <div id="header" class="row">
                                                             <div class="col-xs-10 headerTitle">{{content.errorVoicesTitle}}</div>
                                                         </div>

@@ -436,6 +436,8 @@ class BoardInterface extends CI_Model {
 
     function getBoards($idgroup) {
 
+        $this->db->order_by('primaryBoard', 'desc');
+        $this->db->order_by('Bname', 'asc');
         $this->db->where('ID_GBBoard', $idgroup);
         $query = $this->db->get('Boards');
 
@@ -771,6 +773,7 @@ class BoardInterface extends CI_Model {
         $this->db->where('ID_Board', $IDboard);
         $this->db->delete('Boards');
     }
+
     function removeGoupBoard($IDGB) {
         $this->db->where('ID_GB', $IDGB);
         $this->db->delete('groupboards');
@@ -934,7 +937,7 @@ class BoardInterface extends CI_Model {
         );
         $this->db->where('ID_Cell', $id);
         $this->db->update('Cell', $data);
-        
+
         $this->db->where('ID_Cell', $id);
         $query = $this->db->get('Cell');
         if ($query->num_rows() > 0) {
@@ -950,7 +953,7 @@ class BoardInterface extends CI_Model {
         $this->db->from('Content'); // Seleccionem la taula
         $this->db->where('section', 'color'); // filtrem per columnes
         $this->db->where('ID_CLanguage', $idLanguage); // filtrem per columnes
-        $this->db->order_by('Content.tagString', 'asc');
+        $this->db->order_by('Content.content', 'asc');
         $query = $this->db->get(); // Fem la query i la guardem a la variable query
 
         return $query->result_array(); // retornem l'array query amb els resultats
