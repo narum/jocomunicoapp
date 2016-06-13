@@ -13,6 +13,7 @@
 /*    height: 5vh;
     width: 5.8vh;*/
     background-color: #adadad;
+    border-radius: 1vh;
 
     -webkit-transition: background-color 0.5s ease, margin 0.25s ease, height 0.25s ease, width 0.25s ease;
     -moz-transition: background-color 0.5s ease, margin 0.25s ease, height 0.25s ease, width 0.25s ease;
@@ -25,6 +26,7 @@
     margin-left: 0px;
     height: 15vh;
     width: 100vw;
+    border-radius: 0px;
     opacity: 0.95;
 }
 .img-dropdownMenuButton{
@@ -79,7 +81,7 @@ input.statesButtonMenuBar[type=checkbox]:checked + label{
 }
 input.statesButtonMenuBar[type=radio]:empty + label:hover,
 input.statesButtonMenuBar[type=checkbox]:empty + label:hover{
-    color: black;
+    color: #dddddd;
 }
 .marginLanguagesButtonMenuBar{
     margin-right: 2.5vh;
@@ -97,6 +99,13 @@ input.statesButtonMenuBar[type=checkbox]:empty + label:hover{
 }
 textarea:focus, input:focus {
     box-shadow: none;
+}
+.clickOutside{
+    z-index:40;
+    position: fixed;
+    margin-top: 15vh;
+    height: 85vh;
+    width: 100vw;
 }
 
 
