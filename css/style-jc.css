@@ -141,7 +141,8 @@ html *
 }
 
 .sentencePadding{
-    padding-left: 5%; 
+    padding-top: 0.5vh;
+    padding-left: 5.5%; 
     width: 90%
 }
 

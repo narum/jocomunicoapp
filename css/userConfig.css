@@ -345,6 +345,9 @@ input.imageRadio[type=radio]:empty + label:hover{
 #colorSelect{
     color:white;
 }
+#colorSelect input.imageRadio[type=radio] + label{
+    margin-top: 1vh;
+}
 #colorSelect input.imageRadio[type=radio]:checked + label{
     border: none;
     box-shadow: 0 0 10px #404040;
@@ -503,4 +506,29 @@ input[type=number] {
     padding-top: 2vh;
     font-size: 2.2vh;
     color: gray;
+}
+.imgScanOrder{
+    cursor: pointer;
+}
+.imgScanOrder:hover{
+    opacity: 0.5;
+    cursor: pointer;
+}
+.imgScanOrderDisabled{
+    opacity: 0.5;
+    cursor: default;
+}
+.imgScanOrderPred{
+    height: 26.5vh;
+    margin-right: 0.5vh;
+}
+.imgScanOrderMenu{
+    height: 4.2vh;
+    margin-bottom: 0.5vh;
+}
+.imgScanOrderPanel{
+    height: 21.8vh;
+}
+#scanOrderModal .marginModalTopOwl{
+    margin-top: 4vh;
 }
