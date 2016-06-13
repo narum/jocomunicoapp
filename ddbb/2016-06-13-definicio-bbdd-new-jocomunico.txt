@@ -142,11 +142,12 @@ CREATE TABLE Boards (
 # (supportsExpansion: si han introduït tota la info necessària perquè aquest pictograma funcioni amb el sistema d'expansió / afegir-ho al codi)
 # (ID_PUser: per defecte serà de l'usuari 0 que tindrà el vocab per defecte)
 CREATE TABLE Pictograms (
-	pictoid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	pictoid INT NOT NULL AUTO_INCREMENT,
 	ID_PUser INT DEFAULT '1',
 	pictoType VARCHAR(100),
 	supportsExpansion ENUM('0', '1') DEFAULT '1',
 	imgPicto VARCHAR(300),
+	PRIMARY KEY (pictoid, ID_PUser),
 	INDEX PUser (ID_PUser),
 	FOREIGN KEY (ID_PUser) REFERENCES SuperUser (ID_SU) ON DELETE SET NULL
 ) ENGINE=INNODB;

@@ -328,6 +328,12 @@ class Myaudio {
         // all the info related to the voices and the languages from the user
         $applocal = $this->AppLocalOrServer();
         $userinfo = $CI->Audio_model->getUserInfo($idusu);
+        
+//        echo "Info USUARI: <br />";
+//        print_r($userinfo);
+//        echo "<br /><br />";
+        
+        
         $interfacelanguage = $userinfo->ID_ULanguage;
         $interfacegender = $userinfo->cfgInterfaceVoiceMascFem;
         $expansionlanguage = $userinfo->cfgExpansionLanguage;
@@ -341,7 +347,7 @@ class Myaudio {
             $md5 = md5($key);
             
             $isindb = $CI->Audio_model->isAudioInDatabase($md5);
-            
+                        
             // if it's already in the database
             if ($isindb) $filename = $isindb;
             else {
@@ -367,7 +373,7 @@ class Myaudio {
                 }
                 // if the app is run from the server
                 else {
-                    $voice = $userinfo->cfgExpansionVoiceOnline;
+                    $voice = $userinfo->cfgInterfaceVoiceOnline;
                     $type = "online";
                 }
                 
@@ -441,6 +447,10 @@ class Myaudio {
      */
     function synthesizeAudio($md5, $text, $voice, $type, $language, $rate)
     {      
+    	
+        // DEBUG
+    	// echo "T: ".$text."; V: ".$voice."; Ty: ".$type."; L: ".$language;
+    	
         $CI = &get_instance();
         $CI->load->model('Audio_model');
         
