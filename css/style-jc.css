@@ -1,7 +1,10 @@
 @charset "UTF-8";
 /* CSS Document */
 /*MODIF: mi idea era poner aqui lo comun*/
-
+* {
+    -ms-content-zooming: none;
+    touch-action: none;
+}
 #main{
     height:100vh;
     -webkit-user-select: none;
@@ -23,9 +26,9 @@
 
 html *
 {
-   font-size: 2vh;
-   line-height: 2.8vh;
-   font-family: "Trebuchet MS", Helvetica, sans-serif;;
+    font-size: 2vh;
+    line-height: 2.8vh;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;;
 }
 
 #body{
@@ -42,7 +45,7 @@ html *
 
 
 @media (max-width:1000px){
-    
+
     input[type="radio"]{
         margin: 0px;
     }
@@ -106,7 +109,7 @@ html *
 }
 .paddingFolder
 {
-    padding: 4vh 4vh;
+    padding: 4vh 2vh;
 }
 .PaddingSent
 {
@@ -141,8 +144,9 @@ html *
 }
 
 .sentencePadding{
-   padding-left: 5%; 
-   width: 90%
+    padding-top: 0.5vh;
+    padding-left: 5.5%; 
+    width: 90%
 }
 
 .sentenceCell{
@@ -355,7 +359,10 @@ html *
     position: absolute;
     z-index: 1;
 }
-
+.indicatorNegativeSentence{
+    border-bottom: solid 3px;
+    border-bottom-color: black;
+}
 .indicatorTenseSentence{
     background: #FEE8B6;
     height: 50%;

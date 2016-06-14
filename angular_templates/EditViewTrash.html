@@ -1,8 +1,8 @@
-<div class="row fullheight imgRounded" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)" ng-drop="true" ng-drop-success="onDropRemove($data,$event)">
+<div class="row fullheight imgRounded" style="background-image: url({{baseurl}}img/srcWeb/patterns/pattern6.png)" ng-drop="true" ng-drop-success="onDropRemove($data,$event)">
 
     <div class='trashPadding boxEditTrash' >       
         <div class='col-xs-4 text-center editTrash25'>
-            <img class="fullheight" max-width="100%" height="100%" ng-src="{{baseurl}}img/srcWeb/trashnou.png"/>
+            <img class="fullheight" max-width="100%" height="100%" ng-src="{{baseurl}}img/srcWeb/Edit/trashnou.png"/>
         </div>
         <div class='col-xs-8 text-center editTrash25'> <!-- MODIF: afegir directiva focus and blur-->
             <input type="text" class="form-control text-center editTextInput" name="NameBoard" ng-model="$parent.evt.nameboard" ng-blur="changeNameBoard(13,$parent.evt.nameboard, $parent.idboard)" ng-keyup="changeNameBoard($event.keyCode,$parent.evt.nameboard, $parent.idboard)" style="transform: translate(0%,25%);"/>

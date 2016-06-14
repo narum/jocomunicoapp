@@ -35,7 +35,7 @@
     height: 27%;
 }
 .contentNull{ 
-    background: url('/img/srcWeb/Patterns1-05.png');
+    background: url('/img/srcWeb/patterns/pattern1.png');
     height: 27%;
 }
 .content4{ 
@@ -109,6 +109,19 @@
 .saveEdit{
     padding-left: 1vh;
     border-radius: 150px;
+    height: 100%;
+}
+.saveImg{
+    background-image: url('/img/srcWeb/Edit/guardar.png');
+    background-size: 100% 100%;
+    height: 100%;
+    width: 100%;
+}
+.saveImg:active{
+    background-image: url('/img/srcWeb/Edit/guardar_pulsado.png');
+    background-size: 100% 100%;
+    height: 100%;
+    width: 100%;
 }
 .paddingEditcell{
     padding-left: 2vh;
