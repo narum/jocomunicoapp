@@ -1,4 +1,3 @@
-<!--Logout Modal-->
 <div class="modal fade" id="logoutModal" role="dialog">
     <div class="modal-dialog">
         <div class="row marginModalTopOwl"><img class="img-owl pull-right" src={{img.lowSorpresaFlecha}}/></div>
@@ -8,7 +7,23 @@
             </div>
             <div class="row backgroundUserConfigBox">
                 <div class="row fonsAlert">
-                    <div class="col-xs-12 textCenter">{{logoutContent.question}}</div>
+                    <div class=" row text-center" style="height: 35%">
+                        {{content.nwboardtext}}
+                        <input type="text" class="col-xs-offset-2 col-xs-8 dialogText" ng-class=" {'dialogTextDange' : CreateBoardData.CreateBoardName.length <= 0} "  name="CreateBoardName" ng-model="CreateBoardData.CreateBoardName" placeholder="{{content.nwboardtext}}"/>
+                    </div>
+                    <div class="row" style="height: 20%; margin-left: 20px;">
+                        <div class="col-xs-3 text-right paddingTextRight"> {{content.rows}}</div>
+                        <select class=" col-xs-2 dropdown-arrow confirm"
+                                ng-model="CreateBoardData.height"
+                                ng-options="h for h in range(10)"
+                                >
+                        </select>
+                        <div class="col-xs-2 text-right paddingTextRight" style="margin-left: 10px"> {{content.columns}}</div>
+                        <select class="col-xs-2 dropdown-arrow confirm"
+                                ng-model="CreateBoardData.width"
+                                ng-options="w for w in range(10)">
+                        </select>
+                    </div>
                 </div>
                 <div class="row dadesUsuariCentre">
                     <div class="col-xs-6">
@@ -19,7 +34,7 @@
                     </div>
                 </div>
             </div>
-        <div class="row verticalMarginTop"></div>
+            <div class="row verticalMarginTop"></div>
         </div>
     </div>
 </div>

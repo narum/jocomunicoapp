@@ -1239,13 +1239,9 @@ angular.module('controllers', [])
                 //The user cfg tell us where we have to start
                 if ($scope.cfgScanStartClick && $scope.isScanning != "nowait") {
                     $scope.isScanning = "waiting";
-                } else if ($scope.cfgPredOnOff === '1') {
-                    $scope.isScanning = "prediction";
-                } else if (userConfig.cfgMenuDeleteLastActive + userConfig.cfgMenuDeleteAllActive + userConfig.cfgMenuReadActive + userConfig.cfgMenuHomeActive > 0 && userConfig.cfgSentenceBarUpDown == 0) {
-                    $scope.isScanning = "sentence";
                 } else {
-                    $scope.isScanning = "board";
-                }
+                    $scope.nextBlockToScan(0);
+                } 
             };
             //Return true if the cell it's being scanned
             $scope.isScanned = function (picto) {
@@ -1289,10 +1285,7 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     //If user have start scan click activate we have to wait until he press one button
                     if ($scope.isScanning == "waiting") {
-                        $scope.isScanning = "prediction";
-                        if ($scope.cfgPredOnOff !== '1') {
-                            $scope.nextBlockScan();
-                        }
+                        $scope.nextBlockToScan(0);
                         $scope.setTimer();
                     } else if ($scope.isScanningCancel) {
                         $scope.isScanningCancel = false;
@@ -1313,10 +1306,7 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     //If user have start scan click activate we have to wait until he press one button
                     if ($scope.isScanning == "waiting") {
-                        $scope.isScanning = "prediction";
-                        if ($scope.cfgPredOnOff !== '1') {
-                            $scope.nextBlockScan();
-                        }
+                        $scope.nextBlockToScan(0);
                         $scope.setTimer();
                     }
                     if ($scope.isScanningCancel) {
@@ -1393,10 +1383,7 @@ angular.module('controllers', [])
                 if ($scope.cfgScanningCustomRowCol == 0) {
                     //The last group have been reached
                     if ($scope.indexScannedBlock > $scope.maxCustomScanBlock) {
-                        $scope.isScanning = "sentenceDown";
-                        if ($scope.cfgSentenceBarUpDown == 0) {
-                            $scope.nextBlockScan();
-                        }
+                        $scope.nextBlockToScan($scope.cfgScanOrderPanel);
                         return false;
                     } else {
                         var j = 0;
@@ -1415,10 +1402,7 @@ angular.module('controllers', [])
                     //Works like the last one except that the cell will be added to the array anyway (to avoid strange empty slots in the scan) and we have not to read all the cell, we acces to the cell by the pos 
                 } else if ($scope.cfgScanningCustomRowCol == 1) {
                     if ($scope.indexScannedBlock > $scope.rows - 1) {
-                        $scope.isScanning = "sentenceDown";
-                        if ($scope.cfgSentenceBarUpDown == 0) {
-                            $scope.nextBlockScan();
-                        }
+                        $scope.nextBlockToScan($scope.cfgScanOrderPanel);
                         return false;
                     } else {
                         for (var i = 0; i < $scope.columns; i++) {
@@ -1431,10 +1415,7 @@ angular.module('controllers', [])
                     //Pretty the same
                 } else {
                     if ($scope.indexScannedBlock > $scope.columns - 1) {
-                        $scope.isScanning = "sentenceDown";
-                        if ($scope.cfgSentenceBarUpDown == 0) {
-                            $scope.nextBlockScan();
-                        }
+                        $scope.nextBlockToScan($scope.cfgScanOrderPanel);
                         return false;
                     } else {
                         for (var i = 0; i < $scope.rows; i++) {
@@ -1519,6 +1500,32 @@ angular.module('controllers', [])
             $scope.haveToBeScanned = function (picto) {
                 return (picto.activeCell == 1 && (picto.ID_CFunction != null || picto.ID_CPicto != null || picto.ID_CSentence != null || picto.ID_Fuction != null || picto.boardLink != null));
             };
+            $scope.nextBlockToScan = function (current) {
+                switch ($scope.orderScan[current]) {
+                    case "prediction":
+                        $scope.isScanning = "prediction";
+                        if ($scope.cfgPredOnOff === '0') {
+                            $scope.nextBlockToScan($scope.cfgScanOrderPred);
+                        }
+                        break;
+                    case "sentence":
+                        $scope.isScanning = "sentence";
+                        if ($scope.cfgMenuDeleteLastActive + $scope.cfgMenuDeleteAllActive + $scope.cfgMenuReadActive + $scope.cfgMenuHomeActive < 1) {
+                            $scope.nextBlockToScan($scope.cfgScanOrderMenu);
+                        }
+                        break;
+                    case "board":
+                        $scope.isScanning = "board";
+                        $scope.indexScannedCells = 0; //Cell inside the array
+                        $scope.indexScannedBlock = 0; //Column or row inside the whole board
+                        $scope.arrayScannedCells = $scope.getScanArray();
+                        break;
+                    default:
+                        $scope.isScanning = "nowait";
+                        $scope.InitScan();
+                        break;
+                }
+            };
             // Change the current scan block
             $scope.nextBlockScan = function () {
                 if ($scope.inScan) {
@@ -1532,20 +1539,10 @@ angular.module('controllers', [])
                         case "waiting"://Do nothing
                             break;
                         case "prediction":
-                            $scope.isScanning = "sentenceUp";
-                            if ($scope.cfgMenuDeleteLastActive + $scope.cfgMenuDeleteAllActive + $scope.cfgMenuReadActive + $scope.cfgMenuHomeActive < 1 || $scope.cfgSentenceBarUpDown == 1) {
-                                $scope.nextBlockScan();
-                            }
+                            $scope.nextBlockToScan($scope.cfgScanOrderPred);
                             break;
-                        case "sentenceUp":
-                            $scope.isScanning = "board";
-                            $scope.indexScannedCells = 0; //Cell inside the array
-                            $scope.indexScannedBlock = 0; //Column or row inside the whole board
-                            $scope.arrayScannedCells = $scope.getScanArray();
-                            break;
-                        case "sentenceDown":
-                            $scope.isScanning = "nowait";
-                            $scope.InitScan();
+                        case "sentence":
+                            $scope.nextBlockToScan($scope.cfgScanOrderMenu);
                             break;
                         case "board":
                             $scope.indexScannedBlock = $scope.indexScannedBlock + 1;
@@ -1624,8 +1621,7 @@ angular.module('controllers', [])
                             $scope.isScanning = "predictionCell";
                             $scope.isScanningCancel = $scope.cfgCancelScanOnOff;
                             break;
-                        case "sentenceUp":
-                        case "sentenceDown":
+                        case "sentence":
                             $scope.isScanningCancel = $scope.cfgCancelScanOnOff;
                             $scope.isScanning = "home";
                             if ($scope.cfgMenuHomeActive === 0) {
@@ -1780,6 +1776,14 @@ angular.module('controllers', [])
                 $scope.cfgCancelScanOnOff = userConfig.cfgCancelScanOnOff == 1 ? true : false;
                 $scope.cfgTextInCell = userConfig.cfgTextInCell == 1 ? true : false;
                 $scope.cfgUserExpansionFeedback = userConfig.cfgUserExpansionFeedback == 1 ? true : false;
+                $scope.cfgScanOrderPred = userConfig.cfgScanOrderPred;
+                $scope.cfgScanOrderMenu = userConfig.cfgScanOrderMenu;
+                $scope.cfgScanOrderPanel = userConfig.cfgScanOrderPanel;
+                $scope.orderScan = ["", "", ""];
+                $scope.orderScan[userConfig.cfgScanOrderPred - 1] = "prediction";
+                $scope.orderScan[userConfig.cfgScanOrderMenu - 1] = "sentence";
+                $scope.orderScan[userConfig.cfgScanOrderPanel - 1] = "board";
+                console.log($scope.orderScan);
                 $scope.cfgBgColorPanel = userConfig.cfgBgColorPanel;
                 $scope.cfgBgColorPred = userConfig.cfgBgColorPred;
                 $scope.cfgScanColor = userConfig.cfgScanColor;
@@ -2115,7 +2119,7 @@ angular.module('controllers', [])
                     var text = "";
                     // Just read once.
                     var readed = false;
-                    if ($scope.autoRead){
+                    if ($scope.autoRead) {
                         readed = true;
                     }
                     if (cell.ID_CPicto !== null) {
@@ -2124,7 +2128,8 @@ angular.module('controllers', [])
                         } else {
                             text = cell.pictotext;
                         }
-                        if (readed) text = "";
+                        if (readed)
+                            text = "";
                         $scope.addToSentence(cell.ID_CPicto, cell.imgCell, text);
                         readed = true;
                     }
@@ -2432,11 +2437,11 @@ angular.module('controllers', [])
                     if ($scope.cfgUserExpansionFeedback) {
                         $scope.puntuar();
                     }
-                    
+
                     $scope.readText($scope.info.frasefinal, false);
                     $scope.getPred();
                 });
-                if ($scope.cfgAutoEraseSentenceBar){
+                if ($scope.cfgAutoEraseSentenceBar) {
                     $scope.tense = "defecte";
                     $scope.tipusfrase = "defecte";
                     $scope.negativa = false;
@@ -3109,7 +3114,7 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
 
-                    var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
+                    var URL = $scope.baseurl + "PanelGroup/newGroupPanel";
 
 
                     $http.post(URL, $scope.CreateBoardData).success(function (response)

@@ -160,7 +160,7 @@ class PanelGroup extends REST_Controller {
         //MODIF: 2 es el panel default
         $idusu = $this->session->userdata('idusu');
         $board = $this->BoardInterface->getPrimaryGroupBoard();
-        //if ($board == null) {
+        if ($board == null) {
        
             $changedLinks = array();
             $srcGroupBoard = 2;
@@ -195,10 +195,10 @@ class PanelGroup extends REST_Controller {
                 $i++;
             }
             
-        //}else{
-           // $primaryUserBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
-           // $idToShow = $primaryUserBoard[0]->ID_Board;
-        //}
+        }else{
+            $primaryUserBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
+            $idToShow = $primaryUserBoard[0]->ID_Board;
+        }
         $response = [
             'idBoard' => $idToShow
         ];
