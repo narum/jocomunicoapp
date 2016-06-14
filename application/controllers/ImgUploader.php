@@ -30,24 +30,20 @@ class ImgUploader extends REST_Controller {
 
     public function upload_post() {
         $target_dir = "img/users/";
+        $errorText = "";
+        $error = false;
         for ($i = 0; $i < count($_FILES); $i++) {
             $md5Name = $this->Rename_Img(basename($_FILES['file' . $i]['name']));
             if (!($_FILES['file' . $i]['type'] == "image/gif" || $_FILES['file' . $i]['type'] == "image/jpeg" || $_FILES['file' . $i]['type'] == "image/png")) {
-                $errorText = 'extension no valida.';
-                $response = [
-                    'errorText' => $errorText
-                ];
-                $this->response($response, 300);
+                $errorText = 'Extension no valida: "' . $_FILES['file' . $i]['name'] . '".';
+                $error = true;
             }
             $handle = fopen($target_dir . $md5Name, "r");
             if (is_resource($handle)) {
                 fclose($handle);
                 //MODIF: lanzar error 
-                $errorText = 'Ya existe una imagen con ese nombre.';
-                $response = [
-                    'errorText' => $errorText
-                ];
-                $this->response($response, 300);
+                $errorText = 'Ya existe una imagen con ese nombre: "' . $_FILES['file' . $i]['name'] . '".';
+                $error = true;
             }
             //MODIF: poner tamaño a 100 kb y tamaño 150 minimo
             if ($_FILES['file' . $i]['size'] > 100000) {
@@ -58,26 +54,31 @@ class ImgUploader extends REST_Controller {
             if ($success) {
                 $idusu = $this->session->userdata('idusu');
                 $this->ImgUploader_model->insertImg($idusu, basename($_FILES['file' . $i]['name']), $md5Name);
+            } else {
+                $errorText = 'Error desconocido: "' . $_FILES['file' . $i]['name'] . '".';
+
+                $error = true;
             }
         }
 
         $response = [
-            'nombre' => $target_dir . $md5Name
+            'errorText' => $errorText,
+            'error' => $error
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
 
     function Rename_Img($string) {
-                
+
         $idusu = $this->session->userdata('idusu');
         $fecha = microtime();
         //MODIF: Pasar superuser no user
         $stringlen = strlen($string);
         $pointpos = strrpos($string, '.');
-                
+
         $ext = substr($string, $pointpos, $stringlen);
-        $name = "idu" . $idusu . "-" . $string. "-" . $fecha;
+        $name = "idu" . $idusu . "-" . $string . "-" . $fecha;
         $name = md5($name . $idusu);
         $md5Name = $name . $ext;
         return $md5Name;
