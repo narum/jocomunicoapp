@@ -2651,27 +2651,40 @@ angular.module('controllers', [])
                                 $scope.CreateBoardData = {CreateBoardName: '', height: response.defHeight.toString(), width: response.defWidth.toString(), idGroupBoard: response.ID_GB};
                                 $scope.CreateBoardData.height = $scope.range(10)[response.defHeight - 1].valueOf();
                                 $scope.CreateBoardData.width = $scope.range(10)[response.defWidth - 1].valueOf();
+                                
+                                $('#ConfirmCreateBoard').modal({backdrop: 'static'});
+                                
                                 //alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
-                                ngDialog.openConfirm({
-                                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
-                                    scope: $scope,
-                                    className: 'ngdialog-theme-default dialogCreateBoard'
-                                }).then(function () {
-
-                                    URL = $scope.baseurl + "Board/newBoard";
-
-
-                                    $http.post(URL, $scope.CreateBoardData).success(function (response)
-                                    {
-                                        $scope.showBoard(response.idBoard);
-                                        $scope.edit();
-                                    });
-
-                                }, function (value) {
-                                });
+//                                ngDialog.openConfirm({
+//                                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
+//                                    scope: $scope,
+//                                    className: 'ngdialog-theme-default dialogCreateBoard'
+//                                }).then(function () {
+//
+//                                    URL = $scope.baseurl + "Board/newBoard";
+//
+//
+//                                    $http.post(URL, $scope.CreateBoardData).success(function (response)
+//                                    {
+//                                        $scope.showBoard(response.idBoard);
+//                                        $scope.edit();
+//                                    });
+//
+//                                }, function (value) {
+//                                });
                             });
                 });
 
+            };
+            $scope.confirmCreateBoard = function () {
+                URL = $scope.baseurl + "Board/newBoard";
+
+
+                $http.post(URL, $scope.CreateBoardData).success(function (response)
+                {
+                    $scope.showBoard(response.idBoard);
+                    $scope.edit();
+                });
             };
             $scope.RemoveBoard = function () {
                 $scope.RemoveBoardData = {BoardName: $scope.evt.nameboard};

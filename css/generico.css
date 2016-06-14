@@ -427,7 +427,7 @@ input.switch:checked ~ label:after
 }
 .confirmDefPadM{
     padding: 2vh;
-    height: 88%;
+    height: 50vh;
 }
 .confirmDefPadS{
     padding: 2vh;
