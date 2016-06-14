@@ -2728,8 +2728,6 @@ angular.module('controllers', [])
             };
             $scope.confirmCreateBoard = function () {
                 URL = $scope.baseurl + "Board/newBoard";
-
-
                 $http.post(URL, $scope.CreateBoardData).success(function (response)
                 {
                     $scope.showBoard(response.idBoard);
@@ -2738,28 +2736,22 @@ angular.module('controllers', [])
             };
             $scope.RemoveBoard = function () {
                 $scope.RemoveBoardData = {BoardName: $scope.evt.nameboard};
-                ngDialog.openConfirm({
-                    template: $scope.baseurl + '/angular_templates/ConfirmRemoveBoard.html',
-                    scope: $scope,
-                    className: 'ngdialog-theme-default dialogRemoveBoard'
-                }).then(function () {
-                    var postdata = {id: $scope.idboard};
-                    var URL = $scope.baseurl + "Board/removeBoard";
-                    $http.post(URL, postdata).success(function (response)
-                    {
-                        if (response.idboard != null)
-                        {
-                            $scope.showBoard(response.idboard);
-                            $scope.edit();
-                        } else {
-                            $location.path('/panelGroups');
-                        }
-                    });
-                }, function (value) {
-                });
-
+                $('#ConfirmRemoveBoard').modal({backdrop: 'static'});
             };
-
+            $scope.ConfirmRemoveBoard = function () {
+                var postdata = {id: $scope.idboard};
+                var URL = $scope.baseurl + "Board/removeBoard";
+                $http.post(URL, postdata).success(function (response)
+                {
+                    if (response.idboard != null)
+                    {
+                        $scope.showBoard(response.idboard);
+                        $scope.edit();
+                    } else {
+                        $location.path('/panelGroups');
+                    }
+                });
+            };
 
             $scope.copyBoard = function () {
 
@@ -3122,7 +3114,7 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogCreateBoard'
                 }).then(function () {
 
-                    var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
+                    var URL = $scope.baseurl + "PanelGroup/newGroupPanel";
 
 
                     $http.post(URL, $scope.CreateBoardData).success(function (response)
