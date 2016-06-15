@@ -2772,33 +2772,24 @@ angular.module('controllers', [])
                     var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
 
                     $http.post(URL).
-                            success(function (response)
-                            {
-                                $scope.panels = response.panels;
-                                $scope.CopyBoardData = {CreateBoardName: "", CopiedBoardName: $scope.evt.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.evt.altura, width: $scope.evt.amplada, autoreturn: $scope.evt.autoreturn, autoread: $scope.evt.autoread, srcGroupBoard: $scope.idGroupBoard.toString()};
-                                ngDialog.openConfirm({
-                                    template: $scope.baseurl + '/angular_templates/ConfirmCopyBoard.html',
-                                    scope: $scope,
-                                    className: 'ngdialog-theme-default dialogCopyBoard'
-                                }).then(function () {
-
-                                    URL = $scope.baseurl + "Board/copyBoard";
-                                    $scope.CopyBoardData.idGroupBoard = parseInt($scope.CopyBoardData.idGroupBoard.ID_GB.toString());
-
-                                    $http.post(URL, $scope.CopyBoardData).success(function (response)
-                                    {
-                                        $scope.idGroupBoard = $scope.CopyBoardData.idGroupBoard.ID_GB;
-                                        $scope.showBoard(response.idBoard);
-                                        $scope.edit();
-                                    });
-
-
-                                }, function (value) {
-                                });
-                            });
-
+                        success(function (response)
+                        {
+                            $scope.panels = response.panels;
+                            $scope.CopyBoardData = {CreateBoardName: "", CopiedBoardName: $scope.evt.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.evt.altura, width: $scope.evt.amplada, autoreturn: $scope.evt.autoreturn, autoread: $scope.evt.autoread, srcGroupBoard: $scope.idGroupBoard.toString()};
+                            $('#ConfirmCopyBoard').modal({backdrop: 'static'});
+                        });
                 });
+            };
+            $scope.ConfirmCopyBoard = function () {
+                URL = $scope.baseurl + "Board/copyBoard";
+                $scope.CopyBoardData.idGroupBoard = parseInt($scope.CopyBoardData.idGroupBoard.ID_GB.toString());
 
+                $http.post(URL, $scope.CopyBoardData).success(function (response)
+                {
+                    $scope.idGroupBoard = $scope.CopyBoardData.idGroupBoard.ID_GB;
+                    $scope.showBoard(response.idBoard);
+                    $scope.edit();
+                });
             };
             $scope.startPainting = function () {
                 $scope.fv.painting = true;
