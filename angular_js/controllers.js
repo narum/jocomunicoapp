@@ -1241,7 +1241,7 @@ angular.module('controllers', [])
                     $scope.isScanning = "waiting";
                 } else {
                     $scope.nextBlockToScan(0);
-                } 
+                }
             };
             //Return true if the cell it's being scanned
             $scope.isScanned = function (picto) {
@@ -1846,7 +1846,7 @@ angular.module('controllers', [])
                     }
                 });
             };
-            $scope.aceptErrorNPB = function (){
+            $scope.aceptErrorNPB = function () {
                 $location.path('/panelGroups');
             };
             /*
@@ -2621,7 +2621,7 @@ angular.module('controllers', [])
                 })
                         .success(function (response) {
                             $scope.uploading = false;
-                            if(response.error){
+                            if (response.error) {
                                 //open modal
                                 console.log(response.errorText);
                                 $scope.errorText = response.errorText;
@@ -2659,12 +2659,19 @@ angular.module('controllers', [])
                             $scope.data = response.data;
                         });
             };
+            $scope.removePicto = function (data){
+                var postdata = {pos: data.posInBoard, idboard: $scope.idboard};
+                var URL = $scope.baseurl + "Board/removePicto";
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.statusWord = response.status;
+                            $scope.data = response.data;
+                        });
+            };
             $scope.onDropRemove = function (data, evt) {
-
                 var postdata = {pos: data.posInBoardPicto, idboard: $scope.idboard};
                 var URL = $scope.baseurl + "Board/removePicto";
-
-
                 $http.post(URL, postdata).
                         success(function (response)
                         {
@@ -2673,7 +2680,7 @@ angular.module('controllers', [])
                         });
             };
 
-            
+
 
             /***************************************************
              *
@@ -2697,9 +2704,9 @@ angular.module('controllers', [])
                                 $scope.CreateBoardData = {CreateBoardName: '', height: response.defHeight.toString(), width: response.defWidth.toString(), idGroupBoard: response.ID_GB};
                                 $scope.CreateBoardData.height = $scope.range(10)[response.defHeight - 1].valueOf();
                                 $scope.CreateBoardData.width = $scope.range(10)[response.defWidth - 1].valueOf();
-                                
+
                                 $('#ConfirmCreateBoard').modal({backdrop: 'static'});
-                                
+
                                 //alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
 //                                ngDialog.openConfirm({
 //                                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
@@ -2760,12 +2767,12 @@ angular.module('controllers', [])
                     var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
 
                     $http.post(URL).
-                        success(function (response)
-                        {
-                            $scope.panels = response.panels;
-                            $scope.CopyBoardData = {CreateBoardName: "", CopiedBoardName: $scope.evt.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.evt.altura, width: $scope.evt.amplada, autoreturn: $scope.evt.autoreturn, autoread: $scope.evt.autoread, srcGroupBoard: $scope.idGroupBoard.toString()};
-                            $('#ConfirmCopyBoard').modal({backdrop: 'static'});
-                        });
+                            success(function (response)
+                            {
+                                $scope.panels = response.panels;
+                                $scope.CopyBoardData = {CreateBoardName: "", CopiedBoardName: $scope.evt.nameboard, idGroupBoard: {ID_GB: $scope.idGroupBoard.toString()}, id: $scope.idboard, panels: $scope.panels, height: $scope.evt.altura, width: $scope.evt.amplada, autoreturn: $scope.evt.autoreturn, autoread: $scope.evt.autoread, srcGroupBoard: $scope.idGroupBoard.toString()};
+                                $('#ConfirmCopyBoard').modal({backdrop: 'static'});
+                            });
                 });
             };
             $scope.ConfirmCopyBoard = function () {
@@ -2814,10 +2821,13 @@ angular.module('controllers', [])
             {
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
-                /*
-                 * Remove the currentimg. If there are no imgCell nothings happens. If there are imgCell
-                 * removes it. If there are imgCell and a provisional img removes it, but not the imgCell
-                 */
+                
+                $scope.changeCellType = function (){
+                    if ($scope.cellType == "sentence" || $scope.cellType == "sFolder"){
+                        $scope.checkboxFuncType = false;
+                        $scope.checkboxBoardsGroup = false;
+                    }
+                };
                 $scope.removeFile = function () {
                     $scope.uploadedFile = null;
                 };
@@ -2976,6 +2986,11 @@ angular.module('controllers', [])
                     }
                     if ($scope.cellType !== 'sfolder') {
                         postdata.idSFolder = null;
+                    }
+                    if ($scope.uploadedFile === null) {
+                        var postdataimg = {pos: response.info.posInBoard, idboard: response.info.ID_RBoard, imgCell: null};
+                        var URLimg = $scope.baseurl + "Board/changeImgCell";
+                        $http.post(URLimg, postdataimg);
                     }
 
                     $http.post(url, postdata).success(function ()

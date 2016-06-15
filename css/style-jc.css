@@ -350,7 +350,16 @@ html *
     cursor: default;
     text-transform: uppercase
 }
-
+.removePicto{
+    right: 5px;
+    top: 5px;
+    max-width: 30%;
+    height: auto;
+    max-height: 30%;
+    width: auto;
+    z-index: 3;
+    position: absolute;
+}
 .sfolder{
     padding:2px;
     color:red;

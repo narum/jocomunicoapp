@@ -289,7 +289,7 @@ class BoardInterface extends CI_Model {
             'ID_CPicto' => NULL,
             'ID_CSentence' => NULL,
             'sentenceFolder' => NULL,
-            'cellType' => NULL,
+            'cellType' => 'other',
             'color' => 'fff'
         );
 
