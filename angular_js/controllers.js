@@ -2659,12 +2659,19 @@ angular.module('controllers', [])
                             $scope.data = response.data;
                         });
             };
+            $scope.removePicto = function (data){
+                var postdata = {pos: data.posInBoard, idboard: $scope.idboard};
+                var URL = $scope.baseurl + "Board/removePicto";
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.statusWord = response.status;
+                            $scope.data = response.data;
+                        });
+            };
             $scope.onDropRemove = function (data, evt) {
-
                 var postdata = {pos: data.posInBoardPicto, idboard: $scope.idboard};
                 var URL = $scope.baseurl + "Board/removePicto";
-
-
                 $http.post(URL, postdata).
                         success(function (response)
                         {
