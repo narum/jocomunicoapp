@@ -1836,7 +1836,7 @@ angular.module('controllers', [])
                 {
                     $scope.idboard = response.idboard;
                     if ($scope.idboard === null) {//MODIF:--Modal no hay panel principal en el grupo o no hay group panel principal
-                        $location.path('/panelGroups');
+                        $('#errorNoPrimaryBoard').modal({backdrop: 'static'});
                     } else {
                         $scope.showBoard('0').then(function () {
                             if ($scope.cfgScanningOnOff == 1) {
@@ -1845,6 +1845,9 @@ angular.module('controllers', [])
                         });
                     }
                 });
+            };
+            $scope.aceptErrorNPB = function (){
+                $location.path('/panelGroups');
             };
             /*
              * Return: array from 0 to repeatnum
@@ -2623,6 +2626,8 @@ angular.module('controllers', [])
                             if(response.error){
                                 //open modal
                                 console.log(response.errorText);
+                                $scope.errorText = response.errorText;
+                                $('#errorImgModal').modal({backdrop: 'static'});
                             }
                         })
                         .error(function (response) {
