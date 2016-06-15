@@ -2620,7 +2620,10 @@ angular.module('controllers', [])
                 })
                         .success(function (response) {
                             $scope.uploading = false;
-                            //alert("asd");
+                            if(response.error){
+                                //open modal
+                                console.log(response.errorText);
+                            }
                         })
                         .error(function (response) {
                             //alert(response.errorText);

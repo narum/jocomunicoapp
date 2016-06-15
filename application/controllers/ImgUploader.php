@@ -30,20 +30,24 @@ class ImgUploader extends REST_Controller {
 
     public function upload_post() {
         $target_dir = "img/users/";
-        $errorText = "";
+        $errorText = array();
         $error = false;
         for ($i = 0; $i < count($_FILES); $i++) {
             $md5Name = $this->Rename_Img(basename($_FILES['file' . $i]['name']));
             if (!($_FILES['file' . $i]['type'] == "image/gif" || $_FILES['file' . $i]['type'] == "image/jpeg" || $_FILES['file' . $i]['type'] == "image/png")) {
-                $errorText = 'Extension no valida: "' . $_FILES['file' . $i]['name'] . '".';
+                $errorProv = ["errorImg1", $_FILES['file' . $i]['name']];
+                array_push($errorText, $errorProv);
                 $error = true;
+                continue;
             }
             $handle = fopen($target_dir . $md5Name, "r");
             if (is_resource($handle)) {
                 fclose($handle);
                 //MODIF: lanzar error 
-                $errorText = 'Ya existe una imagen con ese nombre: "' . $_FILES['file' . $i]['name'] . '".';
+                $errorProv = ["errorImg2" , $_FILES['file' . $i]['name']];
+                array_push($errorText, $errorProv);
                 $error = true;
+                continue;
             }
             //MODIF: poner tamaño a 100 kb y tamaño 150 minimo
             if ($_FILES['file' . $i]['size'] > 100000) {
@@ -55,9 +59,10 @@ class ImgUploader extends REST_Controller {
                 $idusu = $this->session->userdata('idusu');
                 $this->ImgUploader_model->insertImg($idusu, basename($_FILES['file' . $i]['name']), $md5Name);
             } else {
-                $errorText = 'Error desconocido: "' . $_FILES['file' . $i]['name'] . '".';
-
+                $errorProv = ["errorImg2" , $_FILES['file' . $i]['name']];
+                array_push($errorText, $errorProv);
                 $error = true;
+                continue;
             }
         }
 
