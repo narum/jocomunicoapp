@@ -1,27 +1,49 @@
-<div class="topBarDialogM"><div class="editTitle">{{content.newboardtext}}</div><div class="cruz"></div></div>
-<div class="imgRounded confirmDefPadM">
-    <div class="dialogContent imgRounded confirmBackgroundColor" >
-        <div class=" row text-center" style="height: 35%">
-            {{content.newboardtext}}
-            <input type="text" class="col-xs-offset-2 col-xs-8 dialogText"  name="CreateBoardName" ng-model="CreateBoardData.GBName" placeholder="{{content.newgroupboardtext}}"/>
-        </div>
-        <div class="row" style="height: 20%; margin-left: 20px;">
-            <div class="col-xs-3 text-right paddingTextRight"> {{content.rows}}</div>
-            <select class=" col-xs-2 dropdown-arrow confirm"
-                    ng-model="CreateBoardData.defH"
-                    ng-options="h for h in range(10)">
-            </select>
-            <div class="col-xs-2 text-right paddingTextRight" style="margin-left: 10px"> {{content.columns}}</div>
-            <select class="col-xs-2 dropdown-arrow confirm"
-                    ng-model="CreateBoardData.defW"
-                    ng-options="p for p in range(10)">
-            </select>
-        </div>
-        <p class="text-center" style="height: 10%">{{content.createBoard}}</p>
-        <div class="row confirmButtons">
-            
-            <input class="dialogButton col-xs-offset-3 col-xs-2" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
-            <input class="dialogButton col-xs-offset-2 col-xs-2" type="button" value="{{content.cancel}}" ng-click="closeThisDialog();"/>
+<div class="modal fade" id="ConfirmCreateGroupBoard" role="dialog">
+    <div class="modal-dialog">
+        <div class="row marginModalTopOwl"><img class="img-owl pull-right" src={{img.lowSorpresaFlecha}}/></div>
+        <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_08}})">
+            <div id="header" class="row">
+                <div class="col-xs-10 headerTitle">{{content.newboardtitle}}</div>
+            </div>
+            <div class="row backgroundUserConfigBox">
+                <div class="row fonsAlert">
+
+                    <div class=" row text-center">
+                        {{content.newboardtext}}
+                        <input type="text" class="col-xs-offset-2 col-xs-8 dialogText" ng-class=" {'dialogTextDange' : CreateBoardData.GBName.length <= 0} "  name="CreateBoardName" ng-model="CreateBoardData.GBName" placeholder="{{content.newboardtext}}"/>
+                    </div>
+                    <div class="row paddingConfirmButton">
+                        <div class=" col-xs-offset-2 pull-left col-xs-3">{{content.rows}}
+                            <select class=" dropdown-arrow confirm"
+                                    ng-model="CreateBoardData.defH"
+                                    ng-options="h for h in range(10)"
+                                    >
+                            </select>
+                        </div>
+                        <div class="col-xs-5"> 
+                        <div class="pull-right">    
+                            {{content.columns}}
+                            <select class="dropdown-arrow confirm"
+                                    ng-model="CreateBoardData.defW"
+                                    ng-options="w for w in range(10)">
+                            </select>
+                        </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row dadesUsuariCentre">
+                    <div class="col-xs-6">
+                        <button type="reset" disabled ng-if="CreateBoardData.GBName.length <= 0" class="btn-gray-disabled pull-left" data-dismiss="modal">{{content.confirm}}</button>
+                        <button type="reset" ng-if="CreateBoardData.GBName.length > 0" class="btn-gray pull-left" data-dismiss="modal" ng-click="ConfirmNewPanellGroup();">{{content.confirm}}</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button type="reset" class="btn-gray pull-right" data-dismiss="modal" ng-click="closeThisDialog();">{{logoutContent.cancel}}</button>
+                    </div>
+                </div>
+            </div>
+        <div class="row verticalMarginTop"></div>
         </div>
     </div>
 </div>

@@ -3106,27 +3106,19 @@ angular.module('controllers', [])
             };
             $scope.initPanelGroup();
             $scope.newPanellGroup = function () {
-                $scope.CreateBoardData = {GBName: '', defH: 0, defW: 0, imgGB: ""};
-                ngDialog.openConfirm({
-                    template: $scope.baseurl + '/angular_templates/ConfirmCreateGroupBoard.html',
-                    scope: $scope,
-                    className: 'ngdialog-theme-default dialogCreateBoard'
-                }).then(function () {
+                $scope.CreateBoardData = {GBName: '', defH: 5, defW: 5, imgGB: ""};
+                $('#ConfirmCreateGroupBoard').modal({backdrop: 'static'});
+            };
 
-                    var URL = $scope.baseurl + "PanelGroup/newGroupPanel";
-
-
-                    $http.post(URL, $scope.CreateBoardData).success(function (response)
-                    {
-                        $rootScope.editPanelInfo = {idBoard: response.idBoard};
-                        $location.path('/');
-                    }, function (value) {
-                        console.log(value);
-                    });
-
-                }, function (value) {
+            $scope.ConfirmNewPanellGroup = function () {
+                var URL = $scope.baseurl + "PanelGroup/newGroupPanel";
+                $http.post(URL, $scope.CreateBoardData).success(function (response)
+                {
+                    $rootScope.editPanelInfo = {idBoard: response.idBoard};
+                    $location.path('/');
                 });
             };
+
 
             $scope.editPanel = function (idGB) {
                 var postdata = {ID_GB: idGB};
