@@ -2675,22 +2675,7 @@ angular.module('controllers', [])
                         });
             };
 
-            /*
-             * Open edit cell dialog and asign the controller
-             */
-            $scope.openEditCellMenu = function (id) {
-                if ($scope.inEdit) {
-                    $scope.idEditCell = id;
-                    ngDialog.open({
-                        template: $scope.baseurl + '/angular_templates/EditCellView.html',
-                        className: 'ngdialog-theme-default dialogEdit',
-                        scope: $scope,
-                        controller: 'Edit'
-                    });
-
-                }
-
-            };
+            
 
             /***************************************************
              *
@@ -2802,6 +2787,22 @@ angular.module('controllers', [])
             };
             $scope.stopPainting = function () {
                 $scope.fv.painting = false;
+            };
+            /*
+             * Open edit cell dialog and asign the controller
+             */
+            $scope.openEditCellMenu = function (id) {
+                if ($scope.inEdit) {
+                    $scope.idEditCell = id;
+                    ngDialog.open({
+                        template: $scope.baseurl + '/angular_templates/EditCellView.html',
+                        className: 'ngdialog-theme-default dialogEdit',
+                        scope: $scope,
+                        controller: 'Edit'
+                    });
+
+                }
+
             };
         })
 
