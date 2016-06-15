@@ -184,6 +184,7 @@ input:focus{
     border: 0px;
     height: 3vh;
     font-size: 2.2vh;
+    padding-left: 4px;
 }
 .dropdown-arrow.panellPrincipal{
     width: 50%;
@@ -194,6 +195,9 @@ input:focus{
 }
 .dropdown-arrow.confirm{
     border: 1px solid; width:80px;
+}
+.dropdown-arrow.confirmLong{
+    border: 1px solid; width:140px;
 }
 .dropdown-arrow.color option:hover {
     box-shadow: 0 0 10px 100px #1882A8 inset;
@@ -423,6 +427,9 @@ input.switch:checked ~ label:after
 }
 .paddingConfirmButton{
     padding-top: 4vh;
+}
+.marginTopConfirm{
+    margin-top: 2vh;
 }
 .colorFolderPadding
 {
