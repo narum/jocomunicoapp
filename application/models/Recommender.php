@@ -41,6 +41,36 @@ class Recommender extends CI_Model {
         return $output; 
     }
     
+    private function getNameClass($pictoid){
+        $output = array();
+        $output = null;
+        
+        $this->db->select('class');
+        $this->db->from('NameClass'.$this->session->userdata('ulangabbr'));
+        $this->db->where('nameid', $pictoid);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output; 
+    }
+    
+    private function getAdvType($pictoid){
+        $output = array();
+        $output = null;
+        
+        $this->db->select('type');
+        $this->db->from('AdvType'.$this->session->userdata('ulangabbr'));
+        $this->db->where('advid', $pictoid);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output; 
+    }
+    
     private function getSubj() {     
         $output = array();
         $output = null;
@@ -478,10 +508,30 @@ class Recommender extends CI_Model {
         return $output;   
     }
     
+    private function getContextTypeAllSE($pictoType, $inputid) {
+        $output = null;
+        $this->db->select('P_StatsUserPicto.pictoid, P_StatsUserPicto.countx1 as repes, PictogramsLanguage.pictotext, Pictograms.imgPicto');
+        $this->db->from('P_StatsUserPicto');              
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
+        $this->db->join('Adjective'.$this->session->userdata('ulangabbr'), 'Pictograms.pictoid = Adjective'.$this->session->userdata('ulangabbr').'.adjid', 'left');
+        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
+        $this->db->where('Pictograms.pictoType', $pictoType);
+        $this->db->where('Adjective'.$this->session->userdata('ulangabbr').'.defaultverb', $inputid);
+        $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
+        $this->db->order_by('repes', 'desc');        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;   
+    }
+    
     public function startsWith($haystack, $needle) {
         return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;
     }
-
     
     private function boolDetPos($pictoid) {
         $output = null;
@@ -546,6 +596,9 @@ class Recommender extends CI_Model {
     }
     
     private function get1OptFitsX2($inputid1, $case, $VF, $TSize, $fits) {
+        if ($case == "locat") $fits = "lloc";
+        else if ($case == "acomp") $fits = "human";
+        
         if ($case == "theme") {
             if ($fits == 'adj' || $fits == 'adv') {
                 // Algorismes V3 i V4 - Predictor verbs I i II (basat en freq. usuari)
@@ -560,7 +613,7 @@ class Recommender extends CI_Model {
             else if ($fits != null && $fits != 'modif' && $fits != 'quant') {
                 // Algorismes V3 i V4 - Predictor verbs I i II (basat en freq. usuari)
                 $res = $this->getfreqUsuariNameX2($inputid1, $fits);
-                $VF = $this->rellenaVFX2X3($VF, $res, $TSize);                        
+                $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
             }
         }
         else if ($case == "manera") {
@@ -569,7 +622,7 @@ class Recommender extends CI_Model {
                 $res = $this->getfreqUsuariQuantX2($inputid1, $fits);
                 $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
             }
-            else if ($fits = 'adv') {  // (case: manera)
+            else if ($fits == 'manera') {  // (case: manera)
                 // Algorismes V3 i V4 - Predictor verbs I i II (basat en freq. usuari)
                 $res = $this->getfreqUsuariAdvManeraX2($inputid1, $fits);
                 $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
@@ -588,8 +641,10 @@ class Recommender extends CI_Model {
 
         if ($case == "theme") {
             if ($fits == 'adj' || $fits == 'adv') {
-                // Algorisme V6 - Predictor de context (adj i adv) total    
-                $res = $this->getContextTypeAll($fits);
+                // Algorisme V6 - Predictor de context (adj i adv) total
+                if ($fits == 'adj' && $inputid1 == '86') $res = $this->getContextTypeAllSE($fits, $inputid1);
+                else if ($fits == 'adj' && $inputid1 == '100') $res = $this->getContextTypeAllSE($fits, $inputid1);
+                else $res = $this->getContextTypeAll($fits);
                 $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
             }
             else if ($fits == 'ordinal') { // (case: theme)
@@ -614,7 +669,7 @@ class Recommender extends CI_Model {
                 $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
                 //return $res;
             }
-            if ($fits = 'adv') {  // (case: manera)
+            if ($fits == 'manera') {  // (case: manera)
                 // Algorisme V6 - Predictor de context (adv manera) total    
                 $res = $this->getContextTypeAdvManeraAll($fits);
                 $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
@@ -642,7 +697,10 @@ class Recommender extends CI_Model {
         return $VF;
     }
     
-    private function get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits) {
+    private function get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid) {
+        if ($case == "locat") $fits = "lloc";
+        else if ($case == "acomp") $fits = "human";
+        
         if ($case == "theme") {
             if ($fits == 'adj' || $fits == 'adv') {
                 // Algorismes V3 i V4 - Predictor verbs I i II (basat en freq. usuari)
@@ -666,7 +724,7 @@ class Recommender extends CI_Model {
                 $res = $this->getfreqUsuariQuantX3($inputid1, $inputid2, $fits);
                 $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
             }
-            else if ($fits = 'adv') {  // (case: manera)
+            else if ($fits == 'manera') {  // (case: manera)
                 // Algorismes V3 i V4 - Predictor verbs I i II (basat en freq. usuari)
                 $res = $this->getfreqUsuariAdvManeraX3($inputid1, $inputid2, $fits);
                 $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
@@ -685,8 +743,10 @@ class Recommender extends CI_Model {
 
         if ($case == "theme") {
             if ($fits == 'adj' || $fits == 'adv') {
-                // Algorisme V6 - Predictor de context (adj i adv) total    
-                $res = $this->getContextTypeAll($fits);
+                // Algorisme V6 - Predictor de context (adj i adv) total 
+                if ($fits == 'adj' && $inputid == '86') $res = $this->getContextTypeAllSE($fits, $inputid);
+                else if ($fits == 'adj' && $inputid == '100') $res = $this->getContextTypeAllSE($fits, $inputid);
+                else $res = $this->getContextTypeAll($fits);
                 $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
             }
             else if ($fits == 'ordinal') { // (case: theme)
@@ -711,8 +771,8 @@ class Recommender extends CI_Model {
                 $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
                 //return $res;
             }
-            if ($fits = 'adv') {  // (case: manera)
-                // Algorisme V6 - Predictor de context (adv manera) total    
+            if ($fits == 'manera') {  // (case: manera)
+                // Algorisme V6 - Predictor de context (adv manera) total
                 $res = $this->getContextTypeAdvManeraAll($fits);
                 $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
                 //return $contextTypeAdvManeraAll;
@@ -735,7 +795,7 @@ class Recommender extends CI_Model {
             // Algorisme V6 - Predictor de context ($fits) total              
             $res = $this->getContextFitsNClassAll($fits);
             $VF = $this->rellenaVFX2X3($VF, $res, $TSize);
-        }           
+        }
         return $VF;
     }
 
@@ -752,13 +812,16 @@ class Recommender extends CI_Model {
         }
         else if ($tipus != null && $tipus[0]->$caseTipus == 'adj') {
             $fits = 'adj';
-        }   
+        }
+        else if ($tipus != null && $case == "manera" && $tipus[0]->$caseTipus == 'adv') {
+            $fits = 'manera';
+        }
         else if ($tipus != null && $tipus[0]->$caseTipus == 'adv') {
             $fits = 'adv';
-        }   
+        }
         else if ($tipus != null && $tipus[0]->$caseTipus == 'quant') {
             $fits = 'quant';
-        }  
+        }
         else if ($tipus != null && $tipus[0]->$caseTipus == 'ordinal') {
             $fits = 'ordinal';
         }
@@ -769,12 +832,12 @@ class Recommender extends CI_Model {
             $fits = 'lloc';
         }
         return $fits;
-    }        
+    }
     
     private function getfreqUsuariX1() {
         $output = array();
         $output = null;
-        
+
         $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext');
         $this->db->from('P_StatsUserPicto');
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
@@ -784,7 +847,7 @@ class Recommender extends CI_Model {
         $this->db->order_by('countx1', 'desc');
         $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();     
-                
+       
         if ($query->num_rows() > 0) {
             $output = $query->result();
         }        
@@ -867,11 +930,6 @@ class Recommender extends CI_Model {
     private function insertCeilVF($VF, $Prediction, $FSize) {
         $k = 0;
         foreach($Prediction as $value) {
-            if (sizeof($VF) == 0) {
-                $VF = array();
-                array_push($VF,$value);
-            }
-                        
             $repe = false;
             $paraulesFrase = $this->getIdsElem();
             for ($i = 0; $i < sizeof($paraulesFrase); $i++) {
@@ -881,7 +939,11 @@ class Recommender extends CI_Model {
                 }
             }
             
-            if (!$repe) {      
+            if (!$repe) {  
+                if (sizeof($VF) == 0) {
+                    $VF = array();
+                    array_push($VF,$value);
+                } 
                 for ($i = 0; $i < sizeof($VF); $i++) {
                     if($k == ceil($FSize/2) || $value->pictoid == $VF[$i]->pictoid) { break; }
                     else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
@@ -895,12 +957,7 @@ class Recommender extends CI_Model {
     }
     
     private function rellenaVFX2X3($VF, $Prediction, $TSize) {
-        foreach($Prediction as $value) {
-            if (sizeof($VF) == 0) {
-                $VF = array();
-                array_push($VF,$value);
-            } 
-            
+        foreach($Prediction as $value) {            
             $repe = false;
             $paraulesFrase = $this->getIdsElem();
             for ($i = 0; $i < sizeof($paraulesFrase); $i++) {
@@ -910,7 +967,11 @@ class Recommender extends CI_Model {
                 }
             }
             
-            if (!$repe) {            
+            if (!$repe) {
+                if (sizeof($VF) == 0) {
+                    $VF = array();
+                    array_push($VF,$value);
+                } 
                 for ($i = 0; sizeof($VF) < $TSize && $i < sizeof($VF); $i++) {
                     if ($value->pictoid == $VF[$i]->pictoid) { break; }
                     else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
@@ -1049,7 +1110,7 @@ class Recommender extends CI_Model {
         $VF = array();
         $VF = array_merge($VF,$this->getfreqUsuariX2($inputid1));
         $TSize = $this->session->userdata('cfgPredBarNumPred');
-        $FSize = $TSize - sizeof($VF);        
+        $FSize = $TSize - sizeof($VF);     
         
         if ($inputType[0]->pictoType == 'name') {
             // Algorisme V6 - Predictor de context (verb) últims 2 dies
@@ -1065,45 +1126,44 @@ class Recommender extends CI_Model {
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerb2Day, $TSize);
         }
         else if ($inputType[0]->pictoType == 'verb') {
-            $caseList = array("theme", "locto", "locfrom", "manera", "time", "tool");
+            $caseList = array("theme",  "manera", "locat", "locto", "locfrom", "time", "tool", "acomp");
             foreach ($caseList as $case) {
-                if ($case == "time" || $case == "tool") {
+                if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
                     if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 1) $VF = $this->get1OptFitsX2($inputid1, $case, $VF, $TSize, $case);
                 }
                 else {
                     if (sizeof($VF) < $TSize) {
-                        
-                        $fits = $this->get1OptFits($inputid1, $case, 1);
+                        $fits = $this->get1OptFits($inputid1, $case, 1);                        
                         $VF = $this->get1OptFitsX2($inputid1, $case, $VF, $TSize, $fits);
                     }
                 }
             }
             foreach ($caseList as $case) {
-                if ($case == "time" || $case == "tool") {
+                if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
                     if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 'opt') {
                         $VF = $this->get1OptFitsX2($inputid1, $case, $VF, $TSize, $case);
                     }
                 }
                 else {
                     if (sizeof($VF) < $TSize) {
-                        $fits = $this->get1OptFits($inputid1, $case, 'opt');
-                        $VF = $this->get1OptFitsX2($inputid1, $case, $VF, $TSize, $fits); 
+                        $fits = $this->get1OptFits($inputid1, $case, 'opt');                        
+                        $VF = $this->get1OptFitsX2($inputid1, $case, $VF, $TSize, $fits);
                     }
                 }
             }
         }
         else if ($inputType[0]->pictoType == 'modifier' && $this->boolDetPos($inputid1)) {
-            // Algorisme V6 - Predictor de context (name) últims 2 dies                                
+            // Algorisme V6 - Predictor de context (name) últims 2 dies
             $contextTypeName2Days = $this->getContextType2Days('name');
-            $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);                   
-            
-            // Algorisme V6 - Predictor de context (name) total                      
+            $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);
+
+            // Algorisme V6 - Predictor de context (name) total
             $contextTypeNamesAll = $this->getContextTypeAll('name');
-            $VF = $this->insertFloorVF($VF, $contextTypeNamesAll, $FSize);   
-            
-                        // rellena
+            $VF = $this->insertFloorVF($VF, $contextTypeNamesAll, $FSize);
+
+            // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
-            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeNamesAll, $TSize);            
+            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeNamesAll, $TSize);
         }
         else {
             // Algorisme V6 - Predictor de context (name) últims 2 dies                                
@@ -1172,10 +1232,22 @@ class Recommender extends CI_Model {
                 break;
             }
         }
-        
+
         // Algorisme V2 - Predictor freqüència II (d'usuari)
         $VF = array();
         $VF = array_merge($VF,$this->getfreqUsuariX3($inputid1, $inputid2));
+
+        // rellena 1ra mitad
+        if (sizeof($VF) < 3) {
+            $freqX2 = $this->getfreqUsuariX2($inputid2);
+            $VF = $this->rellenaVFX2X3($VF, $freqX2, 3);
+        }        
+        
+        // rellena 2da mitad
+        if (sizeof($VF) < 3) {
+            $freqX1 = $this->getfreqUsuariX1();
+            $VF = $this->rellenaVFX2X3($VF, $freqX1, 3);
+        }
         
         $TSize = $this->session->userdata('cfgPredBarNumPred');
         $FSize = $TSize - sizeof($VF);
@@ -1189,7 +1261,7 @@ class Recommender extends CI_Model {
             $contextTypeNamesAll = $this->getContextTypeAll('name');
             $VF = $this->insertFloorVF($VF, $contextTypeNamesAll, $FSize);   
             
-                        // rellena
+            // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeNamesAll, $TSize);            
         }
@@ -1207,29 +1279,70 @@ class Recommender extends CI_Model {
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
         }
         else if ($inputType2[0]->pictoType == 'verb') {
-            $caseList = array("theme", "locto", "locfrom", "manera", "time", "tool");            
+            $caseList = array("theme",  "manera", "locat", "locto", "locfrom", "time", "tool", "acomp");
             foreach ($caseList as $case) {
-                if ($case == "time" || $case == "tool") {
-                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid2, $case)[0]->$case == 1) $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
+                if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
+                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid2, $case)[0]->$case == 1) {
+                        if (($case == 'time' || $case == 'tool') && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $case) {
+                            continue;
+                        }
+                        else if ($case == 'locat' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == 'lloc') {
+                            continue;
+                        }
+                        else if ($case == 'acomp' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == 'human') {
+                            continue;
+                        }
+                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid2);
+                    }
                 }
                 else {
                     if (sizeof($VF) < $TSize) {
                         $fits = $this->get1OptFits($inputid2, $case, 1);
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits);
+                        if ($case == 'theme' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $fits[0]) {
+                            continue;
+                        }
+                        else if ($case == 'manera' && $inputType1[0]->pictoType == 'adv' && $this->getAdvType($inputid1)[0]->class == $fits) {
+                            continue;
+                        }
+                        else if (($case == 'locto' || $case == 'locfrom') && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $fits) {
+                            continue;
+                        }
+                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid2);
                     }
                 }
             }
             foreach ($caseList as $case) {
-                if ($case == "time" || $case == "tool") {
-                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid2, $case)[0]->$case == 'opt') $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
+                if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
+                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid2, $case)[0]->$case == 'opt') {
+                        if (($case == 'time' || $case == 'tool') && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $case) {
+                            continue;
+                        }
+                        else if ($case == 'locat' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == 'lloc') {
+                            continue;
+                        }
+                        else if ($case == 'acomp' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == 'human') {
+                            continue;
+                        }
+                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid2);
+                    }
                 }
                 else {
                     if (sizeof($VF) < $TSize) {
                         $fits = $this->get1OptFits($inputid2, $case, 'opt');
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits); 
+                        if ($case == 'theme' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $fits[0]) {
+                            continue;
+                        }
+                        else if ($case == 'manera' && $inputType1[0]->pictoType == 'adv' && $this->getAdvType($inputid1)[0]->class == $fits) {
+                            continue;
+                        }
+                        else if (($case == 'locto' || $case == 'locfrom') && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $fits) {
+                            continue;
+                        }
+                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid2);
                     }
                 }
             }
+            return $VF;
         }
         else if (!$verb && $inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType != 'name') {
             // Algorisme V6 - Predictor de context (name) últims 2 dies                                
@@ -1244,31 +1357,71 @@ class Recommender extends CI_Model {
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbsAll, $TSize);
         }                        
-        else if ($inputType1[0]->pictoType == 'verb') {              
-            $caseList = array("theme", "locto", "locfrom", "manera", "time", "tool"); 
-           
+        else if ($inputType1[0]->pictoType == 'verb') {
+            $caseList = array("theme",  "manera", "locat", "locto", "locfrom", "time", "tool", "acomp");
             foreach ($caseList as $case) {
-                if ($case == "time" || $case == "tool") {
-                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 1) $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
+                if ($case == "time" || $case == "tool" || $case == "locat" || $case = "acomp") {
+                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 1) {
+                        if (($case == 'time' || $case == 'tool') && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $case) {
+                            continue;
+                        }
+                        else if ($case == 'locat' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'lloc') {
+                            continue;
+                        }
+                        else if ($case == 'acomp' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'human') {
+                            continue;
+                        }
+                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid1);
+                    }
                 }
                 else {
                     if (sizeof($VF) < $TSize) {
                         $fits = $this->get1OptFits($inputid1, $case, 1);
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits);
+                        if ($case == 'theme' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits[0]) {
+                            continue;
+                        }
+                        else if ($case == 'manera' && $inputType2[0]->pictoType == 'adv' && $this->getAdvType($inputid2)[0]->class == $fits) {
+                            continue;
+                        }
+                        else if (($case == 'locto' || $case == 'locfrom') && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits) {
+                            continue;
+                        }
+                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid1);
                     }
                 }
-            }            
+            }
             foreach ($caseList as $case) {
-                if ($case == "time" || $case == "tool") {
-                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 'opt')$VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
+                if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
+                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 'opt') {
+                        if (($case == 'time' || $case == 'tool') && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $case) {
+                            continue;
+                        }
+                        else if ($case == 'locat' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'lloc') {
+                            continue;
+                        }
+                        else if ($case == 'acomp' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'human') {
+                            continue;
+                        }
+                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid1);
+                    }
                 }
                 else {
                     if (sizeof($VF) < $TSize) {
                         $fits = $this->get1OptFits($inputid1, $case, 'opt');
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits); 
+                        if ($case == 'theme' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits[0]) {
+                            continue;
+                        }
+                        else if ($case == 'manera' && $inputType2[0]->pictoType == 'adv' && $this->getAdvType($inputid2)[0]->class == $fits) {
+                            continue;
+                        }
+                        else if (($case == 'locto' || $case == 'locfrom') && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits) {
+                            continue;
+                        }
+                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid1);
                     }
                 }
             }
+            return $VF;
         }
         else if (!$verb && $inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType != 'name') {
             // Algorisme V6 - Predictor de context (name) últims 2 dies                                
@@ -1306,26 +1459,26 @@ class Recommender extends CI_Model {
                 for ($i = sizeof($paraulesFrase); $i > 0; $i--) {
                     if ($this->getTypesElem($paraulesFrase[sizeof($paraulesFrase)-$i]->pictoid)[0]->pictoType == 'verb') {
                         $inputid1 = $paraulesFrase[sizeof($paraulesFrase)-$i]->pictoid;
-                        $caseList = array("theme", "locto", "locfrom", "manera", "time", "tool");            
+                        $caseList = array("theme",  "manera", "locat", "locto", "locfrom", "time", "tool", "acomp");
                         foreach ($caseList as $case) {
-                            if ($case == "time" || $case == "tool") {
-                                if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 1) $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
+                            if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
+                                if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 1) $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid1);
                             }
                             else {
                                 if (sizeof($VF) < $TSize) {
                                     $fits = $this->get1OptFits($inputid1, $case, 1);
-                                    $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits);
+                                    $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid1);
                                 }
                             }
                         }
                         foreach ($caseList as $case) {
-                            if ($case == "time" || $case == "tool") {
-                                if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 'opt') $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case);
+                            if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
+                                if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 'opt') $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid1);
                             }
                             else {
                                 if (sizeof($VF) < $TSize) {
                                     $fits = $this->get1OptFits($inputid1, $case, 'opt');
-                                    $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits); 
+                                    $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid1);
                                 }
                             }
                         }
