@@ -2077,7 +2077,6 @@ angular.module('controllers', [])
              */
             $scope.openConfirmSize = function ($newH, $oldH, $newW, $oldW) {
 
-                var url = $scope.baseurl + "Board/modifyCellBoard";
                 var postdata = {r: $newH, c: $newW, idboard: $scope.idboard};
                 //Object of all new/old sizes
                 $scope.FormData = {
@@ -2097,21 +2096,20 @@ angular.module('controllers', [])
                     $scope.FormData.HWType = 1;
                     $scope.FormData.Dnum = ($oldW - $newW);
                 }
-                ngDialog.openConfirm({
-                    template: $scope.baseurl + '/angular_templates/ConfirmResize.html',
-                    scope: $scope,
-                    className: 'ngdialog-theme-default dialogResize'
-                }).then(function (value) {
-                    //if confirm
-                    $http.post(url, postdata).then(function (response) {
+                $scope.DataResize = postdata;
+                $('#ConfirmResize').modal({backdrop: 'static'});
+            };
+            $scope.AcceptOpenConfirmSize = function () {
+                var url = $scope.baseurl + "Board/modifyCellBoard";
+                $http.post(url, $scope.DataResize).then(function (response) {
                         $scope.showBoard('0');
                     }).error(function (response) {});
-                }, function (value) {
-                    //if close
-                    $scope.edit();
-                    $scope.showBoard('0');
-                });
             };
+            $scope.DenyOpenConfirmSize = function () {
+                $scope.edit();
+                    $scope.showBoard('0');
+            };
+            
 
             /*
              * Add the selected pictogram to the sentence

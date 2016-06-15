@@ -1,19 +1,26 @@
-<div class="topBarDialogS"><div class="editTitle">{{content.resizecolrow}}</div><div class="cruzTop"></div></div>
-<div class="imgRounded confirmDefPadS">
-    <div class="imgRounded confirmBackgroundColor" >
-        <div class="confirmContent row" >
-
-            <p ng-if="FormData.HWType === 0" class="text-center col-xs-12 dialogText">
-                Eliminar {{FormData.Dnum}} filas?
-            </p>
-            <p ng-if="FormData.HWType === 1" class="text-center col-xs-12 dialogText">
-                Eliminar {{FormData.Dnum}} columnes?
-            </p>
-
-        </div>
-        <div class="row confirmButtons">
-            <input class=" dialogButton col-xs-offset-3 col-xs-2" type="button" value="{{content.confirm}}" ng-click="confirm();"/>
-            <input class=" dialogButton col-xs-offset-2 col-xs-2" type="button" value="{{content.cancel}}" ng-click="closeThisDialog();"/>
+<!--Logout Modal-->
+<div class="modal fade" id="ConfirmResize" role="dialog">
+    <div class="modal-dialog">
+        <div class="row marginModalTopOwl"><img class="img-owl pull-right" src={{img.lowSorpresaFlecha}}/></div>
+        <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_08}})">
+            <div id="header" class="row">
+                <div class="col-xs-10 headerTitle">{{content.resizecolrow}}</div>
+            </div>
+            <div class="row backgroundUserConfigBox">
+                <div class="row fonsAlert">
+                    <div class="col-xs-12 textCenter" ng-if="FormData.HWType === 0">Eliminar {{FormData.Dnum}} filas?</div>
+                    <div class="col-xs-12 textCenter" ng-if="FormData.HWType === 1">Eliminar {{FormData.Dnum}} columnes?</div>
+                </div>
+                <div class="row dadesUsuariCentre">
+                    <div class="col-xs-6">
+                        <button type="reset" class="btn-gray pull-left" data-dismiss="modal" ng-click="AcceptOpenConfirmSize();">{{logoutContent.confirm}}</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button type="reset" class="btn-gray pull-right" data-dismiss="modal" ng-click="DenyOpenConfirmSize();">{{logoutContent.cancel}}</button>
+                    </div>
+                </div>
+            </div>
+        <div class="row verticalMarginTop"></div>
         </div>
     </div>
 </div>
