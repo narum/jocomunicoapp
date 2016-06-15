@@ -472,6 +472,9 @@ input.switch:checked ~ label:after
     padding-top: 1vh;
     padding-left: 2vw;
 }
+.textImgError{
+    margin-top: 5px;
+}
 .marginModalTop{
     margin-top: 25vh;
 }

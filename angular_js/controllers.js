@@ -2623,6 +2623,8 @@ angular.module('controllers', [])
                             if(response.error){
                                 //open modal
                                 console.log(response.errorText);
+                                $scope.errorText = response.errorText;
+                                $('#errorImgModal').modal({backdrop: 'static'});
                             }
                         })
                         .error(function (response) {
