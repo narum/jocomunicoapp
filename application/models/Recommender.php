@@ -1226,7 +1226,7 @@ class Recommender extends CI_Model {
         
         $verb = false;
         for ($i = sizeof($paraulesFrase); $i > 0; $i--) {
-            if ($this->getTypesElem($paraulesFrase[sizeof($paraulesFrase)-$i]->pictoid)[0]->pictoType == 'verb')
+            if ($this->getTypesElem($paraulesFrase[$i-1]->pictoid)[0]->pictoType == 'verb')
             {
                 $verb = true;
                 break;
@@ -1235,8 +1235,8 @@ class Recommender extends CI_Model {
 
         // Algorisme V2 - Predictor freqüència II (d'usuari)
         $VF = array();
-        $VF = array_merge($VF,$this->getfreqUsuariX3($inputid1, $inputid2));
-
+        $VF = array_merge($VF,$this->getfreqUsuariX3($inputid1, $inputid2));              
+        
         // rellena 1ra mitad
         if (sizeof($VF) < 3) {
             $freqX2 = $this->getfreqUsuariX2($inputid2);
@@ -1250,9 +1250,10 @@ class Recommender extends CI_Model {
         }
         
         $TSize = $this->session->userdata('cfgPredBarNumPred');
-        $FSize = $TSize - sizeof($VF);
+        $FSize = $TSize - sizeof($VF);       
               
         if ($inputType2[0]->pictoType == 'modifier' && $this->boolDetPos($inputid2)) {
+            
             // Algorisme V6 - Predictor de context (name) últims 2 dies                                
             $contextTypeName2Days = $this->getContextType2Days('name');
             $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);                   
@@ -1265,8 +1266,7 @@ class Recommender extends CI_Model {
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeNamesAll, $TSize);            
         }
-        else if (!$verb && ($inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType == 'name' || 
-                ($inputType1[0]->pictoType == 'name' && $inputType2[0]->pictoType != 'verb'))) {          
+        else if (!$verb && ($inputType1[0]->pictoType == 'name' || $inputType2[0]->pictoType == 'name')) {
             // Algorisme V6 - Predictor de context (verb) últims 2 dies                       
             $contextTypeVerbs2Days = $this->getContextType2Days('verb');
             $VF = $this->insertCeilVF($VF, $contextTypeVerbs2Days, $FSize);
@@ -1278,73 +1278,7 @@ class Recommender extends CI_Model {
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbs2Days, $TSize);
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
         }
-        else if ($inputType2[0]->pictoType == 'verb') {
-            $caseList = array("theme",  "manera", "locat", "locto", "locfrom", "time", "tool", "acomp");
-            foreach ($caseList as $case) {
-                if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
-                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid2, $case)[0]->$case == 1) {
-                        if (($case == 'time' || $case == 'tool') && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $case) {
-                            continue;
-                        }
-                        else if ($case == 'locat' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == 'lloc') {
-                            continue;
-                        }
-                        else if ($case == 'acomp' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == 'human') {
-                            continue;
-                        }
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid2);
-                    }
-                }
-                else {
-                    if (sizeof($VF) < $TSize) {
-                        $fits = $this->get1OptFits($inputid2, $case, 1);
-                        if ($case == 'theme' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $fits[0]) {
-                            continue;
-                        }
-                        else if ($case == 'manera' && $inputType1[0]->pictoType == 'adv' && $this->getAdvType($inputid1)[0]->class == $fits) {
-                            continue;
-                        }
-                        else if (($case == 'locto' || $case == 'locfrom') && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $fits) {
-                            continue;
-                        }
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid2);
-                    }
-                }
-            }
-            foreach ($caseList as $case) {
-                if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
-                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid2, $case)[0]->$case == 'opt') {
-                        if (($case == 'time' || $case == 'tool') && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $case) {
-                            continue;
-                        }
-                        else if ($case == 'locat' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == 'lloc') {
-                            continue;
-                        }
-                        else if ($case == 'acomp' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == 'human') {
-                            continue;
-                        }
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid2);
-                    }
-                }
-                else {
-                    if (sizeof($VF) < $TSize) {
-                        $fits = $this->get1OptFits($inputid2, $case, 'opt');
-                        if ($case == 'theme' && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $fits[0]) {
-                            continue;
-                        }
-                        else if ($case == 'manera' && $inputType1[0]->pictoType == 'adv' && $this->getAdvType($inputid1)[0]->class == $fits) {
-                            continue;
-                        }
-                        else if (($case == 'locto' || $case == 'locfrom') && $inputType1[0]->pictoType == 'name' && $this->getNameClass($inputid1)[0]->class == $fits) {
-                            continue;
-                        }
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid2);
-                    }
-                }
-            }
-            return $VF;
-        }
-        else if (!$verb && $inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType != 'name') {
+        else if (!$verb && $inputType2[0]->pictoType != 'name') {
             // Algorisme V6 - Predictor de context (name) últims 2 dies                                
             $contextTypeName2Days = $this->getContextType2Days('name');
             $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);                   
@@ -1356,87 +1290,8 @@ class Recommender extends CI_Model {
             // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbsAll, $TSize);
-        }                        
-        else if ($inputType1[0]->pictoType == 'verb') {
-            $caseList = array("theme",  "manera", "locat", "locto", "locfrom", "time", "tool", "acomp");
-            foreach ($caseList as $case) {
-                if ($case == "time" || $case == "tool" || $case == "locat" || $case = "acomp") {
-                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 1) {
-                        if (($case == 'time' || $case == 'tool') && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $case) {
-                            continue;
-                        }
-                        else if ($case == 'locat' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'lloc') {
-                            continue;
-                        }
-                        else if ($case == 'acomp' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'human') {
-                            continue;
-                        }
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid1);
-                    }
-                }
-                else {
-                    if (sizeof($VF) < $TSize) {
-                        $fits = $this->get1OptFits($inputid1, $case, 1);
-                        if ($case == 'theme' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits[0]) {
-                            continue;
-                        }
-                        else if ($case == 'manera' && $inputType2[0]->pictoType == 'adv' && $this->getAdvType($inputid2)[0]->class == $fits) {
-                            continue;
-                        }
-                        else if (($case == 'locto' || $case == 'locfrom') && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits) {
-                            continue;
-                        }
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid1);
-                    }
-                }
-            }
-            foreach ($caseList as $case) {
-                if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
-                    if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 'opt') {
-                        if (($case == 'time' || $case == 'tool') && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $case) {
-                            continue;
-                        }
-                        else if ($case == 'locat' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'lloc') {
-                            continue;
-                        }
-                        else if ($case == 'acomp' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'human') {
-                            continue;
-                        }
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid1);
-                    }
-                }
-                else {
-                    if (sizeof($VF) < $TSize) {
-                        $fits = $this->get1OptFits($inputid1, $case, 'opt');
-                        if ($case == 'theme' && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits[0]) {
-                            continue;
-                        }
-                        else if ($case == 'manera' && $inputType2[0]->pictoType == 'adv' && $this->getAdvType($inputid2)[0]->class == $fits) {
-                            continue;
-                        }
-                        else if (($case == 'locto' || $case == 'locfrom') && $inputType2[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits) {
-                            continue;
-                        }
-                        $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid1);
-                    }
-                }
-            }
-            return $VF;
         }
-        else if (!$verb && $inputType1[0]->pictoType != 'verb' && $inputType2[0]->pictoType != 'name') {
-            // Algorisme V6 - Predictor de context (name) últims 2 dies                                
-            $contextTypeName2Days = $this->getContextType2Days('name');
-            $VF = $this->insertCeilVF($VF, $contextTypeName2Days, $FSize);                   
-
-            // Algorisme V6 - Predictor de context (verb) total                      
-            $contextTypeVerbsAll = $this->getContextTypeAll('verb');
-            $VF = $this->insertFloorVF($VF, $contextTypeVerbsAll, $FSize);                  
-
-            // rellena
-            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
-            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbsAll, $TSize);
-        }                        
-        else if (!$verb && $inputType1[0]->pictoType == 'name') {            
+        else if (!$verb && $inputType1[0]->pictoType == 'name') {
             // Algorisme V6 - Predictor de context (verb) últims 2 dies
             $contextTypeVerbs2Days = $this->getContextType2Days('verb');
             $VF = $this->insertCeilVF($VF, $contextTypeVerbs2Days, $FSize);
@@ -1453,31 +1308,103 @@ class Recommender extends CI_Model {
                 $freqX2 = $this->getRecommenderX2();    
                 $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
             }
-        }        
+        }
         else { // ni name ni verb
             if ($verb) {
-                for ($i = sizeof($paraulesFrase); $i > 0; $i--) {
-                    if ($this->getTypesElem($paraulesFrase[sizeof($paraulesFrase)-$i]->pictoid)[0]->pictoType == 'verb') {
-                        $inputid1 = $paraulesFrase[sizeof($paraulesFrase)-$i]->pictoid;
-                        $caseList = array("theme",  "manera", "locat", "locto", "locfrom", "time", "tool", "acomp");
+                $caseList = array("theme",  "manera", "locat", "locto", "locfrom", "tool", "acomp");
+                for ($j = sizeof($paraulesFrase); $j > 0; $j--) {
+                    if ($this->getTypesElem($paraulesFrase[$j-1]->pictoid)[0]->pictoType == 'verb') {
+                        $inputid1 = $paraulesFrase[$j-1]->pictoid;
                         foreach ($caseList as $case) {
                             if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
-                                if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 1) $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid1);
+                                if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 1) {
+                                    $repe = false;
+                                    for ($k = sizeof($paraulesFrase); $k > 0; $k--) {
+                                        $inputid2 = $paraulesFrase[$k-1]->pictoid;
+                                        if (($case == 'time' || $case == 'tool') && $this->getTypesElem($inputid2)[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $case) {
+                                            $repe = true;
+                                            break;
+                                        }
+                                        else if ($case == 'locat' && $this->getTypesElem($inputid2)[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'lloc') {
+                                            $repe = true;
+                                            break;
+                                        }
+                                        else if ($case == 'acomp' && $this->getTypesElem($inputid2)[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'human' && $inputid2 != 444) {
+                                            $repe = true;
+                                            break;
+                                        }
+                                    }
+                                    if ($repe) continue;
+                                    $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid1);
+                                }
                             }
                             else {
                                 if (sizeof($VF) < $TSize) {
                                     $fits = $this->get1OptFits($inputid1, $case, 1);
+                                    $repe = false;
+                                    for ($w = sizeof($paraulesFrase); $w > 0; $w--) {
+                                        $inputid2 = $paraulesFrase[$w-1]->pictoid;
+                                        if ($case == 'theme' && $this->getTypesElem($inputid2)[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits[0]) {
+                                            $repe = true;
+                                            break;
+                                        }
+                                        if ($case == 'manera' && $this->getTypesElem($inputid2)[0]->pictoType == 'adv' && $this->getAdvType($inputid2)[0]->class == $fits) {
+                                            $repe = true;
+                                            break;
+                                        }
+                                        else if (($case == 'locto' || $case == 'locfrom') && $this->getTypesElem($inputid2)[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits) {
+                                            $repe = true;
+                                            break;
+                                        }
+                                    }
+                                    if ($repe) continue;
                                     $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid1);
                                 }
                             }
                         }
                         foreach ($caseList as $case) {
                             if ($case == "time" || $case == "tool" || $case == "locat" || $case == "acomp") {
-                                if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 'opt') $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid1);
+                                if (sizeof($VF) < $TSize && $this->get1Opt($inputid1, $case)[0]->$case == 'opt') {
+                                    $repe = false;
+                                    for ($k = sizeof($paraulesFrase); $k > 0; $k--) {
+                                        $inputid2 = $paraulesFrase[$k-1]->pictoid;
+                                        if (($case == 'time' || $case == 'tool') && $this->getTypesElem($inputid2)[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $case) {
+                                            $repe = true;
+                                            break;
+                                        }
+                                        else if ($case == 'locat' && $this->getTypesElem($inputid2)[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'lloc') {
+                                            $repe = true;
+                                            break;
+                                        }
+                                        else if ($case == 'acomp' && $this->getTypesElem($inputid2)[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == 'human' && $inputid2 != 444) {
+                                            $repe = true;
+                                            break;
+                                        }
+                                    }
+                                    if ($repe) continue;
+                                    $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $case, $inputid1);
+                                }
                             }
                             else {
                                 if (sizeof($VF) < $TSize) {
                                     $fits = $this->get1OptFits($inputid1, $case, 'opt');
+                                    $repe = false;
+                                    for ($w = sizeof($paraulesFrase); $w > 0; $w--) {
+                                        $inputid2 = $paraulesFrase[$w-1]->pictoid;
+                                        if ($case == 'theme' && $this->getTypesElem($inputid2)[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits[0]) {
+                                            $repe = true;
+                                            break;
+                                        }
+                                        if ($case == 'manera' && $this->getTypesElem($inputid2)[0]->pictoType == 'adv' && $this->getAdvType($inputid2)[0]->class == $fits) {
+                                            $repe = true;
+                                            break;
+                                        }
+                                        else if (($case == 'locto' || $case == 'locfrom') && $this->getTypesElem($inputid2)[0]->pictoType == 'name' && $this->getNameClass($inputid2)[0]->class == $fits) {
+                                            $repe = true;
+                                            break;
+                                        }
+                                    }
+                                    if ($repe) continue;
                                     $VF = $this->get1OptFitsX3($inputid1, $inputid2, $case, $VF, $TSize, $fits, $inputid1);
                                 }
                             }
