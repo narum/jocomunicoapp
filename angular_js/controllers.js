@@ -3046,6 +3046,9 @@ angular.module('controllers', [])
 
 
         .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
+            $scope.addWord = function () {
+                $location.path('/addWord');
+            };
             $scope.$on('scrollbar.show', function () {
                 console.log('Scrollbar show');
             });
@@ -3231,7 +3234,11 @@ angular.module('controllers', [])
             });
 
         })
-
+        .controller('addWordCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
+            $scope.testing = function() {
+                
+            };
+        })
 
 
 

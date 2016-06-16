@@ -59,6 +59,10 @@ angular.module('app', [
 			controller:'panelCtrl',
 			templateUrl:'../../angular_templates/PanelGroups.html'
 		})
+                .when('/addWord', {
+			controller:'addWordCtrl',
+			templateUrl:'../../angular_templates/addWord.html'
+		})
 		.otherwise({ redirectTo:'/' });
 })
 .run(function(AuthService){
