@@ -22,3 +22,26 @@
     height: 100%;
     padding: 1vh;
 }
+.addWordFromField{
+    padding: 1vh;
+}
+.addWordForm10{
+    height: 10%;
+    padding: 0.5vh;
+}
+.addWordForm20{
+    height: 20%;
+    padding: 0.5vh;
+}
+.addWordForm30{
+    height: 30%;
+    padding: 0.5vh;
+}
+.addWordForm40{
+    height: 40%;
+    padding: 0.5vh;
+}
+.addWordForm50{
+    height: 50%;
+    padding: 0.5vh;
+}
