@@ -370,6 +370,7 @@ input.switch:checked ~ label:after
     align-content: center;
     flex-direction: column; 
     cursor: pointer;
+    max-height: 40px;
 }
 .folderButton:active{
     box-shadow: 0px -0px 0px 1px #333;

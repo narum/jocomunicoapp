@@ -1,0 +1,24 @@
+@charset "UTF-8";
+/* CSS Document */
+.folderContainer{
+    padding: 5vh 5vw;
+    height: 100vh;
+}
+.paddingContainer{
+    padding: 5vh 5vw;
+}
+.imgContainer{
+    height: 60%;
+    padding: 1vh;
+}
+.confirmContainer{
+    height: 40%;
+    padding: 1vh;
+}
+.imgconfirmContainer{
+    height: 100%;
+}
+.addWordContainer{
+    height: 100%;
+    padding: 1vh;
+}

@@ -3208,7 +3208,7 @@ angular.module('controllers', [])
         })
         .controller('addWordCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
             $scope.testing = function() {
-                alert("THE HOPE IS NEAR!");
+                
             };
         })
 
