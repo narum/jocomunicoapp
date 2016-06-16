@@ -67,6 +67,7 @@ class ImgUploader extends REST_Controller {
         }
 
         $response = [
+            'url' => $target_dir.$md5Name,
             'errorText' => $errorText,
             'error' => $error
         ];

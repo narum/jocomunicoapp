@@ -3148,7 +3148,7 @@ angular.module('controllers', [])
                             success(function (response)
                             {
                                 $scope.isLoged = "true";
-                                
+
                             })
                             .error(function (response) {
                                 $scope.isLoged = "false";
@@ -3235,8 +3235,34 @@ angular.module('controllers', [])
 
         })
         .controller('addWordCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
-            $scope.testing = function() {
-                
+            $scope.testing = function () {
+
+            };
+            $scope.uploadFileToWord = function () {
+                $scope.myFile = document.getElementById('file-input').files;
+                $scope.uploading = true;
+                var i;
+                var uploadUrl = $scope.baseurl + "ImgUploader/upload";
+                var fd = new FormData();
+                for (i = 0; i < $scope.myFile.length; i++) {
+                    fd.append('file' + i, $scope.myFile[i]);
+                }
+                $http.post(uploadUrl, fd, {
+                    headers: {'Content-Type': undefined}
+                })
+                        .success(function (response) {
+                            $scope.uploading = false;
+                            $scope.URLImg = response.url;
+                            if (response.error) {
+                                //open modal
+                                console.log(response.errorText);
+                                $scope.errorText = response.errorText;
+                                $('#errorImgModal').modal({backdrop: 'static'});
+                            }
+                        })
+                        .error(function (response) {
+                            //alert(response.errorText);
+                        });
             };
         })
 
