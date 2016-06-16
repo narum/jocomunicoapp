@@ -156,12 +156,12 @@ class PanelGroup extends REST_Controller {
         $this->response($response, REST_Controller::HTTP_OK);
     }
 
-    public function copyGroupBoard_post() {
+    public function copyDefaultGroupBoard_post() {
         //MODIF: 2 es el panel default
         $idusu = $this->session->userdata('idusu');
         $board = $this->BoardInterface->getPrimaryGroupBoard();
         if ($board == null) {
-       
+
             $changedLinks = array();
             $srcGroupBoard = 2;
             $primaryBoard = $this->BoardInterface->getInfoGroupBoard($srcGroupBoard);
@@ -170,7 +170,7 @@ class PanelGroup extends REST_Controller {
             $boards = $this->BoardInterface->getBoards($srcGroupBoard);
             //If we want to allow the user copy group boards this line have to be removed
             $this->panelInterface->setPrimaryGroupBoard($IDGboard, $idusu);
-            
+
             $sameGroupBoard = 1;
             for ($i = 0; $i < count($boards); $i++) {
                 $idSrc = $boards[$i]->ID_Board;
@@ -190,17 +190,75 @@ class PanelGroup extends REST_Controller {
                 array_push($changedLinks, $idSrc);
                 array_push($changedLinks, $idDst);
             }
-            for($i = 0; $i < count($changedLinks); $i++){
-                $this->panelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i+1]);
+            for ($i = 0; $i < count($changedLinks); $i++) {
+                $this->panelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i + 1]);
                 $i++;
             }
-            
-        }else{
+        } else {
             $primaryUserBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
             $idToShow = $primaryUserBoard[0]->ID_Board;
         }
         $response = [
             'idBoard' => $idToShow
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+
+    public function copyGroupBoard_post() {
+        //MODIF: 2 es el panel default
+        $idusu = $this->session->userdata('idusu');
+        $board = $this->BoardInterface->getPrimaryGroupBoard();
+
+        $changedLinks = array();
+        $srcGroupBoard = 2;
+        $primaryBoard = $this->BoardInterface->getInfoGroupBoard($srcGroupBoard);
+
+        $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
+        $boards = $this->BoardInterface->getBoards($srcGroupBoard);
+        //If we want to allow the user copy group boards this line have to be removed
+        $this->panelInterface->setPrimaryGroupBoard($IDGboard, $idusu);
+
+        $sameGroupBoard = 1;
+        for ($i = 0; $i < count($boards); $i++) {
+            $idSrc = $boards[$i]->ID_Board;
+
+            $name = $boards[$i]->Bname;
+            $width = $boards[$i]->width;
+            $height = $boards[$i]->height;
+            $autoReturn = $boards[$i]->autoReturn;
+            $autoReadSentence = $boards[$i]->autoReadSentence;
+
+            $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
+            if ($boards[$i]->primaryBoard) {
+                $this->BoardInterface->changePrimaryBoard($idDst, $IDGboard);
+                $idToShow = $idDst;
+            }
+            $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
+            array_push($changedLinks, $idSrc);
+            array_push($changedLinks, $idDst);
+        }
+        for ($i = 0; $i < count($changedLinks); $i++) {
+            $this->panelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i + 1]);
+            $i++;
+        }
+
+        $response = [
+            'idBoard' => $idToShow
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+
+    public function loginToCopy_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $user = $request->user;
+        $pass = $request->pass;
+    
+        $userObj = $this->panelInterface->getUser($user, $pass);
+        
+        $response = [
+            'userName' => $user,
+            'userID' => $userObj[0]->ID_User
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
