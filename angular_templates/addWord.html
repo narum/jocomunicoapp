@@ -12,15 +12,14 @@
             <div class="row">
                 <div class="col-xs-12 imgRounded imgContainer">
                     <div class="fullheight imgRounded paddingContainer" style="background-image: url(img/srcWeb/patterns/pattern4.png)">
-                        <div  class="col-xs-offset-3 col-xs-2 paddinFolderButton">
-                            <div class=" imgRounded FolderButton" ng-click="">
-                                MODIF: nom
-                            </div>
+                        <div class="imgAddWord">
+
                         </div>
-                        <div  class="col-xs-offset-2 col-xs-2 paddinFolderButton ">
-                            <div class=" imgRounded FolderButton" ng-click="">
-                                MODIF: adjectiu
-                            </div>
+                        <div class="buttonUploadImg">
+                            <label for="file-input" class="fullheight fullwidth">
+                                <img class="imgRounded buttonAddPhoto" ng-src="{{baseurl}}img/icons/add_photo.png"width="100%" height="100%"/>
+                            </label>
+                            <input type="file" id="file-input" onchange="angular.element(this).scope().uploadFileToWord()"/>
                         </div>
                     </div>
                 </div>

@@ -130,12 +130,18 @@
 .titleTextTypus{
     font-weight: bold;
     padding-left: 5% !important;
-    /*vertical align*/
     margin-top: 2%;
 }
 .titleText{
     font-weight: bold;
-    padding-left: 5% !important;
+    padding-left: 5%;
+    /*vertical align*/
+    top: 50%;
+    transform:translate(0%,-50%);
+}
+.numberText{
+    font-weight: bold;
+    padding-left: 0%;
     /*vertical align*/
     top: 50%;
     transform:translate(0%,-50%);

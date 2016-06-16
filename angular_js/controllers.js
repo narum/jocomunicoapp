@@ -880,7 +880,7 @@ angular.module('controllers', [])
                 if ($scope.userData.UserValidated == '1' && $scope.userData.cfgExpansionVoiceOnline != null && (!$scope.local || $scope.userData.cfgExpansionVoiceOffline != null)) {
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': 'UserValidated', 'value': '2'}, {'funct': "userValidate2"}).$promise
                     //Cargamos la board inicial (Oscar)
-                    $http.post($scope.baseurl + "PanelGroup/copyGroupBoard");
+                    $http.post($scope.baseurl + "PanelGroup/copyDefaultGroupBoard");
                 }
             }
 
@@ -1028,7 +1028,7 @@ angular.module('controllers', [])
                 if ($scope.userData.UserValidated == '1' && $scope.userData.cfgExpansionVoiceOnline != null && (!$scope.local || $scope.userData.cfgExpansionVoiceOffline != null)) {
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': 'UserValidated', 'value': '2'}, {'funct': "userValidate2"}).$promise
                     //Cargamos la board inicial (Oscar)
-                    $http.post($scope.baseurl + "PanelGroup/copyGroupBoard");
+                    $http.post($scope.baseurl + "PanelGroup/copyDefaultGroupBoard");
                 }
             };
 
@@ -2102,14 +2102,14 @@ angular.module('controllers', [])
             $scope.AcceptOpenConfirmSize = function () {
                 var url = $scope.baseurl + "Board/modifyCellBoard";
                 $http.post(url, $scope.DataResize).then(function (response) {
-                        $scope.showBoard('0');
-                    }).error(function (response) {});
+                    $scope.showBoard('0');
+                }).error(function (response) {});
             };
             $scope.DenyOpenConfirmSize = function () {
                 $scope.edit();
-                    $scope.showBoard('0');
+                $scope.showBoard('0');
             };
-            
+
 
             /*
              * Add the selected pictogram to the sentence
@@ -2659,7 +2659,7 @@ angular.module('controllers', [])
                             $scope.data = response.data;
                         });
             };
-            $scope.removePicto = function (data){
+            $scope.removePicto = function (data) {
                 var postdata = {pos: data.posInBoard, idboard: $scope.idboard};
                 var URL = $scope.baseurl + "Board/removePicto";
                 $http.post(URL, postdata).
@@ -2821,9 +2821,9 @@ angular.module('controllers', [])
             {
                 $scope.Editinfo = response.info;
                 var idCell = response.info.ID_RCell;
-                
-                $scope.changeCellType = function (){
-                    if ($scope.cellType == "sentence" || $scope.cellType == "sFolder"){
+
+                $scope.changeCellType = function () {
+                    if ($scope.cellType == "sentence" || $scope.cellType == "sFolder") {
                         $scope.checkboxFuncType = false;
                         $scope.checkboxBoardsGroup = false;
                     }
@@ -3127,6 +3127,34 @@ angular.module('controllers', [])
                         });
             };
             $scope.initPanelGroup();
+            $scope.copyGroupBoard = function (idboard) {
+                $scope.isLoged = "false";
+                $scope.state = "";
+                $scope.state2 = "";
+                $scope.usernameCopyPanel = "";
+                $scope.passwordCopyPanel = "";
+                $('#ConfirmCopyGroupBoard').modal({backdrop: 'static'});
+            };
+            $scope.login = function () {
+                if ($scope.usernameCopyPanel == "") {
+                    $scope.state = 'has-warning';
+                } else if ($scope.passwordCopyPanel == "") {
+                    $scope.state2 = 'has-warning';
+                } else {
+                    $scope.isLoged = "loading";
+                    var postdata = {user: $scope.usernameCopyPanel, pass: $scope.passwordCopyPanel};
+                    var url = $scope.baseurl + "PanelGroup/loginToCopy";
+                    $http.post(url, postdata).
+                            success(function (response)
+                            {
+                                $scope.isLoged = "true";
+
+                            })
+                            .error(function (response) {
+                                $scope.isLoged = "false";
+                            });
+                }
+            };
             $scope.newPanellGroup = function () {
                 $scope.CreateBoardData = {GBName: '', defH: 5, defW: 5, imgGB: ""};
                 $('#ConfirmCreateGroupBoard').modal({backdrop: 'static'});
@@ -3169,7 +3197,7 @@ angular.module('controllers', [])
                             $scope.initPanelGroup();
                         });
             };
-            //meter texto en base de datos. "copiar" el normal
+            //MODIF: creo que se pude borrar
             $scope.CreateBoard = function (ID_GB) {
                 $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: ID_GB};
                 ngDialog.openConfirm({
@@ -3207,8 +3235,34 @@ angular.module('controllers', [])
 
         })
         .controller('addWordCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
-            $scope.testing = function() {
-                
+            $scope.testing = function () {
+
+            };
+            $scope.uploadFileToWord = function () {
+                $scope.myFile = document.getElementById('file-input').files;
+                $scope.uploading = true;
+                var i;
+                var uploadUrl = $scope.baseurl + "ImgUploader/upload";
+                var fd = new FormData();
+                for (i = 0; i < $scope.myFile.length; i++) {
+                    fd.append('file' + i, $scope.myFile[i]);
+                }
+                $http.post(uploadUrl, fd, {
+                    headers: {'Content-Type': undefined}
+                })
+                        .success(function (response) {
+                            $scope.uploading = false;
+                            $scope.URLImg = response.url;
+                            if (response.error) {
+                                //open modal
+                                console.log(response.errorText);
+                                $scope.errorText = response.errorText;
+                                $('#errorImgModal').modal({backdrop: 'static'});
+                            }
+                        })
+                        .error(function (response) {
+                            //alert(response.errorText);
+                        });
             };
         })
 

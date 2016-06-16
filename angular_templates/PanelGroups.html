@@ -2,6 +2,8 @@
 <link rel="stylesheet" type="text/css" href="{{baseurl}}css/style-jc.css">
 <link rel="stylesheet" type="text/css" href="{{baseurl}}css/generico.css">
 <link rel="stylesheet" type="text/css" href="{{baseurl}}/libraries/scrollbarPanel.css">
+<div ng-include="'/angular_templates/ConfirmCopyGroupBoard.html'"></div>
+
 <style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
 <!--menu superior dropdown-->
@@ -30,7 +32,7 @@
                     <div ng-if="panel.primaryGroupBoard == 1" class="col-xs-4 primaryPanel text-center">
                         {{content.primary}}
                     </div>
-                    <div class="col-xs-4 nouPanel text-center" ng-click="CreateBoard(panel.ID_GB)">
+                    <div class="col-xs-4 nouPanel text-center" ng-click="copyGroupBoard(panel.ID_GB)">
                         {{content.new}} <img ng-src="{{baseurl}}/img/icons/file_blanc.png" width="15%" height="50%"/>
                     </div>
                 </div>

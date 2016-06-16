@@ -402,6 +402,7 @@ class BoardInterface extends CI_Model {
     function getFunctions() {
 
         $language = $this->session->userdata('ulangabbr');
+        $this->db->order_by('name', 'asc');
         $this->db->select('ID_Function, functName' . $language . ' AS name');
         $query = $this->db->get('Function');
 

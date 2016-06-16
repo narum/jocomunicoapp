@@ -22,6 +22,34 @@
     height: 100%;
     padding: 1vh;
 }
+.imgAddWord{
+    height: 100%;
+    width: 100%;
+    padding: 10%;
+    background-color: white;
+    background-clip: content-box;
+}
+.buttonUploadImg{
+    max-height: 15%;
+    max-width: 15%;
+    width: auto;
+    height: auto;
+}
+.buttonAddPhoto{
+    display: block;
+    max-width: 15%;
+    height: auto;
+    max-height: 15%;
+    width: auto;
+    top: 80%;
+    left: 77.5%;
+    transform: translate(-50%,-50%);
+    position: absolute;
+    z-index: 5;
+}
+#file-input{
+    display: none !important;
+}
 .addWordFromField{
     padding: 1vh;
 }
