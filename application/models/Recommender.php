@@ -1243,7 +1243,7 @@ class Recommender extends CI_Model {
             $VF = $this->rellenaVFX2X3($VF, $freqX2, 3);
         }        
         
-        // rellena 2da mitad
+        // rellena 1ra mitad
         if (sizeof($VF) < 3) {
             $freqX1 = $this->getfreqUsuariX1();
             $VF = $this->rellenaVFX2X3($VF, $freqX1, 3);
@@ -1270,13 +1270,19 @@ class Recommender extends CI_Model {
             // Algorisme V6 - Predictor de context (verb) últims 2 dies                       
             $contextTypeVerbs2Days = $this->getContextType2Days('verb');
             $VF = $this->insertCeilVF($VF, $contextTypeVerbs2Days, $FSize);
-            
-            $freqX2 = $this->getRecommenderX2();
-            $VF = $this->insertFloorVF($VF, $freqX2, $FSize);
+			
+			// Algorisme V6 - Predictor de context (verb) total  
+            $contextTypeVerbsAll = $this->getContextTypeAll('verb');
+            $VF = $this->insertFloorVF($VF, $contextTypeVerbsAll, $FSize);
             
             // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbs2Days, $TSize);
-            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
+            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbsAll, $TSize);
+
+            if (sizeof($VF) < $TSize) {
+                $freqX2 = $this->getRecommenderX2();    
+                $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
+            }
         }
         else if (!$verb && $inputType2[0]->pictoType != 'name') {
             // Algorisme V6 - Predictor de context (name) últims 2 dies                                
@@ -1290,24 +1296,6 @@ class Recommender extends CI_Model {
             // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbsAll, $TSize);
-        }
-        else if (!$verb && $inputType1[0]->pictoType == 'name') {
-            // Algorisme V6 - Predictor de context (verb) últims 2 dies
-            $contextTypeVerbs2Days = $this->getContextType2Days('verb');
-            $VF = $this->insertCeilVF($VF, $contextTypeVerbs2Days, $FSize);
-            
-            // Algorisme V6 - Predictor de context (verb) total  
-            $contextTypeVerbsAll = $this->getContextTypeAll('verb');
-            $VF = $this->insertCeilVF($VF, $contextTypeVerbsAll, $FSize);
-            
-            // rellena
-            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbsAll, $TSize);
-            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbs2Days, $TSize);
-
-            if (sizeof($VF) < $TSize) {
-                $freqX2 = $this->getRecommenderX2();    
-                $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
-            }
         }
         else { // ni name ni verb
             if ($verb) {
