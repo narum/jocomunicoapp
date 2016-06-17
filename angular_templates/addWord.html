@@ -7,7 +7,7 @@
 <div ng-include="'/angular_templates/errorImgModal.html'"></div>
 <!--menu superior dropdown-->
 <div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
-<div id="main" ng-init="testing()" style="background-image: url('/img/srcWeb/patterns/fons.png');background-size:100% 100%">
+<div id="main" ng-init="initAddWord()" style="background-image: url('/img/srcWeb/patterns/fons.png');background-size:100% 100%">
     <div class="row folderContainer">
         <div class="col-xs-5 imgRounded imgconfirmContainer">
             <div class="row">
@@ -25,15 +25,20 @@
                     </div>
                 </div>
                 <div class="col-xs-12 imgRounded confirmContainer">
-                    <div class="fullheight imgRounded paddingContainer" style="background-image: url(img/srcWeb/patterns/pattern6.png)">
-                        <div  class="col-xs-offset-3 col-xs-2 paddinFolderButton">
+                    <div class="fullheight imgRounded paddingContainer row" style="background-image: url(img/srcWeb/patterns/pattern6.png)">
+                        <div  class="col-xs-12 paddinFolderButton">
                             <div class=" imgRounded FolderButton" ng-click="">
-                                MODIF: nom
+                                MODIF: Eliminar
                             </div>
                         </div>
-                        <div  class="col-xs-offset-2 col-xs-2 paddinFolderButton ">
+                         <div  class="col-xs-12 paddinFolderButton">
                             <div class=" imgRounded FolderButton" ng-click="">
-                                MODIF: adjectiu
+                                MODIF: Guardar
+                            </div>
+                        </div>
+                         <div  class="col-xs-12 paddinFolderButton">
+                            <div class=" imgRounded FolderButton" ng-click="">
+                                MODIF: Cancelar
                             </div>
                         </div>
                     </div>
@@ -42,7 +47,7 @@
         </div>
         <div class="col-xs-7 addWordContainer">
             <div class="fullheight imgRounded paddingContainer" style="background-image: url(img/srcWeb/patterns/pattern3.png)">
-                <div ng-include="'/angular_templates/addWordName.html'"></div>
+                <div ng-if="addWordType == 'name'" ng-include="'/angular_templates/addWordName.html'"></div>
             </div>
         </div>
     </div>
