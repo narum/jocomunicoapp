@@ -2180,11 +2180,13 @@ angular.module('controllers', [])
                     $http.post(url, postdata).success(function (response) {
                         $scope.dataAudio = response.audio;
                         if ($scope.dataAudio[1]) {
-                            txtContent("errorVoices").then(function (content) {
-                                $scope.errorMessage = content.data[$scope.dataAudio[3]];
-                                $scope.errorCode = $scope.dataAudio[3];
-                                $('#errorVoicesModal').modal({backdrop: 'static'});
-                            });
+                            if (false) {
+                                txtContent("errorVoices").then(function (content) {
+                                    $scope.errorMessage = content.data[$scope.dataAudio[3]];
+                                    $scope.errorCode = $scope.dataAudio[3];
+                                    $('#errorVoicesModal').modal({backdrop: 'static'});
+                                });
+                            }
                         } else {
                             $scope.sound = "mp3/" + $scope.dataAudio[0];
                             var audiotoplay = $('#utterance');
@@ -3128,32 +3130,59 @@ angular.module('controllers', [])
             };
             $scope.initPanelGroup();
             $scope.copyGroupBoard = function (idboard) {
+                $scope.idboardToCopy = idboard;
                 $scope.isLoged = "false";
                 $scope.state = "";
                 $scope.state2 = "";
                 $scope.usernameCopyPanel = "";
                 $scope.passwordCopyPanel = "";
+                $scope.idUser = null;
                 $('#ConfirmCopyGroupBoard').modal({backdrop: 'static'});
             };
+            $scope.changeUser = function () {
+                $scope.isLoged = "false";
+                $scope.state = "";
+                $scope.state2 = "";
+                $scope.usernameCopyPanel = "";
+                $scope.passwordCopyPanel = "";
+                $scope.idUser = null;
+            }
             $scope.login = function () {
                 if ($scope.usernameCopyPanel == "") {
                     $scope.state = 'has-warning';
-                } else if ($scope.passwordCopyPanel == "") {
+                } else {
+                    $scope.state = '';
+                }
+                if ($scope.passwordCopyPanel == "") {
                     $scope.state2 = 'has-warning';
                 } else {
+                    $scope.state2 = '';
+                }
+                if ($scope.usernameCopyPanel != "" && $scope.passwordCopyPanel != "") {
                     $scope.isLoged = "loading";
                     var postdata = {user: $scope.usernameCopyPanel, pass: $scope.passwordCopyPanel};
                     var url = $scope.baseurl + "PanelGroup/loginToCopy";
                     $http.post(url, postdata).
                             success(function (response)
                             {
-                                $scope.isLoged = "true";
-
-                            })
-                            .error(function (response) {
-                                $scope.isLoged = "false";
+                                if (response.userID != null) {
+                                    $scope.idUser = response.userID;
+                                    $scope.isLoged = "true";
+                                } else {
+                                    $scope.state = 'has-error';
+                                    $scope.state2 = 'has-error';
+                                    $scope.isLoged = "false";
+                                }
                             });
                 }
+            };
+            $scope.ConfirmCopyBoard = function () {
+                var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
+                var postdata = {id: $scope.idboardToCopy, user: $scope.idUser};
+                $http.post(URL, postdata).success(function (response)
+                {
+
+                });
             };
             $scope.newPanellGroup = function () {
                 $scope.CreateBoardData = {GBName: '', defH: 5, defW: 5, imgGB: ""};

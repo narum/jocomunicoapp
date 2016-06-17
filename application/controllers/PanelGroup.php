@@ -205,18 +205,17 @@ class PanelGroup extends REST_Controller {
     }
 
     public function copyGroupBoard_post() {
-        //MODIF: 2 es el panel default
-        $idusu = $this->session->userdata('idusu');
-        $board = $this->BoardInterface->getPrimaryGroupBoard();
 
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idusu = $request->user;
+        $srcGroupBoard = $request->id;
         $changedLinks = array();
-        $srcGroupBoard = 2;
+                
         $primaryBoard = $this->BoardInterface->getInfoGroupBoard($srcGroupBoard);
-
+        echo "iduser: " . $idusu;
         $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
         $boards = $this->BoardInterface->getBoards($srcGroupBoard);
-        //If we want to allow the user copy group boards this line have to be removed
-        $this->panelInterface->setPrimaryGroupBoard($IDGboard, $idusu);
 
         $sameGroupBoard = 1;
         for ($i = 0; $i < count($boards); $i++) {
@@ -231,7 +230,6 @@ class PanelGroup extends REST_Controller {
             $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
             if ($boards[$i]->primaryBoard) {
                 $this->BoardInterface->changePrimaryBoard($idDst, $IDGboard);
-                $idToShow = $idDst;
             }
             $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
             array_push($changedLinks, $idSrc);
@@ -243,7 +241,6 @@ class PanelGroup extends REST_Controller {
         }
 
         $response = [
-            'idBoard' => $idToShow
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }

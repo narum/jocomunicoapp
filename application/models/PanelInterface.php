@@ -92,7 +92,9 @@ class PanelInterface extends CI_Model {
     }
 
     function getUser($user, $pass) {
+        $languageExp = $this->session->userdata('ulanguage');
         $this->db->join('User', 'SuperUser.ID_SU = User.ID_USU', 'left');
+        $this->db->where('cfgExpansionLanguage', $languageExp);
         $this->db->where('SUname', $user);
         $this->db->where('pswd', md5($pass));
         $query = $this->db->get('SuperUser');
