@@ -448,6 +448,7 @@ class Myword {
         
         // the character encoding of the words from the database is utf-8
         // so we set the php system to utf-8
+        setlocale(LC_ALL, 'es_CA');
         mb_internal_encoding( 'utf-8' );
         
         // letters that we want to replace

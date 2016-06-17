@@ -44,15 +44,30 @@ class Myexpander {
         $idusu = $CI->session->userdata('idusu');
         $this->paraulescopia = $CI->Lexicon->getLastSentence($idusu); // array amb les paraules
         $propietatsfrase = $CI->Lexicon->getLastSentenceProperties($idusu);
-        
+                
         // variables per mostrar els resultats per pantalla
         $this->info['identry'] = $propietatsfrase['identry'];
         $this->info['inputwords'] = $propietatsfrase['inputwords'];
-
-        if ($this->paraulescopia == null) {
-            $this->info['errormessage'] = "Error. No hi ha cap frase per aquest usuari.";
-            $this->info['error'] = true;
-            $this->info['errorcode'] = 1;
+        
+        // si ha intentat fer una frase buida, li retornem la frase anterior
+        // si no en tenia cap, seguirà l'execució
+        if (count($this->paraulescopia) <= 0) {
+                                    
+            $this->info['frasefinal'] = $CI->Lexicon->getLastGeneratedText($idusu);
+                        
+            if ($this->info['frasefinal'] != null) {
+                $this->info['errormessage'] = null;
+                $this->info['error'] = false;
+                $this->info['errorcode'] = false;
+                $this->info['readwithoutexpansion'] = false;
+                
+                return;
+            }
+            else {
+                $this->info['errormessage'] = "Error. No hi ha cap frase per aquest usuari.";
+                $this->info['error'] = true;
+                $this->info['errorcode'] = 1;
+            }
         }
 
         // FIND VERBS
@@ -328,7 +343,7 @@ class Myexpander {
             $this->info['error'] = $this->error[$bestpatternindex];
             $this->info['errorcode'] = $this->errorcode[$bestpatternindex];
             $this->info['readwithoutexpansion'] = $this->readwithoutexpansion;
-
+            
             // MOSTREM LA INTERFÍCIE
             return;                
         }
@@ -637,7 +652,7 @@ class Myexpander {
         $pattern->launchCleanerES($propietatsfrase["tipusfrase"]);
 
         return $pattern->printFraseFinal();
-    }
+    }    
     
 }
 

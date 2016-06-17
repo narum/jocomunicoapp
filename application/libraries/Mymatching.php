@@ -345,14 +345,16 @@ class Mymatching {
         "numero" => 1,
         "quant" => 2,
         "manera" => 3,
+        "det" => 4,
+        "similar" => 5,
     );
     
     // 1000 vol dir que no pot fer match
     var $modifFit = array(
-        0 => array(0,0,0,1000),
-        1 => array(1000,0,1000,1000),
-        2 => array(1000,1000,0,1000),
-        3 => array(1000,1000,1,0),
+        0 => array(0,0,0,1000,0,0),
+        1 => array(1000,0,1000,1000,1000,1000),
+        2 => array(1000,1000,0,1000,1000,1000),
+        3 => array(1000,1000,1,0,1000,1000),
     );
     
     /** INFO LLENGUATGE DEPENDENT PEL GENERADOR */

@@ -1035,9 +1035,10 @@ class Mypattern {
                     }
                     else if ($this->slotarray[$keyslotfinal]->grade == 'opt') {
                         $slotfinalopt = true;
-                        $slotfinaloptpunts = $this->slotarray[$keyslotfinal]->puntsguanyats-1; 
-                        // -1 perquè en cas d'empat preferim que es quedi amb el complement i
-                        // no amb l'slot optatiu
+                        $slotfinaloptpunts = $this->slotarray[$keyslotfinal]->puntsguanyats-0; 
+                        // -0 -> en cas d'empat ja agafa el complement vs l'slot optatiu 
+                        // amb -1 ho penalitzaríem més perquè en cas d'altres empats 
+                        // es quedés amb el complement i no amb l'slot optatiu
                     }
                 }
             }
@@ -2094,7 +2095,7 @@ class Mypattern {
         }
         
         // IMPERATIVE
-        if ($propietatsfrase['tipusfrase'] == "ordre" && !$propietatsfrase['negativa']) {
+        if ($propietatsfrase['tipusfrase'] == "ordre" && !$this->frasenegativa) {
             // afegir si us plau
             $aux = array();
             $aux[0] = "si us plau";
@@ -2502,7 +2503,7 @@ class Mypattern {
         }
         
         // IMPERATIVE
-        if ($propietatsfrase['tipusfrase'] == "ordre"  && !$propietatsfrase['negativa']) {
+        if ($propietatsfrase['tipusfrase'] == "ordre"  && !$this->frasenegativa) {
             // afegir por favor
             $aux = array();
             $aux[0] = "por favor";
