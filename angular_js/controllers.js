@@ -3048,7 +3048,8 @@ angular.module('controllers', [])
 
 
         .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
-            $scope.addWord = function () {
+            $scope.addWord = function (newModif,addWordType) {
+                $rootScope.addWordparam = {newmod: newModif,type: addWordType};
                 $location.path('/addWord');
             };
             $scope.$on('scrollbar.show', function () {
@@ -3264,8 +3265,16 @@ angular.module('controllers', [])
 
         })
         .controller('addWordCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
-            $scope.testing = function () {
-
+            $scope.initAddWord = function () {
+                if ($rootScope.addWordparam != null) {
+                    $scope.NewModif = $rootScope.addWordparam.newmod;
+                    $scope.addWordType = $rootScope.addWordparam.type;
+                    $rootScope.addWordparam = null;
+                    console.log($scope.addWordType);
+                }
+                else{
+                    $location.path("/panelGroups");
+                }
             };
             $scope.uploadFileToWord = function () {
                 $scope.myFile = document.getElementById('file-input').files;
