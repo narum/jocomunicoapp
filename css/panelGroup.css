@@ -1,22 +1,23 @@
 @charset "UTF-8";
 /* CSS Document */
+#boxUserConfig{
+    margin: 0px !important;
+}
 .folderContainer{
-    padding: 5vh 5vw;
     height: 100vh;
+    padding: 5vh 15vw;
 }
 .panelGroupContainer{
-    margin-left: 5vw;
-    padding-right: 0.5vh !important;
-    height: 70%;
+    height: 70vh;
+    padding-right: 1vh;
 }
 .historicContainer{
-    padding-left: 0.5vh !important;
-    height: 70%;
+    height: 70vh;
+    padding-left: 1vh;
 }
 .addWordContainer{
-    margin-left: 5vw;
-    margin-top: 1vh;
-    height: 20%;
+    height: 18vh;
+    margin-top: 2vh;
 }
 .paddingAddWord
 {

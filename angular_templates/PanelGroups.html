@@ -2,6 +2,7 @@
 <link rel="stylesheet" type="text/css" href="{{baseurl}}css/style-jc.css">
 <link rel="stylesheet" type="text/css" href="{{baseurl}}css/generico.css">
 <link rel="stylesheet" type="text/css" href="{{baseurl}}/libraries/scrollbarPanel.css">
+<div ng-include="'/angular_templates/logoutModal.html'"></div>
 <div ng-include="'/angular_templates/ConfirmCopyGroupBoard.html'"></div>
 
 <style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
@@ -9,12 +10,14 @@
 <!--menu superior dropdown-->
 <div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
 <div ng-include="'/angular_templates/ConfirmCreateGroupBoard.html'"></div>
-<div id="main" style="background-image: url('/img/srcWeb/patterns/fons.png');background-size:100% 100%">
-    <!--    <div class="row menu" ng-controller="menuCtrl" ng-include="baseurl + '/angular_templates/MenuView.html'">
-        </div>-->
-    <div class="row folderContainer">
-        <div class="col-xs-5 imgRounded panelGroupContainer" style="background-image: url(img/srcWeb/patterns/pattern3.png)">
-            <div class="topBar"></div>
+
+<div class="row folderContainer">
+    <!--Panel Groups box-->
+    <div class="col-xs-6 panelGroupContainer" id="boxUserConfig" style="background-image: url({{img.Patterns1_08}})">
+        <div id="header" class="row">
+            <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
+        </div>
+        <div class="row">
             <div class="col-xs-offset-1 scrollMenuPanels" ng-class="isScroll ? 'col-xs-10' : 'col-xs-11'" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:me" is-bar-shown="isScroll">
                 <div class="col-xs-12 addPanel" ng-click="newPanellGroup()">
                     <img ng-src="{{baseurl}}/img/srcWeb/afegir.png" width="100%" height="100%"/>
@@ -38,19 +41,22 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-5 historicContainer">
-            <div class="fullheight imgRounded" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-09.png)"></div>
+    </div>
+    <!--historical box-->
+    <div class="col-xs-5 historicContainer" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
+        <div id="header" class="row">
+            <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
         </div>
-        <div class="col-xs-10 imgRounded addWordContainer paddingFolder" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
-            <div  class="col-xs-offset-3 col-xs-2 paddinFolderButton">
-                <div class=" imgRounded FolderButton" ng-click="addWord(1,'name')">
-                    MODIF: nom
-                </div>
+    </div>
+    <div class="col-xs-10 imgRounded addWordContainer paddingFolder" style="background-image: url({{baseurl}}img/srcWeb/Patterns1-12.png)">
+        <div  class="col-xs-offset-3 col-xs-2 paddinFolderButton">
+            <div class=" imgRounded FolderButton" ng-click="addWord(1, 'name')">
+                MODIF: nom
             </div>
-            <div  class="col-xs-offset-2 col-xs-2 paddinFolderButton ">
-                <div class=" imgRounded FolderButton" ng-click="addWord(1,'adj')">
-                    MODIF: adjectiu
-                </div>
+        </div>
+        <div  class="col-xs-offset-2 col-xs-2 paddinFolderButton ">
+            <div class=" imgRounded FolderButton" ng-click="addWord(1, 'adj')">
+                MODIF: adjectiu
             </div>
         </div>
     </div>
