@@ -13,7 +13,7 @@ angular.module('controllers', [])
             //Imagenes
             $scope.img = [];
             $scope.img.fons = '/img/srcWeb/patterns/fons.png';
-            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             $scope.img.clau = '/img/srcWeb/Login/clau.png';
             $scope.img.fletxaLogin2 = '/img/srcWeb/Login/fletxaLogin2.png';
@@ -41,6 +41,7 @@ angular.module('controllers', [])
                         });
                     });
             $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
+            $rootScope.dropdownMenuBarButtonHide = false;
             //function to change html view
             $scope.go = function (path) {
                 $location.path(path);
@@ -125,7 +126,7 @@ angular.module('controllers', [])
             //Imagenes
             $scope.img = [];
             $scope.img.fons = '/img/srcWeb/patterns/fons.png';
-            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             $scope.img.yo_3 = '/img/icons/yo_3.png';
             $scope.img.yo_1 = '/img/icons/yo_1.png';
@@ -142,6 +143,7 @@ angular.module('controllers', [])
 
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBar = [];
+            $rootScope.dropdownMenuBarButtonHide = false;
             dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
                     .then(function () {
                         $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
@@ -415,7 +417,7 @@ angular.module('controllers', [])
             //Imagenes
             $scope.img = [];
             $scope.img.fons = '/img/srcWeb/patterns/fons.png';
-            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             if ($rootScope.contetnLanguageUserNonLoged == undefined) {
                 $rootScope.contetnLanguageUserNonLoged = 1;
@@ -429,6 +431,7 @@ angular.module('controllers', [])
                     });
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBar = [];
+            $rootScope.dropdownMenuBarButtonHide = false;
             dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
                     .then(function () {
                         $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
@@ -479,7 +482,7 @@ angular.module('controllers', [])
             //Imagenes
             $scope.img = [];
             $scope.img.fons = '/img/srcWeb/patterns/fons.png';
-            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
 
             //HTML text content
@@ -490,6 +493,7 @@ angular.module('controllers', [])
                     });
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBar = [];
+            $rootScope.dropdownMenuBarButtonHide = false;
             dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
                     .then(function () {
                         $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
@@ -593,6 +597,7 @@ angular.module('controllers', [])
             }
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBar = [];
+            $rootScope.dropdownMenuBarButtonHide = false;
             $rootScope.dropdownMenuBarValue = '/userConfig'; //Button selected on this view
             $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
 
@@ -644,7 +649,7 @@ angular.module('controllers', [])
             $scope.img.fons = '/img/srcWeb/patterns/fons.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             $scope.img.Patterns1_12 = '/img/srcWeb/Patterns1-12.png';
-            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
             $scope.img.whiteLoading = '/img/icons/whiteLoading.gif';
             $scope.img.Loading_icon = '/img/icons/Loading_icon.gif';
             $scope.img.Icon_Alert = '/img/icons/info alert.png';
@@ -1111,6 +1116,7 @@ angular.module('controllers', [])
 
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
+            $rootScope.dropdownMenuBarButtonHide = true;
             $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
             $rootScope.dropdownMenuBar = [];
             //SentenceBar button to open dropdown menu bar when hover
@@ -1121,7 +1127,6 @@ angular.module('controllers', [])
             //Choose the buttons to show on bar
             dropdownMenuBarInit($rootScope.interfaceLanguageId)
                     .then(function () {
-                        console.log('entro');
                         //Choose the buttons to show on bar
                         angular.forEach($rootScope.dropdownMenuBar, function (value) {
                             if (value.href == '/' || value.href == '/info' || value.href == 'editPanel' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
@@ -1148,7 +1153,7 @@ angular.module('controllers', [])
             //Log Out Modal
             $scope.img = [];
             $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
-            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
             Resources.main.get({'section': 'logoutModal', 'idLanguage': $rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.logoutContent = results.data;
@@ -3046,44 +3051,35 @@ angular.module('controllers', [])
 
 
         .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
-            $scope.addWord = function () {
-                $location.path('/addWord');
-            };
-            $scope.$on('scrollbar.show', function () {
-                console.log('Scrollbar show');
-            });
 
-            $scope.$on('scrollbar.hide', function () {
-                console.log('Scrollbar hide');
+            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+            if (!$rootScope.isLogged) {
+                $location.path('/login');
+            }
+            // Pedimos los textos para cargar la pagina
+            txtContent("panelgroup").then(function (results) {
+                $scope.content = results.data;
             });
-
-            $scope.range = function ($repeatnum)
-            {
-                var n = [];
-                for (i = 1; i < $repeatnum; i++)
-                {
-                    n.push(i);
-                }
-                return n;
-            };
+            
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBarValue = '/panelGroups'; //Button selected on this view
             $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
             $rootScope.dropdownMenuBar = [];
+            $rootScope.dropdownMenuBarButtonHide = false;
 
             //Choose the buttons to show on bar
             dropdownMenuBarInit($rootScope.interfaceLanguageId)
-                    .then(function () {
-                        //Choose the buttons to show on bar
-                        angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/info' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
-                                value.show = true;
-                            } else {
-                                value.show = false;
-                            }
-                        });
+                .then(function () {
+                    //Choose the buttons to show on bar
+                    angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                        if (value.href == '/' || value.href == '/info' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
+                            value.show = true;
+                        } else {
+                            value.show = false;
+                        }
                     });
-            //function to change html view
+                });
+            //function to change html view with dropdown menu buttons
             $scope.go = function (path) {
                 if (path == 'logout') {
                     $('#logoutModal').modal('toggle');
@@ -3093,11 +3089,7 @@ angular.module('controllers', [])
                 }
             };
 
-
             //Log Out Modal
-            $scope.img = [];
-            $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
-            $scope.img.Patterns1_08 = '/img/srcWeb/Patterns1-08.png';
             Resources.main.get({'section': 'logoutModal', 'idLanguage': $rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.logoutContent = results.data;
@@ -3108,14 +3100,37 @@ angular.module('controllers', [])
                 }, 1000);
             };
 
-            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
-            if (!$rootScope.isLogged) {
-                $location.path('/login');
-            }
-            // Pedimos los textos para cargar la pagina
-            txtContent("panelgroup").then(function (results) {
-                $scope.content = results.data;
+            //Scrollbar inside div
+            $scope.$on('scrollbar.show', function () {
+                console.log('Scrollbar show');
             });
+
+            $scope.$on('scrollbar.hide', function () {
+                console.log('Scrollbar hide');
+            });
+            
+            //Content Images and backgrounds
+            $scope.img = [];
+            $scope.img.fons = '/img/srcWeb/patterns/fons.png';
+            $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
+            $scope.img.Patterns4 = '/img/srcWeb/patterns/pattern4.png';
+            $scope.img.loading = '/img/srcWeb/Login/loading.gif';
+            
+            
+            $scope.addWord = function () {
+                $location.path('/addWord');
+            };
+
+            $scope.range = function ($repeatnum)
+            {
+                var n = [];
+                for (i = 1; i < $repeatnum; i++)
+                {
+                    n.push(i);
+                }
+                return n;
+            };
 
             $scope.initPanelGroup = function () {
                 var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";

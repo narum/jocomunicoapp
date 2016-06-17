@@ -1,27 +1,37 @@
 <!--menu superior dropdown-->
 <link rel="stylesheet" type="text/css" href="css/dropdownMenuBar.css">
+<div ng-show="!$root.dropdownMenuBarButtonHide">
     <div id="dropdownMenuButton" ng-init="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton1.png';dropdownMenuOpen=false" ng-mouseover="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton2.png'" ng-mouseout="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton1.png'">
-        <input type="image" class="img-dropdownMenuButton" ng-src="{{imgMenuButton}}" ng-click="dropdownMenuOpen=!dropdownMenuOpen">
+        <input type="image" class="imgDropdownMenuButton" ng-src="{{imgMenuButton}}" ng-click="dropdownMenuOpen=!dropdownMenuOpen">
     </div>
     <div class="dropdownMenuBar">
         <div class="menuBarAnimation" ng-class="{menuBarAnimationOpened: dropdownMenuOpen}"></div>
     </div>
-    <div class="row buttonsMenuBar" ng-class="{buttonsMenuBarOpened: dropdownMenuOpen}" ng-show='dropdownMenuOpen'>
-        <div class="row">
-            <div class="pull-right marginButtonMenuBar" ng-init="$root.languageButtonIcon=$root.languageButton.iconInitial" ng-show="$root.dropdownMenuBarChangeLanguage">
-                <input type="checkbox" id="languageButon" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarLanguage" ng-show="false">
-                <label for="languageButon" ng-mouseover="$root.languageButtonIcon=$root.languageButton.iconHover" ng-mouseout="$root.languageButtonIcon=$root.languageButton.iconInitial"><img class="icondropdownMenuBar" ng-src="{{$root.languageButtonIcon}}" ng-show="!$root.dropdownMenuBarLanguage"/><img class="icondropdownMenuBar" ng-src="{{$root.languageButton.iconSelected}}" ng-show="$root.dropdownMenuBarLanguage"/></br>{{$root.languageButton.name}}</label>
-            </div>
-            <div class="pull-right marginButtonMenuBar" ng-repeat="button in $root.dropdownMenuBar" ng-init="button.icon=button.iconInitial">
-                <input type="radio" id="{{button.name}}" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarValue" value="{{button.href}}" ng-click="$root.dropdownMenuBarValue = button.href; go(button.href)" ng-show="false">
-                <label for="{{button.name}}" ng-mouseover="button.icon=button.iconHover" ng-mouseout="button.icon=button.iconInitial" ng-show="{{button.show}}"><img class="icondropdownMenuBar" ng-src="{{button.icon}}" ng-show="!($root.dropdownMenuBarValue=='{{button.href}}')"/><img class="icondropdownMenuBar" ng-src="{{button.iconSelected}}" ng-show="$root.dropdownMenuBarValue=='{{button.href}}'"/></br>{{button.name}}</label>
-            </div>
+</div>
+<div ng-show="$root.dropdownMenuBarButtonHide">
+    <div id="dropdownMenuButton" ng-init="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton1.png';dropdownMenuOpen=false" ng-mouseover="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton2.png';dropdownMenuOpen=true" ng-mouseout="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton1.png'">
+        <input type="image" class="imgDropdownMenuButtonHide" ng-class="{imgDropdownMenuButtonHideOpened: dropdownMenuOpen}" ng-src="{{imgMenuButton}}" ng-click="dropdownMenuOpen=!dropdownMenuOpen">
+    </div>
+    <div class="dropdownMenuBar">
+        <div class="menuBarAnimationHide" ng-class="{menuBarAnimationOpened: dropdownMenuOpen}"></div>
+    </div>
+</div>
+<div class="row buttonsMenuBar" ng-class="{buttonsMenuBarOpened: dropdownMenuOpen}" ng-show='dropdownMenuOpen'>
+    <div class="row">
+        <div class="pull-right marginButtonMenuBar" ng-init="$root.languageButtonIcon=$root.languageButton.iconInitial" ng-show="$root.dropdownMenuBarChangeLanguage">
+            <input type="checkbox" id="languageButon" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarLanguage" ng-show="false">
+            <label for="languageButon" ng-mouseover="$root.languageButtonIcon=$root.languageButton.iconHover" ng-mouseout="$root.languageButtonIcon=$root.languageButton.iconInitial"><img class="icondropdownMenuBar" ng-src="{{$root.languageButtonIcon}}" ng-show="!$root.dropdownMenuBarLanguage"/><img class="icondropdownMenuBar" ng-src="{{$root.languageButton.iconSelected}}" ng-show="$root.dropdownMenuBarLanguage"/></br>{{$root.languageButton.name}}</label>
         </div>
-        <div class="row marginLanguagesButtonMenuBar" ng-class="{marginLanguagesButtonMenuBarSelected: dropdownMenuBarLanguage}">
-            <div class="pull-right LanguagesButtonMenuBar" ng-repeat="language in languages">
-                <input type="radio" id="{{language.languageName}}" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarLanguageSelected" value="{{language.languageabbr}}" ng-click="$root.dropdownMenuBarLanguageSelected = language.languageabbr; changeLanguage(language.ID_Language)" ng-show="false">
-                <label for="{{language.languageName}}">{{language.languageabbr}}</label>
-            </div>
+        <div class="pull-right marginButtonMenuBar" ng-repeat="button in $root.dropdownMenuBar" ng-init="button.icon=button.iconInitial">
+            <input type="radio" id="{{button.name}}" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarValue" value="{{button.href}}" ng-click="$root.dropdownMenuBarValue = button.href; go(button.href)" ng-show="false">
+            <label for="{{button.name}}" ng-mouseover="button.icon=button.iconHover" ng-mouseout="button.icon=button.iconInitial" ng-show="{{button.show}}"><img class="icondropdownMenuBar" ng-src="{{button.icon}}" ng-show="!($root.dropdownMenuBarValue=='{{button.href}}')"/><img class="icondropdownMenuBar" ng-src="{{button.iconSelected}}" ng-show="$root.dropdownMenuBarValue=='{{button.href}}'"/></br>{{button.name}}</label>
         </div>
     </div>
-    <div class="clickOutside" ng-show='dropdownMenuOpen' ng-click="dropdownMenuOpen=!dropdownMenuOpen"></div>
+    <div class="row marginLanguagesButtonMenuBar" ng-class="{marginLanguagesButtonMenuBarSelected: dropdownMenuBarLanguage}">
+        <div class="pull-right LanguagesButtonMenuBar" ng-repeat="language in languages">
+            <input type="radio" id="{{language.languageName}}" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarLanguageSelected" value="{{language.languageabbr}}" ng-click="$root.dropdownMenuBarLanguageSelected = language.languageabbr; changeLanguage(language.ID_Language)" ng-show="false">
+            <label for="{{language.languageName}}">{{language.languageabbr}}</label>
+        </div>
+    </div>
+</div>
+<div class="clickOutside" ng-show='dropdownMenuOpen' ng-click="dropdownMenuOpen=!dropdownMenuOpen"></div>
