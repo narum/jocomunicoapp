@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* CSS Document */
 .folderContainer{
-    padding: 5vh 15vw;
+    padding: 2vh 5vw;
     height: 100vh;
 }
 .paddingContainer{
@@ -68,4 +68,68 @@
 .addWordForm40{
     height: 40%;
     padding: 0.25vh;
+}
+input.switchclear:empty
+{
+    margin-left: -999px;
+}
+input.switchclear:empty ~ label
+{
+    font-size: 1.9vh;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+
+    position: relative;
+    float: left;
+    line-height: 3vh;
+    text-indent: 0.4em;
+    margin: 0.2em 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+input.switchclear:empty ~ label:before,
+input.switchclear:empty ~ label:after
+{
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    color: #4a4a4a;
+    content: '';
+    width: 7.8vh;
+    background-color: #cccccc;
+    border-radius: 0.2em;
+    /*box-shadow: inset 0 0.2em 0 rgba(0,0,0,0.3);*/
+    -webkit-transition: all 100ms ease-in;
+    transition: all 100ms ease-in;
+}
+input.switchclear:empty ~ label:after
+{
+    color: #717171;
+    content:'==';
+    width: 2.1em;
+    top: 0em;
+    bottom: 0em;
+    margin-left: 0em;
+    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
+    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background-color: #666666;
+    border-radius: 0.15em;
+    box-shadow: inset 0 -0.2em 0 rgba(0,0,0,0.2);
+}
+input.switchclear:checked ~ label:before
+{
+    background-color: #faa258;
+}
+
+input.switchclear:checked ~ label:after
+{
+    margin-left: 2em;
 }
