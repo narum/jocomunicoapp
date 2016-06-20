@@ -455,7 +455,6 @@ input.switch:checked ~ label:after
 /*Modal*/
 /*box User config*/
 #boxUserConfig{
-    margin-right:1vh;
     border-radius: 15px;
     cursor:default;
 }

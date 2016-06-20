@@ -1,28 +1,92 @@
 @charset "UTF-8";
 /* CSS Document */
-#boxUserConfig{
-    margin: 0px !important;
-}
 .folderContainer{
     height: 100vh;
     padding: 5vh 15vw;
 }
+.rightPadding{
+    padding-right: 1vh !important;
+}
+.leftPadding{
+    padding-left: 1vh !important;
+}
 .panelGroupContainer{
-    height: 70vh;
-    padding-right: 1vh;
+    height: 75vh;
 }
 .historicContainer{
-    height: 70vh;
-    padding-left: 1vh;
+    height: 75vh;
 }
 .addWordContainer{
-    height: 18vh;
+    height: 13vh;
     margin-top: 2vh;
 }
-.paddingAddWord
-{
-    padding: 4vh 4vh;
+.marginTopFolderButtons{
+    margin-top: 1vh;
 }
+.contentHistFolderButtons{
+    padding: 6vh 9vh;
+}
+.buttonAddFolder{
+    background-color:rgba(255, 255, 255, 0.3);
+    width: 100%;
+    height: 10vh;
+    border-radius: 15px;
+    border-color: white;
+    border-style: dashed;
+    padding-top: 2.8vh;
+    font-size: 10vh;
+    font-weight: 900;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 1vh;
+}
+.buttonAddFolder:hover{
+    background-color:rgba(0, 0, 0, 0.3);
+}
+.histTabFolder{
+    border-top-left-radius: 1vh;
+    border-top-right-radius: 1vh;
+    height: 1.5vh;
+    background-color: white;
+    margin-left: 3vh;
+}
+.histContentFolder{
+    border-radius: 1vh;
+    height: 10vh;
+    background-color: white;
+    margin-bottom: 1vh;
+}
+.imgHistFolder{
+    height: 9vh;
+    width: auto;
+    margin-top: 0.5vh;
+    margin-left: 3vh;
+}
+.folderTitle{
+    margin-top: 3.5vh;
+    font-size: 4vh;
+}
+.folderEditButton{
+    height: 10vh;
+    border-top-right-radius: 1vh;
+    border-bottom-right-radius: 1vh;
+    background-color: #92dbe1;
+    text-align: center;
+    font-size: 2vh;
+    color: white;
+    padding-top: 3.6vh;
+    cursor: pointer;
+}
+.folderEditButton:hover{
+    background-color: #5d8d91;
+}
+
+
+
+
+
+
 .panelContainer{
     background-color: whitesmoke;
     height: 25%;

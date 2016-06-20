@@ -3124,6 +3124,7 @@ angular.module('controllers', [])
             $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
             $scope.img.Patterns4 = '/img/srcWeb/patterns/pattern4.png';
+            $scope.img.Patterns6 = '/img/srcWeb/patterns/pattern6.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
 
             $scope.range = function ($repeatnum)
