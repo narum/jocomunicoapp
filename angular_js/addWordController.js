@@ -13,10 +13,10 @@ angular.module('controllers')
                 if($scope.NewModif == 1){
                     switch($scope.addWordType)
                     {
-                        case "Name":
-                            $scope.objAdd = {type: "Name",nomtext: null, mf: null, singpl: null, contabincontab: null, determinat: null, ispropernoun: null, defaultverb: null, plural: null, femeni: null, fempl: null};
+                        case "name":
+                            $scope.objAdd = {type: "Name",nomtext: null, mf: false, singpl: false, contabincontab: null, determinat: null, ispropernoun: null, defaultverb: null, plural: null, femeni: null, fempl: null};
                             break;
-                        case "Adj":
+                        case "adj":
                             $scope.objAdd = {type: "Adj", masc: null, fem: null, mescpl: null, fempl: null, subjdef: null};
                             break;
                         default:
@@ -51,6 +51,7 @@ angular.module('controllers')
             
             $scope.saveAddWord = function (){
                 var URL = $scope.baseurl + "Board/XXXXXXXX";
+                alert($scope.objAdd.singpl);
 //      MODIF: HA DE ENVIAR LES DADES AL POST
 //                $http.post(URL, objAdd).success(function (response)
 //                {
