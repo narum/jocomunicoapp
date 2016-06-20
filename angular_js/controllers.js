@@ -2430,7 +2430,7 @@ angular.module('controllers', [])
             };
             /*
              * Generate the current senence under contruction.
-             * Add the pictograms (and the sentence itself) in the history
+             * Add the pictograms (and the sentence itself) in the historic
              */
 
             $scope.generate = function () {
@@ -3291,12 +3291,12 @@ angular.module('controllers', [])
                 } else {
                     $location.path("/panelGroups");
                 }
-                
-                if($scope.NewModif == 1){
-                    switch($scope.addWordType)
+
+                if ($scope.NewModif == 1) {
+                    switch ($scope.addWordType)
                     {
                         case "Name":
-                            $scope.objAdd = {type: "Name",nomtext: null, mf: null, singpl: null, contabincontab: null, determinat: null, ispropernoun: null, defaultverb: null, plural: null, femeni: null, fempl: null};
+                            $scope.objAdd = {type: "Name", nomtext: null, mf: null, singpl: null, contabincontab: null, determinat: null, ispropernoun: null, defaultverb: null, plural: null, femeni: null, fempl: null};
                             break;
                         case "Adj":
                             $scope.objAdd = {type: "Adj", masc: null, fem: null, mescpl: null, fempl: null, subjdef: null};
@@ -3304,19 +3304,18 @@ angular.module('controllers', [])
                         default:
                             break;
                     }
-                }
-                else{
+                } else {
                     //MODIF: Coger BBDD los valores de los objetos
                     //MODIF: Llenar los valores de cada uno de ellos
-                        var URL = $scope.baseurl + "Board/XXXXXXXX";
+                    var URL = $scope.baseurl + "Board/XXXXXXXX";
 //                      MODIF: HA DE GUARDAR LES DADES DEL POST
 //                      $http.post(URL, objAdd).success(function (response)
 //                      {                               
 //                      });
-                    switch($scope.addWordType)
+                    switch ($scope.addWordType)
                     {
                         case "Name":
-                            $scope.objAdd = {type: "Name",nomtext: null, mf: null, singpl: null, contabincontab: null, determinat: null, ispropernoun: null, defaultverb: null, plural: null, femeni: null, fempl: null};
+                            $scope.objAdd = {type: "Name", nomtext: null, mf: null, singpl: null, contabincontab: null, determinat: null, ispropernoun: null, defaultverb: null, plural: null, femeni: null, fempl: null};
                             break;
                         case "Adj":
                             $scope.objAdd = {type: "Adj", masc: null, fem: null, mescpl: null, fempl: null, subjdef: null};
@@ -3326,18 +3325,18 @@ angular.module('controllers', [])
                     }
                 }
             };
-            $scope.cancelAddWord = function (){
+            $scope.cancelAddWord = function () {
                 $location.path("/panelGroups");
             };
 
-            
-            $scope.saveAddWord = function (){
+
+            $scope.saveAddWord = function () {
                 var URL = $scope.baseurl + "Board/XXXXXXXX";
 //      MODIF: HA DE ENVIAR LES DADES AL POST
 //                $http.post(URL, objAdd).success(function (response)
 //                {
 //                });
-                
+
                 $location.path("/panelGroups");
             };
             $scope.uploadFileToWord = function () {
@@ -3367,7 +3366,7 @@ angular.module('controllers', [])
                         });
             };
         })
-        .controller('historyCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
+        .controller('historicCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
             $scope.img = [];
             $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
@@ -3375,40 +3374,69 @@ angular.module('controllers', [])
                 $location.path('/login');
             }
             // Pedimos los textos para cargar la pagina
-            txtContent("historyview").then(function (results) {
+            txtContent("historicview").then(function (results) {
                 $scope.content = results.data;
             });
-            
-            $scope.back = function () {
-              alert("no esta implementado");  
-            };
-            
-            $scope.home = function () {
-              alert("no esta implementado");  
-            };
-            
-            $scope.getTodayHistory = function () {
-              alert("no esta implementado");  
-            };
-            
-            $scope.getLastWeekHistory = function () {
-              alert("no esta implementado");  
-            };
-            
-            $scope.changeFolder = function () {
-              alert("no esta implementado");  
-            };
-            
-            $scope.back2 = function () {
-              alert("no esta implementado");  
-            };
-            
-            $scope.next = function () {
-              alert("no esta implementado");  
-            };
-            
-            
 
+
+            $scope.back = function () {
+                alert("no esta implementado");
+            };
+
+            $scope.home = function () {
+                alert("no esta implementado");
+            };
+
+            $scope.getTodayHistory = function () {
+                alert("no esta implementado");
+            };
+
+            $scope.getLastWeekHistory = function () {
+                alert("no esta implementado");
+            };
+
+            $scope.changeFolder = function () {
+                alert("no esta implementado");
+            };
+
+            $scope.previousSFoler = function () {
+                alert("sdasdasdas");
+                $scope.pagSFolder -= 4;
+                if ($scope.pagSFolder == 0) {
+                    alert("desactivar boton menos");
+                } else {
+                    alert("activar boton menos");
+                }
+            };
+
+            $scope.nextSFolder = function () {
+                alert("sdasdasdadasdas");
+                $scope.pagSFolder += 4;
+                if ($scope.sFolderResult.length < $scope.pagSFolder + 4) {
+                    alert("desactivar boton mas");
+                } else {
+                    alert("activar boton mas");
+                }
+            };
+
+            $scope.getSFolders = function () {
+                var URL = $scope.baseurl + "historic/getSFolder";
+
+                $http.post(URL).
+                        success(function (response)
+                        {
+                            $scope.sFolderResult = response.sFolder;
+                            if ($scope.pagSFolder == 0) {
+                                alert("desactivar boton menos");
+                            } 
+                            if ($scope.sFolderResult.length < $scope.pagSFolder + 4) {
+                                alert("desactivar boton mas");
+                            } 
+                        });
+            };
+            //Init the pag
+            $scope.pagSFolder = 0;
+            $scope.getSFolders();
         })
 
 

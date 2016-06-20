@@ -63,9 +63,9 @@ angular.module('app', [
 			controller:'addWordCtrl',
 			templateUrl:'../../angular_templates/addWord.html'
 		})
-                .when('/history', {
-			controller:'historyCtrl',
-			templateUrl:'../../angular_templates/HistoryView.html'
+                .when('/historic', {
+			controller:'historicCtrl',
+			templateUrl:'../../angular_templates/HistoricView.html'
 		})
 		.otherwise({ redirectTo:'/' });
 })
