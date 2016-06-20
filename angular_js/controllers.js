@@ -3291,6 +3291,54 @@ angular.module('controllers', [])
                 else{
                     $location.path("/panelGroups");
                 }
+                
+                if($scope.NewModif == 1){
+                    switch($scope.addWordType)
+                    {
+                        case "Name":
+                            $scope.objAdd = {type: "Name",nomtext: null, mf: null, singpl: null, contabincontab: null, determinat: null, ispropernoun: null, defaultverb: null, plural: null, femeni: null, fempl: null};
+                            break;
+                        case "Adj":
+                            $scope.objAdd = {type: "Adj", masc: null, fem: null, mescpl: null, fempl: null, subjdef: null};
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else{
+                    //MODIF: Coger BBDD los valores de los objetos
+                    //MODIF: Llenar los valores de cada uno de ellos
+                        var URL = $scope.baseurl + "Board/XXXXXXXX";
+//                      MODIF: HA DE GUARDAR LES DADES DEL POST
+//                      $http.post(URL, objAdd).success(function (response)
+//                      {                               
+//                      });
+                    switch($scope.addWordType)
+                    {
+                        case "Name":
+                            $scope.objAdd = {type: "Name",nomtext: null, mf: null, singpl: null, contabincontab: null, determinat: null, ispropernoun: null, defaultverb: null, plural: null, femeni: null, fempl: null};
+                            break;
+                        case "Adj":
+                            $scope.objAdd = {type: "Adj", masc: null, fem: null, mescpl: null, fempl: null, subjdef: null};
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            };
+            $scope.cancelAddWord = function (){
+                $location.path("/panelGroups");
+            };
+
+            
+            $scope.saveAddWord = function (){
+                var URL = $scope.baseurl + "Board/XXXXXXXX";
+//      MODIF: HA DE ENVIAR LES DADES AL POST
+//                $http.post(URL, objAdd).success(function (response)
+//                {
+//                });
+                
+                $location.path("/panelGroups");
             };
             $scope.uploadFileToWord = function () {
                 $scope.myFile = document.getElementById('file-input').files;

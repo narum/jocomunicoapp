@@ -26,18 +26,23 @@
                 </div>
                 <div class="col-xs-12 imgRounded confirmContainer">
                     <div class="fullheight imgRounded paddingContainer row" style="background-image: url(img/srcWeb/patterns/pattern6.png)">
-                        <div  class="col-xs-12 paddinFolderButton">
+                        <div ng-if="NewModif == 0" class="col-xs-12 paddinFolderButton">
                             <div class=" imgRounded FolderButton" ng-click="">
                                 MODIF: Eliminar
                             </div>
                         </div>
+                        <div ng-if="NewModif == 1" class="col-xs-12 paddinFolderButton active">
+                            <div class=" imgRounded FolderButton " ng-click="">
+                                MODIF: No-Eliminar (NewModif == 1)
+                            </div>
+                        </div>
                          <div  class="col-xs-12 paddinFolderButton">
-                            <div class=" imgRounded FolderButton" ng-click="">
+                            <div class=" imgRounded FolderButton" ng-click="saveAddWord()">
                                 MODIF: Guardar
                             </div>
                         </div>
                          <div  class="col-xs-12 paddinFolderButton">
-                            <div class=" imgRounded FolderButton" ng-click="">
+                            <div class=" imgRounded FolderButton" ng-click="cancelAddWord()">
                                 MODIF: Cancelar
                             </div>
                         </div>
