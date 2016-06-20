@@ -4,14 +4,55 @@
             lorem ipsum
         </div>
     </div>
-    <div class="form addWordForm30">
+    <div class="form addWordForm7c5">
         <div class="addWordFromField fullheight" style="background-color: #fff;">
             lorem ipsum
         </div>
     </div>
-    <div class="form addWordForm30">
+    <div class="form addWordForm7c5">
         <div class="addWordFromField fullheight" style="background-color: #fff;">
             lorem ipsum
+        </div>
+    </div>
+    <div class="form addWordForm15">
+        <div class="addWordFromField fullheight" style="background-color: #fff;">
+            lorem ipsum
+        </div>
+    </div>
+    <div class="form addWordForm7c5">
+        <div class="addWordFromField fullheight" style="background-color: #fff;">
+            lorem ipsum
+        </div>
+    </div>
+    <div class="form addWordForm22c5">
+        <div class="addWordFromField fullheight" style="background-color: #fff;">
+            <div class="form-group {{state.languageSelected}} has-feedback">
+                <div class="input-group input-group-auto inputMarginRigth">
+                    <span class="input-group-addon"><i class="icon-comments"></i></span>
+                    <select
+                        class="form-control"
+                        name="languageSelected"
+                        ng-model="formData.languageSelected"
+                        ng-change="addLanguage(formData.languageSelected)"
+                        >
+                        <option selected="selected" disabled="disabled" value="">{{ content.language}}</option>
+                        <option ng-repeat="option in range(20)" value="{{option.ID_Language}}">{{option.languageName}}</option>
+                    </select>
+                </div>
+                <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.languageSelected == 'has-error'"></span>
+                <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.languageSelected == 'has-success'"></span>
+                <span class="errorcoment" ng-show="state.languageSelected == 'has-error'">{{ content.required}}</span>
+                <span class="errorcoment"
+                      ng-show="registerForm.languageSelected.$touched && registerForm.languageSelected.$pristine && state.languageSelected == ''">{{ content.required}}</span>  
+            </div>
+            <div class="inputMarginLeft">
+                <table class="table table-condensed taula">
+                    <tr ng-repeat="item in languageList">
+                        <td class="llenguatge" >{{ item.languageName}}</td>
+                        <td class="buto"><a class="icon-minus btn-borrar" ng-click="removeLanguage($index)"></a></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
