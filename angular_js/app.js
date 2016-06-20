@@ -63,6 +63,10 @@ angular.module('app', [
 			controller:'addWordCtrl',
 			templateUrl:'../../angular_templates/addWord.html'
 		})
+                .when('/history', {
+			controller:'historyCtrl',
+			templateUrl:'../../angular_templates/HistoryView.html'
+		})
 		.otherwise({ redirectTo:'/' });
 })
 .run(function(AuthService){

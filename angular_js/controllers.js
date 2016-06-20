@@ -3053,8 +3053,8 @@ angular.module('controllers', [])
 
 
         .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
-            $scope.addWord = function (newModif,addWordType) {
-                $rootScope.addWordparam = {newmod: newModif,type: addWordType};
+            $scope.addWord = function (newModif, addWordType) {
+                $rootScope.addWordparam = {newmod: newModif, type: addWordType};
                 $location.path('/addWord');
             };
             $scope.$on('scrollbar.show', function () {
@@ -3069,7 +3069,7 @@ angular.module('controllers', [])
             txtContent("panelgroup").then(function (results) {
                 $scope.content = results.data;
             });
-            
+
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBarValue = '/panelGroups'; //Button selected on this view
             $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
@@ -3078,16 +3078,16 @@ angular.module('controllers', [])
 
             //Choose the buttons to show on bar
             dropdownMenuBarInit($rootScope.interfaceLanguageId)
-                .then(function () {
-                    //Choose the buttons to show on bar
-                    angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                        if (value.href == '/' || value.href == '/info' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
-                            value.show = true;
-                        } else {
-                            value.show = false;
-                        }
+                    .then(function () {
+                        //Choose the buttons to show on bar
+                        angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                            if (value.href == '/' || value.href == '/info' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
+                                value.show = true;
+                            } else {
+                                value.show = false;
+                            }
+                        });
                     });
-                });
             //function to change html view with dropdown menu buttons
             $scope.go = function (path) {
                 if (path == 'logout') {
@@ -3117,7 +3117,7 @@ angular.module('controllers', [])
             $scope.$on('scrollbar.hide', function () {
                 console.log('Scrollbar hide');
             });
-            
+
             //Content Images and backgrounds
             $scope.img = [];
             $scope.img.fons = '/img/srcWeb/patterns/fons.png';
@@ -3125,7 +3125,7 @@ angular.module('controllers', [])
             $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
             $scope.img.Patterns4 = '/img/srcWeb/patterns/pattern4.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
-            
+
             $scope.range = function ($repeatnum)
             {
                 var n = [];
@@ -3287,8 +3287,7 @@ angular.module('controllers', [])
                     $scope.addWordType = $rootScope.addWordparam.type;
                     $rootScope.addWordparam = null;
                     console.log($scope.addWordType);
-                }
-                else{
+                } else {
                     $location.path("/panelGroups");
                 }
             };
@@ -3318,6 +3317,49 @@ angular.module('controllers', [])
                             //alert(response.errorText);
                         });
             };
+        })
+        .controller('historyCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
+            $scope.img = [];
+            $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
+            // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
+            if (!$rootScope.isLogged) {
+                $location.path('/login');
+            }
+            // Pedimos los textos para cargar la pagina
+            txtContent("historyview").then(function (results) {
+                $scope.content = results.data;
+            });
+            
+            $scope.back = function () {
+              alert("no esta implementado");  
+            };
+            
+            $scope.home = function () {
+              alert("no esta implementado");  
+            };
+            
+            $scope.getTodayHistory = function () {
+              alert("no esta implementado");  
+            };
+            
+            $scope.getLastWeekHistory = function () {
+              alert("no esta implementado");  
+            };
+            
+            $scope.changeFolder = function () {
+              alert("no esta implementado");  
+            };
+            
+            $scope.back2 = function () {
+              alert("no esta implementado");  
+            };
+            
+            $scope.next = function () {
+              alert("no esta implementado");  
+            };
+            
+            
+
         })
 
 

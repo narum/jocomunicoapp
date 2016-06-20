@@ -1,0 +1,106 @@
+@charset "UTF-8";
+/* CSS Document */
+#main{
+    height:100vh;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+
+}
+.historyView{
+    padding: 5vh; 
+    height: 100vh;
+
+}
+.containerHistory{
+    height: 15%;
+    margin-bottom: 2vh;
+}
+.backgroundHome{
+    width: 94%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/borrar_ultim_fons.png');
+    background-size: 100% 100%;
+    border-radius: 7px;
+}
+.backgroundBack{
+    width: 94%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/llegir_fons.png');
+    background-size: 100% 100%;
+    border-radius: 7px;
+}
+.imgResponsiveBack {
+    pointer-events: none;
+    display: block;
+    max-width: 50%;
+    height: auto;
+    max-height: 50%;
+    width: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    position: relative;
+    z-index: 2;
+}
+.timeButton{
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 2px -2px 0px 1px #91dce1;
+    border: none;
+    color: #000;
+    background-color: #fff;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column; 
+    cursor: pointer;
+}
+.timeButton:active{
+    box-shadow: 0px -0px 0px 1px #91dce1;
+    transform: translate(2px, -2px);
+}
+.folderHistoryButton{
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 2px -2px 0px 1px #f9a777;
+    border: none;
+    color: #000;
+    background-color: #fff;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column; 
+    cursor: pointer;
+}
+.folderHistoryButton:active{
+    box-shadow: 0px -0px 0px 1px #f9a777;
+    transform: translate(2px, -2px);
+}
+.holderButtons{
+    padding: 2vh 1vh;
+    background-image: url('/img/srcWeb/patterns/pattern0.png');
+    height:100%; 
+    border-radius: 7px;
+}
+.buttonPadding{
+    padding: 0vh 1vh;
+    height: 100%;
+}
+.buttonText{
+    transform: translate(0%, -50%);
+    top: 50%;
+    position: relative;
+}
+.historyContainer{
+    height: 66%;
+    border-radius: 7px;
+}
+.scrollHistory{
+    height: 100%;
+    overflow: hidden;
+}
