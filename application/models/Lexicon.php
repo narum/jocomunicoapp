@@ -1414,12 +1414,21 @@ class Lexicon extends CI_Model {
     }
     
     /*
-     * Adds or updates the stats of the pictogram with pictoid
+     * Adds or updates the stats (countx1 and hour and day of the week) of the pictogram with pictoid
      * for the user with id=iduser. If first is set to true, it only
      * sets the counter to 1 if that user had never used that pictogram
      * before.
      */
-    public function addWordStatsX1($pictoid, $iduser, $first) {
+    public function addWordStatsX1($pictoid, $iduser, $first) 
+    {
+        $datestring = "%Y/%m/%d";
+        $daystring = 'D';
+        $hourstring = 'G';
+        $time = time();
+        $avui = mdate($datestring, $time);
+        $dia = date($daystring, $time);
+        $hora = date($hourstring, $time);
+        $hora .= "h";
         
         $this->db->where('pictoid', $pictoid);
         $this->db->where('ID_PSUPUser', $iduser);
@@ -1428,16 +1437,22 @@ class Lexicon extends CI_Model {
             if (!$first) {
                 $stat = $query->result();
                 $num = $stat[0]->countx1 + 1;
+                $numdia = $stat[0]->$dia + 1;
+                $numhora = $stat[0]->$hora + 1;
                 $this->db->where('pictoid', $pictoid);
                 $this->db->where('ID_PSUPUser', $iduser);
                 $data = array(
-                    'countx1' => $num
+                    'countx1' => $num,
+                    'lastdate' => $avui,
+                    $dia => $numdia,
+                    $hora => $numhora
                 );
                 $query = $this->db->update('P_StatsUserPicto', $data);
             }
         } else {
             $data = array(
                 'countx1' => '1',
+                'lastdate' => $avui,
                 'pictoid' => $pictoid,
                 'ID_PSUPUser' => $iduser
             );
@@ -1527,8 +1542,8 @@ class Lexicon extends CI_Model {
     * sets the counter to 1 if that user had never used that pictogram
     * before.
     */
-   public function addImgTempStatsX1($pictoid, $iduser, $imgtemp) {
-
+   public function addImgTempStatsX1($pictoid, $iduser, $imgtemp) 
+   {
        $this->db->where('pictoid', $pictoid);
        $this->db->where('ID_PSUPUser', $iduser);
        $query = $this->db->get('P_StatsUserPicto');
