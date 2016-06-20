@@ -215,8 +215,8 @@ class Myword {
         $replacements[4] = 'u';
         
         $wordoriginal = $this->text;
-        $wordlowered = strtolower($wordoriginal); // word in lowercase
-                
+        $wordlowered = mb_strtolower($wordoriginal); // word in lowercase
+                        
         // remove the accents from lowercase word
         $wordlowerednoaccents = preg_replace($patterns, $replacements, $wordlowered);
                 
@@ -230,7 +230,7 @@ class Myword {
             }
             else {
                 // c -> We use regular expressions to verify the condition        
-                if (preg_match('/^[bcdfgjklmnpqrstvwxyz]/', $wordlowerednoaccents) == '1') {
+                if (preg_match('/^[bcdfgjklmnpqrstvwxyz]/', $wordlowered) == '1') {
 
                     // d
                     if ($this->propietats->mf == "masc" && !$this->fem)  return $matching->answers["O"];

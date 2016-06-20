@@ -27,6 +27,10 @@ class Myexpander {
     
     public function expand()
     {
+        // the character encoding of the words from the database is utf-8
+        // so we set the php system to utf-8
+        mb_internal_encoding( 'utf-8' );
+        
         $CI = &get_instance();
         $CI->load->model('Lexicon');
 
