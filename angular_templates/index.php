@@ -39,6 +39,8 @@
         <script type="text/javascript" src="<?= base_url(); ?>angular_js/controllers.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>angular_js/services.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>angular_js/captcha.js"></script>
+        <script type="text/javascript" src="<?= base_url(); ?>angular_js/panelController.js"></script>
+        <script type="text/javascript" src="<?= base_url(); ?>angular_js/addWordController.js"></script>
 
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular-bind-html-compile.js"></script>
         <!--<script type="text/javascript" src="<?= base_url(); ?>libraries/angular-sanitize.min.js"></script>-->
