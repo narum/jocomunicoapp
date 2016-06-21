@@ -1,3 +1,27 @@
 @charset "UTF-8";
 /* CSS Document */
 
+#main-container {
+    width: 100%;
+}
+
+.home-logo {
+    text-align: center;
+    margin-top: 15vh;
+}
+
+.home-logo-img {
+    max-width: 100%;
+}
+
+.home-subtitle {
+    font-size: 3vh;
+    font-weight: lighter;
+    color: #f0a22e;
+    display: block;
+    padding-top: 5px;
+}
+
+.home-video {
+    background: url("/img/srcWeb/home/video.png") no-repeat #fff;
+}

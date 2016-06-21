@@ -5,7 +5,7 @@ angular.module('controllers')
              * MENU CONFIGURATION
              */
            
-            $rootScope.contetnLanguageUserNonLoged = 1; // idioma por defecto al iniciar (catalan)
+            $rootScope.contetnLanguageUserNonLoged = 1; // default language Catalan
            
             //Images
             $scope.img = [];
@@ -40,10 +40,17 @@ angular.module('controllers')
             //function to change html content language
             $rootScope.changeLanguage = function (value) {
                 $rootScope.contetnLanguageUserNonLoged = value;
+                $rootScope.interfaceLanguageId = value;
+                // content for the menu
                 Resources.register.get({'section': 'login', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
                             $scope.content = results.data;
                             dropdownMenuBarInit(value);
+                        });
+                // content for the home view    
+                Resources.register.get({'section': 'home', 'idLanguage': value}, {'funct': "content"}).$promise
+                        .then(function (results) {
+                            $scope.text = results.data;
                         });
             };
                 
@@ -51,7 +58,11 @@ angular.module('controllers')
             * HOME VIEW FUNCTIONS
             */
            
-           
+            // Get content for the home view for ddbb   
+            Resources.register.get({'section': 'home', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
+                .then(function (results) {
+                    $scope.text = results.data;
+                });
            
                     
         });

@@ -11,11 +11,21 @@
 <!--menu superior dropdown-->
 <div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
 
-<div class="row folderContainer">
+<div id="main-container">
+    
     <div class="row">
-        
-        
+        <div class="col-xs-6 col-xs-offset-3 home-logo">
+            <img src="img/srcWeb/home/jocomunicologo.png" class="home-logo-img" width="320" />
+            <span class='home-subtitle'>{{text.subtitle}}</span>
+        </div>        
     </div>
+    
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-3 home-video">
+            <iframe src="https://www.youtube.com/embed/1PvC3CvGFMY" frameborder="0" allowfullscreen></iframe>
+        </div>        
+    </div>
+    
 </div>
 
 
