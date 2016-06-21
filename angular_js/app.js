@@ -67,6 +67,10 @@ angular.module('app', [
 			controller:'historicCtrl',
 			templateUrl:'../../angular_templates/HistoricView.html'
 		})
+                .when('/home', {
+			controller:'infoCtrl',
+			templateUrl:'../../angular_templates/Home.html'
+		})
 		.otherwise({ redirectTo:'/' });
 })
 .run(function(AuthService){
