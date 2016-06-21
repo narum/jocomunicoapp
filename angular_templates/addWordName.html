@@ -228,24 +228,25 @@
     </div>
     <div class="form addWordForm22c5">
         <div class="addWordFromField fullheight" style="background-color: #fff;">
-            <div class="form-group has-feedback">
+            <div class="has-feedback" style="height: 30%">
                 <div class="input-group input-group-auto inputMarginRigth">
                     <span class="input-group-addon"><i class="icon-comments"></i></span>
                     <select
                         class="form-control"
                         name="className"
                         ng-model="formNounClass"
+                        ng-change="addNClass(formNounClass.valueOf())"
                         >
                         <option ng-repeat="x in $parent.classNoun" value="{{x.classType}}">{{x.nameType}}</option>
                     </select>
                 </div>
             </div>
-            <div class="inputMarginLeft">
+            <div class="inputMarginLeft" style=" height: 70%">
                 <table class="table table-condensed taula">
-                    <tr ng-repeat="item in languageList">
-                        <td class="llenguatge" >{{ item.languageName}}</td>
-                        <td class="buto"><a class="icon-minus btn-borrar" ng-click="removeLanguage($index)"></a></td>
-                    </tr>
+                    <div class="col-xs-4 row" ng-repeat="item in NClassList">
+                        <div class="col-xs-8 llenguatge" >{{ item.nameType}}</div>
+                        <div class="col-xs-4 buto"><a class="icon-minus btn-borrar" ng-click="removeLanguage($index)"></a></div>
+                    </div>
                 </table>
             </div>
         </div>

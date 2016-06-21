@@ -52,6 +52,7 @@ angular.module('controllers')
                             $scope.objAdd = {type: "name", nomtext: null, mf: false, singpl: false, contabincontab: null, determinat: null, ispropernoun: false, defaultverb: null, plural: null, femeni: null, fempl: null};
                             $scope.switchName = {s1: false, s2: false, s3: false, s4: false, s5: false, s6: false};
                             // MODIF: FALTA RECOLLIR DE LA BBDD ELS VERBS I PASARLOS EN UN SELECT
+                            $scope.NClassList = [];
                             $scope.classNoun = [{classType: "animate", numType: 1, nameType: $scope.content.classname1},
                                 {classType: "human", numType: 2, nameType: $scope.content.classname2},
                                 {classType: "pronoun", numType: 3, nameType: $scope.content.classname3},
@@ -147,19 +148,19 @@ angular.module('controllers')
                             //alert(response.errorText);
                         });
             };
-            $scope.addLanguage = function (idLanguage) {
-                angular.forEach($scope.availableLanguageOptions, function (value, key) {
-                    if (value.ID_Language == idLanguage) {
-                        $scope.languageList.push($scope.availableLanguageOptions[key]);//añadimos el idioma a la lista .push(objeto)
-                        $scope.availableLanguageOptions.splice(key, 1);//Borrar idioma de las opciones .splice(posicion, numero de items)
+            $scope.addNClass = function (nameTypeClass) {
+                angular.forEach($scope.classNoun, function (value, key) {
+                    if (value.classType == nameTypeClass) {
+                        $scope.NClassList.push($scope.classNoun[key]);//añadimos el idioma a la lista .push(objeto)
+                        $scope.classNoun.splice(key, 1);//Borrar idioma de las opciones .splice(posicion, numero de items)
                         $scope.state.languageSelected = 'has-success';
                         languageOk = true;
                     }
                 });
             };
             $scope.removeLanguage = function (index) {
-                $scope.availableLanguageOptions.push($scope.languageList[index]);
-                $scope.languageList.splice(index, 1);//Borrar item de un array .splice(posicion, numero de items)
+                $scope.classNoun.push($scope.NClassList[index]);
+                $scope.NClassList.splice(index, 1);//Borrar item de un array .splice(posicion, numero de items)
             };
 
 
