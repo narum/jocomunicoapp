@@ -151,8 +151,14 @@ class Main extends REST_Controller {
             $interfaceVoicesOffline = $audio->listInterfaceVoices(false);
             $expansionVoicesOffline = $audio->listExpansionVoices(false);
         }else{
-            $interfaceVoicesOffline = 'App on server';
-            $expansionVoicesOffline = 'App on server';
+            $interfaceVoicesOffline = array (
+                [0] => 'App on server',
+                [1] => false
+            );
+            $expansionVoicesOffline = array (
+                [0] => 'App on server',
+                [1] => false
+            );
         }
         
         $voices = [
@@ -194,5 +200,37 @@ class Main extends REST_Controller {
         $response = $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
         //respuesta
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
+    //get today,last week and last month historic
+    public function getHistoric_get()
+    {
+        $idusu = $this->session->userdata('idusu');
+        
+        $this->main_model->deleteHistoric();//delete all historic after last 30 days
+        
+        $today = $this->main_model->getHistoric($idusu, '1');
+        $lastWeek = $this->main_model->getHistoric($idusu, '7');
+        $lastMonth = $this->main_model->getHistoric($idusu, '30');
+
+        $response = [
+            'today' => $today,
+            'lastWeek' => $lastWeek,
+            'lastMonth' => $lastMonth
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+        
+    }
+    //get today,last week and last month historic
+    public function getSentenceFolders_get()
+    {
+        $idusu = $this->session->userdata('idusu');
+        
+        $folders = $this->main_model->getData('S_Folder', 'ID_SFUser', $idusu);
+        $response = [
+            'folders' => $folders
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
     }
 }

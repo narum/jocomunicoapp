@@ -56,57 +56,16 @@
                         <div class="scrollWidth">
                             <div class="row buttonAddFolder">+</div>
                             <!-- XAVI!!!!!: cuando hagas el ng-repeat copia esto  "on-Finish-Loop="nombredeevento" "y avisame y te hago la "funcion" para que se recoloque-->
-                            <div class="row histFolder"><div class="row"><div class="col-xs-2 histTabFolder"></div></div>
-                                <div class="row"><div class="col-xs-12 histContentFolder">
+                            <div class="row histFolder" ng-repeat="folder in historicFolders"><div class="row"><div class="col-xs-2 histTabFolder" style="background-color: #{{folder.folderColor}}"></div></div>
+                                <div class="row"><div class="col-xs-12 histContentFolder" style="background-color: #{{folder.folderColor}}">
                                         <div class="row">
-                                            <div class="col-xs-3"><img class="imgHistFolder" ng-src="/img/pictos/abril.png"/></div>
-                                            <div class="col-xs-7 folderTitle">HORA DE DINAR</div>
-                                            <div class="col-xs-2 folderEditButton">Edita <div class="icon-pencil"></div></div>
-                                        </div>
-                                    </div></div>
-                            </div>
-
-
-
-                            <div class="row histFolder"><div class="row"><div class="col-xs-2 histTabFolder"></div></div>
-                                <div class="row"><div class="col-xs-12 histContentFolder">
-                                        <div class="row">
-                                            <div class="col-xs-3"><img class="imgHistFolder" ng-src="/img/pictos/abril.png"/></div>
-                                            <div class="col-xs-7 folderTitle">HORA DE DINAR</div>
-                                            <div class="col-xs-2 folderEditButton">Edita <div class="icon-pencil"></div></div>
-                                        </div>
-                                    </div></div>
-                            </div>
-                            <div class="row histFolder"><div class="row"><div class="col-xs-2 histTabFolder"></div></div>
-                                <div class="row"><div class="col-xs-12 histContentFolder">
-                                        <div class="row">
-                                            <div class="col-xs-3"><img class="imgHistFolder" ng-src="/img/pictos/abril.png"/></div>
-                                            <div class="col-xs-7 folderTitle">HORA DE DINAR</div>
-                                            <div class="col-xs-2 folderEditButton">Edita <div class="icon-pencil"></div></div>
-                                        </div>
-                                    </div></div>
-                            </div>
-                            <div class="row histFolder"><div class="row"><div class="col-xs-2 histTabFolder"></div></div>
-                                <div class="row"><div class="col-xs-12 histContentFolder">
-                                        <div class="row">
-                                            <div class="col-xs-3"><img class="imgHistFolder" ng-src="/img/pictos/abril.png"/></div>
-                                            <div class="col-xs-7 folderTitle">HORA DE DINAR</div>
-                                            <div class="col-xs-2 folderEditButton">Edita <div class="icon-pencil"></div></div>
-                                        </div>
-                                    </div></div>
-                            </div>
-                            <div class="row histFolder"><div class="row"><div class="col-xs-2 histTabFolder"></div></div>
-                                <div class="row"><div class="col-xs-12 histContentFolder">
-                                        <div class="row">
-                                            <div class="col-xs-3"><img class="imgHistFolder" ng-src="/img/pictos/abril.png"/></div>
-                                            <div class="col-xs-7 folderTitle">HORA DE DINAR</div>
+                                            <div class="col-xs-3"><img class="imgHistFolder" ng-src="{{folder.imgSFolder}}"/></div>
+                                            <div class="col-xs-7 folderTitle">{{folder.folderName}}</div>
                                             <div class="col-xs-2 folderEditButton">Edita <div class="icon-pencil"></div></div>
                                         </div>
                                     </div></div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
