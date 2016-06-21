@@ -1,4 +1,11 @@
 /application/config/
+/application/logs/
+/ddbb/
+/disseny/
+/docs/
+/fonts/
+/tests/
+/txt/
 /system/
 /nbproject/
 /vendor/
