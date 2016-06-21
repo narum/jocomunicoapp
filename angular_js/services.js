@@ -106,7 +106,7 @@ angular.module('services', [])
                 $rootScope.dropdownMenuBar.push({name: results.data.panelGroups, href: '/panelGroups', iconInitial: '/img/srcWeb/DropdownMenuBar/panellsIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/panellsIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/panellsIconSelected.png', show:false});
                 $rootScope.dropdownMenuBar.push({name: results.data.editPanel, href: 'editPanel', iconInitial: '/img/srcWeb/DropdownMenuBar/editaPanellIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/editaPanellIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/editaPanellIconSelected.png', show:false});
                 $rootScope.dropdownMenuBar.push({name: results.data.info, href: '/info', iconInitial: '/img/srcWeb/DropdownMenuBar/sobrejocomIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/sobrejocomIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/sobrejocomIconSelected.png', show:false});
-                $rootScope.dropdownMenuBar.push({name: results.data.init, href: '/', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.init, href: '/home', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png', show:false});
                 $rootScope.languageButton = {name: results.data.languages, iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
                 $rootScope.languageButtonIcon = $rootScope.languageButton.iconInitial;
                 if($rootScope.localServer){
@@ -124,7 +124,8 @@ angular.module('services', [])
                     $rootScope.dropdownMenuBar[4].name = results.data.userConfig;
                     $rootScope.dropdownMenuBar[5].name = results.data.panelGroups;
                     $rootScope.dropdownMenuBar[6].name = results.data.editPanel;
-                    $rootScope.dropdownMenuBar[7].name = results.data.init;
+                    $rootScope.dropdownMenuBar[7].name = results.data.info;
+                    $rootScope.dropdownMenuBar[8].name = results.data.init;
                     $rootScope.languageButton.name = results.data.languages;
                 }else{
                     $rootScope.dropdownMenuBar[0].name = results.data.logout;

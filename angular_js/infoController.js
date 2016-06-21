@@ -1,13 +1,13 @@
 angular.module('controllers')
         .controller('infoCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
            
-           /*
-            * MENU CONFIGURATION
-            */
+            /*
+             * MENU CONFIGURATION
+             */
            
-           $rootScope.contetnLanguageUserNonLoged = 1; // idioma por defecto al iniciar (catalan)
+            $rootScope.contetnLanguageUserNonLoged = 1; // idioma por defecto al iniciar (catalan)
            
-           //Images
+            //Images
             $scope.img = [];
             $scope.img.fons = '/img/srcWeb/patterns/fons.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
@@ -17,10 +17,10 @@ angular.module('controllers')
            //Dropdown Menu Bar
             dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
                     .then(function () {
-                        $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+                        $rootScope.dropdownMenuBarChangeLanguage = true; //Languages button available
                         //Choose the buttons to show on bar
                         angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/privacity') {
+                            if (value.href == '/home' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/privacity') {
                                 value.show = true;
                             } else {
                                 value.show = false;
