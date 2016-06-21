@@ -1,6 +1,41 @@
 angular.module('controllers')
         .controller('addWordCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
-            $scope.initAddWord = function () {
+            txtContent("addWord").then(function (results) {
+                $scope.content = results.data;
+                $scope.initAddWordtest();
+            });
+            //Dropdown Menu Bar
+            dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
+                    .then(function () {
+                        $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+                        //Choose the buttons to show on bar
+                        angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                            if (value.href == '/' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/privacity') {
+                                value.show = true;
+                            } else {
+                                value.show = false;
+                            }
+                        });
+                    });
+            $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
+            $rootScope.dropdownMenuBarButtonHide = false;
+            //function to change html view
+            $scope.go = function (path) {
+                $location.path(path);
+                $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+            };
+            //function to change html content language
+            $rootScope.changeLanguage = function (value) {
+                $rootScope.contetnLanguageUserNonLoged = value;
+                Resources.register.get({'section': 'login', 'idLanguage': value}, {'funct': "content"}).$promise
+                        .then(function (results) {
+                            $scope.content = results.data;
+                            dropdownMenuBarInit(value);
+                        });
+            };
+            $scope.initAddWord = function () {};
+            $scope.initAddWordtest = function () {
+
                 if ($rootScope.addWordparam != null) {
                     $scope.NewModif = $rootScope.addWordparam.newmod;
                     $scope.addWordType = $rootScope.addWordparam.type;
@@ -9,54 +44,81 @@ angular.module('controllers')
                 } else {
                     $location.path("/panelGroups");
                 }
-                
-                if($scope.NewModif == 1){
-                    switch($scope.addWordType)
+
+                if ($scope.NewModif == 1) {
+                    switch ($scope.addWordType)
                     {
                         case "name":
-                            $scope.objAdd = {type: "Name",nomtext: null, mf: false, singpl: false, contabincontab: null, determinat: null, ispropernoun: null, defaultverb: null, plural: null, femeni: null, fempl: null};
+                            $scope.objAdd = {type: "name", nomtext: null, mf: false, singpl: false, contabincontab: null, determinat: null, ispropernoun: false, defaultverb: null, plural: null, femeni: null, fempl: null};
+                            $scope.switchName = {s1: false, s2: false, s3: false, s4: false, s5: false, s6: false};
+                            // MODIF: FALTA RECOLLIR DE LA BBDD ELS VERBS I PASARLOS EN UN SELECT
+                            $scope.classNoun = [{classType: "animate", numType: 1, nameType: $scope.content.classname1},
+                                {classType: "human", numType: 2, nameType: $scope.content.classname2},
+                                {classType: "pronoun", numType: 3, nameType: $scope.content.classname3},
+                                {classType: "animal", numType: 4, nameType: $scope.content.classname4},
+                                {classType: "planta", numType: 5, nameType: $scope.content.classname5},
+                                {classType: "vehicle", numType: 6, nameType: $scope.content.classname6},
+                                {classType: "event", numType: 7, nameType: $scope.content.classname7},
+                                {classType: "inanimate", numType: 8, nameType: $scope.content.classname8},
+                                {classType: "objecte", numType: 9, nameType: $scope.content.classname9},
+                                {classType: "color", numType: 10, nameType: $scope.content.classname10},
+                                {classType: "forma", numType: 11, nameType: $scope.content.classname11},
+                                {classType: "joc", numType: 12, nameType: $scope.content.classname12},
+                                {classType: "cos", numType: 13, nameType: $scope.content.classname13},
+                                {classType: "abstracte", numType: 14, nameType: $scope.content.classname14},
+                                {classType: "lloc", numType: 15, nameType: $scope.content.classname15},
+                                {classType: "menjar", numType: 16, nameType: $scope.content.classname16},
+                                {classType: "beguda", numType: 17, nameType: $scope.content.classname17},
+                                {classType: "time", numType: 18, nameType: $scope.content.classname18},
+                                {classType: "hora", numType: 19, nameType: $scope.content.classname19},
+                                {classType: "month", numType: 20, nameType: $scope.content.classname20},
+                                {classType: "week", numType: 21, nameType: $scope.content.classname21},
+                                {classType: "tool", numType: 22, nameType: $scope.content.classname22},
+                                {classType: "profession", numType: 23, nameType: $scope.content.classname23},
+                                {classType: "material", numType: 24, nameType: $scope.content.classname24}];
+                            $scope.$apply();
                             break;
                         case "adj":
-                            $scope.objAdd = {type: "Adj", masc: null, fem: null, mescpl: null, fempl: null, subjdef: null};
+                            $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null, subjdef: null};
                             break;
                         default:
                             break;
                     }
-                }
-                else{
+                } else {
                     //MODIF: Coger BBDD los valores de los objetos
                     //MODIF: Llenar los valores de cada uno de ellos
-                        var URL = $scope.baseurl + "Board/XXXXXXXX";
+                    var URL = $scope.baseurl + "Board/XXXXXXXX";
 //                      MODIF: HA DE GUARDAR LES DADES DEL POST
 //                      $http.post(URL, objAdd).success(function (response)
 //                      {                               
 //                      });
-                    switch($scope.addWordType)
+                    switch ($scope.addWordType)
                     {
-                        case "Name":
-                            $scope.objAdd = {type: "Name",nomtext: null, mf: null, singpl: null, contabincontab: null, determinat: null, ispropernoun: null, defaultverb: null, plural: null, femeni: null, fempl: null};
+                        case "name":
+                            $scope.objAdd = {type: "name", nomtext: null, mf: false, singpl: false, contabincontab: null, determinat: null, ispropernoun: null, defaultverb: null, plural: null, femeni: null, fempl: null};
+                            $scope.switchName = {s1: false, s2: false, s3: false, s4: false, s5: false, s6: false};
                             break;
-                        case "Adj":
-                            $scope.objAdd = {type: "Adj", masc: null, fem: null, mescpl: null, fempl: null, subjdef: null};
+                        case "adj":
+                            $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null, subjdef: null};
                             break;
                         default:
                             break;
                     }
                 }
             };
-            $scope.cancelAddWord = function (){
+            $scope.cancelAddWord = function () {
                 $location.path("/panelGroups");
             };
 
-            
-            $scope.saveAddWord = function (){
+
+            $scope.saveAddWord = function () {
                 var URL = $scope.baseurl + "Board/XXXXXXXX";
                 alert($scope.objAdd.singpl);
 //      MODIF: HA DE ENVIAR LES DADES AL POST
 //                $http.post(URL, objAdd).success(function (response)
 //                {
 //                });
-                
+
                 $location.path("/panelGroups");
             };
             $scope.uploadFileToWord = function () {
@@ -85,4 +147,43 @@ angular.module('controllers')
                             //alert(response.errorText);
                         });
             };
-        })
+            $scope.addLanguage = function (idLanguage) {
+                angular.forEach($scope.availableLanguageOptions, function (value, key) {
+                    if (value.ID_Language == idLanguage) {
+                        $scope.languageList.push($scope.availableLanguageOptions[key]);//añadimos el idioma a la lista .push(objeto)
+                        $scope.availableLanguageOptions.splice(key, 1);//Borrar idioma de las opciones .splice(posicion, numero de items)
+                        $scope.state.languageSelected = 'has-success';
+                        languageOk = true;
+                    }
+                });
+            };
+            $scope.removeLanguage = function (index) {
+                $scope.availableLanguageOptions.push($scope.languageList[index]);
+                $scope.languageList.splice(index, 1);//Borrar item de un array .splice(posicion, numero de items)
+            };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        });
+        

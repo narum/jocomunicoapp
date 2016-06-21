@@ -17,9 +17,9 @@
                 </div>
                 <div class="col-xs-7 row">
                     <div class="col-xs-4">
-                        <input id="switchName1" class="switchclear" type="checkbox" 
-                               ng-model="objAdd.mf " ng-show="false">
-                        <label for="switchName1">&nbsp;</label>
+                        <input id="switchNameMf" class="switchclear" type="checkbox" 
+                               ng-model="$parent.objAdd.mf " ng-show="false">
+                        <label for="switchNameMf">&nbsp;</label>
                     </div>
                     <div class="col-xs-7">
                         MODIF:FEMALE
@@ -36,59 +36,58 @@
                     </div>
                 </div>
                 <div class="col-xs-7 row">
+                    <div class="col-xs-4">
+                        <input id="switchNameSingpl" class="switchclear" type="checkbox" 
+                               ng-model="$parent.objAdd.singpl" ng-show="false">
+                        <label for="switchNameSingpl">&nbsp;</label>
+                    </div>
+                    <div class="col-xs-7">
+                        MODIF:PLURAL
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5 row">
+                        MODIF:SINGULAR
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5 row">
+                    <div class="col-xs-6">
+
+                    </div>
+                    <div class="col-xs-6">
+                        MODIF:MALE
+                    </div>
+                </div>
+                <div class="col-xs-7 row">
+                    <div class="col-xs-7">
+                        <input type="text" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                    </div>
+                    <div class="col-xs-4">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-if="!$parent.objAdd.mf">
+                <div class="col-xs-5 row">
+                    <div class="col-xs-6">
+
+                    </div>
+                    <div class="col-xs-6">
+                        MODIF:FEMALE
+                    </div>
+                </div>
+                <div class="col-xs-7 row">
+                    <div class="col-xs-7">
+                        <input type="text" ng-if="switchname.s2" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                        <input type="text" disabled ng-if="!switchname.s2" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                    </div>
                     <div class="col-xs-4">
                         <input id="switchName2" class="switchclear" type="checkbox" 
-                               ng-model="$parent.objAdd.singpl" ng-show="false">
+                               ng-model="switchname.s2" ng-show="false">
                         <label for="switchName2">&nbsp;</label>
                     </div>
-                    <div class="col-xs-7">
-                        MODIF:PLURAL
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-5 row">
-                        MODIF:SINGULAR
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-5 row">
-                    <div class="col-xs-6">
-
-                    </div>
-                    <div class="col-xs-6">
-                        MODIF:MALE
-                    </div>
-                </div>
-                <div class="col-xs-7 row">
-                    <div class="col-xs-4">
-                        <input id="switchName1" class="switchclear" type="checkbox" 
-                               ng-model="objAdd.mf " ng-show="false">
-                        <label for="switchName1">&nbsp;</label>
-                    </div>
-                    <div class="col-xs-7">
-                        MODIF:FEMALE
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-5 row">
-                    <div class="col-xs-6">
-
-                    </div>
-                    <div class="col-xs-6">
-                        MODIF:MALE
-                    </div>
-                </div>
-                <div class="col-xs-7 row">
-                    <div class="col-xs-4">
-                        <input id="switchName1" class="switchclear" type="checkbox" 
-                               ng-model="objAdd.mf " ng-show="false">
-                        <label for="switchName1">&nbsp;</label>
-                    </div>
-                    <div class="col-xs-7">
-                        MODIF:FEMALE
-                    </div>
                 </div>
             </div>
             <div class="row">
@@ -96,7 +95,7 @@
                         MODIF:PLURAL
                 </div>
             </div>
-            <div class="row">
+            <div class="row" ng-if="!$parent.objAdd.singpl">
                 <div class="col-xs-5 row">
                     <div class="col-xs-6">
 
@@ -106,78 +105,140 @@
                     </div>
                 </div>
                 <div class="col-xs-7 row">
-                    <div class="col-xs-4">
-                        <input id="switchName1" class="switchclear" type="checkbox" 
-                               ng-model="objAdd.mf " ng-show="false">
-                        <label for="switchName1">&nbsp;</label>
-                    </div>
                     <div class="col-xs-7">
-                        MODIF:FEMALE
+                        <input type="text" ng-if="switchname.s3" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                        <input type="text" disabled ng-if="!switchname.s3" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                    </div>
+                    <div class="col-xs-4">
+                        <input id="switchName3" class="switchclear" type="checkbox" 
+                               ng-model="switchname.s3" ng-show="false">
+                        <label for="switchName3">&nbsp;</label>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" ng-if="!$parent.objAdd.singpl && !$parent.objAdd.mf">
                 <div class="col-xs-5 row">
                     <div class="col-xs-6">
 
                     </div>
                     <div class="col-xs-6">
-                        MODIF:MALE
+                        MODIF:FEMALE
                     </div>
                 </div>
                 <div class="col-xs-7 row">
-                    <div class="col-xs-4">
-                        <input id="switchName1" class="switchclear" type="checkbox" 
-                               ng-model="objAdd.mf " ng-show="false">
-                        <label for="switchName1">&nbsp;</label>
-                    </div>
                     <div class="col-xs-7">
-                        MODIF:FEMALE
+                        <input type="text" ng-if="switchname.s4" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                        <input type="text" disabled ng-if="!switchname.s4" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                    </div>
+                    <div class="col-xs-4">
+                        <input id="switchName4" class="switchclear" type="checkbox" 
+                               ng-model="switchname.s4" ng-show="false">
+                        <label for="switchName4">&nbsp;</label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="form addWordForm7c5">
-        <div class="addWordFromField fullheight" style="background-color: #fff;">
-            lorem ipsum
+        <div class="addWordFromField fullheight row" style="background-color: #fff;">
+            <div class="col-xs-10">
+                MODIF: NOM_PROPI
+            </div>
+            <div class="col-xs-2">
+                <input id="switchNameispropernoun" class="switch" type="checkbox" 
+                       ng-model="$parent.objAdd.ispropernoun " ng-show="false">
+                <label for="switchNameispropernoun">&nbsp;</label>
+            </div>
         </div>
     </div>
     <div class="form addWordForm7c5">
         <div class="addWordFromField fullheight" style="background-color: #fff;">
-            lorem ipsum
+            <div class="row">
+                <div class="col-xs-5 row">
+                    <div class="col-xs-2">
+
+                    </div>
+                    <div class="col-xs-10">
+                        MODIF:CONTABLE
+                    </div>
+                </div>
+                <div class="col-xs-7 row">
+                    <div class="col-xs-4">
+                        <input id="switchNameContabincontab" class="switchclear" type="checkbox" 
+                               ng-model="$parent.objAdd.contabincontab" ng-show="false">
+                        <label for="switchNameContabincontab">&nbsp;</label>
+                    </div>
+                    <div class="col-xs-7">
+                        MODIF:INCONTABLE
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="form addWordForm15">
         <div class="addWordFromField fullheight" style="background-color: #fff;">
-            lorem ipsum
+            <div class="row">
+                <div class="col-xs-5 row">
+                    MODIF:INFO
+                </div>
+                <div class="col-xs-7 row">
+                        MODIF:ARTICLE
+                </div>
+            </div>
+            <div class="row">
+                <form name="determinat">
+                        <div class="col-xs-offset-2 col-xs-5 text-left">
+                            <input type="radio" ng-model="$parent.objAdd.determinat" value="1"/>
+                            MODIF: DETERMINAT
+                        </div>
+                        <div class="col-xs-5 text-left">
+                            <input type="radio" ng-model="$parent.objAdd.determinat" value="2"/>
+                            MODIF: INDETERMINAT
+                        </div>
+                        <div class="col-xs-offset-2 col-xs-5 text-left">
+                            <input type="radio" ng-model="$parent.objAdd.determinat" value="sense"/>
+                            MODIF: SENSE
+                        </div>
+                    </form>
+            </div>
         </div>
     </div>
     <div class="form addWordForm7c5">
         <div class="addWordFromField fullheight" style="background-color: #fff;">
-            lorem ipsum
+            <div class="col-xs-5 row">
+                    <div class="col-xs-6">
+
+                    </div>
+                    <div class="col-xs-6">
+                        MODIF:VERB PER DEFECTE
+                    </div>
+                </div>
+                <div class="col-xs-7 row">
+                    <div class="col-xs-7">
+                        <input type="text" ng-if="switchname.s5" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                        <input type="text" disabled ng-if="!switchname.s5" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                    </div>
+                    <div class="col-xs-4">
+                        <input id="switchName5" class="switch" type="checkbox" 
+                               ng-model="switchname.s5" ng-show="false">
+                        <label for="switchName5">&nbsp;</label>
+                    </div>
+                </div>
         </div>
     </div>
     <div class="form addWordForm22c5">
         <div class="addWordFromField fullheight" style="background-color: #fff;">
-            <div class="form-group {{state.languageSelected}} has-feedback">
+            <div class="form-group has-feedback">
                 <div class="input-group input-group-auto inputMarginRigth">
                     <span class="input-group-addon"><i class="icon-comments"></i></span>
                     <select
                         class="form-control"
-                        name="languageSelected"
-                        ng-model="formData.languageSelected"
-                        ng-change="addLanguage(formData.languageSelected)"
+                        name="className"
+                        ng-model="formNounClass"
                         >
-                        <option selected="selected" disabled="disabled" value="">{{ content.language}}</option>
-                        <option ng-repeat="option in range(20)" value="{{option.ID_Language}}">{{option.languageName}}</option>
+                        <option ng-repeat="x in $parent.classNoun" value="{{x.classType}}">{{x.nameType}}</option>
                     </select>
                 </div>
-                <span class="glyphicon glyphicon-remove form-control-feedback" ng-show=" state.languageSelected == 'has-error'"></span>
-                <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="state.languageSelected == 'has-success'"></span>
-                <span class="errorcoment" ng-show="state.languageSelected == 'has-error'">{{ content.required}}</span>
-                <span class="errorcoment"
-                      ng-show="registerForm.languageSelected.$touched && registerForm.languageSelected.$pristine && state.languageSelected == ''">{{ content.required}}</span>  
             </div>
             <div class="inputMarginLeft">
                 <table class="table table-condensed taula">

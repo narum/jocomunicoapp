@@ -133,3 +133,7 @@ input.switchclear:checked ~ label:after
 {
     margin-left: 2em;
 }
+.addWordText{
+    color: #4c4c4c;
+    font-weight: bold;
+}
