@@ -151,8 +151,14 @@ class Main extends REST_Controller {
             $interfaceVoicesOffline = $audio->listInterfaceVoices(false);
             $expansionVoicesOffline = $audio->listExpansionVoices(false);
         }else{
-            $interfaceVoicesOffline = 'App on server';
-            $expansionVoicesOffline = 'App on server';
+            $interfaceVoicesOffline = array (
+                [0] => 'App on server',
+                [1] => false
+            );
+            $expansionVoicesOffline = array (
+                [0] => 'App on server',
+                [1] => false
+            );
         }
         
         $voices = [
@@ -194,5 +200,71 @@ class Main extends REST_Controller {
         $response = $this->main_model->changeData('SuperUser', 'ID_SU', $ID_SU, $data);
         //respuesta
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
+    //get today,last week and last month historic
+    public function getHistoric_get()
+    {
+        $idusu = $this->session->userdata('idusu');
+        
+        $this->main_model->deleteHistoric();//delete all historic after last 30 days
+        
+        $today = $this->main_model->getHistoric($idusu, '1');
+        $lastWeek = $this->main_model->getHistoric($idusu, '7');
+        $lastMonth = $this->main_model->getHistoric($idusu, '30');
+
+        $response = [
+            'today' => $today,
+            'lastWeek' => $lastWeek,
+            'lastMonth' => $lastMonth
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+        
+    }
+    //get today,last week and last month historic
+    public function getSentenceFolders_get()
+    {
+        $idusu = $this->session->userdata('idusu');
+        
+        $folders = $this->main_model->getData('S_Folder', 'ID_SFUser', $idusu);
+        $response = [
+            'folders' => $folders
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    //Up historic folder Order
+    public function upHistoricFolder_post()
+    {
+        $idusu = $this->session->userdata('idusu');
+        $ID_Folder = $this->query('ID_Folder');
+        
+        $folderToUp = $this->main_model->getSingleData('S_Folder', 'ID_SFUser', $idusu, 'ID_Folder', $ID_Folder);
+        $folderToDown = $this->main_model->getSingleData('S_Folder', 'ID_SFUser', $idusu, 'folderOrder', $folderToUp[0]['folderOrder']-1);
+        
+        $orderUp = ['folderOrder'=> $folderToUp[0]['folderOrder']-1];
+        $order = ['folderOrder'=> $folderToUp[0]['folderOrder']];
+        
+        $this->main_model->changeData('S_Folder', 'ID_Folder', $ID_Folder, $orderUp);
+        $this->main_model->changeData('S_Folder', 'ID_Folder', $folderToDown[0]['ID_Folder'], $order);
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    //Down historic folder Order
+    public function downHistoricFolder_post()
+    {
+        $idusu = $this->session->userdata('idusu');
+        $ID_Folder = $this->query('ID_Folder');
+        
+        $folderToDown = $this->main_model->getSingleData('S_Folder', 'ID_SFUser', $idusu, 'ID_Folder', $ID_Folder);
+        $folderToUp = $this->main_model->getSingleData('S_Folder', 'ID_SFUser', $idusu, 'folderOrder', $folderToDown[0]['folderOrder']+1);
+        
+        $orderDown = ['folderOrder'=> $folderToDown[0]['folderOrder']+1];
+        $order = ['folderOrder'=> $folderToDown[0]['folderOrder']];
+        
+        $this->main_model->changeData('S_Folder', 'ID_Folder', $ID_Folder, $orderDown);
+        $this->main_model->changeData('S_Folder', 'ID_Folder', $folderToUp[0]['ID_Folder'], $order);
+        
+        $this->response($response, REST_Controller::HTTP_OK);
     }
 }

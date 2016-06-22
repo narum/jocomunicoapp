@@ -70,13 +70,31 @@ class Main_model extends CI_Model {
         return $response;
     }
     
+    // Get first data from table $table where content in column $column are like $data
+    public function getFirstData($table, $column, $data){
+        $this->db->from($table);// Seleccionem la taula
+        $this->db->where($column, $data);// filtrem per columnes
+        $data = $this->db->get()->result_array();
+        
+        return $data[0];
+    }
+    // Get single data from table $table where content in column $column are like $data
+    public function getSingleData($table, $column, $data, $column2, $data2){
+        $this->db->from($table);// Seleccionem la taula
+        $this->db->where($column, $data);// filtrem per columnes
+        $this->db->where($column2, $data2);// filtrem per columnes
+        $data = $this->db->get()->result_array();
+        
+        return $data;
+    }
+    
     // Get data from table $table where content in column $column are like $data
     public function getData($table, $column, $data){
         $this->db->from($table);// Seleccionem la taula
         $this->db->where($column, $data);// filtrem per columnes
         $data = $this->db->get()->result_array();
         
-        return $data[0];
+        return $data;
     }
     
     // Guardar contenido en una tabla.
@@ -225,5 +243,26 @@ class Main_model extends CI_Model {
         }
 
         return $Array;
+    }
+    //Return last $day days from historic table
+    function getHistoric($idusu, $day){
+        $date = date('Y-m-d', strtotime("-".$day." day"));
+        $this->db->where('sentenceDate >', $date);
+        $this->db->where('ID_SHUser', $idusu);
+        $query = $this->db->get('S_Historic');
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    //delete all historic after last 30 days
+    function deleteHistoric(){
+        $date = date('Y-m-d', strtotime("-30 day"));
+        $this->db->where('sentenceDate <', $date);
+        $query = $this->db->delete('S_Historic');
+        return;
     }
 }

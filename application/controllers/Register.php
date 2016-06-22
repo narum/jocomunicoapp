@@ -203,7 +203,7 @@ class Register extends REST_Controller {
                     $this->main_model->changeData('SuperUser', 'ID_SU', $user, ['UserValidated' => '1']);
                 }else{
                     //get data from user
-                    $data=$this->main_model->getData('SuperUser', 'ID_SU', $user);
+                    $data=$this->main_model->getFirstData('SuperUser', 'ID_SU', $user);
 
                     //send email
                     $email=$data["email"];
@@ -258,7 +258,7 @@ class Register extends REST_Controller {
                 $emailValidated=$this->main_model->checkData("SuperUser", "email", $email);
                 //If email exists get data from user
                 if($emailValidated === "true"){
-                    $data=$this->main_model->getData('SuperUser', 'email', $email);
+                    $data=$this->main_model->getFirstData('SuperUser', 'email', $email);
                     $exist=true;
                 }
             }
@@ -267,7 +267,7 @@ class Register extends REST_Controller {
                 $userValidated=$this->main_model->checkData('SuperUser', 'SUname', $user);
                 //If user exists get data from user
                 if($userValidated === "true"){
-                    $data=$this->main_model->getData('SuperUser', 'SUname', $user);
+                    $data=$this->main_model->getFirstData('SuperUser', 'SUname', $user);
                     $exist=true;
                 }
             }
