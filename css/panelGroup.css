@@ -60,16 +60,16 @@
     margin-bottom: 1vh;
 }
 .imgHistFolder{
-    height: 9vh;
+    height: 7vh;
     width: auto;
-    margin-top: 0.5vh;
-    margin-left: 3vh;
+    margin-top: 1.5vh;
+    margin-left: 2.5vh;
 }
 .folderTitle{
     margin-top: 3.5vh;
-    font-size: 4vh;
+    font-size: 3.5vh;
 }
-.folderEditButton{
+.folderEditBigButton{
     height: 10vh;
     border-top-right-radius: 1vh;
     border-bottom-right-radius: 1vh;
@@ -80,11 +80,47 @@
     padding-top: 3.6vh;
     cursor: pointer;
 }
+.folderEditBigButton:hover{
+    background-color: #5d8d91;
+}
+.folderEditButton{
+    height: 4vh;
+    background-color: #92dbe1;
+    text-align: center;
+    font-size: 2vh;
+    color: white;
+    padding-top: 0.6vh;
+    cursor: pointer;
+}
 .folderEditButton:hover{
     background-color: #5d8d91;
 }
-
-
+.folderUpButton{
+    height: 3vh;
+    border-top-right-radius: 1vh;
+    background-color: #81c1c6;
+    text-align: center;
+    font-size: 2vh;
+    color: white;
+    padding-top: 0.1vh;
+    cursor: pointer;
+}
+.folderUpButton:hover{
+    background-color: #5d8d91;
+}
+.folderDownButton{
+    height: 3vh;
+    border-bottom-right-radius: 1vh;
+    background-color: #81c1c6;
+    text-align: center;
+    font-size: 2vh;
+    color: white;
+    padding-top: 0.1vh;
+    cursor: pointer;
+}
+.folderDownButton:hover{
+    background-color: #5d8d91;
+}
 
 
 

@@ -72,14 +72,34 @@ angular.module('controllers')
         $scope.historicFolders=[];
         Resources.main.get({'funct': "getSentenceFolders"}).$promise
         .then(function (results) {
-            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'ababab', 'folderOrder':'0'});
-            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastWeek', 'imgSFolder':'img/pictos/semana.png', 'folderColor':'ababab', 'folderOrder':'0'});
-            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastMonth', 'imgSFolder':'img/pictos/mes.png', 'folderColor':'ababab', 'folderOrder':'0'});
+            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
+            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastWeek', 'imgSFolder':'img/pictos/semana.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
+            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastMonth', 'imgSFolder':'img/pictos/mes.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
             angular.forEach(results.folders, function (value) {
                 $scope.historicFolders.push(value);
             });
-            console.log($scope.historicFolders);
+            $scope.historicFolders.sort(function(a, b){return a.folderOrder-b.folderOrder});
         });
+        //Up folder order
+        $scope.upFolder = function(order){
+            order = parseInt(order, 10);
+            if (order>1){
+                $scope.historicFolders[order+2].folderOrder = (order-1).toString();
+                $scope.historicFolders[order+1].folderOrder = (order).toString();
+                Resources.main.save({'ID_Folder': $scope.historicFolders[order+2].ID_Folder}, {'funct': "upHistoricFolder"}).$promise
+                $scope.historicFolders.sort(function(a, b){return a.folderOrder-b.folderOrder});
+            }
+        };
+        //Down folder order
+        $scope.downFolder = function(order){
+            order = parseInt(order, 10);
+            if (order < ($scope.historicFolders.length -3)){
+                $scope.historicFolders[order+2].folderOrder = (order+1).toString();
+                $scope.historicFolders[order+3].folderOrder = (order).toString();
+                Resources.main.save({'ID_Folder': $scope.historicFolders[order+2].ID_Folder}, {'funct': "downHistoricFolder"}).$promise
+                $scope.historicFolders.sort(function(a, b){return a.folderOrder-b.folderOrder});
+            }
+        };
 
         //Scrollbar inside div
         $scope.$on('scrollbar.show', function () {

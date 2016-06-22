@@ -70,13 +70,22 @@ class Main_model extends CI_Model {
         return $response;
     }
     
-    // Get single data from table $table where content in column $column are like $data
-    public function getSingleData($table, $column, $data){
+    // Get first data from table $table where content in column $column are like $data
+    public function getFirstData($table, $column, $data){
         $this->db->from($table);// Seleccionem la taula
         $this->db->where($column, $data);// filtrem per columnes
         $data = $this->db->get()->result_array();
         
         return $data[0];
+    }
+    // Get single data from table $table where content in column $column are like $data
+    public function getSingleData($table, $column, $data, $column2, $data2){
+        $this->db->from($table);// Seleccionem la taula
+        $this->db->where($column, $data);// filtrem per columnes
+        $this->db->where($column2, $data2);// filtrem per columnes
+        $data = $this->db->get()->result_array();
+        
+        return $data;
     }
     
     // Get data from table $table where content in column $column are like $data
