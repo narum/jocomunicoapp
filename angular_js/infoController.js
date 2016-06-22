@@ -1,5 +1,5 @@
 angular.module('controllers')
-        .controller('infoCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
+        .controller('infoCtrl', function ($scope, $rootScope, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
            
             /*
              * MENU CONFIGURATION
@@ -58,11 +58,78 @@ angular.module('controllers')
             * HOME VIEW FUNCTIONS
             */
            
+            // Cookies popup
+            $scope.acceptcookies = window.localStorage.getItem('cookiesAccepted'); 
+            
+            $scope.okCookies = function () {
+                window.localStorage.setItem('cookiesAccepted', true);
+                $scope.acceptcookies = true;
+            };
+           
+            //Images
+            $scope.img.button1 = 'img/srcWeb/home/about.png';
+            $scope.img.button2 = 'img/srcWeb/home/about.png';
+            $scope.img.button3 = 'img/srcWeb/home/open_source.png';
+
+            // Link colors
+            $scope.link1color = "#f0a22e";
+            $scope.link2color = "#b6211b";
+            $scope.link3color = "#3b93af";
+           
             // Get content for the home view for ddbb   
             Resources.register.get({'section': 'home', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
                 .then(function (results) {
                     $scope.text = results.data;
                 });
            
-                    
+            
+            $scope.linkAbout = function () {
+                $location.path('/about');
+            };
+            
+            $scope.linkLogin = function () {
+                $location.path('/login');
+            };
+            
+            $scope.linkCollaborators = function () {
+                $location.path('/collaborators');
+            };
+            
+            $scope.linkColor = function (id, color, inout) {
+                switch(id) {
+                    case "link-1":
+                        $scope.link1color = color;
+                        if (!inout) {
+                            $scope.img.button1 = 'img/srcWeb/home/about.png';
+                        }
+                        else {
+                            $scope.img.button1 = 'img/srcWeb/home/about-hov.png';
+                        }
+                        break;
+                        
+                    case "link-2":
+                        $scope.link2color = color;
+                        if (!inout) {
+                            $scope.img.button2 = 'img/srcWeb/home/about.png';
+                        }
+                        else {
+                            $scope.img.button2 = 'img/srcWeb/home/about-hov.png';
+                        }
+                        break;
+                        
+                    case "link-3":
+                        $scope.link3color = color;
+                        if (!inout) {
+                            $scope.img.button3 = 'img/srcWeb/home/open_source.png';
+                        }
+                        else {
+                            $scope.img.button3 = 'img/srcWeb/home/open_source-hov.png';
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            };
+            
+            
         });
