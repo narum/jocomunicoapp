@@ -56,7 +56,7 @@
                         <div class="scrollWidth">
                             <div class="row buttonAddFolder">+</div>
                             <!-- XAVI!!!!!: cuando hagas el ng-repeat copia esto  "on-Finish-Loop="nombredeevento" "y avisame y te hago la "funcion" para que se recoloque-->
-                            <div class="row histFolder" ng-repeat="folder in historicFolders | orderBy:'folderOrder'"><div class="row"><div class="col-xs-2 histTabFolder" style="background-color: #{{folder.folderColor}}"></div></div>
+                            <div class="row histFolder" ng-repeat="folder in historicFolders | orderBy:'folderOrder'" on-Finish-Loop="scrollbarHistoric"><div class="row"><div class="col-xs-2 histTabFolder" style="background-color: #{{folder.folderColor}}"></div></div>
                                 <div class="row"><div class="col-xs-12 histContentFolder" style="background-color: #{{folder.folderColor}}">
                                         <div class="row">
                                             <div class="col-xs-3"><img class="img-rounded imgHistFolder" ng-src="{{folder.imgSFolder}}"/></div>

@@ -269,7 +269,10 @@ angular.module('controllers')
         $scope.$on('scrollbarPanel', function (ngRepeatFinishedEvent) {
             $scope.$broadcast('rebuild:me');
         });
-
+        
+        $scope.$on('scrollbarHistoric', function (ngRepeatFinishedEvent) {
+            $scope.$broadcast('rebuild:meH');
+        });
     })
 
 
