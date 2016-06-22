@@ -26,6 +26,9 @@
 .contentHistFolderButtons{
     padding: 6vh 9vh;
 }
+.scrollWidth{
+    width: 85%;
+}
 .buttonAddFolder{
     background-color:rgba(255, 255, 255, 0.3);
     width: 100%;
@@ -90,8 +93,7 @@
 .panelContainer{
     background-color: whitesmoke;
     height: 25%;
-    width: 86%;
-    margin: 1vh 2%;
+    margin: 1vh 0vh;
     border-radius: 10px;
 }
 .panelTitle{
