@@ -62,7 +62,7 @@ class Historic extends REST_Controller {
 
         for ($i = $pagHistoric; $i < count($sentenece) && $i < $pagHistoric + 10; $i++){
             $arrayProv[0] = $sentenece[$i];
-            $arrayProv[1] = $this->HistoricInterface->getPictosFolder($historic[$i]->ID_SHistoric);
+            $arrayProv[1] = $this->HistoricInterface->getPictosFolder($sentenece[$i]->ID_SSentence);
             array_push($sentenceArray,$arrayProv);
         }
         $count = $this->HistoricInterface->getCountSentenceFolder($idusu, $idfolder);

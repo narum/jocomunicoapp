@@ -72,7 +72,7 @@
                 <div class="row fullheight imgRounded boardPadding" style="background-image: url(img/srcWeb/patterns/pattern{{cfgBgColorPanel}}.png)">
 
                     <div ng-if="inScan && isScanningCancel == true" class="imgRounded returnScanContainer" style="position: absolute;">
-                        <div class="imgRounded returnScanContent">
+                        <div class="imgRounded returnScanContent" ng-style="{'border':'7px solid #{{cfgScanColor}}'}">
                             <img class="returnScanIcon" ng-src="/img/srcWeb/falta_picto.png"/>
                         </div>
                     </div>

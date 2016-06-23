@@ -814,7 +814,10 @@ class Board extends REST_Controller {
         $autoReadSentence = $request->autoread ? '1' : '0';
 
         $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
-        $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
+        $boardtables = $this->BoardInterface->getBoardTables($idSrc);
+        foreach ($boardtables as $row) {
+            $boardtables = $this->BoardInterface->copyBoardTables($idDst, $sameGroupBoard, $row);
+        }
         /*
          * This commented part can update the size of the board if it is implemented.
          * 

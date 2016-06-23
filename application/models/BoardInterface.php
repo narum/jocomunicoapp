@@ -730,44 +730,50 @@ class BoardInterface extends CI_Model {
         return $id;
     }
 
-    function copyBoardTables($idSrc, $idDst, $sameGroupBoard) {
+    function getBoardTables($idSrc) {
 
         $this->db->where('ID_RBoard', $idSrc);
         $this->db->join('r_boardcell', 'r_boardcell.ID_RCell = cell.ID_Cell', 'left');
         $query = $this->db->get('cell');
-        foreach ($query->result() as $row) {
-            if ($sameGroupBoard === 0) {
-                $row->boardLink = null;
-            }
-            $data = array(
-                'isFixedInGroupBoards' => $row->isFixedInGroupBoards,
-                'imgCell' => $row->imgCell,
-                'ID_CPicto' => $row->ID_CPicto,
-                'ID_CSentence' => $row->D_CSentence,
-                'sentenceFolder' => $row->sentenceFolder,
-                'boardLink' => $row->boardLink,
-                'color' => $row->color,
-                'ID_CFunction' => $row->ID_CFunction,
-                'textInCell' => $row->textInCell,
-                'textInCellTextOnOff' => $row->textInCellTextOnOff,
-                'cellType' => $row->cellType,
-                'activeCell' => $row->activeCell
-            );
-            $this->db->insert('cell', $data);
-            $id = $this->db->insert_id();
-            $data2 = array(
-                'ID_RBoard' => $idDst,
-                'ID_RCell' => $id,
-                'posInBoard' => $row->posInBoard,
-                'isMenu' => $row->isMenu,
-                'customScanBlock1' => $row->customScanBlock1,
-                'customScanBlockText1' => $row->customScanBlockText1,
-                'customScanBlock2' => $row->customScanBlock2,
-                'customScanBlockText2' => $row->customScanBlockText2
-            );
-            $this->db->insert('r_boardcell', $data2);
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+
+    function copyBoardTables($idDst, $sameGroupBoard, $row) {
+        if ($sameGroupBoard === 0) {
+            $row->boardLink = null;
         }
-        return $id;
+        $data = array(
+            'isFixedInGroupBoards' => $row->isFixedInGroupBoards,
+            'imgCell' => $row->imgCell,
+            'ID_CPicto' => $row->ID_CPicto,
+            'ID_CSentence' => $row->D_CSentence,
+            'sentenceFolder' => $row->sentenceFolder,
+            'boardLink' => $row->boardLink,
+            'color' => $row->color,
+            'ID_CFunction' => $row->ID_CFunction,
+            'textInCell' => $row->textInCell,
+            'textInCellTextOnOff' => $row->textInCellTextOnOff,
+            'cellType' => $row->cellType,
+            'activeCell' => $row->activeCell
+        );
+        $this->db->insert('cell', $data);
+        $id = $this->db->insert_id();
+        $data2 = array(
+            'ID_RBoard' => $idDst,
+            'ID_RCell' => $id,
+            'posInBoard' => $row->posInBoard,
+            'isMenu' => $row->isMenu,
+            'customScanBlock1' => $row->customScanBlock1,
+            'customScanBlockText1' => $row->customScanBlockText1,
+            'customScanBlock2' => $row->customScanBlock2,
+            'customScanBlockText2' => $row->customScanBlockText2
+        );
+        $this->db->insert('r_boardcell', $data2);
     }
 
     function removeBoard($IDboard) {

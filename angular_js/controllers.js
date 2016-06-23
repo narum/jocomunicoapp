@@ -3051,7 +3051,7 @@ angular.module('controllers', [])
             };
         })
 
-        .controller('historicCtrl', function ($scope, $rootScope, txtContent, $location, $http, dropdownMenuBarInit, AuthService, Resources, $timeout) {
+        .controller('historicCtrl', function ($scope, $rootScope, txtContent, $location, $http, dropdownMenuBarInit, AuthService, Resources, $timeout, $interval) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -3129,14 +3129,14 @@ angular.module('controllers', [])
             };
 
             $scope.previousPagHistoric = function () {
-                if ($scope.pagBackFolderEnabled) {
+                if ($scope.pagBackHistoricEnabled) {
                     $scope.pagHistoric -= 10;
                     $scope.getHistoric();
                 }
             };
 
             $scope.nextPagHistoric = function () {
-                if ($scope.pagNextFolderEnabled) {
+                if ($scope.pagNextHistoricEnabled) {
                     $scope.pagHistoric += 10;
                     $scope.getHistoric();
                 }
@@ -3214,10 +3214,10 @@ angular.module('controllers', [])
 
             $scope.InitScan = function ()
             {
-                var userConfig = JSON.parse(localStorage.getItem('userData'));
+
                 $scope.inScan = true;
                 //When the scan is automatic, this timer manage when the scan have to move to the next block            
-                $scope.isScanning = "1row";
+
                 $scope.scanningFolder = -1;
                 $scope.scanningSentence = -1;
 
@@ -3225,6 +3225,30 @@ angular.module('controllers', [])
                     $scope.setTimer();
                 }
 
+                if ($scope.cfgScanStartClick && $scope.isScanning != "nowait") {
+                    $scope.isScanning = "waiting";
+                } else {
+                    $scope.isScanning = "1row";
+                }
+
+
+
+
+            };
+
+            $scope.setTimer = function () {
+                $interval.cancel($scope.intervalScan);
+                var Intervalscan = $scope.cfgTimeScanning;
+                function myTimer() {
+                    if ($scope.isScanningCancel) {
+                        //We are not scanning cancel anmore
+                        $scope.isScanningCancel = false;
+                    } else {
+                        $scope.nextBlockScan();
+                    }
+                }
+                ;
+                $scope.intervalScan = $interval(myTimer, Intervalscan);
             };
 
             //Control the left click button while scanning
@@ -3233,7 +3257,7 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     //If user have start scan click activate we have to wait until he press one button
                     if ($scope.isScanning == "waiting") {
-                        $scope.nextBlockToScan(0);
+                        $scope.nextBlockScan();
                         $scope.setTimer();
                     } else if ($scope.isScanningCancel) {
                         $scope.isScanningCancel = false;
@@ -3254,7 +3278,7 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     //If user have start scan click activate we have to wait until he press one button
                     if ($scope.isScanning == "waiting") {
-                        $scope.nextBlockToScan(0);
+                        $scope.isScanning = "1row";
                         $scope.setTimer();
                     }
                     if ($scope.isScanningCancel) {
@@ -3304,6 +3328,9 @@ angular.module('controllers', [])
                 $scope.scanningFolder = $scope.scanningFolder + 1;
                 if ($scope.scanningFolder > $scope.sFolderResult.length || $scope.scanningFolder / 4 >= 1) {
                     $scope.isScanning = "backPagFolder";
+                    if (!$scope.pagBackFolderEnabled) {
+                        $scope.nextBlockScan();
+                    }
                 }
             };
             $scope.getFolderToScan = function () {
@@ -3312,17 +3339,18 @@ angular.module('controllers', [])
             $scope.nextSenteceToScan = function () {
                 $scope.scanningSentence = $scope.scanningSentence + 2;
                 if ($scope.scanningSentence >= 10 || $scope.historic[$scope.scanningSentence] == null) {
+                    $scope.isScanning = "nowait";
                     $scope.InitScan();
                 }
             };
             $scope.isScanned = function (indice) {
-                if ($scope.scanningSentence == -1) {
+                if ($scope.scanningSentence == -1 && !$scope.isScanningCancel) {
                     if ($scope.isScanning == "1column" && indice % 2 == 0) {
                         return true;
                     } else if ($scope.isScanning == "2column" && indice % 2 == 1) {
                         return true;
                     }
-                } else if (indice == $scope.scanningSentence) {
+                } else if (indice == $scope.scanningSentence && !$scope.isScanningCancel) {
                     return true;
                 }
                 return false;
@@ -3331,6 +3359,8 @@ angular.module('controllers', [])
             $scope.nextBlockScan = function () {
                 if ($scope.inScan) {
                     switch ($scope.isScanning) {
+                        case "waiting":
+                            break;
                         case "1row":
                             $scope.isScanning = "2row";
                             break;
@@ -3341,6 +3371,7 @@ angular.module('controllers', [])
                             $scope.isScanning = "2column";
                             break;
                         case "2column":
+                            $scope.isScanning = "nowait";
                             $scope.InitScan();
                             break;
                         case "back":
@@ -3356,10 +3387,14 @@ angular.module('controllers', [])
                             $scope.isScanning = "lastMonth";
                             break;
                         case "lastMonth":
+                            $scope.isScanning = "nowait";
                             $scope.InitScan();
                             break;
                         case "backPagHistoric":
                             $scope.isScanning = "nextPagHistoric";
+                            if (!$scope.pagNextHistoricEnabled) {
+                                $scope.nextBlockScan();
+                            }
                             break;
                         case "nextPagHistoric":
                             $scope.isScanning = "folders";
@@ -3370,8 +3405,12 @@ angular.module('controllers', [])
                             break;
                         case "backPagFolder":
                             $scope.isScanning = "nextPagFolder";
+                            if (!$scope.pagNextFolderEnabled){
+                                $scope.nextBlockScan();
+                            }
                             break;
                         case "nextPagFolder":
+                            $scope.isScanning = "nowait";
                             $scope.InitScan();
                             break;
                         case "even":
@@ -3397,13 +3436,21 @@ angular.module('controllers', [])
                         $scope.scanLongClickController = false;
                     }
                     switch ($scope.isScanning) {
+                        case "waiting"://Do nothing
+                            break;
                         case "1row":
                             $scope.isScanning = "back";
+                            $scope.isScanningCancel = $scope.cfgCancelScanOnOff;
                             break;
                         case "2row":
                             $scope.isScanning = "backPagHistoric";
+                            $scope.isScanningCancel = $scope.cfgCancelScanOnOff;
+                            if (!$scope.pagBackHistoricEnabled) {
+                                $scope.nextBlockScan();
+                            }
                             break;
                         case "1column":
+                            $scope.isScanningCancel = $scope.cfgCancelScanOnOff;
                             $scope.scanningSentence = 0;
                             $scope.isScanning = "even";
                             if ($scope.historic[$scope.scanningSentence] == null) {
@@ -3411,6 +3458,7 @@ angular.module('controllers', [])
                             }
                             break;
                         case "2column":
+                            $scope.isScanningCancel = $scope.cfgCancelScanOnOff;
                             $scope.scanningSentence = 1;
                             $scope.isScanning = "odd";
                             if ($scope.historic[$scope.scanningSentence] == null) {
@@ -3464,10 +3512,41 @@ angular.module('controllers', [])
                     }
                 }
             };
+            var userConfig = JSON.parse(localStorage.getItem('userData'));
+            $scope.cfgScanColor = userConfig.cfgScanColor;
+            $scope.longclick = userConfig.cfgScanningAutoOnOff == 0 ? true : false;
+            $scope.timerScan = userConfig.cfgScanningAutoOnOff == 1 ? true : false;
+            $scope.cfgTimeScanning = userConfig.cfgTimeScanning;
+            $scope.cfgTimeOverOnOff = userConfig.cfgTimeLapseSelectOnOff == 1 ? true : false;
+            $scope.cfgTimeOver = userConfig.cfgTimeLapseSelect;
+            $scope.cfgScanningOnOff = userConfig.cfgScanningOnOff;
+            $scope.cfgScanStartClick = userConfig.cfgScanStartClick == 1 ? true : false;
+            $scope.cfgCancelScanOnOff = userConfig.cfgCancelScanOnOff == 1 ? true : false;
+
+            if (userConfig.cfgUsageMouseOneCTwoC == 0) {
+                $scope.longclick = false;
+                $scope.timerScan = false;
+                $scope.cfgScanStartClick = false;
+            } else if (userConfig.cfgUsageMouseOneCTwoC == 1) {
+                if ($scope.longclick) {
+                    $scope.cfgScanStartClick = false;
+                    $scope.cfgCancelScanOnOff = false;
+                }
+                $scope.cfgTimeOverOnOff = false;
+                $scope.cfgTimeNoRepeatedClickOnOff = false;
+            } else if (userConfig.cfgUsageMouseOneCTwoC == 2) {
+                $scope.longclick = false;
+                $scope.timerScan = false;
+                $scope.cfgTimeOverOnOff = false;
+                $scope.cfgTimeNoRepeatedClickOnOff = false;
+                $scope.cfgScanStartClick = false;
+                $scope.cfgCancelScanOnOff = false;
+            }
 
 
-
-            $scope.InitScan();
+            if ($scope.cfgScanningOnOff == 1) {
+                $scope.InitScan();
+            }
             //Init the pag
             $scope.pagNextFolderEnabled = true;
             $scope.pagNextHistoricEnabled = true;
