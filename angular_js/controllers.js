@@ -3112,6 +3112,9 @@ angular.module('controllers', [])
                         success(function (response)
                         {
                             $scope.historic = response.historic;
+                            while ($scope.historic.length < 10) {
+                                $scope.historic.push(null);
+                            }
                             if ($scope.pagHistoric == 0) {
                                 $scope.pagBackHistoricEnabled = false;
                             } else {
@@ -3126,13 +3129,17 @@ angular.module('controllers', [])
             };
 
             $scope.previousPagHistoric = function () {
-                $scope.pagHistoric -= 10;
-                $scope.getHistoric();
+                if ($scope.pagBackFolderEnabled) {
+                    $scope.pagHistoric -= 10;
+                    $scope.getHistoric();
+                }
             };
 
             $scope.nextPagHistoric = function () {
-                $scope.pagHistoric += 10;
-                $scope.getHistoric();
+                if ($scope.pagNextFolderEnabled) {
+                    $scope.pagHistoric += 10;
+                    $scope.getHistoric();
+                }
             };
 
             $scope.changeFolder = function (id) {
@@ -3142,22 +3149,26 @@ angular.module('controllers', [])
             };
 
             $scope.previousPagSFolder = function () {
-                $scope.pagSFolder -= 4;
-                $scope.pagNextFolderEnabled = true;
-                if ($scope.pagSFolder == 0) {
-                    $scope.pagBackFolderEnabled = false;
-                } else {
-                    $scope.pagBackFolderEnabled = true;
+                if ($scope.pagBackFolderEnabled) {
+                    $scope.pagSFolder -= 4;
+                    $scope.pagNextFolderEnabled = true;
+                    if ($scope.pagSFolder == 0) {
+                        $scope.pagBackFolderEnabled = false;
+                    } else {
+                        $scope.pagBackFolderEnabled = true;
+                    }
                 }
             };
 
             $scope.nextPagSFolder = function () {
-                $scope.pagSFolder += 4;
-                $scope.pagBackFolderEnabled = true;
-                if ($scope.sFolderResult.length < $scope.pagSFolder + 4) {
-                    $scope.pagNextFolderEnabled = false;
-                } else {
-                    $scope.pagNextFolderEnabled = true;
+                if ($scope.pagNextFolderEnabled) {
+                    $scope.pagSFolder += 4;
+                    $scope.pagBackFolderEnabled = true;
+                    if ($scope.sFolderResult.length < $scope.pagSFolder + 4) {
+                        $scope.pagNextFolderEnabled = false;
+                    } else {
+                        $scope.pagNextFolderEnabled = true;
+                    }
                 }
             };
 
@@ -3185,6 +3196,9 @@ angular.module('controllers', [])
                         success(function (response)
                         {
                             $scope.historic = response.historic;
+                            while ($scope.historic.length < 10) {
+                                $scope.historic.push(null);
+                            }
                             if ($scope.pagHistoric == 0) {
                                 $scope.pagBackHistoricEnabled = false;
                             }
@@ -3193,8 +3207,6 @@ angular.module('controllers', [])
                             }
                         });
             };
-
-
 
             /*
              * SCAN
@@ -3206,6 +3218,9 @@ angular.module('controllers', [])
                 $scope.inScan = true;
                 //When the scan is automatic, this timer manage when the scan have to move to the next block            
                 $scope.isScanning = "1row";
+                $scope.scanningFolder = -1;
+                $scope.scanningSentence = -1;
+
                 if ($scope.timerScan) {
                     $scope.setTimer();
                 }
@@ -3285,30 +3300,33 @@ angular.module('controllers', [])
                 }
             };
 
-            //Check if the actual cell (in this point we are pinting to just a one, not a group) is active. Also check if we pass all the cells to start again
-            $scope.getScanCell = function () {
-                if ($scope.cfgScanningCustomRowCol == 0) {
-                    if ($scope.indexScannedCells > $scope.arrayScannedCells.length - 1) {
-                        $scope.isScanning = "nowait";
-                        $scope.InitScan();
-                        return false;
-                    }
-                    if (!$scope.haveToBeScanned($scope.arrayScannedCells[$scope.indexScannedCells])) {
-                        $scope.nextBlockScan();
-                    }
-
-                } else {
-                    //Nos hemos pasado
-                    if (($scope.cfgScanningCustomRowCol == 1 && $scope.indexScannedCells > $scope.columns - 1) || ($scope.cfgScanningCustomRowCol == 2 && $scope.indexScannedCells > $scope.rows - 1)) {
-                        $scope.isScanning = "nowait";
-                        $scope.InitScan();
-                        return false;
-                    }
-                    if (!$scope.haveToBeScanned($scope.arrayScannedCells[$scope.indexScannedCells])) {
-                        $scope.nextBlockScan();
-                    }
+            $scope.nextFolderToScan = function () {
+                $scope.scanningFolder = $scope.scanningFolder + 1;
+                if ($scope.scanningFolder > $scope.sFolderResult.length || $scope.scanningFolder / 4 >= 1) {
+                    $scope.isScanning = "backPagFolder";
                 }
             };
+            $scope.getFolderToScan = function () {
+                $scope.changeFolder($scope.sFolderResult[$scope.scanningFolder].ID_Folder);
+            };
+            $scope.nextSenteceToScan = function () {
+                $scope.scanningSentence = $scope.scanningSentence + 2;
+                if ($scope.scanningSentence >= 10 || $scope.historic[$scope.scanningSentence] == null) {
+                    $scope.InitScan();
+                }
+            };
+            $scope.isScanned = function (indice) {
+                if ($scope.scanningSentence == -1) {
+                    if ($scope.isScanning == "1column" && indice % 2 == 0) {
+                        return true;
+                    } else if ($scope.isScanning == "2column" && indice % 2 == 1) {
+                        return true;
+                    }
+                } else if (indice == $scope.scanningSentence) {
+                    return true;
+                }
+                return false;
+            }
             // Change the current scan block
             $scope.nextBlockScan = function () {
                 if ($scope.inScan) {
@@ -3323,7 +3341,7 @@ angular.module('controllers', [])
                             $scope.isScanning = "2column";
                             break;
                         case "2column":
-                            $scope.InitScan()
+                            $scope.InitScan();
                             break;
                         case "back":
                             $scope.isScanning = "home";
@@ -3344,19 +3362,11 @@ angular.module('controllers', [])
                             $scope.isScanning = "nextPagHistoric";
                             break;
                         case "nextPagHistoric":
-                            $scope.isScanning = "firstFolder";
+                            $scope.isScanning = "folders";
+                            $scope.scanningFolder = $scope.pagSFolder;
                             break;
-                        case "firstFolder":
-                            $scope.isScanning = "secondFolder";
-                            break;
-                        case "secondFolder":
-                            $scope.isScanning = "thirdFolder";
-                            break;
-                        case "thirdFolder":
-                            $scope.isScanning = "fourthFolder";
-                            break;
-                        case "fourthFolder":
-                            $scope.isScanning = "backPagFolder";
+                        case "folders":
+                            $scope.nextFolderToScan();
                             break;
                         case "backPagFolder":
                             $scope.isScanning = "nextPagFolder";
@@ -3364,29 +3374,11 @@ angular.module('controllers', [])
                         case "nextPagFolder":
                             $scope.InitScan();
                             break;
-                        case "1-1c":
-                            $scope.isScanning = "1-2c";
+                        case "even":
+                            $scope.nextSenteceToScan();
                             break;
-                        case "1-2c":
-                            $scope.isScanning = "1-3c";
-                            break;
-                        case "1-3c":
-                            $scope.isScanning = "1-4c";
-                            break;
-                        case "1-4c":
-                            $scope.InitScan();
-                            break;
-                        case "2-1c":
-                            $scope.isScanning = "2-2c";
-                            break;
-                        case "2-2c":
-                            $scope.isScanning = "2-3c";
-                            break;
-                        case "2-3c":
-                            $scope.isScanning = "2-4c";
-                            break;
-                        case "2-4c":
-                            $scope.InitScan();
+                        case "odd":
+                            $scope.nextSenteceToScan();
                             break;
                     }
 
@@ -3412,10 +3404,18 @@ angular.module('controllers', [])
                             $scope.isScanning = "backPagHistoric";
                             break;
                         case "1column":
-                            $scope.isScanning = "1-1c";
+                            $scope.scanningSentence = 0;
+                            $scope.isScanning = "even";
+                            if ($scope.historic[$scope.scanningSentence] == null) {
+                                $scope.InitScan();
+                            }
                             break;
                         case "2column":
-                            $scope.isScanning = "1-2c";
+                            $scope.scanningSentence = 1;
+                            $scope.isScanning = "odd";
+                            if ($scope.historic[$scope.scanningSentence] == null) {
+                                $scope.InitScan();
+                            }
                             break;
                         case "back":
                             $scope.back();
@@ -3443,49 +3443,23 @@ angular.module('controllers', [])
                             $scope.nextPagHistoric();
                             $scope.InitScan();
                             break;
-                        case "firstFolder":
-                            alert("obetener id??");
-                            break;
-                        case "secondFolder":
-                            alert("obetener id??");
-                            break;
-                        case "thirdFolder":
-                            alert("obetener id??");
-                            break;
-                        case "fourthFolder":
-                            alert("obetener id??");
-                            break;
-                        case "nextPagFolder":
-                            $scope.previousPagSFolder()();
+                        case "folders":
+                            $scope.getFolderToScan();
                             $scope.InitScan();
                             break;
                         case "backPagFolder":
+                            $scope.previousPagSFolder();
+                            $scope.InitScan();
+                            break;
+                        case "nextPagFolder":
                             $scope.nextPagSFolder();
                             $scope.InitScan();
                             break;
-                        case "1-1c":
-                            alert("obetener id??");
+                        case "even":
+                            //$scope.getSenteceToScan();
                             break;
-                        case "1-2c":
-                            alert("obetener id??");
-                            break;
-                        case "1-3c":
-                            alert("obetener id??");
-                            break;
-                        case "1-4c":
-                            alert("obetener id??");
-                            break;
-                        case "2-1c":
-                            alert("obetener id??");
-                            break;
-                        case "2-2c":
-                            alert("obetener id??");
-                            break;
-                        case "2-3c":
-                            alert("obetener id??");
-                            break;
-                        case "2-4c":
-                            alert("obetener id??");
+                        case "odd":
+                            //$scope.getSenteceToScan();
                             break;
                     }
                 }

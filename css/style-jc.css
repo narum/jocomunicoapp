@@ -353,12 +353,14 @@ html *
 .removePicto{
     right: 5px;
     top: 5px;
-    max-width: 30%;
+    max-width: 10%;
     height: auto;
-    max-height: 30%;
+    max-height: 10%;
     width: auto;
     z-index: 3;
     position: absolute;
+    min-height: 10px;
+    min-width: 10px;
 }
 .sfolder{
     padding:2px;
