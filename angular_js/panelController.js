@@ -1,13 +1,5 @@
 angular.module('controllers')
     .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
-        $scope.addWord = function (newModif,addWordType) {
-            $rootScope.addWordparam = {newmod: newModif,type: addWordType};
-            $location.path('/addWord');
-        };
-        $scope.$on('scrollbar.show', function () {
-            console.log('Scrollbar show');
-        });
-
         // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
         if (!$rootScope.isLogged) {
             $location.path('/login');
@@ -56,14 +48,6 @@ angular.module('controllers')
             }, 1000);
         };
 
-        //Scrollbar inside div
-        $scope.$on('scrollbar.show', function () {
-            console.log('Scrollbar show');
-        });
-
-        $scope.$on('scrollbar.hide', function () {
-            console.log('Scrollbar hide');
-        });
 
         //Content Images and backgrounds
         $scope.img = [];
@@ -73,7 +57,62 @@ angular.module('controllers')
         $scope.img.Patterns4 = '/img/srcWeb/patterns/pattern4.png';
         $scope.img.Patterns6 = '/img/srcWeb/patterns/pattern6.png';
         $scope.img.loading = '/img/srcWeb/Login/loading.gif';
+        
+//        //Historic folders day/week/month
+//        Resources.main.get({'IdU': $rootScope.userId}, {'funct': "getHistoric"}).$promise
+//        .then(function (results) {
+//            $scope.historicFolders.push({'ID_Folder':'0','name':'today', 'img':'img/pictos/hoy.png', 'sentences':results.today});
+//            $scope.historicFolders.push({'ID_Folder':'0','name':'lastWeek', 'img':'img/pictos/semana.png', 'sentences':results.lastWeek});
+//            $scope.historicFolders.push({'ID_Folder':'0','name':'lastMonth', 'img':'img/pictos/mes.png', 'sentences':results.lastMonth});
+//            console.log(results);
+//            console.log($scope.historicFolders);
+//        });
 
+        //User sentence folders
+        $scope.historicFolders=[];
+        Resources.main.get({'funct': "getSentenceFolders"}).$promise
+        .then(function (results) {
+            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
+            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastWeek', 'imgSFolder':'img/pictos/semana.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
+            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastMonth', 'imgSFolder':'img/pictos/mes.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
+            angular.forEach(results.folders, function (value) {
+                $scope.historicFolders.push(value);
+            });
+            $scope.historicFolders.sort(function(a, b){return a.folderOrder-b.folderOrder});
+        });
+        //Up folder order
+        $scope.upFolder = function(order){
+            order = parseInt(order, 10);
+            if (order>1){
+                $scope.historicFolders[order+2].folderOrder = (order-1).toString();
+                $scope.historicFolders[order+1].folderOrder = (order).toString();
+                Resources.main.save({'ID_Folder': $scope.historicFolders[order+2].ID_Folder}, {'funct': "upHistoricFolder"}).$promise
+                $scope.historicFolders.sort(function(a, b){return a.folderOrder-b.folderOrder});
+            }
+        };
+        //Down folder order
+        $scope.downFolder = function(order){
+            order = parseInt(order, 10);
+            if (order < ($scope.historicFolders.length -3)){
+                $scope.historicFolders[order+2].folderOrder = (order+1).toString();
+                $scope.historicFolders[order+3].folderOrder = (order).toString();
+                Resources.main.save({'ID_Folder': $scope.historicFolders[order+2].ID_Folder}, {'funct': "downHistoricFolder"}).$promise
+                $scope.historicFolders.sort(function(a, b){return a.folderOrder-b.folderOrder});
+            }
+        };
+
+        //Scrollbar inside div
+        $scope.$on('scrollbar.show', function () {
+            console.log('Scrollbar show');
+        });
+
+        $scope.$on('scrollbar.hide', function () {
+            console.log('Scrollbar hide');
+        });
+        $scope.$on('scrollbar.show', function () {
+            console.log('Scrollbar show');
+        });
+        
         $scope.range = function ($repeatnum)
         {
             var n = [];
@@ -84,6 +123,10 @@ angular.module('controllers')
             return n;
         };
 
+        $scope.addWord = function (newModif,addWordType) {
+            $rootScope.addWordparam = {newmod: newModif,type: addWordType};
+            $location.path('/addWord');
+        };
         $scope.initPanelGroup = function () {
             var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
 
@@ -226,7 +269,10 @@ angular.module('controllers')
         $scope.$on('scrollbarPanel', function (ngRepeatFinishedEvent) {
             $scope.$broadcast('rebuild:me');
         });
-
+        
+        $scope.$on('scrollbarHistoric', function (ngRepeatFinishedEvent) {
+            $scope.$broadcast('rebuild:meH');
+        });
     })
 
 

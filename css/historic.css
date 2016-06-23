@@ -12,7 +12,7 @@
     height: 100vh;
 
 }
-.containerHistory{
+.containerHistoric{
     height: 12.5%;
     margin-bottom: 1vh
 }
@@ -63,7 +63,21 @@
     box-shadow: 0px -0px 0px 1px #91dce1;
     transform: translate(2px, -2px);
 }
-.folderHistoryButton{
+.timeButtonAcitve{
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 2px -2px 0px 1px #91dce1;
+    border: none;
+    color: #000;
+    background-color: #d4eaed;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column; 
+    cursor: pointer;
+}
+.folderHistoricButton{
     height: 100%;
     width: 100%;
     border-radius: 5px;
@@ -77,13 +91,26 @@
     flex-direction: column; 
     cursor: pointer;
 }
-.folderHistoryButton:active{
+.folderHistoricButton:active{
     box-shadow: 0px -0px 0px 1px #f9a777;
     transform: translate(2px, -2px);
 }
+.folderHistoricButtonActive{
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 2px -2px 0px 1px #f9c659;
+    border: none;
+    color: #000;
+    background-color: #d4eaed;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column; 
+    cursor: pointer;
+}
 .holderButtons{
     padding: 2vh 1vh;
-    background-image: url('/img/srcWeb/patterns/pattern0.png');
     height:100%; 
     border-radius: 7px;
 }
@@ -101,7 +128,72 @@
     height: 73%;
     border-radius: 7px;
 }
-.scrollHistory{
+.scrollHistoric{
     height: 100%;
     overflow: hidden;
+}
+.sentencePadding{
+    padding: 1vh;
+    height: 20%;
+}
+.sentenceBackground{
+    background-color:white; 
+    border-bottom-left-radius: 7px;
+    border-top-left-radius: 7px;
+    height: 100%;
+    padding: 1vh;
+}
+.sentenceCell{
+    width: 10%;
+    height: 75%;
+}
+.phraseText{
+    height: 20%;
+}
+.imgResponsiveHistoric{
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    width: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    position: relative;
+    z-index: 2;
+}
+.indicatorNegativeSentence{
+    border-bottom: solid 3px;
+    border-bottom-color: black;
+}
+.indicatorTenseSentence{
+    background: #FEE8B6;
+    height: 50%;
+    border-top-right-radius: 7px;
+}
+.indicatorTipusSentence{
+    background: #FEE8B6;
+    height: 50%;
+    border-bottom-right-radius: 7px;
+}
+.sentenceCellIndicator{
+    height:100%
+}
+.scaneo{
+    width: 100%;
+    height: 100%;
+    border: 7px solid #ff0000;
+    border-radius: 7px;
+    z-index: 24;
+    position: absolute;
+}
+.scaneoButton{
+    margin: 0vh -1vh;
+    width: 100%;
+    height: 110%;
+    border: 7px solid #ff0000;
+    border-radius: 7px;
+    z-index: 24;
+    position: absolute;
+    top: -0.5vh;
 }

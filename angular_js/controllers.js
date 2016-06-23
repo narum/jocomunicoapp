@@ -3051,9 +3051,7 @@ angular.module('controllers', [])
             };
         })
 
-        .controller('historyCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
-            $scope.img = [];
-            $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
+        .controller('historicCtrl', function ($scope, $rootScope, txtContent, $location, $http, dropdownMenuBarInit, AuthService, Resources, $timeout) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
                 $location.path('/login');
@@ -3069,38 +3067,97 @@ angular.module('controllers', [])
             };
 
             $scope.home = function () {
-                alert("no esta implementado");
+                $location.path('/');
             };
 
-            $scope.getTodayHistory = function () {
-                alert("no esta implementado");
+            $scope.getTodayHistoric = function () {
+                $scope.folder = null;
+                $scope.timeHis = "today";
+                $scope.pagHistoric = 0;
+                $scope.getHistoric();
             };
 
-            $scope.getLastWeekHistory = function () {
-                alert("no esta implementado");
+            $scope.getLastWeekHistoric = function () {
+                $scope.folder = null;
+                $scope.timeHis = "lastWeek";
+                $scope.pagHistoric = 0;
+                $scope.getHistoric();
             };
 
-            $scope.changeFolder = function () {
-                alert("no esta implementado");
+            $scope.getLastMonthHistoric = function () {
+                $scope.folder = null;
+                $scope.timeHis = "lastMonth";
+                $scope.pagHistoric = 0;
+                $scope.getHistoric();
+
             };
 
-            $scope.previousSFoler = function () {
-                alert("sdasdasdas");
+            $scope.getHistoric = function () {
+                var day = 1;
+                switch ($scope.timeHis) {
+                    case "today":
+                        day = 1;
+                        break;
+                    case "lastWeek":
+                        day = 7;
+                        break;
+                    case "lastMonth":
+                        day = 31;
+                        break;
+                }
+                var postdata = {day: day, pagHistoric: $scope.pagHistoric};
+                var url = $scope.baseurl + "historic/getHistoric";
+
+                $http.post(url, postdata).
+                        success(function (response)
+                        {
+                            $scope.historic = response.historic;
+                            if ($scope.pagHistoric == 0) {
+                                $scope.pagBackHistoricEnabled = false;
+                            } else {
+                                $scope.pagBackHistoricEnabled = true;
+                            }
+                            if ($scope.pagHistoric + 10 > response.count) {
+                                $scope.pagNextHistoricEnabled = false;
+                            } else {
+                                $scope.pagNextHistoricEnabled = true;
+                            }
+                        });
+            };
+
+            $scope.previousPagHistoric = function () {
+                $scope.pagHistoric -= 10;
+                $scope.getHistoric();
+            };
+
+            $scope.nextPagHistoric = function () {
+                $scope.pagHistoric += 10;
+                $scope.getHistoric();
+            };
+
+            $scope.changeFolder = function (id) {
+                $scope.timeHis = null;
+                $scope.folder = id;
+                $scope.getFolder();
+            };
+
+            $scope.previousPagSFolder = function () {
                 $scope.pagSFolder -= 4;
+                $scope.pagNextFolderEnabled = true;
                 if ($scope.pagSFolder == 0) {
-                    alert("desactivar boton menos");
+                    $scope.pagBackFolderEnabled = false;
                 } else {
-                    alert("activar boton menos");
+                    $scope.pagBackFolderEnabled = true;
                 }
             };
 
-            $scope.nextSFolder = function () {
-                alert("sdasdasdadasdas");
+            $scope.nextPagSFolder = function () {
                 $scope.pagSFolder += 4;
+                $scope.pagBackFolderEnabled = true;
                 if ($scope.sFolderResult.length < $scope.pagSFolder + 4) {
-                    alert("desactivar boton mas");
+                    $scope.pagNextFolderEnabled = false;
                 } else {
-                    alert("activar boton mas");
+                    $scope.pagNextFolderEnabled = true;
                 }
             };
 
@@ -3112,16 +3169,343 @@ angular.module('controllers', [])
                         {
                             $scope.sFolderResult = response.sFolder;
                             if ($scope.pagSFolder == 0) {
-                                alert("desactivar boton menos");
-                            } 
+                                $scope.pagBackFolderEnabled = false;
+                            }
                             if ($scope.sFolderResult.length < $scope.pagSFolder + 4) {
-                                alert("desactivar boton mas");
-                            } 
+                                $scope.pagBackFolderEnabled = false;
+                            }
                         });
             };
+
+            $scope.getFolder = function () {
+                var postdata = {folder: $scope.folder, pagHistoric: $scope.pagHistoric};
+                var url = $scope.baseurl + "historic/getFolder";
+
+                $http.post(url, postdata).
+                        success(function (response)
+                        {
+                            $scope.historic = response.historic;
+                            if ($scope.pagHistoric == 0) {
+                                $scope.pagBackHistoricEnabled = false;
+                            }
+                            if ($scope.pagHistoric + 10 > response.count) {
+                                $scope.pagNextHistoricEnabled = false;
+                            }
+                        });
+            };
+
+
+
+            /*
+             * SCAN
+             */
+
+            $scope.InitScan = function ()
+            {
+                var userConfig = JSON.parse(localStorage.getItem('userData'));
+                $scope.inScan = true;
+                //When the scan is automatic, this timer manage when the scan have to move to the next block            
+                $scope.isScanning = "1row";
+                if ($scope.timerScan) {
+                    $scope.setTimer();
+                }
+
+            };
+
+            //Control the left click button while scanning
+            $scope.scanLeftClick = function ()
+            {
+                if ($scope.inScan) {
+                    //If user have start scan click activate we have to wait until he press one button
+                    if ($scope.isScanning == "waiting") {
+                        $scope.nextBlockToScan(0);
+                        $scope.setTimer();
+                    } else if ($scope.isScanningCancel) {
+                        $scope.isScanningCancel = false;
+                        $scope.isScanning = "nowait";
+                        $scope.InitScan();
+                    } else {
+                        if (!$scope.longclick)
+                        {
+                            $scope.selectBlockScan();
+                        }
+                    }
+                }
+            };
+
+            //Control the right click button while scanning
+            $scope.scanRightClick = function ()
+            {
+                if ($scope.inScan) {
+                    //If user have start scan click activate we have to wait until he press one button
+                    if ($scope.isScanning == "waiting") {
+                        $scope.nextBlockToScan(0);
+                        $scope.setTimer();
+                    }
+                    if ($scope.isScanningCancel) {
+                        $scope.isScanningCancel = false;
+                        $scope.isScanning = "nowait";
+                        $scope.InitScan();
+                    } else {
+                        if (!$scope.longclick && !$scope.timerScan)
+                        {
+                            $scope.nextBlockScan();
+                        }
+                    }
+                }
+            };
+            //Control the long click button while scanning (to detect when it's a long one)
+            $scope.playLongClick = function ()
+            {
+                var userConfig = JSON.parse(localStorage.getItem('userData'));
+                if ($scope.inScan) {
+                    if ($scope.longclick)
+                    {
+                        $timeout.cancel($scope.scanLongClickTime);
+                        $scope.scanLongClickController = true;
+                        $scope.scanLongClickTime = $timeout($scope.selectBlockScan, userConfig.cfgTimeClick);
+                    }
+                }
+            };
+            //Control the long click button while scanning (to detect when it's a short one)
+            $scope.cancelLongClick = function ()
+            {
+                if ($scope.inScan) {
+                    if ($scope.longclick)
+                    {
+                        if ($scope.scanLongClickController)
+                        {
+                            $timeout.cancel($scope.scanLongClickTime);
+                            $scope.nextBlockScan();
+                        } else
+                        {
+
+                        }
+                    }
+                }
+            };
+
+            //Check if the actual cell (in this point we are pinting to just a one, not a group) is active. Also check if we pass all the cells to start again
+            $scope.getScanCell = function () {
+                if ($scope.cfgScanningCustomRowCol == 0) {
+                    if ($scope.indexScannedCells > $scope.arrayScannedCells.length - 1) {
+                        $scope.isScanning = "nowait";
+                        $scope.InitScan();
+                        return false;
+                    }
+                    if (!$scope.haveToBeScanned($scope.arrayScannedCells[$scope.indexScannedCells])) {
+                        $scope.nextBlockScan();
+                    }
+
+                } else {
+                    //Nos hemos pasado
+                    if (($scope.cfgScanningCustomRowCol == 1 && $scope.indexScannedCells > $scope.columns - 1) || ($scope.cfgScanningCustomRowCol == 2 && $scope.indexScannedCells > $scope.rows - 1)) {
+                        $scope.isScanning = "nowait";
+                        $scope.InitScan();
+                        return false;
+                    }
+                    if (!$scope.haveToBeScanned($scope.arrayScannedCells[$scope.indexScannedCells])) {
+                        $scope.nextBlockScan();
+                    }
+                }
+            };
+            // Change the current scan block
+            $scope.nextBlockScan = function () {
+                if ($scope.inScan) {
+                    switch ($scope.isScanning) {
+                        case "1row":
+                            $scope.isScanning = "2row";
+                            break;
+                        case "2row":
+                            $scope.isScanning = "1column";
+                            break;
+                        case "1column":
+                            $scope.isScanning = "2column";
+                            break;
+                        case "2column":
+                            $scope.InitScan()
+                            break;
+                        case "back":
+                            $scope.isScanning = "home";
+                            break;
+                        case "home":
+                            $scope.isScanning = "today";
+                            break;
+                        case "today":
+                            $scope.isScanning = "lastWeek";
+                            break;
+                        case "lastWeek":
+                            $scope.isScanning = "lastMonth";
+                            break;
+                        case "lastMonth":
+                            $scope.InitScan();
+                            break;
+                        case "backPagHistoric":
+                            $scope.isScanning = "nextPagHistoric";
+                            break;
+                        case "nextPagHistoric":
+                            $scope.isScanning = "firstFolder";
+                            break;
+                        case "firstFolder":
+                            $scope.isScanning = "secondFolder";
+                            break;
+                        case "secondFolder":
+                            $scope.isScanning = "thirdFolder";
+                            break;
+                        case "thirdFolder":
+                            $scope.isScanning = "fourthFolder";
+                            break;
+                        case "fourthFolder":
+                            $scope.isScanning = "backPagFolder";
+                            break;
+                        case "backPagFolder":
+                            $scope.isScanning = "nextPagFolder";
+                            break;
+                        case "nextPagFolder":
+                            $scope.InitScan();
+                            break;
+                        case "1-1c":
+                            $scope.isScanning = "1-2c";
+                            break;
+                        case "1-2c":
+                            $scope.isScanning = "1-3c";
+                            break;
+                        case "1-3c":
+                            $scope.isScanning = "1-4c";
+                            break;
+                        case "1-4c":
+                            $scope.InitScan();
+                            break;
+                        case "2-1c":
+                            $scope.isScanning = "2-2c";
+                            break;
+                        case "2-2c":
+                            $scope.isScanning = "2-3c";
+                            break;
+                        case "2-3c":
+                            $scope.isScanning = "2-4c";
+                            break;
+                        case "2-4c":
+                            $scope.InitScan();
+                            break;
+                    }
+
+                }
+            };
+            //Pass to the next scan level (subgroup)
+            $scope.selectBlockScan = function () {
+                if ($scope.inScan) {
+                    //when we select a picto cancel the actual timer and set up another
+                    if ($scope.timerScan) {
+                        $scope.setTimer();
+                    }
+                    //cancel long click
+                    if ($scope.longclick)
+                    {
+                        $scope.scanLongClickController = false;
+                    }
+                    switch ($scope.isScanning) {
+                        case "1row":
+                            $scope.isScanning = "back";
+                            break;
+                        case "2row":
+                            $scope.isScanning = "backPagHistoric";
+                            break;
+                        case "1column":
+                            $scope.isScanning = "1-1c";
+                            break;
+                        case "2column":
+                            $scope.isScanning = "1-2c";
+                            break;
+                        case "back":
+                            $scope.back();
+                            break;
+                        case "home":
+                            $scope.home();
+                            break;
+                        case "today":
+                            $scope.getTodayHistoric();
+                            $scope.InitScan();
+                            break;
+                        case "lastWeek":
+                            $scope.getLastWeekHistoric();
+                            $scope.InitScan();
+                            break;
+                        case "lastMonth":
+                            $scope.getLastMonthHistoric();
+                            $scope.InitScan();
+                            break;
+                        case "backPagHistoric":
+                            $scope.previousPagHistoric();
+                            $scope.InitScan();
+                            break;
+                        case "nextPagHistoric":
+                            $scope.nextPagHistoric();
+                            $scope.InitScan();
+                            break;
+                        case "firstFolder":
+                            alert("obetener id??");
+                            break;
+                        case "secondFolder":
+                            alert("obetener id??");
+                            break;
+                        case "thirdFolder":
+                            alert("obetener id??");
+                            break;
+                        case "fourthFolder":
+                            alert("obetener id??");
+                            break;
+                        case "nextPagFolder":
+                            $scope.previousPagSFolder()();
+                            $scope.InitScan();
+                            break;
+                        case "backPagFolder":
+                            $scope.nextPagSFolder();
+                            $scope.InitScan();
+                            break;
+                        case "1-1c":
+                            alert("obetener id??");
+                            break;
+                        case "1-2c":
+                            alert("obetener id??");
+                            break;
+                        case "1-3c":
+                            alert("obetener id??");
+                            break;
+                        case "1-4c":
+                            alert("obetener id??");
+                            break;
+                        case "2-1c":
+                            alert("obetener id??");
+                            break;
+                        case "2-2c":
+                            alert("obetener id??");
+                            break;
+                        case "2-3c":
+                            alert("obetener id??");
+                            break;
+                        case "2-4c":
+                            alert("obetener id??");
+                            break;
+                    }
+                }
+            };
+
+
+
+            $scope.InitScan();
             //Init the pag
+            $scope.pagNextFolderEnabled = true;
+            $scope.pagNextHistoricEnabled = true;
+            $scope.pagBackFolderEnabled = true;
+            $scope.pagBackHistoricEnabled = true;
             $scope.pagSFolder = 0;
+            $scope.pagHistoric = 0;
             $scope.getSFolders();
+            var userConfig = JSON.parse(localStorage.getItem('userData'));
+            $scope.cfgBgColorPanel = userConfig.cfgBgColorPanel;
+            $scope.cfgBgColorMenu = userConfig.cfgBgColorPred;
+            $scope.timeHis = "today";
         })
 
 
