@@ -61,8 +61,9 @@
         </div>        
     </div>
     
-    <div id="footer-cookies" ng-show="!acceptcookies" ng-click="okCookies();">
+    <div class="{{footerclass}}" ng-click="okCookies();">
         <span bind-html-compile="text.cookiespopup"></span>
+        <span class="closecookiespopup">x</span>
     </div>
     
 </div>

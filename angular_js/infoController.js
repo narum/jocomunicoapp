@@ -1,4 +1,4 @@
-angular.module('controllers')
+angular.module('controllers', ['ngAnimate'])
         .controller('infoCtrl', function ($scope, $rootScope, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
            
             /*
@@ -61,9 +61,17 @@ angular.module('controllers')
             // Cookies popup
             $scope.acceptcookies = window.localStorage.getItem('cookiesAccepted'); 
             
+            if ($scope.acceptcookies) {
+                $scope.footerclass = "footer-cookies-out";
+            }
+            else {
+                $scope.footerclass = "footer-cookies";
+            }
+            
             $scope.okCookies = function () {
                 window.localStorage.setItem('cookiesAccepted', true);
                 $scope.acceptcookies = true;
+                $scope.footerclass = "footer-cookies-fade";
             };
            
             //Images
