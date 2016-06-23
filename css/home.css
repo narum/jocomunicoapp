@@ -1,6 +1,10 @@
 @charset "UTF-8";
 /* CSS Document */
 
+a:hover {
+    color: white;
+}
+
 #main-container {
     width: 100%;
     padding-bottom: 20vh;
@@ -16,11 +20,32 @@
 }
 
 .home-subtitle {
-    font-size: 3vh;
+    font-size: 1.6vw;
     font-weight: lighter;
     color: #f0a22e;
     display: block;
     padding-top: 5px;
+}
+
+.home-links {
+    font-size: 1.3vw;
+    font-weight: lighter;
+    display: block;
+    padding-top: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+@media (max-width:1000px){
+
+    .home-subtitle {
+        font-size: 2.2vw;
+    }
+    
+    .home-links {
+        font-size: 1.6vw;
+    }
+    
 }
 
 .home-buttons {
@@ -37,15 +62,6 @@
 
 .home-button-img {
     max-width: 100%;
-}
-
-.home-links {
-    font-size: 2.2vh;
-    font-weight: lighter;
-    display: block;
-    padding-top: 5px;
-    text-overflow: ellipsis;
-    overflow: hidden;
 }
 
 .home-video-img {
@@ -89,5 +105,7 @@
     padding: 3vh;
     padding-left: 7vh;
     padding-right: 7vh;
-    font-size: 2.2vh;
+    text-align: justify;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }

@@ -10,6 +10,7 @@ angular.module('app', [
         'ngScrollbar',
         'ngAnimate',
         'ngSanitize',
+        'angular-bind-html-compile',
         
 	//Modules
 	'controllers',
