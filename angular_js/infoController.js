@@ -1,4 +1,4 @@
-angular.module('controllers', ['ngAnimate'])
+angular.module('controllers')
         .controller('infoCtrl', function ($scope, $rootScope, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
            
             /*
