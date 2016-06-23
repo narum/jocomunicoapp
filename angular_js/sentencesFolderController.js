@@ -64,6 +64,16 @@ angular.module('controllers')
             $scope.historicSentencesView = true;
         }
         
+        //Folder info
+        if($routeParams.folderId<0){
+            if($routeParams.folderId=='-1'){
+                $scope.historicFolders = {'ID_Folder':'-1', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0'};
+            }else if($routeParams.folderId=='-7'){
+                $scope.historicFolders = {'ID_Folder':'-7', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastWeek', 'imgSFolder':'img/pictos/semana.png', 'folderColor':'dfdfdf', 'folderOrder':'0'};
+            }else if($routeParams.folderId=='-30'){
+                $scope.historicFolders = {'ID_Folder':'-30', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastMonth', 'imgSFolder':'img/pictos/mes.png', 'folderColor':'dfdfdf', 'folderOrder':'0'};
+            }
+        }
         //Get sentences folder or Historic folder
         Resources.main.save({'ID_Folder': $routeParams.folderId},{'funct': "getSentencesOrHistoricFolder"}).$promise
         .then(function (results) {
