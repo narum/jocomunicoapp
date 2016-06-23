@@ -67,6 +67,10 @@ angular.module('app', [
 			controller:'historicCtrl',
 			templateUrl:'../../angular_templates/HistoricView.html'
 		})
+                .when('/sentencesFolder/:folderId/', {
+			controller:'sentencesFolderCtrl',
+			templateUrl:'../../angular_templates/sentencesFolder.html'
+		})
 		.otherwise({ redirectTo:'/' });
 })
 .run(function(AuthService){

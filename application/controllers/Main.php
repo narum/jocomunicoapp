@@ -267,4 +267,22 @@ class Main extends REST_Controller {
         
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    //
+    public function getSentencesOrHistoricFolder_post()
+    {
+        $idusu = $this->session->userdata('idusu');
+        $ID_Folder = $this->query('ID_Folder');
+
+        if($ID_Folder<0){
+            $sol = $this->main_model->getHistoric($idusu, ($ID_Folder * (-1)));
+        }else{
+            $sol='sentence';
+        }
+        
+        $response = [
+            'ID_Folder' => $sol
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 }

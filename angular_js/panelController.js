@@ -3,6 +3,7 @@ angular.module('controllers')
         // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
         if (!$rootScope.isLogged) {
             $location.path('/login');
+            $rootScope.dropdownMenuBarValue = '/'; //Dropdown bar button selected on this view
         }
         // Pedimos los textos para cargar la pagina
         txtContent("panelgroup").then(function (results) {
@@ -72,9 +73,9 @@ angular.module('controllers')
         $scope.historicFolders=[];
         Resources.main.get({'funct': "getSentenceFolders"}).$promise
         .then(function (results) {
-            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
-            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastWeek', 'imgSFolder':'img/pictos/semana.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
-            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastMonth', 'imgSFolder':'img/pictos/mes.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
+            $scope.historicFolders.push({'ID_Folder':'-1', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
+            $scope.historicFolders.push({'ID_Folder':'-7', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastWeek', 'imgSFolder':'img/pictos/semana.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
+            $scope.historicFolders.push({'ID_Folder':'-30', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastMonth', 'imgSFolder':'img/pictos/mes.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
             angular.forEach(results.folders, function (value) {
                 $scope.historicFolders.push(value);
             });
@@ -100,6 +101,11 @@ angular.module('controllers')
                 $scope.historicFolders.sort(function(a, b){return a.folderOrder-b.folderOrder});
             }
         };
+        //go to folder view
+        $scope.goSentencesFolder = function(folder){
+            $location.path('/sentencesFolder/'+ folder);
+            $rootScope.dropdownMenuBarValue = '';
+        }
 
         //Scrollbar inside div
         $scope.$on('scrollbar.show', function () {
