@@ -29,6 +29,7 @@
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular-route.min.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular-resource.min.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular-cookies.min.js"></script>
+        <script type="text/javascript" src="<?= base_url(); ?>libraries/angular-sanitize.min.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/ui-bootstrap.min.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/ui-bootstrap-tpls.min.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>/libraries/ng-scrollbar.js"></script>

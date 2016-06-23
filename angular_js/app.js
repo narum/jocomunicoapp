@@ -9,6 +9,7 @@ angular.module('app', [
         'ngDialog',
         'ngScrollbar',
         'ngAnimate',
+        'ngSanitize',
         
 	//Modules
 	'controllers',

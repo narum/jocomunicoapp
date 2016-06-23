@@ -21,25 +21,31 @@
     </div>
     
     <div class="row">
-        <div class="col-xs-8 col-xs-offset-2 home-buttons">
+        <div class="col-xs-10 col-xs-offset-1 home-buttons">
             <div class="row">
                 
-                <div class="col-xs-2 col-xs-offset-1 home-button" ng-mouseenter="linkColor('link-1', '#898989', true)" 
+                <div class="col-xs-2 col-xs-offset-2 home-button" ng-mouseenter="linkColor('link-1', '#898989', true)" 
                      ng-mouseleave="linkColor('link-1', '#f0a22e', false)" ng-click="linkAbout();">
                     <img ng-src="{{img.button1}}" class="home-button-img" width="120"/>
                     <span style="color:{{link1color}};" class='home-links'>{{text.about}}</span>
                 </div>
                 
-                <div class="col-xs-2 col-xs-offset-2 home-button" ng-mouseenter="linkColor('link-2', '#898989', true)" 
+                <div class="col-xs-2  home-button" ng-mouseenter="linkColor('link-2', '#898989', true)" 
                      ng-mouseleave="linkColor('link-2', '#b6211b', false)" ng-click="linkLogin();">
                     <img ng-src="{{img.button2}}" class="home-button-img" width="120"/>
                     <span style="color:{{link2color}};" class='home-links'>{{text.login}}</span>
                 </div>
                 
-                <div class="col-xs-2 col-xs-offset-2 home-button" ng-mouseenter="linkColor('link-3', '#898989', true)" 
+                <div class="col-xs-2  home-button" ng-mouseenter="linkColor('link-3', '#898989', true)" 
                      ng-mouseleave="linkColor('link-3', '#3b93af', false)" ng-click="linkCollaborators();">
                     <img ng-src="{{img.button3}}" class="home-button-img" width="120"/>
                     <span style="color:{{link3color}};" class='home-links'>{{text.sponsors}}</span>
+                </div>
+                
+                <div class="col-xs-2  home-button" ng-mouseenter="linkColor('link-4', '#898989', true)" 
+                     ng-mouseleave="linkColor('link-4', '#3b93af', false)" ng-click="linkCollaborators();">
+                    <img ng-src="{{img.button4}}" class="home-button-img" width="120"/>
+                    <span style="color:{{link4color}};" class='home-links'>{{text.opensource}}</span>
                 </div>
                 
             </div>
@@ -56,7 +62,7 @@
     </div>
     
     <div id="footer-cookies" ng-show="!acceptcookies" ng-click="okCookies();">
-        ACCEPT COOKIES
+        <span ng-bind-html="text.cookiespopup"></span>
     </div>
     
 </div>
