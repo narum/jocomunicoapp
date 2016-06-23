@@ -1,0 +1,49 @@
+<link rel="stylesheet" type="text/css" href="{{baseurl}}css/generico.css">
+<link rel="stylesheet" type="text/css" href="{{baseurl}}css/responsiveForm.css">
+<link rel="stylesheet" type="text/css" href="{{baseurl}}css/sentencesFolder.css">
+<link rel="stylesheet" type="text/css" href="{{baseurl}}/libraries/scrollbarPanel.css">
+
+<style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
+</style>
+<!--menu superior dropdown-->
+<div ng-include="'/angular_templates/dropdownMenuBar.html'" ng-show="viewActived"></div>
+<div ng-include="'/angular_templates/logoutModal.html'"></div>
+
+<div class="loadingGif" ng-show="!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
+<div class="row folderContainer" ng-show="viewActived">
+    <div class="row">
+        <!--Panel Groups box-->
+        <div class="col-xs-10 col-lg-offset-1">
+            <div class="boxSentencesFolder" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
+                <div id="header" class="row">
+                    <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
+                </div>
+                <div class="row histFolder">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="row positionIndex1"><div class="row"><div class="col-xs-2 histTabFolderShadow"></div></div>
+                               <div class="row"><div class="col-xs-12 histContentFolderShadow"></div></div>
+                            </div>
+                            <div class="row positionIndex2"><div class="row"><div class="col-xs-2 histTabFolder" style="background-color: #{{folder.folderColor}}"></div></div>
+                               <div class="row"><div class="col-xs-12 histContentFolder" style="background-color: #FFFFFF">
+                                       <div class="row">
+                                           <div class="col-xs-3"><img class="img-rounded imgHistFolder" ng-src="{{folder.imgSFolder}}"/></div>
+                                           <div class="col-xs-6 folderTitle">{{folder.folderName}}</div>
+                                       </div>
+                                   </div>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row scrollOverflow">
+                        <div ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meS">
+                            <div class="row" ng-repeat="sentence in sentences" on-Finish-Loop="scrollbarSentences">
+                                {{sentence.generatorString}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
