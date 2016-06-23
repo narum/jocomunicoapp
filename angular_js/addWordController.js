@@ -82,6 +82,17 @@ angular.module('controllers')
                             //MODIF: defaultverb: 100/86, subjdef: 1/3 per defecte
                             $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null,defaultverb: false, subjdef: false};
                             $scope.switchAdj = {s1: false, s2: false, s3: false, s4: false, s5: false, s6: false};
+                            $scope.AdjClassList = [];
+                            $scope.classAdj = [{classType: "all", numType: 0, adjType: $scope.content.classadj0},
+                                                {classType: "color", numType: 1, adjType: $scope.content.classadj1},
+                                                {classType: "human", numType: 2, adjType: $scope.content.classadj2},
+                                                {classType: "animate", numType: 3, adjType: $scope.content.classadj3},
+                                                {classType: "objecte", numType: 4, adjType: $scope.content.classadj4},
+                                                {classType: "menjar", numType: 5, adjType: $scope.content.classadj5},
+                                                {classType: "ordinal", numType: 6, adjType: $scope.content.classadj6}
+                                ];
+                            $scope.$apply();
+                            
                             break;
                         default:
                             break;
@@ -159,9 +170,23 @@ angular.module('controllers')
                     }
                 });
             };
-            $scope.removeLanguage = function (index) {
+            $scope.removeNounclass = function (index) {
                 $scope.classNoun.push($scope.NClassList[index]);
                 $scope.NClassList.splice(index, 1);//Borrar item de un array .splice(posicion, numero de items)
+            };
+            $scope.addAdjClass = function (AdjTypeClass) {
+                angular.forEach($scope.classAdj, function (value, key) {
+                    if (value.classType == AdjTypeClass) {
+                        $scope.AdjClassList.push($scope.classAdj[key]);//añadimos el idioma a la lista .push(objeto)
+                        $scope.classAdj.splice(key, 1);//Borrar idioma de las opciones .splice(posicion, numero de items)
+                        $scope.state.languageSelected = 'has-success';
+                        languageOk = true;
+                    }
+                });
+            };
+            $scope.removeAdjclass = function (index) {
+                $scope.classAdj.push($scope.AdjClassList[index]);
+                $scope.AdjClassList.splice(index, 1);//Borrar item de un array .splice(posicion, numero de items)
             };
 
 

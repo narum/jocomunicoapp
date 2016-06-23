@@ -92,18 +92,18 @@
                     <select
                         class="form-control"
                         name="className"
-                        ng-model="formNounClass"
-                        ng-change="addNClass(formNounClass.valueOf())"
+                        ng-model="formAdjClass"
+                        ng-change="addAdjClass(formAdjClass.valueOf())"
                         >
-                        <option ng-repeat="x in $parent.classNoun" value="{{x.classType}}">{{x.nameType}}</option>
+                        <option ng-repeat="x in $parent.classAdj" value="{{x.classType}}">{{x.nameType}}</option>
                     </select>
                 </div>
             </div>
             <div class="inputMarginLeft" style=" height: 70%">
                 <table class="table table-condensed taula">
-                    <div class="col-xs-4 row" ng-repeat="item in NClassList">
+                    <div class="col-xs-4 row" ng-repeat="item in AdjClassList">
                         <div class="col-xs-8 llenguatge" >{{ item.nameType}}</div>
-                        <div class="col-xs-4 buto"><a class="icon-minus btn-borrar" ng-click="removeLanguage($index)"></a></div>
+                        <div class="col-xs-4 buto"><a class="icon-minus btn-borrar" ng-click="removeAdjclass($index)"></a></div>
                     </div>
                 </table>
             </div>
