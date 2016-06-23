@@ -9,7 +9,6 @@ angular.module('app', [
         'ngDialog',
         'ngScrollbar',
         'ngAnimate',
-        'ngSanitize',
         'angular-bind-html-compile',
         
 	//Modules

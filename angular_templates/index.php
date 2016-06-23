@@ -44,7 +44,6 @@
         <script type="text/javascript" src="<?= base_url(); ?>angular_js/infoController.js"></script>
 
         <script type="text/javascript" src="<?= base_url(); ?>libraries/angular-bind-html-compile.js"></script>
-        <script type="text/javascript" src="<?= base_url(); ?>libraries/angular-sanitize.min.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/ngTouch.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/ngDraggable.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>libraries/ngDialog.min.js"></script>
