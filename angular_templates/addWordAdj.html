@@ -1,0 +1,112 @@
+<div>
+    <div class="form addWordForm50">
+        <div class="addWordFromField addWordFromPaddingH fullheight" style="background-color: #fff;">
+            <div class="row marginTopAdj">
+                <div class="col-xs-5 row ">
+                    <div class="col-xs-12">
+                        MODIF:Masculi Singular
+                    </div>
+                    <div class="col-xs-12">
+                        <input type="text" class="addWordText "  name="CopyBoardName" ng-model="objAdd.masc"/>
+                    </div>
+                </div>
+                <div class="col-xs-5 row pull-right">
+                    <div class="col-xs-12">
+                        MODIF:Femeni Singular
+                    </div>
+                    <div class="col-xs-12">
+                        <input type="text" class="addWordText"  name="CopyBoardName" ng-model="objAdd.fem"/>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row marginTopAdj">
+                <div class="col-xs-5 row">
+                    <div class="col-xs-12 ">
+                        MODIF:Masculi Plural
+                    </div>
+                    <div class="col-xs-12 ">
+                        <input type="text" class="addWordText"  name="CopyBoardName" ng-model="objAdd.mascpl"/>
+                    </div>
+                </div>
+                <div class="col-xs-5 row pull-right">
+                    <div class="col-xs-12 ">
+                        MODIF:Femeni Plural
+                    </div>
+                    <div class="col-xs-12">
+                        <input type="text" class="addWordText"  name="CopyBoardName" ng-model="objAdd.fempl"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form addWordForm25">
+        <div class="addWordFromField addWordFromPadding fullheight row" style="background-color: #fff;">
+            <div class="row">
+                <div class="col-xs-5 row">
+                    <div class="col-xs-6">
+
+                    </div>
+                    <div class="col-xs-6">
+                        MODIF:SER
+                    </div>
+                </div>
+                <div class="col-xs-7 row">
+                    <div class="col-xs-4">
+                        <input id="switchAdj1" class="switchclear" type="checkbox" 
+                               ng-model="$parent.switchAdj.s1 " ng-show="false">
+                        <label for="switchAdj1">&nbsp;</label>
+                    </div>
+                    <div class="col-xs-7">
+                        MODIF:ESTAR
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5 row">
+                    <div class="col-xs-6">
+
+                    </div>
+                    <div class="col-xs-6">
+                        MODIF:1ª persona
+                    </div>
+                </div>
+                <div class="col-xs-7 row">
+                    <div class="col-xs-4">
+                        <input id="switchAdj2" class="switchclear" type="checkbox" 
+                               ng-model="$parent.switchAdjs2 " ng-show="false">
+                        <label for="switchAdj2">&nbsp;</label>
+                    </div>
+                    <div class="col-xs-7">
+                        MODIF:3ª persona
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form addWordForm25">
+        <div class="addWordFromField fullheight" style="background-color: #fff;">
+            <div class="has-feedback" style="height: 30%">
+                <div class="input-group input-group-auto inputMarginRigth">
+                    <span class="input-group-addon"><i class="icon-comments"></i></span>
+                    <select
+                        class="form-control"
+                        name="className"
+                        ng-model="formNounClass"
+                        ng-change="addNClass(formNounClass.valueOf())"
+                        >
+                        <option ng-repeat="x in $parent.classNoun" value="{{x.classType}}">{{x.nameType}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="inputMarginLeft" style=" height: 70%">
+                <table class="table table-condensed taula">
+                    <div class="col-xs-4 row" ng-repeat="item in NClassList">
+                        <div class="col-xs-8 llenguatge" >{{ item.nameType}}</div>
+                        <div class="col-xs-4 buto"><a class="icon-minus btn-borrar" ng-click="removeLanguage($index)"></a></div>
+                    </div>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

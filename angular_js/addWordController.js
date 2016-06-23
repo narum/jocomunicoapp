@@ -51,7 +51,6 @@ angular.module('controllers')
                         case "name":
                             $scope.objAdd = {type: "name", nomtext: null, mf: false, singpl: false, contabincontab: null, determinat: null, ispropernoun: false, defaultverb: null, plural: null, femeni: null, fempl: null};
                             $scope.switchName = {s1: false, s2: false, s3: false, s4: false, s5: false, s6: false};
-                            // MODIF: FALTA RECOLLIR DE LA BBDD ELS VERBS I PASARLOS EN UN SELECT
                             $scope.NClassList = [];
                             $scope.classNoun = [{classType: "animate", numType: 1, nameType: $scope.content.classname1},
                                 {classType: "human", numType: 2, nameType: $scope.content.classname2},
@@ -80,7 +79,9 @@ angular.module('controllers')
                             $scope.$apply();
                             break;
                         case "adj":
-                            $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null, subjdef: null};
+                            //MODIF: defaultverb: 100/86, subjdef: 1/3 per defecte
+                            $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null,defaultverb: false, subjdef: false};
+                            $scope.switchAdj = {s1: false, s2: false, s3: false, s4: false, s5: false, s6: false};
                             break;
                         default:
                             break;
@@ -114,7 +115,7 @@ angular.module('controllers')
 
             $scope.saveAddWord = function () {
                 var URL = $scope.baseurl + "Board/XXXXXXXX";
-                alert($scope.objAdd.singpl);
+                console.log($scope.objAdd);
 //      MODIF: HA DE ENVIAR LES DADES AL POST
 //                $http.post(URL, objAdd).success(function (response)
 //                {
