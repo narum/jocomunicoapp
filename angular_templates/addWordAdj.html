@@ -95,14 +95,14 @@
                         ng-model="formAdjClass"
                         ng-change="addAdjClass(formAdjClass.valueOf())"
                         >
-                        <option ng-repeat="x in $parent.classAdj" value="{{x.classType}}">{{x.nameType}}</option>
+                        <option ng-repeat="x in $parent.classAdj" value="{{x.classType}}">{{x.adjType}}</option>
                     </select>
                 </div>
             </div>
             <div class="inputMarginLeft" style=" height: 70%">
                 <table class="table table-condensed taula">
                     <div class="col-xs-4 row" ng-repeat="item in AdjClassList">
-                        <div class="col-xs-8 llenguatge" >{{ item.nameType}}</div>
+                        <div class="col-xs-8 llenguatge" >{{ item.adjType}}</div>
                         <div class="col-xs-4 buto"><a class="icon-minus btn-borrar" ng-click="removeAdjclass($index)"></a></div>
                     </div>
                 </table>
