@@ -1820,6 +1820,9 @@ angular.module('controllers', [])
                     $scope.showBoard($rootScope.editPanelInfo.idBoard);
                     $scope.edit();
                     $rootScope.editPanelInfo = null;
+                } else if ($rootScope.boardToShow) {
+                    $scope.showBoard($rootScope.boardToShow);
+                    $rootScope.boardToShow = null;
                 } else {
                     $scope.getPrimaryUserBoard();
                 }
@@ -1889,6 +1892,9 @@ angular.module('controllers', [])
                     $scope.rows = response.row;
                     $scope.data = response.data;
                     $scope.autoRead = response.autoRead;
+                    if ($scope.data == null) {
+                        $location.path('/panelGroups');
+                    }
                     //                    $scope.oldW = response.col;
                     //                    $scope.oldH = response.row;
                 });
@@ -2122,6 +2128,15 @@ angular.module('controllers', [])
             $scope.clickOnCell = function (cell) {
 
                 if (!$scope.inEdit && cell.activeCell == 1) {
+                    if (cell.sentenceFolder) {
+                        $rootScope.senteceFolderToShow = {folder: cell.sentenceFolder, boardID: $scope.idboard};
+                        $location.path('/historic');
+                        return false;
+                    }
+                    if (cell.ID_CSentence) {
+                        $scope.readText(cell.sPreRecText, true);
+                        return false;
+                    }
                     var text = "";
                     // Just read once.
                     var readed = false;
@@ -2356,7 +2371,7 @@ angular.module('controllers', [])
                     $scope.tense = response.tense;
                     $scope.tipusfrase = response.tipusfrase;
                     $scope.negativa = response.negativa;
-                    if ((control !== "") && (control !== "home")) {
+                    if ((control !== "") && (control !== "home") && (control !== "historic")) {
                         var url = $scope.baseurl + "Board/" + control;
                         var postdata = {tense: $scope.tense, tipusfrase: $scope.tipusfrase, negativa: $scope.negativa};
 
@@ -2386,6 +2401,9 @@ angular.module('controllers', [])
                         });
                     } else if ((control === "home")) {
                         $scope.config();
+                    } else if ((control === "historic")) {
+                        $rootScope.senteceFolderToShow = {folder: null, boardID: $scope.idboard};
+                        $location.path('/historic');
                     } else {
                         if (!readed) {
                             $scope.readText(text, true);
@@ -3063,7 +3081,8 @@ angular.module('controllers', [])
 
 
             $scope.back = function () {
-                alert("no esta implementado");
+                $rootScope.boardToShow = $scope.backBoard;
+                $location.path('/');
             };
 
             $scope.home = function () {
@@ -3207,6 +3226,39 @@ angular.module('controllers', [])
                             }
                         });
             };
+            //Bool is true when the text comes from interface and false if the text is the sentence
+            $scope.readText = function (text, bool) {
+                if (text !== "") {
+                    $scope.sound = "mp3/empty.m4a";
+                    var postdata = {text: text, interface: bool};
+                    var url = $scope.baseurl + "Board/readText";
+                    $http.post(url, postdata).success(function (response) {
+                        $scope.dataAudio = response.audio;
+                        if ($scope.dataAudio[1]) {
+                            if (false) {
+                                txtContent("errorVoices").then(function (content) {
+                                    $scope.errorMessage = content.data[$scope.dataAudio[3]];
+                                    $scope.errorCode = $scope.dataAudio[3];
+                                    $('#errorVoicesModal').modal({backdrop: 'static'});
+                                });
+                            }
+                        } else {
+                            $scope.sound = "mp3/" + $scope.dataAudio[0];
+                            var audiotoplay = $('#utterance');
+                            audiotoplay.src = "mp3/" + $scope.dataAudio[0];
+                            if ($scope.cfgTimeOverOnOff) {
+                                $timeout(function () {
+                                    audiotoplay.get(0).play();
+                                });
+                            }
+                        }
+                    });
+                }
+            };
+
+            $scope.clickOnSentence = function (text) {
+                $scope.readText(text, false);
+            };
 
             /*
              * SCAN
@@ -3327,8 +3379,8 @@ angular.module('controllers', [])
             $scope.nextFolderToScan = function () {
                 $scope.scanningFolder = $scope.scanningFolder + 1;
                 if ($scope.scanningFolder > $scope.sFolderResult.length || $scope.scanningFolder / 4 >= 1) {
-                    $scope.isScanning = "backPagFolder";
-                    if (!$scope.pagBackFolderEnabled) {
+                    $scope.isScanning = "nextPagFolder";
+                    if (!$scope.pagNextFolderEnabled) {
                         $scope.nextBlockScan();
                     }
                 }
@@ -3354,7 +3406,10 @@ angular.module('controllers', [])
                     return true;
                 }
                 return false;
-            }
+            };
+            $scope.getSenteceToScan = function () {
+                $scope.readText($scope.historic[$scope.scanningSentence][0].generatorString || $scope.historic[$scope.scanningSentence][0].sPreRecText, true);
+            };
             // Change the current scan block
             $scope.nextBlockScan = function () {
                 if ($scope.inScan) {
@@ -3397,17 +3452,17 @@ angular.module('controllers', [])
                             }
                             break;
                         case "nextPagHistoric":
+                            $scope.isScanning = "backPagFolder";
+                            if (!$scope.pagBackFolderEnabled) {
+                                $scope.nextBlockScan();
+                            }
+                            break;
+                        case "backPagFolder":
                             $scope.isScanning = "folders";
                             $scope.scanningFolder = $scope.pagSFolder;
                             break;
                         case "folders":
                             $scope.nextFolderToScan();
-                            break;
-                        case "backPagFolder":
-                            $scope.isScanning = "nextPagFolder";
-                            if (!$scope.pagNextFolderEnabled){
-                                $scope.nextBlockScan();
-                            }
                             break;
                         case "nextPagFolder":
                             $scope.isScanning = "nowait";
@@ -3504,10 +3559,10 @@ angular.module('controllers', [])
                             $scope.InitScan();
                             break;
                         case "even":
-                            //$scope.getSenteceToScan();
+                            $scope.getSenteceToScan();
                             break;
                         case "odd":
-                            //$scope.getSenteceToScan();
+                            $scope.getSenteceToScan();
                             break;
                     }
                 }
@@ -3548,6 +3603,7 @@ angular.module('controllers', [])
                 $scope.InitScan();
             }
             //Init the pag
+
             $scope.pagNextFolderEnabled = true;
             $scope.pagNextHistoricEnabled = true;
             $scope.pagBackFolderEnabled = true;
@@ -3558,7 +3614,21 @@ angular.module('controllers', [])
             var userConfig = JSON.parse(localStorage.getItem('userData'));
             $scope.cfgBgColorPanel = userConfig.cfgBgColorPanel;
             $scope.cfgBgColorMenu = userConfig.cfgBgColorPred;
-            $scope.timeHis = "today";
+            if ($rootScope.senteceFolderToShow) {
+                if ($rootScope.senteceFolderToShow.folder) {
+                    $scope.changeFolder($rootScope.senteceFolderToShow.folder);
+                    $scope.backBoard = $rootScope.senteceFolderToShow.boardID;
+                    $rootScope.senteceFolderToShow = null;
+                    //Lo dejo asi por que demomento lleva a today, pero se puede cambiar y poner mas
+                } else {
+                    $scope.timeHis = "today";
+                    $scope.getHistoric();
+                }
+            } else {
+                $scope.timeHis = "today";
+                $scope.getHistoric();
+            }
+
         })
 
 

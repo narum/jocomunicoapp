@@ -90,6 +90,9 @@ class BoardInterface extends CI_Model {
         $this->db->join('Pictograms', 'Cell.ID_CPicto = Pictograms.pictoid', 'left');
         $this->db->join('PictogramsLanguage', 'Pictograms.pictoid = PictogramsLanguage.pictoid AND PictogramsLanguage.languageid = "' . $idlang . '"', 'left');
         $this->db->join('Function', 'Cell.ID_CFunction = Function.ID_Function', 'left');
+        $this->db->join('S_Folder', 'S_Folder.ID_Folder = Cell.sentenceFolder', 'left');
+        $this->db->join('S_Sentence', 'S_Sentence.ID_SSentence = Cell.ID_CSentence', 'left');
+        $this->db->join('boards', 'boards.ID_Board = Cell.boardLink', 'left');
         $this->db->select('*, functName' . $lang . ' as textFunction');
         $query = $this->db->get('R_BoardCell');
 
@@ -536,7 +539,8 @@ class BoardInterface extends CI_Model {
 
     function getSentences($idusu, $idsearch) {
 
-        $this->db->like('generatorString', $idsearch);
+        $this->db->like('sPreRecText', $idsearch);
+        $this->db->where('isPreRec', '1');
         $this->db->where('ID_SSUser', $idusu);
         $query = $this->db->get('S_Sentence');
 
