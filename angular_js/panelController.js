@@ -119,19 +119,6 @@ angular.module('controllers')
             return n;
         };
 
-        $scope.addWord = function (newModif,addWordType) {
-            if (newModif == 1){
-                $rootScope.addWordparam = {newmod: newModif,type: addWordType};
-                $location.path('/addWord');
-            }
-            if (newModif == 0 && addWordType == "edit"){
-                $rootScope.addWordparam = {newmod: newModif,type: addWordType};
-                //var URL = $scope.baseurl + "AddWord/getDBAll";
-                //URL = $scope.baseurl + "SearchWord/getDBAll";
-                $('#ConfirmEditAddWord').modal({backdrop: 'static'});
-            }
-            
-        };
         $scope.initPanelGroup = function () {
             var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
 
@@ -280,6 +267,22 @@ angular.module('controllers')
         });
         
         
+        
+        $scope.addWord = function (newModif,addWordType) {
+            if (newModif == 1){
+                $rootScope.addWordparam = {newmod: newModif,type: addWordType};
+                $location.path('/addWord');
+            }
+            if (newModif == 0 && addWordType == "edit"){
+                $rootScope.addWordparam = {newmod: newModif,type: addWordType};
+                $('#ConfirmEditAddWord').modal({backdrop: 'static'});
+            }
+            
+        };
+        $scope.selectAddWordEdit = function(newModif, id){
+            $rootScope.addWordparam = {newmod: newModif,type: id};
+            $timeout(function() {$location.path('/addWord');},1000);
+        };
         
         $scope.searchDoneAddWord = function (name, Searchtype)
             {

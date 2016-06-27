@@ -39,6 +39,39 @@ class AddWord extends REST_Controller {
             return ($a < $b) ? -1 : 1;
         }
     
+    public function EditWordType_post(){
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idPicto = $request->id;
+        $Type = $this->AddWordInterface->getTypePicto($idPicto);
+        
+        $response = [
+            "data" => $Type
+        ];
+
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    public function EditWordGetData_post(){
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idPicto = $request->id;
+        $type = $request->type;
+        switch($type){
+            case('name'):
+                $data = $this->AddWordInterface->EditWordNoms($idPicto);
+                break;
+            case('adj'):
+                break;
+        }
+        
+        
+        $response = [
+            "data" => $data
+        ];
+
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+        
     public function getDBAll_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);

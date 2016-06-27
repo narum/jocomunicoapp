@@ -39,7 +39,40 @@ class AddWordInterface extends CI_Model {
         }
         return $output;
     }
+    
+    
+    function getTypePicto($idPicto)
+    {
+        $output = array();
+        $this->db->where('Pictograms.pictoid', $idPicto);
+        $this->db->select('pictoType as type');// rename the field like we want
+        $query = $this->db->get('Pictograms');// execute de query
+              
+        if ($query->num_rows() > 0) {
+            $output = $query->result_array();
+        }
+        return $output;
+    }
 
+    
+    function EditWordNoms($id)
+    {
+        $output = array();
+        $userlanguage = $this->session->userdata('ulangabbr');
+        $this->db->where('nameid', $id);
+        $this->db->join('Pictograms', 'Name'.$userlanguage.'.nameid = Pictograms.pictoid', 'left');
+        $query = $this->db->get('Name'.$userlanguage);
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        else $output = null;
+        
+        return $output;
+    }
+    
+    
+    
    /*
      * Gets all verbs from ddbb that starts with ($startswith) in the language ($language)
      */
