@@ -20,7 +20,7 @@ angular.module('controllers')
                         $rootScope.dropdownMenuBarChangeLanguage = true; //Languages button available
                         //Choose the buttons to show on bar
                         angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/privacity') {
+                            if (value.href == '/home' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/privacity') {
                                 value.show = true;
                             } else {
                                 value.show = false;
@@ -77,21 +77,24 @@ angular.module('controllers')
             //Images
             $scope.img.button1 = 'img/srcWeb/home/about.png';
             $scope.img.button2 = 'img/srcWeb/home/login.png';
-            $scope.img.button3 = 'img/srcWeb/home/open_source.png';
+            $scope.img.button3 = 'img/srcWeb/home/colab.png';
             $scope.img.button4 = 'img/srcWeb/home/open_source.png';
 
             // Link colors
             $scope.link1color = "#f0a22e";
-            $scope.link2color = "#b6211b";
-            $scope.link3color = "#3b93af";
+            $scope.link2color = "#3b93af";
+            $scope.link3color = "#edb95d";
             $scope.link4color = "#3b93af";
            
-            // Get content for the home view for ddbb   
+            // Get content for the home view from ddbb   
             Resources.register.get({'section': 'home', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
                 .then(function (results) {
                     $scope.text = results.data;
                 });
            
+            $scope.linkHome = function () {
+                $location.path('/home');
+            };
             
             $scope.linkAbout = function () {
                 $location.path('/about');
@@ -130,10 +133,10 @@ angular.module('controllers')
                     case "link-3":
                         $scope.link3color = color;
                         if (!inout) {
-                            $scope.img.button3 = 'img/srcWeb/home/open_source.png';
+                            $scope.img.button3 = 'img/srcWeb/home/colab.png';
                         }
                         else {
-                            $scope.img.button3 = 'img/srcWeb/home/open_source-hov.png';
+                            $scope.img.button3 = 'img/srcWeb/home/colab-hov.png';
                         }
                         break;
                         

@@ -72,6 +72,10 @@ angular.module('app', [
 			controller:'infoCtrl',
 			templateUrl:'../../angular_templates/Home.html'
 		})
+                .when('/about', {
+			controller:'infoCtrl',
+			templateUrl:'../../angular_templates/About.html'
+		})
 		.otherwise({ redirectTo:'/' });
 })
 .run(function(AuthService){
