@@ -1,11 +1,14 @@
 @charset "UTF-8";
 /* CSS Document */
 .folderContainer{
-    padding: 2vh 5vw;
+    padding: 4vh 15vw;
     height: 100vh;
 }
 .paddingContainer{
     padding: 1.5vh;
+}
+.paddingContainerButtons{
+    padding: 3.5vh 0vh;
 }
 .imgContainer{
     height: 50%;
@@ -153,4 +156,31 @@ input.switchclear:checked ~ label:after
 .addWordText{
     color: #4c4c4c;
     font-weight: bold;
+}
+.paddingButtonAddWord{
+    padding: 1vh 10vh;
+}
+.ButtonAddWord{
+    background: -moz-linear-gradient(top, rgba(74, 74, 74,0) 0%, rgba(74, 74, 74,0.20) 20%, rgba(74, 74, 74,0.40) 40%, rgba(74, 74, 74,0.60) 60%, rgba(74, 74, 74,00) 80%, rgba(74, 74, 74,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(74, 74, 74,0)), color-stop(20%,rgba(74, 74, 74,0.20)), color-stop(40%,rgba(74, 74, 74,0.40)), color-stop(60%,rgba(74, 74, 74,0.60)), color-stop(80%,rgba(74, 74, 74,0.80)), color-stop(100%,rgba(74, 74, 74,1)));
+    background: -webkit-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: -o-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: -ms-linear-gradient(top, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    background: linear-gradient(to bottom, rgba(74, 74, 74,0) 0%,rgba(74, 74, 74,0.2) 20%,rgba(74, 74, 74,0.4) 40%,rgba(74, 74, 74,0.6) 60%,rgba(74, 74, 74,0.8) 80%,rgba(74, 74, 74,1) 100%);
+    height: 25%;
+    color: white;
+    cursor: pointer;
+    background-color: #2d2d2d;
+    padding: 1.5vh;
+}
+.ButtonAddWord:active{
+    box-shadow: 0px -0px 0px 1px #333;
+    transform: translate(2px, -2px);
+}
+.TextAddWord{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
 }

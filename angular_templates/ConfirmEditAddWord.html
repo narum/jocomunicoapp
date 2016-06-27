@@ -2,7 +2,7 @@
 <div class="modal fade" id="ConfirmEditAddWord" role="dialog">
     <div class="modal-dialog">
         <div class="row marginModalTopOwl"><img class="img-owl pull-right" src={{img.lowSorpresaFlecha}}/></div>
-        <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_08}})">
+        <div class="row" id="boxUserConfig" style="background-image: url(img/srcWeb/patterns/pattern6.png)">
             <div id="header" class="row">
                 <div class="col-xs-10 headerTitle">{{content.loginToCopyTitle}}</div>
             </div>
@@ -53,9 +53,9 @@
                     <div class="col-xs-6 row">
 
                         <div bind-html-compile="dataword" class='col-xs-4' ng-repeat="picto in dataWordAddWord| limitTo: 6" style="margin-left: 0 !important">
-                            <div class="imgRounded">
-                                <div ng-if="cfgTextInCell && picto.text !== null" class="textCellAddWord">{{picto.text}}</div>
-                                <div ng-style="cfgTextInCell ? {'height': '70%'} : {'height': '20vh'}">
+                            <div class="imgRounded" style="cursor: pointer">
+                                <div ng-if="cfgTextInCell && picto.text !== null" class="textCellAddWord" >{{picto.text}}</div>
+                                <div ng-style="cfgTextInCell ? {'height': '70%'} : {'height': '20vh'}" data-dismiss="modal" ng-click="selectAddWordEdit(0,picto.id)">
                                     <img class="imgRounded imgResponsive" ng-src="{{baseurl}}img/pictos/{{picto.imgPicto}}"/>
                                 </div>
                             </div>
