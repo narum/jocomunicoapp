@@ -1194,6 +1194,7 @@ angular.module('controllers', [])
             txtContent("mainboard").then(function (results) {
                 $rootScope.content = results.data;
             });
+
             // Get event Edit call in the mune bar
             $scope.$on("EditCallFromMenu", function () {
                 $scope.edit();
@@ -1503,7 +1504,7 @@ angular.module('controllers', [])
             };
             //MODIF: cambiar nombre a la funcion?
             $scope.haveToBeScanned = function (picto) {
-                return (picto.activeCell == 1 && (picto.ID_CFunction != null || picto.ID_CPicto != null || picto.ID_CSentence != null || picto.ID_Fuction != null || picto.boardLink != null));
+                return (picto.activeCell == 1 && (picto.ID_CFunction != null || picto.ID_CPicto != null || picto.ID_CSentence != null || picto.ID_Fuction != null || picto.boardLink != null || picto.sentenceFolder));
             };
             $scope.nextBlockToScan = function (current) {
                 switch ($scope.orderScan[current]) {
@@ -3079,6 +3080,56 @@ angular.module('controllers', [])
                 $scope.content = results.data;
             });
 
+            //Dropdown Menu Bar
+            $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
+            $rootScope.dropdownMenuBarButtonHide = true;
+            $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
+            $rootScope.dropdownMenuBar = [];
+            //SentenceBar button to open dropdown menu bar when hover
+            $("#idSentenceBar").hover(function () {
+                console.log('hover');
+                $scope.dropdownMenuOpen = true;
+            });
+            //Choose the buttons to show on bar
+            dropdownMenuBarInit($rootScope.interfaceLanguageId)
+                    .then(function () {
+                        //Choose the buttons to show on bar
+                        angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                            if (value.href == '/' || value.href == '/info' || value.href == 'editPanel' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
+                                value.show = true;
+                            } else {
+                                value.show = false;
+                            }
+                        });
+                    });
+            //function to change html view
+            $scope.go = function (path) {
+                if (path == '/') {
+                    $scope.config();
+                } else if (path == 'logout') {
+                    $('#logoutModal').modal('toggle');
+                } else if (path == 'editPanel') {
+                    $scope.edit();
+                } else {
+                    $location.path(path);
+                    $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                }
+            };
+
+            //Log Out Modal
+            $scope.img = [];
+            $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
+            $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
+            Resources.main.get({'section': 'logoutModal', 'idLanguage': $rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
+                    .then(function (results) {
+                        $scope.logoutContent = results.data;
+                    });
+            $scope.logout = function () {
+                $scope.viewActived = false;
+                $timeout(function () {
+                    AuthService.logout();
+                }, 1000);
+            };
 
             $scope.back = function () {
                 $rootScope.boardToShow = $scope.backBoard;

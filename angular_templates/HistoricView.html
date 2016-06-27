@@ -4,8 +4,8 @@
 <link rel="stylesheet" href="css/historic.css"/>
 <audio id="utterance" src="{{sound}}" type="audio/mp3"></audio>
 <style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;
-                             -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
-    </style>
+    -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
+</style>
 
     <script>
 
@@ -37,7 +37,7 @@
         }
         }
     </script>
-
+<div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
     <!--menu superior dropdown-->
     <div id="main" style="background-image: url('/img/srcWeb/patterns/fons.png');background-size:100% 100%" ng-click="scanLeftClick()" ng-right-click="scanRightClick()">
     <div class="row historicView">
