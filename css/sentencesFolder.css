@@ -8,7 +8,7 @@
 .boxSentencesFolder{
     height: 90vh;
 }
-.histFolder{
+.folder{
     padding-top: 4vh;
     padding-bottom: 4vh;
     padding-left: 4vw;
@@ -22,6 +22,9 @@
     padding-right: 2vw;
     height: 58vh;
 }
+.scrollBoxModal{
+    height: 40vh;
+}
 .insideScroll{
     padding-right: 2vw;
 }
@@ -32,8 +35,14 @@
 .positionIndex2{
     position: relative;
     z-index: 2;
+}.histTabFolder{
+    border-top-left-radius: 1vh;
+    border-top-right-radius: 1vh;
+    height: 1.5vh;
+    background-color: white;
+    margin-left: 3vh;
 }
-.histTabFolder{
+.tabFolder{
     border-top-left-radius: 0.5vw;
     border-top-right-radius: 0.5vw;
     height: 0.75vw;
@@ -42,7 +51,7 @@
     margin-left: 1.5vw;
     margin-top: 0.25vw;
 }
-.histTabFolderShadow{
+.tabFolderShadow{
     border-top-left-radius: 0.5vw;
     border-top-right-radius: 0.5vw;
     height: 0.75vw;
@@ -51,30 +60,55 @@
     margin-left: 2vw;
 }
 .histContentFolder{
+    border-radius: 1vh;
+    height: 10vh;
+    margin-bottom: 1vh;
+    cursor: pointer;
+}
+.histContentFolder:hover{
+    opacity: 0.6;
+}
+.contentFolder{
     border-radius: 0.5vw;
     height: 5vw;
     width: 35vw;
 }
-.histContentFolderShadow{
+.contentFolderShadow{
     border-radius: 0.5vw;
     height: 5vw;
     width: 35vw;
     margin-left: 0.5vw;
     background-color: #393939;
 }
-.imgHistFolder{
+.imgFolder{
     height: 3.5vw;
     width: auto;
     margin-top: 0.75vw;
     margin-left: 1.25vw;
 }
+.imgHistFolder{
+    height: 7vh;
+    width: auto;
+    margin-top: 1.5vh;
+    margin-left: 2.5vh;
+}
 .folderTitle{
-    margin-top: 1.75vw;
+    margin-top: 1.5vw;
     font-size: 1.75vw;
 }
 .scrollOverflow{
     height: 100%;
     overflow: hidden;
+}
+.folderHistTitle{
+    margin-top: 3.5vh;
+    font-size: 3.5vh;
+}
+.histFolder{
+    margin-right: 2vw;
+}
+.marginModalTopHist{
+    margin-top: 20vh;
 }
 .sentenceBox{
     border-radius: 1vh;
