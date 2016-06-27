@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="{{baseurl}}/libraries/scrollbarPanel.css">
 <div ng-include="'/angular_templates/logoutModal.html'"></div>
 <div ng-include="'/angular_templates/ConfirmCopyGroupBoard.html'"></div>
+<div ng-include="'/angular_templates/ConfirmEditAddWord.html'"></div>
 
 <style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
@@ -55,16 +56,15 @@
                     <div class="col-xs-offset-1 scrollMenuPanels" ng-style="!isScrollH ? {'width':'98%'} : {'width':'84%'}" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meH" is-bar-shown="isScrollH">
                         <div class="scrollWidth">
                             <div class="row buttonAddFolder">+</div>
-                            <!-- XAVI!!!!!: cuando hagas el ng-repeat copia esto  "on-Finish-Loop="nombredeevento" "y avisame y te hago la "funcion" para que se recoloque-->
                             <div class="row histFolder" ng-repeat="folder in historicFolders | orderBy:'folderOrder'" on-Finish-Loop="scrollbarHistoric"><div class="row"><div class="col-xs-2 histTabFolder" style="background-color: #{{folder.folderColor}}"></div></div>
                                 <div class="row"><div class="col-xs-12 histContentFolder" style="background-color: #{{folder.folderColor}}">
                                         <div class="row">
                                             <div class="col-xs-3"><img class="img-rounded imgHistFolder" ng-src="{{folder.imgSFolder}}"/></div>
                                             <div class="col-xs-6 folderTitle">{{folder.folderName}}</div>
-                                            <div class="col-xs-3 folderEditBigButton" ng-show="folder.ID_Folder=='0'" >Edita <div class="icon-pencil"></div></div>
-                                            <div class="col-xs-3" ng-show="folder.ID_Folder!='0'" >
+                                            <div class="col-xs-3 folderEditBigButton" ng-click="goSentencesFolder(folder.ID_Folder)" ng-show="folder.ID_Folder<0" >Entra <div class="icon-folder-open"></div></div>
+                                            <div class="col-xs-3" ng-show="folder.ID_Folder>0" >
                                                 <div class="row folderUpButton" ng-click="upFolder(folder.folderOrder)">Mou <div class="icon-circle-arrow-up"></div></div>
-                                                <div class="row folderEditButton">Edita <div class="icon-pencil"></div></div>
+                                                <div class="row folderEditButton" ng-click="goSentencesFolder(folder.ID_Folder)">Edita <div class="icon-pencil"></div></div>
                                                 <div class="row folderDownButton" ng-click="downFolder(folder.folderOrder)">Mou <div class="icon-circle-arrow-down"></div></div>
                                             </div>
                                         </div>
@@ -84,7 +84,7 @@
                 <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
             </div>
             <div class="row marginTopFolderButtons">
-                <div  class="col-xs-offset-3 col-xs-2">
+                <div  class="col-xs-offset-1 col-xs-2">
                     <div class=" imgRounded FolderButton" ng-click="addWord(1, 'name')">
                         MODIF: nom
                     </div>
@@ -92,6 +92,11 @@
                 <div  class="col-xs-offset-2 col-xs-2">
                     <div class=" imgRounded FolderButton" ng-click="addWord(1, 'adj')">
                         MODIF: adjectiu
+                    </div>
+                </div>
+                <div  class="col-xs-offset-2 col-xs-2">
+                    <div class=" imgRounded FolderButton" ng-click="addWord(0, 'edit')">
+                        MODIF: editar
                     </div>
                 </div>
             </div>

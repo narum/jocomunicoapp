@@ -3,6 +3,7 @@ angular.module('controllers')
         // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
         if (!$rootScope.isLogged) {
             $location.path('/login');
+            $rootScope.dropdownMenuBarValue = '/'; //Dropdown bar button selected on this view
         }
         // Pedimos los textos para cargar la pagina
         txtContent("panelgroup").then(function (results) {
@@ -72,9 +73,9 @@ angular.module('controllers')
         $scope.historicFolders=[];
         Resources.main.get({'funct': "getSentenceFolders"}).$promise
         .then(function (results) {
-            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
-            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastWeek', 'imgSFolder':'img/pictos/semana.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
-            $scope.historicFolders.push({'ID_Folder':'0', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastMonth', 'imgSFolder':'img/pictos/mes.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
+            $scope.historicFolders.push({'ID_Folder':'-1', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
+            $scope.historicFolders.push({'ID_Folder':'-7', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastWeek', 'imgSFolder':'img/pictos/semana.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
+            $scope.historicFolders.push({'ID_Folder':'-30', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastMonth', 'imgSFolder':'img/pictos/mes.png', 'folderColor':'dfdfdf', 'folderOrder':'0'});
             angular.forEach(results.folders, function (value) {
                 $scope.historicFolders.push(value);
             });
@@ -100,6 +101,11 @@ angular.module('controllers')
                 $scope.historicFolders.sort(function(a, b){return a.folderOrder-b.folderOrder});
             }
         };
+        //go to folder view
+        $scope.goSentencesFolder = function(folder){
+            $location.path('/sentencesFolder/'+ folder);
+            $rootScope.dropdownMenuBarValue = '';
+        }
 
         //Scrollbar inside div
         $scope.$on('scrollbar.show', function () {
@@ -124,8 +130,17 @@ angular.module('controllers')
         };
 
         $scope.addWord = function (newModif,addWordType) {
-            $rootScope.addWordparam = {newmod: newModif,type: addWordType};
-            $location.path('/addWord');
+            if (newModif == 1){
+                $rootScope.addWordparam = {newmod: newModif,type: addWordType};
+                $location.path('/addWord');
+            }
+            if (newModif == 0 && addWordType == "edit"){
+                $rootScope.addWordparam = {newmod: newModif,type: addWordType};
+                //var URL = $scope.baseurl + "AddWord/getDBAll";
+                //URL = $scope.baseurl + "SearchWord/getDBAll";
+                $('#ConfirmEditAddWord').modal({backdrop: 'static'});
+            }
+            
         };
         $scope.initPanelGroup = function () {
             var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
@@ -273,6 +288,52 @@ angular.module('controllers')
         $scope.$on('scrollbarHistoric', function (ngRepeatFinishedEvent) {
             $scope.$broadcast('rebuild:meH');
         });
-    })
+        
+        
+        
+        $scope.searchDoneAddWord = function (name, Searchtype)
+            {
+
+                var URL = "";
+                var postdata = {id: name};
+                //Radio button function parameter, to set search type
+                switch (Searchtype)
+                {
+                    case "Tots":
+                        URL = $scope.baseurl + "AddWord/getDBAll";
+                        break;
+                    case "Noms":
+                        URL = $scope.baseurl + "AddWord/getDBNames";
+                        break;
+                    case "Verb":
+                        URL = $scope.baseurl + "AddWord/getDBVerbs";
+                        break;
+                    case "Adj":
+                        URL = $scope.baseurl + "AddWord/getDBAdj";
+                        break;
+                    case "Exp":
+                        URL = $scope.baseurl + "AddWord/getDBExprs";
+                        break;
+                    case "Altres":
+                        URL = $scope.baseurl + "AddWord/getDBOthers";
+                        break;
+                    default:
+                        URL = $scope.baseurl + "AddWord/getDBAll";
+                }
+                //Request via post to controller search data from database
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.dataWordAddWord = response.data;
+                        });
+            };
+            $scope.searchAddWord = function (name, Searchtype)
+            {
+                $timeout.cancel($scope.searchTimeout);
+                $scope.searchTimeout = $timeout(function () {
+                    $scope.searchDoneAddWord(name, Searchtype);
+                }, 500);
+            };
+    });
 
 

@@ -2617,7 +2617,7 @@ angular.module('controllers', [])
             {
                 $timeout.cancel($scope.searchTimeout);
                 $scope.searchTimeout = $timeout(function () {
-                    $scope.searchDone(name, Searchtype)
+                    $scope.searchDone(name, Searchtype);
                 }, 500);
             };
             //get all the photos attached to the pictos

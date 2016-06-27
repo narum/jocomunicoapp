@@ -53,6 +53,15 @@
 .addWordFromField{
     padding: 1vh;
 }
+.addWordFromPaddingH{
+    padding: 10vh 8vh;
+}
+.addWordFromPadding{
+    padding: 6vh 8vh;
+}
+.marginTopAdj{
+    margin-top: 20px;
+}
 .addWordForm7c5{
     height: 7.5%;
     padding: 0.25vh;
@@ -65,8 +74,16 @@
     height: 22.5%;
     padding: 0.25vh;
 }
+.addWordForm25{
+    height: 25%;
+    padding: 0.25vh;
+}
 .addWordForm40{
     height: 40%;
+    padding: 0.25vh;
+}
+.addWordForm50{
+    height: 50%;
     padding: 0.25vh;
 }
 input.switchclear:empty
@@ -132,4 +149,8 @@ input.switchclear:checked ~ label:before
 input.switchclear:checked ~ label:after
 {
     margin-left: 2em;
+}
+.addWordText{
+    color: #4c4c4c;
+    font-weight: bold;
 }
