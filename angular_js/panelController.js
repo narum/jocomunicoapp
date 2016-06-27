@@ -58,16 +58,6 @@ angular.module('controllers')
         $scope.img.Patterns4 = '/img/srcWeb/patterns/pattern4.png';
         $scope.img.Patterns6 = '/img/srcWeb/patterns/pattern6.png';
         $scope.img.loading = '/img/srcWeb/Login/loading.gif';
-        
-//        //Historic folders day/week/month
-//        Resources.main.get({'IdU': $rootScope.userId}, {'funct': "getHistoric"}).$promise
-//        .then(function (results) {
-//            $scope.historicFolders.push({'ID_Folder':'0','name':'today', 'img':'img/pictos/hoy.png', 'sentences':results.today});
-//            $scope.historicFolders.push({'ID_Folder':'0','name':'lastWeek', 'img':'img/pictos/semana.png', 'sentences':results.lastWeek});
-//            $scope.historicFolders.push({'ID_Folder':'0','name':'lastMonth', 'img':'img/pictos/mes.png', 'sentences':results.lastMonth});
-//            console.log(results);
-//            console.log($scope.historicFolders);
-//        });
 
         //User sentence folders
         $scope.historicFolders=[];

@@ -274,13 +274,41 @@ class Main extends REST_Controller {
         $ID_Folder = $this->query('ID_Folder');
 
         if($ID_Folder<0){
-            $sol = $this->main_model->getHistoric($idusu, ($ID_Folder * (-1)));
+            $sentences = $this->main_model->getHistoric($idusu, ($ID_Folder * (-1)));
         }else{
-            $sol='sentence';
+            $folder=$this->main_model->getSingleData('S_Folder', 'ID_SFUser', $idusu, 'ID_Folder', $ID_Folder);
+            $sentences = $this->main_model->getSingleData('S_Sentence', 'ID_SSUser', $idusu, 'ID_SFolder', $ID_Folder);
         }
         
         $response = [
-            'ID_Folder' => $sol
+            'sentences' => $sentences,
+            'folder' => $folder[0]
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    //
+    public function addSentenceOnFolder_post()
+    {
+        $idusu = $this->session->userdata('idusu');
+        $ID_Folder = $this->query('ID_Folder');
+        $ID_SHistoric = $this->query('ID_SHistoric');
+        
+        //Get sentence
+        $sentence = $this->main_model->getHistoricSentence($idusu, $ID_SHistoric);
+        
+        //Add and remove some properties
+        $sentence['ID_SFolder'] = $ID_Folder;
+        $sentence['ID_SSUser'] = $idusu;
+        unset($sentence['ID_SHistoric']);
+        unset($sentence['ID_SHUser']);
+        
+        //Save sentence
+        $saved=$this->main_model->saveData('S_Sentence', $sentence);
+        
+        $response = [
+            'saved' => $saved,
+            'ID_Folder' => $sentence
         ];
         
         $this->response($response, REST_Controller::HTTP_OK);

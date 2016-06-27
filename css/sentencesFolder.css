@@ -8,8 +8,25 @@
 .boxSentencesFolder{
     height: 90vh;
 }
-.histFolder{
-    padding: 4vh 4vw;
+.folder{
+    padding-top: 4vh;
+    padding-bottom: 4vh;
+    padding-left: 4vw;
+    height: 84vh;
+}
+.titleFolderBox{
+    padding-right: 4vw;
+    height: 18vh;
+}
+.scrollBox{
+    padding-right: 2vw;
+    height: 58vh;
+}
+.scrollBoxModal{
+    height: 40vh;
+}
+.insideScroll{
+    padding-right: 2vw;
 }
 .positionIndex1{
     position: fixed;
@@ -18,8 +35,14 @@
 .positionIndex2{
     position: relative;
     z-index: 2;
+}.histTabFolder{
+    border-top-left-radius: 1vh;
+    border-top-right-radius: 1vh;
+    height: 1.5vh;
+    background-color: white;
+    margin-left: 3vh;
 }
-.histTabFolder{
+.tabFolder{
     border-top-left-radius: 0.5vw;
     border-top-right-radius: 0.5vw;
     height: 0.75vw;
@@ -28,7 +51,7 @@
     margin-left: 1.5vw;
     margin-top: 0.25vw;
 }
-.histTabFolderShadow{
+.tabFolderShadow{
     border-top-left-radius: 0.5vw;
     border-top-right-radius: 0.5vw;
     height: 0.75vw;
@@ -37,28 +60,141 @@
     margin-left: 2vw;
 }
 .histContentFolder{
+    border-radius: 1vh;
+    height: 10vh;
+    margin-bottom: 1vh;
+    cursor: pointer;
+}
+.histContentFolder:hover{
+    opacity: 0.6;
+}
+.contentFolder{
     border-radius: 0.5vw;
     height: 5vw;
     width: 35vw;
 }
-.histContentFolderShadow{
+.contentFolderShadow{
     border-radius: 0.5vw;
     height: 5vw;
     width: 35vw;
     margin-left: 0.5vw;
     background-color: #393939;
 }
-.imgHistFolder{
+.imgFolder{
     height: 3.5vw;
     width: auto;
     margin-top: 0.75vw;
     margin-left: 1.25vw;
 }
+.imgHistFolder{
+    height: 7vh;
+    width: auto;
+    margin-top: 1.5vh;
+    margin-left: 2.5vh;
+}
 .folderTitle{
-    margin-top: 1.75vw;
+    margin-top: 1.5vw;
     font-size: 1.75vw;
 }
 .scrollOverflow{
-    height: 50vh;
+    height: 100%;
     overflow: hidden;
+}
+.folderHistTitle{
+    margin-top: 3.5vh;
+    font-size: 3.5vh;
+}
+.histFolder{
+    margin-right: 2vw;
+}
+.marginModalTopHist{
+    margin-top: 20vh;
+}
+.sentenceBox{
+    border-radius: 1vh;
+    height: 10vh;
+    margin-bottom: 2vh;
+    background-color: #FFFFFF;
+}
+
+.editButton{
+    height: 4vh;
+    background-color: #92dbe1;
+    text-align: center;
+    font-size: 2vh;
+    color: white;
+    padding-top: 0.6vh;
+    cursor: pointer;
+}
+.editButton:hover{
+    background-color: #5d8d91;
+}
+.copyButton{
+    height: 3vh;
+    border-top-right-radius: 1vh;
+    background-color: #81c1c6;
+    text-align: center;
+    font-size: 2vh;
+    color: white;
+    padding-top: 0.1vh;
+    cursor: pointer;
+}
+.copyButton:hover{
+    background-color: #5d8d91;
+}
+.deleteButton{
+    height: 3vh;
+    border-bottom-right-radius: 1vh;
+    background-color: #81c1c6;
+    text-align: center;
+    font-size: 2vh;
+    color: white;
+    padding-top: 0.1vh;
+    cursor: pointer;
+}
+.deleteButton:hover{
+    background-color: #5d8d91;
+}
+
+.grayButton {
+    margin-top: 0.75vw;
+    height: 5vw;
+    font-size: 2.5vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 0.5vw;
+    color: white;
+    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
+    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background-color: #666666;
+    border: none;
+}
+.grayButton:hover{
+    background-color: black;
+}
+.turquoiseButton {
+    margin-top: 0.75vw;
+    height: 5vw;
+    font-size: 2.5vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 0.5vw;
+    color: white;
+    background: #3c8188;
+    background: -webkit-linear-gradient(90deg, #3c8188 14%, #7bd0d7 100%);
+    background: -moz-linear-gradient(90deg, #3c8188 14%, #7bd0d7 100%);
+    background: -ms-linear-gradient(90deg, #3c8188 14%, #7bd0d7 100%);
+    background: -o-linear-gradient(90deg, #3c8188 14%, #7bd0d7 100%);
+    border: none;
+}
+.turquoiseButton:hover{
+    background: #2a5b60;
+    background: -webkit-linear-gradient(90deg, #2a5b60 14%, #3c8188 100%);
+    background: -moz-linear-gradient(90deg, #2a5b60 14%, #3c8188 100%);
+    background: -ms-linear-gradient(90deg, #2a5b60 14%, #3c8188 100%);
+    background: -o-linear-gradient(90deg, #2a5b60 14%, #3c8188 100%);
 }

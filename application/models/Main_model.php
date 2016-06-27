@@ -265,4 +265,11 @@ class Main_model extends CI_Model {
         $query = $this->db->delete('S_Historic');
         return;
     }
+    //get historic sentence
+    function getHistoricSentence($idusu, $ID_SHistoric){
+        $this->db->where('ID_SHistoric', $ID_SHistoric);
+        $this->db->where('ID_SHUser', $idusu);
+        $query = $this->db->get('S_Historic');
+        return $query->result_array()[0];
+    }
 }
