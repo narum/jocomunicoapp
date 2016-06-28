@@ -72,12 +72,12 @@ angular.module('controllers')
         $scope.img.loading = '/img/srcWeb/Login/loading.gif';
         
         //Variable declaration
-        $scope.viewActived = true;
-        var historicFolder = false;
+        $scope.viewActived = false;
+        $scope.historicFolder = false;
         
         //Folder info
         if($routeParams.folderId<0){
-            historicFolder = true;
+            $scope.historicFolder = true;
             if($routeParams.folderId=='-1'){
                 $scope.folderSelected = {'ID_Folder':'-1', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0'};
             }else if($routeParams.folderId=='-7'){
@@ -91,6 +91,7 @@ angular.module('controllers')
             Resources.main.save({'ID_Folder': $routeParams.folderId},{'funct': "getSentencesOrHistoricFolder"}).$promise
             .then(function (results) {
                 $scope.sentences = results.sentences;
+                $scope.viewActived = true;
                 if($routeParams.folderId>0){
                     $scope.folderSelected = results.folder;
                 }
@@ -98,22 +99,22 @@ angular.module('controllers')
         };
         getSentences();
         
-        //Copy sentence modal on folder
+        //Copy sentence on folder
         $scope.copySentence = function(ID_SHistoric,ID_SSentence){
-            if(historicFolder){
+            if($scope.historicFolder){
                 $scope.sentenceToCopy = ID_SHistoric;
             }else{
                 $scope.sentenceToCopy = ID_SSentence;
             }
             Resources.main.get({'funct': "getSentenceFolders"}).$promise
             .then(function (results) {
-                $scope.historicFolders = results.folders;
-                $('#copySentenceModal').modal('toggle');
+                $scope.folders = results.folders;
+                $('#copySentenceModal').modal('toggle');//Show modal
             });
         };
         $scope.copyOnFolder = function(ID_Folder){
-            $('#copySentenceModal').modal('hide');
-            Resources.main.save({'ID_Folder':ID_Folder, 'ID_Sentence':$scope.sentenceToCopy,'historicFolder':historicFolder},{'funct': "addSentenceOnFolder"}).$promise
+            $('#copySentenceModal').modal('hide');//Hide modal
+            Resources.main.save({'ID_Folder':ID_Folder, 'ID_Sentence':$scope.sentenceToCopy,'historicFolder':$scope.historicFolder},{'funct': "addSentenceOnFolder"}).$promise
             .then(function (results) {
                 getSentences();
             });
