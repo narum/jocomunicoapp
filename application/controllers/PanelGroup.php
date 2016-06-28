@@ -12,6 +12,7 @@ class PanelGroup extends REST_Controller {
 
         $this->load->library('session');
         $this->load->model('panelInterface');
+        $this->load->model('Lexicon');
         $this->load->model('BoardInterface');
     }
 
@@ -186,7 +187,10 @@ class PanelGroup extends REST_Controller {
                     $this->BoardInterface->changePrimaryBoard($idDst, $IDGboard);
                     $idToShow = $idDst;
                 }
-                $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
+                $boardtables = $this->BoardInterface->getBoardTables($idSrc);
+                foreach ($boardtables as $row) {
+                    $boardtables = $this->BoardInterface->copyBoardTables($idDst, $sameGroupBoard, $row);
+                }
                 array_push($changedLinks, $idSrc);
                 array_push($changedLinks, $idDst);
             }
@@ -211,9 +215,9 @@ class PanelGroup extends REST_Controller {
         $idusu = $request->user;
         $srcGroupBoard = $request->id;
         $changedLinks = array();
-                
+
         $primaryBoard = $this->BoardInterface->getInfoGroupBoard($srcGroupBoard);
-        echo "iduser: " . $idusu;
+
         $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
         $boards = $this->BoardInterface->getBoards($srcGroupBoard);
 
@@ -231,7 +235,20 @@ class PanelGroup extends REST_Controller {
             if ($boards[$i]->primaryBoard) {
                 $this->BoardInterface->changePrimaryBoard($idDst, $IDGboard);
             }
-            $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
+            $boardtables = $this->BoardInterface->getBoardTables($idSrc);
+            foreach ($boardtables as $row) {
+                $boardtables = $this->BoardInterface->copyBoardTables($idDst, $sameGroupBoard, $row);
+                $idusuorigen = $this->session->userdata('idusu');
+                if ($idusuorigen != $idusu) {
+                    //MODIF: copiar vocabulirio ;)
+                }
+                if ($row->ID_CPicto != null) {
+                    $this->Lexicon->addWordStatsX1($row->ID_CPicto, $idusu, true);
+                    if ($row->imgCell != null) {
+                        $this->Lexicon->addImgTempStatsX1($row->ID_CPicto, $idusu, $row->imgCell);
+                    }
+                }
+            }
             array_push($changedLinks, $idSrc);
             array_push($changedLinks, $idDst);
         }
@@ -250,9 +267,9 @@ class PanelGroup extends REST_Controller {
         $request = json_decode($postdata);
         $user = $request->user;
         $pass = $request->pass;
-    
+
         $userObj = $this->panelInterface->getUser($user, $pass);
-        
+
         $response = [
             'userName' => $user,
             'userID' => $userObj[0]->ID_User

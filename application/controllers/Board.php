@@ -107,7 +107,7 @@ class Board extends REST_Controller {
         if ($output != null) {
             $columns = $output[0]->width;
             $rows = $output[0]->height;
-            $autoReturn = $output[0]->autoReturn;
+            $autoRead = $output[0]->autoRead;
 
             $array = $this->BoardInterface->getCellsBoard($idboard);
 
@@ -117,6 +117,12 @@ class Board extends REST_Controller {
                 'row' => $rows,
                 'data' => $array,
                 'autoRead' => $autoRead
+            ];
+
+            $this->response($response, REST_Controller::HTTP_OK);
+        }else{
+            $response = [
+                'data' => null
             ];
 
             $this->response($response, REST_Controller::HTTP_OK);
@@ -814,7 +820,10 @@ class Board extends REST_Controller {
         $autoReadSentence = $request->autoread ? '1' : '0';
 
         $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
-        $this->BoardInterface->copyBoardTables($idSrc, $idDst, $sameGroupBoard);
+        $boardtables = $this->BoardInterface->getBoardTables($idSrc);
+        foreach ($boardtables as $row) {
+            $boardtables = $this->BoardInterface->copyBoardTables($idDst, $sameGroupBoard, $row);
+        }
         /*
          * This commented part can update the size of the board if it is implemented.
          * 

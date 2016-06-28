@@ -119,10 +119,6 @@ angular.module('controllers')
             return n;
         };
 
-        $scope.addWord = function (newModif,addWordType) {
-            $rootScope.addWordparam = {newmod: newModif,type: addWordType};
-            $location.path('/addWord');
-        };
         $scope.initPanelGroup = function () {
             var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
 
@@ -269,6 +265,68 @@ angular.module('controllers')
         $scope.$on('scrollbarHistoric', function (ngRepeatFinishedEvent) {
             $scope.$broadcast('rebuild:meH');
         });
-    })
+        
+        
+        
+        $scope.addWord = function (newModif,addWordType) {
+            if (newModif == 1){
+                $rootScope.addWordparam = {newmod: newModif,type: addWordType};
+                $location.path('/addWord');
+            }
+            if (newModif == 0 && addWordType == "edit"){
+                $rootScope.addWordparam = {newmod: newModif,type: addWordType};
+                $('#ConfirmEditAddWord').modal({backdrop: 'static'});
+            }
+            
+        };
+        $scope.selectAddWordEdit = function(newModif, id){
+            $rootScope.addWordparam = {newmod: newModif,type: id};
+            $timeout(function() {$location.path('/addWord');},1000);
+        };
+        
+        $scope.searchDoneAddWord = function (name, Searchtype)
+            {
+
+                var URL = "";
+                var postdata = {id: name};
+                //Radio button function parameter, to set search type
+                switch (Searchtype)
+                {
+                    case "Tots":
+                        URL = $scope.baseurl + "AddWord/getDBAll";
+                        break;
+                    case "Noms":
+                        URL = $scope.baseurl + "AddWord/getDBNames";
+                        break;
+                    case "Verb":
+                        URL = $scope.baseurl + "AddWord/getDBVerbs";
+                        break;
+                    case "Adj":
+                        URL = $scope.baseurl + "AddWord/getDBAdj";
+                        break;
+                    case "Exp":
+                        URL = $scope.baseurl + "AddWord/getDBExprs";
+                        break;
+                    case "Altres":
+                        URL = $scope.baseurl + "AddWord/getDBOthers";
+                        break;
+                    default:
+                        URL = $scope.baseurl + "AddWord/getDBAll";
+                }
+                //Request via post to controller search data from database
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.dataWordAddWord = response.data;
+                        });
+            };
+            $scope.searchAddWord = function (name, Searchtype)
+            {
+                $timeout.cancel($scope.searchTimeout);
+                $scope.searchTimeout = $timeout(function () {
+                    $scope.searchDoneAddWord(name, Searchtype);
+                }, 500);
+            };
+    });
 
 

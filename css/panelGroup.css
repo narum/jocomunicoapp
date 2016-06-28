@@ -177,3 +177,25 @@
     margin-top: 5vh;
     overflow: hidden;
 }
+
+.textCellAddWord{
+    top: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+    z-index: 2;
+    position: relative;
+    padding-left: 4px;
+    cursor: default;
+    text-transform: uppercase
+}
+.content1EditWord{ 
+    height: 10vh;
+}
+.searchBoxEditWord{
+    width: 100%;
+}
+.radioEditWord{
+    height: 3vh;
+}
