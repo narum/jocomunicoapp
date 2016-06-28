@@ -49,9 +49,9 @@
                                         <div class="col-xs-1"></div>
                                         <div class="col-xs-10">{{sentence.generatorString}}</div>
                                         <div class="col-xs-1">
-                                            <div class="row copyButton" ng-click="copySentence(sentence.ID_SHistoric)">Copiar <div class="icon-copy"></div></div>
+                                            <div class="row copyButton" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
                                             <div class="row editButton">Edita <div class="icon-pencil"></div></div>
-                                            <div class="row deleteButton">Eliminar <div class="icon-trash"></div></div>
+                                            <div class="row deleteButton" ng-click="deleteSentence(sentence.ID_SSentence)">Eliminar <div class="icon-trash"></div></div>
                                         </div>
                                     </div>
                                 </div>

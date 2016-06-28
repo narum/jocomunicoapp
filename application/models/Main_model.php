@@ -87,6 +87,13 @@ class Main_model extends CI_Model {
         
         return $data;
     }
+    // Delete single data from table $table where content in column $column are like $data
+    public function deleteSingleData($table, $column, $data, $column2, $data2){
+        $this->db->where($column, $data);// filtrem per columnes
+        $this->db->where($column2, $data2);// filtrem per columnes
+        $query = $this->db->delete($table);
+        return $query;
+    }
     
     // Get data from table $table where content in column $column are like $data
     public function getData($table, $column, $data){

@@ -49,11 +49,17 @@ angular.module('controllers')
             }, 1000);
         };
         //scrollbars
-        $scope.$on('scrollbarSentences', function (ngRepeatFinishedEvent) {
+        $scope.$on('scrollbarSentences', function () {
             $scope.$broadcast('rebuild:meS');
         });
-        $scope.$on('scrollbarSentences2', function (ngRepeatFinishedEvent) {
+        $scope.$on('scrollbarSentences2', function () {
             $scope.$broadcast('rebuild:meS2');
+        });
+        $scope.$on('scrollbar.show', function () {
+            console.log('Scrollbar show');
+        });
+        $scope.$on('scrollbar.hide', function () {
+            console.log('Scrollbar hide');
         });
 
 
@@ -67,13 +73,11 @@ angular.module('controllers')
         
         //Variable declaration
         $scope.viewActived = true;
-        $scope.historicSentencesView = false;
-        if($routeParams.folderId<0){
-            $scope.historicSentencesView = true;
-        }
+        var historicFolder = false;
         
         //Folder info
         if($routeParams.folderId<0){
+            historicFolder = true;
             if($routeParams.folderId=='-1'){
                 $scope.folderSelected = {'ID_Folder':'-1', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0'};
             }else if($routeParams.folderId=='-7'){
@@ -83,18 +87,24 @@ angular.module('controllers')
             }
         }
         //Get sentences folder or Historic folder
-        Resources.main.save({'ID_Folder': $routeParams.folderId},{'funct': "getSentencesOrHistoricFolder"}).$promise
-        .then(function (results) {
-            console.log(results);
-            $scope.sentences = results.sentences;
-            if($routeParams.folderId>0){
-                $scope.folderSelected = results.folder;
-            }
-        });
+        var getSentences = function(){
+            Resources.main.save({'ID_Folder': $routeParams.folderId},{'funct': "getSentencesOrHistoricFolder"}).$promise
+            .then(function (results) {
+                $scope.sentences = results.sentences;
+                if($routeParams.folderId>0){
+                    $scope.folderSelected = results.folder;
+                }
+            });
+        };
+        getSentences();
         
         //Copy sentence modal on folder
-        $scope.copySentence = function(ID_SHistoric){
-            $scope.sentenceToCopy = ID_SHistoric;
+        $scope.copySentence = function(ID_SHistoric,ID_SSentence){
+            if(historicFolder){
+                $scope.sentenceToCopy = ID_SHistoric;
+            }else{
+                $scope.sentenceToCopy = ID_SSentence;
+            }
             Resources.main.get({'funct': "getSentenceFolders"}).$promise
             .then(function (results) {
                 $scope.historicFolders = results.folders;
@@ -103,9 +113,16 @@ angular.module('controllers')
         };
         $scope.copyOnFolder = function(ID_Folder){
             $('#copySentenceModal').modal('hide');
-            Resources.main.save({'ID_Folder':ID_Folder, 'ID_SHistoric':$scope.sentenceToCopy},{'funct': "addSentenceOnFolder"}).$promise
+            Resources.main.save({'ID_Folder':ID_Folder, 'ID_Sentence':$scope.sentenceToCopy,'historicFolder':historicFolder},{'funct': "addSentenceOnFolder"}).$promise
+            .then(function (results) {
+                getSentences();
+            });
+        };
+        $scope.deleteSentence = function(ID_SSentence){
+            Resources.main.save({'ID_SSentence':ID_SSentence},{'funct': "deleteSentenceFromFolder"}).$promise
             .then(function (results) {
                 console.log(results);
+                getSentences();
             });
         };
     });

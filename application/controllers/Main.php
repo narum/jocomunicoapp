@@ -292,24 +292,42 @@ class Main extends REST_Controller {
     {
         $idusu = $this->session->userdata('idusu');
         $ID_Folder = $this->query('ID_Folder');
-        $ID_SHistoric = $this->query('ID_SHistoric');
+        $ID_Sentence = $this->query('ID_Sentence');
+        $historicFolder = $this->query('historicFolder');
         
-        //Get sentence
-        $sentence = $this->main_model->getHistoricSentence($idusu, $ID_SHistoric);
-        
-        //Add and remove some properties
-        $sentence['ID_SFolder'] = $ID_Folder;
-        $sentence['ID_SSUser'] = $idusu;
-        unset($sentence['ID_SHistoric']);
-        unset($sentence['ID_SHUser']);
+        if($historicFolder=='true'){
+            //Get sentence from historic
+            $sentence = $this->main_model->getHistoricSentence($idusu, $ID_Sentence);
+            //Add and remove some fields of array
+            $sentence['ID_SFolder'] = $ID_Folder;
+            $sentence['ID_SSUser'] = $idusu;
+            unset($sentence['ID_SHistoric']);
+            unset($sentence['ID_SHUser']);
+        }else{
+            //Get sentence from folder
+            $sentence = $this->main_model->getSingleData('S_Sentence', 'ID_SSentence', $ID_Sentence, 'ID_SSUser', $idusu)[0];
+            //Add and remove some fields of array
+            $sentence['ID_SFolder'] = $ID_Folder;
+            unset($sentence['ID_SSentence']);
+        }
         
         //Save sentence
         $saved=$this->main_model->saveData('S_Sentence', $sentence);
         
         $response = [
             'saved' => $saved,
-            'ID_Folder' => $sentence
+            'sentence' => $sentence
         ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    //
+    public function deleteSentenceFromFolder_post()
+    {
+        $idusu = $this->session->userdata('idusu');
+        $ID_SSentence = $this->query('ID_SSentence');
+        
+        $response = $this->main_model->deleteSingleData('S_Sentence', 'ID_SSentence', $ID_SSentence, 'ID_SSUser', $idusu);
         
         $this->response($response, REST_Controller::HTTP_OK);
     }
