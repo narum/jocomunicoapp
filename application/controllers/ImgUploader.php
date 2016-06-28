@@ -29,7 +29,12 @@ class ImgUploader extends REST_Controller {
     }
 
     public function upload_post() {
-        $target_dir = "img/users/";
+        //"vocabulary" is a string.....
+        if (filter_input(INPUT_POST, 'vocabulary') == "true") {
+            $target_dir = "img/pictos/";
+        } else {
+            $target_dir = "img/users/";
+        }
         $errorText = array();
         $error = false;
         for ($i = 0; $i < count($_FILES); $i++) {
@@ -44,7 +49,7 @@ class ImgUploader extends REST_Controller {
             if (is_resource($handle)) {
                 fclose($handle);
                 //MODIF: lanzar error 
-                $errorProv = ["errorImg2" , $_FILES['file' . $i]['name']];
+                $errorProv = ["errorImg2", $_FILES['file' . $i]['name']];
                 array_push($errorText, $errorProv);
                 $error = true;
                 continue;
@@ -59,7 +64,7 @@ class ImgUploader extends REST_Controller {
                 $idusu = $this->session->userdata('idusu');
                 $this->ImgUploader_model->insertImg($idusu, basename($_FILES['file' . $i]['name']), $md5Name);
             } else {
-                $errorProv = ["errorImg2" , $_FILES['file' . $i]['name']];
+                $errorProv = ["errorImg2", $_FILES['file' . $i]['name']];
                 array_push($errorText, $errorProv);
                 $error = true;
                 continue;
@@ -67,7 +72,7 @@ class ImgUploader extends REST_Controller {
         }
 
         $response = [
-            'url' => $target_dir.$md5Name,
+            'url' => $target_dir . $md5Name,
             'errorText' => $errorText,
             'error' => $error
         ];
