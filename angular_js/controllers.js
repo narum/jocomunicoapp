@@ -1165,19 +1165,6 @@ angular.module('controllers', [])
                 }, 1000);
             };
 
-//            $scope.logOut = function () {
-//                ngDialog.openConfirm({
-//                    template: $scope.baseurl + '/angular_templates/ConfirmLogout.html',
-//                    scope: $scope,
-//                    className: 'ngdialog-theme-default dialogLogOut'
-//                }).then(function () {
-//                    AuthService.logout();
-//                }, function (value) {
-//
-//                });
-//
-//            };
-
             if (!$rootScope.isLogged) {
                 $location.path('/login');
             } else {
@@ -1215,7 +1202,7 @@ angular.module('controllers', [])
                 var Intervalscan = $scope.cfgTimeScanning;
                 function myTimer() {
                     if ($scope.isScanningCancel) {
-                        //We are not scanning cancel anmore
+                        //We are not scanning cancel anymore
                         $scope.isScanningCancel = false;
                     } else {
                         $scope.nextBlockScan();
@@ -1229,7 +1216,6 @@ angular.module('controllers', [])
                 if ($scope.inEdit) {
                     return false;
                 }
-                var userConfig = JSON.parse(localStorage.getItem('userData'));
                 $scope.inScan = true;
                 if ($scope.cfgScanningCustomRowCol == 0) {
                     $scope.getMaxScanBlock1();
@@ -1502,10 +1488,11 @@ angular.module('controllers', [])
                     }
                 }
             };
-            //MODIF: cambiar nombre a la funcion?
+            //Check if the cell have to be added to the array or not
             $scope.haveToBeScanned = function (picto) {
                 return (picto.activeCell == 1 && (picto.ID_CFunction != null || picto.ID_CPicto != null || picto.ID_CSentence != null || picto.ID_Fuction != null || picto.boardLink != null || picto.sentenceFolder));
             };
+            //OrderScan contains the order that the user establish so, whenever we pass to another scan (only first level) we have to determine the next by this array. Be carefulthe array start with 0 and the user order is 1, 2 and 3, so we don't have to increment the index, we use the current block orde to resolve what the next is
             $scope.nextBlockToScan = function (current) {
                 switch ($scope.orderScan[current]) {
                     case "prediction":
@@ -1744,7 +1731,7 @@ angular.module('controllers', [])
 
                 //-----------Iniciacion-----------
 
-                // Prediction bar configuration
+                // load user configuration in the scope
                 $scope.cfgPredOnOff = userConfig.cfgPredOnOff;
                 $scope.cfgPredBarVertHor = userConfig.cfgPredBarVertHor;
                 $scope.cfgPredBarNumPred = userConfig.cfgPredBarNumPred;
@@ -1761,7 +1748,7 @@ angular.module('controllers', [])
                         $scope.userViewWidth = 10;
                     }
                 }
-                // Sentece bar configuration
+                
                 $scope.cfgMenuHomeActive = userConfig.cfgMenuHomeActive;
                 $scope.cfgMenuReadActive = userConfig.cfgMenuReadActive;
                 $scope.cfgMenuDeleteLastActive = userConfig.cfgMenuDeleteLastActive;
@@ -1789,7 +1776,6 @@ angular.module('controllers', [])
                 $scope.orderScan[userConfig.cfgScanOrderPred - 1] = "prediction";
                 $scope.orderScan[userConfig.cfgScanOrderMenu - 1] = "sentence";
                 $scope.orderScan[userConfig.cfgScanOrderPanel - 1] = "board";
-                console.log($scope.orderScan);
                 $scope.cfgBgColorPanel = userConfig.cfgBgColorPanel;
                 $scope.cfgBgColorPred = userConfig.cfgBgColorPred;
                 $scope.cfgScanColor = userConfig.cfgScanColor;
@@ -1816,18 +1802,23 @@ angular.module('controllers', [])
                 }
                 $scope.getSentence();
                 $scope.getPred();
-                //If there are some request to edit from another controller, the edit panel it's loaded
+                //If there are some request from another controller, it's loaded
                 if ($rootScope.editPanelInfo != null) {
                     $scope.showBoard($rootScope.editPanelInfo.idBoard);
                     $scope.edit();
                     $rootScope.editPanelInfo = null;
                 } else if ($rootScope.boardToShow) {
-                    $scope.showBoard($rootScope.boardToShow);
+                    $scope.showBoard($rootScope.boardToShow).then(function () {
+                        if ($scope.cfgScanningOnOff == 1) {
+                            $scope.InitScan();
+                        }
+                    });
                     $rootScope.boardToShow = null;
                 } else {
                     $scope.getPrimaryUserBoard();
                 }
             };
+            //Get the current sentence in order to show to the user
             $scope.getSentence = function () {
                 var url = $scope.baseurl + "Board/getTempSentence";
 
@@ -1844,7 +1835,8 @@ angular.module('controllers', [])
                 $http.post(url).success(function (response)
                 {
                     $scope.idboard = response.idboard;
-                    if ($scope.idboard === null) {//MODIF:--Modal no hay panel principal en el grupo o no hay group panel principal
+                    //If the user doesn't have one or some gone wrong a error modal is displayed
+                    if ($scope.idboard === null) {
                         $('#errorNoPrimaryBoard').modal({backdrop: 'static'});
                     } else {
                         $scope.showBoard('0').then(function () {
@@ -1855,6 +1847,7 @@ angular.module('controllers', [])
                     }
                 });
             };
+            //When the user press acept (in the no primaryboard modal) panelgroups it's loaded 
             $scope.aceptErrorNPB = function () {
                 $location.path('/panelGroups');
             };
@@ -1876,7 +1869,7 @@ angular.module('controllers', [])
              */
             $scope.showBoard = function (id)
             {
-                //MODIF: leer texto panel
+                
                 //If the id is 0, show (reload) the actual board. Else the current board is changed (and showed)
                 if (id === '0') {
                     id = $scope.idboard;
@@ -1893,13 +1886,13 @@ angular.module('controllers', [])
                     $scope.rows = response.row;
                     $scope.data = response.data;
                     $scope.autoRead = response.autoRead;
+                    //Something gone wrong... (maybe he/she tried to access to another user's board)
                     if ($scope.data == null) {
                         $location.path('/panelGroups');
                     }
-                    //                    $scope.oldW = response.col;
-                    //                    $scope.oldH = response.row;
                 });
             };
+            //Load the recommenderArray that will be displayed in the prediction bar.
             $scope.getPred = function ()
             {
                 var url = $scope.baseurl + "Board/getPrediction";
@@ -1907,8 +1900,6 @@ angular.module('controllers', [])
                 {
                     $scope.recommenderArray = response.recommenderArray;
                 }).error(function (error) {
-                    //alert(error);
-                    //alert("error on predictor update building");
                 });
             };
 
@@ -1937,7 +1928,7 @@ angular.module('controllers', [])
                     $scope.userViewWidth = 8;
                     $scope.editViewWidth = 4;
                 }
-
+                //Load the colors from the DDBB in the drop down menu
                 $scope.getColors();
 
                 var url = $scope.baseurl + "Board/getCellboard";
@@ -1961,8 +1952,9 @@ angular.module('controllers', [])
                     $scope.colors = response.data;
                 });
             };
-
+            //Change the tab in the serach view (edit mode) between pictos and images
             $scope.changeEditSearch = function () {
+                alert("es esto");
                 if ($scope.typeSearh === "picto")
                     $scope.typeSearh = "img";
                 else
@@ -2117,14 +2109,23 @@ angular.module('controllers', [])
                     $scope.showBoard('0');
                 }).error(function (response) {});
             };
+            
             $scope.DenyOpenConfirmSize = function () {
+                //reload the dropdown menus
                 $scope.edit();
                 $scope.showBoard('0');
             };
 
 
             /*
-             * Add the selected pictogram to the sentence
+             * The user has clicked the cell. The cell can be:
+             *      SentenceFolder: The user will be redirected to the historic view
+             *      Sentence: The sentence will be readed
+             *      Picto: The picto is added to the sentece
+             *      Link to another board: the user will be redirected to this new board
+             *      Function: go to the historic, change the tipus or tme of the sentence...
+             * The last three can be together in the same cell
+             *      
              */
             $scope.clickOnCell = function (cell) {
 
@@ -2139,7 +2140,7 @@ angular.module('controllers', [])
                         return false;
                     }
                     var text = "";
-                    // Just read once.
+                    // Just read once, and, if the autoread is activated in this board we don't have to read (the text will be mixed up)
                     var readed = false;
                     if ($scope.autoRead) {
                         readed = true;
@@ -2180,6 +2181,7 @@ angular.module('controllers', [])
                         $scope.autoReturn();
                         $scope.automaticRead();
                     }
+                    //If we are in edit mode the user can not create a sentence (or whatever). But, the user can edit the color of the cells
                 } else if ($scope.inEdit && $scope.fv.painting) {
                     var postdata = {id: cell.ID_RCell, color: $scope.fv.colorPaintingSelected};
                     var url = $scope.baseurl + "Board/modifyColorCell";
@@ -2224,7 +2226,6 @@ angular.module('controllers', [])
             /*
              * If this option is true on confing, it will automatic click when mouse is over the div and the timeout ends.
              */
-
             $scope.TimeoutOverClick = function (type, object)
             {
                 if ($scope.inScan) {
@@ -2232,15 +2233,14 @@ angular.module('controllers', [])
                 }
                 //This timeout.cancel avoid possible multiple calls.
                 $timeout.cancel($scope.OverAutoClick);
+                //Check the element over we are
                 if (type === 0)
                 {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
                     $scope.OverAutoClick = $timeout(function () {
                         $scope.clickOnCell(object);
                     }, $scope.cfgTimeOver);
                 } else if (type === 1)
                 {
-                    //MODIF: No se perque tarda mes del temps que s'ha assignat
                     $scope.OverAutoClick = $timeout(function () {
                         $scope.addToSentence(object.id, object.imgPicto, object.pictotext);
                     }, $scope.cfgTimeOver);
@@ -2253,19 +2253,16 @@ angular.module('controllers', [])
                         }, $scope.cfgTimeOver);
                     } else if (object === 'generate')
                     {
-                        //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.generate();
                         }, $scope.cfgTimeOver);
                     } else if (object === 'deleteLast')
                     {
-                        //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.deleteLast();
                         }, $scope.cfgTimeOver);
                     } else if (object === 'deleteAll')
                     {
-                        //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.deleteAll();
                         }, $scope.cfgTimeOver);
@@ -2274,13 +2271,11 @@ angular.module('controllers', [])
                 {
                     if (object === 'Good')
                     {
-                        //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.feedback(1);
                         }, $scope.cfgTimeOver);
                     } else if (object === 'Bad')
                     {
-                        //MODIF: No se perque tarda mes del temps que s'ha assignat
                         $scope.OverAutoClick = $timeout(function () {
                             $scope.feedback(0);
                         }, $scope.cfgTimeOver);
@@ -2443,7 +2438,7 @@ angular.module('controllers', [])
                     $scope.getPred();
                 });
             };
-
+            
             $scope.goPrimaryBoard = function () {
                 $scope.config();
             };
@@ -2553,27 +2548,6 @@ angular.module('controllers', [])
                         });
             };
             /*
-             * Return uploaded images from database.
-             */
-            $scope.searchImg = function (name, typeImgEditSearch) {
-                var URL = "";
-                switch (typeImgEditSearch)
-                {
-                    case "Arasaac":
-                        URL = $scope.baseurl + "ImgUploader/getImagesArasaac";
-                        break;
-                    case "Uploads":
-                        URL = $scope.baseurl + "ImgUploader/getImagesUploads";
-                        break;
-                }
-                var postdata = {name: name};
-                $http.post(URL, postdata).
-                        success(function (response)
-                        {
-                            $scope.imgData = response.data;
-                        });
-            }
-            /*
              * Return pictograms from database. The result depends on 
              * Searchtype (noms, verbs...) and Name (letters with the word start with)
              */
@@ -2620,6 +2594,28 @@ angular.module('controllers', [])
                     $scope.searchDone(name, Searchtype);
                 }, 500);
             };
+            /*
+             * Return uploaded images from database. There are two types, the users images an the arasaac (not user images)
+             */
+            $scope.searchImg = function (name, typeImgEditSearch) {
+                var URL = "";
+                switch (typeImgEditSearch)
+                {
+                    case "Arasaac":
+                        URL = $scope.baseurl + "ImgUploader/getImagesArasaac";
+                        break;
+                    case "Uploads":
+                        URL = $scope.baseurl + "ImgUploader/getImagesUploads";
+                        break;
+                }
+                var postdata = {name: name};
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            $scope.imgData = response.data;
+                        });
+            }
+            
             //get all the photos attached to the pictos
             $scope.searchFoto = function (name)
             {
@@ -2632,7 +2628,7 @@ angular.module('controllers', [])
                             $scope.allImg = response.data;
                         });
             };
-            // Upload and resize the image and the, call savedata()
+            // Upload and resize the image
             $scope.uploadFile = function () {
                 $scope.myFile = document.getElementById('file-input').files;
                 $scope.uploading = true;
@@ -2732,25 +2728,6 @@ angular.module('controllers', [])
                                 $scope.CreateBoardData.width = $scope.range(10)[response.defWidth - 1].valueOf();
 
                                 $('#ConfirmCreateBoard').modal({backdrop: 'static'});
-
-                                //alert("INFO: " + $scope.CreateBoardData.height + " : " + $scope.CreateBoardData.width + " : " + $scope.CreateBoardData.idGroupBoard);
-//                                ngDialog.openConfirm({
-//                                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
-//                                    scope: $scope,
-//                                    className: 'ngdialog-theme-default dialogCreateBoard'
-//                                }).then(function () {
-//
-//                                    URL = $scope.baseurl + "Board/newBoard";
-//
-//
-//                                    $http.post(URL, $scope.CreateBoardData).success(function (response)
-//                                    {
-//                                        $scope.showBoard(response.idBoard);
-//                                        $scope.edit();
-//                                    });
-//
-//                                }, function (value) {
-//                                });
                             });
                 });
 
@@ -2834,7 +2811,8 @@ angular.module('controllers', [])
 
                 }
 
-            };
+            }
+            ;
         })
 
         // Edit controller 

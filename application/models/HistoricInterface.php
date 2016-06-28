@@ -8,7 +8,7 @@ class HistoricInterface extends CI_Model {
     }
 
     function getSFolders($idusu) {
-
+        $this->db->order_by('folderOrder', 'asc');
         $this->db->where('ID_SFUser', $idusu);
         $query = $this->db->get('S_Folder');
 
