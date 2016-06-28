@@ -12,33 +12,86 @@
 <div class="loadingGif" ng-show="!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
 <div class="row folderContainer" ng-show="viewActived">
     <div class="row">
-        <!--Panel Groups box-->
+        <!--Folder box-->
         <div class="col-xs-10 col-lg-offset-1">
             <div class="boxSentencesFolder" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
                 <div id="header" class="row">
                     <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
                 </div>
-                <div class="row histFolder">
-                    <div class="row">
+                <div class="row folder">
+                    <!--Folder & buttons-->
+                    <div class="row titleFolderBox">
                         <div class="col-xs-6">
-                            <div class="row positionIndex1"><div class="row"><div class="col-xs-2 histTabFolderShadow"></div></div>
-                               <div class="row"><div class="col-xs-12 histContentFolderShadow"></div></div>
+                            <div class="row positionIndex1"><div class="row"><div class="col-xs-2 tabFolderShadow"></div></div>
+                               <div class="row"><div class="col-xs-12 contentFolderShadow"></div></div>
                             </div>
-                            <div class="row positionIndex2"><div class="row"><div class="col-xs-2 histTabFolder" style="background-color: #{{folder.folderColor}}"></div></div>
-                               <div class="row"><div class="col-xs-12 histContentFolder" style="background-color: #FFFFFF">
+                            <div class="row positionIndex2"><div class="row"><div class="col-xs-2 tabFolder" style="background-color: #{{folderSelected.folderColor}}"></div></div>
+                               <div class="row"><div class="col-xs-12 contentFolder" style="background-color: #{{folderSelected.folderColor}}">
                                        <div class="row">
-                                           <div class="col-xs-3"><img class="img-rounded imgHistFolder" ng-src="{{folder.imgSFolder}}"/></div>
-                                           <div class="col-xs-6 folderTitle">{{folder.folderName}}</div>
+                                           <div class="col-xs-2"><img class="img-rounded imgFolder" ng-src="{{folderSelected.imgSFolder}}"/></div>
+                                           <div class="col-xs-10 folderTitle">{{folderSelected.folderName}}</div>
                                        </div>
                                    </div>
                                </div>
                             </div>
                         </div>
+                        <div class="col-xs-1"><button class="turquoiseButton pull-right">Editar <div class="icon-pencil"></div><br/>carpeta</button></div>
+                        <div class="col-xs-2"><button class="turquoiseButton pull-right">Descarregar <div class="icon-download-alt"></div><br/>carpeta</button></div>
+                        <div class="col-xs-3"><button ng-click="go('/panelGroups')" class="grayButton pull-right">Tornar <div class="icon-reply"></div><br/>al llistat</button></div>
                     </div>
-                    <div class="row scrollOverflow">
-                        <div ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meS">
-                            <div class="row" ng-repeat="sentence in sentences" on-Finish-Loop="scrollbarSentences">
-                                {{sentence.generatorString}}
+                    <!--Sentences-->
+                    <div class="row scrollBox">
+                        <div class="row scrollOverflow" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meS">
+                            <div class="row insideScroll" ng-repeat="sentence in sentences" on-Finish-Loop="scrollbarSentences">
+                                
+                                <div class="col-xs-12 sentenceBox">
+                                    <div class="row">
+                                        <div class="col-xs-1"></div>
+                                        <div class="col-xs-10">{{sentence.generatorString}}</div>
+                                        <div class="col-xs-1">
+                                            <div class="row copyButton" ng-click="copySentence(sentence.ID_SHistoric)">Copiar <div class="icon-copy"></div></div>
+                                            <div class="row editButton">Edita <div class="icon-pencil"></div></div>
+                                            <div class="row deleteButton">Eliminar <div class="icon-trash"></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                    <!--Copy Sentnce Modal-->
+                    <div class="modal fade" id="copySentenceModal" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="row marginModalTopHist">
+                            <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
+                                <div id="header" class="row">
+                                    <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
+                                </div>
+                                <div class="row backgroundUserConfigBox">
+                                    <div class="row fonsAlert">
+                                        <div class="col-xs-12 textCenter">Selecciona la carpeta:</div>
+                                    </div>
+                                    <div class="row dadesUsuariCentre">
+                                        <div class="row scrollBoxModal">
+                                            <div class="row scrollOverflow" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meS2">
+                                                <div class="row histFolder" ng-repeat="folder in historicFolders | orderBy:'folderOrder'" on-Finish-Loop="scrollbarSentences2">
+                                                    <div class="row"><div class="col-xs-2 histTabFolder" style="background-color: #{{folder.folderColor}}"></div></div>
+                                                    <div class="row" ng-click="copyOnFolder(folder.ID_Folder)">
+                                                        <div class="col-xs-12 histContentFolder" style="background-color: #{{folder.folderColor}}">
+                                                            <div class="row">
+                                                                <div class="col-xs-2"><img class="img-rounded imgHistFolder" ng-src="{{folder.imgSFolder}}"/></div>
+                                                                <div class="col-xs-10 folderHistTitle">{{folder.folderName}}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="row verticalMarginTop"></div>
+                            </div>
+                        </div>
+                    </div>
+                                
                             </div>
                         </div>
                     </div>

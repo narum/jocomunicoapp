@@ -16,6 +16,9 @@
     height: 12.5%;
     margin-bottom: 1vh
 }
+.containerButtonsHistoric{
+    height: 13.5%;
+}
 .backgroundHome{
     width: 94%;
     height: 100%;    
@@ -24,13 +27,81 @@
     background-size: 100% 100%;
     border-radius: 7px;
 }
-.backgroundBack{
+.backgroundReturn{
     width: 94%;
     height: 100%;    
     position: absolute;
     background: url('/img/srcWeb/Menu/llegir_fons.png');
     background-size: 100% 100%;
     border-radius: 7px;
+}
+.backgroundBack{
+    width: 100%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/llegir_fons.png');
+    background-size: 100% 100%;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+.disabledBackgroundBack{
+    width: 100%;
+    height: 100%;    
+    position: absolute;
+    background-color: grey;
+    background-size: 100% 100%;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+.backgroundNext{
+    width: 100%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/llegir_fons.png');
+    background-size: 100% 100%;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+.disabledBackgroundNext{
+    width: 100%;
+    height: 100%;    
+    position: absolute;
+    background-color: grey;
+    background-size: 100% 100%;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+.backgroundHistoricBack{
+    width: 100%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/llegir_fons.png');
+    background-size: 100% 100%;
+    border-top-left-radius: 7px;
+}
+.disabledBackgroundHistoricBack{
+    width: 100%;
+    height: 100%;    
+    position: absolute;
+    background-color: grey;
+    background-size: 100% 100%;
+    border-top-left-radius: 7px;
+}
+.backgroundHistoricNext{
+    width: 94%;
+    height: 100%;    
+    position: absolute;
+    background: url('/img/srcWeb/Menu/llegir_fons.png');
+    background-size: 100% 100%;
+    border-top-right-radius: 7px;
+}
+.disabledBackgroundHistoricNext{
+    width: 94%;
+    height: 100%;    
+    position: absolute;
+    background-color: grey;
+    background-size: 100% 100%;
+    border-top-right-radius: 7px;
 }
 .imgResponsiveBack {
     pointer-events: none;
@@ -81,7 +152,7 @@
     height: 100%;
     width: 100%;
     border-radius: 5px;
-    box-shadow: 2px -2px 0px 1px #f9a777;
+    box-shadow: 2px -2px 0px 1px #f6985d;
     border: none;
     color: #000;
     background-color: #fff;
@@ -99,10 +170,10 @@
     height: 100%;
     width: 100%;
     border-radius: 5px;
-    box-shadow: 2px -2px 0px 1px #f9c659;
+    box-shadow: 2px -2px 0px 1px #f6985d;
     border: none;
     color: #000;
-    background-color: #d4eaed;
+    background-color: #f9c659;
     text-align: center;
     justify-content: center;
     align-content: center;
@@ -112,7 +183,6 @@
 .holderButtons{
     padding: 2vh 1vh;
     height:100%; 
-    border-radius: 7px;
 }
 .buttonPadding{
     padding: 0vh 1vh;
@@ -126,7 +196,9 @@
 }
 .historicContainer{
     height: 73%;
-    border-radius: 7px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-top-right-radius: 7px;
 }
 .scrollHistoric{
     height: 100%;
@@ -177,7 +249,10 @@
     border-bottom-right-radius: 7px;
 }
 .sentenceCellIndicator{
-    height:100%
+    height:100%;
+    background: #FEE8B6;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
 }
 .scaneo{
     width: 100%;
@@ -196,4 +271,33 @@
     z-index: 24;
     position: absolute;
     top: -0.5vh;
+}
+.returnScanContainer{
+    width: 40vh ;
+    height: 30vh;
+    z-index: 24;
+    position: absolute;
+    background: url("/img/srcWeb/Patterns1-08.png");
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    padding: 2vh;
+}
+.returnScanContent{
+    width: 100%;
+    height: 100%;
+    z-index: 24;
+    border-radius: 15px;
+    border: 7px solid #ff0000;
+    background: white;
+}
+.returnScanIcon{
+    top: 50%;
+    left: 50%;
+    position:relative;
+    transform: translate(-50%,-50%);
+    max-width: 80%;
+    max-height: 80%;
+    width: auto;
+    height: auto;
 }
