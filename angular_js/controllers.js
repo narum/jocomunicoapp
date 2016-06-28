@@ -2769,7 +2769,7 @@ angular.module('controllers', [])
                 {
                     $scope.idGroupBoard = response.idGroupBoard;
                     var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
-
+                    
                     $http.post(URL).
                             success(function (response)
                             {

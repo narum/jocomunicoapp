@@ -19,6 +19,36 @@ class AddWordInterface extends CI_Model {
         return $output;
     }
 
+    function copyVocabulary($idsuOrigen, $idsuDest) {
+        $voc = array();
+        $this->db->where('ID_PUser', $idsuOrigen);
+        $query = $this->db->get('Pictograms');
+        //MODIF: mirar si ya lo tiene
+
+        if ($query->num_rows() > 0) {
+
+            $voc = $query->result();
+            foreach ($voc as $word) {
+                $data = array(
+                    'pictoid' => $word->pictoid,
+                    'ID_PUser' => $idsuDest,
+                    'pictoType' => $word->pictoType,
+                    'supportsExpansion' => $word->supportsExpansion,
+                    'imgPicto' => $word->imgPicto);
+
+                $this->db->where('pictoid', $word->pictoid);
+                $this->db->where('ID_PUser', $idsuDest);
+                $exist = $this->db->get('Pictograms');
+                if ($exist->num_rows() == 0) {
+                    $a = $this->db->insert('Pictograms', $data);
+                }
+            }
+        } else
+            $voc = null;
+
+        return $voc;
+    }
+
     function EditWordNoms($id) {
         $output = array();
         $userlanguage = $this->session->userdata('ulangabbr');
@@ -33,13 +63,13 @@ class AddWordInterface extends CI_Model {
 
         return $output;
     }
-    
+
     function getDBClassNames($id) {
         $output = array();
         $userlanguage = $this->session->userdata('ulangabbr');
         $this->db->where('nameid', $id);
         $this->db->select('class');
-        $query = $this->db->get('NameClass'.$userlanguage);
+        $query = $this->db->get('NameClass' . $userlanguage);
 
         if ($query->num_rows() > 0) {
             $output = $query->result();
