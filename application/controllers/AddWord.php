@@ -58,7 +58,7 @@ class AddWord extends REST_Controller {
         $type = $request->type;
         switch($type){
             case('name'):
-                $DataArray = $this->AddWordInterface->getDBClassNames($idPicto);
+                $data = $this->AddWordInterface->getDBClassNames($idPicto);
                 break;
             case('adj'):
                 break;

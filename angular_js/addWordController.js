@@ -123,16 +123,20 @@ angular.module('controllers')
                             $scope.addWordEditData = response.data[0];
                             console.log($scope.addWordEditData);
                             
-                            var postdata = {id: $scope.addWordType, type: $scope.addWordType};
-                            console.log(postdata);
-                            var URL = $scope.baseurl + "AddWord/EditWordGetClass";
+                            var postdata = {id: $scope.idEditWord, type: $scope.addWordType};
+                            URL = $scope.baseurl + "AddWord/EditWordGetClass";
                             $http.post(URL, postdata).
                                     success(function (response)
                                     {
                                         switch ($scope.addWordType)
                                         {
                                             case "name":
-                                                
+                                                console.log(response.data);
+                                                if (response.data){
+                                                    for(i = 0; i < response.data.length;i++){
+                                                        $scope.addNClass(response.data[i].class);
+                                                    }
+                                                }
                                                 $scope.objAdd = {type: "name", nomtext: $scope.addWordEditData.nomtext, mf: $scope.addWordEditData.mf == "masc" ? false : true,
                                                     singpl: $scope.addWordEditData.singpl == "sing" ? false : true, contabincontab: $scope.addWordEditData.contabincontab == "incontable" ? true : false,
                                                     determinat: $scope.addWordEditData.determinat, ispropernoun: $scope.addWordEditData.ispropernoun == 1 ? true : false,
