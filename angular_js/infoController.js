@@ -73,6 +73,9 @@ angular.module('controllers')
                 $scope.acceptcookies = true;
                 $scope.footerclass = "footer-cookies-fade";
             };
+            
+            // Language
+            $rootScope.langabbr = "CA";
            
             //Images
             $scope.img.button1 = 'img/srcWeb/home/about.png';
