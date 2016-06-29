@@ -22,7 +22,7 @@
                     <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-offset-1 scrollMenuPanels" ng-style="!isScroll ? {'width':'98%'} : {'width':'84%'}" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:me" is-bar-shown="isScroll">
+                    <div ng-if="finished" class="col-xs-offset-1 scrollMenuPanels" ng-style="!isScroll ? {'width':'98%'} : {'width':'84%'}" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:me" is-bar-shown="isScroll">
                         <div class="scrollWidth">
                             <div class="col-xs-12 buttonAddFolder" ng-click="newPanellGroup()">+</div>
                             <div class="col-xs-12 panelContainer" ng-repeat="panel in panels" on-Finish-Loop="scrollbarPanel">
@@ -44,6 +44,7 @@
                             </div>
                         </div>
                     </div>
+                    <div ng-if="!finished"></div>
                 </div>
             </div>
         </div>

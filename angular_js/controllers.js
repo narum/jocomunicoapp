@@ -1954,7 +1954,6 @@ angular.module('controllers', [])
             };
             //Change the tab in the serach view (edit mode) between pictos and images
             $scope.changeEditSearch = function () {
-                alert("es esto");
                 if ($scope.typeSearh === "picto")
                     $scope.typeSearh = "img";
                 else
@@ -2634,7 +2633,9 @@ angular.module('controllers', [])
                 $scope.uploading = true;
                 var i;
                 var uploadUrl = $scope.baseurl + "ImgUploader/upload";
+
                 var fd = new FormData();
+                fd.append('vocabulary', angular.toJson(false));
                 for (i = 0; i < $scope.myFile.length; i++) {
                     fd.append('file' + i, $scope.myFile[i]);
                 }
@@ -2768,7 +2769,7 @@ angular.module('controllers', [])
                 {
                     $scope.idGroupBoard = response.idGroupBoard;
                     var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
-
+                    
                     $http.post(URL).
                             success(function (response)
                             {

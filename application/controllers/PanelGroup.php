@@ -14,6 +14,7 @@ class PanelGroup extends REST_Controller {
         $this->load->model('panelInterface');
         $this->load->model('Lexicon');
         $this->load->model('BoardInterface');
+        $this->load->model('AddWordInterface');
     }
 
     public function index_get() {
@@ -239,9 +240,6 @@ class PanelGroup extends REST_Controller {
             foreach ($boardtables as $row) {
                 $boardtables = $this->BoardInterface->copyBoardTables($idDst, $sameGroupBoard, $row);
                 $idusuorigen = $this->session->userdata('idusu');
-                if ($idusuorigen != $idusu) {
-                    //MODIF: copiar vocabulirio ;)
-                }
                 if ($row->ID_CPicto != null) {
                     $this->Lexicon->addWordStatsX1($row->ID_CPicto, $idusu, true);
                     if ($row->imgCell != null) {
@@ -256,6 +254,7 @@ class PanelGroup extends REST_Controller {
             $this->panelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i + 1]);
             $i++;
         }
+        $this->AddWordInterface->copyVocabulary($idusuorigen,$idusu);
 
         $response = [
         ];
