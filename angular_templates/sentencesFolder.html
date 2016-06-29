@@ -1,6 +1,7 @@
 <link rel="stylesheet" type="text/css" href="{{baseurl}}css/generico.css">
 <link rel="stylesheet" type="text/css" href="{{baseurl}}css/responsiveForm.css">
 <link rel="stylesheet" type="text/css" href="{{baseurl}}css/sentencesFolder.css">
+<link rel="stylesheet" type="text/css" href="{{baseurl}}css/editHistorialFolder.css">
 <link rel="stylesheet" type="text/css" href="{{baseurl}}/libraries/scrollbarPanel.css">
 
 <style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
@@ -8,6 +9,7 @@
 <!--menu superior dropdown-->
 <div ng-include="'/angular_templates/dropdownMenuBar.html'" ng-show="viewActived"></div>
 <div ng-include="'/angular_templates/logoutModal.html'"></div>
+<div ng-include="'/angular_templates/editHistoricFolder.html'"></div>
 
 <div class="loadingGif" ng-show="!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
 <div class="row folderContainer" ng-show="viewActived">
@@ -35,15 +37,17 @@
                                </div>
                             </div>
                         </div>
-                        <div class="col-xs-1"><button class="turquoiseButton pull-right">Editar <div class="icon-pencil"></div><br/>carpeta</button></div>
-                        <div class="col-xs-2"><button class="turquoiseButton pull-right">Descarregar <div class="icon-download-alt"></div><br/>carpeta</button></div>
-                        <div class="col-xs-3"><button ng-click="go('/panelGroups')" class="grayButton pull-right">Tornar <div class="icon-reply"></div><br/>al llistat</button></div>
+                        <div class="col-xs-4">
+                            <button ng-show="!historicFolder" ng-click="editHistoricFolder()" class="turquoiseButton">Editar <div class="icon-pencil"></div><br/>carpeta</button>
+                            <button class="turquoiseButton">Descarregar <div class="icon-download-alt"></div><br/>carpeta</button>
+                            <button class="turquoiseButton" ng-click="deleteFolderModal()">Eliminar <div class="icon-trash"></div><br/>carpeta</button>
+                        </div>
+                        <div class="col-xs-2"><button ng-click="go('/panelGroups')" class="grayButton pull-right">Tornar <div class="icon-reply"></div><br/>al llistat</button></div>
                     </div>
                     <!--Sentences-->
                     <div class="row scrollBox">
                         <div class="row scrollOverflow" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meS">
                             <div class="row insideScroll" ng-repeat="sentence in sentences" on-Finish-Loop="scrollbarSentences">
-                                
                                 <div class="col-xs-12 sentenceBox">
                                     <div class="row">
                                         <div class="col-xs-1"></div>
@@ -58,6 +62,14 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                                 
                                 
                     <!--Copy Sentnce Modal-->
@@ -92,14 +104,37 @@
                                 </div>
                             <div class="row verticalMarginTop"></div>
                             </div>
-                        </div>
-                    </div>
-                                
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                                
+                                
+                    <!--Delete folder Modal-->
+                    <div class="modal fade" id="deleteFolderModal" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="row marginModalTopOwl"><img class="img-owl pull-right" src={{img.lowSorpresaFlecha}}/></div>
+                            <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
+                                <div id="header" class="row">
+                                    <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
+                                </div>
+                                <div class="row backgroundUserConfigBox">
+                                    <div class="row fonsAlert">
+                                        <div class="col-xs-12 textCenter">Segur que vols eliminar la carpeta?</div>
+                                        <div class="col-xs-12 textCenter">Totes les frases es perderan</div>
+                                    </div>
+                                    <div class="row dadesUsuariCentre">
+                                        <div class="col-xs-6">
+                                            <button type="reset" class="btn-gray pull-left" data-dismiss="modal" ng-click="deleteFolder();">{{logoutContent.confirm}}</button>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <button type="reset" class="btn-gray pull-right" data-dismiss="modal">{{logoutContent.cancel}}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="row verticalMarginTop"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    

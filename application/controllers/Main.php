@@ -331,4 +331,66 @@ class Main extends REST_Controller {
         
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    //Create sentence folder
+    public function createSentenceFolder_post()
+    {
+        $idusu = $this->session->userdata('idusu');
+        
+        $folders = $this->main_model->getHistoricFolders($idusu);
+        $folderOrder = $folders[0][folderOrder]+1;
+        $data = [
+            'ID_SFUser'=>$idusu,
+            'folderName'=>$this->query('folderName'),
+            'imgSFolder'=>$this->query('imgSFolder'),
+            'folderColor'=>$this->query('folderColor'),
+            'folderOrder'=>$folderOrder
+        ];
+        
+        //Save folder
+        $saved=$this->main_model->saveData('S_Folder', $data);
+        
+        if($saved){
+            $folder = $this->main_model->getSingleData('S_Folder', 'ID_SFUser', $idusu, 'folderOrder', $folderOrder)[0];
+        }
+        
+        $response = [
+            'folder'=>$folder
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    //Edit sentence folder
+    public function editSentenceFolder_post()
+    {
+        $data = json_decode($this->query("folder"), true); // convertimos el string json del post en array.
+        $idusu = $this->session->userdata('idusu');
+        $ID_Folder = $data['ID_Folder'];
+
+        $this->main_model->changeHistFolder($idusu, $ID_Folder, $data);
+        
+        $response = [
+            'folder'=>$folder['ID_Folder']
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    //delete sentence folder
+    public function deleteSentenceFolder_post()
+    {
+        $data = json_decode($this->query("folder"), true); // convertimos el string json del post en array.
+        $idusu = $this->session->userdata('idusu');
+        $ID_Folder = $data['ID_Folder'];
+        
+        //delete sentences
+        $this->main_model->deleteSingleData('S_Sentence', 'ID_SSUser', $idusu, 'ID_SFolder', $ID_Folder);
+
+        //delete Folder
+        $this->main_model->deleteSingleData('S_Folder', 'ID_SFUser', $idusu, 'ID_Folder', $ID_Folder);
+        
+        $response = [
+            'folder'=>$folder['ID_Folder']
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 }

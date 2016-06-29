@@ -1,5 +1,8 @@
 @charset "UTF-8";
 /* CSS Document */
+html * {
+    line-height: 2.8vh;
+}
 .folderContainer{
     height: 100vh;
     padding: 5vh 15vw;

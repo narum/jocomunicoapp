@@ -279,4 +279,22 @@ class Main_model extends CI_Model {
         $query = $this->db->get('S_Historic');
         return $query->result_array()[0];
     }
+    //get historic folders ordered by folderOrder descended
+    public function getHistoricFolders($idusu){
+        $this->db->from('S_Folder');// Seleccionem la taula
+        $this->db->where('ID_SFUser', $idusu);// filtrem per columnes
+        $this->db->order_by('folderOrder', 'desc');
+        $data = $this->db->get()->result_array();
+        
+        return $data;
+    }
+    // Change historic folder data.
+    public function changeHistFolder($idusu, $ID_Folder, $data){
+
+        $this->db->where('ID_Folder', $ID_Folder);
+        $this->db->where('ID_SFUser', $idusu);
+        $saved = $this->db->update('S_Folder', $data);
+
+        return $saved;
+    }
 }

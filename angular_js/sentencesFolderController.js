@@ -1,5 +1,5 @@
 angular.module('controllers')
-    .controller('sentencesFolderCtrl', function ($scope, $rootScope, txtContent, $routeParams, $location, dropdownMenuBarInit, AuthService, Resources, $timeout) {
+    .controller('sentencesFolderCtrl', function ($scope, $rootScope, txtContent, $routeParams, $location, dropdownMenuBarInit, AuthService, Resources, $timeout, $http) {
         // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
         if (!$rootScope.isLogged) {
             $location.path('/login');
@@ -94,6 +94,7 @@ angular.module('controllers')
                 $scope.viewActived = true;
                 if($routeParams.folderId>0){
                     $scope.folderSelected = results.folder;
+                    $scope.newFolder = JSON.parse(JSON.stringify(results.folder)); //copy JavaScript object to new variable NOT by reference
                 }
             });
         };
@@ -125,5 +126,87 @@ angular.module('controllers')
                 console.log(results);
                 getSentences();
             });
+        };
+        //edit folder
+        $scope.editHistoricFolder = function(){
+            $('#editHistoricFolderModal').modal('toggle');//Show modal
+        };
+        $scope.deleteFolderModal = function(){
+            $('#deleteFolderModal').modal('toggle');//Show modal
+        };
+        $scope.saveFolder = function(){
+            Resources.main.save({'folder':$scope.newFolder},{'funct': "editSentenceFolder"}).$promise
+            .then(function (results) {
+                $scope.folderSelected = JSON.parse(JSON.stringify($scope.newFolder)); //copy JavaScript object to new variable NOT by reference
+            });
+        };
+        $scope.deleteFolder = function(){
+            $scope.viewActived = false;
+            Resources.main.save({'folder':$scope.newFolder},{'funct': "deleteSentenceFolder"}).$promise
+            .then(function (results) {
+                $location.path('/panelGroups');
+            });
+        };
+        
+        
+        /*
+         * Return uploaded images from database. There are two types, the users images an the arasaac (not user images)
+         */
+        $scope.searchImg = function (name, typeImgEditSearch) {
+            var URL = "";
+            switch (typeImgEditSearch)
+            {
+                case "Arasaac":
+                    URL = $scope.baseurl + "ImgUploader/getImagesArasaac";
+                    break;
+                case "Uploads":
+                    URL = $scope.baseurl + "ImgUploader/getImagesUploads";
+                    break;
+            }
+            var postdata = {name: name};
+            $http.post(URL, postdata).
+                success(function (response)
+                {
+                    $scope.imgData = response.data;
+                });
+        }
+
+        //get all the photos attached to the pictos
+        $scope.searchFoto = function (name)
+        {
+            var URL = $scope.baseurl + "SearchWord/getDBAll";
+            var postdata = {id: name};
+            //Request via post to controller search data from database
+            $http.post(URL, postdata).
+                success(function (response)
+                {
+                    $scope.allImg = response.data;
+                });
+        };
+        // Upload and resize the image
+        $scope.uploadFile = function () {
+            $scope.myFile = document.getElementById('file-input').files;
+            $scope.uploading = true;
+            var i;
+            var uploadUrl = $scope.baseurl + "ImgUploader/upload";
+            var fd = new FormData();
+            for (i = 0; i < $scope.myFile.length; i++) {
+                fd.append('file' + i, $scope.myFile[i]);
+            }
+            $http.post(uploadUrl, fd, {
+                headers: {'Content-Type': undefined}
+            })
+                .success(function (response) {
+                    $scope.uploading = false;
+                    if (response.error) {
+                        //open modal
+                        console.log(response.errorText);
+                        $scope.errorText = response.errorText;
+                        $('#errorImgModal').modal({backdrop: 'static'});
+                    }
+                })
+                .error(function (response) {
+                    //alert(response.errorText);
+                });
         };
     });
