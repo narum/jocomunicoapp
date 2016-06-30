@@ -1748,7 +1748,7 @@ angular.module('controllers', [])
                         $scope.userViewWidth = 10;
                     }
                 }
-                
+
                 $scope.cfgMenuHomeActive = userConfig.cfgMenuHomeActive;
                 $scope.cfgMenuReadActive = userConfig.cfgMenuReadActive;
                 $scope.cfgMenuDeleteLastActive = userConfig.cfgMenuDeleteLastActive;
@@ -1869,7 +1869,7 @@ angular.module('controllers', [])
              */
             $scope.showBoard = function (id)
             {
-                
+
                 //If the id is 0, show (reload) the actual board. Else the current board is changed (and showed)
                 if (id === '0') {
                     id = $scope.idboard;
@@ -1899,7 +1899,6 @@ angular.module('controllers', [])
                 $http.post(url).success(function (response)
                 {
                     $scope.recommenderArray = response.recommenderArray;
-                }).error(function (error) {
                 });
             };
 
@@ -1908,6 +1907,7 @@ angular.module('controllers', [])
              */
             $scope.edit = function ()
             {
+                $scope.readmore = false;
                 $scope.uploading = false;
                 $scope.evt = {nameboard: "", altura: 1, amplada: 1, autoreturn: false, autoread: false};
                 $scope.fv = {colorPaintingSelected: "ffffff", painting: false};
@@ -2066,9 +2066,6 @@ angular.module('controllers', [])
                         $http.post(url, postdata).then(function ()
                         {
                             $scope.showBoard($scope.idboard);
-                        }).error(function ()
-                        {
-
                         });
                         $scope.edit();
 
@@ -2106,9 +2103,9 @@ angular.module('controllers', [])
                 var url = $scope.baseurl + "Board/modifyCellBoard";
                 $http.post(url, $scope.DataResize).then(function (response) {
                     $scope.showBoard('0');
-                }).error(function (response) {});
+                });
             };
-            
+
             $scope.DenyOpenConfirmSize = function () {
                 //reload the dropdown menus
                 $scope.edit();
@@ -2213,6 +2210,8 @@ angular.module('controllers', [])
                             $scope.sound = "mp3/" + $scope.dataAudio[0];
                             var audiotoplay = $('#utterance');
                             audiotoplay.src = "mp3/" + $scope.dataAudio[0];
+                            
+                            console.log($scope.dataAudio[0]);
                             if ($scope.cfgTimeOverOnOff) {
                                 $timeout(function () {
                                     audiotoplay.get(0).play();
@@ -2437,7 +2436,7 @@ angular.module('controllers', [])
                     $scope.getPred();
                 });
             };
-            
+
             $scope.goPrimaryBoard = function () {
                 $scope.config();
             };
@@ -2614,7 +2613,7 @@ angular.module('controllers', [])
                             $scope.imgData = response.data;
                         });
             }
-            
+
             //get all the photos attached to the pictos
             $scope.searchFoto = function (name)
             {
@@ -2650,9 +2649,6 @@ angular.module('controllers', [])
                                 $scope.errorText = response.errorText;
                                 $('#errorImgModal').modal({backdrop: 'static'});
                             }
-                        })
-                        .error(function (response) {
-                            //alert(response.errorText);
                         });
             };
 
@@ -2769,7 +2765,7 @@ angular.module('controllers', [])
                 {
                     $scope.idGroupBoard = response.idGroupBoard;
                     var URL = $scope.baseurl + "PanelGroup/getUserPanelGroups";
-                    
+
                     $http.post(URL).
                             success(function (response)
                             {
@@ -3028,8 +3024,6 @@ angular.module('controllers', [])
                     className: 'ngdialog-theme-default dialogLogOut'
                 }).then(function () {
                     AuthService.logout();
-                }, function (value) {
-
                 });
 
             };
@@ -3230,6 +3224,9 @@ angular.module('controllers', [])
                             $scope.sFolderResult = response.sFolder;
                             if ($scope.pagSFolder == 0) {
                                 $scope.pagBackFolderEnabled = false;
+                            }
+                            if ($scope.sFolderResult == null) {
+                                $scope.pagNextFolderEnabled = false;
                             }
                             if ($scope.sFolderResult.length < $scope.pagSFolder + 4) {
                                 $scope.pagBackFolderEnabled = false;

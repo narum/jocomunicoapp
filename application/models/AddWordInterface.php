@@ -36,12 +36,9 @@ class AddWordInterface extends CI_Model {
                     'supportsExpansion' => $word->supportsExpansion,
                     'imgPicto' => $word->imgPicto);
 
-                $this->db->where('pictoid', $word->pictoid);
-                $this->db->where('ID_PUser', $idsuDest);
-                $exist = $this->db->get('Pictograms');
-                if ($exist->num_rows() == 0) {
-                    $a = $this->db->insert('Pictograms', $data);
-                }
+                $sql = $this->db->insert_string('Pictograms', $data);
+                $sql = str_replace('INSERT INTO', 'INSERT IGNORE INTO', $sql);
+                $this->db->query($sql);
             }
         } else
             $voc = null;
