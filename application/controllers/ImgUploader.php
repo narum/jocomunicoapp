@@ -61,7 +61,7 @@ class ImgUploader extends REST_Controller {
                 $success = move_uploaded_file($_FILES['file' . $i]['tmp_name'], $target_dir . $md5Name);
             }
             if ($success) {
-                $idusu = $this->session->userdata('idusu');
+                $idusu = $this->session->userdata('idsu');
                 $this->ImgUploader_model->insertImg($idusu, basename($_FILES['file' . $i]['name']), $md5Name);
             } else {
                 $errorProv = ["errorImg2", $_FILES['file' . $i]['name']];
@@ -82,7 +82,7 @@ class ImgUploader extends REST_Controller {
 
     function Rename_Img($string) {
 
-        $idusu = $this->session->userdata('idusu');
+        $idusu = $this->session->userdata('idsu');
         $fecha = microtime();
         //MODIF: Pasar superuser no user
         $stringlen = strlen($string);
@@ -193,7 +193,7 @@ class ImgUploader extends REST_Controller {
         $request = json_decode($postdata);
         $name = $request->name;
 
-        $idusu = $this->session->userdata('idusu');
+        $idusu = $this->session->userdata('idsu');
         $data = $this->ImgUploader_model->getImages($idusu, $name);
 
         $response = [
