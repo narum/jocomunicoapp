@@ -40,7 +40,7 @@
                         <div class="col-xs-4">
                             <button ng-show="!historicFolder" ng-click="editHistoricFolder()" class="turquoiseButton">Editar <div class="icon-pencil"></div><br/>carpeta</button>
                             <button class="turquoiseButton">Descarregar <div class="icon-download-alt"></div><br/>carpeta</button>
-                            <button class="turquoiseButton" ng-click="deleteFolderModal()">Eliminar <div class="icon-trash"></div><br/>carpeta</button>
+                            <button ng-show="!historicFolder" class="turquoiseButton" ng-click="deleteFolderModal()">Eliminar <div class="icon-trash"></div><br/>carpeta</button>
                         </div>
                         <div class="col-xs-2"><button ng-click="go('/panelGroups')" class="grayButton pull-right">Tornar <div class="icon-reply"></div><br/>al llistat</button></div>
                     </div>
@@ -50,8 +50,10 @@
                             <div class="row insideScroll" ng-repeat="sentence in sentences" on-Finish-Loop="scrollbarSentences">
                                 <div class="col-xs-12 sentenceBox">
                                     <div class="row">
+                                        
                                         <div class="col-xs-1"></div>
                                         <div class="col-xs-10">{{sentence.generatorString}}</div>
+                                        
                                         <div class="col-xs-1" ng-show="!historicFolder">
                                             <div class="row copyButton" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
                                             <div class="row editButton">Edita <div class="icon-pencil"></div></div>
@@ -72,69 +74,69 @@
 </div>
                                 
                                 
-                    <!--Copy Sentnce Modal-->
-                    <div class="modal fade" id="copySentenceModal" role="dialog">
-                        <div class="modal-dialog modal-lg">
-                            <div class="row marginModalTopHist">
-                            <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
-                                <div id="header" class="row">
-                                    <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
-                                </div>
-                                <div class="row backgroundUserConfigBox">
-                                    <div class="row fonsAlert">
-                                        <div class="col-xs-12 textCenter">Selecciona la carpeta:</div>
-                                    </div>
-                                    <div class="row dadesUsuariCentre">
-                                        <div class="row scrollBoxModal">
-                                            <div class="row scrollOverflow" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meS2">
-                                                <div class="row histFolder" ng-repeat="folder in folders | orderBy:'folderOrder'" on-Finish-Loop="scrollbarSentences2">
-                                                    <div class="row"><div class="col-xs-2 histTabFolder" style="background-color: #{{folder.folderColor}}"></div></div>
-                                                    <div class="row" ng-click="copyOnFolder(folder.ID_Folder)">
-                                                        <div class="col-xs-12 histContentFolder" style="background-color: #{{folder.folderColor}}">
-                                                            <div class="row">
-                                                                <div class="col-xs-2"><img class="img-rounded imgHistFolder" ng-src="{{folder.imgSFolder}}"/></div>
-                                                                <div class="col-xs-10 folderHistTitle">{{folder.folderName}}</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+<!--Copy Sentnce Modal-->
+<div class="modal fade" id="copySentenceModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="row marginModalTopHist">
+        <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
+            <div id="header" class="row">
+                <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
+            </div>
+            <div class="row backgroundUserConfigBox">
+                <div class="row fonsAlert">
+                    <div class="col-xs-12 textCenter">Selecciona la carpeta:</div>
+                </div>
+                <div class="row dadesUsuariCentre">
+                    <div class="row scrollBoxModal">
+                        <div class="row scrollOverflow" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meS2">
+                            <div class="row histFolder" ng-repeat="folder in folders | orderBy:'folderOrder'" on-Finish-Loop="scrollbarSentences2">
+                                <div class="row"><div class="col-xs-2 histTabFolder" style="background-color: #{{folder.folderColor}}"></div></div>
+                                <div class="row" ng-click="copyOnFolder(folder.ID_Folder)">
+                                    <div class="col-xs-12 histContentFolder" style="background-color: #{{folder.folderColor}}">
+                                        <div class="row">
+                                            <div class="col-xs-2"><img class="img-rounded imgHistFolder" ng-src="{{folder.imgSFolder}}"/></div>
+                                            <div class="col-xs-10 folderHistTitle">{{folder.folderName}}</div>
                                         </div>
                                     </div>
                                 </div>
-                            <div class="row verticalMarginTop"></div>
-                            </div>
                             </div>
                         </div>
                     </div>
-                                
-                                
-                    <!--Delete folder Modal-->
-                    <div class="modal fade" id="deleteFolderModal" role="dialog">
-                        <div class="modal-dialog">
-                            <div class="row marginModalTopOwl"><img class="img-owl pull-right" src={{img.lowSorpresaFlecha}}/></div>
-                            <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
-                                <div id="header" class="row">
-                                    <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
-                                </div>
-                                <div class="row backgroundUserConfigBox">
-                                    <div class="row fonsAlert">
-                                        <div class="col-xs-12 textCenter">Segur que vols eliminar la carpeta?</div>
-                                        <div class="col-xs-12 textCenter">Totes les frases es perderan</div>
-                                    </div>
-                                    <div class="row dadesUsuariCentre">
-                                        <div class="col-xs-6">
-                                            <button type="reset" class="btn-gray pull-left" data-dismiss="modal" ng-click="deleteFolder();">{{logoutContent.confirm}}</button>
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <button type="reset" class="btn-gray pull-right" data-dismiss="modal">{{logoutContent.cancel}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="row verticalMarginTop"></div>
-                            </div>
-                        </div>
+                </div>
+            </div>
+        <div class="row verticalMarginTop"></div>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Delete folder Modal-->
+<div class="modal fade" id="deleteFolderModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="row marginModalTopOwl"><img class="img-owl pull-right" src={{img.lowSorpresaFlecha}}/></div>
+        <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
+            <div id="header" class="row">
+                <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
+            </div>
+            <div class="row backgroundUserConfigBox">
+                <div class="row fonsAlert">
+                    <div class="col-xs-12 textCenter">Segur que vols eliminar la carpeta?</div>
+                    <div class="col-xs-12 textCenter">Totes les frases es perderan</div>
+                </div>
+                <div class="row dadesUsuariCentre">
+                    <div class="col-xs-6">
+                        <button type="reset" class="btn-gray pull-left" data-dismiss="modal" ng-click="deleteFolder();">{{logoutContent.confirm}}</button>
                     </div>
+                    <div class="col-xs-6">
+                        <button type="reset" class="btn-gray pull-right" data-dismiss="modal">{{logoutContent.cancel}}</button>
+                    </div>
+                </div>
+            </div>
+        <div class="row verticalMarginTop"></div>
+        </div>
+    </div>
+</div>
                     
                     
                     

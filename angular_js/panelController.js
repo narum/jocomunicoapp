@@ -161,6 +161,7 @@ angular.module('controllers')
             var i;
             var uploadUrl = $scope.baseurl + "ImgUploader/upload";
             var fd = new FormData();
+            fd.append('vocabulary', angular.toJson(false));
             for (i = 0; i < $scope.myFile.length; i++) {
                 fd.append('file' + i, $scope.myFile[i]);
             }
