@@ -90,6 +90,7 @@ class Lexicon extends CI_Model {
         
         return $output;
     }
+    
     function getVerbs()
     {
         $output = array();
@@ -104,6 +105,7 @@ class Lexicon extends CI_Model {
         else $output = null;
         return $output;
     }
+    
     function getAdjs($tipus)
     {
         $output = array();
@@ -121,6 +123,7 @@ class Lexicon extends CI_Model {
         else $output = null;
         return $output;
     }
+    
     function getAdvs($tipus)
     {
         $output = array();
@@ -138,6 +141,7 @@ class Lexicon extends CI_Model {
         else $output = null;
         return $output;
     }
+    
     function getModifs($tipus)
     {
         $output = array();
@@ -154,6 +158,7 @@ class Lexicon extends CI_Model {
         else $output = null;
         return $output;
     }
+    
     function getExprs($tipus)
     {
         $output = array();
@@ -171,6 +176,7 @@ class Lexicon extends CI_Model {
         else $output = null;
         return $output;
     }
+    
     function getPartPregunta()
     {
         $output = array();
@@ -1160,6 +1166,34 @@ class Lexicon extends CI_Model {
         return $output;   
     }
     
+    // Retorna el text de l'última frase generada, si no n'hi havia cap de feta retorna null
+    function getLastGeneratedText($idusu)
+    {
+        $text = null;
+        
+        $this->db->where('ID_SHUser', $idusu);
+        $this->db->order_by('ID_SHistoric', 'desc');
+        $query = $this->db->get('S_Historic');
+        
+        // tal com està fet el codi, quan s'apreta generar frase, crea una entrada mig buida a 
+        // S_Historic, per tant la frase anterior es troba en la segona posició
+        // aleshores borrem aquesta entrada mig buida
+        if ($query->num_rows() > 1) {
+            $aux = $query->result();
+            
+            $text = $aux[1]->generatorString;
+            $idsentence = $aux[0]->ID_SHistoric;
+            
+            if ($aux[0]->generatorString == null) {
+                $this->db->where('ID_SHistoric', $idsentence);
+                $this->db->delete('S_Historic');
+            }
+            
+        }
+        
+        return $text;   
+    }
+    
     // Retorna l'estructura de la paraula Verbless o de qualsevol Verb amb els seus patterns
     function getPatternsVerb($verbid, $withsubject)
     {
@@ -1380,16 +1414,21 @@ class Lexicon extends CI_Model {
     }
     
     /*
-     * Adds or updates the stats of the pictogram with pictoid
+     * Adds or updates the stats (countx1 and hour and day of the week) of the pictogram with pictoid
      * for the user with id=iduser. If first is set to true, it only
      * sets the counter to 1 if that user had never used that pictogram
      * before.
      */
-    public function addWordStatsX1($pictoid, $iduser, $first) {
-        
+    public function addWordStatsX1($pictoid, $iduser, $first) 
+    {
         $datestring = "%Y/%m/%d";
+        $daystring = 'D';
+        $hourstring = 'G';
         $time = time();
         $avui = mdate($datestring, $time);
+        $dia = date($daystring, $time);
+        $hora = date($hourstring, $time);
+        $hora .= "h";
         
         $this->db->where('pictoid', $pictoid);
         $this->db->where('ID_PSUPUser', $iduser);
@@ -1398,20 +1437,24 @@ class Lexicon extends CI_Model {
             if (!$first) {
                 $stat = $query->result();
                 $num = $stat[0]->countx1 + 1;
+                $numdia = $stat[0]->$dia + 1;
+                $numhora = $stat[0]->$hora + 1;
                 $this->db->where('pictoid', $pictoid);
                 $this->db->where('ID_PSUPUser', $iduser);
                 $data = array(
                     'countx1' => $num,
-                    'lastdate' => $avui
+                    'lastdate' => $avui,
+                    $dia => $numdia,
+                    $hora => $numhora
                 );
                 $query = $this->db->update('P_StatsUserPicto', $data);
             }
         } else {
             $data = array(
                 'countx1' => '1',
+                'lastdate' => $avui,
                 'pictoid' => $pictoid,
-                'ID_PSUPUser' => $iduser,
-                'lastdate' => $avui
+                'ID_PSUPUser' => $iduser
             );
             $query = $this->db->insert('P_StatsUserPicto', $data);
         }
@@ -1419,12 +1462,18 @@ class Lexicon extends CI_Model {
     
     /*
      * Inserts, in pairs, each pictogram in P_StatsUserPicto.
-     * If this combination of pictograms already exist increment count
+     * If this combination of pictograms already exists increment count
      */
     function addStatsX2($paraulesFrase, $iduser) {
+        
         $datestring = "%Y/%m/%d";
+        $daystring = 'D';
+        $hourstring = 'G';
         $time = time();
         $avui = mdate($datestring, $time);
+        $dia = date($daystring, $time);
+        $hora = date($hourstring, $time);
+        $hora .= "h";
         
         for ($i = 1; $i < count($paraulesFrase); $i++) {
             $word1 = $paraulesFrase[$i - 1];
@@ -1438,34 +1487,46 @@ class Lexicon extends CI_Model {
             if ($query->num_rows() > 0) {
                 $stat = $query->result();
                 $num = $stat[0]->countx2 + 1;
+                $numdia = $stat[0]->$dia + 1;
+                $numhora = $stat[0]->$hora + 1;
                 $this->db->where('picto2id', $inputid2);
                 $this->db->where('picto1id', $inputid1);
                 $this->db->where('ID_PSUP2User', $iduser);
                 $data = array(
                     'countx2' => $num,
-                    'lastdate' => $avui
+                    'lastdate' => $avui,
+                    $dia => $numdia,
+                    $hora => $numhora
                 );
                 $query = $this->db->update('P_StatsUserPictox2', $data);
             } else {
                 $data = array(
                     'countx2' => '1',
+                    'lastdate' => $avui,
+                    $dia => '1',
+                    $hora => '1',
                     'picto2id' => $inputid2,
                     'picto1id' => $inputid1,
-                    'ID_PSUP2User' => $iduser,
-                    'lastdate' => $avui
+                    'ID_PSUP2User' => $iduser
                 );
                 $query = $this->db->insert('P_StatsUserPictox2', $data);
             }
         }
     }
     /*
-     * Inserts, in t, each pictogram in P_StatsUserPicto.
-     * If this combination of pictograms already exist increment count
+     * Inserts, in trios, each pictogram in P_StatsUserPicto.
+     * If this combination of pictograms already exists increment count
      */
     function addStatsX3($paraulesFrase, $iduser) {
+        
         $datestring = "%Y/%m/%d";
+        $daystring = 'D';
+        $hourstring = 'G';
         $time = time();
         $avui = mdate($datestring, $time);
+        $dia = date($daystring, $time);
+        $hora = date($hourstring, $time);
+        $hora .= "h";
         
         for ($i = 2; $i < count($paraulesFrase); $i++) {
             $word1 = $paraulesFrase[$i - 2];
@@ -1482,28 +1543,56 @@ class Lexicon extends CI_Model {
             if ($query->num_rows() > 0) {
                 $stat = $query->result();
                 $num = $stat[0]->countx3 + 1;
+                $numdia = $stat[0]->$dia + 1;
+                $numhora = $stat[0]->$hora + 1;
                 $this->db->where('picto3id', $inputid3);
                 $this->db->where('picto2id', $inputid2);
                 $this->db->where('picto1id', $inputid1);
                 $this->db->where('ID_PSUP3User', $iduser);
                 $data = array(
                     'countx3' => $num,
-                    'lastdate' => $avui
+                    'lastdate' => $avui,
+                    $dia => $numdia,
+                    $hora => $numhora
                 );
                 $query = $this->db->update('P_StatsUserPictox3', $data);
             } else {
                 $data = array(
                     'countx3' => '1',
+                    'lastdate' => $avui,
+                    $dia => '1',
+                    $hora => '1',
                     'picto3id' => $inputid3,
                     'picto2id' => $inputid2,
                     'picto1id' => $inputid1,
-                    'ID_PSUP3User' => $iduser,
-                    'lastdate' => $avui
+                    'ID_PSUP3User' => $iduser
                 );
                 $query = $this->db->insert('P_StatsUserPictox3', $data);
             }
-        }
+        }        
     }
+    
+    /*
+    * Adds or updates the stats of the pictogram with pictoid
+    * for the user with id=iduser. If first is set to true, it only
+    * sets the counter to 1 if that user had never used that pictogram
+    * before.
+    */
+   public function addImgTempStatsX1($pictoid, $iduser, $imgtemp) 
+   {
+       $this->db->where('pictoid', $pictoid);
+       $this->db->where('ID_PSUPUser', $iduser);
+       $query = $this->db->get('P_StatsUserPicto');
+       
+       if ($query->num_rows() > 0) {
+            $this->db->where('pictoid', $pictoid);
+            $this->db->where('ID_PSUPUser', $iduser);
+            $data = array(
+                'imgtemp' => $imgtemp
+            );
+            $query = $this->db->update('P_StatsUserPicto', $data);
+       }
+   }
     
 }
 ?>
