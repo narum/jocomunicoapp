@@ -1,3 +1,7 @@
+<?php
+    header("Cache-Control: no-transform");
+?>
+
 <html ng-app="app">
     <head>
         <title>JoComunico</title>
