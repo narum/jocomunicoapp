@@ -23,7 +23,7 @@
 }
 .content1-5{ 
     background-color: #fddfad;
-    height: 13%;
+    height: 17.5%;
     margin-top: -0.1px;/*to solve a little problem in chrome*/
 }
 .content2{ 
@@ -142,9 +142,6 @@
 .numberText{
     font-weight: bold;
     padding-left: 0%;
-    /*vertical align*/
-    top: 50%;
-    transform:translate(0%,-50%);
 }
 .buttonTitle{
     padding-right: 5% !important;

@@ -14,6 +14,7 @@ class PanelGroup extends REST_Controller {
         $this->load->model('panelInterface');
         $this->load->model('Lexicon');
         $this->load->model('BoardInterface');
+        $this->load->model('AddWordInterface');
     }
 
     public function index_get() {
@@ -159,6 +160,7 @@ class PanelGroup extends REST_Controller {
 
     public function copyDefaultGroupBoard_post() {
         //MODIF: 2 es el panel default
+        $this->BoardInterface->initTrans();
         $idusu = $this->session->userdata('idusu');
         $board = $this->BoardInterface->getPrimaryGroupBoard();
         if ($board == null) {
@@ -202,6 +204,7 @@ class PanelGroup extends REST_Controller {
             $primaryUserBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
             $idToShow = $primaryUserBoard[0]->ID_Board;
         }
+        $this->BoardInterface->commitTrans();
         $response = [
             'idBoard' => $idToShow
         ];
@@ -216,6 +219,7 @@ class PanelGroup extends REST_Controller {
         $srcGroupBoard = $request->id;
         $changedLinks = array();
 
+        $this->BoardInterface->initTrans();
         $primaryBoard = $this->BoardInterface->getInfoGroupBoard($srcGroupBoard);
 
         $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
@@ -239,9 +243,6 @@ class PanelGroup extends REST_Controller {
             foreach ($boardtables as $row) {
                 $boardtables = $this->BoardInterface->copyBoardTables($idDst, $sameGroupBoard, $row);
                 $idusuorigen = $this->session->userdata('idusu');
-                if ($idusuorigen != $idusu) {
-                    //MODIF: copiar vocabulirio ;)
-                }
                 if ($row->ID_CPicto != null) {
                     $this->Lexicon->addWordStatsX1($row->ID_CPicto, $idusu, true);
                     if ($row->imgCell != null) {
@@ -256,7 +257,9 @@ class PanelGroup extends REST_Controller {
             $this->panelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i + 1]);
             $i++;
         }
+        $this->AddWordInterface->copyVocabulary($idusuorigen,$idusu);
 
+        $this->BoardInterface->commitTrans();
         $response = [
         ];
         $this->response($response, REST_Controller::HTTP_OK);

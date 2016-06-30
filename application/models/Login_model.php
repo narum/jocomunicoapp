@@ -59,6 +59,7 @@ class Login_model extends CI_Model {
         $userConfig = $query2[0];
 
         // Save user config data in the COOKIES
+        $this->session->set_userdata('idsu', $userConfig["ID_SU"]);
         $this->session->set_userdata('idusu', $userConfig["ID_User"]);
         $this->session->set_userdata('uname', $userConfig["SUname"]);
         $this->session->set_userdata('ulanguage', $userConfig["cfgExpansionLanguage"]);

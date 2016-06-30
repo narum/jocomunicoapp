@@ -92,7 +92,7 @@ class BoardInterface extends CI_Model {
         $this->db->join('Function', 'Cell.ID_CFunction = Function.ID_Function', 'left');
         $this->db->join('S_Folder', 'S_Folder.ID_Folder = Cell.sentenceFolder', 'left');
         $this->db->join('S_Sentence', 'S_Sentence.ID_SSentence = Cell.ID_CSentence', 'left');
-        $this->db->join('boards', 'boards.ID_Board = Cell.boardLink', 'left');
+        $this->db->join('Boards', 'Boards.ID_Board = Cell.boardLink', 'left');
         $this->db->select('*, functName' . $lang . ' as textFunction');
         $query = $this->db->get('R_BoardCell');
 
