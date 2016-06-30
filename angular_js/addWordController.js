@@ -37,7 +37,7 @@ angular.module('controllers')
             switch ($scope.addWordType)
                 {
                     case "name":
-                        $scope.objAdd = {type: "name", nomtext: null, mf: false, singpl: false, contabincontab: null, determinat: null, ispropernoun: false, defaultverb: null, plural: null, femeni: null, fempl: null};
+                        $scope.objAdd = {type: "name", nomtext: null, mf: false, singpl: false, contabincontab: null, determinat: null, ispropernoun: false, defaultverb: null, plural: null, femeni: null, fempl: null, imgPicto: 'arrow question.png'};
                         $scope.switchName = {s1: false, s2: false, s3: false, s4: false, s5: false, s6: false};
                         $scope.NClassList = [];
                         $scope.classNoun = [{classType: "animate", numType: 1, nameType: $scope.content.classname1},
@@ -69,7 +69,7 @@ angular.module('controllers')
                         break;
                     case "adj":
                         //MODIF: defaultverb: 100/86, subjdef: 1/3 per defecte
-                        $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null,defaultverb: false, subjdef: false};
+                        $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null,defaultverb: false, subjdef: false, imgPicto: 'arrow question.png'};
                         $scope.switchAdj = {s1: false, s2: false, s3: false, s4: false, s5: false, s6: false};
                         $scope.AdjClassList = [];
                         $scope.classAdj = [{classType: "all", numType: 0, adjType: $scope.content.classadj0},
@@ -141,12 +141,21 @@ angular.module('controllers')
                                                     singpl: $scope.addWordEditData.singpl == "sing" ? false : true, contabincontab: $scope.addWordEditData.contabincontab == "incontable" ? true : false,
                                                     determinat: $scope.addWordEditData.determinat, ispropernoun: $scope.addWordEditData.ispropernoun == 1 ? true : false,
                                                     defaultverb: $scope.addWordEditData.defaultverb, plural: $scope.addWordEditData.plural,
-                                                    femeni: $scope.addWordEditData.femeni, fempl: $scope.addWordEditData.fempl};
+                                                    femeni: $scope.addWordEditData.femeni, fempl: $scope.addWordEditData.fempl, imgPicto: $scope.addWordEditData.imgPicto};
                                                 $scope.switchName = {s1: false, s2: $scope.objAdd.femeni != null ? true : false, s3: $scope.objAdd.plural != null ? true : false,
                                                     s4: $scope.objAdd.fempl != null ? true : false, s5: $scope.objAdd.defaultverb != null ? true : false, s6: false};
                                                 break;
-                                            case "adj":
-                                                $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null, subjdef: null};
+                                            case "adj": //MODIF: S'HA DE TESTEAR
+                                                console.log(response.data);
+                                                if (response.data){
+                                                    for(i = 0; i < response.data.length;i++){
+                                                        $scope.addAdjClass(response.data[i].class);
+                                                    }
+                                                }
+                                                $scope.objAdd = {type: "adj", masc: $scope.addWordEditData.masc, fem: $scope.addWordEditData.fem,
+                                                    mascpl: $scope.addWordEditData.mascpl, fempl: $scope.addWordEditData.fempl,
+                                                    defaultverb: $scope.addWordEditData.defaultverb == "86" ? false : true, subjdef: $scope.addWordEditData.subjdef == "1" ? false : true};
+                                                $scope.switchAdj = {s1: $scope.addWordEditData.defaultverb, s2: $scope.addWordEditData.subjdef, s3: false, s4: false, s5: false, s6: false};
                                                 break;
                                             default:
                                                 break;
@@ -161,12 +170,37 @@ angular.module('controllers')
 
 
             $scope.saveAddWord = function () {
-                var URL = $scope.baseurl + "Board/XXXXXXXX";
                 console.log($scope.objAdd);
-//      MODIF: HA DE ENVIAR LES DADES AL POST
-//                $http.post(URL, objAdd).success(function (response)
-//                {
-//                });
+                switch ($scope.addWordType)
+                {
+                    case "name":
+                        $scope.objAdd = {type: "name", nomtext: $scope.objAdd.nomtext, mf: $scope.objAdd.mf == false ? "masc" : "fem",
+                            singpl: $scope.objAdd.singpl == false ? "sing" : "pl", contabincontab: $scope.objAdd.contabincontab == true ? "incontable" : "contable",
+                            determinat: $scope.objAdd.determinat, ispropernoun: $scope.objAdd.ispropernoun == true ? "1" : "0",
+                            defaultverb: $scope.objAdd.defaultverb, plural: $scope.switchName.s3 == false ? null : $scope.objAdd.plural,
+                            femeni: $scope.switchName.s2 == false ? null : $scope.objAdd.femeni, fempl: $scope.switchName.s4 == false ? null : $scope.objAdd.fempl,
+                            supportsExpansion: true, //MODIF: AFEGIR A VISTA UN SWITCH
+                            imgPicto: $scope.objAdd.imgPicto, idpicto: $scope.idEditWord != null ? $scope.idEditWord : false, new: $scope.NewModif == 1 ? true : false,
+                            class: $scope.NClassList};
+                        $scope.switchName = {s1: false, s2: $scope.objAdd.femeni != null ? true : false, s3: $scope.objAdd.plural != null ? true : false,
+                            s4: $scope.objAdd.fempl != null ? true : false, s5: $scope.objAdd.defaultverb != null ? true : false, s6: false};
+                        break;
+                    case "adj":
+                        $scope.objAdd = {type: "adj", masc: $scope.objAdd.masc, fem: $scope.objAdd.fem, mascpl: $scope.objAdd.mascpl,
+                            fempl: $scope.objAdd.fempl, defaultverb: $scope.addWordEditData.defaultverb == false ? "86" : "100", subjdef: $scope.addWordEditData.subjdef == false ? "1" : "3"};
+                        break;
+                    default:
+                        break;
+                }
+                
+                var URL = $scope.baseurl + "AddWord/InsertWordData";
+                var postdata = {objAdd: $scope.objAdd};
+                console.log($scope.objAdd);
+                
+                $http.post(URL, postdata).success(function (response)
+                {
+                    
+                });
 
                 $location.path("/panelGroups");
             };
@@ -185,7 +219,9 @@ angular.module('controllers')
                 })
                         .success(function (response) {
                             $scope.uploading = false;
-                            $scope.URLImg = response.url;
+                            $scope.objAdd.imgPicto = response.url;
+                            $scope.objAdd.imgPicto = $scope.objAdd.imgPicto.split('/');
+                            $scope.objAdd.imgPicto = $scope.objAdd.imgPicto[2];
                             if (response.error) {
                                 //open modal
                                 console.log(response.errorText);
@@ -202,8 +238,6 @@ angular.module('controllers')
                     if (value.classType == nameTypeClass) {
                         $scope.NClassList.push($scope.classNoun[key]);//añadimos el idioma a la lista .push(objeto)
                         $scope.classNoun.splice(key, 1);//Borrar idioma de las opciones .splice(posicion, numero de items)
-                        $scope.state.languageSelected = 'has-success';
-                        languageOk = true;
                     }
                 });
             };
@@ -216,8 +250,6 @@ angular.module('controllers')
                     if (value.classType == AdjTypeClass) {
                         $scope.AdjClassList.push($scope.classAdj[key]);//añadimos el idioma a la lista .push(objeto)
                         $scope.classAdj.splice(key, 1);//Borrar idioma de las opciones .splice(posicion, numero de items)
-                        $scope.state.languageSelected = 'has-success';
-                        languageOk = true;
                     }
                 });
             };
