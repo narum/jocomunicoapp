@@ -14,7 +14,7 @@
                 <div class="col-xs-12 imgRounded imgContainer">
                     <div class="fullheight imgRounded paddingContainer" style="background-image: url(img/srcWeb/patterns/pattern4.png)">
                         <div class="imgAddWord">
-
+                            <img class="imgResponsive" ng-src="{{baseurl+'img/pictos/'+objAdd.imgPicto}}"/>
                         </div>
                         <div class="buttonUploadImg">
                             <label for="file-input" class="fullheight fullwidth">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-xs-12 imgRounded confirmContainer">
                     <div class="fullheight imgRounded paddingContainerButtons row" style="background-image: url(img/srcWeb/patterns/pattern6.png)">
-                        <div ng-if="NewModif == 1" class="col-xs-12 paddingButtonAddWord">
+                        <div ng-if="NewModif == 0" class="col-xs-12 paddingButtonAddWord">
                             <div class="imgRounded ButtonAddWord row" ng-click="">
                                 <div class="col-xs-8 fullheight TextAddWord">MODIF: Eliminar</div>
                                 <img class="col-xs-4" max-width="100%" height="100%" ng-src="{{baseurl}}img/srcWeb/Menu/borrar_tot_icon.png"/>
