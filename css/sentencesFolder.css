@@ -121,7 +121,7 @@
     height: 4vh;
     background-color: #92dbe1;
     text-align: center;
-    font-size: 2vh;
+    font-size: 1.8vh;
     color: white;
     padding-top: 0.6vh;
     cursor: pointer;
@@ -134,7 +134,7 @@
     border-top-right-radius: 1vh;
     background-color: #81c1c6;
     text-align: center;
-    font-size: 2vh;
+    font-size: 1.8vh;
     color: white;
     padding-top: 0.1vh;
     cursor: pointer;
@@ -148,7 +148,7 @@
     border-bottom-right-radius: 1vh;
     background-color: #81c1c6;
     text-align: center;
-    font-size: 2vh;
+    font-size: 1.8vh;
     color: white;
     padding-top: 3.5vh;
     cursor: pointer;
@@ -161,7 +161,7 @@
     border-bottom-right-radius: 1vh;
     background-color: #81c1c6;
     text-align: center;
-    font-size: 2vh;
+    font-size: 1.8vh;
     color: white;
     padding-top: 0.1vh;
     cursor: pointer;
@@ -173,7 +173,7 @@
 .grayButton {
     margin-top: 0.75vw;
     height: 5vw;
-    font-size: 2.5vh;
+    font-size: 2.2vh;
     padding-left: 1vw;
     padding-right: 1vw;
     border-radius: 0.5vw;
@@ -193,7 +193,7 @@
 .turquoiseButton {
     margin-top: 0.75vw;
     height: 5vw;
-    font-size: 2.5vh;
+    font-size: 2.2vh;
     padding-left: 1vw;
     padding-right: 1vw;
     border-radius: 0.5vw;

@@ -268,8 +268,10 @@ class Main_model extends CI_Model {
     //delete all historic after last 30 days
     function deleteHistoric(){
         $date = date('Y-m-d', strtotime("-30 day"));
+        $this->db->from('S_Historic');
+        $this->db->join('R_S_HistoricPictograms', 'S_Historic.ID_SHistoric = R_S_HistoricPictograms.ID_RSHPSentence');
         $this->db->where('sentenceDate <', $date);
-        $query = $this->db->delete('S_Historic');
+        $query = $this->db->delete();
         return;
     }
     //get historic sentence

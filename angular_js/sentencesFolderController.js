@@ -91,6 +91,7 @@ angular.module('controllers')
             Resources.main.save({'ID_Folder': $routeParams.folderId},{'funct': "getSentencesOrHistoricFolder"}).$promise
             .then(function (results) {
                 $scope.sentences = results.sentences;
+                console.log($scope.sentences);
                 $scope.viewActived = true;
                 if($routeParams.folderId>0){
                     $scope.folderSelected = results.folder;
@@ -190,6 +191,7 @@ angular.module('controllers')
             var i;
             var uploadUrl = $scope.baseurl + "ImgUploader/upload";
             var fd = new FormData();
+            fd.append('vocabulary', angular.toJson(false));
             for (i = 0; i < $scope.myFile.length; i++) {
                 fd.append('file' + i, $scope.myFile[i]);
             }

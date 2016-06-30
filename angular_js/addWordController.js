@@ -122,23 +122,32 @@ angular.module('controllers')
                         {
                             $scope.addWordEditData = response.data[0];
                             console.log($scope.addWordEditData);
-
-                            switch ($scope.addWordType)
-                            {
-                                case "name":
-                                    $scope.objAdd = {type: "name", nomtext: $scope.addWordEditData.nomtext, mf: $scope.addWordEditData.mf == "masc" ? false : true,
-                                        singpl: $scope.addWordEditData.singpl == "sing" ? false : true, contabincontab: $scope.addWordEditData.contabincontab == "incontable" ? true : false,
-                                        determinat: $scope.addWordEditData.determinat, ispropernoun: $scope.addWordEditData.ispropernoun == 1 ? true : false,
-                                        defaultverb: $scope.addWordEditData.defaultverb, plural: $scope.addWordEditData.plural,
-                                        femeni: $scope.addWordEditData.femeni, fempl: $scope.addWordEditData.fempl};
-                                    $scope.switchName = {s1: false, s2: false, s3: false, s4: false, s5: false, s6: false};
-                                    break;
-                                case "adj":
-                                    $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null, subjdef: null};
-                                    break;
-                                default:
-                                    break;
-                            }
+                            
+                            var postdata = {id: $scope.addWordType, type: $scope.addWordType};
+                            console.log(postdata);
+                            var URL = $scope.baseurl + "AddWord/EditWordGetClass";
+                            $http.post(URL, postdata).
+                                    success(function (response)
+                                    {
+                                        switch ($scope.addWordType)
+                                        {
+                                            case "name":
+                                                
+                                                $scope.objAdd = {type: "name", nomtext: $scope.addWordEditData.nomtext, mf: $scope.addWordEditData.mf == "masc" ? false : true,
+                                                    singpl: $scope.addWordEditData.singpl == "sing" ? false : true, contabincontab: $scope.addWordEditData.contabincontab == "incontable" ? true : false,
+                                                    determinat: $scope.addWordEditData.determinat, ispropernoun: $scope.addWordEditData.ispropernoun == 1 ? true : false,
+                                                    defaultverb: $scope.addWordEditData.defaultverb, plural: $scope.addWordEditData.plural,
+                                                    femeni: $scope.addWordEditData.femeni, fempl: $scope.addWordEditData.fempl};
+                                                $scope.switchName = {s1: false, s2: $scope.objAdd.femeni != null ? true : false, s3: $scope.objAdd.plural != null ? true : false,
+                                                    s4: $scope.objAdd.fempl != null ? true : false, s5: $scope.objAdd.defaultverb != null ? true : false, s6: false};
+                                                break;
+                                            case "adj":
+                                                $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null, subjdef: null};
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    });
                         });
             };
 
@@ -163,10 +172,11 @@ angular.module('controllers')
                 var i;
                 var uploadUrl = $scope.baseurl + "ImgUploader/upload";
                 var fd = new FormData();
+                fd.append('vocabulary', angular.toJson(true));
                 for (i = 0; i < $scope.myFile.length; i++) {
                     fd.append('file' + i, $scope.myFile[i]);
                 }
-                $http.post(uploadUrl, fd, {
+                $http.post(uploadUrl, fd,{
                     headers: {'Content-Type': undefined}
                 })
                         .success(function (response) {

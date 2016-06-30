@@ -51,7 +51,28 @@ class AddWord extends REST_Controller {
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    public function EditWordGetData_post(){
+    public function EditWordGetClass_post(){
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idPicto = $request->id;
+        $type = $request->type;
+        switch($type){
+            case('name'):
+                $DataArray = $this->AddWordInterface->getDBClassNames($idPicto);
+                break;
+            case('adj'):
+                break;
+        }
+        
+        
+        $response = [
+            "data" => $data
+        ];
+
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    
+        public function EditWordGetData_post(){
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $idPicto = $request->id;
@@ -102,6 +123,8 @@ class AddWord extends REST_Controller {
 
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
+    
+    
     
     public function getDBNames_post() {
         $postdata = file_get_contents("php://input");

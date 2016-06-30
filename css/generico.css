@@ -547,3 +547,12 @@ input.switch:checked ~ label:after
 .textCenter{
     text-align: center;
 }
+.modalScrollbar{
+    max-height: 20vh;
+    overflow: hidden;
+}
+.arrowMenuBar{
+    margin-top: 1.2vh;
+    height: 2vh;
+    width: auto;
+}

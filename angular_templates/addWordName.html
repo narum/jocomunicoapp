@@ -62,7 +62,7 @@
                 </div>
                 <div class="col-xs-7 row">
                     <div class="col-xs-7">
-                        <input type="text" class="addWordText"  name="addWordText" ng-model="objAdd.nomtext"/>
+                        <input type="text" class="addWordText"  name="addWordText" ng-model="$parent.objAdd.nomtext"/>
                     </div>
                     <div class="col-xs-4">
                         
@@ -80,8 +80,8 @@
                 </div>
                 <div class="col-xs-7 row">
                     <div class="col-xs-7">
-                        <input type="text" ng-if="$parent.switchName.s2" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
-                        <input type="text" disabled ng-if="!$parent.switchName.s2" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                        <input type="text" ng-if="$parent.switchName.s2" class="addWordText"  name="femeni" ng-model="$parent.objAdd.femeni"/>
+                        <input type="text" disabled ng-if="!$parent.switchName.s2" class="addWordText"  name="femeniDis"/>
                     </div>
                     <div class="col-xs-4">
                         <input id="switchName2" class="switchclear" type="checkbox" 
@@ -109,9 +109,8 @@
                 </div>
                 <div class="col-xs-7 row">
                     <div class="col-xs-7">
-                        <input type="text" ng-if="$parent.switchName.s3 && !$parent.objAdd.mf" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
-                        <input type="text" ng-if="$parent.switchName.s3 && $parent.objAdd.mf" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName2"/>
-                        <input type="text" disabled ng-if="!$parent.switchName.s3" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                        <input type="text" ng-if="$parent.switchName.s3" class="addWordText"  name="plural" ng-model="$parent.objAdd.plural"/>
+                        <input type="text" disabled ng-if="!$parent.switchName.s3" class="addWordText"  name="pluralDis"/>
                     </div>
                     <div class="col-xs-4">
                         <input id="switchName3" class="switchclear" type="checkbox" 
@@ -131,8 +130,8 @@
                 </div>
                 <div class="col-xs-7 row">
                     <div class="col-xs-7">
-                        <input type="text" ng-if="$parent.switchName.s4" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
-                        <input type="text" disabled ng-if="!$parent.switchName.s4" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                        <input type="text" ng-if="$parent.switchName.s4" class="addWordText"  name="fempl" ng-model="$parent.objAdd.fempl"/>
+                        <input type="text" disabled ng-if="!$parent.switchName.s4" class="addWordText"  name="femplDis" />
                     </div>
                     <div class="col-xs-4">
                         <input id="switchName4" class="switchclear" type="checkbox" 
@@ -196,7 +195,7 @@
                             MODIF: DETERMINAT
                         </div>
                         <div class="col-xs-5 text-left">
-                            <input type="radio" ng-model="$parent.objAdd.determinat" value="2"/>
+                            <input type="radio" ng-model="$parent.objAdd.determinat" value="0"/>
                             MODIF: INDETERMINAT
                         </div>
                         <div class="col-xs-offset-2 col-xs-5 text-left">
@@ -219,8 +218,8 @@
                 </div>
                 <div class="col-xs-7 row">
                     <div class="col-xs-7">
-                        <input type="text" ng-if="$parent.switchName.s5" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
-                        <input type="text" disabled ng-if="!$parent.switchName.s5" class="addWordText"  name="CopyBoardName" ng-model="CopyBoardData.CreateBoardName"/>
+                        <input type="text" ng-if="$parent.switchName.s5" class="addWordText"  name="defaultverb" ng-model="$parent.objAdd.defaultverb"/>
+                        <input type="text" disabled ng-if="!$parent.switchName.s5" class="addWordText"  name="defaultverbDis"/>
                     </div>
                     <div class="col-xs-4">
                         <input id="switchName5" class="switch" type="checkbox" 
