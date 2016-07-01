@@ -860,7 +860,7 @@ class Recommender extends CI_Model {
     private function getContextTypeAllDeep($pictoType, $minCount) {                            
         $output = null;
 
-        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, SUM(P_StatsUserPicto.'.($this->getHora()-1).'h+P_StatsUserPicto.'.$this->getHora().'h+P_StatsUserPicto.'.($this->getHora()+1).'h) as count');
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, SUM(P_StatsUserPicto.'.($this->getHora()-1).'h+P_StatsUserPicto.'.$this->getHora().'h+P_StatsUserPicto.'.($this->getHora()+1).'h) as repes');
         $this->db->from('P_StatsUserPicto');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
@@ -869,14 +869,14 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('Pictograms.pictoType', $pictoType);    
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->having('count >=', 1);
-        $this->db->order_by('count', 'desc');        
+        $this->db->having('repes >=', 1);
+        $this->db->order_by('repes', 'desc');        
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
             $output = $query->result();
             foreach($output as $value) {
-                $value->count = $value->count*10;
+                $value->repes = $value->repes*10;
             }
         }
         return $output;   
@@ -935,6 +935,33 @@ class Recommender extends CI_Model {
         return $output;   
     }
     
+    private function getfreqUsuariX1DeepNV($minCount) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, SUM(P_StatsUserPicto.'.($this->getHora()-1).'h+P_StatsUserPicto.'.$this->getHora().'h+P_StatsUserPicto.'.($this->getHora()+1).'h) as count');
+        $this->db->from('P_StatsUserPicto');
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left');
+        $this->db->where('P_StatsUserPicto.'.$this->getDia().' >=', 1);
+        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
+        $this->db->where('Pictograms.pictoType !=', 'verb');                             
+        $this->db->having('count >=', 1);
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $query = $this->db->get();      
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+            foreach($output as $value) {
+                $value->count = $value->count*10;
+            }
+        }
+
+        return $output;
+    }
+    
     private function getfreqUsuariX1Deep($minCount) {
         $output = array();
         $output = null;
@@ -977,9 +1004,27 @@ class Recommender extends CI_Model {
        
         if ($query->num_rows() > 0) {
             $output = $query->result();
-//            foreach($output as $value) {
-//                $value->count = $value->count*1;
-//            }
+        }
+        return $output;
+    }
+    
+    private function getfreqUsuariX1NV() {
+        $output = array();
+        $output = null;     
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, P_StatsUserPicto.countx1 as count');
+        $this->db->from('P_StatsUserPicto');
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
+        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));
+        $this->db->where('Pictograms.pictoType !=', 'verb');                             
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $query = $this->db->get();     
+       
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
         }
         return $output;
     }
@@ -1194,13 +1239,16 @@ class Recommender extends CI_Model {
 
         // Algorisme V2 - Predictor freqüència II (d'usuari)
         $contextTypeNamesAll = $this->getContextTypeAll('name');
-        $contextTypeNamesAllDeep = $this->getContextTypeAllDeep('name', sizeof($contextTypeNamesAll)*0.01);
-        $freqTemp = array_merge($contextTypeNamesAllDeep, $contextTypeNamesAll);
-        usort($freqTemp, function ($a, $b) {  
-            if ($a->count == $b->count) return 0;
-            else return ($a->count < $b->count) ? 1 : -1;
-        });
-        $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+        $contextTypeNamesAllDeep = $this->getContextTypeAllDeep('name', sizeof($contextTypeNamesAll)*0.01);      
+        if (empty($contextTypeNamesAllDeep)) $freqTotal = $contextTypeNamesAll;
+        else {
+            $freqTemp = array_merge($contextTypeNamesAllDeep, $contextTypeNamesAll);
+            usort($freqTemp, function ($a, $b) {  
+                if ($a->repes == $b->repes) return 0;
+                else return ($a->repes < $b->repes) ? 1 : -1;
+            });
+            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');            
+        }
         $k = 0;
         foreach($freqTotal as $value) {
             for ($i = 0; $i < sizeof($VF); $i++) {
@@ -1218,16 +1266,19 @@ class Recommender extends CI_Model {
         if (sizeof($VF) < $TSize) {
             $freqUsuari = $this->getfreqUsuariX1();
             $freqUsuariDeep = $this->getfreqUsuariX1Deep(sizeof($freqUsuari)*0.01);
-            $freqTemp = array_merge($freqUsuariDeep, $freqUsuari);
-            usort($freqTemp, function ($a, $b) {  
-                if ($a->count == $b->count) return 0;
-                else return ($a->count < $b->count) ? 1 : -1;
-            });
-            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            if (empty($freqUsuariDeep)) $freqTotal = $freqUsuari;
+            else {
+                $freqTemp = array_merge($freqUsuariDeep, $freqUsuari);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->count == $b->count) return 0;
+                    else return ($a->count < $b->count) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
             $VF = $this->rellenaVFX2X3($VF, $freqTotal, $TSize);
         }
         return $VF;
-    }   
+    }
 
     private function getRecommenderX1NonExpan() {
         $TSize = $this->session->userdata('cfgPredBarNumPred');
@@ -1238,12 +1289,15 @@ class Recommender extends CI_Model {
         // Algorisme V2 - Predictor freqüència II (d'usuari)                   
         $freqUsuari = $this->getfreqUsuariX1();
         $freqUsuariDeep = $this->getfreqUsuariX1Deep(sizeof($freqUsuari)*0.01);
-        $freqTemp = array_merge($freqUsuariDeep, $freqUsuari);
-        usort($freqTemp, function ($a, $b) {  
-            if ($a->count == $b->count) return 0;
-            else return ($a->count < $b->count) ? 1 : -1;
-        });
-        $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+        if (empty($freqUsuariDeep)) $freqTotal = $freqUsuari;
+        else {            
+            $freqTemp = array_merge($freqUsuariDeep, $freqUsuari);
+            usort($freqTemp, function ($a, $b) {  
+                if ($a->count == $b->count) return 0;
+                else return ($a->count < $b->count) ? 1 : -1;
+            });
+            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+        }
         $VF = $this->rellenaVFX1($VF, $freqTotal, $TSize);           
 
         return $VF;
@@ -1308,12 +1362,15 @@ class Recommender extends CI_Model {
             // Algorisme V6 - Predictor de context (name) total
             $contextTypeNamesAll = $this->getContextTypeAll('name');
             $contextTypeNamesAllDeep = $this->getContextTypeAllDeep('name', sizeof($contextTypeNamesAll)*0.01);
-            $freqTemp = array_merge($contextTypeNamesAllDeep, $contextTypeNamesAll);
-            usort($freqTemp, function ($a, $b) {  
-                if ($a->count == $b->count) return 0;
-                else return ($a->count < $b->count) ? 1 : -1;
-            });
-            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            if (empty($contextTypeNamesAllDeep)) $freqTotal = $contextTypeNamesAll;
+            else {
+                $freqTemp = array_merge($contextTypeNamesAllDeep, $contextTypeNamesAll);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->repes == $b->repes) return 0;
+                    else return ($a->repes < $b->repes) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
             $VF = $this->insertFloorVF($VF, $freqTotal, $FSize);
 
             // rellena
@@ -1357,7 +1414,7 @@ class Recommender extends CI_Model {
 
         // Algorisme V2 - Predictor freqüència II (d'usuari)
         $VF = array();
-        $VF = array_merge($VF,$this->getfreqUsuariX2NonExpan($inputid1));        
+        $VF = array_merge($VF,$this->getfreqUsuariX2NonExpan($inputid1));
         $TSize = $this->session->userdata('cfgPredBarNumPred');
         
         // rellena
@@ -1366,12 +1423,15 @@ class Recommender extends CI_Model {
             unset($freqX1[0]);
             unset($freqX1[1]);
             $freqUsuariDeep = $this->getfreqUsuariX1Deep(sizeof($freqX1)*0.01);
-            $freqTemp = array_merge($freqUsuariDeep, $freqX1);
-            usort($freqTemp, function ($a, $b) {  
-                if ($a->count == $b->count) return 0;
-                else return ($a->count < $b->count) ? 1 : -1;
-            });
-            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            if (empty($freqUsuariDeep)) $freqTotal = $freqX1;
+            else {
+                $freqTemp = array_merge($freqUsuariDeep, $freqX1);
+                usort($freqTemp, function ($a, $b) {
+                    if ($a->count == $b->count) return 0;
+                    else return ($a->count < $b->count) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
             $VF = $this->rellenaVFX2X3($VF, $freqTotal, $TSize);
         }
 
@@ -1398,23 +1458,31 @@ class Recommender extends CI_Model {
         // Algorisme V2 - Predictor freqüència II (d'usuari)
         $VF = array();
         $VF = array_merge($VF,$this->getfreqUsuariX3($inputid1, $inputid2));              
-        
         // rellena 1ra mitad
         if (sizeof($VF) < 3) {
             $freqX2 = $this->getfreqUsuariX2($inputid2);
             $VF = $this->rellenaVFX2X3($VF, $freqX2, 3);
         }        
-        
+       
         // rellena 1ra mitad
         if (sizeof($VF) < 3) {
-            $freqX1 = $this->getfreqUsuariX1();
-            $freqUsuariDeep = $this->getfreqUsuariX1Deep(sizeof($freqX1)*0.01);
-            $freqTemp = array_merge($freqUsuariDeep, $freqX1);
-            usort($freqTemp, function ($a, $b) {  
-                if ($a->count == $b->count) return 0;
-                else return ($a->count < $b->count) ? 1 : -1;
-            });
-            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            if ($verb) {
+                $freqX1 = $this->getfreqUsuariX1NV();
+                $freqUsuariDeep = $this->getfreqUsuariX1DeepNV(sizeof($freqX1)*0.01);
+            }
+            else {
+                $freqX1 = $this->getfreqUsuariX1();
+                $freqUsuariDeep = $this->getfreqUsuariX1Deep(sizeof($freqX1)*0.01);
+            }
+            if (empty($freqUsuariDeep)) $freqTotal = $freqX1;
+            else {
+                $freqTemp = array_merge($freqUsuariDeep, $freqX1);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->count == $b->count) return 0;
+                    else return ($a->count < $b->count) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
             $VF = $this->rellenaVFX2X3($VF, $freqTotal, 3);
         }
         
@@ -1430,12 +1498,15 @@ class Recommender extends CI_Model {
             // Algorisme V6 - Predictor de context (name) total                      
             $contextTypeNamesAll = $this->getContextTypeAll('name');
             $contextTypeNamesAllDeep = $this->getContextTypeAllDeep('name', sizeof($contextTypeNamesAll)*0.01);
-            $freqTemp = array_merge($contextTypeNamesAllDeep, $contextTypeNamesAll);
-            usort($freqTemp, function ($a, $b) {  
-                if ($a->count == $b->count) return 0;
-                else return ($a->count < $b->count) ? 1 : -1;
-            });
-            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            if (empty($contextTypeNamesAllDeep)) $freqTotal = $contextTypeNamesAll;
+            else {
+                $freqTemp = array_merge($contextTypeNamesAllDeep, $contextTypeNamesAll);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->repes == $b->repes) return 0;
+                    else return ($a->repes < $b->repes) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
             $VF = $this->insertFloorVF($VF, $freqTemp, $FSize);   
             
             // rellena
@@ -1630,12 +1701,15 @@ class Recommender extends CI_Model {
             unset($freqX1[0]);
             unset($freqX1[1]);
             $freqUsuariDeep = $this->getfreqUsuariX1Deep(sizeof($freqX1)*0.01);
-            $freqTemp = array_merge($freqUsuariDeep, $freqX1);
-            usort($freqTemp, function ($a, $b) {  
-                if ($a->count == $b->count) return 0;
-                else return ($a->count < $b->count) ? 1 : -1;
-            });
-            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            if (empty($freqUsuariDeep)) $freqTotal = $freqX1;
+            else {               
+                $freqTemp = array_merge($freqUsuariDeep, $freqX1);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->count == $b->count) return 0;
+                    else return ($a->count < $b->count) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
             $VF = $this->rellenaVFX2X3($VF, $freqTotal, $TSize);
         }
         
