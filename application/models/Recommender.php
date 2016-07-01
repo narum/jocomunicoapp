@@ -1463,7 +1463,7 @@ class Recommender extends CI_Model {
             $freqX2 = $this->getfreqUsuariX2($inputid2);
             $VF = $this->rellenaVFX2X3($VF, $freqX2, 3);
         }        
-       
+
         // rellena 1ra mitad
         if (sizeof($VF) < 3) {
             if ($verb) {
