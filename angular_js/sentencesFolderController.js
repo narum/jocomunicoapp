@@ -146,6 +146,7 @@ angular.module('controllers')
             $scope.viewActived = false;
             Resources.main.save({'folder':$scope.newFolder},{'funct': "deleteSentenceFolder"}).$promise
             .then(function (results) {
+                console.log(results);
                 $location.path('/panelGroups');
             });
         };

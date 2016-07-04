@@ -349,13 +349,15 @@ class Main extends REST_Controller {
         
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    //
+    //Delete sentence from folder
     public function deleteSentenceFromFolder_post()
     {
         $idusu = $this->session->userdata('idusu');
         $ID_SSentence = $this->query('ID_SSentence');
         
+        //Delete pictograms
         $this->main_model->deleteData('R_S_SentencePictograms', 'ID_RSSPSentence', $ID_SSentence);
+        //Delete sentence
         $response = $this->main_model->deleteSingleData('S_Sentence', 'ID_SSentence', $ID_SSentence, 'ID_SSUser', $idusu);
         
         $this->response($response, REST_Controller::HTTP_OK);
@@ -410,6 +412,13 @@ class Main extends REST_Controller {
         $idusu = $this->session->userdata('idusu');
         $ID_Folder = $data['ID_Folder'];
         
+        //Get sentences ID from folder to delete pictograms
+        $sentences = $this->main_model->getSingleData('S_Sentence', 'ID_SSUser', $idusu, 'ID_SFolder', $ID_Folder);
+        for($i = 0, $size = count($sentences); $i < $size; ++$i) {
+            //Delete pictograms
+            $this->main_model->deleteData('R_S_SentencePictograms', 'ID_RSSPSentence', $sentences[$i]['ID_SSentence']);
+        }
+        
         //delete sentences
         $this->main_model->deleteSingleData('S_Sentence', 'ID_SSUser', $idusu, 'ID_SFolder', $ID_Folder);
 
@@ -417,7 +426,7 @@ class Main extends REST_Controller {
         $this->main_model->deleteSingleData('S_Folder', 'ID_SFUser', $idusu, 'ID_Folder', $ID_Folder);
         
         $response = [
-            'folder'=>$folder['ID_Folder']
+            'folder'=>$ID_Folder
         ];
         
         $this->response($response, REST_Controller::HTTP_OK);
