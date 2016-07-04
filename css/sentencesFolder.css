@@ -212,3 +212,12 @@
     background: -ms-linear-gradient(90deg, #2a5b60 14%, #3c8188 100%);
     background: -o-linear-gradient(90deg, #2a5b60 14%, #3c8188 100%);
 }
+/*Sentence box*/
+.sentenceText{
+    font-size: 2.5vh;
+    text-align: center;
+}
+.sentenceImg{
+    height: 6vh;
+    width: auto;
+}

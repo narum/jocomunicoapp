@@ -277,7 +277,7 @@ class Main extends REST_Controller {
             $sentences = $this->main_model->getHistoric($idusu, ($ID_Folder * (-1)));
         }else{
             $folder=$this->main_model->getSingleData('S_Folder', 'ID_SFUser', $idusu, 'ID_Folder', $ID_Folder);
-            $sentences = $this->main_model->getSingleData('S_Sentence', 'ID_SSUser', $idusu, 'ID_SFolder', $ID_Folder);
+            $sentences = $this->main_model->getSentencesWithPictos($idusu, $ID_Folder);
         }
         
         $response = [
@@ -296,27 +296,55 @@ class Main extends REST_Controller {
         $historicFolder = $this->query('historicFolder');
         
         if($historicFolder=='true'){
-            //Get sentence from historic
+            //Get sentence from historic and pictograms from historic pictograms
             $sentence = $this->main_model->getHistoricSentence($idusu, $ID_Sentence);
+            $pictograms = $this->main_model->getData('R_S_HistoricPictograms', 'ID_RSHPSentence', $ID_Sentence);
             //Add and remove some fields of array
             $sentence['ID_SFolder'] = $ID_Folder;
             $sentence['ID_SSUser'] = $idusu;
             unset($sentence['ID_SHistoric']);
             unset($sentence['ID_SHUser']);
+            
+            //Save sentence
+            $saved=$this->main_model->saveData('S_Sentence', $sentence);
+            //Get sentence ID
+            $sentenceID = $this->main_model->getHigherSentenceId($ID_Folder, $idusu);
+            
+            //Change the folder id of pictograms
+            for($i = 0, $size = count($pictograms); $i < $size; ++$i) {
+                unset($pictograms[$i]['ID_RSHPSentencePicto']);
+                $pictograms[$i]['ID_RSSPSentence'] = $sentenceID;
+                unset($pictograms[$i]['ID_RSHPSentence']);
+                unset($pictograms[$i]['ID_RSHPUser']);
+            }
         }else{
-            //Get sentence from folder
+            //Get sentence from folder and pictograms
             $sentence = $this->main_model->getSingleData('S_Sentence', 'ID_SSentence', $ID_Sentence, 'ID_SSUser', $idusu)[0];
+            $pictograms = $this->main_model->getData('R_S_SentencePictograms', 'ID_RSSPSentence', $sentence['ID_SSentence']);
             //Add and remove some fields of array
             $sentence['ID_SFolder'] = $ID_Folder;
             unset($sentence['ID_SSentence']);
+            
+            //Save sentence
+            $saved=$this->main_model->saveData('S_Sentence', $sentence);
+            //Get sentence ID
+            $sentenceID = $this->main_model->getHigherSentenceId($ID_Folder, $idusu);
+            
+            //Change the folder id of pictograms
+            for($i = 0, $size = count($pictograms); $i < $size; ++$i) {
+                unset($pictograms[$i]['ID_RSSPSentencePicto']);
+                $pictograms[$i]['ID_RSSPSentence'] = $sentenceID;
+            }
         }
         
-        //Save sentence
-        $saved=$this->main_model->saveData('S_Sentence', $sentence);
+        //Save sentence pictogrmas
+        $this->main_model->saveArrayData('R_S_SentencePictograms', $pictograms);
         
         $response = [
             'saved' => $saved,
-            'sentence' => $sentence
+            'sentence' => $sentence,
+            'pictograms' => $pictograms,
+            'sentenceID' => $sentenceID
         ];
         
         $this->response($response, REST_Controller::HTTP_OK);
@@ -327,6 +355,7 @@ class Main extends REST_Controller {
         $idusu = $this->session->userdata('idusu');
         $ID_SSentence = $this->query('ID_SSentence');
         
+        $this->main_model->deleteData('R_S_SentencePictograms', 'ID_RSSPSentence', $ID_SSentence);
         $response = $this->main_model->deleteSingleData('S_Sentence', 'ID_SSentence', $ID_SSentence, 'ID_SSUser', $idusu);
         
         $this->response($response, REST_Controller::HTTP_OK);

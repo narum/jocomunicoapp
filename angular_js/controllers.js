@@ -3336,7 +3336,7 @@ angular.module('controllers', [])
                 if ($scope.inScan) {
                     //If user have start scan click activate we have to wait until he press one button
                     if ($scope.isScanning == "waiting") {
-                        $scope.nextBlockScan();
+                        $scope.isScanning = "1row";
                         $scope.setTimer();
                     } else if ($scope.isScanningCancel) {
                         $scope.isScanningCancel = false;

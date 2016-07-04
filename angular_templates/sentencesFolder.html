@@ -44,23 +44,58 @@
                         </div>
                         <div class="col-xs-2"><button ng-click="go('/panelGroups')" class="grayButton pull-right">Tornar <div class="icon-reply"></div><br/>al llistat</button></div>
                     </div>
-                    <!--Sentences-->
-                    <div class="row scrollBox">
+                    <!--Historic Sentences-->
+                    <div class="row scrollBox" ng-if="historicFolder">
                         <div class="row scrollOverflow" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meS">
-                            <div class="row insideScroll" ng-repeat="sentence in sentences" on-Finish-Loop="scrollbarSentences">
+                            <div class="row insideScroll" ng-repeat="sentence in sentences | unique:'ID_SHistoric'" on-Finish-Loop="scrollbarSentences">
                                 <div class="col-xs-12 sentenceBox">
                                     <div class="row">
-                                        
+                                        <div class="col-xs-10">
+                                            <div class="row">
+                                                <div class="col-xs-1"></div>
+                                                <div class="col-xs-1" ng-repeat="pictos in sentences | filter:{ID_SHistoric: sentence.ID_SHistoric}">
+                                                    <img class="sentenceImg" ng-src="{{baseurl}}img/pictos/{{pictos.imgPicto}}"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-3 col-xs-offset-1 sentenceText">
+                                                    {{sentence.generatorString}}
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-xs-1"></div>
-                                        <div class="col-xs-10">{{sentence.generatorString}}</div>
-                                        
-                                        <div class="col-xs-1" ng-show="!historicFolder">
+                                        <div class="col-xs-1">
+                                            <div class="row copyButtonBig" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Folder Sentences-->
+                    <div class="row scrollBox" ng-if="!historicFolder">
+                        <div class="row scrollOverflow" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meS">
+                            <div class="row insideScroll" ng-repeat="sentence in sentences | unique:'ID_SSentence'" on-Finish-Loop="scrollbarSentences">
+                                <div class="col-xs-12 sentenceBox">
+                                    <div class="row">
+                                        <div class="col-xs-10">
+                                            <div class="row">
+                                                <div class="col-xs-1"></div>
+                                                <div class="col-xs-1" ng-repeat="pictos in sentences | filter:{ID_SSentence: sentence.ID_SSentence}">
+                                                    <img class="sentenceImg" ng-src="{{baseurl}}img/pictos/{{pictos.imgPicto}}"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-3 col-xs-offset-1 sentenceText">
+                                                    {{sentence.generatorString}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-1"></div>
+                                        <div class="col-xs-1">
                                             <div class="row copyButton" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
                                             <div class="row editButton">Edita <div class="icon-pencil"></div></div>
                                             <div class="row deleteButton" ng-click="deleteSentence(sentence.ID_SSentence)">Eliminar <div class="icon-trash"></div></div>
-                                        </div>
-                                        <div class="col-xs-1" ng-show="historicFolder">
-                                            <div class="row copyButtonBig" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
                                         </div>
                                     </div>
                                 </div>

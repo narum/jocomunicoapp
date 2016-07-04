@@ -118,6 +118,7 @@ angular.module('controllers')
             $('#copySentenceModal').modal('hide');//Hide modal
             Resources.main.save({'ID_Folder':ID_Folder, 'ID_Sentence':$scope.sentenceToCopy,'historicFolder':$scope.historicFolder},{'funct': "addSentenceOnFolder"}).$promise
             .then(function (results) {
+                console.log(results);
                 getSentences();
             });
         };
@@ -149,7 +150,7 @@ angular.module('controllers')
             });
         };
         
-        
+
         /*
          * Return uploaded images from database. There are two types, the users images an the arasaac (not user images)
          */

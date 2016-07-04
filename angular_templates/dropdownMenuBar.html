@@ -12,7 +12,7 @@
     <div id="dropdownMenuButton" ng-init="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton1.png';dropdownMenuOpen=false" ng-mouseover="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton2.png';dropdownMenuOpen=true" ng-mouseout="imgMenuButton='/img/srcWeb/DropdownMenuBar/menuButton1.png'">
         <input type="image" class="imgDropdownMenuButtonHide" ng-class="{imgDropdownMenuButtonHideOpened: dropdownMenuOpen}" ng-src="{{imgMenuButton}}" ng-click="dropdownMenuOpen=!dropdownMenuOpen">
     </div>
-    <div class="dropdownMenuBar">
+    <div class="dropdownMenuBar" style="background-color: blue;">
         <div class="menuBarAnimationHide" ng-class="{menuBarAnimationOpened: dropdownMenuOpen}"></div>
     </div>
 </div>

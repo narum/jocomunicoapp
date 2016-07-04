@@ -16,6 +16,19 @@ angular.module('controllers')
             $rootScope.dropdownMenuBar = [];
             $rootScope.dropdownMenuBarButtonHide = false;
 
+            //Choose the buttons to show on bar
+            dropdownMenuBarInit($rootScope.interfaceLanguageId)
+                .then(function () {
+                    //Choose the buttons to show on bar
+                    angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                        if (value.href == '/' || value.href == '/info' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
+                            value.show = true;
+                        } else {
+                            value.show = false;
+                        }
+                    });
+                });
+            
             //function to change html view with dropdown menu buttons
             $scope.go = function (path) {
                 if (path == 'logout') {
@@ -64,6 +77,8 @@ angular.module('controllers')
                 $scope.historicFolders.sort(function(a, b){return a.folderOrder-b.folderOrder});
                 console.log($scope.historicFolders);
             });
+            //Delet historic sentences 30 days old
+            Resources.main.get({'funct': "getHistoric"});
             
             //Up folder order
             $scope.upFolder = function (order) {
