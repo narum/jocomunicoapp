@@ -143,10 +143,18 @@
     font-weight: bold;
     padding-left: 0%;
 }
+.scanText{
+    font-weight: bold;
+    padding-left: 0%;
+    padding-top: 2.5%;
+}
 .buttonTitle{
     padding-right: 5% !important;
     top: 50%;
     transform:translate(0%,-50%);
+}
+.scanCentered{
+    padding-right: 5% !important;
 }
 .colorTitle{
     padding-right: 0% !important;

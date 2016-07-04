@@ -1,5 +1,5 @@
 angular.module('controllers')
-    .controller('sentencesFolderCtrl', function ($scope, $rootScope, txtContent, $routeParams, $location, dropdownMenuBarInit, AuthService, Resources, $timeout) {
+    .controller('sentencesFolderCtrl', function ($scope, $rootScope, txtContent, $routeParams, $location, dropdownMenuBarInit, AuthService, Resources, $timeout, $http) {
         // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
         if (!$rootScope.isLogged) {
             $location.path('/login');
@@ -49,11 +49,17 @@ angular.module('controllers')
             }, 1000);
         };
         //scrollbars
-        $scope.$on('scrollbarSentences', function (ngRepeatFinishedEvent) {
+        $scope.$on('scrollbarSentences', function () {
             $scope.$broadcast('rebuild:meS');
         });
-        $scope.$on('scrollbarSentences2', function (ngRepeatFinishedEvent) {
+        $scope.$on('scrollbarSentences2', function () {
             $scope.$broadcast('rebuild:meS2');
+        });
+        $scope.$on('scrollbar.show', function () {
+            console.log('Scrollbar show');
+        });
+        $scope.$on('scrollbar.hide', function () {
+            console.log('Scrollbar hide');
         });
 
 
@@ -66,14 +72,12 @@ angular.module('controllers')
         $scope.img.loading = '/img/srcWeb/Login/loading.gif';
         
         //Variable declaration
-        $scope.viewActived = true;
-        $scope.historicSentencesView = false;
-        if($routeParams.folderId<0){
-            $scope.historicSentencesView = true;
-        }
+        $scope.viewActived = false;
+        $scope.historicFolder = false;
         
         //Folder info
         if($routeParams.folderId<0){
+            $scope.historicFolder = true;
             if($routeParams.folderId=='-1'){
                 $scope.folderSelected = {'ID_Folder':'-1', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0'};
             }else if($routeParams.folderId=='-7'){
@@ -83,29 +87,128 @@ angular.module('controllers')
             }
         }
         //Get sentences folder or Historic folder
-        Resources.main.save({'ID_Folder': $routeParams.folderId},{'funct': "getSentencesOrHistoricFolder"}).$promise
-        .then(function (results) {
-            console.log(results);
-            $scope.sentences = results.sentences;
-            if($routeParams.folderId>0){
-                $scope.folderSelected = results.folder;
-            }
-        });
+        var getSentences = function(){
+            Resources.main.save({'ID_Folder': $routeParams.folderId},{'funct': "getSentencesOrHistoricFolder"}).$promise
+            .then(function (results) {
+                $scope.sentences = results.sentences;
+                console.log($scope.sentences);
+                $scope.viewActived = true;
+                if($routeParams.folderId>0){
+                    $scope.folderSelected = results.folder;
+                    $scope.newFolder = JSON.parse(JSON.stringify(results.folder)); //copy JavaScript object to new variable NOT by reference
+                }
+            });
+        };
+        getSentences();
         
-        //Copy sentence modal on folder
-        $scope.copySentence = function(ID_SHistoric){
-            $scope.sentenceToCopy = ID_SHistoric;
+        //Copy sentence on folder
+        $scope.copySentence = function(ID_SHistoric,ID_SSentence){
+            if($scope.historicFolder){
+                $scope.sentenceToCopy = ID_SHistoric;
+            }else{
+                $scope.sentenceToCopy = ID_SSentence;
+            }
             Resources.main.get({'funct': "getSentenceFolders"}).$promise
             .then(function (results) {
-                $scope.historicFolders = results.folders;
-                $('#copySentenceModal').modal('toggle');
+                $scope.folders = results.folders;
+                $('#copySentenceModal').modal('toggle');//Show modal
             });
         };
         $scope.copyOnFolder = function(ID_Folder){
-            $('#copySentenceModal').modal('hide');
-            Resources.main.save({'ID_Folder':ID_Folder, 'ID_SHistoric':$scope.sentenceToCopy},{'funct': "addSentenceOnFolder"}).$promise
+            $('#copySentenceModal').modal('hide');//Hide modal
+            Resources.main.save({'ID_Folder':ID_Folder, 'ID_Sentence':$scope.sentenceToCopy,'historicFolder':$scope.historicFolder},{'funct': "addSentenceOnFolder"}).$promise
+            .then(function (results) {
+                getSentences();
+            });
+        };
+        $scope.deleteSentence = function(ID_SSentence){
+            Resources.main.save({'ID_SSentence':ID_SSentence},{'funct': "deleteSentenceFromFolder"}).$promise
             .then(function (results) {
                 console.log(results);
+                getSentences();
             });
+        };
+        //edit folder
+        $scope.editHistoricFolder = function(){
+            $('#editHistoricFolderModal').modal('toggle');//Show modal
+        };
+        $scope.deleteFolderModal = function(){
+            $('#deleteFolderModal').modal('toggle');//Show modal
+        };
+        $scope.saveFolder = function(){
+            Resources.main.save({'folder':$scope.newFolder},{'funct': "editSentenceFolder"}).$promise
+            .then(function (results) {
+                $scope.folderSelected = JSON.parse(JSON.stringify($scope.newFolder)); //copy JavaScript object to new variable NOT by reference
+            });
+        };
+        $scope.deleteFolder = function(){
+            $scope.viewActived = false;
+            Resources.main.save({'folder':$scope.newFolder},{'funct': "deleteSentenceFolder"}).$promise
+            .then(function (results) {
+                $location.path('/panelGroups');
+            });
+        };
+        
+        
+        /*
+         * Return uploaded images from database. There are two types, the users images an the arasaac (not user images)
+         */
+        $scope.searchImg = function (name, typeImgEditSearch) {
+            var URL = "";
+            switch (typeImgEditSearch)
+            {
+                case "Arasaac":
+                    URL = $scope.baseurl + "ImgUploader/getImagesArasaac";
+                    break;
+                case "Uploads":
+                    URL = $scope.baseurl + "ImgUploader/getImagesUploads";
+                    break;
+            }
+            var postdata = {name: name};
+            $http.post(URL, postdata).
+                success(function (response)
+                {
+                    $scope.imgData = response.data;
+                });
+        }
+
+        //get all the photos attached to the pictos
+        $scope.searchFoto = function (name)
+        {
+            var URL = $scope.baseurl + "SearchWord/getDBAll";
+            var postdata = {id: name};
+            //Request via post to controller search data from database
+            $http.post(URL, postdata).
+                success(function (response)
+                {
+                    $scope.allImg = response.data;
+                });
+        };
+        // Upload and resize the image
+        $scope.uploadFile = function () {
+            $scope.myFile = document.getElementById('file-input').files;
+            $scope.uploading = true;
+            var i;
+            var uploadUrl = $scope.baseurl + "ImgUploader/upload";
+            var fd = new FormData();
+            fd.append('vocabulary', angular.toJson(false));
+            for (i = 0; i < $scope.myFile.length; i++) {
+                fd.append('file' + i, $scope.myFile[i]);
+            }
+            $http.post(uploadUrl, fd, {
+                headers: {'Content-Type': undefined}
+            })
+                .success(function (response) {
+                    $scope.uploading = false;
+                    if (response.error) {
+                        //open modal
+                        console.log(response.errorText);
+                        $scope.errorText = response.errorText;
+                        $('#errorImgModal').modal({backdrop: 'static'});
+                    }
+                })
+                .error(function (response) {
+                    //alert(response.errorText);
+                });
         };
     });

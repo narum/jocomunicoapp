@@ -121,7 +121,7 @@
     height: 4vh;
     background-color: #92dbe1;
     text-align: center;
-    font-size: 2vh;
+    font-size: 1.8vh;
     color: white;
     padding-top: 0.6vh;
     cursor: pointer;
@@ -134,7 +134,7 @@
     border-top-right-radius: 1vh;
     background-color: #81c1c6;
     text-align: center;
-    font-size: 2vh;
+    font-size: 1.8vh;
     color: white;
     padding-top: 0.1vh;
     cursor: pointer;
@@ -142,12 +142,26 @@
 .copyButton:hover{
     background-color: #5d8d91;
 }
+.copyButtonBig{
+    height: 10vh;
+    border-top-right-radius: 1vh;
+    border-bottom-right-radius: 1vh;
+    background-color: #81c1c6;
+    text-align: center;
+    font-size: 1.8vh;
+    color: white;
+    padding-top: 3.5vh;
+    cursor: pointer;
+}
+.copyButtonBig:hover{
+    background-color: #5d8d91;
+}
 .deleteButton{
     height: 3vh;
     border-bottom-right-radius: 1vh;
     background-color: #81c1c6;
     text-align: center;
-    font-size: 2vh;
+    font-size: 1.8vh;
     color: white;
     padding-top: 0.1vh;
     cursor: pointer;
@@ -159,9 +173,9 @@
 .grayButton {
     margin-top: 0.75vw;
     height: 5vw;
-    font-size: 2.5vh;
-    padding-left: 2vw;
-    padding-right: 2vw;
+    font-size: 2.2vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
     border-radius: 0.5vw;
     color: white;
     background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
@@ -179,9 +193,9 @@
 .turquoiseButton {
     margin-top: 0.75vw;
     height: 5vw;
-    font-size: 2.5vh;
-    padding-left: 2vw;
-    padding-right: 2vw;
+    font-size: 2.2vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
     border-radius: 0.5vw;
     color: white;
     background: #3c8188;

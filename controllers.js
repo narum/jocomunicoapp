@@ -2872,7 +2872,7 @@ angular.module('controllers', [])
                     $http.post(url, postdata).success(function (response)
                     {
                         $scope.sentenceSelectedId = response.sentence.ID_SSentence;
-                        $scope.sentenceSelectedText = response.sentence.generatorString;
+                        $scope.sentenceSelectedText = response.sentence;
                     });
                 };
                 // Gets all pre-record sentences from database and shows it the dropmenu
@@ -2887,9 +2887,9 @@ angular.module('controllers', [])
                             });
                 };
                 // Asigns the selected sentence to the cell (provisionally) and show it to the user
-                $scope.selectSentence = function (id, text) {
+                $scope.selectSentence = function (id, s) {
                     $scope.sentenceSelectedId = id;
-                    $scope.sentenceSelectedText = text;
+                    $scope.sentenceSelectedText = s;
                 };
                 // Gets the sentence folder asigned (if there is any) to the cell and shows it to the user
                 $scope.getSFolder = function (id) {

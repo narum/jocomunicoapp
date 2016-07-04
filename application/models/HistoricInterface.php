@@ -80,8 +80,8 @@ class HistoricInterface extends CI_Model {
         return $query->num_rows();
     }
     
-    function getPictosFolder($IDHistoric){
-        $this->db->where('ID_SSentence', $IDHistoric);
+    function getPictosFolder($IDSentence){
+        $this->db->where('ID_SSentence', $IDSentence);
         $this->db->join('R_S_SentencePictograms', 'S_Sentence.ID_SSentence = R_S_SentencePictograms.ID_RSSPSentence', 'left');
         $this->db->join('Pictograms', 'R_S_SentencePictograms.pictoid = Pictograms.pictoid', 'left');
         $query = $this->db->get('S_Sentence');

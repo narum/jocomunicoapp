@@ -87,6 +87,13 @@ class Main_model extends CI_Model {
         
         return $data;
     }
+    // Delete single data from table $table where content in column $column are like $data
+    public function deleteSingleData($table, $column, $data, $column2, $data2){
+        $this->db->where($column, $data);// filtrem per columnes
+        $this->db->where($column2, $data2);// filtrem per columnes
+        $query = $this->db->delete($table);
+        return $query;
+    }
     
     // Get data from table $table where content in column $column are like $data
     public function getData($table, $column, $data){
@@ -271,5 +278,23 @@ class Main_model extends CI_Model {
         $this->db->where('ID_SHUser', $idusu);
         $query = $this->db->get('S_Historic');
         return $query->result_array()[0];
+    }
+    //get historic folders ordered by folderOrder descended
+    public function getHistoricFolders($idusu){
+        $this->db->from('S_Folder');// Seleccionem la taula
+        $this->db->where('ID_SFUser', $idusu);// filtrem per columnes
+        $this->db->order_by('folderOrder', 'desc');
+        $data = $this->db->get()->result_array();
+        
+        return $data;
+    }
+    // Change historic folder data.
+    public function changeHistFolder($idusu, $ID_Folder, $data){
+
+        $this->db->where('ID_Folder', $ID_Folder);
+        $this->db->where('ID_SFUser', $idusu);
+        $saved = $this->db->update('S_Folder', $data);
+
+        return $saved;
     }
 }

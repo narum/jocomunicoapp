@@ -16,18 +16,6 @@ angular.module('controllers')
             $rootScope.dropdownMenuBar = [];
             $rootScope.dropdownMenuBarButtonHide = false;
 
-            //Choose the buttons to show on bar
-            dropdownMenuBarInit($rootScope.interfaceLanguageId)
-                    .then(function () {
-                        //Choose the buttons to show on bar
-                        angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/info' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
-                                value.show = true;
-                            } else {
-                                value.show = false;
-                            }
-                        });
-                    });
             //function to change html view with dropdown menu buttons
             $scope.go = function (path) {
                 if (path == 'logout') {
@@ -58,23 +46,25 @@ angular.module('controllers')
             $scope.img.Patterns4 = '/img/srcWeb/patterns/pattern4.png';
             $scope.img.Patterns6 = '/img/srcWeb/patterns/pattern6.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
+            $scope.img.addPhoto = '/img/icons/add_photo.png';
+            $scope.img.addPhotoSelected = '/img/icons/add_photo_selected.png';
             $scope.finished = true;
 
-
             //User sentence folders
-            $scope.historicFolders = [];
+            $scope.historicFolders=[];
             Resources.main.get({'funct': "getSentenceFolders"}).$promise
-                    .then(function (results) {
-                        $scope.historicFolders.push({'ID_Folder': '-1', 'ID_SFUser': $rootScope.userId, 'folderDescr': '', 'folderName': 'today', 'imgSFolder': 'img/pictos/hoy.png', 'folderColor': 'dfdfdf', 'folderOrder': '0'});
-                        $scope.historicFolders.push({'ID_Folder': '-7', 'ID_SFUser': $rootScope.userId, 'folderDescr': '', 'folderName': 'lastWeek', 'imgSFolder': 'img/pictos/semana.png', 'folderColor': 'dfdfdf', 'folderOrder': '0'});
-                        $scope.historicFolders.push({'ID_Folder': '-30', 'ID_SFUser': $rootScope.userId, 'folderDescr': '', 'folderName': 'lastMonth', 'imgSFolder': 'img/pictos/mes.png', 'folderColor': 'dfdfdf', 'folderOrder': '0'});
-                        angular.forEach(results.folders, function (value) {
-                            $scope.historicFolders.push(value);
-                        });
-                        $scope.historicFolders.sort(function (a, b) {
-                            return a.folderOrder - b.folderOrder
-                        });
-                    });
+            .then(function (results) {
+                $scope.historicFolders.push({'ID_Folder':'-1', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0.1'});
+                $scope.historicFolders.push({'ID_Folder':'-7', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastWeek', 'imgSFolder':'img/pictos/semana.png', 'folderColor':'dfdfdf', 'folderOrder':'0.2'});
+                $scope.historicFolders.push({'ID_Folder':'-30', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastMonth', 'imgSFolder':'img/pictos/mes.png', 'folderColor':'dfdfdf', 'folderOrder':'0.3'});
+                angular.forEach(results.folders, function (value) {
+                    value.folderOrder = parseInt(value.folderOrder, 10);
+                    $scope.historicFolders.push(value);
+                });
+                $scope.historicFolders.sort(function(a, b){return a.folderOrder-b.folderOrder});
+                console.log($scope.historicFolders);
+            });
+            
             //Up folder order
             $scope.upFolder = function (order) {
                 order = parseInt(order, 10);
@@ -117,6 +107,81 @@ angular.module('controllers')
                 console.log('Scrollbar show');
             });
 
+        //CreateFolder
+        $scope.createHistoricFolder = function(){
+            $('#editHistoricFolderModal').modal('toggle');//Show modal
+        };
+        $scope.newFolder={};
+        $scope.saveFolder = function(){
+            Resources.main.save({'folderName':$scope.newFolder.folderName,'imgSFolder':$scope.newFolder.imgSFolder,'folderColor':$scope.newFolder.folderColor},{'funct': "createSentenceFolder"}).$promise
+            .then(function (results) {
+                $scope.newFolder={};
+                $scope.historicFolders.push(results.folder);
+            });
+        };
+        
+        /*
+         * Return uploaded images from database. There are two types, the users images an the arasaac (not user images)
+         */
+        $scope.searchImg = function (name, typeImgEditSearch) {
+            var URL = "";
+            switch (typeImgEditSearch)
+            {
+                case "Arasaac":
+                    URL = $scope.baseurl + "ImgUploader/getImagesArasaac";
+                    break;
+                case "Uploads":
+                    URL = $scope.baseurl + "ImgUploader/getImagesUploads";
+                    break;
+            }
+            var postdata = {name: name};
+            $http.post(URL, postdata).
+                success(function (response)
+                {
+                    $scope.imgData = response.data;
+                });
+        }
+
+        //get all the photos attached to the pictos
+        $scope.searchFoto = function (name)
+        {
+            var URL = $scope.baseurl + "SearchWord/getDBAll";
+            var postdata = {id: name};
+            //Request via post to controller search data from database
+            $http.post(URL, postdata).
+                success(function (response)
+                {
+                    $scope.allImg = response.data;
+                });
+        };
+        // Upload and resize the image
+        $scope.uploadFile = function () {
+            $scope.myFile = document.getElementById('file-input').files;
+            $scope.uploading = true;
+            var i;
+            var uploadUrl = $scope.baseurl + "ImgUploader/upload";
+            var fd = new FormData();
+            fd.append('vocabulary', angular.toJson(false));
+            for (i = 0; i < $scope.myFile.length; i++) {
+                fd.append('file' + i, $scope.myFile[i]);
+            }
+            $http.post(uploadUrl, fd, {
+                headers: {'Content-Type': undefined}
+            })
+                .success(function (response) {
+                    $scope.uploading = false;
+                    if (response.error) {
+                        //open modal
+                        console.log(response.errorText);
+                        $scope.errorText = response.errorText;
+                        $('#errorImgModal').modal({backdrop: 'static'});
+                    }
+                })
+                .error(function (response) {
+                    //alert(response.errorText);
+                });
+        };
+        
             $scope.range = function ($repeatnum)
             {
                 var n = [];
@@ -339,5 +404,3 @@ angular.module('controllers')
                 }, 500);
             };
         });
-
-
