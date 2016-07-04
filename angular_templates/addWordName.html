@@ -213,7 +213,7 @@
 
                     </div>
                     <div class="col-xs-6">
-                        MODIF:VERB PER DEFECTE
+                        MODIF:VERB
                     </div>
                 </div>
                 <div class="col-xs-7 row">
@@ -229,9 +229,33 @@
                 </div>
         </div>
     </div>
-    <div class="form addWordForm22c5">
+    <div class="form addWordForm7c5">
         <div class="addWordFromField fullheight" style="background-color: #fff;">
-            <div class="has-feedback" style="height: 30%">
+            <div class="row">
+                <div class="col-xs-5 row">
+                    <div class="col-xs-2">
+
+                    </div>
+                    <div class="col-xs-10">
+                        MODIF:Expansion
+                    </div>
+                </div>
+                <div class="col-xs-7 row">
+                    <div class="col-xs-4">
+                        <input id="switchNamesupExp" class="switchclear" type="checkbox" 
+                               ng-model="$parent.objAdd.supExp" ng-show="false">
+                        <label for="switchNamesupExp">&nbsp;</label>
+                    </div>
+                    <div class="col-xs-7">
+                        MODIF:NoExpansion
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form addWordForm15">
+        <div class="addWordFromField fullheight" style="background-color: #fff;">
+            <div class="has-feedback" style="height: 50%">
                 <div class="input-group input-group-auto inputMarginRigth">
                     <span class="input-group-addon"><i class="icon-comments"></i></span>
                     <select
@@ -240,11 +264,11 @@
                         ng-model="formNounClass"
                         ng-change="addNClass(formNounClass.valueOf())"
                         >
-                        <option ng-repeat="x in $parent.classNoun" value="{{x.classType}}">{{x.nameType}}</option>
+                        <option ng-repeat="x in $parent.classNoun | orderBy:'classType'" value="{{x.classType}}">{{x.nameType}}</option>
                     </select>
                 </div>
             </div>
-            <div class="inputMarginLeft" style=" height: 70%">
+            <div class="inputMarginLeft" style=" height: 50%">
                 <table class="table table-condensed taula">
                     <div class="col-xs-4 row" ng-repeat="item in NClassList">
                         <div class="col-xs-8 llenguatge" >{{ item.nameType}}</div>

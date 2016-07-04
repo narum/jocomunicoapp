@@ -369,6 +369,7 @@ html *
     height: 100%;
     position: absolute;
     z-index: 1;
+    pointer-events: none;
 }
 .indicatorNegativeSentence{
     border-bottom: solid 3px;

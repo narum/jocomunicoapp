@@ -39,7 +39,27 @@ class AddWord extends REST_Controller {
         }
         return ($a < $b) ? -1 : 1;
     }
+        private static function cmpclass($a, $b) {
+        $a = strtolower($a['class']);
+        $b = strtolower($b['class']);
+        if ($a == $b) {
+            return 0;
+        }
+        return ($a < $b) ? -1 : 1;
+    }
+    
+    public function EditWordRemove_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idPicto = $request->id;
+        $Type = $this->InsertVocabulari->deletePictogram($idPicto);
 
+        $response = [
+            "data" => $Type
+        ];
+
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
     public function EditWordType_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -52,7 +72,24 @@ class AddWord extends REST_Controller {
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
-
+    public function EditWordGetData_post(){
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idPicto = $request->id;
+        $type = $request->type;
+        switch($type){
+            case('name'):
+                $data = $this->AddWordInterface->EditWordNoms($idPicto);
+                break;
+            case('adj'):
+                $data = $this->AddWordInterface->EditWordAdj($idPicto);
+                break;
+        }
+        $response = [
+            "data" => $data
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
     public function EditWordGetClass_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -63,8 +100,11 @@ class AddWord extends REST_Controller {
                 $data = $this->AddWordInterface->getDBClassNames($idPicto);
                 break;
             case('adj'):
+                $data = $this->AddWordInterface->getDBClassAdj($idPicto);
                 break;
         }
+        usort($data, array('SearchWord', 'cmpclass'));
+        
         $response = [
             "data" => $data
         ];
@@ -75,7 +115,6 @@ class AddWord extends REST_Controller {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $objAdd = $request->objAdd;
-        var_dump($objAdd->class);
         $this->InsertVocabulari->insertPicto($objAdd);
     }
 

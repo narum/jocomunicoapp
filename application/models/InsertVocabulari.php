@@ -6,19 +6,26 @@ class InsertVocabulari extends CI_Model {
     {
         // Call the Model constructor
         parent::__construct();
-    }
-    
+    }        
+
     private function insertAdjClass($new, $adjid, $class) {
-        $data = array(
-            'adjid' => $adjid,
-            'class' => $class
-        );
-        if ($new) $this->db->insert('AdjClass'.$this->session->userdata('ulangabbr'), $data);
+        if ($new) $this->insertIntoAdjClass($adjid, $class);
         else {
             $this->db->where('adjid', $adjid);
-            $this->db->update('AdjClass'.$this->session->userdata('ulangabbr'), $data); 
+            $this->db->delete('AdjClass'.$this->session->userdata('ulangabbr'));
+            $this->insertIntoAdjClass($adjid, $class);
         }
     }
+    
+    private function insertIntoAdjClass($adjid, $class) {
+        for ($i = 0; $i < sizeof($class); $i++) {
+            $data = array(
+                'adjid' => $adjid,
+                'class' => $class[$i]->classType
+            );
+            $this->db->insert('AdjClass'.$this->session->userdata('ulangabbr'), $data);
+        }
+    }        
     
     private function insertAdjective($new, $adjid, $fem, $masc, $mascpl, $fempl, $defaultverb, $subjdef) {
         $data = array(
@@ -96,7 +103,7 @@ class InsertVocabulari extends CI_Model {
         if ($new) $this->db->insert('Name'.$this->session->userdata('ulangabbr'), $data);
         else {
             $this->db->where('nameid', $nameid);
-            $this->db->replace('Name'.$this->session->userdata('ulangabbr'), $data);
+            $this->db->update('Name'.$this->session->userdata('ulangabbr'), $data);
         }
     }
     
@@ -171,7 +178,7 @@ class InsertVocabulari extends CI_Model {
         }
     }
 
-    private function insertP_StatsUserPicto($ID_PSUPUser, $pictoid) {        
+    private function insertP_StatsUserPicto($ID_PSUPUser, $pictoid) {
         $data = array(
             'ID_PSUPUser' => $ID_PSUPUser,
             'pictoid' => $pictoid,
@@ -194,7 +201,6 @@ class InsertVocabulari extends CI_Model {
         }
         else {
             $data = array(
-                'pictoid' => $pictoid,
                 'ID_PUser' => $ID_PUSer,
                 'pictoType' => $pictoType,
                 'supportsExpansion' => $supportsExpansion,
@@ -207,39 +213,48 @@ class InsertVocabulari extends CI_Model {
     }
     
     private function insertPictogramsLanguage($new, $pictoid, $languageid, $pictotext, $pictofreq ) {
-        $data = array(
+        if ($new){
+            $data = array(
             'pictoid' => $pictoid,
             'languageid' => $languageid,
             'insertdate' => mdate("%Y/%m/%d", time()),
             'pictotext' => $pictotext,
             'pictofreq' => $pictofreq
-        );
-        if ($new) $this->db->insert('PictogramsLanguage', $data);
+            );
+            $this->db->insert('PictogramsLanguage', $data);
+        }
         else {
+            $data = array(
+            'insertdate' => mdate("%Y/%m/%d", time()),
+            'pictotext' => $pictotext,
+            'pictofreq' => $pictofreq
+            );
             $this->db->where('pictoid', $pictoid);
             $this->db->update('PictogramsLanguage', $data);
         }
     }
-    
+
     public function insertPicto($objAdd) {
         $ID_PUSer = $this->session->userdata('idusu');
         $ID_PSUPUser = $this->session->userdata('idusu');
         $languageid = ($this->session->userdata('ulangabbr') == 'ca' ? 1:  2);
-
-        $pictoid = $this->insertPictograms($objAdd->new, $objAdd->pictoid, $ID_PUSer, $objAdd->type, $objAdd->supportsExpansion, $objAdd->imgPicto);        
-        $this->insertPictogramsLanguage($objAdd->new, $pictoid, $languageid, $objAdd->pictotext, $pictofreq = 10.000); //pictofreq a modificar
+        $pictoid = $this->insertPictograms($objAdd->new, $objAdd->pictoid, $ID_PUSer, $objAdd->type, $objAdd->supExp, $objAdd->imgPicto);
+        var_dump($pictoid);        
+         //pictofreq a modificar
+        
         if ($objAdd->type == 'name') {
+            $this->insertPictogramsLanguage($objAdd->new, $pictoid, $languageid, $objAdd->nomtext, $pictofreq = 10.000);
             $this->insertName($objAdd->new, $pictoid, $objAdd->nomtext, $objAdd->mf, $objAdd->singpl, $objAdd->contabincontab, $objAdd->determinat, $objAdd->ispropernoun, $objAdd->defaultverb, $objAdd->plural, $objAdd->femeni, $objAdd->fempl);
             $this->insertNameClass($objAdd->new, $pictoid, $objAdd->class);            
         }
         else if ($objAdd->type == 'adj') {
+            $this->insertPictogramsLanguage($objAdd->new, $pictoid, $languageid, $objAdd->masc, $pictofreq = 10.000);
             $this->insertAdjective($objAdd->new, $pictoid, $objAdd->fem, $objAdd->masc, $objAdd->mascpl, $objAdd->fempl, $objAdd->defaultverb, $objAdd->subjdef);
             $this->insertAdjClass($objAdd->new, $pictoid, $objAdd->class);
         }
-        if (!$objAdd->new) $this->insertP_StatsUserPicto($ID_PSUPUser, $pictoid);
     }
-    
-    private function deletePictogram($pictoid) {
+
+    public function deletePictogram($pictoid) {
         $this->db->where('ID_PUser', $this->session->userdata('idusu'));                             
         $this->db->where('pictoid', $pictoid);                             
         $this->db->delete('Pictograms');

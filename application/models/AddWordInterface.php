@@ -60,6 +60,20 @@ class AddWordInterface extends CI_Model {
 
         return $output;
     }
+    function EditWordAdj($id) {
+        $output = array();
+        $userlanguage = $this->session->userdata('ulangabbr');
+        $this->db->where('adjid', $id);
+        $this->db->join('Pictograms', 'adjective' . $userlanguage . '.adjid = Pictograms.pictoid', 'left');
+        $query = $this->db->get('adjective' . $userlanguage);
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
 
     function getDBClassNames($id) {
         $output = array();
@@ -67,6 +81,20 @@ class AddWordInterface extends CI_Model {
         $this->db->where('nameid', $id);
         $this->db->select('class');
         $query = $this->db->get('NameClass' . $userlanguage);
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    function getDBClassAdj($id) {
+        $output = array();
+        $userlanguage = $this->session->userdata('ulangabbr');
+        $this->db->where('adjid', $id);
+        $this->db->select('class');
+        $query = $this->db->get('adjclass' . $userlanguage);
 
         if ($query->num_rows() > 0) {
             $output = $query->result();
