@@ -134,7 +134,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $this->db->limit(3);
         $query = $this->db->get();
         
@@ -156,7 +158,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->where('Pictograms.pictoType !=', 'verb');  
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $this->db->limit(3);
         $query = $this->db->get();
         
@@ -177,7 +181,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -199,7 +205,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->where_in('NameClass'.$this->session->userdata('ulangabbr').'.class', $fits);
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -221,7 +229,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('Modifier'.$this->session->userdata('ulangabbr').'.type', $pictoType);               
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -243,7 +253,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->where('Modifier'.$this->session->userdata('ulangabbr').'.type', $fits);  
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -266,7 +278,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->where('Modifier'.$this->session->userdata('ulangabbr').'.type', $fits);  
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -288,7 +302,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->where('AdvType'.$this->session->userdata('ulangabbr').'.type', $fits);  
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -311,7 +327,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->where('AdvType'.$this->session->userdata('ulangabbr').'.type', $fits);  
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -332,7 +350,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->where('Pictograms.pictoType', $fits);
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -354,7 +374,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->where('Pictograms.pictoType', $fits);
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -376,7 +398,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->where('AdjClass'.$this->session->userdata('ulangabbr').'.class', $fits);
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -399,7 +423,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->where_in('NameClass'.$this->session->userdata('ulangabbr').'.class', $fits);
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();        
         
         if ($query->num_rows() > 0) {
@@ -422,7 +448,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->where('AdjClass'.$this->session->userdata('ulangabbr').'.class', $fits);
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -444,7 +472,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('AdjClass'.$this->session->userdata('ulangabbr').'.class', $pictoType);               
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -467,7 +497,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('Pictograms.pictoType', $pictoType);               
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -490,7 +522,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where_in('NameClass'.$this->session->userdata('ulangabbr').'.class', $fits);        
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -511,7 +545,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where_in('NameClass'.$this->session->userdata('ulangabbr').'.class', $fits);        
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -533,7 +569,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('AdvType'.$this->session->userdata('ulangabbr').'.type', $pictoType);               
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();                
 
         if ($query->num_rows() > 0) {
@@ -553,7 +591,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('Pictograms.pictoType', $pictoType);               
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -574,7 +614,9 @@ class Recommender extends CI_Model {
         $this->db->where('Pictograms.pictoType', $pictoType);
         $this->db->where('Adjective'.$this->session->userdata('ulangabbr').'.defaultverb', $inputid);
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -908,7 +950,9 @@ class Recommender extends CI_Model {
         $this->db->where('Pictograms.pictoType', $pictoType);    
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
         $this->db->having('repes >=', $minCount);
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -933,7 +977,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->having('count >=', $minCount);
-        $this->db->order_by('count', 'desc');        
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -959,6 +1005,8 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->having('count >=', $minCount);
         $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $this->db->limit(3);
         $query = $this->db->get();
         
@@ -985,6 +1033,8 @@ class Recommender extends CI_Model {
         $this->db->where('Pictograms.pictoType', 'verb');
         $this->db->having('count >=', $minCount);   
         $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $this->db->limit(3);     
         $query = $this->db->get();
         
@@ -1010,6 +1060,8 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->having('count >=', $minCount);   
         $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $this->db->limit(3);     
         $query = $this->db->get();
         
@@ -1034,7 +1086,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->having('count >=', $minCount);
-        $this->db->order_by('count', 'desc');        
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -1059,6 +1113,7 @@ class Recommender extends CI_Model {
         $this->db->where('Pictograms.pictoType !=', 'verb');                             
         $this->db->having('count >=', $minCount);
         $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
         $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();      
 
@@ -1084,6 +1139,7 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->having('count >=', $minCount);
         $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
         $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();      
 
@@ -1108,6 +1164,7 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));
         $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
         $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();     
        
@@ -1129,6 +1186,7 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));
         $this->db->where('Pictograms.pictoType !=', 'verb');                             
         $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
         $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();     
        
@@ -1150,7 +1208,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                              
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $this->db->limit(3);
         $query = $this->db->get();
         
@@ -1172,7 +1232,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                              
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
