@@ -14,7 +14,9 @@
                 <div class="col-xs-12 imgRounded imgContainer">
                     <div class="fullheight imgRounded paddingContainer" style="background-image: url(img/srcWeb/patterns/pattern4.png)">
                         <div class="imgAddWord">
-                            <img class="imgResponsive" ng-src="{{baseurl+'img/pictos/'+objAdd.imgPicto}}"/>
+                            <div class="fullheight" ng-class="{ReqField: errAdd.erradd3 == true }">
+                                <img class="imgResponsive" ng-src="{{baseurl+'img/pictos/'+objAdd.imgPicto}}"/>
+                            </div>
                         </div>
                         <div class="buttonUploadImg">
                             <label for="file-input" class="fullheight fullwidth">

@@ -1,6 +1,6 @@
 <div>
-    <div class="form addWordForm50">
-        <div class="addWordFromField addWordFromPaddingH fullheight" style="background-color: #fff;">
+    <div class="form addWordForm52c5" >
+        <div class="addWordFromField addWordFromPaddingH fullheight" style="background-color: #fff;" ng-class="{ReqField: errAdd.erradd1 == true }">
             <div class="row marginTopAdj">
                 <div class="col-xs-5 row ">
                     <div class="col-xs-12">
@@ -84,9 +84,33 @@
             </div>
         </div>
     </div>
-    <div class="form addWordForm25">
+    <div class="form addWordForm7c5">
         <div class="addWordFromField fullheight" style="background-color: #fff;">
-            <div class="has-feedback" style="height: 30%">
+            <div class="row">
+                <div class="col-xs-5 row">
+                    <div class="col-xs-2">
+
+                    </div>
+                    <div class="col-xs-10">
+                        MODIF:NoExpansion
+                    </div>
+                </div>
+                <div class="col-xs-7 row">
+                    <div class="col-xs-4">
+                        <input id="switchNamesupExp" class="switchclear" type="checkbox" 
+                               ng-model="$parent.objAdd.supExp" ng-show="false">
+                        <label for="switchNamesupExp">&nbsp;</label>
+                    </div>
+                    <div class="col-xs-7">
+                        MODIF:Expansion
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form addWordForm15">
+        <div class="addWordFromField fullheight" style="background-color: #fff;" ng-class="{ReqField: errAdd.erradd2 == true }">
+            <div class="has-feedback" style="height: 50%">
                 <div class="input-group input-group-auto inputMarginRigth">
                     <span class="input-group-addon"><i class="icon-comments"></i></span>
                     <select
@@ -99,7 +123,7 @@
                     </select>
                 </div>
             </div>
-            <div class="inputMarginLeft" style=" height: 70%">
+            <div class="inputMarginLeft" style=" height: 50%">
                 <table class="table table-condensed taula">
                     <div class="col-xs-4 row" ng-repeat="item in AdjClassList">
                         <div class="col-xs-8 llenguatge" >{{ item.adjType}}</div>

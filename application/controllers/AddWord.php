@@ -117,7 +117,20 @@ class AddWord extends REST_Controller {
         $objAdd = $request->objAdd;
         $this->InsertVocabulari->insertPicto($objAdd);
     }
+    
+    public function getAllVerbs_post(){
+    
+        
+        $Verbs = $this->AddWordInterface->getDBVerbs();
+        
+        $response = [
+            "data" => $Verbs
+        ];
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
 
+        
+    }
+    
     public function getDBAll_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);

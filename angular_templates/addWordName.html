@@ -1,5 +1,5 @@
 <div>
-    <div class="form addWordForm40">
+    <div class="form addWordForm40 " ng-class="{ReqField: errAdd.erradd1 == true }">
         <div class="addWordFromField fullheight row" style="background-color: #fff;">
             <div class="row">
                 <div class="col-xs-5 row">
@@ -217,13 +217,23 @@
                     </div>
                 </div>
                 <div class="col-xs-7 row">
-                    <div class="col-xs-7">
-                        <input type="text" ng-if="$parent.switchName.s5" class="addWordText"  name="defaultverb" ng-model="$parent.objAdd.defaultverb"/>
-                        <input type="text" disabled ng-if="!$parent.switchName.s5" class="addWordText"  name="defaultverbDis"/>
+                    <div class="col-xs-7">                 
+                        <select class=" dropdown-arrow" 
+                            ng-model="$parent.objAdd.defaultverb"
+                            ng-if="$parent.switchName.s5"
+                            ng-options="verbsList.id as verbsList.text for verbsList in $parent.verbsList">
+
+                        </select>
+                        <select class=" dropdown-arrow" 
+                            ng-model="$parent.objAdd.defaultverb"
+                            disabled
+                            ng-if="!$parent.switchName.s5"
+                            ng-options="verbsList.id as verbsList.text for verbsList in $parent.verbsList">
+                        </select>
                     </div>
                     <div class="col-xs-4">
                         <input id="switchName5" class="switch" type="checkbox" 
-                               ng-model="switchname.s5" ng-show="false">
+                               ng-model="switchName.s5" ng-show="false">
                         <label for="switchName5">&nbsp;</label>
                     </div>
                 </div>
@@ -253,7 +263,7 @@
             </div>
         </div>
     </div>
-    <div class="form addWordForm15">
+    <div class="form addWordForm15" ng-class="{ReqField: errAdd.erradd2 == true }">
         <div class="addWordFromField fullheight" style="background-color: #fff;">
             <div class="has-feedback" style="height: 50%">
                 <div class="input-group input-group-auto inputMarginRigth">

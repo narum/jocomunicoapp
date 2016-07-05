@@ -104,6 +104,34 @@ class AddWordInterface extends CI_Model {
         return $output;
     }
 
+    
+    function getDBVerbs(){
+        $user = $this->session->userdata('idusu');
+        // Expansion language
+        $languageExp = $this->session->userdata('ulangabbr');
+        //Interface language
+        $languageInt = $this->session->userdata('uinterfacelangauge');
+
+        $output = array();
+
+        $this->db->where_in('Pictograms.ID_PUser', array('1',$user));
+        $this->db->where('PictogramsLanguage.languageid', $languageInt); //Get all default and own user pictos
+        $this->db->select('verbid as id, PictogramsLanguage.pictotext as text');
+        $this->db->from('Verb' . $languageExp);
+        $this->db->join('Pictograms', 'Verb' . $languageExp . '.verbid = Pictograms.pictoid', 'left');
+        $this->db->join('PictogramsLanguage', 'PictogramsLanguage.pictoid = Pictograms.pictoid', 'left');
+        $this->db->where('actiu', '1');
+        $this->db->order_by('PictogramsLanguage.pictotext', 'asc');
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result_array();
+        }
+
+        return $output;
+    }
+
+    
     /*
      * Gets all names from ddbb that starts with ($startswith) in the language ($language)
      */

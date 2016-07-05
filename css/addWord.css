@@ -85,8 +85,8 @@
     height: 40%;
     padding: 0.25vh;
 }
-.addWordForm50{
-    height: 50%;
+.addWordForm52c5{
+    height: 52.5%;
     padding: 0.25vh;
 }
 input.switchclear:empty
@@ -183,4 +183,9 @@ input.switchclear:checked ~ label:after
     justify-content: center;
     align-content: center;
     flex-direction: column;
+}
+.ReqField{
+    border-style: solid;
+    border-color: rgba(230,25,25,0.8);
+    
 }
