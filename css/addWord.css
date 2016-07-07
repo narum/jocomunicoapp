@@ -6,9 +6,18 @@
 }
 .paddingContainer{
     padding: 1.5vh;
+    height: 93%;
+}
+.paddingContainerAddword{
+    padding: 1.5vh;
+    height: 93%;
+}
+.paddingContainerImg{
+    padding: 1.5vh;
+    height: 88%;
 }
 .paddingContainerButtons{
-    padding: 3.5vh 0vh;
+    padding: 3.5vh 2vh;
 }
 .imgContainer{
     height: 50%;
@@ -49,24 +58,39 @@
     transform: translate(-50%,-50%);
     position: absolute;
     z-index: 5;
+    cursor: pointer;
 }
 #file-input{
     display: none !important;
 }
 .addWordFromField{
-    padding: 1vh;
+    padding: 1.5vh 2vh;
+}
+.addWordFromFieldAdj{
+    padding: 3vh 2vh;
 }
 .addWordFromPaddingH{
-    padding: 10vh 8vh;
+    padding: 6vh;
 }
 .addWordFromPadding{
-    padding: 6vh 8vh;
+    padding: 4.5vh 2vh;
 }
 .marginTopAdj{
     margin-top: 20px;
 }
+.marginTopAdjS{
+    margin-top: 5px;
+}
 .addWordForm7c5{
     height: 7.5%;
+    padding: 0.25vh;
+}
+.addWordForm30{
+    height: 30%;
+    padding: 0.25vh;
+}
+.addWordForm12c5{
+    height: 12.5%;
     padding: 0.25vh;
 }
 .addWordForm15{
@@ -156,9 +180,10 @@ input.switchclear:checked ~ label:after
 .addWordText{
     color: #4c4c4c;
     font-weight: bold;
+    width: 100px;
 }
 .paddingButtonAddWord{
-    padding: 1vh 10vh;
+    padding: 1vh 1vh;
 }
 .ButtonAddWord{
     background: -moz-linear-gradient(top, rgba(74, 74, 74,0) 0%, rgba(74, 74, 74,0.20) 20%, rgba(74, 74, 74,0.40) 40%, rgba(74, 74, 74,0.60) 60%, rgba(74, 74, 74,00) 80%, rgba(74, 74, 74,1) 100%);
@@ -172,6 +197,9 @@ input.switchclear:checked ~ label:after
     cursor: pointer;
     background-color: #2d2d2d;
     padding: 1.5vh;
+    max-width: 200px;
+    min-width: 100px;
+    margin: 0 auto;
 }
 .ButtonAddWord:active{
     box-shadow: 0px -0px 0px 1px #333;
@@ -186,6 +214,30 @@ input.switchclear:checked ~ label:after
 }
 .ReqField{
     border-style: solid;
-    border-color: rgba(230,25,25,0.8);
+    border-color: rgb(230,25,25);
     
 }
+.ReqFieldimg{
+    border-style: solid;
+    border-color: rgb(230,25,25);
+    border-width: 5px;
+}
+.imgResponsiveAddWord{
+    pointer-events: none;
+    display: block;
+    max-width: 70%;
+    height: auto;
+    max-height: 70%;
+    width: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-40%,0%);
+    position: relative;
+    z-index: 2;
+}
+.headerAddWord
+{
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+

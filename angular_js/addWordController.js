@@ -173,7 +173,6 @@ angular.module('controllers')
                                     });
                         });
             };
-
             $scope.cancelAddWord = function () {
                 $location.path("/panelGroups");
             };
@@ -188,7 +187,6 @@ angular.module('controllers')
                         });
                 $location.path("/panelGroups");
             };
-
             $scope.saveAddWord = function () {
                 $scope.commit = 1;
                 switch ($scope.addWordType)
