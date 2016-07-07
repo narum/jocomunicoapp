@@ -341,4 +341,19 @@ class Main_model extends CI_Model {
 
         return $saved;
     }
+    //get sentences in folder ordered by posInFolder
+    function getSentencesOrdered($idusu, $ID_SFolder){
+        $this->db->from('S_Sentence');
+        $this->db->where('ID_SFolder', $ID_SFolder);
+        $this->db->where('ID_SSUser', $idusu);
+        $this->db->order_by('posInFolder', 'asc');
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
 }

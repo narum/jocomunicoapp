@@ -278,11 +278,17 @@ class Main extends REST_Controller {
         }else{
             $folder=$this->main_model->getSingleData('S_Folder', 'ID_SFUser', $idusu, 'ID_Folder', $ID_Folder);
             $sentences = $this->main_model->getSentencesWithPictos($idusu, $ID_Folder);
+            //Get manual input sentences
+            $manualSentences = $this->main_model->getSingleData('S_Sentence', 'ID_SFolder', $ID_Folder, 'isPreRec', '1');
+            //Add manual input sentences to sentences
+            foreach ($manualSentences as $value) {
+                array_push($sentences, $value);
+            }
         }
         
         $response = [
-            'sentences' => $sentences,
-            'folder' => $folder[0]
+            'folder' => $folder[0],
+            'sentences' => $sentences
         ];
         
         $this->response($response, REST_Controller::HTTP_OK);
@@ -430,5 +436,78 @@ class Main extends REST_Controller {
         ];
         
         $this->response($response, REST_Controller::HTTP_OK);
+    }
+    //Add manual sentence
+    public function addManualSentence_post()
+    {
+        $pictograms = json_decode($this->query("pictograms"), true); // convertimos el string json del post en array.
+        
+        $sentence=[
+            'ID_SSUser'=>$this->session->userdata('idusu'),
+            'ID_SFolder'=>$this->query('ID_SFolder'),
+            'generatorString'=>$this->query('sentence'),
+            'isPreRec'=>'1',
+            'sPreRecText'=>$this->query('sentence'),
+            'sPreRecDate'=>date('Y-m-d'),
+            'sPreRecImg1'=>$pictograms[0],
+            'sPreRecImg2'=>$pictograms[1],
+            'sPreRecImg3'=>$pictograms[2]
+        ];
+
+        $saved=$this->main_model->saveData('S_Sentence', $sentence);
+        
+        $response = [
+            'sentence'=>$sentence,
+            'pictograms'=>$pictograms,
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    //Up sentence position in folder
+    public function upSentenceOrderOnFolder_post()
+    {
+        $idusu = $this->session->userdata('idusu');
+        $ID_SSentence = $this->query('ID_SSentence');
+        $ID_SFolder = $this->query('ID_SFolder');
+        
+        $sentences = $this->main_model->getSentencesOrdered($idusu, $ID_SFolder);
+        
+        //Change sentences order if it is not the first sentence
+        if($sentences[0]->ID_SSentence != $ID_SSentence){
+            $count=0;
+            
+            foreach ($sentences as $value) {
+                if($sentences[$count]->ID_SSentence == $ID_SSentence){
+                    $this->main_model->changeData('S_Sentence', 'ID_SSentence', $sentences[$count]->ID_SSentence, ['posInFolder'=> $sentences[$count-1]->posInFolder]);
+                    $this->main_model->changeData('S_Sentence', 'ID_SSentence', $sentences[$count-1]->ID_SSentence, ['posInFolder'=> $sentences[$count]->posInFolder]);
+                }
+                $count++;
+            }
+        }
+        $this->response(REST_Controller::HTTP_OK);
+    }
+    //Down sentence position in folder
+    public function downSentenceOrderOnFolder_post()
+    {
+        $idusu = $this->session->userdata('idusu');
+        $ID_SSentence = $this->query('ID_SSentence');
+        $ID_SFolder = $this->query('ID_SFolder');
+        
+        $sentences = $this->main_model->getSentencesOrdered($idusu, $ID_SFolder);
+        
+        //Change sentences order if it is not the first sentence
+        $size=count($sentences);
+        if($sentences[$size-1]->ID_SSentence != $ID_SSentence){
+            $count=0;
+            
+            foreach ($sentences as $value) {
+                if($sentences[$count]->ID_SSentence == $ID_SSentence){
+                    $this->main_model->changeData('S_Sentence', 'ID_SSentence', $sentences[$count]->ID_SSentence, ['posInFolder'=> $sentences[$count+1]->posInFolder]);
+                    $this->main_model->changeData('S_Sentence', 'ID_SSentence', $sentences[$count+1]->ID_SSentence, ['posInFolder'=> $sentences[$count]->posInFolder]);
+                }
+                $count++;
+            }
+        }
+        $this->response(REST_Controller::HTTP_OK);
     }
 }
