@@ -1515,7 +1515,7 @@ class Recommender extends CI_Model {
                 });
                 $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
             }
-            $VF = $this->insertCeilVF($VF, $freqTotal, $FSize);
+            $VF = $this->rellenaVFX2X3($VF, $freqTotal, $TSize);
 
             // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbAll, $TSize);
