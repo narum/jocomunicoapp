@@ -64,10 +64,11 @@
                                             <div class="col-xs-3"><img class="img-rounded imgHistFolder" ng-src="{{folder.imgSFolder}}"/></div>
                                             <div class="col-xs-6 folderTitle">{{folder.folderName}}</div>
                                             <div class="col-xs-3 folderEditBigButton" ng-click="goSentencesFolder(folder.ID_Folder)" ng-show="folder.ID_Folder<0" >Entra <div class="icon-folder-open"></div></div>
-                                            <div class="col-xs-3" ng-show="folder.ID_Folder>0" >
-                                                <div class="row folderUpButton" ng-click="upFolder(folder.folderOrder)">Mou <div class="icon-circle-arrow-up"></div></div>
-                                                <div class="row folderEditButton" ng-click="goSentencesFolder(folder.ID_Folder)">Edita <div class="icon-pencil"></div></div>
-                                                <div class="row folderDownButton" ng-click="downFolder(folder.folderOrder)">Mou <div class="icon-circle-arrow-down"></div></div>
+                                            <div class="col-xs-3" ng-show="folder.ID_Folder>0">
+                                                <img class="loadingGifTransparent" ng-show="!showUpDownButtons" ng-src={{img.whiteLoading}}/>
+                                                <div class="row folderUpButton" ng-class="{transparent: !showUpDownButtons}" ng-click="upFolder(folder.folderOrder,folder.ID_Folder)">Mou <div class="icon-circle-arrow-up"></div></div>
+                                                <div class="row folderEditButton" ng-class="{transparent: !showUpDownButtons}" ng-click="goSentencesFolder(folder.ID_Folder)">Edita <div class="icon-pencil"></div></div>
+                                                <div class="row folderDownButton" ng-class="{transparent: !showUpDownButtons}" ng-click="downFolder(folder.folderOrder,folder.ID_Folder)">Mou <div class="icon-circle-arrow-down"></div></div>
                                             </div>
                                         </div>
                                     </div>

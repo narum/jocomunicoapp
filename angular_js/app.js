@@ -76,5 +76,22 @@ angular.module('app', [
 
 	//Comprobamos el token para el login en services.js
 	AuthService.init();
+})
+//Function to filter Duplicates From ng-repeat List
+.filter('unique', function() {
+    return function(collection, keyname) {
+       var output = [], 
+           keys = [];
+
+       angular.forEach(collection, function(item) {
+           var key = item[keyname];
+           if(keys.indexOf(key) === -1) {
+               keys.push(key);
+               output.push(item);
+           }
+       });
+
+       return output;
+    };
 });
 

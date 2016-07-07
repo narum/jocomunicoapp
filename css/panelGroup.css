@@ -202,3 +202,17 @@ html * {
 .radioEditWord{
     height: 3vh;
 }
+.transparent{
+    opacity: 0.3;
+    -webkit-transition: 0.75s ;
+    -moz-transition: 0.75s ;
+    -o-transition: 0.75s ;
+    transition: 0.75s ;
+}
+.loadingGifTransparent{
+    z-index: 20;
+    position: absolute;
+    height: 4vh;
+    margin-top: 3vh;
+    margin-left: 5vh;
+}

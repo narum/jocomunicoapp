@@ -87,6 +87,12 @@ class Main_model extends CI_Model {
         
         return $data;
     }
+    // Delete data from table $table where content in column $column are like $data
+    public function deleteData($table, $column, $data){
+        $this->db->where($column, $data);// filtrem per columnes
+        $query = $this->db->delete($table);
+        return $query;
+    }
     // Delete single data from table $table where content in column $column are like $data
     public function deleteSingleData($table, $column, $data, $column2, $data2){
         $this->db->where($column, $data);// filtrem per columnes
@@ -108,6 +114,13 @@ class Main_model extends CI_Model {
     public function saveData($table, $data){
 
         $saved = $this->db->insert($table, $data);
+
+        return $saved;
+    }
+    // Guardar contenido de un array en una tabla.
+    public function saveArrayData($table, $data){
+
+        $saved = $this->db->insert_batch($table, $data);
 
         return $saved;
     }
@@ -254,9 +267,12 @@ class Main_model extends CI_Model {
     //Return last $day days from historic table
     function getHistoric($idusu, $day){
         $date = date('Y-m-d', strtotime("-".$day." day"));
+        $this->db->from('S_Historic');
+        $this->db->join('R_S_HistoricPictograms', 'S_Historic.ID_SHistoric = R_S_HistoricPictograms.ID_RSHPSentence');
+        $this->db->join('Pictograms', 'R_S_HistoricPictograms.pictoid = Pictograms.pictoid');
         $this->db->where('sentenceDate >', $date);
         $this->db->where('ID_SHUser', $idusu);
-        $query = $this->db->get('S_Historic');
+        $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -268,8 +284,10 @@ class Main_model extends CI_Model {
     //delete all historic after last 30 days
     function deleteHistoric(){
         $date = date('Y-m-d', strtotime("-30 day"));
+        $this->db->from('S_Historic');
+        $this->db->join('R_S_HistoricPictograms', 'S_Historic.ID_SHistoric = R_S_HistoricPictograms.ID_RSHPSentence');
         $this->db->where('sentenceDate <', $date);
-        $query = $this->db->delete('S_Historic');
+        $query = $this->db->delete();
         return;
     }
     //get historic sentence
@@ -278,6 +296,32 @@ class Main_model extends CI_Model {
         $this->db->where('ID_SHUser', $idusu);
         $query = $this->db->get('S_Historic');
         return $query->result_array()[0];
+    }
+    //get historic sentences with pictos
+    function getSentencesWithPictos($idusu, $ID_Folder){
+        $this->db->from('S_Sentence');
+        $this->db->join('R_S_SentencePictograms', 'S_Sentence.ID_SSentence = R_S_SentencePictograms.ID_RSSPSentence');
+        $this->db->join('Pictograms', 'R_S_SentencePictograms.pictoid = Pictograms.pictoid');
+        $this->db->where('ID_SFolder', $ID_Folder);
+        $this->db->where('ID_SSUser', $idusu);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
+    }
+    //Get higher sentence Id from S_Sentence table
+    public function getHigherSentenceId($ID_Folder, $idusu){
+        $this->db->from('S_Sentence');
+        $this->db->where('ID_SFolder', $ID_Folder);
+        $this->db->where('ID_SSUser', $idusu);
+        $this->db->order_by('ID_SSentence', 'desc');
+        $query = $this->db->get()->result_array();
+
+        return $query[0]['ID_SSentence'];
     }
     //get historic folders ordered by folderOrder descended
     public function getHistoricFolders($idusu){
@@ -296,5 +340,20 @@ class Main_model extends CI_Model {
         $saved = $this->db->update('S_Folder', $data);
 
         return $saved;
+    }
+    //get sentences in folder ordered by posInFolder
+    function getSentencesOrdered($idusu, $ID_SFolder){
+        $this->db->from('S_Sentence');
+        $this->db->where('ID_SFolder', $ID_SFolder);
+        $this->db->where('ID_SSUser', $idusu);
+        $this->db->order_by('posInFolder', 'asc');
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        } else
+            $output = null;
+
+        return $output;
     }
 }

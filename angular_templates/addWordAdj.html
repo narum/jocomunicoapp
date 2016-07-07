@@ -102,7 +102,7 @@
                 </div>
                 <div class="col-xs-6 input-group input-group-auto inputMarginRigth">
                     <select
-                        class="form-control"
+                        class="classBoxAddWord"
                         name="className"
                         ng-model="formAdjClass"
                         ng-change="addAdjClass(formAdjClass.valueOf())"
@@ -113,9 +113,11 @@
             </div>
             <div class="inputMarginLeft" style=" height:70%">
                 <table class="table table-condensed taula">
-                    <div class="col-xs-4 row" ng-repeat="item in AdjClassList">
-                        <div class="col-xs-8 llenguatge" >{{ item.adjType}}</div>
-                        <div class="col-xs-4 buto"><a class="icon-minus btn-borrar" ng-click="removeAdjclass($index)"></a></div>
+                    <div class="col-xs-4 classPaddingAddWord" ng-repeat="item in AdjClassList">
+                        <div class="row colorBoxClass">
+                            <div class="col-xs-8 llenguatgeAddWord" >{{ item.adjType}}</div>
+                            <div class="col-xs-4 butoAddWord text-right"><div class="icon-minus btn-borrarAddWord" ng-click="removeAdjclass($index)"></div></div>
+                        </div>
                     </div>
                 </table>
             </div>

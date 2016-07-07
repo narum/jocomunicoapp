@@ -56,10 +56,10 @@ angular.module('controllers')
             $scope.$broadcast('rebuild:meS2');
         });
         $scope.$on('scrollbar.show', function () {
-            console.log('Scrollbar show');
+//            console.log('Scrollbar show');
         });
         $scope.$on('scrollbar.hide', function () {
-            console.log('Scrollbar hide');
+//            console.log('Scrollbar hide');
         });
 
 
@@ -70,10 +70,14 @@ angular.module('controllers')
         $scope.img.Patterns4 = '/img/srcWeb/patterns/pattern4.png';
         $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
         $scope.img.loading = '/img/srcWeb/Login/loading.gif';
+        $scope.img.addPhoto = '/img/icons/add_photo.png';
+        $scope.img.addPhotoSelected = '/img/icons/add_photo_selected.png';
+        $scope.img.info = '/img/icons/info.png';
         
         //Variable declaration
         $scope.viewActived = false;
         $scope.historicFolder = false;
+        $scope.newSentenceImage=[];
         
         //Folder info
         if($routeParams.folderId<0){
@@ -91,7 +95,9 @@ angular.module('controllers')
             Resources.main.save({'ID_Folder': $routeParams.folderId},{'funct': "getSentencesOrHistoricFolder"}).$promise
             .then(function (results) {
                 $scope.sentences = results.sentences;
-                console.log($scope.sentences);
+                if($scope.sentences!=null){
+                    $scope.sentences.sort(function(a, b){return a.posInFolder-b.posInFolder});
+                }
                 $scope.viewActived = true;
                 if($routeParams.folderId>0){
                     $scope.folderSelected = results.folder;
@@ -118,6 +124,7 @@ angular.module('controllers')
             $('#copySentenceModal').modal('hide');//Hide modal
             Resources.main.save({'ID_Folder':ID_Folder, 'ID_Sentence':$scope.sentenceToCopy,'historicFolder':$scope.historicFolder},{'funct': "addSentenceOnFolder"}).$promise
             .then(function (results) {
+                console.log(results);
                 getSentences();
             });
         };
@@ -148,8 +155,55 @@ angular.module('controllers')
                 $location.path('/panelGroups');
             });
         };
-        
-        
+        //New manual input Sentence
+        $scope.createSentence = function(){
+            $('#createSentenceModal').modal({backdrop:'static'});//Show static modal
+        }
+        $scope.addImage = function(image, position){
+            if(position!=null){
+                $scope.faltaImg=false;
+                $scope.newSentenceImage[position]=image;
+            }
+        }
+        $scope.deleteImage = function(position){
+            $scope.newSentenceImage.splice(position,1);
+        }
+        $scope.saveSentence = function(){
+            if($scope.newSentence==null||$scope.newSentence==''){
+                $scope.faltaText=true;
+            }else if($scope.newSentenceImage.length==0){
+                $scope.faltaImg=true;
+            }else{
+                $('#createSentenceModal').modal('hide');
+                var pictograms = JSON.stringify($scope.newSentenceImage) //array to json format
+                Resources.main.save({'sentence':$scope.newSentence,'pictograms':pictograms,'ID_SFolder':$routeParams.folderId},{'funct': "addManualSentence"}).$promise
+                .then(function (results) {
+                    console.log(results);
+                    $scope.newSentence=null;
+                    $scope.newSentenceImage.splice(0,3);
+                    getSentences();
+                });
+            }
+        }
+        $scope.cancelSentence = function(){
+            $('#createSentenceModal').modal('hide');
+            $scope.newSentence=null;
+            $scope.newSentenceImage.splice(0,3);
+        }
+        //Change sentence order in folder
+        $scope.upSentenceOrder = function(idSentence){
+            Resources.main.save({'ID_SSentence': idSentence,'ID_SFolder':$routeParams.folderId}, {'funct': "upSentenceOrderOnFolder"}).$promise
+                .then(function (results){
+                    getSentences();
+                });
+        }
+        $scope.downSentenceOrder = function(idSentence){
+            Resources.main.save({'ID_SSentence': idSentence,'ID_SFolder':$routeParams.folderId}, {'funct': "downSentenceOrderOnFolder"}).$promise
+                .then(function (results){
+                    getSentences();
+                });
+        }
+
         /*
          * Return uploaded images from database. There are two types, the users images an the arasaac (not user images)
          */

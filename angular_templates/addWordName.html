@@ -44,11 +44,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-2 text-center" ng-if=" !$parent.objAdd.singpl">
-                        {{content.numberSingularName}}
+                <div class="col-xs-2 marginLeftAddWord" ng-if=" !$parent.objAdd.singpl">
+                    <b>{{content.numberSingularName}}</b>
                 </div>
-                <div class="col-xs-2 text-center" ng-if=" $parent.objAdd.singpl">
-                        {{content.numberPluralName}}
+                <div class="col-xs-2 marginLeftAddWord" ng-if=" $parent.objAdd.singpl">
+                    <b>{{content.numberPluralName}}</b>
                 </div>
             </div>
             <div class="row">
@@ -94,8 +94,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-2 text-center" ng-if=" !$parent.objAdd.singpl">
-                        {{content.numberPluralName}}
+                <div class="col-xs-2 marginLeftAddWord" ng-if=" !$parent.objAdd.singpl">
+                    <b>{{content.numberPluralName}}</b>
                 </div>
             </div>
             <div class="row" ng-if="!$parent.objAdd.singpl">
@@ -264,16 +264,16 @@
     
     <div class="form addWordForm15">
         <div class="addWordFromField fullheight" style="background-color: #fff;" ng-class="{ReqField: errAdd.erradd2 == true }">
-            <div class="has-feedback row" style="height: 50%">
+            <div class="row" style="height: 40%">
                 <div class="col-xs-1">
                     <img class="img-icon" ng-src="/img/icons/info.png" ng-click=""/>
                 </div>
                 <div class="col-xs-2">
                     {{content.classWord}}
                 </div>
-                <div class="col-xs-6 input-group input-group-auto inputMarginRigth">
+                <div class="col-xs-6 input-group input-group-auto inputMarginRigth ">
                     <select
-                        class="form-control"
+                        class="classBoxAddWord"
                         name="className"
                         ng-model="formNounClass"
                         ng-change="addNClass(formNounClass.valueOf())"
@@ -282,11 +282,13 @@
                     </select>
                 </div>
             </div>
-            <div class="inputMarginLeft" style=" height: 50%">
+            <div class="inputMarginLeft" style=" height: 60%">
                 <table class="table table-condensed taula">
-                    <div class="col-xs-4 row" ng-repeat="item in NClassList">
-                        <div class="col-xs-8 llenguatge" >{{ item.nameType}}</div>
-                        <div class="col-xs-4 buto"><a class="icon-minus btn-borrar" ng-click="removeNounclass($index)"></a></div>
+                    <div class="col-xs-4 classPaddingAddWord" ng-repeat="item in NClassList">
+                        <div class="row colorBoxClass">
+                            <div class="col-xs-8 llenguatgeAddWord" >{{ item.nameType}}</div>
+                            <div class="col-xs-4 butoAddWord text-right"><div class="icon-minus btn-borrarAddWord" ng-click="removeNounclass($index)"></div></div>
+                        </div>
                     </div>
                 </table>
             </div>

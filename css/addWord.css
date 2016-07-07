@@ -240,4 +240,33 @@ input.switchclear:checked ~ label:after
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
 }
-
+.marginLeftAddWord
+{
+    margin-left: 5px;
+}
+.classBoxAddWord
+{
+    width: 180px;
+}
+.btn-borrarAddWord{
+    cursor: pointer;
+}
+.btn-borrarAddWord:hover{
+    color: black;
+    text-decoration: none;
+}
+.butoAddWord
+{
+    margin-top: 2px;
+    padding-right: 5px;
+}
+.llenguatgeAddWord
+{
+    padding-left: 5px;
+}
+.colorBoxClass{
+    background-color: #FFCC99;
+}
+.classPaddingAddWord{
+    padding: 1px 2px;
+}
