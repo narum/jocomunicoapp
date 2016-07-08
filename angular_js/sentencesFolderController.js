@@ -73,6 +73,7 @@ angular.module('controllers')
         $scope.img.addPhoto = '/img/icons/add_photo.png';
         $scope.img.addPhotoSelected = '/img/icons/add_photo_selected.png';
         $scope.img.info = '/img/icons/info.png';
+        $scope.img.Loading_icon = '/img/icons/Loading_icon.gif';
         
         //Variable declaration
         $scope.viewActived = false;
@@ -94,15 +95,47 @@ angular.module('controllers')
         var getSentences = function(){
             Resources.main.save({'ID_Folder': $routeParams.folderId},{'funct': "getSentencesOrHistoricFolder"}).$promise
             .then(function (results) {
+                console.log(results);
                 $scope.sentences = results.sentences;
                 if($scope.sentences!=null){
                     $scope.sentences.sort(function(a, b){return a.posInFolder-b.posInFolder});
                 }
                 $scope.viewActived = true;
+                $scope.showUpDownButtons=true;
                 if($routeParams.folderId>0){
                     $scope.folderSelected = results.folder;
                     $scope.newFolder = JSON.parse(JSON.stringify(results.folder)); //copy JavaScript object to new variable NOT by reference
                 }
+                //find the $i in the string 'inputIds' to add the i pictogram to the word
+                var arrayPosition = 0;
+                var pictoNumber = 0;
+                angular.forEach($scope.sentences, function (value) {
+                    var cadenaAnalizar = value.inputIds;
+                    if(arrayPosition==pictoNumber){
+                        if(cadenaAnalizar!=null){
+                            for (var i = 0; i< cadenaAnalizar.length; i++) {
+                                if (cadenaAnalizar.charAt(i) == '{'){
+                                    pictoNumber++;
+//                                    console.log('corchete');
+                                }
+                                if(cadenaAnalizar.charAt(i)=="$" && cadenaAnalizar.charAt(i+1)=="i") {
+                                    var pictoI = JSON.parse(JSON.stringify(value)); //copy JavaScript object to new variable NOT by reference
+                                    pictoI.imgPicto = 'y.png';
+                                    pictoI.isNegative = '';
+                                    pictoI.isfem = '';
+                                    pictoI.isplural = '';
+                                    $scope.sentences.splice(pictoNumber,0,pictoI);
+//                                    console.log('guardado en',pictoNumber);
+                                    pictoNumber++;
+                                }
+                            }
+                        }else{
+                            pictoNumber++;
+                        }
+                    }
+                    arrayPosition++;
+//                    console.log('arrayPosition:',arrayPosition,' / pictoNumber:',pictoNumber);
+                });
             });
         };
         getSentences();
@@ -157,6 +190,7 @@ angular.module('controllers')
         };
         //New manual input Sentence
         $scope.createSentence = function(){
+            $scope.editSentence = false;
             $('#createSentenceModal').modal({backdrop:'static'});//Show static modal
         }
         $scope.addImage = function(image, position){
@@ -173,8 +207,21 @@ angular.module('controllers')
                 $scope.faltaText=true;
             }else if($scope.newSentenceImage.length==0){
                 $scope.faltaImg=true;
+            }else if($scope.editSentence){
+                $('#createSentenceModal').modal('hide'); //Close modal
+                var pictograms = JSON.stringify($scope.newSentenceImage) //array to json format
+                Resources.main.save({'sentence':$scope.newSentence,'pictograms':pictograms,'ID_SSentence':$scope.editSentenceId},{'funct': "editManualSentence"}).$promise
+                .then(function (results) {
+                    console.log(results);
+                    $scope.newSentence=null;
+                    $scope.newSentenceImage.splice(0,3);
+                    $scope.editSentence = false;
+                    $scope.editSentenceId = null;
+                    getSentences();
+                });
+                
             }else{
-                $('#createSentenceModal').modal('hide');
+                $('#createSentenceModal').modal('hide'); //Close modal
                 var pictograms = JSON.stringify($scope.newSentenceImage) //array to json format
                 Resources.main.save({'sentence':$scope.newSentence,'pictograms':pictograms,'ID_SFolder':$routeParams.folderId},{'funct': "addManualSentence"}).$promise
                 .then(function (results) {
@@ -189,15 +236,29 @@ angular.module('controllers')
             $('#createSentenceModal').modal('hide');
             $scope.newSentence=null;
             $scope.newSentenceImage.splice(0,3);
+            $scope.editSentence = false;
+            $scope.editSentenceId = null;
         }
+        //Edit manual imput sentence
+        $scope.editManualSentence = function(generatorString,sPreRecImg1,sPreRecImg2,sPreRecImg3,ID_SSentence){
+            $scope.newSentence=generatorString;
+            $scope.newSentenceImage.splice(0,0,sPreRecImg1,sPreRecImg2,sPreRecImg3);
+            $scope.editSentence = true;
+            $scope.editSentenceId = ID_SSentence;
+            $('#createSentenceModal').modal('toggle');//Show static modal
+            console.log(generatorString,sPreRecImg1,sPreRecImg2,sPreRecImg3,ID_SSentence);
+        }
+        
         //Change sentence order in folder
         $scope.upSentenceOrder = function(idSentence){
+            $scope.showUpDownButtons=false;
             Resources.main.save({'ID_SSentence': idSentence,'ID_SFolder':$routeParams.folderId}, {'funct': "upSentenceOrderOnFolder"}).$promise
                 .then(function (results){
                     getSentences();
                 });
         }
         $scope.downSentenceOrder = function(idSentence){
+            $scope.showUpDownButtons=false;
             Resources.main.save({'ID_SSentence': idSentence,'ID_SFolder':$routeParams.folderId}, {'funct': "downSentenceOrderOnFolder"}).$promise
                 .then(function (results){
                     getSentences();

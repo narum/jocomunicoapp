@@ -293,7 +293,7 @@ class Main extends REST_Controller {
         
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    //
+    //Copy sentence from historic or folder to other folder
     public function addSentenceOnFolder_post()
     {
         $idusu = $this->session->userdata('idusu');
@@ -305,11 +305,18 @@ class Main extends REST_Controller {
             //Get sentence from historic and pictograms from historic pictograms
             $sentence = $this->main_model->getHistoricSentence($idusu, $ID_Sentence);
             $pictograms = $this->main_model->getData('R_S_HistoricPictograms', 'ID_RSHPSentence', $ID_Sentence);
+            //Get sentences in folder to know de order number of the new sentence
+            $sentencesOrdered = $this->main_model->getSentencesOrdered($idusu, $ID_Folder);
+            $size=count($sentencesOrdered);
+            if($size > 0){
+                $posInFolder=$sentencesOrdered[$size-1]->posInFolder;
+            }
             //Add and remove some fields of array
             $sentence['ID_SFolder'] = $ID_Folder;
             $sentence['ID_SSUser'] = $idusu;
             unset($sentence['ID_SHistoric']);
             unset($sentence['ID_SHUser']);
+            $sentence['posInFolder'] = $posInFolder + 1;
             
             //Save sentence
             $saved=$this->main_model->saveData('S_Sentence', $sentence);
@@ -323,13 +330,24 @@ class Main extends REST_Controller {
                 unset($pictograms[$i]['ID_RSHPSentence']);
                 unset($pictograms[$i]['ID_RSHPUser']);
             }
+            //Save sentence pictogrmas
+            $this->main_model->saveArrayData('R_S_SentencePictograms', $pictograms);
         }else{
             //Get sentence from folder and pictograms
             $sentence = $this->main_model->getSingleData('S_Sentence', 'ID_SSentence', $ID_Sentence, 'ID_SSUser', $idusu)[0];
-            $pictograms = $this->main_model->getData('R_S_SentencePictograms', 'ID_RSSPSentence', $sentence['ID_SSentence']);
+            if($sentence['isPreRec']=='0'){
+                $pictograms = $this->main_model->getData('R_S_SentencePictograms', 'ID_RSSPSentence', $sentence['ID_SSentence']);
+            }
+            //Get sentences in folder to know de order number of the new sentence
+            $sentencesOrdered = $this->main_model->getSentencesOrdered($idusu, $ID_Folder);
+            $size=count($sentencesOrdered);
+            if($size > 0){
+                $posInFolder=$sentencesOrdered[$size-1]->posInFolder;
+            }
             //Add and remove some fields of array
             $sentence['ID_SFolder'] = $ID_Folder;
             unset($sentence['ID_SSentence']);
+            $sentence['posInFolder'] = $posInFolder + 1;
             
             //Save sentence
             $saved=$this->main_model->saveData('S_Sentence', $sentence);
@@ -337,14 +355,15 @@ class Main extends REST_Controller {
             $sentenceID = $this->main_model->getHigherSentenceId($ID_Folder, $idusu);
             
             //Change the folder id of pictograms
-            for($i = 0, $size = count($pictograms); $i < $size; ++$i) {
-                unset($pictograms[$i]['ID_RSSPSentencePicto']);
-                $pictograms[$i]['ID_RSSPSentence'] = $sentenceID;
+            if($sentence['isPreRec']=='0'){
+                for($i = 0, $size = count($pictograms); $i < $size; ++$i) {
+                    unset($pictograms[$i]['ID_RSSPSentencePicto']);
+                    $pictograms[$i]['ID_RSSPSentence'] = $sentenceID;
+                }
+                //Save sentence pictogrmas
+                $this->main_model->saveArrayData('R_S_SentencePictograms', $pictograms);
             }
         }
-        
-        //Save sentence pictogrmas
-        $this->main_model->saveArrayData('R_S_SentencePictograms', $pictograms);
         
         $response = [
             'saved' => $saved,
@@ -441,10 +460,20 @@ class Main extends REST_Controller {
     public function addManualSentence_post()
     {
         $pictograms = json_decode($this->query("pictograms"), true); // convertimos el string json del post en array.
+        $idusu = $this->session->userdata('idusu');
+        $ID_Folder = $this->query('ID_SFolder');
         
+        //Get sentences in folder to know de order number of the new sentence
+        $sentencesOrdered = $this->main_model->getSentencesOrdered($idusu, $ID_Folder);
+        $size=count($sentencesOrdered);
+        if($size > 0){
+            $posInFolder=$sentencesOrdered[$size-1]->posInFolder;
+        }
+
         $sentence=[
-            'ID_SSUser'=>$this->session->userdata('idusu'),
-            'ID_SFolder'=>$this->query('ID_SFolder'),
+            'ID_SSUser'=>$idusu,
+            'ID_SFolder'=>$ID_Folder,
+            'posInFolder'=>$posInFolder + 1,
             'generatorString'=>$this->query('sentence'),
             'isPreRec'=>'1',
             'sPreRecText'=>$this->query('sentence'),
@@ -455,6 +484,31 @@ class Main extends REST_Controller {
         ];
 
         $saved=$this->main_model->saveData('S_Sentence', $sentence);
+        
+        $response = [
+            'sentence'=>$sentence,
+            'pictograms'=>$pictograms,
+        ];
+        
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    //Edit manual sentence
+    public function editManualSentence_post()
+    {
+        $pictograms = json_decode($this->query("pictograms"), true); // convertimos el string json del post en array.
+        $idusu = $this->session->userdata('idusu');
+        $ID_SSentence = $this->query('ID_SSentence');
+
+        $sentence=[
+            'generatorString'=>$this->query('sentence'),
+            'sPreRecText'=>$this->query('sentence'),
+            'sPreRecDate'=>date('Y-m-d'),
+            'sPreRecImg1'=>$pictograms[0],
+            'sPreRecImg2'=>$pictograms[1],
+            'sPreRecImg3'=>$pictograms[2]
+        ];
+
+        $saved=$this->main_model->changeData('S_Sentence', 'ID_SSentence', $ID_SSentence, $sentence);
         
         $response = [
             'sentence'=>$sentence,

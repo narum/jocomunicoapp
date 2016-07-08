@@ -50,12 +50,17 @@
                             <div class="row insideScroll" ng-repeat="sentence in sentences | unique:'ID_SHistoric'" on-Finish-Loop="scrollbarSentences">
                                 <div class="col-xs-12 sentenceBox">
                                     <div class="row">
-                                        <div class="col-xs-10">
+                                        <div class="col-xs-9">
                                             <div class="row">
                                                 <div class="col-xs-1"></div>
                                                 <div class="col-xs-1" ng-repeat="pictos in sentences | filter:{ID_SHistoric: sentence.ID_SHistoric}">
-                                                    <img class="sentenceImg" ng-src="{{baseurl}}img/pictos/{{pictos.imgPicto}}"/>
+                                                    <div class="col-xs-8 sentencePicto"><img class="pictoImg" ng-src="{{baseurl}}img/pictos/{{pictos.imgPicto}}"/></div>
+                                                    <div class="col-xs-4">
+                                                        <div class="row pictoType"><img class="pictoTypeImg" ng-src="{{baseurl}}img/pictos/plural.png" ng-show="pictos.isplural == '1'"/></div>
+                                                        <div class="row pictoType"><img class="pictoTypeImg" ng-src="{{baseurl}}img/pictos/femenino.png" ng-show="pictos.isfem == '1'"/></div>
+                                                    </div>
                                                 </div>
+                                                
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-3 col-xs-offset-1 sentenceText">
@@ -64,8 +69,17 @@
                                             </div>
                                         </div>
                                         <div class="col-xs-1"></div>
+                                        <!--Sentence Type-->
                                         <div class="col-xs-1">
-                                            <div class="row copyButtonBig" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
+                                            <div class="col-xs-9 col-xs-offset-3">
+                                                <div class="row sentenceType"><img class="sentenceTypeImg" ng-src="{{baseurl}}img/indicadors/{{sentence.sentenceTense}}.png" ng-show="sentence.sentenceTense != 'defecte'"/></div>
+                                                <div class="row indicatorNegativeSentence" ng-show="sentence.isNegative=='1'"></div>
+                                                <div class="row indicatorNoNegativeSentence" ng-show="sentence.isNegative=='0'"></div>
+                                                <div class="row sentenceType"><img class="sentenceTypeImg" ng-src="{{baseurl}}img/indicadors/{{sentence.sentenceType}}.png" ng-show="sentence.sentenceType != 'defecte'"/></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-1">
+                                            <div class="row copyButtonXLg" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
                                         </div>
                                     </div>
                                 </div>
@@ -79,24 +93,37 @@
                             <div class="row insideScroll" ng-repeat="sentence in sentences | unique:'ID_SSentence'" on-Finish-Loop="scrollbarSentences">
                                 <div class="col-xs-12 sentenceBox">
                                     <div class="row">
-                                        <div class="col-xs-10">
+                                        <div class="col-xs-9">
                                             <div class="row">
                                                 <div class="col-xs-1"></div>
                                                 <div ng-if="sentence.isPreRec=='0'">
                                                     <div class="col-xs-1" ng-repeat="pictos in sentences | filter:{ID_SSentence: sentence.ID_SSentence}">
-                                                        <img class="sentenceImg" ng-src="{{baseurl}}img/pictos/{{pictos.imgPicto}}"/>
+                                                        <div class="col-xs-8 sentencePicto"><img class="pictoImg" ng-src="{{baseurl}}img/pictos/{{pictos.imgPicto}}"/></div>
+                                                        <div class="col-xs-4">
+                                                            <div class="row pictoType"><img class="pictoTypeImg" ng-src="{{baseurl}}img/pictos/plural.png" ng-show="pictos.isplural == '1'"/></div>
+                                                            <div class="row pictoType"><img class="pictoTypeImg" ng-src="{{baseurl}}img/pictos/femenino.png" ng-show="pictos.isfem == '1'"/></div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div ng-if="sentence.isPreRec=='1'">
-                                                    <div class="col-xs-1"><img class="sentenceImg" ng-src="{{baseurl}}{{sentence.sPreRecImg1}}" ng-show="sentence.sPreRecImg1"/></div>
-                                                    <div class="col-xs-1"><img class="sentenceImg" ng-src="{{baseurl}}{{sentence.sPreRecImg2}}" ng-show="sentence.sPreRecImg2"/></div>
-                                                    <div class="col-xs-1"><img class="sentenceImg" ng-src="{{baseurl}}{{sentence.sPreRecImg3}}" ng-show="sentence.sPreRecImg3"/></div>
+                                                    <div class="col-xs-1 sentencePicto"><img class="pictoImg" ng-src="{{baseurl}}{{sentence.sPreRecImg1}}" ng-show="sentence.sPreRecImg1"/></div>
+                                                    <div class="col-xs-1 sentencePicto"><img class="pictoImg" ng-src="{{baseurl}}{{sentence.sPreRecImg2}}" ng-show="sentence.sPreRecImg2"/></div>
+                                                    <div class="col-xs-1 sentencePicto"><img class="pictoImg" ng-src="{{baseurl}}{{sentence.sPreRecImg3}}" ng-show="sentence.sPreRecImg3"/></div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-3 col-xs-offset-1 sentenceText">
                                                     {{sentence.generatorString}}
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <!--Sentence Type-->
+                                        <div class="col-xs-1">
+                                            <div class="col-xs-9 col-xs-offset-3">
+                                                <div class="row sentenceType"><img class="sentenceTypeImg" ng-src="{{baseurl}}img/indicadors/{{sentence.sentenceTense}}.png" ng-show="sentence.sentenceTense != 'defecte'"/></div>
+                                                <div class="row indicatorNegativeSentence" ng-show="sentence.isNegative=='1'"></div>
+                                                <div class="row indicatorNoNegativeSentence" ng-show="sentence.isNegative=='0'"></div>
+                                                <div class="row sentenceType"><img class="sentenceTypeImg" ng-src="{{baseurl}}img/indicadors/{{sentence.sentenceType}}.png" ng-show="sentence.sentenceType != 'defecte'"/></div>
                                             </div>
                                         </div>
                                         <div class="col-xs-1">
@@ -107,19 +134,21 @@
                                             </div>
                                             <!--Up Down Buttons-->
                                             <div class="col-xs-4">
-                                                <div class="row upButton" ng-click="upSentenceOrder(sentence.ID_SSentence);"><div class="icon-circle-arrow-up"></div></div>
-                                                <div class="row downButton" ng-click="downSentenceOrder(sentence.ID_SSentence);"><div class="icon-circle-arrow-down"></div></div>
+                                                <div class="row upButton" ng-class="{transparent: !showUpDownButtons}" ng-click="upSentenceOrder(sentence.ID_SSentence);"><div class="icon-circle-arrow-up"></div></div>
+                                                <div class="row downButton" ng-class="{transparent: !showUpDownButtons}" ng-click="downSentenceOrder(sentence.ID_SSentence);"><div class="icon-circle-arrow-down"></div></div>
                                             </div>
                                         </div>
                                         <div class="col-xs-1" ng-if="sentence.isPreRec=='0'">
-                                            <div class="row copyButtonLg" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
-                                            <div class="row deleteButtonLg" ng-click="deleteSentence(sentence.ID_SSentence)">Eliminar <div class="icon-trash"></div></div>
+                                            <img class="loadingGifTransparent" ng-show="!showUpDownButtons" ng-src={{img.Loading_icon}}/>
+                                            <div class="row copyButtonLg" ng-class="{transparent: !showUpDownButtons}" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
+                                            <div class="row deleteButtonLg" ng-class="{transparent: !showUpDownButtons}" ng-click="deleteSentence(sentence.ID_SSentence)">Eliminar <div class="icon-trash"></div></div>
                                         </div>
                                         <!--Copy edit delete buttons-->
                                         <div class="col-xs-1" ng-if="sentence.isPreRec=='1'">
-                                            <div class="row copyButton" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
-                                            <div class="row editButton">Edita <div class="icon-pencil"></div></div>
-                                            <div class="row deleteButton" ng-click="deleteSentence(sentence.ID_SSentence)">Eliminar <div class="icon-trash"></div></div>
+                                            <img class="loadingGifTransparent" ng-show="!showUpDownButtons" ng-src={{img.Loading_icon}}/>
+                                            <div class="row copyButton" ng-class="{transparent: !showUpDownButtons}" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
+                                            <div class="row editButton" ng-class="{transparent: !showUpDownButtons}" ng-click="editManualSentence(sentence.generatorString, sentence.sPreRecImg1, sentence.sPreRecImg2, sentence.sPreRecImg3, sentence.ID_SSentence);">Edita <div class="icon-pencil"></div></div>
+                                            <div class="row deleteButton" ng-class="{transparent: !showUpDownButtons}" ng-click="deleteSentence(sentence.ID_SSentence)">Eliminar <div class="icon-trash"></div></div>
                                         </div>
                                     </div>
                                 </div>

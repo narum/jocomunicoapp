@@ -149,7 +149,19 @@
     padding-top: 1.1vh;
     cursor: pointer;
 }
+.copyButtonXLg{
+    height: 10vh;
+    border-top-right-radius: 1vh;
+    border-bottom-right-radius: 1vh;
+    background-color: #81c1c6;
+    text-align: center;
+    font-size: 1.8vh;
+    color: white;
+    padding-top: 4vh;
+    cursor: pointer;
+}
 .copyButton:hover,
+.copyButtonXLg:hover,
 .copyButtonLg:hover{
     background-color: #5d8d91;
 }
@@ -320,13 +332,55 @@
 .error{
     border: 0.6vh solid red !important;
 }
-
+.transparent{
+    opacity: 0.3;
+    -webkit-transition: 0.75s ;
+    -moz-transition: 0.75s ;
+    -o-transition: 0.75s ;
+    transition: 0.75s ;
+}
+.loadingGifTransparent{
+    z-index: 20;
+    position: absolute;
+    height: 4vh;
+    margin-top: 3vh;
+    margin-left: 5vh;
+}
 /*Sentence box*/
 .sentenceText{
     font-size: 2.5vh;
     text-align: center;
 }
-.sentenceImg{
+.sentencePicto{
     height: 6vh;
-    width: auto;
+    padding-top: 0.5vh;
+}
+.pictoImg{
+    height: 100%;
+}
+.sentenceType{
+    height: 4.75vh;
+    padding-left: 2vh;
+    padding-top: 0.75vh;
+    padding-bottom: 0.75vh;
+    background-color: #FEE8B6;
+}
+.sentenceTypeImg{
+    height: 100%;
+}
+.indicatorNegativeSentence{
+    height: 0.5vh;
+    background-color: black;
+}
+.indicatorNoNegativeSentence{
+    height: 0.5vh;
+    background-color: #FEE8B6;
+}
+.pictoType{
+    height: 3vh;
+    padding-top: 0.25vh;
+    padding-bottom: 0.25vh;
+}
+.pictoTypeImg{
+    height: 100%;
 }
