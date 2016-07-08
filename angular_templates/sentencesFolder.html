@@ -38,11 +38,11 @@
                             </div>
                         </div>
                         <div class="col-xs-4">
-                            <button ng-show="!historicFolder" ng-click="editHistoricFolder()" class="turquoiseButton">Editar <div class="icon-pencil"></div><br/>carpeta</button>
-                            <button class="turquoiseButton">Descarregar <div class="icon-download-alt"></div><br/>carpeta</button>
-                            <button ng-show="!historicFolder" class="turquoiseButton" ng-click="deleteFolderModal()">Eliminar <div class="icon-trash"></div><br/>carpeta</button>
+                            <button ng-show="!historicFolder" ng-click="editHistoricFolder()" class="turquoiseButton">{{content.editHistoryEditFolderButton1}} <div class="icon-pencil"></div><br/>{{content.editHistoryEditFolderButton2}}</button>
+                            <button class="turquoiseButton">{{content.editHistoryDownloadButton1}} <div class="icon-download-alt"></div><br/>{{content.editHistoryDownloadButton2}}</button>
+                            <button ng-show="!historicFolder" class="turquoiseButton" ng-click="deleteFolderModal()">Eliminar <div class="icon-trash"></div><br/>{{content.editHistoryEditFolderButton2}}</button>
                         </div>
-                        <div class="col-xs-2"><button ng-click="go('/panelGroups')" class="grayButton pull-right">Tornar <div class="icon-reply"></div><br/>al llistat</button></div>
+                        <div class="col-xs-2"><button ng-click="go('/panelGroups')" class="grayButton pull-right">{{content.editHistoryBackButton}} <div class="icon-reply"></div><br/>al llistat</button></div>
                     </div>
                     <!--Historic Sentences-->
                     <div class="row scrollBox" ng-if="historicFolder">
@@ -140,15 +140,15 @@
                                         </div>
                                         <div class="col-xs-1" ng-if="sentence.isPreRec=='0'">
                                             <img class="loadingGifTransparent" ng-show="!showUpDownButtons" ng-src={{img.Loading_icon}}/>
-                                            <div class="row copyButtonLg" ng-class="{transparent: !showUpDownButtons}" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
-                                            <div class="row deleteButtonLg" ng-class="{transparent: !showUpDownButtons}" ng-click="deleteSentence(sentence.ID_SSentence)">Eliminar <div class="icon-trash"></div></div>
+                                            <div class="row copyButtonLg" ng-class="{transparent: !showUpDownButtons}" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">{{content.editHistoryCopySentence}} <div class="icon-copy"></div></div>
+                                            <div class="row deleteButtonLg" ng-class="{transparent: !showUpDownButtons}" ng-click="deleteSentence(sentence.ID_SSentence)">{{content.editHistoryEraseSentence}} <div class="icon-trash"></div></div>
                                         </div>
                                         <!--Copy edit delete buttons-->
                                         <div class="col-xs-1" ng-if="sentence.isPreRec=='1'">
                                             <img class="loadingGifTransparent" ng-show="!showUpDownButtons" ng-src={{img.Loading_icon}}/>
-                                            <div class="row copyButton" ng-class="{transparent: !showUpDownButtons}" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
-                                            <div class="row editButton" ng-class="{transparent: !showUpDownButtons}" ng-click="editManualSentence(sentence.generatorString, sentence.sPreRecImg1, sentence.sPreRecImg2, sentence.sPreRecImg3, sentence.ID_SSentence);">Edita <div class="icon-pencil"></div></div>
-                                            <div class="row deleteButton" ng-class="{transparent: !showUpDownButtons}" ng-click="deleteSentence(sentence.ID_SSentence)">Eliminar <div class="icon-trash"></div></div>
+                                            <div class="row copyButton" ng-class="{transparent: !showUpDownButtons}" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">{{content.editHistoryCopySentence}} <div class="icon-copy"></div></div>
+                                            <div class="row editButton" ng-class="{transparent: !showUpDownButtons}" ng-click="editManualSentence(sentence.generatorString, sentence.sPreRecImg1, sentence.sPreRecImg2, sentence.sPreRecImg3, sentence.ID_SSentence);">{{content.editHistoryEditSentence}} <div class="icon-pencil"></div></div>
+                                            <div class="row deleteButton" ng-class="{transparent: !showUpDownButtons}" ng-click="deleteSentence(sentence.ID_SSentence)">{{content.editHistoryEraseSentence}} <div class="icon-trash"></div></div>
                                         </div>
                                     </div>
                                 </div>
@@ -168,11 +168,11 @@
         <div class="row marginModalTopHist">
         <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
             <div id="header" class="row">
-                <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
+                <div class="col-xs-10 headerTitle">{{content.editHistoryCopySentenceTitle}}</div>
             </div>
             <div class="row backgroundUserConfigBox">
                 <div class="row fonsAlert">
-                    <div class="col-xs-12 textCenter">Selecciona la carpeta:</div>
+                    <div class="col-xs-12 textCenter">{{content.editHistoryCopySentenceText}}</div>
                 </div>
                 <div class="row dadesUsuariCentre">
                     <div class="row scrollBoxModal">

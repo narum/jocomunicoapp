@@ -6,8 +6,9 @@ angular.module('controllers')
             $rootScope.dropdownMenuBarValue = '/'; //Dropdown bar button selected on this view
         }
         // Pedimos los textos para cargar la pagina
-        txtContent("panelgroup").then(function (results) {
+        txtContent("historySentencesFold").then(function (results) {
             $scope.content = results.data;
+            $scope.editHistoricFolderContent = results.data;
         });
 
         //Dropdown Menu Bar

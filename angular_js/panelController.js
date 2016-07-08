@@ -8,6 +8,10 @@ angular.module('controllers')
             // Pedimos los textos para cargar la pagina
             txtContent("panelgroup").then(function (results) {
                 $scope.content = results.data;
+                getFolders();
+            });
+            txtContent("historySentencesFold").then(function (results) {
+                $scope.editHistoricFolderContent = results.data;
             });
 
             //Dropdown Menu Bar
@@ -69,9 +73,9 @@ angular.module('controllers')
                 Resources.main.get({'funct': "getSentenceFolders"}).$promise
                 .then(function (results) {
                     $scope.historicFolders=[];
-                    $scope.historicFolders.push({'ID_Folder':'-1', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'today', 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0.1'});
-                    $scope.historicFolders.push({'ID_Folder':'-7', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastWeek', 'imgSFolder':'img/pictos/semana.png', 'folderColor':'dfdfdf', 'folderOrder':'0.2'});
-                    $scope.historicFolders.push({'ID_Folder':'-30', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':'lastMonth', 'imgSFolder':'img/pictos/mes.png', 'folderColor':'dfdfdf', 'folderOrder':'0.3'});
+                    $scope.historicFolders.push({'ID_Folder':'-1', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':$scope.content.historyTodayFolder, 'imgSFolder':'img/pictos/hoy.png', 'folderColor':'dfdfdf', 'folderOrder':'0.1'});
+                    $scope.historicFolders.push({'ID_Folder':'-7', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':$scope.content.historyLastWeekFolder, 'imgSFolder':'img/pictos/semana.png', 'folderColor':'dfdfdf', 'folderOrder':'0.2'});
+                    $scope.historicFolders.push({'ID_Folder':'-30', 'ID_SFUser':$rootScope.userId, 'folderDescr':'', 'folderName':$scope.content.historyLastMonthFolder, 'imgSFolder':'img/pictos/mes.png', 'folderColor':'dfdfdf', 'folderOrder':'0.3'});
                     angular.forEach(results.folders, function (value) {
                         value.folderOrder = parseInt(value.folderOrder, 10);
                         $scope.historicFolders.push(value);
@@ -80,7 +84,6 @@ angular.module('controllers')
                     $scope.showUpDownButtons=true;
                 });
             };
-            getFolders();
             //Delet historic sentences 30 days old
             Resources.main.get({'funct': "getHistoric"});
 
