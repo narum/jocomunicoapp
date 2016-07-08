@@ -124,10 +124,9 @@ html * {
 .folderDownButton:hover{
     background-color: #5d8d91;
 }
-
-
-
-
+.paddingButtonAddWord{
+    padding: 1vh;
+}
 .panelContainer{
     background-color: whitesmoke;
     height: 25%;
@@ -215,4 +214,24 @@ html * {
     height: 4vh;
     margin-top: 3vh;
     margin-left: 5vh;
+}
+.FolderButtonAddWord{
+    height: 1000%;
+    border-radius: 5px;
+    box-shadow: 2px -2px 0px 1px #333;
+    border: none;
+    color: #000;
+    background-color: #fff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column; 
+    cursor: pointer;
+    max-height: 35px;
+    width: 100%
+}
+.FolderButtonAddWord:active{
+    box-shadow: 0px -0px 0px 1px #333;
+    transform: translate(2px, -2px);
 }

@@ -230,6 +230,15 @@ angular.module('controllers')
                 $scope.idUser = null;
                 $('#ConfirmCopyGroupBoard').modal({backdrop: 'static'});
             };
+            $scope.copyVocabulary = function () {
+                $scope.isLoged = "false";
+                $scope.state = "";
+                $scope.state2 = "";
+                $scope.usernameCopyPanel = "";
+                $scope.passwordCopyPanel = "";
+                $scope.idUser = null;
+                $('#ConfirmCopyVocabulary').modal({backdrop: 'static'});
+            };
             $scope.changeUser = function () {
                 $scope.isLoged = "false";
                 $scope.state = "";
@@ -270,6 +279,15 @@ angular.module('controllers')
             $scope.ConfirmCopyBoard = function () {
                 var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
                 var postdata = {id: $scope.idboardToCopy, user: $scope.idUser};
+                $scope.finished = false;
+                $http.post(URL, postdata).success(function (response)
+                {
+                    $scope.finished = true;
+                });
+            };
+            $scope.ConfirmCopyVocabulary = function () {
+                var URL = $scope.baseurl + "AddWord/copyUserVocabulary";
+                var postdata = {user: $scope.idUser};
                 $scope.finished = false;
                 $http.post(URL, postdata).success(function (response)
                 {
@@ -365,9 +383,16 @@ angular.module('controllers')
                     $rootScope.addWordparam = {newmod: newModif, type: addWordType};
                     $location.path('/addWord');
                 }
-                if (newModif == 0 && addWordType == "edit") {
-                    $rootScope.addWordparam = {newmod: newModif, type: addWordType};
-                    $('#ConfirmEditAddWord').modal({backdrop: 'static'});
+                if (newModif == 0) {
+                    switch(addWordType){
+                        case("edit"):
+                            $rootScope.addWordparam = {newmod: newModif, type: addWordType};
+                            $('#ConfirmEditAddWord').modal({backdrop: 'static'});
+                            break;
+                        case("copy"):
+                            $scope.copyVocabulary();
+                            break;
+                }
                 }
 
             };

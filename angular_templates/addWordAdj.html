@@ -1,40 +1,40 @@
 <div>
-    <div class="form addWordForm50">
-        <div class="addWordFromField addWordFromPaddingH fullheight" style="background-color: #fff;">
-            <div class="row marginTopAdj">
-                <div class="col-xs-5 row ">
+    <div class="form addWordForm40" >
+        <div class="addWordFromField addWordFromPaddingH fullheight" style="background-color: #fff;" ng-class="{ReqField: errAdd.erradd1 == true }">
+            <div class="row">
+                <div class="col-xs-6 row ">
                     <div class="col-xs-12">
-                        MODIF:Masculi Singular
+                        {{content.SingularMascAdj}}
                     </div>
-                    <div class="col-xs-12">
-                        <input type="text" class="addWordText "  name="CopyBoardName" ng-model="objAdd.masc"/>
-                    </div>
-                </div>
-                <div class="col-xs-5 row pull-right">
-                    <div class="col-xs-12">
-                        MODIF:Femeni Singular
-                    </div>
-                    <div class="col-xs-12">
-                        <input type="text" class="addWordText"  name="CopyBoardName" ng-model="objAdd.fem"/>
+                    <div class="col-xs-12 marginTopAdjS">
+                        <input type="text" class="addWordText "  name="mascAdj" ng-model="objAdd.masc"/>
                     </div>
                 </div>
-                
+                <div class="col-xs-6 row text-right">
+                    <div class="col-xs-12">
+                        {{content.SingularFemAdj}}
+                    </div>
+                    <div class="col-xs-12 marginTopAdjS">
+                        <input type="text" class="addWordText"  name="femAdj" ng-model="objAdd.fem"/>
+                    </div>
+                </div>
+
             </div>
             <div class="row marginTopAdj">
-                <div class="col-xs-5 row">
+                <div class="col-xs-6 row">
                     <div class="col-xs-12 ">
-                        MODIF:Masculi Plural
+                        {{content.PluralMascAdj}}
                     </div>
-                    <div class="col-xs-12 ">
-                        <input type="text" class="addWordText"  name="CopyBoardName" ng-model="objAdd.mascpl"/>
+                    <div class="col-xs-12 marginTopAdjS">
+                        <input type="text" class="addWordText"  name="mascplAdj" ng-model="objAdd.mascpl"/>
                     </div>
                 </div>
-                <div class="col-xs-5 row pull-right">
+                <div class="col-xs-6 row text-right">
                     <div class="col-xs-12 ">
-                        MODIF:Femeni Plural
+                        {{content.PluralFemAdj}}
                     </div>
-                    <div class="col-xs-12">
-                        <input type="text" class="addWordText"  name="CopyBoardName" ng-model="objAdd.fempl"/>
+                    <div class="col-xs-12 marginTopAdjS">
+                        <input type="text" class="addWordText"  name="femplAdj" ng-model="objAdd.fempl"/>
                     </div>
                 </div>
             </div>
@@ -43,67 +43,81 @@
     <div class="form addWordForm25">
         <div class="addWordFromField addWordFromPadding fullheight row" style="background-color: #fff;">
             <div class="row">
-                <div class="col-xs-5 row">
-                    <div class="col-xs-6">
-
-                    </div>
-                    <div class="col-xs-6">
-                        MODIF:SER
-                    </div>
+                <div class="col-xs-1 ">
+                    <img class="img-icon" ng-src="/img/icons/info.png" ng-click=""/>
                 </div>
-                <div class="col-xs-7 row">
-                    <div class="col-xs-4">
-                        <input id="switchAdj1" class="switchclear" type="checkbox" 
-                               ng-model="$parent.switchAdj.s1 " ng-show="false">
-                        <label for="switchAdj1">&nbsp;</label>
-                    </div>
-                    <div class="col-xs-7">
-                        MODIF:ESTAR
-                    </div>
+                <div class=" col-xs-4">
+                    {{content.serAdj}}
+                </div>
+                <div class="col-xs-4">
+                    <input id="switchAdj1" class="switchclear" type="checkbox" 
+                           ng-model="$parent.switchAdj.s1" ng-show="false">
+                    <label for="switchAdj1">&nbsp;</label>
+                </div>
+                <div class="col-xs-3">
+                    {{content.estarAdj}}
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-5 row">
-                    <div class="col-xs-6">
-
-                    </div>
-                    <div class="col-xs-6">
-                        MODIF:1ª persona
-                    </div>
+            <div class="row marginTopAdj">
+                <div class="col-xs-1 ">
+                    <img class="img-icon" ng-src="/img/icons/info.png" ng-click=""/>
                 </div>
-                <div class="col-xs-7 row">
-                    <div class="col-xs-4">
-                        <input id="switchAdj2" class="switchclear" type="checkbox" 
-                               ng-model="$parent.switchAdjs2 " ng-show="false">
-                        <label for="switchAdj2">&nbsp;</label>
-                    </div>
-                    <div class="col-xs-7">
-                        MODIF:3ª persona
-                    </div>
+                <div class=" col-xs-4">
+                    {{content.firstPersonAdj}}
+                </div>
+                <div class="col-xs-4">
+                    <input id="switchAdj2" class="switchclear" type="checkbox" 
+                           ng-model="$parent.switchAdj.s2" ng-show="false">
+                    <label for="switchAdj2">&nbsp;</label>
+                </div>
+                <div class="col-xs-3">
+                    {{content.thirdPersonAdj}}
                 </div>
             </div>
         </div>
     </div>
-    <div class="form addWordForm25">
-        <div class="addWordFromField fullheight" style="background-color: #fff;">
+    <div class="form addWordForm12c5">
+        <div class="addWordFromFieldAdj fullheight row" style="background-color: #fff;">
+            <div class="col-xs-1 ">
+                <img class="img-icon" ng-src="/img/icons/info.png" ng-click=""/>
+            </div>
+            <div class="col-xs-9">
+                {{content.supportsExpansion}}
+            </div>
+            <div class="col-xs-2">
+                <input id="switchAdjsupExp" class="switch" type="checkbox" 
+                       ng-model="$parent.objAdd.supExp" ng-show="false">
+                <label for="switchAdjsupExp">&nbsp;</label>
+            </div>
+        </div>
+    </div>
+    <div class="form addWordForm22c5">
+        <div class="addWordFromFieldAdj fullheight" style="background-color: #fff;" ng-class="{ReqField: errAdd.erradd2 == true }">
             <div class="has-feedback" style="height: 30%">
-                <div class="input-group input-group-auto inputMarginRigth">
-                    <span class="input-group-addon"><i class="icon-comments"></i></span>
+                <div class="col-xs-1">
+                    <img class="img-icon" ng-src="/img/icons/info.png" ng-click=""/>
+                </div>
+                <div class="col-xs-2">
+                    {{content.classWord}}
+                </div>
+                <div class="col-xs-6 input-group input-group-auto inputMarginRigth">
                     <select
-                        class="form-control"
+                        class="classBoxAddWord"
                         name="className"
                         ng-model="formAdjClass"
                         ng-change="addAdjClass(formAdjClass.valueOf())"
                         >
-                        <option ng-repeat="x in $parent.classAdj" value="{{x.classType}}">{{x.adjType}}</option>
+                        <option ng-repeat="x in $parent.classAdj| orderBy:'classType'" value="{{x.classType}}">{{x.adjType}}</option>
                     </select>
                 </div>
             </div>
-            <div class="inputMarginLeft" style=" height: 70%">
+            <div class="inputMarginLeft" style=" height:70%">
                 <table class="table table-condensed taula">
-                    <div class="col-xs-4 row" ng-repeat="item in AdjClassList">
-                        <div class="col-xs-8 llenguatge" >{{ item.adjType}}</div>
-                        <div class="col-xs-4 buto"><a class="icon-minus btn-borrar" ng-click="removeAdjclass($index)"></a></div>
+                    <div class="col-xs-4 classPaddingAddWord" ng-repeat="item in AdjClassList">
+                        <div class="row colorBoxClass">
+                            <div class="col-xs-8 llenguatgeAddWord" >{{ item.adjType}}</div>
+                            <div class="col-xs-4 butoAddWord text-right"><div class="icon-minus btn-borrarAddWord" ng-click="removeAdjclass($index)"></div></div>
+                        </div>
                     </div>
                 </table>
             </div>

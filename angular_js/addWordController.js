@@ -37,9 +37,10 @@ angular.module('controllers')
             switch ($scope.addWordType)
                 {
                     case "name":
-                        $scope.objAdd = {type: "name", nomtext: null, mf: false, singpl: false, contabincontab: null, determinat: null, ispropernoun: false, defaultverb: null, plural: null, femeni: null, fempl: null};
+                        $scope.objAdd = {type: "name", nomtext: null, mf: false, singpl: false, contabincontab: null, determinat: "1", ispropernoun: false, defaultverb: null, plural: null, femeni: null, fempl: null, imgPicto: 'arrow question.png', supExp: true};
                         $scope.switchName = {s1: false, s2: false, s3: false, s4: false, s5: false, s6: false};
                         $scope.NClassList = [];
+                        $scope.errAdd = {erradd1: false, erradd2: false,erradd3: false};
                         $scope.classNoun = [{classType: "animate", numType: 1, nameType: $scope.content.classname1},
                             {classType: "human", numType: 2, nameType: $scope.content.classname2},
                             {classType: "pronoun", numType: 3, nameType: $scope.content.classname3},
@@ -68,10 +69,10 @@ angular.module('controllers')
                         
                         break;
                     case "adj":
-                        //MODIF: defaultverb: 100/86, subjdef: 1/3 per defecte
-                        $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null,defaultverb: false, subjdef: false};
+                        $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null,defaultverb: false, subjdef: false, imgPicto: 'arrow question.png', supExp: true};
                         $scope.switchAdj = {s1: false, s2: false, s3: false, s4: false, s5: false, s6: false};
                         $scope.AdjClassList = [];
+                        $scope.errAdd = {erradd1: false, erradd2: false,erradd3: false};
                         $scope.classAdj = [{classType: "all", numType: 0, adjType: $scope.content.classadj0},
                                             {classType: "color", numType: 1, adjType: $scope.content.classadj1},
                                             {classType: "human", numType: 2, adjType: $scope.content.classadj2},
@@ -96,22 +97,29 @@ angular.module('controllers')
                 } else {
                     $location.path("/panelGroups");
                 }
-                if ($scope.NewModif == 0) {
-                    $scope.idEditWord = $scope.addWordType;
-                    var postdata = {id: $scope.idEditWord};
-                    var URL = $scope.baseurl + "AddWord/EditWordType";
-                    $http.post(URL, postdata).
-                            success(function (response)
-                            {
-                                $scope.addWordType = response.data[0].type;
-                                $scope.initAddWord();
-                                $scope.editWordData();
-                            });
-                }
-                else{
-                    $scope.initAddWord();
-                }
+                
+                var URL = $scope.baseurl + "AddWord/getAllVerbs";
+                $http.post(URL).
+                    success(function (response)
+                    {
+                    $scope.verbsList = response.data;
+                    if ($scope.NewModif == 0) {
+                        $scope.idEditWord = $scope.addWordType;
+                        var postdata = {id: $scope.idEditWord};
+                        var URL = $scope.baseurl + "AddWord/EditWordType";
+                        $http.post(URL, postdata).
+                                success(function (response)
+                                {
+                                    $scope.addWordType = response.data[0].type;
+                                    $scope.initAddWord();
+                                    $scope.editWordData();
+                                });
+                    }
+                    else{
+                        $scope.initAddWord();
+                    }
 
+                    });
             };
             $scope.editWordData = function () {
                 var postdata = {id: $scope.idEditWord, type: $scope.addWordType};
@@ -123,26 +131,41 @@ angular.module('controllers')
                             $scope.addWordEditData = response.data[0];
                             console.log($scope.addWordEditData);
                             
-                            var postdata = {id: $scope.addWordType, type: $scope.addWordType};
-                            console.log(postdata);
-                            var URL = $scope.baseurl + "AddWord/EditWordGetClass";
+                            var postdata = {id: $scope.idEditWord, type: $scope.addWordType};
+                            URL = $scope.baseurl + "AddWord/EditWordGetClass";
                             $http.post(URL, postdata).
                                     success(function (response)
                                     {
                                         switch ($scope.addWordType)
                                         {
                                             case "name":
-                                                
+                                                console.log(response.data);
+                                                if (response.data){
+                                                    for(i = 0; i < response.data.length;i++){
+                                                        $scope.addNClass(response.data[i].class);
+                                                    }
+                                                }
                                                 $scope.objAdd = {type: "name", nomtext: $scope.addWordEditData.nomtext, mf: $scope.addWordEditData.mf == "masc" ? false : true,
                                                     singpl: $scope.addWordEditData.singpl == "sing" ? false : true, contabincontab: $scope.addWordEditData.contabincontab == "incontable" ? true : false,
                                                     determinat: $scope.addWordEditData.determinat, ispropernoun: $scope.addWordEditData.ispropernoun == 1 ? true : false,
-                                                    defaultverb: $scope.addWordEditData.defaultverb, plural: $scope.addWordEditData.plural,
-                                                    femeni: $scope.addWordEditData.femeni, fempl: $scope.addWordEditData.fempl};
+                                                    defaultverb: $scope.addWordEditData.defaultverb == "0" ? null : $scope.addWordEditData.defaultverb, plural: $scope.addWordEditData.plural,
+                                                    femeni: $scope.addWordEditData.femeni, fempl: $scope.addWordEditData.fempl, imgPicto: $scope.addWordEditData.imgPicto,
+                                                    supExp: $scope.addWordEditData.supportsExpansion == "1" ? true : false};
                                                 $scope.switchName = {s1: false, s2: $scope.objAdd.femeni != null ? true : false, s3: $scope.objAdd.plural != null ? true : false,
                                                     s4: $scope.objAdd.fempl != null ? true : false, s5: $scope.objAdd.defaultverb != null ? true : false, s6: false};
                                                 break;
                                             case "adj":
-                                                $scope.objAdd = {type: "adj", masc: null, fem: null, mascpl: null, fempl: null, subjdef: null};
+                                                console.log(response.data);
+                                                if (response.data){
+                                                    for(i = 0; i < response.data.length;i++){
+                                                        $scope.addAdjClass(response.data[i].class);
+                                                    }
+                                                }
+                                                $scope.objAdd = {type: "adj", masc: $scope.addWordEditData.masc, fem: $scope.addWordEditData.fem,
+                                                    mascpl: $scope.addWordEditData.mascpl, fempl: $scope.addWordEditData.fempl,
+                                                    defaultverb: $scope.addWordEditData.defaultverb == "86" ? false : true, subjdef: $scope.addWordEditData.subjdef == "1" ? false : true,
+                                                    imgPicto: $scope.addWordEditData.imgPicto, supExp: $scope.addWordEditData.supportsExpansion == "1" ? true : false};
+                                                $scope.switchAdj = {s1: $scope.addWordEditData.defaultverb, s2: $scope.addWordEditData.subjdef, s3: false, s4: false, s5: false, s6: false};
                                                 break;
                                             default:
                                                 break;
@@ -150,21 +173,102 @@ angular.module('controllers')
                                     });
                         });
             };
-
             $scope.cancelAddWord = function () {
                 $location.path("/panelGroups");
             };
-
-
-            $scope.saveAddWord = function () {
-                var URL = $scope.baseurl + "Board/XXXXXXXX";
-                console.log($scope.objAdd);
-//      MODIF: HA DE ENVIAR LES DADES AL POST
-//                $http.post(URL, objAdd).success(function (response)
-//                {
-//                });
-
+            $scope.EditWordRemove = function () {
+                var postdata = {id: $scope.idEditWord, type: $scope.addWordType};
+                console.log(postdata);
+                var URL = $scope.baseurl + "AddWord/EditWordRemove";
+                $http.post(URL, postdata).
+                        success(function (response)
+                        {
+                            
+                        });
                 $location.path("/panelGroups");
+            };
+            $scope.saveAddWord = function () {
+                $scope.commit = 1;
+                switch ($scope.addWordType)
+                {
+                    case "name":
+                        $scope.errAdd = {erradd1: false, erradd2: false,erradd3: false};
+                        if($scope.objAdd.nomtext == null){
+                            $scope.commit = 0;
+                            $scope.errAdd.erradd1 = true;
+                        }
+                        if($scope.NClassList.length < 1){
+                            $scope.commit = 0;
+                            $scope.errAdd.erradd2 = true;
+                        }
+                        if($scope.objAdd.imgPicto == 'arrow question.png' || $scope.objAdd.imgPicto == null){
+                            $scope.commit = 0;
+                            $scope.errAdd.erradd3 = true;
+                        }
+                        
+                        if($scope.commit == 1)
+                        {
+                            $scope.objAdd = {type: "name", nomtext: $scope.objAdd.nomtext, mf: $scope.objAdd.mf == false ? "masc" : "fem",
+                            singpl: $scope.objAdd.singpl == false ? "sing" : "pl", contabincontab: $scope.objAdd.contabincontab == true ? "incontable" : "contable",
+                            determinat: $scope.objAdd.determinat, ispropernoun: $scope.objAdd.ispropernoun == true ? "1" : "0",
+                            defaultverb: $scope.objAdd.defaultverb == null ? "0" : $scope.objAdd.defaultverb, plural: $scope.switchName.s3 == false ? null : $scope.objAdd.plural,
+                            femeni: $scope.switchName.s2 == false ? null : $scope.objAdd.femeni, fempl: $scope.switchName.s4 == false ? null : $scope.objAdd.fempl,
+                            imgPicto: $scope.objAdd.imgPicto, pictoid: $scope.idEditWord != null ? $scope.idEditWord : false, new: $scope.NewModif == 1 ? true : false,
+                            class: $scope.NClassList, supExp: $scope.objAdd.supExp == true ? "1" : "0"};
+                            if ($scope.objAdd.singpl == "pl"){
+                                $scope.objAdd.plural = null;
+                                $scope.objAdd.femeni = null;
+                                $scope.objAdd.fempl = null;
+                            }
+                            if ($scope.objAdd.mf == "fem"){
+                                $scope.objAdd.femeni = null;
+                                $scope.objAdd.fempl = null;
+                            }
+                        var URL = $scope.baseurl + "AddWord/InsertWordData";
+                        var postdata = {objAdd: $scope.objAdd};
+                            $http.post(URL, postdata).success(function (response)
+                            {
+                                
+                            });
+                            $location.path("/panelGroups");
+                        }
+                        break;
+                    case "adj":
+                        $scope.errAdd = {erradd1: false, erradd2: false,erradd3: false};
+                        if($scope.objAdd.masc == null || $scope.objAdd.fem == null || $scope.objAdd.mascpl == null || $scope.objAdd.fempl == null){
+                            $scope.commit = 0;
+                            $scope.errAdd.erradd1 = true;
+                        }
+                        if($scope.AdjClassList.length < 1){
+                            $scope.commit = 0;
+                            $scope.errAdd.erradd2 = true;
+                        }
+                        if($scope.objAdd.imgPicto == 'arrow question.png' || $scope.objAdd.imgPicto == null){
+                            $scope.commit = 0;
+                            $scope.errAdd.erradd3 = true;
+                        }
+                        
+                        if($scope.commit == 1)
+                        {
+                            $scope.objAdd = {type: "adj", masc: $scope.objAdd.masc, fem: $scope.objAdd.fem, mascpl: $scope.objAdd.mascpl,
+                            fempl: $scope.objAdd.fempl, defaultverb: $scope.switchAdj.s1 == false ? "86" : "100", subjdef: $scope.switchAdj.s2 == false ? "1" : "3",
+                            imgPicto: $scope.objAdd.imgPicto, pictoid: $scope.idEditWord != null ? $scope.idEditWord : false, new: $scope.NewModif == 1 ? true : false,
+                            class: $scope.AdjClassList, supExp: $scope.objAdd.supExp == true ? "1" : "0"};
+                            var URL = $scope.baseurl + "AddWord/InsertWordData";
+                            var postdata = {objAdd: $scope.objAdd};
+                            $http.post(URL, postdata).success(function (response)
+                            {
+
+                            });
+                            $location.path("/panelGroups");
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                
+
+                
             };
             $scope.uploadFileToWord = function () {
                 $scope.myFile = document.getElementById('file-input').files;
@@ -181,45 +285,41 @@ angular.module('controllers')
                 })
                         .success(function (response) {
                             $scope.uploading = false;
-                            $scope.URLImg = response.url;
+                            $scope.objAdd.imgPicto = response.url;
+                            $scope.objAdd.imgPicto = $scope.objAdd.imgPicto.split('/');
+                            $scope.objAdd.imgPicto = $scope.objAdd.imgPicto[2];
                             if (response.error) {
-                                //open modal
                                 console.log(response.errorText);
                                 $scope.errorText = response.errorText;
                                 $('#errorImgModal').modal({backdrop: 'static'});
                             }
                         })
                         .error(function (response) {
-                            //alert(response.errorText);
                         });
             };
             $scope.addNClass = function (nameTypeClass) {
                 angular.forEach($scope.classNoun, function (value, key) {
                     if (value.classType == nameTypeClass) {
-                        $scope.NClassList.push($scope.classNoun[key]);//añadimos el idioma a la lista .push(objeto)
-                        $scope.classNoun.splice(key, 1);//Borrar idioma de las opciones .splice(posicion, numero de items)
-                        $scope.state.languageSelected = 'has-success';
-                        languageOk = true;
+                        $scope.NClassList.push($scope.classNoun[key]);
+                        $scope.classNoun.splice(key, 1);
                     }
                 });
             };
             $scope.removeNounclass = function (index) {
                 $scope.classNoun.push($scope.NClassList[index]);
-                $scope.NClassList.splice(index, 1);//Borrar item de un array .splice(posicion, numero de items)
+                $scope.NClassList.splice(index, 1);
             };
             $scope.addAdjClass = function (AdjTypeClass) {
                 angular.forEach($scope.classAdj, function (value, key) {
                     if (value.classType == AdjTypeClass) {
-                        $scope.AdjClassList.push($scope.classAdj[key]);//añadimos el idioma a la lista .push(objeto)
-                        $scope.classAdj.splice(key, 1);//Borrar idioma de las opciones .splice(posicion, numero de items)
-                        $scope.state.languageSelected = 'has-success';
-                        languageOk = true;
+                        $scope.AdjClassList.push($scope.classAdj[key]);
+                        $scope.classAdj.splice(key, 1);
                     }
                 });
             };
             $scope.removeAdjclass = function (index) {
                 $scope.classAdj.push($scope.AdjClassList[index]);
-                $scope.AdjClassList.splice(index, 1);//Borrar item de un array .splice(posicion, numero de items)
+                $scope.AdjClassList.splice(index, 1);
             };
 
 

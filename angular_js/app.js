@@ -8,7 +8,6 @@ angular.module('app', [
 	'ui.bootstrap',
         'ngDialog',
         'ngScrollbar',
-        'ngAnimate',
         
 	//Modules
 	'controllers',
