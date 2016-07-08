@@ -24,7 +24,6 @@ class AddWordInterface extends CI_Model {
         $this->db->where('ID_PUser', $idsuOrigen);
         $query = $this->db->get('Pictograms');
         //MODIF: mirar si ya lo tiene
-
         if ($query->num_rows() > 0) {
 
             $voc = $query->result();

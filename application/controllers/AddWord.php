@@ -291,5 +291,19 @@ class AddWord extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+    public function copyUserVocabulary_post() {
 
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idusu = $request->user;
+
+        $this->BoardInterface->initTrans();
+        $idusuorigen = $this->session->userdata('idusu');
+        $vocabulary = $this->AddWordInterface->copyVocabulary($idusuorigen,$idusu);
+        $this->BoardInterface->commitTrans();
+        $response = [
+            "data" => $vocabulary
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
 }

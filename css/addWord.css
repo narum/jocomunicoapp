@@ -183,7 +183,7 @@ input.switchclear:checked ~ label:after
     width: 100px;
 }
 .paddingButtonAddWord{
-    padding: 1vh 1vh;
+    padding: 1vh;
 }
 .ButtonAddWord{
     background: -moz-linear-gradient(top, rgba(74, 74, 74,0) 0%, rgba(74, 74, 74,0.20) 20%, rgba(74, 74, 74,0.40) 40%, rgba(74, 74, 74,0.60) 60%, rgba(74, 74, 74,00) 80%, rgba(74, 74, 74,1) 100%);
