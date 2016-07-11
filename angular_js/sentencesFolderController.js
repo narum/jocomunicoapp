@@ -188,9 +188,9 @@ angular.module('controllers')
         $scope.deleteFolder = function(){
             $scope.viewActived = false;
             Resources.main.save({'folder':$scope.newFolder},{'funct': "deleteSentenceFolder"}).$promise
-            .then(function (results) {
-                $location.path('/panelGroups'); ///POOSAR TIMEOUT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111 500
-            });
+            $timeout(function () {
+                $location.path('/panelGroups');
+            }, 500);
         };
         //New manual input Sentence
         $scope.createSentence = function(){

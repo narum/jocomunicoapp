@@ -281,6 +281,9 @@ class Main extends REST_Controller {
             //Get manual input sentences
             $manualSentences = $this->main_model->getSingleData('S_Sentence', 'ID_SFolder', $ID_Folder, 'isPreRec', '1');
             //Add manual input sentences to sentences
+            if ($sentences == null){
+                $sentences = array();
+            }
             foreach ($manualSentences as $value) {
                 array_push($sentences, $value);
             }

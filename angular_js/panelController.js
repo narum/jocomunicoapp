@@ -133,6 +133,9 @@ angular.module('controllers')
         };
         $scope.newFolder={};
         $scope.saveFolder = function(){
+            if ($scope.newFolder.folderColor == null){
+                $scope.newFolder.folderColor='FFFFFF';
+            }
             Resources.main.save({'folderName':$scope.newFolder.folderName,'imgSFolder':$scope.newFolder.imgSFolder,'folderColor':$scope.newFolder.folderColor},{'funct': "createSentenceFolder"}).$promise
             .then(function (results) {
                 $scope.newFolder={};
@@ -141,6 +144,36 @@ angular.module('controllers')
             });
         };
         
+        /***************************************************
+        *
+        *  editFolders functions
+        *  
+        ***************************************************/
+        $scope.CreateBoard = function (ID_GB) {
+            $scope.idGroupBoard = ID_GB;
+            var URL = $scope.baseurl + "PanelGroup/getPanelGroupInfo";
+            //alert($scope.idGroupBoard);
+            var postdata = {idGroupBoard: $scope.idGroupBoard};
+            $http.post(URL, postdata).
+                success(function (response)
+                {
+                    $scope.CreateBoardData = {CreateBoardName: '', height: response.defHeight.toString(), width: response.defWidth.toString(), idGroupBoard: response.ID_GB};
+                    $scope.CreateBoardData.height = $scope.range(10)[response.defHeight - 1].valueOf();
+                    $scope.CreateBoardData.width = $scope.range(10)[response.defWidth - 1].valueOf();
+
+                    $('#ConfirmCreateBoard').modal({backdrop: 'static'});
+                });
+
+        };
+        $scope.confirmCreateBoard = function () {
+            URL = $scope.baseurl + "Board/newBoard";
+            $http.post(URL, $scope.CreateBoardData).success(function (response)
+            {
+                $scope.editPanel($scope.idGroupBoard);
+//                $scope.showBoard(response.idBoard);
+//                $scope.edit();
+            });
+        };
         /*
          * Return uploaded images from database. There are two types, the users images an the arasaac (not user images)
          */
@@ -339,27 +372,27 @@ angular.module('controllers')
                             $scope.initPanelGroup();
                         });
             };
-            //MODIF: creo que se pude borrar
-            $scope.CreateBoard = function (ID_GB) {
-                $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: ID_GB};
-                ngDialog.openConfirm({
-                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
-                    scope: $scope,
-                    className: 'ngdialog-theme-default dialogCreateBoard'
-                }).then(function () {
-
-                    var URL = $scope.baseurl + "Board/newBoard";
-
-
-                    $http.post(URL, $scope.CreateBoardData).success(function (response)
-                    {
-                        $rootScope.editPanelInfo = {idBoard: response.idBoard};
-                        $location.path('/');
-                    });
-
-                }, function (value) {
-                });
-            };
+//            //MODIF: creo que se pude borrar
+//            $scope.CreateBoard = function (ID_GB) {
+//                $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: ID_GB};
+//                ngDialog.openConfirm({
+//                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
+//                    scope: $scope,
+//                    className: 'ngdialog-theme-default dialogCreateBoard'
+//                }).then(function () {
+//
+//                    var URL = $scope.baseurl + "Board/newBoard";
+//
+//
+//                    $http.post(URL, $scope.CreateBoardData).success(function (response)
+//                    {
+//                        $rootScope.editPanelInfo = {idBoard: response.idBoard};
+//                        $location.path('/');
+//                    });
+//
+//                }, function (value) {
+//                });
+//            };
 
             $scope.changeGroupBoardName = function (nameboard, idgb)
             {
