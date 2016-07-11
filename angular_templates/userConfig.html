@@ -8,6 +8,7 @@
 <div ng-include="'/angular_templates/dropdownMenuBar.html'" ng-show="viewActived"></div>
 <div ng-include="'/angular_templates/logoutModal.html'"></div>
 <div ng-include="'/angular_templates/errorVoicesModal.html'"></div>
+<div ng-include="'/angular_templates/infoModal.html'"></div>
 
 <div class="loadingGif" ng-show="!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
 <div class="row scroll" id="scrollBar" ng-show="viewActived">
@@ -218,7 +219,7 @@
                 <div id="header" class="row"><div class="col-xs-10 headerTitle">{{content.titleBar2}}</div></div>
                 <div class="marginBoxCentral">
 <!--InterfaceLanguage-->                    
-                    <div class="row menuBar">
+                <!--    <div class="row menuBar">
                         <div class="row headerBar" ng-class="{disabledBar: !interfaceLanguageBarEnable}">
                             <div class="col-xs-6">
                                 <div class="col-xs-2 infoIconBox">
@@ -255,9 +256,9 @@
                         </div>
                         </div>
                         </div>
-                    </div>
+                    </div> -->
 <!--LanguagesModal-->                       
-                                        <div class="modal fade" id="LanguageModal" role="dialog">
+                                 <!--       <div class="modal fade" id="LanguageModal" role="dialog">
                                             <div class="modal-dialog modal-lg">
                                                  <div class="row marginModalTopOwl"><img class="img-owl pull-right" src={{img.lowHolaFlecha}}/></div>
                                                 <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns1_08}})">
@@ -290,9 +291,9 @@
                                                 <div class="row verticalMarginTop"></div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
 <!--ExpansionLanguage-->                    
-                    <div class="row menuBar">
+                  <!--  <div class="row menuBar">
                         <div class="row headerBar" ng-class="{disabledBar: !expansionLanguageEnable||!userData.cfgExpansionOnOff}">
                             <div class="col-xs-6">
                                 <div class="col-xs-2 infoIconBox">
@@ -335,14 +336,13 @@
                         </div>
                         </div>
                         </div>
-                    </div>
+                    </div> -->
 <!--Your Voice-->                           
                     <div class="row menuBar">
                         <div class="row headerBar">
                             <div class="col-xs-6">
                                 <div class="col-xs-2 infoIconBox">
-                                    <input type="image" class="img-icon" ng-src={{img.info}} popover-placement="top-left" popover-trigger="focus"
-                                           uib-popover="{{content.popYourVoice}}">
+                                    <input type="image" class="img-icon" ng-src={{img.info}} ng-click="toggleInfoModal(content.modalInfoTitle, content.popYourVoiceLocal);">
                                 </div>
                                 <div class="col-xs-10 buttonBar" ng-click="contentBar11=!contentBar11">{{content.yourVoiceTitleBar}}</div>
                             </div>
@@ -406,8 +406,7 @@
                         <div class="row headerBar" ng-class="{disabledBar:!userData.cfgInterfaceVoiceOnOff}">
                             <div class="col-xs-6">
                                 <div class="col-xs-2 infoIconBox">
-                                    <input type="image" class="img-icon" ng-src={{img.info}} popover-placement="top-left" popover-trigger="focus"
-                                           uib-popover="{{content.popFeedbackVoice}}">
+                                    <input type="image" class="img-icon" ng-src={{img.info}} ng-click="toggleInfoModal(content.modalInfoTitle, content.popFeedbackVoiceLocal);">
                                 </div>
                                 <div class="col-xs-10 buttonBar" ng-click="contentBar10=!contentBar10">{{content.feedbackVoiceTitleBar}}</div>
                             </div>
@@ -466,8 +465,7 @@
                         <div class="row headerBar">
                             <div class="col-xs-6">
                                 <div class="col-xs-2 infoIconBox">
-                                    <input type="image" class="img-icon" ng-src={{img.info}} popover-placement="top-left" popover-trigger="focus"
-                                           uib-popover="{{content.popMenuInfo}}">
+                                    <input type="image" class="img-icon" ng-src={{img.info}} ng-click="toggleInfoModal(content.modalInfoTitle, content.popMenuInfo);">
                                 </div>
                                 <div class="col-xs-10 buttonBar" ng-click="contentBar3=!contentBar3">{{content.menuBar}}</div>
                             </div>
@@ -509,8 +507,7 @@
                         <div class="row headerBar">
                             <div class="col-xs-6">
                                 <div class="col-xs-2 infoIconBox">
-                                    <input type="image" class="img-icon" ng-src={{img.info}} popover-placement="top-left" popover-trigger="focus"
-                                           uib-popover="{{content.popInterfaceInfo}}">
+                                    <input type="image" class="img-icon" ng-src={{img.info}} ng-click="toggleInfoModal(content.modalInfoTitle, content.interfaceLocalInfo);">
                                 </div>
                                 <div class="col-xs-10 buttonBar" ng-click="contentBar5=!contentBar5">{{content.interface}}</div>
                             </div>
@@ -618,8 +615,7 @@
                         <div id="predSistem" class="row headerBar" ng-class="{disabledBar:!userData.cfgPredOnOff}">
                             <div class="col-xs-6">
                                 <div class="col-xs-2 infoIconBox">
-                                    <input type="image" class="img-icon" ng-src={{img.info}} popover-placement="top-left" popover-trigger="focus"
-                                           uib-popover="{{content.popPredictionInfo}}">
+                                    <input type="image" class="img-icon" ng-src={{img.info}} ng-click="toggleInfoModal(content.modalInfoTitle, content.popPredictionInfo);">
                                 </div>
                                 <div class="col-xs-10">{{content.predictionSistem}}</div>
                             </div>
@@ -653,8 +649,7 @@
                         <div class="row headerBar">
                             <div class="col-xs-6">
                                 <div class="col-xs-2 infoIconBox">
-                                    <input type="image" class="img-icon" ng-src={{img.info}} popover-placement="top-left" popover-trigger="focus"
-                                           uib-popover="{{content.popHardwareConfig}}">
+                                    <input type="image" class="img-icon" ng-src={{img.info}} ng-click="toggleInfoModal(content.modalInfoTitle, content.popHardwareConfig);">
                                 </div>
                                 <div class="col-xs-10 buttonBar" ng-click="contentBar7=!contentBar7">{{content.hardwareTitleBar}}</div>
                             </div>
@@ -713,8 +708,7 @@
                         <div class="row headerBar" ng-class="{disabledBar:!userData.cfgScanningOnOff}">
                             <div class="col-xs-6">
                                 <div class="col-xs-2 infoIconBox">
-                                    <input type="image" class="img-icon" ng-src={{img.info}} popover-placement="top-left" popover-trigger="focus"
-                                           uib-popover="{{content.popScanSistem}}">
+                                    <input type="image" class="img-icon" ng-src={{img.info}} ng-click="toggleInfoModal(content.modalInfoTitle, content.popScanSistem);">
                                 </div>
                                 <div class="col-xs-10 buttonBar" ng-click="contentBar8=!contentBar8">{{content.scanSistemTitleBar}}</div>
                             </div>
@@ -908,7 +902,7 @@
                                                                         </div>
                                                                     </div>
 <!--Historial-->                            
-                    <div class="row menuBar">
+                    <!--<div class="row menuBar">
                         <div class="row headerBar" ng-class="{disabledBar:!userData.cfgHistOnOff}">
                             <div class="col-xs-6">
                                 <div class="col-xs-2 infoIconBox">
@@ -923,10 +917,10 @@
                                 <label for="switch10">&nbsp;</label>
                             </div>
                             <div class="col-xs-1">&nbsp;
-                                <!--<img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src={{img.Loading_icon}}/>-->
+                                <img class="loadingGifSm pull-right" ng-show="!expansionLanguageEnable&&userData.cfgExpansionOnOff" src={{img.Loading_icon}}/>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 <!--Buttons-->
                     <div class="row verticalMarginTop">
                         <div class="col-xs-12">

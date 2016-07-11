@@ -1,5 +1,14 @@
 @charset "UTF-8";
 /* CSS Document */
+@media (max-width:1000px){
+
+    input[type="radio"]{
+        margin: 0px;
+    }
+    html *{
+        font-size: 1.3vw;
+    }
+}
 .folderContainer{
     padding: 4vh 15vw;
     height: 100vh;

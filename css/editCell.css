@@ -92,12 +92,13 @@
     border-radius: 10px;
     position: absolute;
     z-index: 5;
+    cursor: pointer;
 }
 .buttonRemovePhoto{
     display: block;
-    max-width: 25%;
+    max-width: 20%;
     height: auto;
-    max-height: 25%;
+    max-height: 20%;
     width: auto;
     top: 15%;
     left: 85%;
@@ -105,6 +106,19 @@
     border-radius: 10px;
     position: absolute;
     z-index: 5;
+    cursor: pointer;
+}
+.buttonInfoPhoto{
+    display: block;
+    max-width: 20%;
+    height: auto;
+    max-height: 20%;
+    width: auto;
+    top: 5%;
+    left: 8%;
+    position: absolute;
+    z-index: 5;
+    cursor: pointer;
 }
 .saveEdit{
     padding-left: 1vh;
@@ -130,7 +144,7 @@
 .titleTextTypus{
     font-weight: bold;
     padding-left: 5% !important;
-    margin-top: 2%;
+    margin-top: 3%;
 }
 .titleText{
     font-weight: bold;
@@ -146,7 +160,14 @@
 .scanText{
     font-weight: bold;
     padding-left: 0%;
-    padding-top: 2.5%;
+    padding-top: 4.5%;
+    padding-bottom: 1%;
+}
+.scanText2{
+    font-weight: bold;
+    padding-left: 0%;
+    padding-top: 1%;
+    padding-bottom: 1%;
 }
 .buttonTitle{
     padding-right: 5% !important;
@@ -206,9 +227,12 @@
     height: 75%;
     float: left;
     top: 50%;
-    transform:translate(0%,-50%);
+    transform: translate(0%,-50%);
     margin-left: 2em;
     font-weight: bold;
+    font-size: 2.5vh;
+    padding-top: 5px;
+    width: 57%;
 }
 
 #sentenceSearchContent{
@@ -285,7 +309,7 @@
     border-radius: 7px;
 }
 .imgSearchView{
-    height: 57%;
+    height: 63%;
 }
 .buttonsSearchView{
     height: 15%;
@@ -299,3 +323,46 @@
     display: none !important;
 }
 
+.btn-save {
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    color: white;
+    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
+    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
+    background-color: #666666;
+    border: none;
+    cursor: pointer;
+}
+.btn-save:hover{
+    background-color: black;
+}
+
+.img-save {
+    display: block;
+    position: absolute;
+    width: 70%;
+    top: 25%;
+    left: 20%;
+}
+
+.text-save {
+    color: white;
+    display: block;
+    position: absolute;
+    top: 8%;
+    text-align: center;
+    width: 100%;
+    left: 0%;
+}
+
+.infoIconBox-editcell {
+    text-align: center;
+    padding-top: 3%;
+    padding-left: 5%;
+    padding-right: 7%;
+}

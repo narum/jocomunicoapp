@@ -1414,12 +1414,21 @@ class Lexicon extends CI_Model {
     }
     
     /*
-     * Adds or updates the stats of the pictogram with pictoid
+     * Adds or updates the stats (countx1 and hour and day of the week) of the pictogram with pictoid
      * for the user with id=iduser. If first is set to true, it only
      * sets the counter to 1 if that user had never used that pictogram
      * before.
      */
-    public function addWordStatsX1($pictoid, $iduser, $first) {
+    public function addWordStatsX1($pictoid, $iduser, $first) 
+    {
+        $datestring = "%Y/%m/%d";
+        $daystring = 'D';
+        $hourstring = 'G';
+        $time = time();
+        $avui = mdate($datestring, $time);
+        $dia = date($daystring, $time);
+        $hora = date($hourstring, $time);
+        $hora .= "h";
         
         $this->db->where('pictoid', $pictoid);
         $this->db->where('ID_PSUPUser', $iduser);
@@ -1428,16 +1437,22 @@ class Lexicon extends CI_Model {
             if (!$first) {
                 $stat = $query->result();
                 $num = $stat[0]->countx1 + 1;
+                $numdia = $stat[0]->$dia + 1;
+                $numhora = $stat[0]->$hora + 1;
                 $this->db->where('pictoid', $pictoid);
                 $this->db->where('ID_PSUPUser', $iduser);
                 $data = array(
-                    'countx1' => $num
+                    'countx1' => $num,
+                    'lastdate' => $avui,
+                    $dia => $numdia,
+                    $hora => $numhora
                 );
                 $query = $this->db->update('P_StatsUserPicto', $data);
             }
         } else {
             $data = array(
                 'countx1' => '1',
+                'lastdate' => $avui,
                 'pictoid' => $pictoid,
                 'ID_PSUPUser' => $iduser
             );
@@ -1447,9 +1462,19 @@ class Lexicon extends CI_Model {
     
     /*
      * Inserts, in pairs, each pictogram in P_StatsUserPicto.
-     * If this combination of pictograms already exist increment count
+     * If this combination of pictograms already exists increment count
      */
     function addStatsX2($paraulesFrase, $iduser) {
+        
+        $datestring = "%Y/%m/%d";
+        $daystring = 'D';
+        $hourstring = 'G';
+        $time = time();
+        $avui = mdate($datestring, $time);
+        $dia = date($daystring, $time);
+        $hora = date($hourstring, $time);
+        $hora .= "h";
+        
         for ($i = 1; $i < count($paraulesFrase); $i++) {
             $word1 = $paraulesFrase[$i - 1];
             $word2 = $paraulesFrase[$i];
@@ -1462,16 +1487,24 @@ class Lexicon extends CI_Model {
             if ($query->num_rows() > 0) {
                 $stat = $query->result();
                 $num = $stat[0]->countx2 + 1;
+                $numdia = $stat[0]->$dia + 1;
+                $numhora = $stat[0]->$hora + 1;
                 $this->db->where('picto2id', $inputid2);
                 $this->db->where('picto1id', $inputid1);
                 $this->db->where('ID_PSUP2User', $iduser);
                 $data = array(
-                    'countx2' => $num
+                    'countx2' => $num,
+                    'lastdate' => $avui,
+                    $dia => $numdia,
+                    $hora => $numhora
                 );
                 $query = $this->db->update('P_StatsUserPictox2', $data);
             } else {
                 $data = array(
                     'countx2' => '1',
+                    'lastdate' => $avui,
+                    $dia => '1',
+                    $hora => '1',
                     'picto2id' => $inputid2,
                     'picto1id' => $inputid1,
                     'ID_PSUP2User' => $iduser
@@ -1481,10 +1514,20 @@ class Lexicon extends CI_Model {
         }
     }
     /*
-     * Inserts, in t, each pictogram in P_StatsUserPicto.
-     * If this combination of pictograms already exist increment count
+     * Inserts, in trios, each pictogram in P_StatsUserPicto.
+     * If this combination of pictograms already exists increment count
      */
     function addStatsX3($paraulesFrase, $iduser) {
+        
+        $datestring = "%Y/%m/%d";
+        $daystring = 'D';
+        $hourstring = 'G';
+        $time = time();
+        $avui = mdate($datestring, $time);
+        $dia = date($daystring, $time);
+        $hora = date($hourstring, $time);
+        $hora .= "h";
+        
         for ($i = 2; $i < count($paraulesFrase); $i++) {
             $word1 = $paraulesFrase[$i - 2];
             $word2 = $paraulesFrase[$i - 1];
@@ -1500,17 +1543,25 @@ class Lexicon extends CI_Model {
             if ($query->num_rows() > 0) {
                 $stat = $query->result();
                 $num = $stat[0]->countx3 + 1;
+                $numdia = $stat[0]->$dia + 1;
+                $numhora = $stat[0]->$hora + 1;
                 $this->db->where('picto3id', $inputid3);
                 $this->db->where('picto2id', $inputid2);
                 $this->db->where('picto1id', $inputid1);
                 $this->db->where('ID_PSUP3User', $iduser);
                 $data = array(
-                    'countx3' => $num
+                    'countx3' => $num,
+                    'lastdate' => $avui,
+                    $dia => $numdia,
+                    $hora => $numhora
                 );
                 $query = $this->db->update('P_StatsUserPictox3', $data);
             } else {
                 $data = array(
                     'countx3' => '1',
+                    'lastdate' => $avui,
+                    $dia => '1',
+                    $hora => '1',
                     'picto3id' => $inputid3,
                     'picto2id' => $inputid2,
                     'picto1id' => $inputid1,
@@ -1527,8 +1578,8 @@ class Lexicon extends CI_Model {
     * sets the counter to 1 if that user had never used that pictogram
     * before.
     */
-   public function addImgTempStatsX1($pictoid, $iduser, $imgtemp) {
-
+   public function addImgTempStatsX1($pictoid, $iduser, $imgtemp) 
+   {
        $this->db->where('pictoid', $pictoid);
        $this->db->where('ID_PSUPUser', $iduser);
        $query = $this->db->get('P_StatsUserPicto');

@@ -19,7 +19,7 @@ angular.module('controllers', [])
             $scope.img.fletxaLogin2 = '/img/srcWeb/Login/fletxaLogin2.png';
             $scope.img.BotoEntra = '/img/srcWeb/Login/BotoEntra.png';
             $scope.img.BotoEntra2 = '/img/srcWeb/Login/BotoEntra2.png';
-
+            
             //HTML text content
             Resources.register.get({'section': 'login', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
                     .then(function (results) {
@@ -644,6 +644,9 @@ angular.module('controllers', [])
             $scope.userDataForm = [];
             var count1 = 0;
             var count2 = 0;
+            // Initialize variables for the information popups
+            $scope.infoModalContent = "";
+            $scope.infoModalTitle = "";
             //Imagenes
             $scope.img = [];
             $scope.img.fons = '/img/srcWeb/patterns/fons.png';
@@ -1110,6 +1113,17 @@ angular.module('controllers', [])
                             $rootScope.dropdownMenuBarValue = '/panelGroups'; //Dropdown bar button selected on this view
                         });
             };
+            
+            $scope.style_changes_title = '';
+            
+             // Activate information modals (popups)
+            $scope.toggleInfoModal = function (title, text) {
+                $scope.infoModalContent = text;
+                $scope.infoModalTitle = title;
+                
+                $('#infoModal').modal('toggle');
+            };
+            
             $scope.viewActived = false; // para activar el gif del loading
         })
         .controller('myCtrl', function (Resources, $location, $scope, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, dropdownMenuBarInit, AuthService) {
@@ -1849,7 +1863,11 @@ angular.module('controllers', [])
             };
             //When the user press acept (in the no primaryboard modal) panelgroups it's loaded 
             $scope.aceptErrorNPB = function () {
-                $location.path('/panelGroups');
+                
+                $timeout(function () {
+                    $location.path('/panelGroups');
+                }, 500);
+                
             };
             /*
              * Return: array from 0 to repeatnum
@@ -1953,12 +1971,9 @@ angular.module('controllers', [])
                 });
             };
             //Change the tab in the serach view (edit mode) between pictos and images
-            $scope.changeEditSearch = function () {
-                if ($scope.typeSearh === "picto")
-                    $scope.typeSearh = "img";
-                else
-                    $scope.typeSearh = "picto";
-
+            $scope.changeEditSearch = function (source) {
+                if ($scope.typeSearh != source)
+                    $scope.typeSearh = source;
             };
             // Gets all the boards and initialize the two dropdown menus
             $scope.getGroupBoardInfo = function () {
@@ -2803,13 +2818,21 @@ angular.module('controllers', [])
                         template: $scope.baseurl + '/angular_templates/EditCellView.html',
                         className: 'ngdialog-theme-default dialogEdit',
                         scope: $scope,
-                        controller: 'Edit'
+                        controller: 'Edit',
+                        showClose: false
                     });
-
                 }
-
-            }
-            ;
+            };
+            
+            $scope.style_changes_title = '';
+            
+             // Activate information modals (popups)
+            $scope.toggleInfoModal = function (title, text) {
+                $scope.infoModalContent = text;
+                $scope.infoModalTitle = title;
+                $scope.style_changes_title = 'padding-top: 2vh;';
+                $('#infoModal').modal('toggle');
+            };
         })
 
         // Edit controller 
@@ -2915,6 +2938,12 @@ angular.module('controllers', [])
                     $scope.sFolderSelectedImg = img;
                     $scope.sFolderSelectedText = text;
                 };
+                
+                // Closes the editCell dialog
+                $scope.closeDialog = function() {
+                    ngDialog.close();
+                };
+                
                 //Initialize the dropdwon menus and all the variables that will be shown to the user
                 $scope.getFunctions();
                 $scope.getBoards();
@@ -3285,6 +3314,7 @@ angular.module('controllers', [])
 
             $scope.clickOnSentence = function (text) {
                 $scope.readText(text, false);
+                $scope.initScan();
             };
 
             /*

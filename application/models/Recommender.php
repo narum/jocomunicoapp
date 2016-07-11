@@ -11,6 +11,38 @@ class Recommender extends CI_Model {
         $this->load->library('Mymatching');
     }
     
+    private function SUMcount() {
+        $output = null;     
+        
+        $this->db->select('SUM(P_StatsUserPicto.countx1) as count');
+        $this->db->from('P_StatsUserPicto');
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
+        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));
+        $query = $this->db->get();     
+       
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;
+    }           
+
+    private function unique_multidim_array($array, $key) { 
+        $temp_array = array();
+        $i = 0;
+        $key_array = array();
+
+        foreach($array as $val) {
+            if (!in_array($val->$key, $key_array)) {
+                $key_array[$i] = $val->$key;
+                $temp_array[$i] = $val;
+            }
+            $i++;
+        }
+        return $temp_array; 
+    }
+    
     private function getIdsElem(){
         $output = array();
         $output = null;
@@ -91,7 +123,7 @@ class Recommender extends CI_Model {
         return $output;
     }    
 
-    private function getfreqUsuariX2($inputid1) {                            
+    private function getfreqUsuariX2($inputid1) {
         $output = array();
         $output = null;
         
@@ -102,8 +134,34 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $this->db->limit(3);
-        $this->db->order_by('countx2', 'desc');        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
+        return $output;   
+    }
+    
+    private function getfreqUsuariX2NV($inputid1) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext');
+        $this->db->from('P_StatsUserPictox2');              
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
+        $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
+        $this->db->where('Pictograms.pictoType !=', 'verb');  
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $this->db->limit(3);
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -123,7 +181,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -145,7 +205,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->where_in('NameClass'.$this->session->userdata('ulangabbr').'.class', $fits);
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -167,7 +229,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('Modifier'.$this->session->userdata('ulangabbr').'.type', $pictoType);               
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -189,7 +253,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->where('Modifier'.$this->session->userdata('ulangabbr').'.type', $fits);  
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -212,7 +278,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->where('Modifier'.$this->session->userdata('ulangabbr').'.type', $fits);  
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -234,7 +302,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->where('AdvType'.$this->session->userdata('ulangabbr').'.type', $fits);  
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -257,7 +327,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->where('AdvType'.$this->session->userdata('ulangabbr').'.type', $fits);  
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -278,7 +350,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->where('Pictograms.pictoType', $fits);
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -300,7 +374,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->where('Pictograms.pictoType', $fits);
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -322,7 +398,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
         $this->db->where('AdjClass'.$this->session->userdata('ulangabbr').'.class', $fits);
-        $this->db->order_by('countx2', 'desc');        
+        $this->db->order_by('countx2', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -345,7 +423,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->where_in('NameClass'.$this->session->userdata('ulangabbr').'.class', $fits);
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();        
         
         if ($query->num_rows() > 0) {
@@ -368,7 +448,9 @@ class Recommender extends CI_Model {
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
         $this->db->where('AdjClass'.$this->session->userdata('ulangabbr').'.class', $fits);
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -390,7 +472,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('AdjClass'.$this->session->userdata('ulangabbr').'.class', $pictoType);               
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -413,7 +497,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('Pictograms.pictoType', $pictoType);               
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -436,7 +522,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where_in('NameClass'.$this->session->userdata('ulangabbr').'.class', $fits);        
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -457,7 +545,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where_in('NameClass'.$this->session->userdata('ulangabbr').'.class', $fits);        
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -479,7 +569,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('AdvType'.$this->session->userdata('ulangabbr').'.type', $pictoType);               
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();                
 
         if ($query->num_rows() > 0) {
@@ -499,7 +591,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('Pictograms.pictoType', $pictoType);               
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -520,7 +614,9 @@ class Recommender extends CI_Model {
         $this->db->where('Pictograms.pictoType', $pictoType);
         $this->db->where('Adjective'.$this->session->userdata('ulangabbr').'.defaultverb', $inputid);
         $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
-        $this->db->order_by('repes', 'desc');        
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -833,24 +929,270 @@ class Recommender extends CI_Model {
         }
         return $fits;
     }
-    
-    private function getfreqUsuariX1() {
-        $output = array();
+	
+	private function getHora (){
+            return date('G', time());
+	}
+	
+	private function getDia() {
+            return date('D', time());
+	}
+        
+    private function getContextTypeAllDeep($pictoType, $minCount) {                            
         $output = null;
 
-        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext');
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, (P_StatsUserPicto.'.($this->getHora()-1).'h+P_StatsUserPicto.'.$this->getHora().'h+P_StatsUserPicto.'.($this->getHora()+1).'h+P_StatsUserPicto.'.$this->getDia().'+P_StatsUserPicto.'.$this->getDia().') as repes');
+        $this->db->from('P_StatsUserPicto');              
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
+        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
+        $this->db->where('Pictograms.pictoType', $pictoType);    
+        $this->db->group_by('P_StatsUserPicto.pictoid, PictogramsLanguage.pictotext, Pictograms.imgPicto');
+        $this->db->having('repes >=', $minCount);
+        $this->db->order_by('repes', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+            foreach($output as $value) {
+                $value->repes = $value->repes*10;
+            }
+        }
+        return $output;   
+    }
+    
+    private function getfreqUsuariX3NonExpanDeep($inputid1, $inputid2, $minCount) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, (P_StatsUserPictox3.'.($this->getHora()-1).'h+P_StatsUserPictox3.'.$this->getHora().'h+P_StatsUserPictox3.'.($this->getHora()+1).'h+P_StatsUserPictox3.'.$this->getDia().'+P_StatsUserPictox3.'.$this->getDia().') as count');
+        $this->db->from('P_StatsUserPictox3');       
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPictox3.picto3id = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPictox3.picto3id = Pictograms.pictoid', 'left');
+        $this->db->where('P_StatsUserPictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                              
+        $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
+        $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
+        $this->db->having('count >=', $minCount);
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+            foreach($output as $value) {
+                $value->count = $value->count*10;
+            }
+        }
+        return $output;   
+    }
+    
+    private function getfreqUsuariX3Deep($inputid1, $inputid2, $minCount) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, (P_StatsUserPictox3.'.($this->getHora()-1).'h+P_StatsUserPictox3.'.$this->getHora().'h+P_StatsUserPictox3.'.($this->getHora()+1).'h+P_StatsUserPictox3.'.$this->getDia().'+P_StatsUserPictox3.'.$this->getDia().') as count');
+        $this->db->from('P_StatsUserPictox3');       
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPictox3.picto3id = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPictox3.picto3id = Pictograms.pictoid', 'left');
+        $this->db->where('P_StatsUserPictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                              
+        $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
+        $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
+        $this->db->having('count >=', $minCount);
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $this->db->limit(3);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+            foreach($output as $value) {
+                $value->count = $value->count*10;
+            }
+        }
+        return $output;   
+    }
+    
+    private function getfreqUsuariX2DeepNV($inputid1, $minCount) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, (P_StatsUserPictox2.'.($this->getHora()-1).'h+P_StatsUserPictox2.'.$this->getHora().'h+P_StatsUserPictox2.'.($this->getHora()+1).'h+P_StatsUserPictox2.'.$this->getDia().'+P_StatsUserPictox2.'.$this->getDia().') as count');
+        $this->db->from('P_StatsUserPictox2');              
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
+        $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);
+        $this->db->where('Pictograms.pictoType', 'verb');
+        $this->db->having('count >=', $minCount);   
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $this->db->limit(3);     
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+            foreach($output as $value) {
+                $value->count = $value->count*10;
+            }
+        }
+        return $output;   
+    }
+    
+    private function getfreqUsuariX2Deep($inputid1, $minCount) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, (P_StatsUserPictox2.'.($this->getHora()-1).'h+P_StatsUserPictox2.'.$this->getHora().'h+P_StatsUserPictox2.'.($this->getHora()+1).'h+P_StatsUserPictox2.'.$this->getDia().'+P_StatsUserPictox2.'.$this->getDia().') as count');
+        $this->db->from('P_StatsUserPictox2');              
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
+        $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
+        $this->db->having('count >=', $minCount);   
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $this->db->limit(3);     
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+            foreach($output as $value) {
+                $value->count = $value->count*10;
+            }
+        }
+        return $output;   
+    }
+    
+    private function getfreqUsuariX2NonExpanDeep($inputid1, $minCount) {                            
+        $output = array();
+        $output = null;
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, (P_StatsUserPictox2.'.($this->getHora()-1).'h+P_StatsUserPictox2.'.$this->getHora().'h+P_StatsUserPictox2.'.($this->getHora()+1).'h+P_StatsUserPictox2.'.$this->getDia().'+P_StatsUserPictox2.'.$this->getDia().') as count');
+        $this->db->from('P_StatsUserPictox2');              
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
+        $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
+        $this->db->having('count >=', $minCount);
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+            foreach($output as $value) {
+                $value->count = $value->count*10;
+            }
+        }
+        return $output;   
+    } 
+    
+    private function getfreqUsuariX1DeepNV($minCount) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, (P_StatsUserPicto.'.($this->getHora()-1).'h+P_StatsUserPicto.'.$this->getHora().'h+P_StatsUserPicto.'.($this->getHora()+1).'h+P_StatsUserPicto.'.$this->getDia().'+P_StatsUserPicto.'.$this->getDia().') as count');
+        $this->db->from('P_StatsUserPicto');
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left');
+        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
+        $this->db->where('Pictograms.pictoType !=', 'verb');                             
+        $this->db->having('count >=', $minCount);
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $query = $this->db->get();      
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+            foreach($output as $value) {
+                $value->count = $value->count*10;
+            }
+        }
+
+        return $output;
+    }
+    
+    private function getfreqUsuariX1Deep($minCount) {
+        $output = array();
+        $output = null;
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, (P_StatsUserPicto.'.($this->getHora()-1).'h+P_StatsUserPicto.'.$this->getHora().'h+P_StatsUserPicto.'.($this->getHora()+1).'h+P_StatsUserPicto.'.$this->getDia().'+P_StatsUserPicto.'.$this->getDia().') as count');
+        $this->db->from('P_StatsUserPicto');
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left');
+        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
+        $this->db->having('count >=', $minCount);
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $query = $this->db->get();      
+
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+            foreach($output as $value) {
+                $value->count = $value->count*10;
+            }
+        }
+
+        return $output;
+    }
+
+    private function getfreqUsuariX1() {
+        $output = array();
+        $output = null;     
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, P_StatsUserPicto.countx1 as count');
         $this->db->from('P_StatsUserPicto');
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
-        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
-        $this->db->order_by('countx1', 'desc');
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
         $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();     
        
         if ($query->num_rows() > 0) {
             $output = $query->result();
-        }        
+        }
+        return $output;
+    }
+    
+    private function getfreqUsuariX1NV() {
+        $output = array();
+        $output = null;     
+        
+        $this->db->select('Pictograms.imgPicto, Pictograms.pictoid, PictogramsLanguage.pictotext, P_StatsUserPicto.countx1 as count');
+        $this->db->from('P_StatsUserPicto');
+        $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
+        $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
+        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));
+        $this->db->where('Pictograms.pictoType !=', 'verb');                             
+        $this->db->order_by('count', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
+        $query = $this->db->get();     
+       
+        if ($query->num_rows() > 0) {
+            $output = $query->result();
+        }
         return $output;
     }
     
@@ -866,8 +1208,10 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                              
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $this->db->limit(3);
-        $this->db->order_by('countx3', 'desc');        
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -888,7 +1232,9 @@ class Recommender extends CI_Model {
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                              
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
         $this->db->where('P_StatsUserPictox3.picto2id', $inputid2);  
-        $this->db->order_by('countx3', 'desc');        
+        $this->db->order_by('countx3', 'desc');
+        $this->db->order_by('PictogramsLanguage.pictofreq', 'desc');
+        $this->db->order_by('Pictograms.pictoid', 'random');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
@@ -1006,28 +1352,28 @@ class Recommender extends CI_Model {
         }
         return $VF;
     }
-    
+
     function getRecommenderX1() {
         $pred = null;
         if ($this->session->userdata('cfgExpansionOnOff')) $pred = $this->getRecommenderX1Expan(1);
         else $pred = $this->getRecommenderX1NonExpan();
         return $pred;
     }
-        
+
     function getRecommenderX2() {
         $pred = null;
         if ($this->session->userdata('cfgExpansionOnOff')) $pred = $this->getRecommenderX2Expan();
         else $pred = $this->getRecommenderX2NonExpan();
         return $pred;
     }   
-   
+
     function getRecommenderX3() {   
         $pred = null;
         if ($this->session->userdata('cfgExpansionOnOff')) $pred = $this->getRecommenderX3Expan();
         else $pred = $this->getRecommenderX3NonExpan();
         return $pred;
     }
-    
+
     function getcountElem(){
         $output = 0;
         $this->db->where('ID_RSTPUser', $this->session->userdata('idusu'));        
@@ -1040,7 +1386,7 @@ class Recommender extends CI_Model {
     }
     
     private function getRecommenderX1Expan($primera) {
-        $TSize = $this->session->userdata('cfgPredBarNumPred');
+        $TSize = $this->session->userdata('cfgPredBarNumPred');        
 
         // Algorisme V5 - Predictor inicial (cas 00 no hi ha res (fix jo i tu)  
         $VF = $this->getSubj();
@@ -1062,10 +1408,20 @@ class Recommender extends CI_Model {
             }
         }
 
-        // Algorisme V2 - Predictor freqüència II (d'usuari)                   
-        $freqUsuari = $this->getfreqUsuariX1();
+        // Algorisme V2 - Predictor freqüència II (d'usuari)
+        $contextTypeNamesAll = $this->getContextTypeAll('name');
+        $contextTypeNamesAllDeep = $this->getContextTypeAllDeep('name', round(($this->SUMcount()[0]->count-sizeof($contextTypeNamesAll))*0.01));      
+        if (empty($contextTypeNamesAllDeep)) $freqTotal = $contextTypeNamesAll;
+        else {
+            $freqTemp = array_merge($contextTypeNamesAllDeep, $contextTypeNamesAll);
+            usort($freqTemp, function ($a, $b) {  
+                if ($a->repes == $b->repes) return 0;
+                else return ($a->repes < $b->repes) ? 1 : -1;
+            });
+            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');            
+        }
         $k = 0;
-        foreach($freqUsuari as $value) {
+        foreach($freqTotal as $value) {
             for ($i = 0; $i < sizeof($VF); $i++) {
                 if($k == floor(($TSize-2)/2) || $value->pictoid == $VF[$i]->pictoid) { break; }
                 else if ($value->pictoid != $VF[$i]->pictoid && $i+1 === sizeof($VF)) {
@@ -1074,20 +1430,27 @@ class Recommender extends CI_Model {
                 }
             }
         }
-        
         // rellena
         if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX1($VF, $contextTypeName2Days, $TSize);
-        if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX1($VF, $freqUsuari, $TSize);
-        
+        if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX1($VF, $freqTotal, $TSize);
         // rellena - Algorisme V6 - Predictor de context (name) total                      
         if (sizeof($VF) < $TSize) {
-            $contextTypeNamesAll = $this->getContextTypeAll('name');
-            $VF = $this->rellenaVFX2X3($VF, $contextTypeNamesAll, $TSize);  
+            $freqUsuari = $this->getfreqUsuariX1();
+            $freqUsuariDeep = $this->getfreqUsuariX1Deep(round(($this->SUMcount()[0]->count-sizeof($freqUsuari))*0.01));
+            if (empty($freqUsuariDeep)) $freqTotal = $freqUsuari;
+            else {
+                $freqTemp = array_merge($freqUsuariDeep, $freqUsuari);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->count == $b->count) return 0;
+                    else return ($a->count < $b->count) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->rellenaVFX2X3($VF, $freqTotal, $TSize);
         }
-                
         return $VF;
     }
-    
+
     private function getRecommenderX1NonExpan() {
         $TSize = $this->session->userdata('cfgPredBarNumPred');
 
@@ -1096,10 +1459,20 @@ class Recommender extends CI_Model {
 
         // Algorisme V2 - Predictor freqüència II (d'usuari)                   
         $freqUsuari = $this->getfreqUsuariX1();
-        $VF = $this->rellenaVFX1($VF, $freqUsuari, $TSize);           
+        $freqUsuariDeep = $this->getfreqUsuariX1Deep(round(($this->SUMcount()[0]->count-sizeof($freqUsuari))*0.01));
+        if (empty($freqUsuariDeep)) $freqTotal = $freqUsuari;
+        else {            
+            $freqTemp = array_merge($freqUsuariDeep, $freqUsuari);
+            usort($freqTemp, function ($a, $b) {  
+                if ($a->count == $b->count) return 0;
+                else return ($a->count < $b->count) ? 1 : -1;
+            });
+            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+        }
+        $VF = $this->rellenaVFX1($VF, $freqTotal, $TSize);           
 
         return $VF;
-    }  
+    }
     
     private function getRecommenderX2Expan() {
         $paraulesFrase = $this->getIdsElem();
@@ -1108,9 +1481,22 @@ class Recommender extends CI_Model {
 
         // Algorisme V2 - Predictor freqüència II (d'usuari)
         $VF = array();
-        $VF = array_merge($VF,$this->getfreqUsuariX2($inputid1));
+        $freqUsuari = $this->getfreqUsuariX2($inputid1);
+        $freqUsuariDeep = $this->getfreqUsuariX2Deep($inputid1, round(($this->SUMcount()[0]->count-sizeof($freqUsuari))*0.01));
+        if (empty($freqUsuariDeep)) $freqTotal = $freqUsuari;
+        else {
+            $freqTemp = array_merge($freqUsuariDeep, $freqUsuari);
+            usort($freqTemp, function ($a, $b) {
+                if ($a->count == $b->count)
+                    return 0;
+                else
+                    return ($a->count < $b->count) ? 1 : -1;
+            });
+            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+        }
+        $VF = array_merge($VF, $freqTotal);
         $TSize = $this->session->userdata('cfgPredBarNumPred');
-        $FSize = $TSize - sizeof($VF);     
+        $FSize = $TSize - sizeof($VF);
         
         if ($inputType[0]->pictoType == 'name') {
             // Algorisme V6 - Predictor de context (verb) últims 2 dies
@@ -1118,8 +1504,18 @@ class Recommender extends CI_Model {
             $VF = $this->insertFloorVF($VF, $contextTypeVerb2Day, $FSize);
 
             // Algorisme V6 - Predictor de context (verb) total
-            $contextTypeVerbAll = $this->getContextTypeAll('verb');
-            $VF = $this->insertCeilVF($VF, $contextTypeVerbAll, $FSize);
+            $contextTypeVerbsAll = $this->getContextTypeAll('verb');
+            $contextTypeVerbsAllDeep = $this->getContextTypeAllDeep('verb', round(($this->SUMcount()[0]->count-sizeof($contextTypeVerbsAll))*0.01));
+            if (empty($contextTypeVerbsAllDeep)) $freqTotal = $contextTypeVerbsAll;
+            else {
+                $freqTemp = array_merge($contextTypeVerbsAllDeep, $contextTypeVerbsAll);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->repes == $b->repes) return 0;
+                    else return ($a->repes < $b->repes) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->rellenaVFX2X3($VF, $freqTotal, $TSize);
 
             // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbAll, $TSize);
@@ -1159,11 +1555,21 @@ class Recommender extends CI_Model {
 
             // Algorisme V6 - Predictor de context (name) total
             $contextTypeNamesAll = $this->getContextTypeAll('name');
-            $VF = $this->insertFloorVF($VF, $contextTypeNamesAll, $FSize);
+            $contextTypeNamesAllDeep = $this->getContextTypeAllDeep('name', round(($this->SUMcount()[0]->count-sizeof($contextTypeNamesAll))*0.01));
+            if (empty($contextTypeNamesAllDeep)) $freqTotal = $contextTypeNamesAll;
+            else {
+                $freqTemp = array_merge($contextTypeNamesAllDeep, $contextTypeNamesAll);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->repes == $b->repes) return 0;
+                    else return ($a->repes < $b->repes) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->insertFloorVF($VF, $freqTotal, $FSize);
 
             // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
-            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeNamesAll, $TSize);
+            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $freqTotal, $TSize);
         }
         else {
             // Algorisme V6 - Predictor de context (name) últims 2 dies                                
@@ -1172,7 +1578,17 @@ class Recommender extends CI_Model {
 
             // Algorisme V6 - Predictor de context (verb) total                      
             $contextTypeVerbsAll = $this->getContextTypeAll('verb');
-            $VF = $this->insertFloorVF($VF, $contextTypeVerbsAll, $FSize);                  
+            $contextTypeVerbsAllDeep = $this->getContextTypeAllDeep('verb', round(($this->SUMcount()[0]->count-sizeof($contextTypeVerbsAll))*0.01));
+            if (empty($contextTypeVerbsAllDeep)) $freqTotal = $contextTypeVerbsAll;
+            else {
+                $freqTemp = array_merge($contextTypeVerbsAllDeep, $contextTypeVerbsAll);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->repes == $b->repes) return 0;
+                    else return ($a->repes < $b->repes) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->insertFloorVF($VF, $freqTotal, $FSize);                  
 
             // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
@@ -1189,8 +1605,18 @@ class Recommender extends CI_Model {
         
         // Algorisme V6 - Predictor de context (name) total
         if (sizeof($VF) < $TSize) {
-            $contextTypeNameAll = $this->getContextTypeAll('name');
-            $VF = $this->rellenaVFX1($VF, $contextTypeNameAll, $TSize); 
+            $contextTypeNamesAll = $this->getContextTypeAll('name');
+            $contextTypeNamesAllDeep = $this->getContextTypeAllDeep('name', round(($this->SUMcount()[0]->count-sizeof($contextTypeNamesAll))*0.01));
+            if (empty($contextTypeNamesAllDeep)) $freqTotal = $contextTypeNamesAll;
+            else {
+                $freqTemp = array_merge($contextTypeNamesAllDeep, $contextTypeNamesAll);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->repes == $b->repes) return 0;
+                    else return ($a->repes < $b->repes) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->rellenaVFX1($VF, $freqTotal, $TSize); 
         }
         return $VF;
     }
@@ -1202,7 +1628,18 @@ class Recommender extends CI_Model {
 
         // Algorisme V2 - Predictor freqüència II (d'usuari)
         $VF = array();
-        $VF = array_merge($VF,$this->getfreqUsuariX2NonExpan($inputid1));        
+        $freqUsuari = $this->getfreqUsuariX2NonExpan($inputid1);
+        $freqUsuariDeep = $this->getfreqUsuariX2NonExpanDeep($inputid1, round(($this->SUMcount()[0]->count-sizeof($freqUsuari))*0.01));
+        if (empty($freqUsuariDeep)) $freqTotal = $freqUsuari;
+        else {
+            $freqTemp = array_merge($freqUsuariDeep, $freqUsuari);
+            usort($freqTemp, function ($a, $b) {  
+                if ($a->count == $b->count) return 0;
+                else return ($a->count < $b->count) ? 1 : -1;
+            });
+            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+        }
+        $VF = array_merge($VF,$freqTotal);
         $TSize = $this->session->userdata('cfgPredBarNumPred');
         
         // rellena
@@ -1210,7 +1647,17 @@ class Recommender extends CI_Model {
             $freqX1 = $this->getfreqUsuariX1();
             unset($freqX1[0]);
             unset($freqX1[1]);
-            $VF = $this->rellenaVFX2X3($VF, $freqX1, $TSize);
+            $freqUsuariDeep = $this->getfreqUsuariX1Deep(round(($this->SUMcount()[0]->count-sizeof($freqX1))*0.01));
+            if (empty($freqUsuariDeep)) $freqTotal = $freqX1;
+            else {
+                $freqTemp = array_merge($freqUsuariDeep, $freqX1);
+                usort($freqTemp, function ($a, $b) {
+                    if ($a->count == $b->count) return 0;
+                    else return ($a->count < $b->count) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->rellenaVFX2X3($VF, $freqTotal, $TSize);
         }
 
         return $VF;                
@@ -1235,18 +1682,64 @@ class Recommender extends CI_Model {
 
         // Algorisme V2 - Predictor freqüència II (d'usuari)
         $VF = array();
-        $VF = array_merge($VF,$this->getfreqUsuariX3($inputid1, $inputid2));              
-        
+        $freqUsuari = $this->getfreqUsuariX3($inputid1, $inputid2);
+        $freqUsuariDeep = $this->getfreqUsuariX3Deep($inputid1, $inputid2, round(($this->SUMcount()[0]->count-sizeof($freqUsuari))*0.01));
+        if (empty($freqUsuariDeep)) $freqTotal = $freqUsuari;
+        else {
+            $freqTemp = array_merge($freqUsuariDeep, $freqUsuari);
+            usort($freqTemp, function ($a, $b) {
+                if ($a->count == $b->count)
+                    return 0;
+                else
+                    return ($a->count < $b->count) ? 1 : -1;
+            });
+            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+        }
+        $VF = array_merge($VF,$freqTotal);              
         // rellena 1ra mitad
         if (sizeof($VF) < 3) {
             $freqX2 = $this->getfreqUsuariX2($inputid2);
-            $VF = $this->rellenaVFX2X3($VF, $freqX2, 3);
+            if ($verb) {
+                $freqX2 = $this->getfreqUsuariX2NV($inputid2);
+                $freqUsuariDeep = $this->getfreqUsuariX2DeepNV($inputid2, round(($this->SUMcount()[0]->count-sizeof($freqX2))*0.01));
+            }
+            else {
+                $freqX2 = $this->getfreqUsuariX2($inputid2);
+                $freqUsuariDeep = $this->getfreqUsuariX2Deep($inputid2, round(($this->SUMcount()[0]->count-sizeof($freqX2))*0.01));
+            }
+            if (empty($freqUsuariDeep)) $freqTotal = $freqX2;
+            else {
+                $freqTemp = array_merge($freqUsuariDeep, $freqX2);
+                usort($freqTemp, function ($a, $b) {
+                    if ($a->count == $b->count)
+                        return 0;
+                    else
+                        return ($a->count < $b->count) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->rellenaVFX2X3($VF, $freqTotal, 3);
         }        
-        
         // rellena 1ra mitad
         if (sizeof($VF) < 3) {
-            $freqX1 = $this->getfreqUsuariX1();
-            $VF = $this->rellenaVFX2X3($VF, $freqX1, 3);
+            if ($verb) {
+                $freqX1 = $this->getfreqUsuariX1NV();
+                $freqUsuariDeep = $this->getfreqUsuariX1DeepNV(round(($this->SUMcount()[0]->count-sizeof($freqX1))*0.01));
+            }
+            else {
+                $freqX1 = $this->getfreqUsuariX1();
+                $freqUsuariDeep = $this->getfreqUsuariX1Deep(round(($this->SUMcount()[0]->count-sizeof($freqX1))*0.01));
+            }
+            if (empty($freqUsuariDeep)) $freqTotal = $freqX1;
+            else {
+                $freqTemp = array_merge($freqUsuariDeep, $freqX1);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->count == $b->count) return 0;
+                    else return ($a->count < $b->count) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->rellenaVFX2X3($VF, $freqTotal, 3);
         }
         
         $TSize = $this->session->userdata('cfgPredBarNumPred');
@@ -1260,11 +1753,21 @@ class Recommender extends CI_Model {
             
             // Algorisme V6 - Predictor de context (name) total                      
             $contextTypeNamesAll = $this->getContextTypeAll('name');
-            $VF = $this->insertFloorVF($VF, $contextTypeNamesAll, $FSize);   
+            $contextTypeNamesAllDeep = $this->getContextTypeAllDeep('name', round(($this->SUMcount()[0]->count-sizeof($contextTypeNamesAll))*0.01));
+            if (empty($contextTypeNamesAllDeep)) $freqTotal = $contextTypeNamesAll;
+            else {
+                $freqTemp = array_merge($contextTypeNamesAllDeep, $contextTypeNamesAll);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->repes == $b->repes) return 0;
+                    else return ($a->repes < $b->repes) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->insertFloorVF($VF, $freqTemp, $FSize);   
             
             // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
-            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeNamesAll, $TSize);            
+            if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $freqTotal, $TSize);            
         }
         else if (!$verb && ($inputType1[0]->pictoType == 'name' || $inputType2[0]->pictoType == 'name')) {
             // Algorisme V6 - Predictor de context (verb) últims 2 dies                       
@@ -1273,7 +1776,17 @@ class Recommender extends CI_Model {
 			
 			// Algorisme V6 - Predictor de context (verb) total  
             $contextTypeVerbsAll = $this->getContextTypeAll('verb');
-            $VF = $this->insertFloorVF($VF, $contextTypeVerbsAll, $FSize);
+            $contextTypeVerbsAllDeep = $this->getContextTypeAllDeep('verb', round(($this->SUMcount()[0]->count-sizeof($contextTypeVerbsAll))*0.01));
+            if (empty($contextTypeVerbsAllDeep)) $freqTotal = $contextTypeVerbsAll;
+            else {
+                $freqTemp = array_merge($contextTypeNamesAllDeep, $contextTypeVerbsAll);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->repes == $b->repes) return 0;
+                    else return ($a->repes < $b->repes) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->insertFloorVF($VF, $freqTotal, $FSize);
             
             // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeVerbs2Days, $TSize);
@@ -1291,7 +1804,17 @@ class Recommender extends CI_Model {
 
             // Algorisme V6 - Predictor de context (verb) total                      
             $contextTypeVerbsAll = $this->getContextTypeAll('verb');
-            $VF = $this->insertFloorVF($VF, $contextTypeVerbsAll, $FSize);                  
+            $contextTypeVerbsAllDeep = $this->getContextTypeAllDeep('verb', round(($this->SUMcount()[0]->count-sizeof($contextTypeVerbsAll))*0.01));
+            if (empty($contextTypeVerbsAllDeep)) $freqTotal = $contextTypeVerbsAll;
+            else {
+                $freqTemp = array_merge($contextTypeVerbsAllDeep, $contextTypeVerbsAll);
+                usort($freqTemp, function ($a, $b) {
+                    if ($a->repes == $b->repes) return 0;
+                    else return ($a->repes < $b->repes) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->insertFloorVF($VF, $freqTotal, $FSize);                  
 
             // rellena
             if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
@@ -1407,7 +1930,17 @@ class Recommender extends CI_Model {
 
                 // Algorisme V6 - Predictor de context (verb) total  
                 $contextTypeVerbsAll = $this->getContextTypeAll('verb');
-                $VF = $this->insertFloorVF($VF, $contextTypeVerbsAll, $FSize);
+                $contextTypeVerbsAllDeep = $this->getContextTypeAllDeep('verb', round(($this->SUMcount()[0]->count-sizeof($contextTypeVerbsAll))*0.01));
+                if (empty($contextTypeVerbsAllDeep)) $freqTotal = $contextTypeVerbsAll;
+                else {
+                    $freqTemp = array_merge($contextTypeVerbsAllDeep, $contextTypeVerbsAll);
+                    usort($freqTemp, function ($a, $b) {  
+                        if ($a->repes == $b->repes) return 0;
+                        else return ($a->repes < $b->repes) ? 1 : -1;
+                    });
+                    $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+                }
+                $VF = $this->insertFloorVF($VF, $freqTotal, $FSize);
 
                 // rellena
                 if (sizeof($VF) < $TSize) $VF = $this->rellenaVFX2X3($VF, $contextTypeName2Days, $TSize);
@@ -1439,13 +1972,34 @@ class Recommender extends CI_Model {
         
         // Algorisme V2 - Predictor freqüència II (d'usuari)
         $VF = array();
-        $VF = array_merge($VF,$this->getfreqUsuariX3NonExpan($inputid1, $inputid2));        
+        $freqUsuari = $this->getfreqUsuariX3NonExpan($inputid1, $inputid2);
+        $freqUsuariDeep = $this->getfreqUsuariX3NonExpanDeep($inputid1, $inputid2, round(($this->SUMcount()[0]->count-sizeof($freqUsuari))*0.01));
+        if (empty($freqUsuariDeep)) $freqTotal = $freqUsuari;
+        else {
+            $freqTemp = array_merge($freqUsuariDeep, $freqUsuari);
+            usort($freqTemp, function ($a, $b) {  
+                if ($a->count == $b->count) return 0;
+                else return ($a->count < $b->count) ? 1 : -1;
+            });
+            $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+        }
+        $VF = array_merge($VF,$freqTotal);        
         $TSize = $this->session->userdata('cfgPredBarNumPred');
                         
         // rellena
         if (sizeof($VF) < $TSize) {
             $freqX2 = $this->getfreqUsuariX2NonExpan($inputid2);
-            $VF = $this->rellenaVFX2X3($VF, $freqX2, $TSize);
+            $freqUsuariDeep = $this->getfreqUsuariX2NonExpanDeep(round(($this->SUMcount()[0]->count-sizeof($freqX2))*0.01));
+            if (empty($freqUsuariDeep)) $freqTotal = $freqX2;
+            else {
+                $freqTemp = array_merge($freqUsuariDeep, $freqX2);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->count == $b->count) return 0;
+                    else return ($a->count < $b->count) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->rellenaVFX2X3($VF, $freqTotal, $TSize);
         }
 
         // rellena
@@ -1453,7 +2007,17 @@ class Recommender extends CI_Model {
             $freqX1 = $this->getfreqUsuariX1();
             unset($freqX1[0]);
             unset($freqX1[1]);
-            $VF = $this->rellenaVFX2X3($VF, $freqX1, $TSize);
+            $freqUsuariDeep = $this->getfreqUsuariX1Deep(round(($this->SUMcount()[0]->count-sizeof($freqX1))*0.01));
+            if (empty($freqUsuariDeep)) $freqTotal = $freqX1;
+            else {               
+                $freqTemp = array_merge($freqUsuariDeep, $freqX1);
+                usort($freqTemp, function ($a, $b) {  
+                    if ($a->count == $b->count) return 0;
+                    else return ($a->count < $b->count) ? 1 : -1;
+                });
+                $freqTotal = $this->unique_multidim_array($freqTemp, 'pictoid');
+            }
+            $VF = $this->rellenaVFX2X3($VF, $freqTotal, $TSize);
         }
         
         return $VF;

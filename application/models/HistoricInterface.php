@@ -25,6 +25,7 @@ class HistoricInterface extends CI_Model {
         $this->db->where('sentenceDate >', $date);
         $this->db->where('ID_SHUser', $idusu);
         $this->db->where('generatorString IS NOT NULL', null, false);
+        $this->db->order_by('sentenceDate', 'desc');
         $query = $this->db->get('S_Historic');
 
         if ($query->num_rows() > 0) {

@@ -11,7 +11,7 @@ class PanelGroup extends REST_Controller {
         parent::__construct();
 
         $this->load->library('session');
-        $this->load->model('panelInterface');
+        $this->load->model('PanelInterface');
         $this->load->model('Lexicon');
         $this->load->model('BoardInterface');
         $this->load->model('AddWordInterface');
@@ -52,7 +52,7 @@ class PanelGroup extends REST_Controller {
 
     public function getUserPanelGroups_post() {
         $idusu = $this->session->userdata('idusu');
-        $panels = $this->panelInterface->getUserPanels($idusu);
+        $panels = $this->PanelInterface->getUserPanels($idusu);
 
         $response = [
             'panels' => $panels
@@ -83,7 +83,7 @@ class PanelGroup extends REST_Controller {
         $ID_GBoard = $request->ID_GB;
         $idusu = $this->session->userdata('idusu');
 
-        $this->panelInterface->setPrimaryGroupBoard($ID_GBoard, $idusu);
+        $this->PanelInterface->setPrimaryGroupBoard($ID_GBoard, $idusu);
 
         $response = [
             'id' => $primaryBoard[0]->ID_Board
@@ -101,7 +101,7 @@ class PanelGroup extends REST_Controller {
         $imgGB = $request->imgGB;
         $idusu = $this->session->userdata('idusu');
         $this->BoardInterface->initTrans();
-        $id = $this->panelInterface->newGroupPanel($GBName, $idusu, $defW, $defH, $imgGB);
+        $id = $this->PanelInterface->newGroupPanel($GBName, $idusu, $defW, $defH, $imgGB);
 
         $idBoard = $this->BoardInterface->createBoard($id, "default", $defW, $defH);
         $this->addColumns(0, 0, $idBoard, $defW);
@@ -149,7 +149,7 @@ class PanelGroup extends REST_Controller {
         $name = $request->Name;
         $idusu = $this->session->userdata('idusu');
 
-        $this->panelInterface->changeGroupName($ID_GB, $name, $idusu);
+        $this->PanelInterface->changeGroupName($ID_GB, $name, $idusu);
 
         $response = [
             'id' => $primaryBoard[0]->ID_Board
@@ -169,10 +169,10 @@ class PanelGroup extends REST_Controller {
             $srcGroupBoard = 2;
             $primaryBoard = $this->BoardInterface->getInfoGroupBoard($srcGroupBoard);
 
-            $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
+            $IDGboard = $this->PanelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
             $boards = $this->BoardInterface->getBoards($srcGroupBoard);
             //If we want to allow the user copy group boards this line have to be removed
-            $this->panelInterface->setPrimaryGroupBoard($IDGboard, $idusu);
+            $this->PanelInterface->setPrimaryGroupBoard($IDGboard, $idusu);
 
             $sameGroupBoard = 1;
             for ($i = 0; $i < count($boards); $i++) {
@@ -197,7 +197,7 @@ class PanelGroup extends REST_Controller {
                 array_push($changedLinks, $idDst);
             }
             for ($i = 0; $i < count($changedLinks); $i++) {
-                $this->panelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i + 1]);
+                $this->PanelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i + 1]);
                 $i++;
             }
         } else {
@@ -218,11 +218,11 @@ class PanelGroup extends REST_Controller {
         $idusu = $request->user;
         $srcGroupBoard = $request->id;
         $changedLinks = array();
-
+        
         $this->BoardInterface->initTrans();
         $primaryBoard = $this->BoardInterface->getInfoGroupBoard($srcGroupBoard);
 
-        $IDGboard = $this->panelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
+        $IDGboard = $this->PanelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
         $boards = $this->BoardInterface->getBoards($srcGroupBoard);
 
         $sameGroupBoard = 1;
@@ -250,11 +250,13 @@ class PanelGroup extends REST_Controller {
                     }
                 }
             }
+
             array_push($changedLinks, $idSrc);
             array_push($changedLinks, $idDst);
         }
+
         for ($i = 0; $i < count($changedLinks); $i++) {
-            $this->panelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i + 1]);
+            $this->PanelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i + 1]);
             $i++;
         }
         $this->AddWordInterface->copyVocabulary($idusuorigen,$idusu);
@@ -271,7 +273,7 @@ class PanelGroup extends REST_Controller {
         $user = $request->user;
         $pass = $request->pass;
 
-        $userObj = $this->panelInterface->getUser($user, $pass);
+        $userObj = $this->PanelInterface->getUser($user, $pass);
 
         $response = [
             'userName' => $user,

@@ -24,12 +24,19 @@ input:focus{
     padding-right: 0px;
     padding-left: 0px;
 }
-.cruz{
+.cruz {
     background-color: #151515;
     height: 100%;
     float: right;
     width: 35px;
     border-top-right-radius: 10px;
+    cursor: pointer;
+    padding-top: 10px;
+    padding-left: 12px;
+    font-size: larger;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
 }
 .cruzTop{
     background-color: #151515;
@@ -88,7 +95,7 @@ input:focus{
     font-weight: bold;
 }
 .dialogText{
-    margin-top: 2vh;
+    margin-top: 1vh;
     color: #4c4c4c;
     font-weight: bold;
 }
@@ -212,8 +219,19 @@ input:focus{
 .infoIconBox input:focus{
     box-shadow: none;
 }
+.infoIconBox-small{
+    text-align: center;
+    padding-top: 0.3vh;
+}
+.infoIconBox-small input:focus{
+    box-shadow: none;
+}
 .img-icon{
     height: 3vh;
+    width: auto;
+}
+.img-icon-small{
+    height: 2.2vh;
     width: auto;
 }
 /*MODIF: se tendra que poner en generar*/
@@ -357,16 +375,6 @@ input.switch:checked ~ label:after
     background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
     background-color: #4c4c4c;
 }
-#headerShort{
-    height:4%;
-    background: -moz-linear-gradient(top, rgba(46, 46, 46,0) 0%,  rgba(46, 46, 46,0.20) 20%, rgba(46, 46, 46,0.40) 40%, rgba(46, 46, 46,0.60) 60%, rgba(46, 46, 46,00) 80%, rgba(46, 46, 46,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46, 46, 46,0)), color-stop(20%,rgba(46, 46, 46,0.20)), color-stop(40%,rgba(46, 46, 46,0.40)), color-stop(60%,rgba(46, 46, 46,0.60)), color-stop(80%,rgba(46, 46, 46,0.80)), color-stop(100%,rgba(46, 46, 46,1)));
-    background: -webkit-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background: -o-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background: -ms-linear-gradient(top,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background: linear-gradient(to bottom,  rgba(46, 46, 46,0) 0%,rgba(46, 46, 46,0.2) 20%,rgba(46, 46, 46,0.4) 40%,rgba(46, 46, 46,0.6) 60%,rgba(46, 46, 46,0.8) 80%,rgba(46, 46, 46,1) 100%);
-    background-color: #4c4c4c;
-}
 .folderButton{
     height: 100%;
     border-radius: 5px;
@@ -437,10 +445,10 @@ input.switch:checked ~ label:after
     padding-right: 2vh;
 }
 .paddingConfirmButton{
-    padding-top: 4vh;
+    padding-top: 3vh;
 }
 .marginTopConfirm{
-    margin-top: 2vh;
+    margin-top: 3vh;
 }
 .colorFolderPadding
 {
@@ -480,7 +488,13 @@ input.switch:checked ~ label:after
 .headerTitle{
     color:white;
     padding-top: 1vh;
-    padding-left: 2vw;
+    padding-left: 3vw;
+}
+.headerTitle-confirms{
+    color:white;
+    padding-top: 2vh;
+    padding-left: 3vw;
+    font-size: 3vh;
 }
 .textImgError{
     margin-top: 5px;
@@ -501,7 +515,18 @@ input.switch:checked ~ label:after
     background-color: white;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    padding: 3vh;
+    padding-left: 10vh;
+    padding-right: 10vh;
+    padding-top: 6vh;
+    padding-bottom: 4vh;
+}
+.fonsAlert-confirms{
+    font-size: 4vh;
+    background-color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding-top: 4vh;
+    padding-bottom: 4vh;
 }
 .img-Alert{
     height: 4.5vh;
@@ -550,7 +575,7 @@ input.switch:checked ~ label:after
 }
 
 .img-owl{
-    height: 20vh;
+    height: 15vh;
     width: auto;
     margin-right: 5vw;
 }
@@ -565,4 +590,46 @@ input.switch:checked ~ label:after
     margin-top: 1.2vh;
     height: 2vh;
     width: auto;
+}
+
+.headerTitle-infomodal{
+    color:white;
+    padding-top: 1vh;
+    padding-left: 3vw;
+    font-size: 3vh;
+}
+
+.text-info-modal * {
+    text-align: justify !important;
+    font-size: 2.6vh !important;
+    line-height: 4vh;
+}
+
+.text-info-modal ul {
+    list-style-type: disc !important;
+}
+
+.modal {
+    z-index: 1000000;
+}
+
+.modal-backdrop {
+    z-index: 900000 !important;
+}
+
+.tabstext {
+    display: block;
+    position: absolute;
+    width: 100%;
+    z-index: 5;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
 }

@@ -8,6 +8,7 @@ angular.module('app', [
 	'ui.bootstrap',
         'ngDialog',
         'ngScrollbar',
+        'angular-bind-html-compile',
         
 	//Modules
 	'controllers',
@@ -69,6 +70,26 @@ angular.module('app', [
                 .when('/sentencesFolder/:folderId/', {
 			controller:'sentencesFolderCtrl',
 			templateUrl:'../../angular_templates/sentencesFolder.html'
+		})
+                .when('/home', {
+			controller:'infoCtrl',
+			templateUrl:'../../angular_templates/Home.html'
+		})
+                .when('/about', {
+			controller:'infoCtrl',
+			templateUrl:'../../angular_templates/About.html'
+		})
+                .when('/privacy', {
+			controller:'infoCtrl',
+			templateUrl:'../../angular_templates/Privacy.html'
+		})
+                .when('/partners', {
+			controller:'infoCtrl',
+			templateUrl:'../../angular_templates/Partners.html'
+		})
+                .when('/cc', {
+			controller:'infoCtrl',
+			templateUrl:'../../angular_templates/CC.html'
 		})
 		.otherwise({ redirectTo:'/' });
 })

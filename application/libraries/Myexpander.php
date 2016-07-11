@@ -27,6 +27,10 @@ class Myexpander {
     
     public function expand()
     {
+        // the character encoding of the words from the database is utf-8
+        // so we set the php system to utf-8
+        mb_internal_encoding( 'utf-8' );
+        
         $CI = &get_instance();
         $CI->load->model('Lexicon');
 
@@ -119,7 +123,10 @@ class Myexpander {
         // si ha trobat un pictograma que no es pot expandir
         // o el sistema d'expansió estava desactivat que surti del sistema d'expansió
         if ($this->readwithoutexpansion || $expansionOff) {
+            
             $this->info['frasefinal'] = $frasefinalnotexpanded;
+            $CI->Lexicon->guardarParseIFraseResultat($propietatsfrase['identry'], null, $frasefinalnotexpanded);
+            
             return;
         }
 
@@ -136,6 +143,8 @@ class Myexpander {
             $this->info['readwithoutexpansion'] = $this->readwithoutexpansion;
             
             $this->info['frasefinal'] = $frasefinalnotexpanded;
+            $CI->Lexicon->guardarParseIFraseResultat($propietatsfrase['identry'], null, $frasefinalnotexpanded);
+            
             return;
         }
 
@@ -196,6 +205,7 @@ class Myexpander {
                    $this->info['readwithoutexpansion'] = $this->readwithoutexpansion;
 
                    $this->info['frasefinal'] = $frasefinalnotexpanded;
+                   $CI->Lexicon->guardarParseIFraseResultat($propietatsfrase['identry'], null, $frasefinalnotexpanded);
 
                    return;
                }
@@ -337,7 +347,8 @@ class Myexpander {
 //            }
 
             // Guardar parse tree i frase final a la base de dades
-            $CI->Lexicon->guardarParseIFraseResultat($propietatsfrase['identry'], $printparsepattern, $frasefinal);
+            if ($this->readwithoutexpansion) $CI->Lexicon->guardarParseIFraseResultat($propietatsfrase['identry'], null, $frasefinalnotexpanded);
+            else $CI->Lexicon->guardarParseIFraseResultat($propietatsfrase['identry'], $printparsepattern, $frasefinal);
 
             $this->info['errormessage'] = $this->errormessage[$bestpatternindex];
             $this->info['error'] = $this->error[$bestpatternindex];

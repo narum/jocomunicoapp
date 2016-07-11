@@ -11,7 +11,7 @@
 
                 <div class="row fonsAlert">
                     <div class="row" ng-show="isLoged == 'false'">
-                        {{content.loginToCopyText}}
+                        {{content.loginToCopyText}} 
                         <div class="col-xs-8 col-xs-offset-2">
                             <div class="row margeSuperiorUser">
                                 <div class="form-group {{state}} has-feedback">
@@ -55,7 +55,7 @@
                 <div class="row dadesUsuariCentre">
                     <div class="col-xs-6">
                         <button type="reset" class="btn-gray-disabled pull-left" disabled ng-if="idUser == null">{{content.confirm}}</button>
-                        <button type="reset" class="btn-gray pull-left" data-dismiss="modal" ng-click="ConfirmCopyBoard();" ng-if="idUser != null">{{content.confirm}}</button>
+                        <button type="reset" class="btn-gray pull-left" data-dismiss="modal" ng-click="ConfirmCopyGroupBoard();" ng-if="idUser != null">{{content.confirm}}</button>
                     </div>
                     <div class="col-xs-6">
                         <button type="reset" class="btn-gray pull-right" data-dismiss="modal" ng-click="closeThisDialog();">{{content.cancel}}</button>

@@ -98,14 +98,18 @@ html *
     width: 50%;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
+    cursor: pointer;
+    background-color: #eec558;
 }
 .searchTabDisable
 {
-    background-color:rgba(0,0,0,0.5);
-    height: 100%;
+    height: 90%;
     width: 100%;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
+    background-color: #858585;
+    border-bottom: 2px solid #f3d67b;
+    border-left: 1px solid #f3d67b;
 }
 .paddingFolder
 {
@@ -183,6 +187,14 @@ html *
     padding-left: 5%;
     padding-right: 5%;
     align-items: center;
+}
+
+.ngdialog-content {
+    z-index: 950;
+}
+
+.ngdialog-overlay {
+    z-index: 900;
 }
 
 .ngdialog.dialogEdit .ngdialog-content{
