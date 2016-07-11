@@ -79,7 +79,7 @@
                                             </div>
                                         </div>
                                         <div class="col-xs-1">
-                                            <div class="row copyButtonXLg" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">Copiar <div class="icon-copy"></div></div>
+                                            <div class="row copyButtonXLg" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence);scrollbarSentences2">Copiar <div class="icon-copy"></div></div>
                                         </div>
                                     </div>
                                 </div>
@@ -88,9 +88,9 @@
                     </div>
                     <!--Folder Sentences-->
                     <div class="row scrollBox" ng-if="!historicFolder">
-                        <div class="row scrollOverflow" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meS">
+                        <div class="row scrollOverflow" ng-scrollbar rebuild-on-resize rebuild-on="rebuild:meS3">
                             <div class="row insideScroll"><div class="buttonAddFolder" ng-click="createSentence()">+</div></div>
-                            <div class="row insideScroll" ng-repeat="sentence in sentences | unique:'ID_SSentence'" on-Finish-Loop="scrollbarSentences">
+                            <div class="row insideScroll" ng-repeat="sentence in sentences | unique:'ID_SSentence'" on-Finish-Loop="scrollbarSentences3">
                                 <div class="col-xs-12 sentenceBox">
                                     <div class="row">
                                         <div class="col-xs-9">
@@ -146,7 +146,7 @@
                                         <!--Copy edit delete buttons-->
                                         <div class="col-xs-1" ng-if="sentence.isPreRec=='1'">
                                             <img class="loadingGifTransparent" ng-show="!showUpDownButtons" ng-src={{img.Loading_icon}}/>
-                                            <div class="row copyButton" ng-class="{transparent: !showUpDownButtons}" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence)">{{content.editHistoryCopySentence}} <div class="icon-copy"></div></div>
+                                            <div class="row copyButton" ng-class="{transparent: !showUpDownButtons}" ng-click="copySentence(sentence.ID_SHistoric, sentence.ID_SSentence);scrollbarSentences2">{{content.editHistoryCopySentence}} <div class="icon-copy"></div></div>
                                             <div class="row editButton" ng-class="{transparent: !showUpDownButtons}" ng-click="editManualSentence(sentence.generatorString, sentence.sPreRecImg1, sentence.sPreRecImg2, sentence.sPreRecImg3, sentence.ID_SSentence);">{{content.editHistoryEditSentence}} <div class="icon-pencil"></div></div>
                                             <div class="row deleteButton" ng-class="{transparent: !showUpDownButtons}" ng-click="deleteSentence(sentence.ID_SSentence)">{{content.editHistoryEraseSentence}} <div class="icon-trash"></div></div>
                                         </div>
@@ -171,7 +171,7 @@
                 <div class="col-xs-10 headerTitle">{{content.editHistoryCopySentenceTitle}}</div>
             </div>
             <div class="row backgroundUserConfigBox">
-                <div class="row fonsAlert">
+                <div class="row fonsBlanc">
                     <div class="col-xs-12 textCenter">{{content.editHistoryCopySentenceText}}</div>
                 </div>
                 <div class="row dadesUsuariCentre">
@@ -231,14 +231,15 @@
     <div class="modal-dialog modal-lg">
         <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
             <div id="header" class="row">
-                <div class="col-xs-10 headerTitle">{{logoutContent.title}}</div>
+                <div class="col-xs-10 headerTitle" ng-show="!editSentence">{{content.createSentenceHistoryTitle}}</div>
+                <div class="col-xs-10 headerTitle" ng-show="editSentence">{{content.editSentenceHistoryTitle}}</div>
             </div>
             <div class="row backgroundUserConfigBox">
                 <div class="row fonsAlert">
-                    <div class="row"><div class="col-xs-12">Escriu la nova frase</div></div>
+                    <div class="row"><div class="col-xs-12">{{content.editSentenceHistoryText}}</div></div>
                     <div class="row">
                         <div class="col-xs-12">
-                            <input type="text" class="historicInputText" ng-class="{error: faltaText}" ng-change="faltaText=false;" ng-model="newSentence" placeholder="Escriu la frase"/>
+                            <input type="text" class="historicInputText" ng-class="{error: faltaText}" ng-change="faltaText=false;" ng-model="newSentence" placeholder="{{content.editSentenceHistoryPh1}}"/>
                         </div>
                     </div>
                     <div class="row"><br/></div>
@@ -253,7 +254,7 @@
                         <div class="col-xs-5" ng-init="searchImg('', 'Arasaac')">
                             <div class="row">
                                 <div class="col-xs-8">
-                                    <input type="text" class="historicInputText" ng-model="imgEditSearch" ng-keyup="searchImg(imgEditSearch, typeImgEditSearch);" placeholder="Buscar imatge"/><br>
+                                    <input type="text" class="historicInputText" ng-model="imgEditSearch" ng-keyup="searchImg(imgEditSearch, typeImgEditSearch);" placeholder="{{content.editSentenceHistoryPh2}}"/><br>
                                 </div>
                                 <div class="col-xs-3">
                                     <div class="buttonsSearchView">
@@ -271,13 +272,13 @@
                                     <div class="col-xs-4 text-left">
                                         <label class="radio-inline">
                                             <input type="radio" ng-model="typeImgEditSearch" ng-click="searchImg(imgEditSearch, typeImgEditSearch);" value="Arasaac"/>
-                                            Arasaac
+                                            {{content.editSentenceHistoryArasaacImages}}
                                         </label>
                                     </div>
                                     <div class="col-xs-4 text-left">
                                         <label class="radio-inline">
                                             <input type="radio" ng-model="typeImgEditSearch" ng-click="searchImg(imgEditSearch, typeImgEditSearch);" value="Uploads"/>
-                                            Meves
+                                            {{content.editSentenceHistoryMyImages}}
                                         </label>
                                     </div>
                                 </form>

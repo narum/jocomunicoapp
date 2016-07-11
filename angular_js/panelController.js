@@ -279,7 +279,7 @@ angular.module('controllers')
                             });
                 }
             };
-            $scope.ConfirmCopyBoard = function () {
+            $scope.ConfirmCopyGroupBoard = function () {
                 var URL = $scope.baseurl + "PanelGroup/copyGroupBoard";
                 var postdata = {id: $scope.idboardToCopy, user: $scope.idUser};
                 $scope.finished = false;

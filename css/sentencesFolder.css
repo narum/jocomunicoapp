@@ -287,6 +287,13 @@
 .buttonAddFolder:hover{
     background-color:rgba(0, 0, 0, 0.3);
 }
+.fonsBlanc{
+    font-size: 4vh;
+    background-color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 3vh;
+}
 /*Add sentence modal*/
 .img-icon{
     height: 3vh;

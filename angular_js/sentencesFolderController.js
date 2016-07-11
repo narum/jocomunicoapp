@@ -56,6 +56,9 @@ angular.module('controllers')
         $scope.$on('scrollbarSentences2', function () {
             $scope.$broadcast('rebuild:meS2');
         });
+        $scope.$on('scrollbarSentences3', function () {
+            $scope.$broadcast('rebuild:meS3');
+        });
         $scope.$on('scrollbar.show', function () {
 //            console.log('Scrollbar show');
         });
@@ -186,7 +189,7 @@ angular.module('controllers')
             $scope.viewActived = false;
             Resources.main.save({'folder':$scope.newFolder},{'funct': "deleteSentenceFolder"}).$promise
             .then(function (results) {
-                $location.path('/panelGroups');
+                $location.path('/panelGroups'); ///POOSAR TIMEOUT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111 500
             });
         };
         //New manual input Sentence
