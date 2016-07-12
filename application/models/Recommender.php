@@ -15,11 +15,12 @@ class Recommender extends CI_Model {
         $output = null;     
         
         $this->db->select('SUM(P_StatsUserPicto.countx1) as count');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
+        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
+        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));
         $this->db->from('P_StatsUserPicto');
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
-        $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
-        $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));
         $query = $this->db->get();     
        
         if ($query->num_rows() > 0) {
@@ -131,6 +132,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox2');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
@@ -154,6 +156,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox2');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
@@ -178,6 +181,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox2');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
@@ -201,6 +205,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left');
         $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
         $this->db->join('NameClass'.$this->session->userdata('ulangabbr'), 'P_StatsUserPictox2.picto2id = NameClass'.$this->session->userdata('ulangabbr').'.nameid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));        
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
@@ -225,6 +230,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'PictogramsLanguage.pictoid = Pictograms.pictoid', 'left'); 
         $this->db->join('Modifier'.$this->session->userdata('ulangabbr'), 'Pictograms.pictoid = Modifier'.$this->session->userdata('ulangabbr').'.modid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('Modifier'.$this->session->userdata('ulangabbr').'.type', $pictoType);               
@@ -249,6 +255,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left');
         $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
         $this->db->join('Modifier'.$this->session->userdata('ulangabbr'), 'Pictograms.pictoid = Modifier'.$this->session->userdata('ulangabbr').'.modid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));        
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
@@ -273,6 +280,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox3.picto3id = PictogramsLanguage.pictoid', 'left');
         $this->db->join('Pictograms', 'P_StatsUserPictox3.picto3id = Pictograms.pictoid', 'left'); 
         $this->db->join('Modifier'.$this->session->userdata('ulangabbr'), 'Pictograms.pictoid = Modifier'.$this->session->userdata('ulangabbr').'.modid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox3.ID_PSUP3User', $this->session->userdata('idusu'));        
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
@@ -298,6 +306,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left');
         $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
         $this->db->join('AdvType'.$this->session->userdata('ulangabbr'), 'Pictograms.pictoid = AdvType'.$this->session->userdata('ulangabbr').'.advid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));        
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
@@ -322,6 +331,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox3.picto3id = PictogramsLanguage.pictoid', 'left');
         $this->db->join('Pictograms', 'P_StatsUserPictox3.picto3id = Pictograms.pictoid', 'left'); 
         $this->db->join('AdvType'.$this->session->userdata('ulangabbr'), 'Pictograms.pictoid = AdvType'.$this->session->userdata('ulangabbr').'.advid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox3.ID_PSUP3User', $this->session->userdata('idusu'));        
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
@@ -346,6 +356,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox2');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
@@ -369,6 +380,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox3');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox3.picto3id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox3.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
@@ -394,6 +406,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left');
         $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
         $this->db->join('AdjClass'.$this->session->userdata('ulangabbr'), 'P_StatsUserPictox2.picto2id = AdjClass'.$this->session->userdata('ulangabbr').'.adjid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));        
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
@@ -418,6 +431,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox3.picto3id = PictogramsLanguage.pictoid', 'left');
         $this->db->join('Pictograms', 'P_StatsUserPictox3.picto3id = Pictograms.pictoid', 'left'); 
         $this->db->join('NameClass'.$this->session->userdata('ulangabbr'), 'P_StatsUserPictox3.picto3id = NameClass'.$this->session->userdata('ulangabbr').'.nameid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox3.ID_PSUP3User', $this->session->userdata('idusu'));        
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
@@ -443,6 +457,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox3.picto3id = PictogramsLanguage.pictoid', 'left');
         $this->db->join('Pictograms', 'P_StatsUserPictox3.picto3id = Pictograms.pictoid', 'left'); 
         $this->db->join('AdjClass'.$this->session->userdata('ulangabbr'), 'P_StatsUserPictox3.picto3id = AdjClass'.$this->session->userdata('ulangabbr').'.adjid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox3.ID_PSUP3User', $this->session->userdata('idusu'));        
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
@@ -468,6 +483,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
         $this->db->join('AdjClass'.$this->session->userdata('ulangabbr'), 'PictogramsLanguage.pictoid = AdjClass'.$this->session->userdata('ulangabbr').'.adjid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('AdjClass'.$this->session->userdata('ulangabbr').'.class', $pictoType);               
@@ -492,6 +508,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPicto');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
         $this->db->where_in('P_StatsUserPicto.lastdate', $date);
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
@@ -517,6 +534,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
         $this->db->join('NameClass'.$this->session->userdata('ulangabbr'), 'Pictograms.pictoid = NameClass'.$this->session->userdata('ulangabbr').'.nameid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
         $this->db->where_in('P_StatsUserPicto.lastdate', $date);
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
@@ -541,6 +559,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
         $this->db->join('NameClass'.$this->session->userdata('ulangabbr'), 'Pictograms.pictoid = NameClass'.$this->session->userdata('ulangabbr').'.nameid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where_in('NameClass'.$this->session->userdata('ulangabbr').'.class', $fits);        
@@ -565,6 +584,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
         $this->db->join('AdvType'.$this->session->userdata('ulangabbr'), 'P_StatsUserPicto.pictoid = AdvType'.$this->session->userdata('ulangabbr').'.advid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('AdvType'.$this->session->userdata('ulangabbr').'.type', $pictoType);               
@@ -587,6 +607,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPicto');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('Pictograms.pictoType', $pictoType);               
@@ -609,6 +630,7 @@ class Recommender extends CI_Model {
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
         $this->db->join('Adjective'.$this->session->userdata('ulangabbr'), 'Pictograms.pictoid = Adjective'.$this->session->userdata('ulangabbr').'.adjid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('Pictograms.pictoType', $pictoType);
@@ -945,6 +967,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPicto');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                           
         $this->db->where('Pictograms.pictoType', $pictoType);    
@@ -972,6 +995,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox3');       
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox3.picto3id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox3.picto3id = Pictograms.pictoid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                              
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
@@ -999,6 +1023,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox3');       
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox3.picto3id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox3.picto3id = Pictograms.pictoid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                              
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
@@ -1027,6 +1052,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox2');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);
@@ -1055,6 +1081,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox2');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
@@ -1082,6 +1109,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox2');              
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox2.picto2id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox2.picto2id = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox2.ID_PSUP2User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                                   
         $this->db->where('P_StatsUserPictox2.picto1id', $inputid1);  
@@ -1108,6 +1136,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPicto');
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->where('Pictograms.pictoType !=', 'verb');                             
@@ -1135,6 +1164,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPicto');
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                             
         $this->db->having('count >=', $minCount);
@@ -1161,6 +1191,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPicto');
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));
         $this->db->order_by('count', 'desc');
@@ -1182,6 +1213,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPicto');
         $this->db->join('PictogramsLanguage', 'P_StatsUserPicto.pictoid = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPicto.pictoid = Pictograms.pictoid', 'left'); 
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPicto.ID_PSUPUser', $this->session->userdata('idusu'));                             
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));
         $this->db->where('Pictograms.pictoType !=', 'verb');                             
@@ -1204,6 +1236,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox3');       
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox3.picto3id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox3.picto3id = Pictograms.pictoid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                              
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  
@@ -1228,6 +1261,7 @@ class Recommender extends CI_Model {
         $this->db->from('P_StatsUserPictox3');       
         $this->db->join('PictogramsLanguage', 'P_StatsUserPictox3.picto3id = PictogramsLanguage.pictoid', 'left'); 
         $this->db->join('Pictograms', 'P_StatsUserPictox3.picto3id = Pictograms.pictoid', 'left');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('P_StatsUserPictox3.ID_PSUP3User', $this->session->userdata('idusu'));               
         $this->db->where('PictogramsLanguage.languageid', $this->session->userdata('ulanguage'));                                              
         $this->db->where('P_StatsUserPictox3.picto1id', $inputid1);  

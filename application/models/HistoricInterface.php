@@ -21,11 +21,12 @@ class HistoricInterface extends CI_Model {
     }
     function getHistoric($idusu, $day){
         $date = date('Y-m-d', strtotime("-".$day." day"));
-
+        
         $this->db->where('sentenceDate >', $date);
         $this->db->where('ID_SHUser', $idusu);
         $this->db->where('generatorString IS NOT NULL', null, false);
         $this->db->order_by('sentenceDate', 'desc');
+        $this->db->order_by('ID_SHistoric', 'desc');
         $query = $this->db->get('S_Historic');
 
         if ($query->num_rows() > 0) {
@@ -37,6 +38,7 @@ class HistoricInterface extends CI_Model {
     }
     
     function getPictosHistoric($IDHistoric){
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('ID_SHistoric', $IDHistoric);
         $this->db->join('R_S_HistoricPictograms', 'S_Historic.ID_SHistoric = R_S_HistoricPictograms.ID_RSHPSentence', 'left');
         $this->db->join('Pictograms', 'R_S_HistoricPictograms.pictoid = Pictograms.pictoid', 'left');
@@ -63,6 +65,7 @@ class HistoricInterface extends CI_Model {
     function getSentenceFolder($idusu, $folder){
         $this->db->where('ID_SSUser', $idusu);
         $this->db->where('ID_SFolder', $folder);
+        $this->db->order_by('posInFolder', 'asc');
         $query = $this->db->get('S_Sentence');
 
         if ($query->num_rows() > 0) {
@@ -82,6 +85,7 @@ class HistoricInterface extends CI_Model {
     }
     
     function getPictosFolder($IDSentence){
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('ID_SSentence', $IDSentence);
         $this->db->join('R_S_SentencePictograms', 'S_Sentence.ID_SSentence = R_S_SentencePictograms.ID_RSSPSentence', 'left');
         $this->db->join('Pictograms', 'R_S_SentencePictograms.pictoid = Pictograms.pictoid', 'left');

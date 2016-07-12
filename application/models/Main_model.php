@@ -268,10 +268,13 @@ class Main_model extends CI_Model {
     function getHistoric($idusu, $day){
         $date = date('Y-m-d', strtotime("-".$day." day"));
         $this->db->from('S_Historic');
-        $this->db->join('R_S_HistoricPictograms', 'S_Historic.ID_SHistoric = R_S_HistoricPictograms.ID_RSHPSentence');
-        $this->db->join('Pictograms', 'R_S_HistoricPictograms.pictoid = Pictograms.pictoid');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('sentenceDate >', $date);
         $this->db->where('ID_SHUser', $idusu);
+        $this->db->join('R_S_HistoricPictograms', 'S_Historic.ID_SHistoric = R_S_HistoricPictograms.ID_RSHPSentence');
+        $this->db->join('Pictograms', 'R_S_HistoricPictograms.pictoid = Pictograms.pictoid');
+        $this->db->order_by('sentenceDate', 'desc');
+        $this->db->order_by('ID_SHistoric', 'desc');
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
@@ -300,10 +303,12 @@ class Main_model extends CI_Model {
     //get historic sentences with pictos
     function getSentencesWithPictos($idusu, $ID_Folder){
         $this->db->from('S_Sentence');
-        $this->db->join('R_S_SentencePictograms', 'S_Sentence.ID_SSentence = R_S_SentencePictograms.ID_RSSPSentence');
-        $this->db->join('Pictograms', 'R_S_SentencePictograms.pictoid = Pictograms.pictoid');
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('ID_SFolder', $ID_Folder);
         $this->db->where('ID_SSUser', $idusu);
+        $this->db->join('R_S_SentencePictograms', 'S_Sentence.ID_SSentence = R_S_SentencePictograms.ID_RSSPSentence');
+        $this->db->join('Pictograms', 'R_S_SentencePictograms.pictoid = Pictograms.pictoid');
+        $this->db->order_by('R_S_SentencePictograms.ID_RSSPSentencePicto', 'asc');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {

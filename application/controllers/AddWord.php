@@ -14,6 +14,7 @@ class AddWord extends REST_Controller {
         $this->load->model('panelInterface');
         $this->load->model('BoardInterface');
         $this->load->model('AddWordInterface');
+        $this->load->model('InsertVocabulari');
     }
 
     public function index_get() {
@@ -31,48 +32,47 @@ class AddWord extends REST_Controller {
     }
 
     private static function cmp($a, $b) {
-            $a = strtolower($a['text']);
-            $b = strtolower($b['text']);
-            if ($a == $b) {
-                return 0;
-            }
-            return ($a < $b) ? -1 : 1;
+        $a = strtolower($a['text']);
+        $b = strtolower($b['text']);
+        if ($a == $b) {
+            return 0;
         }
+        return ($a < $b) ? -1 : 1;
+    }
+        private static function cmpclass($a, $b) {
+        $a = strtolower($a['class']);
+        $b = strtolower($b['class']);
+        if ($a == $b) {
+            return 0;
+        }
+        return ($a < $b) ? -1 : 1;
+    }
     
-    public function EditWordType_post(){
+    public function EditWordRemove_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $idPicto = $request->id;
-        $Type = $this->AddWordInterface->getTypePicto($idPicto);
-        
+        $Type = $this->InsertVocabulari->deletePictogram($idPicto);
+
         $response = [
             "data" => $Type
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    public function EditWordGetClass_post(){
+    public function EditWordType_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $idPicto = $request->id;
-        $type = $request->type;
-        switch($type){
-            case('name'):
-                $DataArray = $this->AddWordInterface->getDBClassNames($idPicto);
-                break;
-            case('adj'):
-                break;
-        }
-        
-        
+        $Type = $this->AddWordInterface->getTypePicto($idPicto);
+
         $response = [
-            "data" => $data
+            "data" => $Type
         ];
 
         $this->response($response, REST_Controller::HTTP_OK);
     }
-    
-        public function EditWordGetData_post(){
+    public function EditWordGetData_post(){
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $idPicto = $request->id;
@@ -82,25 +82,61 @@ class AddWord extends REST_Controller {
                 $data = $this->AddWordInterface->EditWordNoms($idPicto);
                 break;
             case('adj'):
+                $data = $this->AddWordInterface->EditWordAdj($idPicto);
                 break;
         }
-        
+        $response = [
+            "data" => $data
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    public function EditWordGetClass_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idPicto = $request->id;
+        $type = $request->type;
+        switch ($type) {
+            case('name'):
+                $data = $this->AddWordInterface->getDBClassNames($idPicto);
+                break;
+            case('adj'):
+                $data = $this->AddWordInterface->getDBClassAdj($idPicto);
+                break;
+        }
+        usort($data, array('SearchWord', 'cmpclass'));
         
         $response = [
             "data" => $data
         ];
-
         $this->response($response, REST_Controller::HTTP_OK);
     }
+
+    public function InsertWordData_post() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $objAdd = $request->objAdd;
+        $this->InsertVocabulari->insertPicto($objAdd);
+    }
+    
+    public function getAllVerbs_post(){
+    
         
+        $Verbs = $this->AddWordInterface->getDBVerbs();
+        
+        $response = [
+            "data" => $Verbs
+        ];
+        $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+
+        
+    }
+    
     public function getDBAll_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
         $startswith = $request->id;
         $language = $this->session->userdata('ulangabbr');
-        if ($canExpand == '0') {
-            $language = $this->session->userdata('ulangabbr', 'ES');
-        }
+        
         $user = $this->session->userdata('idusu');
 
         // Controller search all names from all picto table
@@ -111,21 +147,19 @@ class AddWord extends REST_Controller {
         $Advs = $this->AddWordInterface->getDBAdvsLike($startswith, $user);
         $Modifs = $this->AddWordInterface->getDBModifsLike($startswith, $user);
         $QuestionPart = $this->AddWordInterface->getDBQuestionPartLike($startswith, $user);
-        
+
         // Marge all arrays to one
         $DataArray = array_merge($Names, $Verbs, $Adj, $Exprs, $Advs, $Modifs, $QuestionPart);
 
-        usort($DataArray, array('SearchWord','cmp'));
-        
+        usort($DataArray, array('SearchWord', 'cmp'));
+
         $response = [
             "data" => $DataArray
         ];
 
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
-    
-    
-    
+
     public function getDBNames_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -134,11 +168,11 @@ class AddWord extends REST_Controller {
         $user = $this->session->userdata('idusu');
         // Controller search all names from all picto table
         $DataArray = $this->AddWordInterface->getDBNamesLike($startswith, $user);
-        usort($DataArray, array('SearchWord','cmp'));
+        usort($DataArray, array('SearchWord', 'cmp'));
         $response = [
             "data" => $DataArray
         ];
-        
+
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
 
@@ -152,7 +186,7 @@ class AddWord extends REST_Controller {
 
         // Controller search all names from all picto table
         $DataArray = $this->AddWordInterface->getDBVerbsLike($startswith, $user);
-        usort($DataArray, array('SearchWord','cmp'));
+        usort($DataArray, array('SearchWord', 'cmp'));
         $response = [
             "data" => $DataArray
         ];
@@ -170,7 +204,7 @@ class AddWord extends REST_Controller {
 
         // Controller search all names from all picto table
         $DataArray = $this->AddWordInterface->getDBAdjLike($startswith, $user);
-        usort($DataArray, array('SearchWord','cmp'));
+        usort($DataArray, array('SearchWord', 'cmp'));
         $response = [
             "data" => $DataArray
         ];
@@ -188,7 +222,7 @@ class AddWord extends REST_Controller {
 
         // Controller search all names from all picto table
         $DataArray = $this->AddWordInterface->getDBExprsLike($startswith, $user);
-        usort($DataArray, array('SearchWord','cmp'));
+        usort($DataArray, array('SearchWord', 'cmp'));
         $response = [
             "data" => $DataArray
         ];
@@ -210,7 +244,7 @@ class AddWord extends REST_Controller {
         $QuestionPart = $this->AddWordInterface->getDBQuestionPartLike($startswith, $user);
 
         $DataArray = array_merge($Advs, $Modifs, $QuestionPart);
-        usort($DataArray, array('SearchWord','cmp'));
+        usort($DataArray, array('SearchWord', 'cmp'));
         $response = [
             "data" => $DataArray
         ];
@@ -218,11 +252,6 @@ class AddWord extends REST_Controller {
         $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
     }
 
-    
-    
-    
-    
-    
     public function EditWordSelect_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -241,6 +270,7 @@ class AddWord extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }
+
     public function GetWordSelect_post() {
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -256,6 +286,21 @@ class AddWord extends REST_Controller {
             'defWidth' => $primaryBoard[0]->defWidth,
             'defHeight' => $primaryBoard[0]->defHeight,
             'imgGB' => $primaryBoard[0]->imgGB
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+    public function copyUserVocabulary_post() {
+
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        $idusu = $request->user;
+
+        $this->BoardInterface->initTrans();
+        $idusuorigen = $this->session->userdata('idusu');
+        $vocabulary = $this->AddWordInterface->copyVocabulary($idusuorigen,$idusu);
+        $this->BoardInterface->commitTrans();
+        $response = [
+            "data" => $vocabulary
         ];
         $this->response($response, REST_Controller::HTTP_OK);
     }

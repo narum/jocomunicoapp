@@ -42,6 +42,9 @@
             stringScript += '<script type="text/javascript" src="angular_js/addWordController.js"></' + 'script>';
             stringScript += '<script type="text/javascript" src="angular_js/sentencesFolderController.js"></' + 'script>';
             stringScript += '<script type="text/javascript" src="angular_js/infoController.js"></' + 'script>';
+            stringScript += '<script type="text/javascript" src="angular_js/usController.js"></' + 'script>';
+            stringScript += '<script type="text/javascript" src="angular_js/downloadController.js"></' + 'script>';
+            stringScript += '<script type="text/javascript" src="angular_js/faqController.js"></' + 'script>';
             stringScript += '<script type="text/javascript" src="libraries/angular-bind-html-compile.js"></' + 'script>';
             stringScript += '<script type="text/javascript" src="libraries/ngTouch.min.js"></' + 'script>';
             stringScript += '<script type="text/javascript" src="libraries/ngDraggable.min.js"></' + 'script>';

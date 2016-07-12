@@ -356,7 +356,7 @@
 /*Sentence box*/
 .sentenceText{
     font-size: 2.5vh;
-    text-align: center;
+    text-align: left;
 }
 .sentencePicto{
     height: 6vh;

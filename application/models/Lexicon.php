@@ -81,6 +81,7 @@ class Lexicon extends CI_Model {
         $this->db->order_by('Name'.$userlanguage.'.nomtext', 'asc');
         $this->db->join('NameClass'.$userlanguage, 'NameClass'.$userlanguage.'.nameid = Name'.$userlanguage.'.nameid', 'left');
         $this->db->join('Pictograms', 'Name'.$userlanguage.'.nameid = Pictograms.pictoid', 'left');
+        $this->db->group_by('Pictograms.pictoid');
         $query = $this->db->get('Name'.$userlanguage);
         
         if ($query->num_rows() > 0) {
@@ -98,6 +99,7 @@ class Lexicon extends CI_Model {
         $this->db->where('actiu', '1');
         $this->db->order_by('verbtext', 'asc');
         $this->db->join('Pictograms', 'Verb'.$userlanguage.'.verbid = Pictograms.pictoid', 'left');
+        $this->db->group_by('Pictograms.pictoid');
         $query = $this->db->get('Verb'.$userlanguage);
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -116,6 +118,7 @@ class Lexicon extends CI_Model {
         $this->db->order_by('Adjective'.$userlanguage.'.masc', 'asc');
         $this->db->join('AdjClass'.$userlanguage, 'AdjClass'.$userlanguage.'.adjid = Adjective'.$userlanguage.'.adjid', 'left');
         $this->db->join('Pictograms', 'Adjective'.$userlanguage.'.adjid = Pictograms.pictoid', 'left');
+        $this->db->group_by('Pictograms.pictoid');
         $query = $this->db->get('Adjective'.$userlanguage);
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -134,6 +137,7 @@ class Lexicon extends CI_Model {
         $this->db->order_by('Adverb'.$userlanguage.'.advtext', 'asc');
         $this->db->join('AdvType'.$userlanguage, 'AdvType'.$userlanguage.'.advid = Adverb'.$userlanguage.'.advid', 'left');
         $this->db->join('Pictograms', 'Adverb'.$userlanguage.'.advid = Pictograms.pictoid', 'left');
+        $this->db->group_by('Pictograms.pictoid');
         $query = $this->db->get('Adverb'.$userlanguage);
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -151,6 +155,7 @@ class Lexicon extends CI_Model {
         }
         $this->db->order_by('masc', 'asc');
         $this->db->join('Pictograms', 'Modifier'.$userlanguage.'.modid = Pictograms.pictoid', 'left');
+        $this->db->group_by('Pictograms.pictoid');
         $query = $this->db->get('Modifier'.$userlanguage);
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -169,6 +174,7 @@ class Lexicon extends CI_Model {
         $this->db->order_by('Expressions'.$userlanguage.'.exprtext', 'asc');
         $this->db->join('ExprType'.$userlanguage, 'ExprType'.$userlanguage.'.exprid = Expressions'.$userlanguage.'.exprid', 'left');
         $this->db->join('Pictograms', 'Expressions'.$userlanguage.'.exprid = Pictograms.pictoid', 'left');
+        $this->db->group_by('Pictograms.pictoid');
         $query = $this->db->get('Expressions'.$userlanguage);
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -183,6 +189,7 @@ class Lexicon extends CI_Model {
         $userlanguage = $this->session->userdata('ulangabbr');
         $this->db->order_by('parttext', 'asc');
         $this->db->join('Pictograms', 'QuestionPart'.$userlanguage.'.questid = Pictograms.pictoid', 'left');
+        $this->db->group_by('Pictograms.pictoid');
         $query = $this->db->get('QuestionPart'.$userlanguage);
         if ($query->num_rows() > 0) {
             $output = $query->result();
@@ -309,6 +316,7 @@ class Lexicon extends CI_Model {
                         $negativa = true;
                         break;
                     default:
+                        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
                         $this->db->where('pictotext', $paraula);
                         $this->db->where('languageid', $userlanguage);
                         $this->db->join('Pictograms', 'Pictograms.pictoid = PictogramsLanguage.pictoid', 'left');
@@ -602,8 +610,10 @@ class Lexicon extends CI_Model {
         $userlanguage = $this->session->userdata('ulangabbr');
         
         $paraules = array();
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('ID_RSTPUser', $idusu);
         $this->db->join('Pictograms', 'Pictograms.pictoid = R_S_TempPictograms.pictoid', 'left');
+        $this->db->order_by('ID_RSTPSentencePicto', 'asc');
         $query = $this->db->get('R_S_TempPictograms');
         $beforeverb = true;
         $beforeverb2 = true;
@@ -986,9 +996,11 @@ class Lexicon extends CI_Model {
             $identry = $aux[0]->ID_SHistoric;
         }
         else return null;
-                
+            
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('ID_RSHPSentence', $identry);
         $this->db->join('Pictograms', 'Pictograms.pictoid = R_S_HistoricPictograms.pictoid', 'left');
+        $this->db->order_by('ID_RSHPSentencePicto', 'asc');
         $query = $this->db->get('R_S_HistoricPictograms');
         if ($query->num_rows() > 0) {
             $paraules = $query->result();
@@ -1203,9 +1215,11 @@ class Lexicon extends CI_Model {
         // només retorna patrons amb subjecte, és a dir, no impersonals
         if ($withsubject) $this->db->where('Pattern'.$userlanguage.'.subj !=', '0');
         
+        $this->db->where_in('Pictograms.ID_PUser', array('1', $this->session->userdata('idusu')));
         $this->db->where('Verb'.$userlanguage.'.verbid', $verbid);
         $this->db->join('Pictograms', 'Pictograms.pictoid = Verb'.$userlanguage.'.verbid', 'left');
         $this->db->join('Pattern'.$userlanguage, 'Pattern'.$userlanguage.'.verbid = Verb'.$userlanguage.'.verbid', 'left');
+        $this->db->order_by('Pictograms.pictoid', 'asc');
         $query2 = $this->db->get('Verb'.$userlanguage);
         
         if ($query2->num_rows() > 0) {

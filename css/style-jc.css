@@ -154,6 +154,7 @@ html *
 }
 
 .sentenceCell{
+    margin-right: 2px;
     width: 10%;
     height:80%
 }

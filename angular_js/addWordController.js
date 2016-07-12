@@ -208,21 +208,35 @@ angular.module('controllers')
                         
                         if($scope.commit == 1)
                         {
-                            $scope.objAdd = {type: "name", nomtext: $scope.objAdd.nomtext, mf: $scope.objAdd.mf == false ? "masc" : "fem",
-                            singpl: $scope.objAdd.singpl == false ? "sing" : "pl", contabincontab: $scope.objAdd.contabincontab == true ? "incontable" : "contable",
-                            determinat: $scope.objAdd.determinat, ispropernoun: $scope.objAdd.ispropernoun == true ? "1" : "0",
-                            defaultverb: $scope.objAdd.defaultverb == null ? "0" : $scope.objAdd.defaultverb, plural: $scope.switchName.s3 == false ? null : $scope.objAdd.plural,
-                            femeni: $scope.switchName.s2 == false ? null : $scope.objAdd.femeni, fempl: $scope.switchName.s4 == false ? null : $scope.objAdd.fempl,
-                            imgPicto: $scope.objAdd.imgPicto, pictoid: $scope.idEditWord != null ? $scope.idEditWord : false, new: $scope.NewModif == 1 ? true : false,
-                            class: $scope.NClassList, supExp: $scope.objAdd.supExp == true ? "1" : "0"};
+                            $scope.objAdd = {
+                                type: "name", 
+                                nomtext: $scope.objAdd.nomtext, 
+                                mf: $scope.objAdd.mf == false ? "masc" : "fem",
+                                singpl: $scope.objAdd.singpl == false ? "sing" : "pl", 
+                                contabincontab: $scope.objAdd.contabincontab == true ? "incontable" : "contable",
+                                determinat: $scope.objAdd.determinat, 
+                                ispropernoun: $scope.objAdd.ispropernoun == true ? "1" : "0",
+                                defaultverb: $scope.objAdd.defaultverb == null ? "0" : $scope.objAdd.defaultverb, 
+                                plural: $scope.switchName.s3 == false ? $scope.objAdd.nomtext : $scope.objAdd.plural,
+                                femeni: $scope.switchName.s2 == false ? null : $scope.objAdd.femeni, 
+                                fempl: $scope.switchName.s4 == false ? null : $scope.objAdd.fempl,
+                                imgPicto: $scope.objAdd.imgPicto, 
+                                pictoid: $scope.idEditWord != null ? $scope.idEditWord : false, 
+                                new: $scope.NewModif == 1 ? true : false,
+                                class: $scope.NClassList, 
+                                supExp: $scope.objAdd.supExp == true ? "1" : "0"};
+                            
                             if ($scope.objAdd.singpl == "pl"){
-                                $scope.objAdd.plural = null;
+                                $scope.objAdd.plural = $scope.objAdd.nomtext;
                                 $scope.objAdd.femeni = null;
                                 $scope.objAdd.fempl = null;
                             }
                             if ($scope.objAdd.mf == "fem"){
                                 $scope.objAdd.femeni = null;
                                 $scope.objAdd.fempl = null;
+                            }
+                            if ($scope.objAdd.plural == null) {
+                                $scope.objAdd.plural = $scope.objAdd.nomtext;
                             }
                         var URL = $scope.baseurl + "AddWord/InsertWordData";
                         var postdata = {objAdd: $scope.objAdd};

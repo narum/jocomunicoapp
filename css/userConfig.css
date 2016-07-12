@@ -535,3 +535,12 @@ input[type=number] {
 #scanOrderModal .marginModalTopOwl{
     margin-top: 4vh;
 }
+
+// CSS FAQ, Tips and Download views
+.text-indent-up{
+    text-indent: 5%;
+}
+
+.paddingRight3{
+    padding-right: 3vw;
+}

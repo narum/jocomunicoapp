@@ -91,6 +91,18 @@ angular.module('app', [
 			controller:'infoCtrl',
 			templateUrl:'../../angular_templates/CC.html'
 		})
+                .when('/faq', {
+			controller:'faqCtrl',
+			templateUrl:'../../angular_templates/Faq.html'
+		})
+                .when('/us', {
+			controller:'usCtrl',
+			templateUrl:'../../angular_templates/Us.html'
+		})
+                .when('/download', {
+			controller:'downloadCtrl',
+			templateUrl:'../../angular_templates/Download.html'
+		})
 		.otherwise({ redirectTo:'/' });
 })
 .run(function(AuthService){

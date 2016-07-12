@@ -181,7 +181,7 @@ class DBwords extends CI_Model {
         $this->db->from('Modifier'.$languageExp);
         $this->db->join('Pictograms', 'Modifier'.$languageExp.'.modid = Pictograms.pictoid', 'left');
         $this->db->join('PictogramsLanguage', 'PictogramsLanguage.pictoid = Pictograms.pictoid', 'left');
-        $this->db->like('PictogramsLanguage.pictotext', $startswith, 'after');        
+        $this->db->like('PictogramsLanguage.pictotext', $startswith, 'after'); 
         $this->db->order_by('PictogramsLanguage.pictotext', 'asc');
         $query = $this->db->get();
         

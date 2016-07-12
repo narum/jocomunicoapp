@@ -218,6 +218,7 @@
     padding: 1vh;
 }
 .sentenceCell{
+    margin-right: 2px;
     width: 10%;
     height: 75%;
 }
