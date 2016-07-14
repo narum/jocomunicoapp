@@ -21,7 +21,7 @@
 <div class="row buttonsMenuBar fontSizeForced" ng-class="{buttonsMenuBarOpened: dropdownMenuOpen}">
     <div class="row">
         <!--Exit Button-->
-        <div class="pull-right marginButtonMenuBar" ng-init="$root.exitButtonIcon=$root.exitButton.iconInitial" onclick="windowClose();" ng-click="closeWindow();exitPower=false;">
+        <div class="pull-right marginButtonMenuBar" ng-init="$root.exitButtonIcon=$root.exitButton.iconInitial" onclick="windowClose();" ng-click="exitPower=false;">
             <input type="checkbox" id="exitButton" class="statesButtonMenuBar" ng-model="exitPower" ng-show="false">
             <label for="exitButton" ng-mouseover="$root.exitButtonIcon=$root.exitButton.iconHover" ng-mouseout="$root.exitButtonIcon=$root.exitButton.iconInitial"><img class="icondropdownMenuBar" ng-src="{{$root.exitButtonIcon}}"/></br>{{$root.exitButton.name}}</label>
         </div>
@@ -52,8 +52,10 @@
 <!--Close bar outside of div-->
 <div class="clickOutside" ng-show='dropdownMenuOpen' ng-click="dropdownMenuOpen=!dropdownMenuOpen"></div>
 
+<!--Function to close-->
 <script language="javascript" type="text/javascript">
     function windowClose() { 
-//        win.close();
-    } 
+        var win = window.open('/#/panelGroups','_self','');
+        win.close();
+    }
 </script>

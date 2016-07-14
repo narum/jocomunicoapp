@@ -42,12 +42,6 @@ angular.module('controllers')
                 }
             };
             //Function to close
-            $scope.closeWindow = function() { 
-                var win = window.open('/#/panelGroups','_self','');
-                $timeout(function () {
-                    win.close();
-                }, 1000);
-            };
 
             //Log Out Modal
             Resources.main.get({'section': 'logoutModal', 'idLanguage': $rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
