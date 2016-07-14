@@ -12,6 +12,7 @@ angular.module('controllers')
             });
             txtContent("historySentencesFold").then(function (results) {
                 $scope.editHistoricFolderContent = results.data;
+                $scope.createFolderContentTitle = true; //Change the modal title to create folder or edit folder
             });
 
             //Dropdown Menu Bar
@@ -41,7 +42,6 @@ angular.module('controllers')
                     $location.path(path);
                 }
             };
-            //Function to close
 
             //Log Out Modal
             Resources.main.get({'section': 'logoutModal', 'idLanguage': $rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
@@ -172,8 +172,6 @@ angular.module('controllers')
             $http.post(URL, $scope.CreateBoardData).success(function (response)
             {
                 $scope.editPanel($scope.idGroupBoard);
-//                $scope.showBoard(response.idBoard);
-//                $scope.edit();
             });
         };
         /*

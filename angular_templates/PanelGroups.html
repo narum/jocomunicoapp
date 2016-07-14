@@ -80,7 +80,7 @@
                                             <div class="col-xs-3" ng-show="folder.ID_Folder > 0">
                                                 <img class="loadingGifTransparent" ng-show="!showUpDownButtons" ng-src={{img.whiteLoading}}/>
                                                 <div class="row folderUpButton" ng-class="{transparent: !showUpDownButtons}" ng-click="upFolder(folder.folderOrder, folder.ID_Folder)">{{content.historyMove}} <div class="icon-circle-arrow-up"></div></div>
-                                                <div class="row folderEditButton" ng-class="{transparent: !showUpDownButtons}" ng-click="goSentencesFolder(folder.ID_Folder)">{{content.historyEdit}} <div class="icon-pencil"></div></div>
+                                                <div class="row folderEditButton" ng-class="{transparent: !showUpDownButtons}" ng-click="goSentencesFolder(folder.ID_Folder)">{{content.historyEnter}} <div class="icon-folder-open"></div></div>
                                                 <div class="row folderDownButton" ng-class="{transparent: !showUpDownButtons}" ng-click="downFolder(folder.folderOrder, folder.ID_Folder)">{{content.historyMove}} <div class="icon-circle-arrow-down"></div></div>
                                             </div>
                                         </div>

@@ -9,6 +9,7 @@ angular.module('controllers')
         txtContent("historySentencesFold").then(function (results) {
             $scope.content = results.data;
             $scope.editHistoricFolderContent = results.data;
+            $scope.createFolderContentTitle = false; //Change the modal title to create folder or edit folder
         });
 
         //Dropdown Menu Bar

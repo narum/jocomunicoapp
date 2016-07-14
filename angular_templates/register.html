@@ -181,7 +181,7 @@
                                 <div class="form-group {{state.female}} has-feedback">
                                     <div class="input-group input-group-auto inputMarginRigth">
                                         <span class="input-group-addon"><image class="img img-inputIcon" alt="Responsive image" ng-src={{img.yo_3}}></span>
-                                        <input type="button" class="form-control" value="{{ content.sexFemale }}" ng-click="gender('female')">
+                                        <input type="button" class="form-control genderTitle" value="{{ content.sexFemale }}" ng-click="gender('female')">
                                     </div>
                                     <span class="errorcoment" ng-show="state.female =='has-error'">{{ content.required }}</span>
                                 </div>
@@ -190,7 +190,7 @@
                                 <div class="form-group {{state.male}} has-feedback">
                                     <div class="input-group input-group-auto inputMarginLeft">
                                         <span class="input-group-addon"><image class="img img-inputIcon" alt="Responsive image" ng-src={{img.yo_1}}></span>
-                                        <input type="button" class="form-control" value="{{ content.sexMale }}" ng-click="gender('male')">
+                                        <input type="button" class="form-control genderTitle" value="{{ content.sexMale }}" ng-click="gender('male')">
                                     </div>
                                     <span class="errorcoment" ng-show="state.male =='has-error'"> &nbsp;&nbsp;{{ content.required }}</span>
                                 </div>
@@ -258,6 +258,7 @@
                     <div class="col-xs-10">
                         <div id="divID" ng-init="imgsrc=img.BotoCrea" ng-mouseover="imgsrc=img.BotoCrea2" ng-mouseout="imgsrc=img.BotoCrea">
                             <input type="image" class="img img-rounded" alt="Responsive image" ng-src="{{imgsrc}}" ng-click="submitForm(formData)">
+                            <br/><div class="newUser">{{content.registerButton}}</div>
                         </div>
                     </div>
                 </div>

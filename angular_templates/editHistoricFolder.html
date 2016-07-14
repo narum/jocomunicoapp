@@ -3,7 +3,8 @@
     <div class="modal-dialog modal-lg">
         <div class="row" id="boxUserConfig" style="background-image: url({{img.Patterns4}})">
             <div id="header" class="row">
-                <div class="col-xs-10 headerTitle">{{editHistoricFolderContent.historyCreateFolderTitle}}</div>
+                <div class="col-xs-10 headerTitle" ng-show="createFolderContentTitle">{{editHistoricFolderContent.historyCreateFolderTitle}}</div>
+                <div class="col-xs-10 headerTitle" ng-show="!createFolderContentTitle">{{editHistoricFolderContent.historyEditFolderTitle}}</div>
             </div>
             <div class="row backgroundUserConfigBox">
                 <div class="row fonsAlert">
@@ -77,10 +78,10 @@
                 </div>
                 <div class="row dadesUsuariCentre">
                     <div class="col-xs-6">
-                        <button type="reset" class="btn-gray pull-left" data-dismiss="modal" ng-click="saveFolder();">{{logoutContent.confirm}}</button>
+                        <button type="reset" class="btn-gray pull-left" data-dismiss="modal" ng-click="saveFolder();">{{editHistoricFolderContent.historyCreateFolderSaveButton}}</button>
                     </div>
                     <div class="col-xs-6">
-                        <button type="reset" class="btn-gray pull-right" data-dismiss="modal">{{logoutContent.cancel}}</button>
+                        <button type="reset" class="btn-gray pull-right" data-dismiss="modal">{{editHistoricFolderContent.historyCreateFolderCancelButton}}</button>
                     </div>
                 </div>
             </div>

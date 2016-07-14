@@ -14,8 +14,8 @@ angular.module('controllers', [])
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             $scope.img.clau = '/img/srcWeb/Login/clau.png';
             $scope.img.fletxaLogin2 = '/img/srcWeb/Login/fletxaLogin2.png';
-            $scope.img.BotoEntra = '/img/srcWeb/Login/BotoEntra.png';
-            $scope.img.BotoEntra2 = '/img/srcWeb/Login/BotoEntra2.png';
+            $scope.img.BotoEntra = '/img/srcWeb/Login/login.png';
+            $scope.img.BotoEntra2 = '/img/srcWeb/Login/login-hov.png';
             
             //HTML text content
             Resources.register.get({'section': 'login', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
@@ -143,8 +143,8 @@ angular.module('controllers', [])
             $scope.img.yo_3 = '/img/icons/yo_3.png';
             $scope.img.yo_1 = '/img/icons/yo_1.png';
             $scope.img.fletxaLogin2 = '/img/srcWeb/Login/fletxaLogin2.png';
-            $scope.img.BotoCrea = '/img/srcWeb/Login/BotoCrea.png';
-            $scope.img.BotoCrea2 = '/img/srcWeb/Login/BotoCrea2.png';
+            $scope.img.BotoCrea = '/img/srcWeb/Login/new.png';
+            $scope.img.BotoCrea2 = '/img/srcWeb/Login/new-hov.png';
 
             //HTML text content
             Resources.register.get({'section': 'userRegister', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
