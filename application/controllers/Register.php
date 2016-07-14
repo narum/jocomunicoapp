@@ -324,27 +324,30 @@ class Register extends REST_Controller {
     public function sendEmail($mail, $userName, $subject, $message){
         //Cargamos la libreria de codeigniter
         $this->load->library('email');
-        //Indicamos el protocolo a utilizar
-        $config['protocol'] = 'smtp';
-        //El servidor de correo que utilizaremos
-        $config["smtp_host"] = 'smtp.gmail.com';
-        //Nuestro usuario
-        $config["smtp_user"] = '';
-        //Nuestra contraseña
-        $config["smtp_pass"] = '';
-        //El puerto que utilizará el servidor smtp
-        $config["smtp_port"] = '587';
-        //El juego de caracteres a utilizar
-        $config['charset'] = 'utf-8';
-        //Permitimos que se puedan cortar palabras
-        $config['wordwrap'] = TRUE;
-        //El email debe ser valido
-        $config['validate'] = true;
+        
+        $config = array(
+            //Indicamos el protocolo a utilizar  
+            'protocol' => 'smtp',
+            //El servidor de correo que utilizaremos
+            'smtp_host' => 'smtp.1and1.es',
+            //Nuestro usuario
+            'smtp_user' => 'info@jocomunico.com',
+            //Nuestra contraseña
+            'smtp_pass' => 'Jocomunicoapp7',
+            //El puerto que utilizará el servidor smtp
+            'smtp_port' => 587,
+            //El juego de caracteres a utilizar
+            'charset' => 'utf-8',
+            //Permitimos que se puedan cortar palabras
+            'wordwrap' => TRUE,
+          //El email debe ser valido
+            'validate' => true  
+        );          
 
         //Establecemos esta configuración
         $this->email->initialize($config);
         //Ponemos la dirección de correo que enviará el email y un nombre
-        $this->email->from('jocomunico@jocomunico.com', 'JoComunico');
+        $this->email->from('info@jocomunico.com', 'Jocomunico');
 
         //Destinatario
         $this->email->to($mail, $userName);

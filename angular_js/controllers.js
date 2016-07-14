@@ -6,9 +6,6 @@ angular.module('controllers', [])
             //Definición de variables
             $scope.view2 = false;// vista de recuperación de contraseña
             var loginResource = Resources.login;
-            $rootScope.contetnLanguageUserNonLoged = 1; // idioma por defecto al iniciar (catalan)
-            $rootScope.dropdownMenuBarLanguageSelected = 'CA';
-            $rootScope.dropdownMenuBar = [];
 
             //Imagenes
             $scope.img = [];
@@ -21,35 +18,54 @@ angular.module('controllers', [])
             $scope.img.BotoEntra2 = '/img/srcWeb/Login/BotoEntra2.png';
             
             //HTML text content
-            Resources.register.get({'section': 'login', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
+            Resources.register.get({'section': 'login', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.content = results.data;
                         $scope.viewActivated = true; // para activar la vista
                     });
 
             //Dropdown Menu Bar
-            dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
+            $rootScope.dropdownMenuBar = null;
+            if($rootScope.isLogged){
+                var languageId = $rootScope.interfaceLanguageId;
+                $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
+            } else {
+                var languageId = $rootScope.contentLanguageUserNonLoged;
+                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+            }
+            dropdownMenuBarInit(languageId)
                     .then(function () {
-                        $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
                         //Choose the buttons to show on bar
-                        angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/privacity') {
-                                value.show = true;
-                            } else {
-                                value.show = false;
-                            }
-                        });
+                        if ($rootScope.isLogged){
+                            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                                if (value.href == '/' || value.href == '/about' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/download' || value.href == '/tips' || value.href == '/privacy') {
+                                    value.show = true;
+                                } else {
+                                    value.show = false;
+                                }
+                            });
+                        }else{
+                            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                                if (value.href == '/home' || value.href == '/about' || value.href == '/faq' || value.href == '/download' || value.href == '/tips' || value.href == '/privacy') {
+                                    value.show = true;
+                                } else {
+                                    value.show = false;
+                                }
+                            });
+                        }
                     });
-            $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
+            $rootScope.dropdownMenuBarValue = '/login'; //Button selected on this view
             $rootScope.dropdownMenuBarButtonHide = false;
             //function to change html view
             $scope.go = function (path) {
-                $location.path(path);
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                $location.path(path);
             };
             //function to change html content language
-            $rootScope.changeLanguage = function (value) {
-                $rootScope.contetnLanguageUserNonLoged = value;
+            $scope.changeLanguage = function (value) {
+                $rootScope.contentLanguageUserNonLoged = value;
+                window.localStorage.setItem('contentLanguageUserNonLoged', $rootScope.contentLanguageUserNonLoged);
+                window.localStorage.setItem('contentLanguageUserNonLogedAbbr', $rootScope.contentLanguageUserNonLogedAbbr);
                 Resources.register.get({'section': 'login', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
                             $scope.content = results.data;
@@ -118,10 +134,6 @@ angular.module('controllers', [])
             var userOk = false; // variables de validación
             var emailOk = false; // variables de validación
             var languageOk = false; // variables de validación
-            //idioma del contenido html
-            if ($rootScope.contetnLanguageUserNonLoged == undefined) {
-                $rootScope.contetnLanguageUserNonLoged = 1;
-            }
 
             //Imagenes
             $scope.img = [];
@@ -135,36 +147,54 @@ angular.module('controllers', [])
             $scope.img.BotoCrea2 = '/img/srcWeb/Login/BotoCrea2.png';
 
             //HTML text content
-            Resources.register.get({'section': 'userRegister', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
+            Resources.register.get({'section': 'userRegister', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.content = results.data;
                         $scope.viewActived = true; // para activar la vista
                     });
 
             //Dropdown Menu Bar
-            $rootScope.dropdownMenuBar = [];
-            $rootScope.dropdownMenuBarButtonHide = false;
-            dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
+            $rootScope.dropdownMenuBar = null;
+            if($rootScope.isLogged){
+                var languageId = $rootScope.interfaceLanguageId;
+                $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
+            } else {
+                var languageId = $rootScope.contentLanguageUserNonLoged;
+                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+            }
+            dropdownMenuBarInit(languageId)
                     .then(function () {
-                        $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
                         //Choose the buttons to show on bar
-                        angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/privacity') {
-                                value.show = true;
-                            } else {
-                                value.show = false;
-                            }
-                        });
+                        if ($rootScope.isLogged){
+                            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                                if (value.href == '/' || value.href == '/about' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/download' || value.href == '/tips' || value.href == '/privacy') {
+                                    value.show = true;
+                                } else {
+                                    value.show = false;
+                                }
+                            });
+                        }else{
+                            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                                if (value.href == '/home' || value.href == '/about' || value.href == '/faq' || value.href == '/download' || value.href == '/tips' || value.href == '/privacy') {
+                                    value.show = true;
+                                } else {
+                                    value.show = false;
+                                }
+                            });
+                        }
                     });
-            $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
+            $rootScope.dropdownMenuBarValue = '/register'; //Button selected on this view
+            $rootScope.dropdownMenuBarButtonHide = false;
             //function to change html view
             $scope.go = function (path) {
-                $location.path(path);
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                $location.path(path);
             };
             //function to change html content language
-            $rootScope.changeLanguage = function (value) {
-                $rootScope.contetnLanguageUserNonLoged = value;
+            $scope.changeLanguage = function (value) {
+                $rootScope.contentLanguageUserNonLoged = value;
+                window.localStorage.setItem('contentLanguageUserNonLoged', $rootScope.contentLanguageUserNonLoged);
+                window.localStorage.setItem('contentLanguageUserNonLogedAbbr', $rootScope.contentLanguageUserNonLogedAbbr);
                 Resources.register.get({'section': 'userRegister', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
                             $scope.content = results.data;
@@ -419,40 +449,55 @@ angular.module('controllers', [])
             $scope.img.fons = '/img/srcWeb/patterns/fons.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
-            if ($rootScope.contetnLanguageUserNonLoged == undefined) {
-                $rootScope.contetnLanguageUserNonLoged = 1;
-            }
 
             //HTML text content
-            Resources.register.get({'section': 'emailValidation', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
+            Resources.register.get({'section': 'emailValidation', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.content = results.data;
                         $scope.viewActived = true; // para activar la vista
                     });
             //Dropdown Menu Bar
-            $rootScope.dropdownMenuBar = [];
-            $rootScope.dropdownMenuBarButtonHide = false;
-            dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
+            $rootScope.dropdownMenuBar = null;
+            if($rootScope.isLogged){
+                var languageId = $rootScope.interfaceLanguageId;
+                $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
+            } else {
+                var languageId = $rootScope.contentLanguageUserNonLoged;
+                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+            }
+            dropdownMenuBarInit(languageId)
                     .then(function () {
-                        $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
                         //Choose the buttons to show on bar
-                        angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/privacity') {
-                                value.show = true;
-                            } else {
-                                value.show = false;
-                            }
-                        });
+                        if ($rootScope.isLogged){
+                            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                                if (value.href == '/' || value.href == '/about' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/download' || value.href == '/tips' || value.href == '/privacy') {
+                                    value.show = true;
+                                } else {
+                                    value.show = false;
+                                }
+                            });
+                        }else{
+                            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                                if (value.href == '/home' || value.href == '/about' || value.href == '/faq' || value.href == '/download' || value.href == '/tips' || value.href == '/privacy') {
+                                    value.show = true;
+                                } else {
+                                    value.show = false;
+                                }
+                            });
+                        }
                     });
             $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
+            $rootScope.dropdownMenuBarButtonHide = false;
             //function to change html view
             $scope.go = function (path) {
-                $location.path(path);
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                $location.path(path);
             };
             //function to change html content language
-            $rootScope.changeLanguage = function (value) {
-                $rootScope.contetnLanguageUserNonLoged = value;
+            $scope.changeLanguage = function (value) {
+                $rootScope.contentLanguageUserNonLoged = value;
+                window.localStorage.setItem('contentLanguageUserNonLoged', $rootScope.contentLanguageUserNonLoged);
+                window.localStorage.setItem('contentLanguageUserNonLogedAbbr', $rootScope.contentLanguageUserNonLogedAbbr);
                 Resources.register.get({'section': 'emailValidation', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
                             $scope.content = results.data;
@@ -475,9 +520,6 @@ angular.module('controllers', [])
             //initialize variables
             $scope.formData = {};  //Datos del formulario
             $scope.state = {password: "", confirmPassword: ""};// estado de cada campo del formulario
-            if ($rootScope.contetnLanguageUserNonLoged == undefined) {
-                $rootScope.contetnLanguageUserNonLoged = 1;
-            }
 
             //Imagenes
             $scope.img = [];
@@ -486,35 +528,53 @@ angular.module('controllers', [])
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
 
             //HTML text content
-            Resources.register.get({'section': 'passRecovery', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
+            Resources.register.get({'section': 'passRecovery', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.content = results.data;
                         $scope.viewActived = true; // para activar la vista
                     });
             //Dropdown Menu Bar
-            $rootScope.dropdownMenuBar = [];
-            $rootScope.dropdownMenuBarButtonHide = false;
-            dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
+            $rootScope.dropdownMenuBar = null;
+            if($rootScope.isLogged){
+                var languageId = $rootScope.interfaceLanguageId;
+                $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
+            } else {
+                var languageId = $rootScope.contentLanguageUserNonLoged;
+                $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
+            }
+            dropdownMenuBarInit(languageId)
                     .then(function () {
-                        $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
                         //Choose the buttons to show on bar
-                        angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/privacity') {
-                                value.show = true;
-                            } else {
-                                value.show = false;
-                            }
-                        });
+                        if ($rootScope.isLogged){
+                            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                                if (value.href == '/' || value.href == '/about' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/download' || value.href == '/tips' || value.href == '/privacy') {
+                                    value.show = true;
+                                } else {
+                                    value.show = false;
+                                }
+                            });
+                        }else{
+                            angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                                if (value.href == '/home' || value.href == '/about' || value.href == '/faq' || value.href == '/download' || value.href == '/tips' || value.href == '/privacy') {
+                                    value.show = true;
+                                } else {
+                                    value.show = false;
+                                }
+                            });
+                        }
                     });
             $rootScope.dropdownMenuBarValue = ''; //Button selected on this view
+            $rootScope.dropdownMenuBarButtonHide = false;
             //function to change html view
             $scope.go = function (path) {
-                $location.path(path);
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                $location.path(path);
             };
             //function to change html content language
-            $rootScope.changeLanguage = function (value) {
-                $rootScope.contetnLanguageUserNonLoged = value;
+            $scope.changeLanguage = function (value) {
+                $rootScope.contentLanguageUserNonLoged = value;
+                window.localStorage.setItem('contentLanguageUserNonLoged', $rootScope.contentLanguageUserNonLoged);
+                window.localStorage.setItem('contentLanguageUserNonLogedAbbr', $rootScope.contentLanguageUserNonLogedAbbr);
                 Resources.register.get({'section': 'passRecovery', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
                             $scope.content = results.data;
@@ -592,11 +652,11 @@ angular.module('controllers', [])
         .controller('UserConfCtrl', function ($http, $scope, $rootScope, Resources, AuthService, txtContent, $location, $timeout, dropdownMenuBarInit) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
-                $location.path('/login');
-                $rootScope.dropdownMenuBarValue = '/'; //Dropdown bar button selected on this view
+                $rootScope.dropdownMenuBarValue = '/home'; //Dropdown bar button selected on this view
+                $location.path('/home');
             }
             //Dropdown Menu Bar
-            $rootScope.dropdownMenuBar = [];
+            $rootScope.dropdownMenuBar = null;
             $rootScope.dropdownMenuBarButtonHide = false;
             $rootScope.dropdownMenuBarValue = '/userConfig'; //Button selected on this view
             $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
@@ -606,7 +666,7 @@ angular.module('controllers', [])
                     .then(function () {
                         //Choose the buttons to show on bar
                         angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/info' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
+                            if (value.href == '/' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tips' || value.href == '/privacy' || value.href == 'logout') {
                                 value.show = true;
                             } else {
                                 value.show = false;
@@ -618,8 +678,8 @@ angular.module('controllers', [])
                 if (path == 'logout') {
                     $('#logoutModal').modal('toggle');
                 } else {
-                    $location.path(path);
                     $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                    $location.path(path);
                 }
             };
             //Log Out Modal
@@ -854,7 +914,7 @@ angular.module('controllers', [])
                                                 .then(function (results) {
                                                     $scope.logoutContent = results.data;
                                                     //Change content language dropdown Menu Bar
-                                                    dropdownMenuBarInit();
+                                                    dropdownMenuBarInit($rootScope.interfaceLanguageId);
                                                 });
                                     });
                         });
@@ -1129,10 +1189,10 @@ angular.module('controllers', [])
         .controller('myCtrl', function (Resources, $location, $scope, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, dropdownMenuBarInit, AuthService) {
 
             //Dropdown Menu Bar
+            $rootScope.dropdownMenuBar = null;
             $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
             $rootScope.dropdownMenuBarButtonHide = true;
             $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
-            $rootScope.dropdownMenuBar = [];
             //SentenceBar button to open dropdown menu bar when hover
             $("#idSentenceBar").hover(function () {
                 console.log('hover');
@@ -1143,7 +1203,7 @@ angular.module('controllers', [])
                     .then(function () {
                         //Choose the buttons to show on bar
                         angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/info' || value.href == 'editPanel' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
+                            if (value.href == '/' || value.href == 'editPanel' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tips' || value.href == '/privacy' || value.href == 'logout') {
                                 value.show = true;
                             } else {
                                 value.show = false;
@@ -1180,7 +1240,8 @@ angular.module('controllers', [])
             };
 
             if (!$rootScope.isLogged) {
-                $location.path('/login');
+                $rootScope.dropdownMenuBarValue = '/home'; //Dropdown bar button selected on this view
+                $location.path('/home');
             } else {
                 Resources.main.get({'IdSu': $rootScope.sUserId}, {'funct': "getConfig"}).$promise
                         .then(function (results) {
@@ -3075,7 +3136,8 @@ angular.module('controllers', [])
         .controller('historicCtrl', function ($scope, $rootScope, txtContent, $location, $http, dropdownMenuBarInit, AuthService, Resources, $timeout, $interval) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
-                $location.path('/login');
+                $rootScope.dropdownMenuBarValue = '/home'; //Dropdown bar button selected on this view
+                $location.path('/home');
             }
             // Pedimos los textos para cargar la pagina
             txtContent("historicview").then(function (results) {
@@ -3083,10 +3145,10 @@ angular.module('controllers', [])
             });
 
             //Dropdown Menu Bar
+            $rootScope.dropdownMenuBar = null;
             $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
             $rootScope.dropdownMenuBarButtonHide = true;
             $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
-            $rootScope.dropdownMenuBar = [];
             //SentenceBar button to open dropdown menu bar when hover
             $("#idSentenceBar").hover(function () {
                 console.log('hover');
@@ -3097,7 +3159,7 @@ angular.module('controllers', [])
                     .then(function () {
                         //Choose the buttons to show on bar
                         angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/info' || value.href == 'editPanel' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
+                            if (value.href == '/' || value.href == 'editPanel' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tips' || value.href == '/privacy' || value.href == 'logout') {
                                 value.show = true;
                             } else {
                                 value.show = false;

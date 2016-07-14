@@ -5,34 +5,43 @@ angular.module('controllers')
                 $scope.initAddWordtest();
             });
             //Dropdown Menu Bar
-            dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
+            $rootScope.dropdownMenuBar = null;
+            $rootScope.dropdownMenuBarButtonHide = false;
+            $rootScope.dropdownMenuBarValue = '/panelGroups'; //Button selected on this view
+            $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
+
+            //Choose the buttons to show on bar
+            dropdownMenuBarInit($rootScope.interfaceLanguageId)
                     .then(function () {
-                        $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
                         //Choose the buttons to show on bar
                         angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                            if (value.href == '/' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/privacity') {
+                            if (value.href == '/' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tips' || value.href == '/privacy' || value.href == 'logout') {
                                 value.show = true;
                             } else {
                                 value.show = false;
                             }
                         });
                     });
-            $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
-            $rootScope.dropdownMenuBarButtonHide = false;
             //function to change html view
             $scope.go = function (path) {
-                $location.path(path);
-                $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                if (path == 'logout') {
+                    $('#logoutModal').modal('toggle');
+                } else {
+                    $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                    $location.path(path);
+                }
             };
-            //function to change html content language
-            $rootScope.changeLanguage = function (value) {
-                $rootScope.contetnLanguageUserNonLoged = value;
-                Resources.register.get({'section': 'login', 'idLanguage': value}, {'funct': "content"}).$promise
-                        .then(function (results) {
-                            $scope.content = results.data;
-                            dropdownMenuBarInit(value);
-                        });
+            //Log Out Modal
+            Resources.main.get({'section': 'logoutModal', 'idLanguage': $rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
+                    .then(function (results) {
+                        $scope.logoutContent = results.data;
+                    });
+            $scope.logout = function () {
+                $timeout(function () {
+                    AuthService.logout();
+                }, 1000);
             };
+            
             $scope.initAddWord = function () {
             switch ($scope.addWordType)
                 {
@@ -79,7 +88,8 @@ angular.module('controllers')
                                             {classType: "animate", numType: 3, adjType: $scope.content.classadj3},
                                             {classType: "objecte", numType: 4, adjType: $scope.content.classadj4},
                                             {classType: "menjar", numType: 5, adjType: $scope.content.classadj5},
-                                            {classType: "ordinal", numType: 6, adjType: $scope.content.classadj6}
+                                            {classType: "ordinal", numType: 6, adjType: $scope.content.classadj6},
+                                            {classType: "numero", numType: 7, adjType: $scope.content.classadj7}
                             ];
 
                         break;
@@ -336,28 +346,17 @@ angular.module('controllers')
                 $scope.AdjClassList.splice(index, 1);
             };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            $scope.img = [];
+            $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
+            $scope.style_changes_title = '';
+            
+             // Activate information modals (popups)
+            $scope.toggleInfoModal = function (title, text) {
+                $scope.infoModalContent = text;
+                $scope.infoModalTitle = title;
+                $scope.style_changes_title = 'padding-top: 2vh;';
+                $('#infoModal').modal('toggle');
+            };
 
         });
         

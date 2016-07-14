@@ -95,9 +95,9 @@ angular.module('app', [
 			controller:'faqCtrl',
 			templateUrl:'../../angular_templates/Faq.html'
 		})
-                .when('/us', {
-			controller:'usCtrl',
-			templateUrl:'../../angular_templates/Us.html'
+                .when('/tips', {
+			controller:'consellsCtrl',
+			templateUrl:'../../angular_templates/Consells.html'
 		})
                 .when('/download', {
 			controller:'downloadCtrl',

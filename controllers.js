@@ -6,8 +6,8 @@ angular.module('controllers', [])
             //Definición de variables
             $scope.view2 = false;// vista de recuperación de contraseña
             var loginResource = Resources.login;
-            $rootScope.contetnLanguageUserNonLoged = 1; // idioma por defecto al iniciar (catalan)
-            $rootScope.dropdownMenuBarLanguageSelected = 'CA';
+            $rootScope.contentLanguageUserNonLoged = 1; // idioma por defecto al iniciar (catalan)
+            $rootScope.contentLanguageUserNonLogedAbbr = 'CA';
             $rootScope.dropdownMenuBar = [];
 
             //Imagenes
@@ -21,14 +21,14 @@ angular.module('controllers', [])
             $scope.img.BotoEntra2 = '/img/srcWeb/Login/BotoEntra2.png';
 
             //HTML text content
-            Resources.register.get({'section': 'login', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
+            Resources.register.get({'section': 'login', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.content = results.data;
                         $scope.viewActivated = true; // para activar la vista
                     });
 
             //Dropdown Menu Bar
-            dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
+            dropdownMenuBarInit($rootScope.contentLanguageUserNonLoged)
                     .then(function () {
                         $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
                         //Choose the buttons to show on bar
@@ -48,8 +48,8 @@ angular.module('controllers', [])
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
             };
             //function to change html content language
-            $rootScope.changeLanguage = function (value) {
-                $rootScope.contetnLanguageUserNonLoged = value;
+            $scope.changeLanguage = function (value) {
+                $rootScope.contentLanguageUserNonLoged = value;
                 Resources.register.get({'section': 'login', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
                             $scope.content = results.data;
@@ -119,8 +119,8 @@ angular.module('controllers', [])
             var emailOk = false; // variables de validación
             var languageOk = false; // variables de validación
             //idioma del contenido html
-            if ($rootScope.contetnLanguageUserNonLoged == undefined) {
-                $rootScope.contetnLanguageUserNonLoged = 1;
+            if ($rootScope.contentLanguageUserNonLoged == undefined) {
+                $rootScope.contentLanguageUserNonLoged = 1;
             }
 
             //Imagenes
@@ -135,7 +135,7 @@ angular.module('controllers', [])
             $scope.img.BotoCrea2 = '/img/srcWeb/Login/BotoCrea2.png';
 
             //HTML text content
-            Resources.register.get({'section': 'userRegister', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
+            Resources.register.get({'section': 'userRegister', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.content = results.data;
                         $scope.viewActived = true; // para activar la vista
@@ -144,7 +144,7 @@ angular.module('controllers', [])
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBar = [];
             $rootScope.dropdownMenuBarButtonHide = false;
-            dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
+            dropdownMenuBarInit($rootScope.contentLanguageUserNonLoged)
                     .then(function () {
                         $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
                         //Choose the buttons to show on bar
@@ -163,8 +163,8 @@ angular.module('controllers', [])
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
             };
             //function to change html content language
-            $rootScope.changeLanguage = function (value) {
-                $rootScope.contetnLanguageUserNonLoged = value;
+            $scope.changeLanguage = function (value) {
+                $rootScope.contentLanguageUserNonLoged = value;
                 Resources.register.get({'section': 'userRegister', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
                             $scope.content = results.data;
@@ -419,12 +419,12 @@ angular.module('controllers', [])
             $scope.img.fons = '/img/srcWeb/patterns/fons.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
-            if ($rootScope.contetnLanguageUserNonLoged == undefined) {
-                $rootScope.contetnLanguageUserNonLoged = 1;
+            if ($rootScope.contentLanguageUserNonLoged == undefined) {
+                $rootScope.contentLanguageUserNonLoged = 1;
             }
 
             //HTML text content
-            Resources.register.get({'section': 'emailValidation', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
+            Resources.register.get({'section': 'emailValidation', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.content = results.data;
                         $scope.viewActived = true; // para activar la vista
@@ -432,7 +432,7 @@ angular.module('controllers', [])
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBar = [];
             $rootScope.dropdownMenuBarButtonHide = false;
-            dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
+            dropdownMenuBarInit($rootScope.contentLanguageUserNonLoged)
                     .then(function () {
                         $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
                         //Choose the buttons to show on bar
@@ -451,8 +451,8 @@ angular.module('controllers', [])
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
             };
             //function to change html content language
-            $rootScope.changeLanguage = function (value) {
-                $rootScope.contetnLanguageUserNonLoged = value;
+            $scope.changeLanguage = function (value) {
+                $rootScope.contentLanguageUserNonLoged = value;
                 Resources.register.get({'section': 'emailValidation', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
                             $scope.content = results.data;
@@ -475,8 +475,8 @@ angular.module('controllers', [])
             //initialize variables
             $scope.formData = {};  //Datos del formulario
             $scope.state = {password: "", confirmPassword: ""};// estado de cada campo del formulario
-            if ($rootScope.contetnLanguageUserNonLoged == undefined) {
-                $rootScope.contetnLanguageUserNonLoged = 1;
+            if ($rootScope.contentLanguageUserNonLoged == undefined) {
+                $rootScope.contentLanguageUserNonLoged = 1;
             }
 
             //Imagenes
@@ -486,7 +486,7 @@ angular.module('controllers', [])
             $scope.img.loading = '/img/srcWeb/Login/loading.gif';
 
             //HTML text content
-            Resources.register.get({'section': 'passRecovery', 'idLanguage': $rootScope.contetnLanguageUserNonLoged}, {'funct': "content"}).$promise
+            Resources.register.get({'section': 'passRecovery', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.content = results.data;
                         $scope.viewActived = true; // para activar la vista
@@ -494,7 +494,7 @@ angular.module('controllers', [])
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBar = [];
             $rootScope.dropdownMenuBarButtonHide = false;
-            dropdownMenuBarInit($rootScope.contetnLanguageUserNonLoged)
+            dropdownMenuBarInit($rootScope.contentLanguageUserNonLoged)
                     .then(function () {
                         $rootScope.dropdownMenuBarChangeLanguage = true;//Languages button available
                         //Choose the buttons to show on bar
@@ -513,8 +513,8 @@ angular.module('controllers', [])
                 $rootScope.dropdownMenuBarValue = path; //Button selected on this view
             };
             //function to change html content language
-            $rootScope.changeLanguage = function (value) {
-                $rootScope.contetnLanguageUserNonLoged = value;
+            $scope.changeLanguage = function (value) {
+                $rootScope.contentLanguageUserNonLoged = value;
                 Resources.register.get({'section': 'passRecovery', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
                             $scope.content = results.data;

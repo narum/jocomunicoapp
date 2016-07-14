@@ -229,6 +229,7 @@ input:focus{
 .img-icon{
     height: 3vh;
     width: auto;
+    cursor: pointer;
 }
 .img-icon-small{
     height: 2.2vh;
@@ -483,6 +484,7 @@ input.switch:checked ~ label:after
     height:6vh;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+    padding-top: 1vh;
 }
 
 .headerTitle{
@@ -492,9 +494,15 @@ input.switch:checked ~ label:after
 }
 .headerTitle-confirms{
     color:white;
-    padding-top: 2vh;
+    padding-top: 1vh;
     padding-left: 3vw;
     font-size: 3vh;
+}
+.headerTitle-panelgroup{
+    color:white;
+    padding-top: 1vh;
+    padding-left: 1vw;
+    font-size: 2.8vh;
 }
 .textImgError{
     margin-top: 5px;
@@ -511,6 +519,16 @@ input.switch:checked ~ label:after
     background-color: #fddfad;
 }
 .fonsAlert{
+    font-size: 4vh;
+    background-color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding-left: 10vh;
+    padding-right: 10vh;
+    padding-top: 6vh;
+    padding-bottom: 4vh;
+}
+.fonsAlert-info{
     font-size: 4vh;
     background-color: white;
     border-top-left-radius: 15px;
@@ -632,4 +650,29 @@ input.switch:checked ~ label:after
 .ellipsis {
     text-overflow: ellipsis;
     overflow: hidden;
+}
+
+.content-example {
+    padding-left: 10%;
+}
+
+.text-indent-up{
+    padding-left: 4%;
+    display: block;
+}
+
+.placeholder {
+    margin-top: 1vh;
+    padding-left: 3px;
+}
+
+.errorcoment-logincopy {
+    color: #cc0000;
+    font-weight: bold;
+    font-size: 2.2vh;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin-top: 1vh;
 }

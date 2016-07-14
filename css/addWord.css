@@ -189,7 +189,7 @@ input.switchclear:checked ~ label:after
 .addWordText{
     color: #4c4c4c;
     font-weight: bold;
-    width: 100px;
+    width: 90%;
 }
 .paddingButtonAddWord{
     padding: 1vh;

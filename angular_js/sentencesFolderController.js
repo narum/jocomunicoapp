@@ -2,8 +2,8 @@ angular.module('controllers')
     .controller('sentencesFolderCtrl', function ($scope, $rootScope, txtContent, $routeParams, $location, dropdownMenuBarInit, AuthService, Resources, $timeout, $http) {
         // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
         if (!$rootScope.isLogged) {
-            $location.path('/login');
-            $rootScope.dropdownMenuBarValue = '/'; //Dropdown bar button selected on this view
+            $location.path('/home');
+            $rootScope.dropdownMenuBarValue = '/home'; //Dropdown bar button selected on this view
         }
         // Pedimos los textos para cargar la pagina
         txtContent("historySentencesFold").then(function (results) {
@@ -12,43 +12,44 @@ angular.module('controllers')
         });
 
         //Dropdown Menu Bar
-        $rootScope.dropdownMenuBarValue = '/sentencesFolder'; //Button selected on this view
-        $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
-        $rootScope.dropdownMenuBar = [];
-        $rootScope.dropdownMenuBarButtonHide = false;
+            $rootScope.dropdownMenuBar = null;
+            $rootScope.dropdownMenuBarButtonHide = false;
+            $rootScope.dropdownMenuBarValue = '/panelGroups'; //Button selected on this view
+            $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
 
-        //Choose the buttons to show on bar
-        dropdownMenuBarInit($rootScope.interfaceLanguageId)
-            .then(function () {
-                //Choose the buttons to show on bar
-                angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                    if (value.href == '/' || value.href == '/info' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
-                        value.show = true;
-                    } else {
-                        value.show = false;
-                    }
-                });
-            });
-        //function to change html view with dropdown menu buttons
-        $scope.go = function (path) {
-            if (path == 'logout') {
-                $('#logoutModal').modal('toggle');
-            } else {
-                $location.path(path);
-                $rootScope.dropdownMenuBarValue = path; //Button selected on this view
-            }
-        };
+            //Choose the buttons to show on bar
+            dropdownMenuBarInit($rootScope.interfaceLanguageId)
+                    .then(function () {
+                        //Choose the buttons to show on bar
+                        angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                            if (value.href == '/' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tips' || value.href == '/privacy' || value.href == 'logout') {
+                                value.show = true;
+                            } else {
+                                value.show = false;
+                            }
+                        });
+                    });
+            //function to change html view
+            $scope.go = function (path) {
+                if (path == 'logout') {
+                    $('#logoutModal').modal('toggle');
+                } else {
+                    $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                    $location.path(path);
+                }
+            };
 
-        //Log Out Modal
-        Resources.main.get({'section': 'logoutModal', 'idLanguage': $rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
-                .then(function (results) {
-                    $scope.logoutContent = results.data;
-                });
-        $scope.logout = function () {
-            $timeout(function () {
-                AuthService.logout();
-            }, 1000);
-        };
+            //Log Out Modal
+            Resources.main.get({'section': 'logoutModal', 'idLanguage': $rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
+                    .then(function (results) {
+                        $scope.logoutContent = results.data;
+                    });
+            $scope.logout = function () {
+                $timeout(function () {
+                    AuthService.logout();
+                }, 1000);
+            };
+        
         //scrollbars
         $scope.$on('scrollbarSentences', function () {
             $scope.$broadcast('rebuild:meS');
@@ -329,5 +330,16 @@ angular.module('controllers')
                 .error(function (response) {
                     //alert(response.errorText);
                 });
+        };
+        
+        
+        $scope.style_changes_title = '';
+
+         // Activate information modals (popups)
+        $scope.toggleInfoModal = function (title, text) {
+            $scope.infoModalContent = text;
+            $scope.infoModalTitle = title;
+            $scope.style_changes_title = 'padding-top: 2vh;';
+            $('#infoModal').modal('toggle');
         };
     });

@@ -20,8 +20,19 @@ angular.module('services', [])
 	
 	return {
 		"init": function() {
+                        //DropDown Menu Bar
+                        $rootScope.contentLanguageUserNonLoged = window.localStorage.getItem('contentLanguageUserNonLoged');
+                        $rootScope.contentLanguageUserNonLogedAbbr = window.localStorage.getItem('contentLanguageUserNonLogedAbbr');
+                        $rootScope.dropdownMenuBar = [];
+                        if(!$rootScope.contentLanguageUserNonLoged||!$rootScope.contentLanguageUserNonLogedAbbr){
+                            $rootScope.contentLanguageUserNonLoged = 1; // idioma por defecto al iniciar (catalan)
+                            $rootScope.contentLanguageUserNonLogedAbbr = 'CA';
+                            window.localStorage.setItem('contentLanguageUserNonLoged', $rootScope.contentLanguageUserNonLoged);
+                            window.localStorage.setItem('contentLanguageUserNonLogedAbbr', $rootScope.contentLanguageUserNonLogedAbbr);
+                        }
+			//Login
 			$rootScope.isLogged = false;
-			var token = window.localStorage.getItem('token'); //mirem si hi ha un token al LocalStorage de html5
+                        var token = window.localStorage.getItem('token'); //mirem si hi ha un token al LocalStorage de html5
                         var userConfig = JSON.parse(localStorage.getItem('userData'));
 			if(token)
 				this.login(token, userConfig);
@@ -60,17 +71,6 @@ angular.module('services', [])
 //Función que inicializa la barra del menu superior
 .factory('dropdownMenuBarInit',  function(Resources, $rootScope, txtContent){
     return function(Language){
-        //check if the APP is running locally or server
-        if($rootScope.localServer==undefined){
-            Resources.register.get({'funct': "runningLocalOrServer"}).$promise
-                .then(function (results) {
-                    if(results.appRunning=='local'){
-                        $rootScope.localServer=true;
-                    }else{
-                        $rootScope.localServer=false;
-                    }
-            });
-        }
         //Get menu bar content
         var content = function(){
             if($rootScope.isLogged){
@@ -98,47 +98,39 @@ angular.module('services', [])
                 //Dropdown Menu Bar
                 $rootScope.dropdownMenuBar = [];
                 $rootScope.dropdownMenuBar.push({name: results.data.logout, href: 'logout', iconInitial: '/img/srcWeb/DropdownMenuBar/clauIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/clauIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/clauIconSelected.png', show:false});
-                $rootScope.dropdownMenuBar.push({name: results.data.privacity, href: '/privacity', iconInitial: '/img/srcWeb/DropdownMenuBar/lockIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/lockIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/lockIconSelected.png', show:false});
-                $rootScope.dropdownMenuBar.push({name: results.data.contact, href: '/contact', iconInitial: '/img/srcWeb/DropdownMenuBar/mailIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/mailIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/mailIconSelected.png', show:false});
-                $rootScope.dropdownMenuBar.push({name: results.data.tutorial, href: '/tutorial', iconInitial: '/img/srcWeb/DropdownMenuBar/tutorialIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/tutorialIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/tutorialIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.privacity, href: '/privacy', iconInitial: '/img/srcWeb/DropdownMenuBar/lockIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/lockIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/lockIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.tutorial, href: '/tips', iconInitial: '/img/srcWeb/DropdownMenuBar/tutorialIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/tutorialIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/tutorialIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.download, href: '/download', iconInitial: '/img/srcWeb/DropdownMenuBar/downloadIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/downloadIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/downloadIconSelected.png', show:false});
                 $rootScope.dropdownMenuBar.push({name: results.data.faq, href: '/faq', iconInitial: '/img/srcWeb/DropdownMenuBar/faqIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/faqIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/faqIconSelected.png', show:false});
                 $rootScope.dropdownMenuBar.push({name: results.data.userConfig, href: '/userConfig', iconInitial: '/img/srcWeb/DropdownMenuBar/configIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/configIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/configIconSelected.png', show:false});
                 $rootScope.dropdownMenuBar.push({name: results.data.panelGroups, href: '/panelGroups', iconInitial: '/img/srcWeb/DropdownMenuBar/panellsIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/panellsIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/panellsIconSelected.png', show:false});
                 $rootScope.dropdownMenuBar.push({name: results.data.editPanel, href: 'editPanel', iconInitial: '/img/srcWeb/DropdownMenuBar/editaPanellIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/editaPanellIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/editaPanellIconSelected.png', show:false});
-                $rootScope.dropdownMenuBar.push({name: results.data.info, href: '/info', iconInitial: '/img/srcWeb/DropdownMenuBar/sobrejocomIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/sobrejocomIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/sobrejocomIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.info, href: '/about', iconInitial: '/img/srcWeb/DropdownMenuBar/sobrejocomIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/sobrejocomIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/sobrejocomIconSelected.png', show:false});
+                $rootScope.dropdownMenuBar.push({name: results.data.home, href: '/home', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png', show:false});
                 $rootScope.dropdownMenuBar.push({name: results.data.init, href: '/', iconInitial: '/img/srcWeb/DropdownMenuBar/iniciIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/iniciIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/iniciIconSelected.png', show:false});
                 $rootScope.languageButton = {name: results.data.languages, iconInitial: '/img/srcWeb/DropdownMenuBar/idiomaIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/idiomaIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/idiomaIconSelected.png'};
+                $rootScope.contactButton = {name: results.data.contact, iconInitial: '/img/srcWeb/DropdownMenuBar/mailIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/mailIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/mailIconSelected.png'};
+                $rootScope.exitButton = {name: results.data.exit, iconInitial: '/img/srcWeb/DropdownMenuBar/powerIcon.png', iconHover: '/img/srcWeb/DropdownMenuBar/powerIconHover.png', iconSelected: '/img/srcWeb/DropdownMenuBar/powerIconSelected.png'};
                 $rootScope.languageButtonIcon = $rootScope.languageButton.iconInitial;
-                if($rootScope.localServer){
-                    $rootScope.dropdownMenuBar.splice(2, 1);//Borrar item de un array .splice(posicion, numero de items)
-                    $rootScope.dropdownMenuBar.splice(7, 1);//Borrar item de un array .splice(posicion, numero de items)
-                }
+                $rootScope.contactButtonIcon = $rootScope.contactButton.iconInitial;
+                $rootScope.exitButtonIcon = $rootScope.exitButton.iconInitial;
             });
         }else{
             return content().then(function(results){
-                if($rootScope.localServer){
                     $rootScope.dropdownMenuBar[0].name = results.data.logout;
                     $rootScope.dropdownMenuBar[1].name = results.data.privacity;
                     $rootScope.dropdownMenuBar[2].name = results.data.tutorial;
-                    $rootScope.dropdownMenuBar[3].name = results.data.faq;
-                    $rootScope.dropdownMenuBar[4].name = results.data.userConfig;
-                    $rootScope.dropdownMenuBar[5].name = results.data.panelGroups;
-                    $rootScope.dropdownMenuBar[6].name = results.data.editPanel;
-                    $rootScope.dropdownMenuBar[7].name = results.data.init;
-                    $rootScope.languageButton.name = results.data.languages;
-                }else{
-                    $rootScope.dropdownMenuBar[0].name = results.data.logout;
-                    $rootScope.dropdownMenuBar[1].name = results.data.privacity;
-                    $rootScope.dropdownMenuBar[2].name = results.data.contact;
-                    $rootScope.dropdownMenuBar[3].name = results.data.tutorial;
+                    $rootScope.dropdownMenuBar[3].name = results.data.download;
                     $rootScope.dropdownMenuBar[4].name = results.data.faq;
                     $rootScope.dropdownMenuBar[5].name = results.data.userConfig;
                     $rootScope.dropdownMenuBar[6].name = results.data.panelGroups;
                     $rootScope.dropdownMenuBar[7].name = results.data.editPanel;
                     $rootScope.dropdownMenuBar[8].name = results.data.info;
-                    $rootScope.dropdownMenuBar[9].name = results.data.init;
+                    $rootScope.dropdownMenuBar[9].name = results.data.home;
+                    $rootScope.dropdownMenuBar[10].name = results.data.init;
                     $rootScope.languageButton.name = results.data.languages;
-                }
+                    $rootScope.contactButton.name = results.data.contact;
+                    $rootScope.exitButton.name = results.data.exit;
             });
         }
     };

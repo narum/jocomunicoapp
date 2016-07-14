@@ -1,5 +1,5 @@
 angular.module('controllers')
-    .controller('faqCtrl', function ($http, $scope, $rootScope, Resources, AuthService, txtContent, $location, $timeout, dropdownMenuBarInit) {
+    .controller('consellsCtrl', function ($http, $scope, $rootScope, Resources, AuthService, txtContent, $location, $timeout, dropdownMenuBarInit) {
         
         //Dropdown Menu Bar
             $rootScope.dropdownMenuBar = null;
@@ -31,7 +31,7 @@ angular.module('controllers')
                             });
                         }
                     });
-            $rootScope.dropdownMenuBarValue = '/faq'; //Button selected on this view
+            $rootScope.dropdownMenuBarValue = '/tips'; //Button selected on this view
             $rootScope.dropdownMenuBarButtonHide = false;
             //function to change html view
             $scope.go = function (path) {
@@ -43,10 +43,10 @@ angular.module('controllers')
                 $rootScope.contentLanguageUserNonLoged = value;
                 window.localStorage.setItem('contentLanguageUserNonLoged', $rootScope.contentLanguageUserNonLoged);
                 window.localStorage.setItem('contentLanguageUserNonLogedAbbr', $rootScope.contentLanguageUserNonLogedAbbr);
-                Resources.register.get({'section': 'faq', 'idLanguage': value}, {'funct': "content"}).$promise
+                Resources.register.get({'section': 'tips', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
                             $rootScope.langabbr = $rootScope.contentLanguageUserNonLogedAbbr;
-                            $scope.text = results.data;
+                            $scope.content = results.data;
                             dropdownMenuBarInit(value);
                         });
             };
@@ -59,14 +59,11 @@ angular.module('controllers')
         $scope.contentBar11 = false;
         $scope.contentBar21 = false;
         $scope.contentBar22 = false;
-        $scope.contentBar31 = false;
-        $scope.contentBar32 = false;
-        $scope.contentBar33 = false;
-        $scope.contentBar34 = false;
-        $scope.contentBar35 = false;
-        $scope.contentBar36 = false;
-        $scope.contentBar37 = false;
-        $scope.contentBar41 = false;
+        $scope.contentBar23 = false;
+        $scope.contentBar24 = false;
+        $scope.contentBar25 = false;
+        $scope.contentBar26 = false;
+        $scope.contentBar31 = false;        
 
         //Imagenes
         $scope.img = [];
@@ -76,12 +73,12 @@ angular.module('controllers')
         $scope.img.whiteLoading = '/img/icons/whiteLoading.gif';
         $scope.img.Loading_icon = '/img/icons/Loading_icon.gif';
         $scope.img.orangeArrow = '/img/srcWeb/UserConfig/orangeArrow.png';  
-
+        
         // Language
         $rootScope.langabbr = $rootScope.contentLanguageUserNonLogedAbbr;
 
         // Get content for the home view from ddbb           
-        Resources.register.get({'section': 'faq', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
+        Resources.register.get({'section': 'tips', 'idLanguage': $rootScope.contentLanguageUserNonLoged}, {'funct': "content"}).$promise
         .then(function (results) {
             $scope.text = results.data;
             $scope.viewActived = true;

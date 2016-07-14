@@ -4,6 +4,11 @@
     z-index:40;
     position: fixed;
 }
+.dropdownMenuBarHide{
+    z-index:40;
+    position: fixed;
+    left: -6vh;
+}
 .menuBarAnimation{
     position: relative;
     margin-top: 4vh;
@@ -23,7 +28,7 @@
 .menuBarAnimationHide{
     position: relative;
     margin-top: 4vh;
-    left: -6vh;
+    /*left: -6vh;*/
     height: 7vh;
     width: 7.8vh;
     background-color: #adadad;
@@ -39,6 +44,16 @@
     margin-top: 0px;
     margin-left: 0px;
     left: 0px;
+    height: 15vh;
+    width: 100vw;
+    border-radius: 0px;
+    opacity: 0.95;
+}
+.menuBarAnimationOpenedHide{
+    background-color: #474747;
+    margin-top: 0px;
+    margin-left: 0px;
+    left: 6vh;
     height: 15vh;
     width: 100vw;
     border-radius: 0px;
@@ -71,17 +86,22 @@
     -o-transition: left 0.25s ease;
     transition: left 0.25s ease;
 }
+.fontSizeForced *{
+    font-size: 1.4vh;
+}
 .buttonsMenuBar{
     z-index:41;
     position: fixed;
     width: 100vw;
     opacity: 0;
-    
+    top: -12vh;
     margin-top: 5vh;
-    font-size: 1.5vh;
+    padding-left: 12vh;
+    /*font-size: 1.2vh;*/
     text-align: center;
 }
 .buttonsMenuBarOpened{
+    top: 0px;
     -webkit-transition: opacity 0.5s ease-out;
     -webkit-transition-delay: 0.25s;
     -moz-transition: opacity 0.5s ease-out;
@@ -98,7 +118,7 @@
     margin-bottom: 0.6vh;
 }
 .marginButtonMenuBar{
-    width: 14vh;
+    width: 12vh;
 }
 .marginButtonMenuBar label{
     font-weight: normal;
@@ -117,7 +137,7 @@ input.statesButtonMenuBar[type=checkbox]:empty + label:hover{
     color: #dddddd;
 }
 .marginLanguagesButtonMenuBar{
-    margin-right: 2.5vh;
+    margin-right: 11.5vh;
     -webkit-transition: opacity 1s;
     -moz-transition: opacity 1s;
     -o-transition: opacity 1s;
@@ -139,6 +159,21 @@ textarea:focus, input:focus {
     margin-top: 15vh;
     height: 85vh;
     width: 100vw;
+}
+.mailto{
+    color: #828282;
+    display: block;
+    height: 5vh;
+}
+.mailto:hover{
+    color: #dddddd;
+    text-decoration: none;
+}
+.mailto:active,
+.mailto:checked,
+.mailto:focus {
+    color: #828282;
+    text-decoration: none;
 }
 
 

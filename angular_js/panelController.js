@@ -2,8 +2,8 @@ angular.module('controllers')
         .controller('panelCtrl', function ($scope, $rootScope, txtContent, $location, $http, ngDialog, dropdownMenuBarInit, AuthService, Resources, $timeout) {
             // Comprobación del login   IMPORTANTE!!! PONER EN TODOS LOS CONTROLADORES
             if (!$rootScope.isLogged) {
-                $location.path('/login');
-                $rootScope.dropdownMenuBarValue = '/'; //Dropdown bar button selected on this view
+                $location.path('/home');
+                $rootScope.dropdownMenuBarValue = '/home'; //Dropdown bar button selected on this view
             }
             // Pedimos los textos para cargar la pagina
             txtContent("panelgroup").then(function (results) {
@@ -15,32 +15,38 @@ angular.module('controllers')
             });
 
             //Dropdown Menu Bar
+            $rootScope.dropdownMenuBar = null;
+            $rootScope.dropdownMenuBarButtonHide = false;
             $rootScope.dropdownMenuBarValue = '/panelGroups'; //Button selected on this view
             $rootScope.dropdownMenuBarChangeLanguage = false;//Languages button available
-            $rootScope.dropdownMenuBar = [];
-            $rootScope.dropdownMenuBarButtonHide = false;
 
             //Choose the buttons to show on bar
             dropdownMenuBarInit($rootScope.interfaceLanguageId)
-                .then(function () {
-                    //Choose the buttons to show on bar
-                    angular.forEach($rootScope.dropdownMenuBar, function (value) {
-                        if (value.href == '/' || value.href == '/info' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tutorial' || value.href == '/contact' || value.href == '/privacity' || value.href == 'logout') {
-                            value.show = true;
-                        } else {
-                            value.show = false;
-                        }
+                    .then(function () {
+                        //Choose the buttons to show on bar
+                        angular.forEach($rootScope.dropdownMenuBar, function (value) {
+                            if (value.href == '/' || value.href == '/panelGroups' || value.href == '/userConfig' || value.href == '/faq' || value.href == '/tips' || value.href == '/privacy' || value.href == 'logout') {
+                                value.show = true;
+                            } else {
+                                value.show = false;
+                            }
+                        });
                     });
-                });
-            
-            //function to change html view with dropdown menu buttons
+            //function to change html view
             $scope.go = function (path) {
                 if (path == 'logout') {
                     $('#logoutModal').modal('toggle');
                 } else {
-                    $location.path(path);
                     $rootScope.dropdownMenuBarValue = path; //Button selected on this view
+                    $location.path(path);
                 }
+            };
+            //Function to close
+            $scope.closeWindow = function() { 
+                var win = window.open('/#/panelGroups','_self','');
+                $timeout(function () {
+                    win.close();
+                }, 1000);
             };
 
             //Log Out Modal
@@ -111,7 +117,9 @@ angular.module('controllers')
             };
             //go to folder view
             $scope.goSentencesFolder = function (folder) {
-                $location.path('/sentencesFolder/' + folder);
+                $timeout(function () {
+                    $location.path('/sentencesFolder/' + folder);
+                }, 1000);
                 $rootScope.dropdownMenuBarValue = '';
             }
 
@@ -340,7 +348,9 @@ angular.module('controllers')
                 $http.post(URL, $scope.CreateBoardData).success(function (response)
                 {
                     $rootScope.editPanelInfo = {idBoard: response.idBoard};
-                    $location.path('/');
+                    $timeout(function () {
+                        $location.path('/');
+                    }, 1000);
                 });
             };
 
@@ -358,7 +368,9 @@ angular.module('controllers')
                             }
                             // Put the panel to edit info, and load the edit panel  
                             $rootScope.editPanelInfo = {idBoard: $scope.id};
-                            $location.path('/');
+                            $timeout(function () {
+                                $location.path('/');
+                            }, 1000);
                         });
             };
 
@@ -372,27 +384,6 @@ angular.module('controllers')
                             $scope.initPanelGroup();
                         });
             };
-//            //MODIF: creo que se pude borrar
-//            $scope.CreateBoard = function (ID_GB) {
-//                $scope.CreateBoardData = {CreateBoardName: '', height: 0, width: 0, idGroupBoard: ID_GB};
-//                ngDialog.openConfirm({
-//                    template: $scope.baseurl + '/angular_templates/ConfirmCreateBoard.html',
-//                    scope: $scope,
-//                    className: 'ngdialog-theme-default dialogCreateBoard'
-//                }).then(function () {
-//
-//                    var URL = $scope.baseurl + "Board/newBoard";
-//
-//
-//                    $http.post(URL, $scope.CreateBoardData).success(function (response)
-//                    {
-//                        $rootScope.editPanelInfo = {idBoard: response.idBoard};
-//                        $location.path('/');
-//                    });
-//
-//                }, function (value) {
-//                });
-//            };
 
             $scope.changeGroupBoardName = function (nameboard, idgb)
             {
@@ -417,7 +408,9 @@ angular.module('controllers')
             $scope.addWord = function (newModif, addWordType) {
                 if (newModif == 1) {
                     $rootScope.addWordparam = {newmod: newModif, type: addWordType};
-                    $location.path('/addWord');
+                    $timeout(function () {
+                        $location.path('/addWord');
+                    }, 1000);
                 }
                 if (newModif == 0) {
                     switch(addWordType){
@@ -482,4 +475,16 @@ angular.module('controllers')
                     $scope.searchDoneAddWord(name, Searchtype);
                 }, 500);
             };
+            
+            $scope.SearchTypeAddWord = "Tots";
+            $scope.style_changes_title = '';
+
+            // Activate information modals (popups)
+            $scope.toggleInfoModal = function (title, text) {
+                $scope.infoModalContent = text;
+                $scope.infoModalTitle = title;
+                $scope.style_changes_title = 'padding-top: 2vh;';
+                $('#infoModal').modal('toggle');
+            };
+            
         });
