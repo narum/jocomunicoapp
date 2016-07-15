@@ -320,6 +320,10 @@ input[type="text"] {
     padding-top: 6vh;
     padding-bottom: 4vh;
 }
+.backgroundUserConfigBox .fonsAlert{
+    padding-left: 5vh !important;
+    padding-right: 5vh !important;
+}
 .img-Alert{
     height: 4.5vh;
     width: auto;

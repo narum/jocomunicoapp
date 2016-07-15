@@ -20,13 +20,13 @@
 </div>
 <div class="row buttonsMenuBar fontSizeForced" ng-class="{buttonsMenuBarOpened: dropdownMenuOpen}">
     <div class="row">
-<!--        Exit Button
-        <div class="pull-right marginButtonMenuBar" ng-init="$root.exitButtonIcon=$root.exitButton.iconInitial" onclick="windowClose();" ng-click="exitPower=false;">
+        <!--Exit Button-->
+        <div class="pull-right marginButtonMenuBar" ng-init="$root.exitButtonIcon=$root.exitButton.iconInitial;exitPower=false;" ng-click="$root.dropdownMenuBarLanguage=false;">
             <input type="checkbox" id="exitButton" class="statesButtonMenuBar" ng-model="exitPower" ng-show="false">
-            <label for="exitButton" ng-mouseover="$root.exitButtonIcon=$root.exitButton.iconHover" ng-mouseout="$root.exitButtonIcon=$root.exitButton.iconInitial"><img class="icondropdownMenuBar" ng-src="{{$root.exitButtonIcon}}"/></br>{{$root.exitButton.name}}</label>
-        </div>-->
+            <label for="exitButton" ng-mouseover="$root.exitButtonIcon=$root.exitButton.iconHover" ng-mouseout="$root.exitButtonIcon=$root.exitButton.iconInitial"><img class="icondropdownMenuBar" ng-src="{{$root.exitButtonIcon}}" ng-show="!exitPower"/><img class="icondropdownMenuBar" ng-src="{{$root.exitButton.iconSelected}}" ng-show="exitPower"/></br>{{$root.exitButton.name}}</label>
+        </div>
         <!--Language Button-->
-        <div class="pull-right marginButtonMenuBar" ng-init="$root.languageButtonIcon=$root.languageButton.iconInitial" ng-show="$root.dropdownMenuBarChangeLanguage">
+        <div class="pull-right marginButtonMenuBar" ng-init="$root.languageButtonIcon=$root.languageButton.iconInitial" ng-show="$root.dropdownMenuBarChangeLanguage" ng-click="exitPower=false;">
             <input type="checkbox" id="languageButton" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarLanguage" ng-show="false">
             <label for="languageButton" ng-mouseover="$root.languageButtonIcon=$root.languageButton.iconHover" ng-mouseout="$root.languageButtonIcon=$root.languageButton.iconInitial"><img class="icondropdownMenuBar" ng-src="{{$root.languageButtonIcon}}" ng-show="!$root.dropdownMenuBarLanguage"/><img class="icondropdownMenuBar" ng-src="{{$root.languageButton.iconSelected}}" ng-show="$root.dropdownMenuBarLanguage"/></br>{{$root.languageButton.name}}</label>
         </div>
@@ -42,20 +42,18 @@
         </div>
     </div>
     <!--Languages to select-->
-    <div class="row marginLanguagesButtonMenuBar" ng-class="{marginLanguagesButtonMenuBarSelected: dropdownMenuBarLanguage}">
+    <div class="row marginLanguagesButtonMenuBar" ng-class="{marginLanguagesButtonMenuBarSelected: dropdownMenuBarLanguage}" ng-if="!exitPower">
         <div class="pull-right LanguagesButtonMenuBar" ng-repeat="language in languages">
             <input type="radio" id="{{language.languageName}}" class="statesButtonMenuBar" ng-model="$root.contentLanguageUserNonLogedAbbr" value="{{language.languageabbr}}" ng-click="$root.contentLanguageUserNonLogedAbbr = language.languageabbr; changeLanguage(language.ID_Language)" ng-show="false">
             <label for="{{language.languageName}}">{{language.languageabbr}}</label>
         </div>
     </div>
+    <!--Exit Text-->
+    <div class="row marginLanguagesButtonMenuBar2" ng-class="{marginLanguagesButtonMenuBarSelected: exitPower}">
+        <div class="pull-right exitText" ng-if="!dropdownMenuBarLanguage&&exitPower">
+            {{$root.exitTextContent}}
+        </div>
+    </div>
 </div>
 <!--Close bar outside of div-->
 <div class="clickOutside" ng-show='dropdownMenuOpen' ng-click="dropdownMenuOpen=!dropdownMenuOpen"></div>
-
-<!--Function to close-->
-<script language="javascript" type="text/javascript">
-    function windowClose() { 
-        var win = window.open('/#/panelGroups','_self','');
-        win.close();
-    }
-</script>

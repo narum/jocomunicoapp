@@ -81,7 +81,6 @@ class Register extends REST_Controller {
 
             //Petición al modelo
             $saveResult = $this->main_model->getContent($section, $idLanguage);
-
             
             //Cojemos los datos de las dos columnas de la petición y lo convertimos en un objecto clave:valor
             $array1 = array_column($saveResult, 'tagString');
@@ -207,24 +206,25 @@ class Register extends REST_Controller {
 
                     //send email
                     $email=$data["email"];
-                    $userName=$data["realname"] ." " . $data["surnames"] ;
+                    $userName=$data["realname"];
                     $ID_SU=$data["ID_SU"];
                     $pass=$data["pswd"];
-                    $language=$data["cfgDefUser"];
+                    
+                    $idLang=$this->main_model->getFirstData('User', 'ID_USU', $ID_SU);                
+                    $language=$idLang["ID_ULanguage"];
+                
                     $hash=md5($pass . $ID_SU);
                     $url= base_url() . '#/emailValidation/' . $hash . '/' . $ID_SU;
 
-                    if($language==1){
-                        //Catalan email
-                        $subject    = 'JoComunico/Recuperació de contrasenya';
-                        $message   = 'Accedeix el següent enllaç per validar la conta. \r\n ' . $url;
-                    }else{
-                        //Spanish email
-                        $subject    = 'JoComunico/Recuperación de contraseña';
-                        $message   = 'Dirigete al siguiente enlace para validar la cuenta. \r\n ' . $url;
-                    }
-
-                    $sended=$this->sendEmail($email, $userName, $subject, $message);
+                    $dataResponse = $this->getData($language);          
+                    $subject = $dataResponse["data"]["AsuntoRegistro"];
+                    $preprebody = $dataResponse["data"]["BodyPreNameRegistro"];
+                    $prebody = $dataResponse["data"]["Body1Registro"];
+                    $postbody = $dataResponse["data"]["Body2Registro"];        
+                    $message = $preprebody.$userName.$prebody.$url.$postbody;
+                    
+                    $sended = $this->sendEmail($email, $userName, $subject, $message);
+                    
                 }
             }
             $response = [
@@ -236,6 +236,7 @@ class Register extends REST_Controller {
             $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
         }
     }
+    
     public function passRecoveryMail_post()
     {
         $sended=false;
@@ -276,10 +277,13 @@ class Register extends REST_Controller {
                 
                 //User data for email
                 $email=$data["email"];
-                $userName=$data["realname"] ." " . $data["surnames"] ;
+                $userName=$data["realname"];
                 $ID_SU=$data["ID_SU"];
                 $pass=$data["pswd"];
-                $language=$data["cfgDefUser"];
+                
+                $idLang=$this->main_model->getFirstData('User', 'ID_USU', $ID_SU);                
+                $language=$idLang["ID_ULanguage"];
+                
                 $hash=md5($pass . $ID_SU);
                 $path= '/passRecovery/' . $hash . '/' . $ID_SU;
                 $url= base_url() . '#/passRecovery/' . $hash . '/' . $ID_SU;
@@ -292,19 +296,14 @@ class Register extends REST_Controller {
                     $local=true;
                     $message="Local server";
                 }else{
+                    $dataResponse = $this->getData($language);
+                    $subject = $dataResponse["data"]["AsuntoPassword"];
+                    $prebody = $dataResponse["data"]["Body1Password"];
+                    $postbody = $dataResponse["data"]["Body2Password"];        
+                    $message = $prebody.$url.$postbody;
 
-                    //send email
-                    if($language==1){
-                        //Catalan email
-                        $subject    = 'JoComunico/Recuperació de contrasenya';
-                        $message   = 'Accedeix el següent enllaç per introduir la nova contrasenya. \r\n ' . $url;
-                    }else{
-                        //Spanish email
-                        $subject    = 'JoComunico/Recuperación de contraseña';
-                        $message   = 'Dirigete al siguiente enlace para introducir la nueva contraseña. \r\n ' . $url;
-                    }
+                    $sended = $this->sendEmail($email, $userName, $subject, $message);
 
-                    $sended=$this->sendEmail($email, $userName, $subject, $message);
                 }
             }
 
@@ -321,33 +320,27 @@ class Register extends REST_Controller {
 
     }
     
-    public function sendEmail($mail, $userName, $subject, $message){
+    private function sendEmail($mail, $userName, $subject, $message){           
         //Cargamos la libreria de codeigniter
         $this->load->library('email');
-        
+
         $config = array(
             //Indicamos el protocolo a utilizar  
-            'protocol' => 'smtp',
+            'protocol' => 'sendmail',
             //El servidor de correo que utilizaremos
             'smtp_host' => 'smtp.1and1.es',
             //Nuestro usuario
             'smtp_user' => 'info@jocomunico.com',
             //Nuestra contraseña
             'smtp_pass' => 'Jocomunicoapp7',
-            //El puerto que utilizará el servidor smtp
-            'smtp_port' => 587,
-            //El juego de caracteres a utilizar
-            'charset' => 'utf-8',
-            //Permitimos que se puedan cortar palabras
-            'wordwrap' => TRUE,
-          //El email debe ser valido
-            'validate' => true  
-        );          
+            //El email debe ser valido
+            'mailtype' => 'html'  
+        ); 
 
         //Establecemos esta configuración
         $this->email->initialize($config);
         //Ponemos la dirección de correo que enviará el email y un nombre
-        $this->email->from('info@jocomunico.com', 'Jocomunico');
+        $this->email->from('jocomunico@jocomunico.com', 'JoComunico');
 
         //Destinatario
         $this->email->to($mail, $userName);
@@ -364,5 +357,22 @@ class Register extends REST_Controller {
         }else{
             return false;
         }
+    }
+    
+    private function getData($language) {
+        //Petición al modelo
+        $saveResult = $this->main_model->getContent('emailValidation', $language);
+
+        //Cojemos los datos de las dos columnas de la petición y lo convertimos en un objecto clave:valor
+        $array1 = array_column($saveResult, 'tagString');
+        $array2 = array_column($saveResult, 'content');
+
+        $keyValue = array_combine($array1, $array2);
+
+        // Convertimos el array en un objeto
+        $response = [
+            "data" => $keyValue
+        ];
+        return $response;
     }
 }

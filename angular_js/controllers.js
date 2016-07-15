@@ -2,9 +2,12 @@ angular.module('controllers', [])
 
 // Controlador del Login
 
-        .controller('LoginCtrl', function ($scope, Resources, $location, AuthService, $rootScope, dropdownMenuBarInit) {
+        .controller('LoginCtrl', function ($scope, Resources, $location, AuthService, $rootScope, dropdownMenuBarInit, $timeout) {
             //Definición de variables
             $scope.view2 = false;// vista de recuperación de contraseña
+            $timeout(function () {
+                $scope.viewActived = true; // para activar la vista
+            }, 1000);
             var loginResource = Resources.login;
 
             //Imagenes
@@ -125,7 +128,7 @@ angular.module('controllers', [])
         })
 
 //Controlador del registro de usuario
-        .controller('RegisterCtrl', function ($scope, $rootScope, $captcha, Resources, md5, $q, $location, dropdownMenuBarInit) {
+        .controller('RegisterCtrl', function ($scope, $rootScope, $captcha, Resources, md5, $q, $location, dropdownMenuBarInit, $http) {
 
             //Inicializamos el formulario y las variables necesarias
             $scope.formData = {};  //Datos del formulario
@@ -394,6 +397,9 @@ angular.module('controllers', [])
                     $rootScope.dropdownMenuBarValue = ''; //Dropdown bar button selected on this view
                     $rootScope.viewActived2 = false; // para activar el gif de loading...
                     $rootScope.localServer = true;
+
+                    //Cargamos la board inicial (Oscar)
+                    $http.post($scope.baseurl + "PanelGroup/copyDefaultGroupBoard");
 
                     //Borramos los campos inecesarios
                     delete formData.confirmPassword;
@@ -820,6 +826,23 @@ angular.module('controllers', [])
                                 //Enable content view
                                 $scope.viewActived = true;
                             });
+                            
+                            // If a voices error had been triggered while using the app
+                            // the error is shown and set back to 0 with errorVoicesSeen.
+                            if ($scope.userData.errorTemp !== '0' &&
+                                    $scope.userData.errorTemp !== null) {
+                                
+                                var errorcode = parseInt($scope.userData.errorTemp);
+                                                                
+                                txtContent("errorVoices").then(function (content) {
+                                        $scope.errorMessage = content.data['errorVoicesText2'] + content.data[errorcode];
+                                        $scope.errorCode = content.data['errorVoicesTitle'] + " " + errorcode;
+                                        
+                                        Resources.main.get({'funct': "errorVoicesSeen"});
+                                        
+                                        $scope.toggleInfoModal($scope.errorCode, $scope.errorMessage);
+                                    });
+                            }
                         });
             };
 
@@ -947,8 +970,6 @@ angular.module('controllers', [])
                 Resources.main.save({'IdU': $rootScope.userId, 'data': data, 'value': value}, {'funct': "changeCfgVoices"}).$promise
                 if ($scope.userData.UserValidated == '1' && $scope.userData.cfgExpansionVoiceOnline != null && (!$scope.local || $scope.userData.cfgExpansionVoiceOffline != null)) {
                     Resources.main.save({'IdSu': $rootScope.sUserId, 'data': 'UserValidated', 'value': '2'}, {'funct': "userValidate2"}).$promise
-                    //Cargamos la board inicial (Oscar)
-                    $http.post($scope.baseurl + "PanelGroup/copyDefaultGroupBoard");
                 }
             }
 
@@ -1131,9 +1152,8 @@ angular.module('controllers', [])
                                 });
                             } else {
                                 $scope.sound = "mp3/" + results[0];
-                                $timeout(function () {
-                                    $('#utterance').get(0).play();
-                                });
+                                var audiotoplay = $('#utterance');
+                                audiotoplay.src = "mp3/" + $scope.results[0];
                             }
                         });
             };
@@ -2534,6 +2554,7 @@ angular.module('controllers', [])
                 {
                     //$scope.dataTemp = response.data;
                     $scope.info = response.info;
+                    $scope.info.errormessage = response.errorText;
                     //$scope.data = response.data;
 
                     if ($scope.cfgUserExpansionFeedback) {

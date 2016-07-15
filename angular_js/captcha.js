@@ -36,7 +36,7 @@ captcha.factory('$captcha', ['$rootScope', function ($rootScope)
  		getOperation: function()
 		{
 			//array de operadores
-			$rootScope.operators = ["+","-","*","/"];
+			$rootScope.operators = ["+","-"]; //Podemos añadir multiplicaciones y divisiones
 		    //obtenemos un operador aleatorio
 		    $rootScope.operator = $rootScope.operators[Math.floor(Math.random() * $rootScope.operators.length)];
 		    //numero aleatorio entre 25 y 6

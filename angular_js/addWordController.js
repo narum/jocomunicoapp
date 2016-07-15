@@ -32,6 +32,8 @@ angular.module('controllers')
                 }
             };
             //Log Out Modal
+            $scope.img = [];
+            $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
             Resources.main.get({'section': 'logoutModal', 'idLanguage': $rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.logoutContent = results.data;

@@ -46,7 +46,7 @@ angular.module('controllers')
                 Resources.register.get({'section': 'tips', 'idLanguage': value}, {'funct': "content"}).$promise
                         .then(function (results) {
                             $rootScope.langabbr = $rootScope.contentLanguageUserNonLogedAbbr;
-                            $scope.content = results.data;
+                            $scope.text = results.data;
                             dropdownMenuBarInit(value);
                         });
             };

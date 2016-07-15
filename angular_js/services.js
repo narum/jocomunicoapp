@@ -114,6 +114,7 @@ angular.module('services', [])
                 $rootScope.languageButtonIcon = $rootScope.languageButton.iconInitial;
                 $rootScope.contactButtonIcon = $rootScope.contactButton.iconInitial;
                 $rootScope.exitButtonIcon = $rootScope.exitButton.iconInitial;
+                $rootScope.exitTextContent = results.data.shortcutExitFullScreen;
             });
         }else{
             return content().then(function(results){
@@ -131,6 +132,7 @@ angular.module('services', [])
                     $rootScope.languageButton.name = results.data.languages;
                     $rootScope.contactButton.name = results.data.contact;
                     $rootScope.exitButton.name = results.data.exit;
+                    $rootScope.exitTextContent = results.data.shortcutExitFullScreen;
             });
         }
     };

@@ -137,7 +137,15 @@ input.statesButtonMenuBar[type=checkbox]:empty + label:hover{
     color: #dddddd;
 }
 .marginLanguagesButtonMenuBar{
-    margin-right: 11.5vh;
+    margin-right:11.5vh;
+    -webkit-transition: opacity 1s;
+    -moz-transition: opacity 1s;
+    -o-transition: opacity 1s;
+    transition: opacity 1s;
+    opacity: 0;
+}
+.marginLanguagesButtonMenuBar2{
+    margin-right:4vh;
     -webkit-transition: opacity 1s;
     -moz-transition: opacity 1s;
     -o-transition: opacity 1s;
@@ -175,7 +183,9 @@ textarea:focus, input:focus {
     color: #828282;
     text-decoration: none;
 }
-
+.exitText{
+    color: white;
+}
 
 
 
