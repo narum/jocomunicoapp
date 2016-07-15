@@ -999,8 +999,8 @@ class Board extends REST_Controller {
         $audio->waitForFile($aux[0], $aux[1]);
         
         // We save the audio error code in the database
-        if (TRUE) {
-            $this->BoardInterface->ErrorAudioToDB(7);
+        if ($aux[1]) {
+            $this->BoardInterface->ErrorAudioToDB($aux[3]);
         }
 
         $response = [

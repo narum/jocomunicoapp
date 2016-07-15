@@ -1161,7 +1161,7 @@ angular.module('controllers', [])
                             } else {
                                 $scope.sound = "mp3/" + results[0];
                                 var audiotoplay = $('#utterance');
-                                audiotoplay.src = "mp3/" + $scope.results[0];
+                                audiotoplay.src = "mp3/" + results[0];
                             }
                         });
             };
