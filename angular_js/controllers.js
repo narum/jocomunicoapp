@@ -128,7 +128,7 @@ angular.module('controllers', [])
         })
 
 //Controlador del registro de usuario
-        .controller('RegisterCtrl', function ($scope, $rootScope, $captcha, Resources, md5, $q, $location, dropdownMenuBarInit, $http) {
+        .controller('RegisterCtrl', function ($scope, $rootScope, $captcha, Resources, md5, $q, $location, dropdownMenuBarInit) {
 
             //Inicializamos el formulario y las variables necesarias
             $scope.formData = {};  //Datos del formulario
@@ -400,8 +400,6 @@ angular.module('controllers', [])
                     $rootScope.viewActived2 = false; // para activar el gif de loading...
                     $rootScope.localServer = true;
 
-                    //Cargamos la board inicial (Oscar)
-                    $http.post($scope.baseurl + "PanelGroup/copyDefaultGroupBoard");
 
                     //Borramos los campos inecesarios
                     delete formData.confirmPassword;
@@ -424,6 +422,14 @@ angular.module('controllers', [])
                                             .then(function (response) {
                                                 deferred.resolve(response);//PROMESAS
                                                 $id_su = response.ID_SU;
+                                                $id_usu = response.ID_U;
+                                                
+                                                //Cargamos la board inicial (Oscar)
+                                                Resources.register.save({'idsu': $id_su, 'idusu' :$id_usu}, {'funct': "copyDefaultGroupBoard"}).$promise
+                                                .then(function (results) {
+                                                    console.log(results);
+                                                });
+                                                
                                             });
                                     promises.push(deferred.promise);//PROMESAS
                                 });

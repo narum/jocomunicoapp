@@ -10,6 +10,11 @@ class Register extends REST_Controller {
         parent::__construct('rest', TRUE);
         $this->load->model('main_model');
         $this->load->library('Myaudio');
+        $this->load->library('session');
+        $this->load->model('PanelInterface');
+        $this->load->model('Lexicon');
+        $this->load->model('BoardInterface');
+        $this->load->model('AddWordInterface');
     }
     
     public function runningLocalOrServer_get()
@@ -375,4 +380,62 @@ class Register extends REST_Controller {
         ];
         return $response;
     }
+    public function copyDefaultGroupBoard_post()
+    {
+        //MODIF: 2 es el panel default
+        $this->BoardInterface->initTrans();
+        $idusu = $this->query('idusu');
+        $idsu = $this->query('idsu');
+        $this->session->set_userdata('idsu', $idsu);
+        $this->session->set_userdata('idusu', $idusu);
+        $board = $this->BoardInterface->getPrimaryGroupBoard();
+        if ($board == null) {
+
+            $changedLinks = array();
+            $srcGroupBoard = 2;
+            $primaryBoard = $this->BoardInterface->getInfoGroupBoard($srcGroupBoard);
+
+            $IDGboard = $this->PanelInterface->newGroupPanel($primaryBoard[0]->GBname, $idusu, $primaryBoard[0]->defWidth, $primaryBoard[0]->defHeight, $primaryBoard[0]->imgGB);
+            $boards = $this->BoardInterface->getBoards($srcGroupBoard);
+            //If we want to allow the user copy group boards this line have to be removed
+            $this->PanelInterface->setPrimaryGroupBoard($IDGboard, $idusu);
+
+            $sameGroupBoard = 1;
+            for ($i = 0; $i < count($boards); $i++) {
+                $idSrc = $boards[$i]->ID_Board;
+
+                $name = $boards[$i]->Bname;
+                $width = $boards[$i]->width;
+                $height = $boards[$i]->height;
+                $autoReturn = $boards[$i]->autoReturn;
+                $autoReadSentence = $boards[$i]->autoReadSentence;
+
+                $idDst = $this->BoardInterface->copyBoard($IDGboard, $name, $width, $height, $autoReturn, $autoReadSentence);
+                if ($boards[$i]->primaryBoard) {
+                    $this->BoardInterface->changePrimaryBoard($idDst, $IDGboard);
+                    $idToShow = $idDst;
+                }
+                $boardtables = $this->BoardInterface->getBoardTables($idSrc);
+                foreach ($boardtables as $row) {
+                    $boardtables = $this->BoardInterface->copyBoardTables($idDst, $sameGroupBoard, $row);
+                }
+                array_push($changedLinks, $idSrc);
+                array_push($changedLinks, $idDst);
+            }
+            for ($i = 0; $i < count($changedLinks); $i++) {
+                $this->PanelInterface->updateBoardLinks($IDGboard, $changedLinks[$i], $changedLinks[$i + 1]);
+                $i++;
+            }
+        } else {
+            $primaryUserBoard = $this->BoardInterface->getPrimaryBoard($board[0]->ID_GB);
+            $idToShow = $primaryUserBoard[0]->ID_Board;
+        }
+        $this->BoardInterface->commitTrans();
+        $response = [
+            'idBoard' => $idToShow,
+            'idusu' => $idusu
+        ];
+        $this->response($response, REST_Controller::HTTP_OK);
+    }
+
 }
