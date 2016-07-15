@@ -1,9 +1,46 @@
 <link rel="stylesheet" type="text/css" href="css/userConfig.css">
 <link rel="stylesheet" type="text/css" href="css/responsiveForm.css">
+
 <audio id="utterance" src="{{sound}}" type="audio/mp3"></audio>
+
 <style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;
     -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
+
+<script>
+    
+    var myVar;
+    var exit = 0;
+    
+    function audiohallelujah() {
+        console.log("audio");
+
+        var aux = document.getElementById('utterance');
+        aux.src="mp3/empty.m4a";
+        var audiotoplayinitial = aux.src;
+        
+        var myVar = setInterval(function(){ waitloop(audiotoplayinitial, myVar) }, 500);
+    }
+    
+    function waitloop(audiotoplayinitial, myVar) {
+        var aux = document.getElementById('utterance');
+        var audiotoplayfinal = aux.src;
+        
+        if (audiotoplayinitial !== audiotoplayfinal) {
+            exit = 0;
+            aux.play();
+            clearInterval(myVar);
+        }
+        
+        exit = exit+1;
+        
+        if (exit > 8) {
+            exit = 0;
+            clearInterval(myVar);
+        }
+    }
+</script>
+
 <!--menu superior dropdown-->
 <div ng-include="'/angular_templates/dropdownMenuBar.html'" ng-show="viewActived"></div>
 <div ng-include="'/angular_templates/logoutModal.html'"></div>
@@ -367,7 +404,8 @@
                                     </select>
                                 </div>
                                 <div class="col-xs-1"></div>
-                                <div class="col-xs-1" ng-init="imgsrc3=img.audioPlay" ng-mouseover="imgsrc3=img.audioPlay2" ng-mouseout="imgsrc3=img.audioPlay">
+                                <div class="col-xs-1" ng-init="imgsrc3=img.audioPlay" ng-mouseover="imgsrc3=img.audioPlay2" 
+                                     ng-mouseout="imgsrc3=img.audioPlay" onmousedown="audiohallelujah()">
                                     <input type="image" class="img-audioButton" ng-src="{{imgsrc3}}" ng-click="generateAudio(userData.cfgExpansionVoiceOnline,'offline');"></div>
                             </div>
                             <div class="row" ng-show="local">
@@ -381,7 +419,8 @@
                                     </select>
                                 </div>
                                 <div class="col-xs-1"></div>
-                                <div class="col-xs-1" ng-init="imgsrc4=img.audioPlay" ng-mouseover="imgsrc4=img.audioPlay2" ng-mouseout="imgsrc4=img.audioPlay">
+                                <div class="col-xs-1" ng-init="imgsrc4=img.audioPlay" ng-mouseover="imgsrc4=img.audioPlay2" 
+                                     ng-mouseout="imgsrc4=img.audioPlay" onmousedown="audiohallelujah()">
                                     <input type="image" class="img-audioButton" ng-src="{{imgsrc4}}" ng-click="generateAudio(userData.cfgExpansionVoiceOffline,'offline');"></div>
                             </div>
                             <div class="row" ng-show="local">
@@ -439,7 +478,8 @@
                                     </select>
                                 </div>
                                 <div class="col-xs-1"></div>
-                                <div class="col-xs-1" ng-init="imgsrc1=img.audioPlay" ng-mouseover="imgsrc1=img.audioPlay2" ng-mouseout="imgsrc1=img.audioPlay">
+                                <div class="col-xs-1" ng-init="imgsrc1=img.audioPlay" ng-mouseover="imgsrc1=img.audioPlay2" 
+                                     ng-mouseout="imgsrc1=img.audioPlay" onmousedown="audiohallelujah()">
                                     <input type="image" class="img-audioButton" ng-src="{{imgsrc1}}" ng-click="generateAudio(userData.cfgInterfaceVoiceOnline,'offline');"></div>
                             </div>
                             <div class="row" ng-show="local">
@@ -453,7 +493,8 @@
                                     </select>
                                 </div>
                                 <div class="col-xs-1"></div>
-                                <div class="col-xs-1" ng-init="imgsrc2=img.audioPlay" ng-mouseover="imgsrc2=img.audioPlay2" ng-mouseout="imgsrc2=img.audioPlay">
+                                <div class="col-xs-1" ng-init="imgsrc2=img.audioPlay" ng-mouseover="imgsrc2=img.audioPlay2" 
+                                     ng-mouseout="imgsrc2=img.audioPlay" onmousedown="audiohallelujah()">
                                     <input type="image" class="img-audioButton" ng-src="{{imgsrc2}}" ng-click="generateAudio(userData.cfgInterfaceVoiceOffline,'offline');"></div>
                             </div>
                         </div>

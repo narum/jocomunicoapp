@@ -972,4 +972,22 @@ class BoardInterface extends CI_Model {
         return $query->result_array(); // retornem l'array query amb els resultats
     }
 
+    function get_errorText($errorID) {
+        $idLanguage = $this->session->userdata('uinterfacelangauge');
+        $this->db->select('tagString, content'); // Seleccionar les columnes
+        $this->db->from('Content'); // Seleccionem la taula
+        $this->db->where('tagString', $errorID); // filtrem per columnes
+        $this->db->where('ID_CLanguage', $idLanguage); // filtrem per columnes
+        $query = $this->db->get(); // Fem la query i la guardem a la variable query
+
+        return $query->result_array();
+    }
+    
+    function ErrorAudioToDB($errorCode) {
+        $idUser = $this->session->userdata('idusu');
+        $this->db->set('errorTemp', $errorCode);
+        $this->db->where('ID_User', $idUser);
+        $this->db->update('User');
+    }
+    
 }

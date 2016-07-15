@@ -11,7 +11,7 @@ class BackupDb extends CI_Controller {
     private function prefs() {
         return array(                
             'format'    => 'zip',
-            'filename'  => date("Y-m-d").'-jocomunicoapp.sql'
+            'filename'  => date("Y-m-d-H_i").'-jocomunicoapp.sql'
         );
     }   
 
@@ -20,14 +20,15 @@ class BackupDb extends CI_Controller {
         $backup = $this->dbutil->backup($this->prefs());
 
         $this->load->helper('file');
-        write_file('ddbb/'.date("Y-m-d").'.zip', $backup);            
+        write_file('ddbb/'.date("Y-m-d-H_i").'.zip', $backup);            
     }
 
-    public function downloadBackup()
+    private function downloadBackup()
     {
         $backup = $this->dbutil->backup($this->prefs());
 
         $this->load->helper('download');
-        force_download(date("Y-m-d").'.zip', $backup);
-    }            
+        force_download(date("Y-m-d-H_i").'.zip', $backup);
+    }   
+    
 }

@@ -567,4 +567,10 @@ class Main extends REST_Controller {
         }
         $this->response(REST_Controller::HTTP_OK);
     }
+    
+    public function errorVoicesSeen_get()
+    {
+        $idusu = $this->session->userdata('idusu');
+        $this->main_model->restartErrorVoices($idusu);
+    }
 }

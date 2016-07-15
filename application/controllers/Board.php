@@ -389,13 +389,14 @@ class Board extends REST_Controller {
         } else {
             $expander = new Myexpander();
             $expander->expand();
+            
             $info = $expander->info;
-//            if ($info['frasefinal'] == ""){
-//                $response = null;
-//            }else{
-
+            $idErrorcode = $info[errorcode];
+            $errorText = $this->BoardInterface->get_errorText($idErrorcode);
+            
             $response = [
-                'info' => $info
+                'info' => $info,
+                'errorText' => $errorText[0][content]
             ];
 
             $this->response($response, REST_Controller::HTTP_OK);
@@ -996,6 +997,11 @@ class Board extends REST_Controller {
         $aux = $audio->generateAudio($idusu, $text, $interface);
 
         $audio->waitForFile($aux[0], $aux[1]);
+        
+        // We save the audio error code in the database
+        if (TRUE) {
+            $this->BoardInterface->ErrorAudioToDB(7);
+        }
 
         $response = [
             'audio' => $aux

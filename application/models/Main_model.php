@@ -361,4 +361,14 @@ class Main_model extends CI_Model {
 
         return $output;
     }
+    
+    function restartErrorVoices($idusu) {
+        
+        $data = array(
+            'errorTemp' => '0',
+        );
+        
+        $this->db->where('ID_User', $idusu);
+        $this->db->update('User', $data);
+    }
 }

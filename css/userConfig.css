@@ -451,7 +451,7 @@ input[type=number] {
     height: 4vh;
     background-color: white;
     margin: 0;
-    font-size: 1vw;
+    padding-right: 17%;
 }
 .voices .dropdown-arrow{
     width: 100%;

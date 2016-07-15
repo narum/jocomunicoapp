@@ -707,3 +707,11 @@ input.switch:checked ~ label:after
 #main-container ul {
     list-style-type: disc !important;
 }
+
+.color-bold b {
+    color: #d45f01;
+}
+
+.color-bold strong {
+    color: #d45f01;
+}
