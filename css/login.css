@@ -124,12 +124,22 @@
 }
 
 .img-rounded{
-    height: 21vh;
+    height: 18vh;
     width: auto;
     border-radius: 10px;
     border:none;
     margin-left: 1vh;
     cursor: pointer;
+}
+.newUser{
+    width: 20vh;
+    font-size: 3vh;
+    text-align: center;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: #3b93af;
+}
+.newUserHover{
+    color: #898989;
 }
 
 /*password recovery view*/

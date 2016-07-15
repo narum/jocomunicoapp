@@ -231,11 +231,11 @@
                         </div>
                         <div class="row marginTopInput" id="captcha">
                             <div class="col-xs-6">
-                                <div class="form-group has-feedback noMargin">
-                                    <div class="input-group input-group-auto inputMarginRigth">
+                                <div class="form-group has-feedback noMargin backgroundSolveText">{{content.solve}}
+<!--                                    <div class="input-group input-group-auto inputMarginRigth">
                                         <span class="input-group-addon"><i class="icon-question-sign"></i></span>
                                         <input class="form-control" value="{{content.solve}}" ng-disabled='true'>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                             
@@ -258,11 +258,12 @@
                     <div class="col-xs-10">
                         <div id="divID" ng-init="imgsrc=img.BotoCrea" ng-mouseover="imgsrc=img.BotoCrea2" ng-mouseout="imgsrc=img.BotoCrea">
                             <input type="image" class="img img-rounded" alt="Responsive image" ng-src="{{imgsrc}}" ng-click="submitForm(formData)">
-                            <br/><div class="newUser">{{content.registerButton}}</div>
+                            <br/><div class="newUser" ng-class="{newUserHover: imgsrc==img.BotoCrea2}">{{content.registerButton}}</div>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
+        <div class="row policyText" ng-show="viewActived">{{content.privacyPolicyInfo}}</div>
     </div>
 </div>

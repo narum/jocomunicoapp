@@ -13,10 +13,11 @@
 <style>html, body, .container-table{height: 100%;height: 100vh;background: url('{{img.fons}}') no-repeat center center fixed;-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;}
 </style>
 <!--menu superior dropdown-->
-<div ng-include="'/angular_templates/dropdownMenuBar.html'"></div>
+<div ng-include="'/angular_templates/dropdownMenuBar.html'" ng-show="viewActived"></div>
 <div ng-include="'/angular_templates/ConfirmCreateGroupBoard.html'"></div>
 
-<div class="row folderContainer">
+<div class="loadingGif" ng-show="!viewActived"><img class="img-loadingGif" ng-src={{img.loading}}/></div>
+<div class="row folderContainer" ng-if="viewActived">
     <div class="row">
         <!--Panel Groups box-->
         <div class="col-xs-6 rightPadding">

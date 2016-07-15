@@ -28,7 +28,9 @@ border:1px gray solid;
 border-radius:10px;
 -webkit-box-shadow:0 0 6px gray inset;
 }*/
-
+#boxUserConfig #header{
+    padding-top: 0px !important;
+}
 .MenuUserConfig{
     height: 80vh;
     margin-top: 7vh;
@@ -445,7 +447,7 @@ input[type=number] {
     height: 4vh;
     background-color: white;
     margin: 0;
-    font-size: 2vh;
+    font-size: 1vw;
 }
 .voices .dropdown-arrow{
     width: 100%;

@@ -1,5 +1,8 @@
 @charset "UTF-8";
 /* CSS Document */
+#boxUserConfig #header{
+    padding-top: 0px !important;
+}
 .folderContainer{
     height: 100vh;
     padding-top: 5vh;
@@ -428,4 +431,21 @@
 }
 .pictoTypeImg{
     height: 100%;
+}
+.fonsCreateSentenceModal{
+    font-size: 2.5vh;
+    background-color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding-left: 5vh;
+    padding-right: 5vh;
+    padding-top: 3vh;
+    padding-bottom: 4vh;
+}
+.popover{
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 2vh;
+    border: none;
+    box-shadow: 0 0 10px #404040;
+    min-width: 50vh;
 }

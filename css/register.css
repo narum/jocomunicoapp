@@ -117,7 +117,7 @@
 /*Triangle div and submit button*/
 .boxButo{
     padding: 0px;
-    height: 60vh;
+    height: 80vh;
     background-color: none;
 }
 .buto{
@@ -144,7 +144,11 @@
     width: 20vh;
     font-size: 3vh;
     text-align: center;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     color: #3b93af;
+}
+.newUserHover{
+    color: #898989;
 }
 
 .img-inputIcon{
@@ -258,4 +262,11 @@
 }
 .genderTitle{
     text-align: left;
+}
+.policyText{
+    font-size: 2vh;
+    text-align: center;
+}
+.backgroundSolveText{
+    /*background-color: #99ccdd;*/
 }

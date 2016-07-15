@@ -101,7 +101,6 @@ angular.module('controllers')
         var getSentences = function(){
             Resources.main.save({'ID_Folder': $routeParams.folderId},{'funct': "getSentencesOrHistoricFolder"}).$promise
             .then(function (results) {
-                console.log(results);
                 $scope.sentences = results.sentences;
                 if($scope.sentences!=null){
                     $scope.sentences.sort(function(a, b){return a.posInFolder-b.posInFolder});
@@ -223,6 +222,9 @@ angular.module('controllers')
                     $scope.newSentenceImage.splice(0,3);
                     $scope.editSentence = false;
                     $scope.editSentenceId = null;
+                    $scope.faltaImg=false;
+                    $scope.faltaText=false;
+                    $scope.addImg=false;
                     getSentences();
                 });
                 
@@ -244,6 +246,9 @@ angular.module('controllers')
             $scope.newSentenceImage.splice(0,3);
             $scope.editSentence = false;
             $scope.editSentenceId = null;
+            $scope.faltaImg=false;
+            $scope.faltaText=false;
+            $scope.addImg=false;
         }
         //Edit manual imput sentence
         $scope.editManualSentence = function(generatorString,sPreRecImg1,sPreRecImg2,sPreRecImg3,ID_SSentence){

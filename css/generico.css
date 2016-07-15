@@ -1,6 +1,17 @@
 @charset "UTF-8";
 /* CSS Document */
 @-ms-viewport { width: device-width; zoom:1.0; }
+
+/*Loading gif image*/
+.loadingGif{
+    margin-top: 46vh;
+    text-align: center;
+}
+.img-loadingGif{
+    height: 8vh;
+}
+
+
 .fullheight{
     height:100%;
 }

@@ -67,6 +67,7 @@ angular.module('controllers')
             $scope.img.addPhotoSelected = '/img/icons/add_photo_selected.png';
             $scope.img.whiteLoading = '/img/icons/whiteLoading.gif';
             $scope.finished = true;
+            $scope.viewActived = false;
 
             //User sentence folders
             var getFolders = function(){
@@ -82,6 +83,7 @@ angular.module('controllers')
                     });
                     $scope.historicFolders.sort(function(a, b){return a.folderOrder-b.folderOrder});
                     $scope.showUpDownButtons=true;
+                    $scope.viewActived = true;
                 });
             };
             //Delet historic sentences 30 days old

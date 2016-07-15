@@ -1188,6 +1188,11 @@ angular.module('controllers', [])
         })
         .controller('myCtrl', function (Resources, $location, $scope, $http, ngDialog, txtContent, $rootScope, $interval, $timeout, dropdownMenuBarInit, AuthService) {
 
+            $scope.viewActived = false;
+            $timeout(function () {
+                $scope.viewActived = true;
+            }, 1000);
+    
             //Dropdown Menu Bar
             $rootScope.dropdownMenuBar = null;
             $rootScope.dropdownMenuBarValue = '/'; //Button selected on this view
@@ -1228,6 +1233,7 @@ angular.module('controllers', [])
             $scope.img = [];
             $scope.img.lowSorpresaFlecha = '/img/srcWeb/Mus/lowSorpresaFlecha.png';
             $scope.img.Patterns1_08 = '/img/srcWeb/patterns/pattern3.png';
+            $scope.img.loading = '/img/srcWeb/Login/loading.gif';
             Resources.main.get({'section': 'logoutModal', 'idLanguage': $rootScope.interfaceLanguageId}, {'funct': "content"}).$promise
                     .then(function (results) {
                         $scope.logoutContent = results.data;

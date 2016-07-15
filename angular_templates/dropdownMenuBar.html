@@ -20,11 +20,11 @@
 </div>
 <div class="row buttonsMenuBar fontSizeForced" ng-class="{buttonsMenuBarOpened: dropdownMenuOpen}">
     <div class="row">
-        <!--Exit Button-->
+<!--        Exit Button
         <div class="pull-right marginButtonMenuBar" ng-init="$root.exitButtonIcon=$root.exitButton.iconInitial" onclick="windowClose();" ng-click="exitPower=false;">
             <input type="checkbox" id="exitButton" class="statesButtonMenuBar" ng-model="exitPower" ng-show="false">
             <label for="exitButton" ng-mouseover="$root.exitButtonIcon=$root.exitButton.iconHover" ng-mouseout="$root.exitButtonIcon=$root.exitButton.iconInitial"><img class="icondropdownMenuBar" ng-src="{{$root.exitButtonIcon}}"/></br>{{$root.exitButton.name}}</label>
-        </div>
+        </div>-->
         <!--Language Button-->
         <div class="pull-right marginButtonMenuBar" ng-init="$root.languageButtonIcon=$root.languageButton.iconInitial" ng-show="$root.dropdownMenuBarChangeLanguage">
             <input type="checkbox" id="languageButton" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarLanguage" ng-show="false">
@@ -37,8 +37,8 @@
         </div>
         <!--Other Buttons-->
         <div class="pull-right marginButtonMenuBar" ng-repeat="button in $root.dropdownMenuBar" ng-init="button.icon=button.iconInitial">
-            <input type="radio" id="{{button.name}}" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarValue" value="{{button.href}}" ng-click="go(button.href)" ng-show="false">
-            <label for="{{button.name}}" ng-mouseover="button.icon=button.iconHover" ng-mouseout="button.icon=button.iconInitial" ng-show="{{button.show}}"><img class="icondropdownMenuBar" ng-src="{{button.icon}}" ng-show="!($root.dropdownMenuBarValue=='{{button.href}}')"/><img class="icondropdownMenuBar" ng-src="{{button.iconSelected}}" ng-show="$root.dropdownMenuBarValue=='{{button.href}}'"/></br>{{button.name}}</label>
+            <input type="radio" id="{{button.id}}" class="statesButtonMenuBar" ng-model="$root.dropdownMenuBarValue" value="{{button.href}}" ng-click="go(button.href)" ng-show="false">
+            <label for="{{button.id}}" ng-mouseover="button.icon=button.iconHover" ng-mouseout="button.icon=button.iconInitial" ng-show="{{button.show}}"><img class="icondropdownMenuBar" ng-src="{{button.icon}}" ng-show="!($root.dropdownMenuBarValue=='{{button.href}}')"/><img class="icondropdownMenuBar" ng-src="{{button.iconSelected}}" ng-show="$root.dropdownMenuBarValue=='{{button.href}}'"/></br>{{button.name}}</label>
         </div>
     </div>
     <!--Languages to select-->
