@@ -196,7 +196,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" ng-init="singleLanguageSelected=false;">
                             <div class="col-xs-6">
                                 <div class="form-group {{state.languageSelected}} has-feedback">
                                     <div class="input-group input-group-auto inputMarginRigth">
@@ -206,6 +206,7 @@
                                             name="languageSelected"
                                             ng-model="formData.languageSelected"
                                             ng-change="addLanguage(formData.languageSelected)"
+                                            ng-disabled="singleLanguageSelected"
                                             >
                                             <option selected="selected" disabled="disabled" value="">{{ content.language }}</option>
                                             <option ng-repeat="option in availableLanguageOptions" value="{{option.ID_Language}}">{{option.languageName}}</option>
@@ -264,6 +265,6 @@
                 </div>
             </div>
         </form>
-        <div class="row policyText" ng-show="viewActived">{{content.privacyPolicyInfo}}</div>
+        <div class="row"><div class="col-xs-8 col-xs-offset-2 policyText" ng-show="viewActived">{{content.privacyPolicyInfo}}</div></div>
     </div>
 </div>

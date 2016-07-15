@@ -322,6 +322,7 @@ angular.module('controllers', [])
 
             //Añadir idiomas
             $scope.addLanguage = function (idLanguage) {
+                $scope.singleLanguageSelected=true;
                 angular.forEach($scope.availableLanguageOptions, function (value, key) {
                     if (value.ID_Language == idLanguage) {
                         $scope.languageList.push($scope.availableLanguageOptions[key]);//añadimos el idioma a la lista .push(objeto)
@@ -334,6 +335,7 @@ angular.module('controllers', [])
 
             //Quitar idiomas
             $scope.removeLanguage = function (index) {
+                $scope.singleLanguageSelected=false;
                 $scope.availableLanguageOptions.push($scope.languageList[index]);
                 $scope.languageList.splice(index, 1);//Borrar item de un array .splice(posicion, numero de items)
             };

@@ -8,8 +8,8 @@
             </div>
             <div class="row backgroundUserConfigBox">
                 <div class="row fonsAlert">
-                    <div class="col-xs-12 textCenter" ng-if="FormData.HWType === 0">Eliminar {{FormData.Dnum}} filas?</div>
-                    <div class="col-xs-12 textCenter" ng-if="FormData.HWType === 1">Eliminar {{FormData.Dnum}} columnes?</div>
+                    <div class="col-xs-12 textCenter" ng-if="FormData.HWType === 0">{{content.resizecolrowtext}} {{FormData.Dnum}} {{content.resizerowtext}}?</div>
+                    <div class="col-xs-12 textCenter" ng-if="FormData.HWType === 1">{{content.resizecolrowtext}} {{FormData.Dnum}} {{content.resizecoltext}}?</div>
                 </div>
                 <div class="row dadesUsuariCentre">
                     <div class="col-xs-6">
