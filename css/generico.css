@@ -687,3 +687,23 @@ input.switch:checked ~ label:after
     display: block;
     margin-top: 1vh;
 }
+
+.img-download {
+    display: block;
+    float: right;
+    width: 20%;
+    height: auto;
+    padding-top: 1%;
+}
+
+.download-button {
+    display: block;
+    position: absolute;
+    top: 5px;
+    right: 0;
+    z-index: 5;
+}
+
+#main-container ul {
+    list-style-type: disc !important;
+}
